@@ -116,7 +116,7 @@
 #include <vector>
 #include <utility>     // for pair<>
 #include <algorithm>
-#include "gflags/gflags.h"
+#include "gflags.h"
 
 #ifndef PATH_SEPARATOR
 #define PATH_SEPARATOR  '/'
