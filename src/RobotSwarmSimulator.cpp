@@ -7,9 +7,12 @@
 //============================================================================
 
 #include <iostream>
+#include "testheader.h"
 using namespace std;
 
 int main() {
 	cout << "Hello swarm!" << endl; // prints Hello swarm!
+	Test test;
+	test.say_hello();
 	return 0;
 }
