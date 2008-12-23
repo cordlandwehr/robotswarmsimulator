@@ -13,16 +13,25 @@
 #include <iterator>
 #include <algorithm>
 
-#include "testheader.h"
+#include "../testheader.h"
+#include "../testheaderB.h"
 
 using namespace std;
+
 
 int main(int argc, char *argv[]) {
   using namespace boost::lambda;
   
+  Test test;
+  cout << "testing " << test.correct_add(2,2) << endl ;
+  
+  TestB testb(test);
+  cout << "testing 2 " << testb.correct_add(2,2) << endl;
+  
   std::string line;
   boost::regex pat( "^Subject: (Re: |Aw: )*(.*)" );
 
+  cout << "Main Program";
   while (std::cin)
   {
       std::getline(std::cin, line);
@@ -38,3 +47,4 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+

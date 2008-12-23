@@ -4,6 +4,8 @@
 class Test {
 public: 
 	void say_hello();
+	int correct_add(int a, int b);
+	int incorrect_add(int a, int b);
 	
 };
 
