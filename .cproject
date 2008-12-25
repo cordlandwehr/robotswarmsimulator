@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?>
 
 <cproject>
@@ -3938,7 +3938,7 @@
 <tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1065254937" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1202906346" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 <option id="gnu.cpp.link.option.libs.1451703550" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-<listOptionValue builtIn="false" value="boost_regex${BOOST_SUFFIX}"/>
+<listOptionValue builtIn="false" value="boost_regex&quot;${BOOST_SUFFIX}&quot;"/>
 </option>
 <option id="gnu.cpp.link.option.paths.2005277297" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 <listOptionValue builtIn="false" value="&quot;${LIBRARY_PATH}&quot;"/>
