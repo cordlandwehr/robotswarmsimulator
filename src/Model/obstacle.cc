@@ -1,11 +1,3 @@
-//============================================================================
-// Name        : obstacle.cc
-// Author      : Martina Hüllmann
-// Version     :
-// Copyright   :
-// Description :
-//============================================================================
-
 #include "obstacle.h"
 
 Obstacle::Obstacle() {

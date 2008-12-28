@@ -1,11 +1,3 @@
-//============================================================================
-// Name        : robot_data.cc
-// Author      : Martina Hüllmann
-// Version     :
-// Copyright   :
-// Description :
-//============================================================================
-
 #include "robot_data.h"
 
 RobotData::RobotData() {
