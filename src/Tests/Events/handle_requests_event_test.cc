@@ -4,6 +4,6 @@
 
 BOOST_AUTO_TEST_CASE(handle_requests_event_smoke_test)
 {
-    HandleRequestsEvent event;
+    HandleRequestsEvent event(0);
     //TODO(craupach): add some meaningful tests as soon as the requests are finished
 }

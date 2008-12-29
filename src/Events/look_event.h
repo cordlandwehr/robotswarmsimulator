@@ -23,6 +23,9 @@ using namespace std;
  */
 class LookEvent : public Event {
 public:
+
+	LookEvent(int time) : Event(time) {};
+
 	/**
 	 * Adds a new robot to the subset of robots in the event.
 	 * \param a shared pointer to the new robot

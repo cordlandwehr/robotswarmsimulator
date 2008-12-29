@@ -17,6 +17,8 @@
  *
  */
 class Request {
+public:
+	virtual ~Request() {};
 private:
 	/**
 	 * The robot which issued the request.

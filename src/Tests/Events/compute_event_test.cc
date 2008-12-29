@@ -14,7 +14,10 @@ void add_robot(ComputeEvent& event) {
 
 BOOST_AUTO_TEST_CASE(compute_event_smoke_test)
 {
-    ComputeEvent event;
+    ComputeEvent event(5);
+
+    // time correct
+    BOOST_CHECK(event.get_time() == 5);
 
     // no robots in the subset at beginning
     BOOST_CHECK(event.get_robot_subset().size() == 0);

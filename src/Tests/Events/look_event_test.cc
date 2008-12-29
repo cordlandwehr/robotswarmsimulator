@@ -14,7 +14,7 @@ void add_robot(LookEvent& event) {
 
 BOOST_AUTO_TEST_CASE(look_event_smoke_test)
 {
-    LookEvent event;
+    LookEvent event(0);
 
     // no robots in the subset at beginning
     BOOST_CHECK(event.get_robot_subset().size() == 0);

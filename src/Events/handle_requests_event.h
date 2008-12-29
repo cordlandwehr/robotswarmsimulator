@@ -23,6 +23,9 @@ using namespace std;
  */
 class HandleRequestsEvent : public Event {
 public:
+
+	HandleRequestsEvent(int time): Event(time) {};
+
 	/**
 	 * Adds a new request to the set of requests.
 	 * \param A shared pointer to the new request.
