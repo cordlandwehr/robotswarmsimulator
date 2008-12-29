@@ -12,6 +12,8 @@
 #include "../Model/world_information.h"
 #include "../Events/look_event.h"
 
+using namespace std;
+
 /**
  * \class ActivationSequenceGenerator
  * \brief Interface for activation sequence generators

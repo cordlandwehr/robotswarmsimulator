@@ -15,6 +15,8 @@
 #include "../Events/look_event.h"
 #include "../Requests/request.h"
 
+using namespace std;
+
 /**
  * \class SynchronousASG
  * \brief The synchronous ASG produces a sequence of events according to the fully-synchronous time-model.
