@@ -13,14 +13,13 @@
 #include "robot.h"
 #include "obstacle.h"
 
-using namespace std;
-
 class WorldInformation {
 public:
 	WorldInformation();
 	virtual ~WorldInformation();
 
 private:
+	//TODO: boost::ptr_vector<>? (more efficient, but slightly different behavior)
 	std::vector< boost::shared_ptr<WorldObject> > markers;
 	std::vector< boost::shared_ptr<Obstacle> > obstacles;
 	std::vector< boost::shared_ptr<Robot> > robots;

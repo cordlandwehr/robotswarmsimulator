@@ -10,8 +10,6 @@
 
 #include "marker_information.h"
 
-using namespace std;
-
 class WorldObject {
 public:
 	WorldObject();
