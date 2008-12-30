@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <boost/smart_ptr.hpp>
+#include <boost/circular_buffer.hpp>
+
 #include "activation_sequence_generator.h"
 #include "../Model/world_information.h"
 #include "../Events/look_event.h"
@@ -53,7 +55,7 @@ public:
 	 * \param A pointer to the history of world states.
 	 * \param The last handled event
 	 */
-	void update_sequence(boost::shared_ptr<vector <WorldInformation> > history,
+	void update_sequence(boost::shared_ptr<boost::circular_buffer <WorldInformation> > history,
 				         boost::shared_ptr<Event> last_event);
 
 private:
