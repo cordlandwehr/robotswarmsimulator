@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(synchronous_asg_smoke_test)
 	synchronous_asg.initialize(world_state);
 
 	// first event should be at time 0
-	BOOST_CHECK(synchronous_asg.get_time_of_next_event() == 0);
+	BOOST_CHECK_EQUAL(synchronous_asg.get_time_of_next_event(), 0);
 
 	// first event should be a look event
 	boost::shared_ptr<Event> next_event = synchronous_asg.get_next_event();

@@ -25,6 +25,8 @@ using namespace std;
  *
  */
 class ActivationSequenceGenerator {
+
+
 public:
 
 	virtual ~ActivationSequenceGenerator() {};
