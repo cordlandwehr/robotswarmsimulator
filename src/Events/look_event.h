@@ -36,7 +36,7 @@ public:
 	 * Returns a constant reference to the robot subset.
 	 * \return A constant reference to the robot subset.
 	 */
-	const vector<boost::shared_ptr<Robot> >& get_robot_subset() const;
+	const vector<boost::shared_ptr<Robot> >& robot_subset() const;
 
 private:
 	/**

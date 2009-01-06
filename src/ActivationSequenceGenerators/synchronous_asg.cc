@@ -53,7 +53,7 @@ void SynchronousASG::update_sequence(boost::shared_ptr<boost::circular_buffer <W
 	// check if it is a compute event
 	ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (last_event.get());
 	if(compute_event != NULL) {
-		BOOST_FOREACH(boost::shared_ptr<Request> cur_request, compute_event->get_requests()) {
+		BOOST_FOREACH(boost::shared_ptr<Request> cur_request, compute_event->requests()) {
 			unhandled_request_set_.push_back(cur_request);
 		}
 	}

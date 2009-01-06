@@ -11,6 +11,6 @@ void HandleRequestsEvent::add_to_requests(boost::shared_ptr<Request> new_request
 	requests_.push_back(new_request);
 }
 
-const vector<boost::shared_ptr<Request> >& HandleRequestsEvent::get_requests() const {
+const vector<boost::shared_ptr<Request> >& HandleRequestsEvent::requests() const {
 	return requests_;
 }

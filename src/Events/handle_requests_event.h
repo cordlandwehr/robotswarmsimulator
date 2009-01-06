@@ -36,7 +36,7 @@ public:
 	 * Returns a constant reference to the set of requests.
 	 * \return A constant reference to the set of requests.
 	 */
-	const vector<boost::shared_ptr<Request> >& get_requests() const;
+	const vector<boost::shared_ptr<Request> >& requests() const;
 
 private:
 	/**

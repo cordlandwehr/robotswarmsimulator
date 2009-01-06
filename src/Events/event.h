@@ -13,7 +13,7 @@ public:
 	Event(int time) : time_(time) {};
 	virtual ~Event() {};
 
-	int get_time() const {return time_;};
+	int time() const {return time_;};
 private:
 	/**
 	 * The time the event happens

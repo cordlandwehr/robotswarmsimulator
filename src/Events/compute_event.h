@@ -36,7 +36,7 @@ public:
 	 * Returns a constant reference to the robot subset.
 	 * \return A constant reference to the robot subset.
 	 */
-	const vector<boost::shared_ptr<Robot> >& get_robot_subset() const;
+	const vector<boost::shared_ptr<Robot> >& robot_subset() const;
 
 	/**
 	 * Adds a new request to the set of requests.
@@ -48,7 +48,7 @@ public:
 	 * Returns a constant reference to the set of requests.
 	 * \return A constant reference to the set of requests.
 	 */
-	const vector<boost::shared_ptr<Request> >& get_requests() const;
+	const vector<boost::shared_ptr<Request> >& requests() const;
 
 private:
 	/**
