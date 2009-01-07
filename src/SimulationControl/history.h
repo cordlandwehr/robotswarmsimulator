@@ -30,6 +30,13 @@ public:
 	 */
 	boost::shared_ptr<WorldInformation> get_oldest();
 
+	/**
+	 * returns a const reference to the newest world information object in the buffer.
+	 * Should never be called if there is another thread which might call push_back()
+	 * concurrently
+	 */
+	const WorldInformation& get_newest();
+
 	// .. other accessors may follow
 private:
 	boost::circular_buffer<boost::shared_ptr<WorldInformation> > history_;

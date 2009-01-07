@@ -19,6 +19,12 @@
 class Request {
 public:
 	virtual ~Request() {};
+
+	/**
+	 * returns a constant reference to the robot which issued the request
+	 * \Return a constant reference to the robot which issued the request
+	 */
+	const Robot& robot() const {return *robot_;};
 private:
 	/**
 	 * The robot which issued the request.

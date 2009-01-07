@@ -22,3 +22,7 @@ boost::shared_ptr<WorldInformation> History::get_oldest() {
 	boost::shared_ptr<WorldInformation> ptr;
 	return ptr;
 }
+
+const WorldInformation& History::get_newest() {
+	return *history_.at(0);
+}
