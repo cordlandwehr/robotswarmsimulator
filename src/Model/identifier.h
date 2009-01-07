@@ -13,7 +13,14 @@ public:
 	Identifier();
 	virtual ~Identifier();
 
-	//TODO implement
+	/**
+	 * Return ID of identifier.
+	 * \return ID of identifier.
+	 */
+	int id() const;
+
+private:
+	int id_;
 };
 
 #endif /* IDENTIFIER_H_ */

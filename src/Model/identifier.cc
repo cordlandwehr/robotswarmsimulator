@@ -8,3 +8,7 @@ Identifier::Identifier() {
 Identifier::~Identifier() {
 	// TODO Auto-generated destructor stub
 }
+
+int Identifier::id() const {
+	return id_;
+}

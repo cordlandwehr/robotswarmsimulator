@@ -24,10 +24,20 @@ void WorldInformation::add_obstacle(boost::shared_ptr<Obstacle> new_obstacle) {
 	obstacles_.push_back(new_obstacle);
 }
 
-const vector<boost::shared_ptr<Robot> >& WorldInformation::robots() const {
-	return robots_;
+const vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_datas() const {
+	return robot_datas_;
 }
 
-void WorldInformation::add_robot(boost::shared_ptr<Robot> new_robot) {
-	robots_.push_back(new_robot);
+void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {
+	robot_datas_.push_back(new_robot_data);
 }
+
+int WorldInformation::time() const {
+	return time_;
+}
+
+const boost::shared_ptr<RobotData>& WorldInformation::get_according_robot_data(Identifier * id) const {
+	//TODO(martinah) maybe check if robot_datas_[id->id()] exists? (should exist!)
+	return robot_datas_[id->id()];
+}
+

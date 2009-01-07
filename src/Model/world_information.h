@@ -11,11 +11,14 @@
 #include <vector>
 #include <boost/smart_ptr.hpp>
 
+#include "identifier.h"
+
 using namespace std;
 
 class WorldObject;
-class Robot;
+class RobotData;
 class Obstacle;
+
 
 class WorldInformation {
 
@@ -32,7 +35,7 @@ public:
 	//TODO (martinah) maybe set_marker() instead of (or additionally?) this method
 	/**
 	 * Adds a new marker to the world.
-	 * \param a shared pointer to the new marker
+	 * \param Shared pointer to the new marker.
 	 */
 	void add_marker(boost::shared_ptr<WorldObject> new_marker);
 
@@ -45,22 +48,40 @@ public:
 	//TODO (martinah) maybe set_obstacle() instead of (or additionally?) this method
 	/**
 	 * Adds a new obstacle to the world.
-	 * \param a shared pointer to the new obstacle
+	 * \param Shared pointer to the new obstacle.
 	 */
 	void add_obstacle(boost::shared_ptr<Obstacle> new_obstacle);
 
 	/**
-	 * Returns a constant reference to the set of the robots.
-	 * \return Constant reference to the set of the robots.
+	 * Returns a constant reference to the set of the robot datas.
+	 * \return Constant reference to the set of the robots datas.
 	 */
-	const vector<boost::shared_ptr<Robot> >& robots() const;
+	const vector<boost::shared_ptr<RobotData> >& robot_datas() const;
 
-	//TODO (martinah) maybe set_robot() instead of (or additionally?) this method
+	//TODO (martinah) maybe set_robot_data() instead of (or additionally?) this method
 	/**
-	 * Adds a new obstacle to the world.
-	 * \param a shared pointer to the new robot
+	 * Adds a new robot data to the world.
+	 * \param Shared pointer to the new robot data.
 	 */
-	void add_robot(boost::shared_ptr<Robot> new_robot);
+	void add_robot_data(boost::shared_ptr<RobotData> new_robot_data);
+
+	/**
+	 * Returns the time (measured in steps) when this world info object was created.
+	 * \return Time (measured in steps) when this world info object was created.
+	 */
+	int time() const;
+
+	/**
+	 * Return constant reference to according robotData of given robot ID
+	 *
+	 * This method assumes, that the according reference to the
+	 * robotData of a robot with ID i is saved at position i in
+	 * the robot_datas-vector.
+	 *
+	 * \param reference to identifier of robot whose robotData's reference shall be returned.
+	 * \return Constant reference to according robotData of given robot ID.
+	 */
+	const boost::shared_ptr<RobotData>& get_according_robot_data(Identifier * id) const;
 
 private:
 	/**
@@ -74,9 +95,15 @@ private:
 	std::vector< boost::shared_ptr<Obstacle> > obstacles_;
 
 	/**
-	* Set of robots in the world
+	* Set of robot datas of robots in the world
 	*/
-	std::vector< boost::shared_ptr<Robot> > robots_;
+	std::vector< boost::shared_ptr<RobotData> > robot_datas_;
+
+	/**
+	 * Time (measured in steps) of creation of this world information
+	 */
+	int time_;
+
 };
 
 #endif /* WORLD_INFORMATION_H_ */
