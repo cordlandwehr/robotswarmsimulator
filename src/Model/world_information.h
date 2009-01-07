@@ -1,5 +1,6 @@
 /**
- * \class WorldInformation
+ * \class	WorldInformation
+ * \author	Martina Hüllmann
  * \brief	Each WorldInformation instance corresponds
  * 			to the state of the simulated world at a
  * 			specific simulation step.

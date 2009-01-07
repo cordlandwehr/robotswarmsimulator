@@ -8,8 +8,3 @@ Obstacle::Obstacle() {
 Obstacle::~Obstacle() {
 	// TODO Auto-generated destructor stub
 }
-
-bool Obstacle::contains_point(std::vector<double> point) {
-	//TODO implement
-	return false;
-}

@@ -26,6 +26,12 @@ public:
 	 */
 	void set_radius(double new_radius);
 
+	/**
+	 * Checks whether the given point is contained in the obstacle.
+	 * \param point to check whether it's contained in the obstacle.
+	 */
+	bool contains_point(std::vector<double> point);
+
 private:
 	double radius_;
 };
