@@ -2960,6 +2960,7 @@
 </option>
 <option id="macosx.cpp.link.option.libs.1311799848" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="boost_regex-xgcc40-mt"/>
+<listOptionValue builtIn="false" value="boost_thread-xgcc40-mt"/>
 </option>
 <inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1202444375" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -7382,6 +7383,7 @@
 </option>
 <option id="macosx.cpp.link.option.libs.1645399955" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="boost_regex-xgcc40-mt"/>
+<listOptionValue builtIn="false" value="boost_thread-xgcc40-mt"/>
 <listOptionValue builtIn="false" value="boost_unit_test_framework-xgcc40-mt"/>
 </option>
 <inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1967044028" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
@@ -8861,7 +8863,7 @@
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.550478690" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1735392943" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
-<option id="gnu.cpp.link.option.libs.1101362136" superClass="gnu.cpp.link.option.libs" valueType="libs">
+<option id="gnu.cpp.link.option.libs.1101362136" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="boost_unit_test_framework"/>
 <listOptionValue builtIn="false" value="boost_thread"/>
 </option>
