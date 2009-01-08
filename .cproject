@@ -5921,6 +5921,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.271159953" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
 <option id="gnu.cpp.link.option.libs.1291301098" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="boost_regex"/>
+<listOptionValue builtIn="false" value="boost_thread"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.7801554" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -8860,6 +8861,10 @@
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.550478690" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1735392943" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
+<option id="gnu.cpp.link.option.libs.1101362136" superClass="gnu.cpp.link.option.libs" valueType="libs">
+<listOptionValue builtIn="false" value="boost_unit_test_framework"/>
+<listOptionValue builtIn="false" value="boost_thread"/>
+</option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2016105759" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
