@@ -24,7 +24,7 @@ class WorldInformation {
 
 public:
 	WorldInformation();
-	virtual ~WorldInformation();
+	~WorldInformation();
 
 	/**
 	 * Returns a constant reference to the set of the markers.
@@ -53,10 +53,10 @@ public:
 	void add_obstacle(boost::shared_ptr<Obstacle> new_obstacle);
 
 	/**
-	 * Returns a constant reference to the set of the robot datas.
-	 * \return Constant reference to the set of the robots datas.
+	 * Returns a constant reference to the set of the robot data.
+	 * \return Constant reference to the set of the robots data.
 	 */
-	const vector<boost::shared_ptr<RobotData> >& robot_datas() const;
+	const vector<boost::shared_ptr<RobotData> >& robot_data() const;
 
 	//TODO (martinah) maybe set_robot_data() instead of (or additionally?) this method
 	/**
@@ -81,7 +81,7 @@ public:
 	 * \param reference to identifier of robot whose robotData's reference shall be returned.
 	 * \return Constant reference to according robotData of given robot ID.
 	 */
-	const boost::shared_ptr<RobotData>& get_according_robot_data(Identifier * id) const;
+	const RobotData& get_according_robot_data(Identifier * id) const;
 
 private:
 	/**
@@ -97,7 +97,7 @@ private:
 	/**
 	* Set of robot datas of robots in the world
 	*/
-	std::vector< boost::shared_ptr<RobotData> > robot_datas_;
+	std::vector< boost::shared_ptr<RobotData> > robot_data_;
 
 	/**
 	 * Time (measured in steps) of creation of this world information

@@ -10,6 +10,7 @@
 #define ROBOT_DATA_H_
 
 #include "boost/tuple/tuple.hpp"
+#include "../Utilities/vector3d.h"
 
 using namespace std;
 
@@ -17,87 +18,88 @@ using namespace std;
 
 class Identifier;
 
-//TODO set possible stati of a robot
+//TODO(martinah) set possible stati of a robot
 /**
  * \enum Status a robot can have.
  */
-enum Status { STATUS };
+enum RobotStatus { STATUS };
 
-//TODO set possible types of a robot
+//TODO(martinah) set possible types of a robot
 /**
  * \enum Type a robot can have.
  */
-enum Type { TYPE };
+enum RobotType { TYPE };
 
 class RobotData : public WorldObject{
 public:
 	RobotData();
-	virtual ~RobotData();
+	~RobotData();
 
 	/**
 	 * Returns constant reference to the robot's id.
 	 * \return Constant reference to the robot's id.
 	 */
-	const boost::shared_ptr<Identifier>& id() const;
+	const Identifier& id() const;
 
 	/**
-	 * Returns acceleration vector of the robot.
-	 * \return Acceleration vector of the robot.
+	 * Returns constant reference to acceleration vector of the robot.
+	 * \return Constant reference to acceleration vector of the robot.
 	 */
-	std::vector<double> acceleration() const;
+	const Vector3d & acceleration() const;
 
 	/**
-	 * Set acceleration of the robot
-	 * \param acceleration vector
+	 * Sets acceleration of the robot.
+	 * \param Pointer to acceleration vector.
 	 */
-	void set_acceleration(std::vector<double> new_acceleration);
+	void set_acceleration(boost::shared_ptr<Vector3d> new_acceleration);
 
 	/**
-	 * Returns triple of vectors containing the coordinate system axis.
+	 * Returns constant reference to triple of pointers to vectors
+	 * containing the coordinate system axis.
 	 * \return Triple of vectors containing the coordinate system axis.
 	 */
-	const boost::tuple<std::vector<double> > coordinate_system_axis() const;
+	boost::tuple<boost::shared_ptr<Vector3d> > coordinate_system_axis() const;
 
 	/**
 	 * Returns type of the robot.
 	 * \return type of the robot.
 	 */
-	const Type type() const;
+	const RobotType type() const;
 
 	/**
-	 * Returns velocity vector of the robot.
-	 * \return Velocity vector of the robot.
+	 * Returns constant reference to velocity vector of the robot.
+	 * \return constant reference Velocity vector of the robot.
 	 */
-	std::vector<double> velocity() const;
+	const Vector3d & velocity() const;
 
 	/**
 	 * Sets velocity of the robot.
-	 * \param new velocity vector.
+	 * \param Pointer to new velocity vector.
 	 */
-	void set_velocity(std::vector<double> new_velocity);
+	void set_velocity(boost::shared_ptr<Vector3d> new_velocity);
 
 	/**
 	 * Returns status of the robot.
 	 * \return Status of the robot.
 	 */
-	Status status() const;
+	RobotStatus status() const;
 
 	/**
 	 * Sets status of the robot.
 	 * \param new status
 	 */
-	void set_status(Status new_status);
+	void set_status(RobotStatus new_status);
 
 private:
-	const boost::shared_ptr<Identifier> id_;
-	std::vector<double> acceleration_;
+	boost::shared_ptr<Identifier> id_;
+	boost::shared_ptr<Vector3d> acceleration_;
 	/**
 	 * \var Triple with the three coordinate axis of the robot.
 	 */
-	const boost::tuple<vector<double> > coordinate_system_axis_;
-	Type type_;
-	std::vector<double> velocity_;
-	Status status_;
+	boost::tuple<boost::shared_ptr<Vector3d> > coordinate_system_axis_;
+	RobotType type_;
+	boost::shared_ptr<Vector3d> velocity_;
+	RobotStatus status_;
 };
 
 #endif /* ROBOT_DATA_H_ */

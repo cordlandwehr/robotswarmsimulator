@@ -1,10 +1,3 @@
-/*
- * simulation_kernel.cc
- *
- *  Created on: Jan 7, 2009
- *      Author: martinah
- */
-
 #include "simulation_kernel.h"
 
 SimulationKernel::SimulationKernel() {

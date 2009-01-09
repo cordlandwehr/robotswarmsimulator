@@ -8,7 +8,7 @@
 class Robot {
 public:
 	Robot();
-	virtual ~Robot();
+	~Robot();
 };
 
 #endif /* ROBOT_H_ */

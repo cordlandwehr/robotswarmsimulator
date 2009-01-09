@@ -8,11 +8,12 @@
 #define BOX_H_
 
 #include "obstacle.h"
+#include "../Utilities/vector3d.h"
 
 class Box : public Obstacle {
 public:
 	Box();
-	virtual ~Box();
+	~Box();
 
 	/**
 	 * Returns the length of the box.
@@ -52,9 +53,10 @@ public:
 
 	/**
 	 * Checks whether the given point is contained in the obstacle.
-	 * \param point to check whether it's contained in the obstacle.
+	 * \param Pointer to vector of point to check whether it's contained
+	 * 	      in the obstacle.
 	 */
-	bool contains_point(std::vector<double> point);
+	bool contains_point(boost::shared_ptr<Vector3d> point);
 
 private:
 	/**

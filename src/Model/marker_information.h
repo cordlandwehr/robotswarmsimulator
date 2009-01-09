@@ -8,7 +8,7 @@
 class MarkerInformation {
 public:
 	MarkerInformation();
-	virtual ~MarkerInformation();
+	~MarkerInformation();
 };
 
 #endif /* MARKER_INFORMATION_H_ */

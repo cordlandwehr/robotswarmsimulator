@@ -28,17 +28,17 @@ public:
 	 * Constructs a new type change request.
 	 * The request cannot be changed after construction.
 	 */
-	TypeChangeRequest(boost::shared_ptr<Robot> robot, Type requested_type) : Request(robot),
+	TypeChangeRequest(boost::shared_ptr<Robot> robot, RobotType requested_type) : Request(robot),
 	                                                                         requested_type_(requested_type) {}
 
 	/**
 	 * Returns a constant reference to the requested type
 	 * \return A constant reference to the requested type
 	 */
-	const Type& requested_type() const {return requested_type_;}
+	const RobotType& requested_type() const {return requested_type_;}
 
 private:
-	Type requested_type_;
+	RobotType requested_type_;
 };
 
 #endif /* TYPECHANGEREQUEST_H_ */

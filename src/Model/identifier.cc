@@ -9,6 +9,6 @@ Identifier::~Identifier() {
 	// TODO Auto-generated destructor stub
 }
 
-int Identifier::id() const {
+std::size_t Identifier::id() const {
 	return id_;
 }

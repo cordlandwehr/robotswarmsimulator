@@ -8,38 +8,38 @@
 #define WORLD_OBJECT_H_
 
 #include <boost/smart_ptr.hpp>
-#include <vector>
+#include "../Utilities/vector3d.h"
 
-#include "marker_information.h"
+class MarkerInformation;
 
 class WorldObject {
 public:
 	WorldObject();
-	virtual ~WorldObject();
+	~WorldObject();
 
 	/**
 	 * Sets the marker information of this object.
 	 * \param a shared pointer to the new marker information
 	 */
-	void set_marker_information(MarkerInformation * new_marker_information);
+	void set_marker_information(boost::shared_ptr<MarkerInformation> new_marker_information);
 
 	/**
 	 * Returns a constant reference to the marker information of this object.
 	 * \return Constant reference to the marker information of this object.
 	 */
-	const boost::shared_ptr<MarkerInformation>& marker_information() const;
+	const MarkerInformation& marker_information() const;
 
 	/**
-	 * Sets the position of this object
-	 * \param Position vector
+	 * Sets the position of this object.
+	 * \param Pointer to new position vector.
 	 */
-	void set_position(std::vector<double> new_position);
+	void set_position(boost::shared_ptr<Vector3d> new_position);
 
 	/**
-	 * Returns a the position vector this object.
-	 * \return Position vector this object.
+	 * Returns constant reference to position vector.
+	 * \return Constant reference to position vector.
 	 */
-	const std::vector<double> position() const;
+	const Vector3d & position() const;
 
 private:
 	/**
@@ -51,9 +51,8 @@ protected:
 	/**
 	 * Position of the world object in the world.
 	 * This point always is the point in the center of the object
-	 * This information is needed for objects with a volume > 0.
 	 */
-	std::vector<double> position_;
+	boost::shared_ptr<Vector3d> position_;
 };
 
 #endif /* WORLD_OBJECT_H_ */

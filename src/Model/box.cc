@@ -34,16 +34,18 @@ void Box::set_width(double new_width) {
 }
 
 
-bool Box::contains_point(std::vector<double> point) {
+bool Box::contains_point(boost::shared_ptr<Vector3d> point) {
 	//Point is contained if:
 	//this.x - width/2 <= point.x <= this.x + width/2 AND
 	//this.y - height/2 <= point.y <= this.y + height/2 AND
 	//this.z - depth/2 <= point.z <= this.z + depth/2
 	//remember: position is the center point of the box
+	/*
+	 * TODO implement using type Vector3d
 	if( position_[0] - width_/2. <= point[0] && point[0] <= position_[0]+width_/2. &&
 	    position_[1] - height_/2. <= point[1] && point[1] <= position_[0]+height_/2. &&
 	    position_[2] - depth_/2.<= point[2] && point[2] <= position_[2]+depth_/2. )
 		return true;
-	else
+	else*/
 		return false;
 }

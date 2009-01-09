@@ -22,7 +22,7 @@ class History;
 class SimulationKernel {
 public:
 	SimulationKernel();
-	virtual ~SimulationKernel();
+	~SimulationKernel();
 
 	/**
 	 * Returns a constant reference to the set of the robots.
@@ -33,11 +33,10 @@ public:
 	/**
 	 * Returns a constant reference to History of WorldInformations.
 	 * \return Constant reference to History of WorldInformations.
+	 *
+	 * TODO(martinah) return History& instead of boost::shared_ptr<History>&
 	 */
 	const boost::shared_ptr<History>& history() const;
-
-	//TODO(martinah) if the robots aren't created in SimulationKernel add a
-	//               method for adding or setting robots
 
 private:
 	/**

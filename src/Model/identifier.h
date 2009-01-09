@@ -8,19 +8,21 @@
 #ifndef IDENTIFIER_H_
 #define IDENTIFIER_H_
 
+#include <cstddef>
+
 class Identifier {
 public:
 	Identifier();
-	virtual ~Identifier();
+	~Identifier();
 
 	/**
 	 * Return ID of identifier.
 	 * \return ID of identifier.
 	 */
-	int id() const;
+	std::size_t id() const;
 
 private:
-	int id_;
+	std::size_t id_;
 };
 
 #endif /* IDENTIFIER_H_ */
