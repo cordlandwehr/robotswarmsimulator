@@ -1,20 +1,22 @@
-#include "View.h"
+#include "view.h"
 
 
 
 #include "../Model/identifier.h"
 
-/*#include "../Model/robot_identifier.h"
+#include "../Model/robot_identifier.h"
 #include "../Model/obstacle_identifier.h"
 #include "../Model/marker_identifier.h"
 #include "../Model/box_identifier.h"
-#include "../Model/sphere_identifier.h"*/
+#include "../Model/sphere_identifier.h"
 //TODO: remove this classes and replace with includes above.
+/*
 class RobotIdentifier : public Identifier {};
 class ObstacleIdentifier : public Identifier {};
 class BoxIdentifier : public ObstacleIdentifier {};
 class SphereIdentifier : public ObstacleIdentifier {};
 class MarkerIdentifier : public Identifier {};
+*/
 
 #include "../Model/robot.h"
 #include "../Utilities/vector3d.h"

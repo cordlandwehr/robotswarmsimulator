@@ -9,8 +9,8 @@ RobotData::~RobotData() {
 	// TODO Auto-generated destructor stub
 }
 
-const Identifier& RobotData::id() const {
-	return *id_;
+const boost::shared_ptr<Identifier>& RobotData::id() const {
+	return id_;
 }
 
 const Vector3d & RobotData::acceleration() const {

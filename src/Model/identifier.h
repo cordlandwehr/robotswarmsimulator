@@ -1,8 +1,7 @@
 /**
  * \class	Identifier
  * \author	Martina Hüllmann
- * \brief	Denote ID's of robots and additionally distinguish
- * 			between owned and not owned ID's.
+ * \brief	Denote ID's of robots.
  */
 
 #ifndef IDENTIFIER_H_

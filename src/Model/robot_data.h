@@ -39,7 +39,7 @@ public:
 	 * Returns constant reference to the robot's id.
 	 * \return Constant reference to the robot's id.
 	 */
-	const Identifier& id() const;
+	const boost::shared_ptr<Identifier>& id() const;
 
 	/**
 	 * Returns constant reference to acceleration vector of the robot.
