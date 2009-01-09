@@ -30,6 +30,9 @@ void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 	LookEvent* look_event = dynamic_cast<LookEvent*> (event.get());
 	if(look_event != NULL) {
 		// TODO(craupach) can this be done more elegantly?
+		// TODO(dwonisch) this will lead to undefined behavior, because look_event_ptr and event will have an own
+		//                reference count each, leading to 2 deletes on the same object.
+		//                Use boost::dynamic_pointer_cast (http://www.boost.org/doc/libs/1_37_0/libs/smart_ptr/shared_ptr.htm#dynamic_pointer_cast)
 		boost::shared_ptr<LookEvent> look_event_ptr;
 		look_event_ptr.reset(look_event);
 		handle_look_event(look_event_ptr);
