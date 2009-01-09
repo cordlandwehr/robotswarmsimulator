@@ -13,7 +13,7 @@
 class Identifier {
 public:
 	Identifier();
-	~Identifier();
+	virtual ~Identifier();
 
 	/**
 	 * Return ID of identifier.

@@ -47,9 +47,9 @@ public:
 	 */
 	virtual void init(boost::shared_ptr<WorldInformation> world_information);
 
-	virtual std::set<RobotRef> get_visible_robots(const Robot& caller) const;
-	virtual std::set<RobotRef> get_visibile_obstacles(const Robot& caller) const;
-	virtual std::set<RobotRef> get_visible_markers(const Robot& caller) const;
+	std::set<RobotRef> get_visible_robots(const Robot& caller) const;
+	std::set<ObstacleRef> get_visible_obstacles(const Robot& caller) const;
+	std::set<MarkerRef> get_visible_markers(const Robot& caller) const;
 
 	//-- WorldObject--
 	Vector3d get_position(const Robot& caller, WorldObjectRef world_object) const;
@@ -78,6 +78,10 @@ public:
 
 protected:
 	//Helper methods for non virtual methods
+	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
+	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
+	virtual std::set<MarkerRef> get_visible_markers(const RobotData& robot) const;
+
 	virtual Vector3d get_own_position(const RobotData& robot) const;
 	virtual Vector3d get_robot_position(const RobotData& robot) const;
 	virtual Vector3d get_obstacle_position(const Obstacle& obstacle) const;
@@ -88,11 +92,11 @@ protected:
 	virtual const MarkerInformation& get_obstacles_marker_information(const Obstacle& obstacle) const;
 	virtual const MarkerInformation& get_markers_marker_information(const WorldObject& marker) const;
 
-	virtual std::size_t get_robot_id(const RobotData& robot) const;
 	virtual std::size_t get_own_id(const RobotData& robot) const;
+	virtual std::size_t get_robot_id(const RobotData& robot) const;
 
-	virtual boost::tuple<Vector3d> get_own_acceleration(const RobotData& robot) const;
-	virtual boost::tuple<Vector3d> get_robot_acceleration(const RobotData& robot) const;
+	virtual Vector3d get_own_acceleration(const RobotData& robot) const;
+	virtual Vector3d get_robot_acceleration(const RobotData& robot) const;
 
 	virtual boost::tuple<Vector3d> get_own_coordinate_system_axis(const RobotData& robot) const;
 	virtual boost::tuple<Vector3d> get_robot_coordinate_system_axis(const RobotData& robot) const;
@@ -108,9 +112,9 @@ protected:
 
 	virtual bool is_point_in_obstacle(const Obstacle& obstacle, const Vector3d& point) const;
 
-	virtual double get_box_depth(const Box& obstacle) const;
-	virtual double get_box_width(const Box& obstacle) const;
-	virtual double get_box_height(const Box& obstacle) const;
+	virtual double get_box_depth(const Box& box) const;
+	virtual double get_box_width(const Box& box) const;
+	virtual double get_box_height(const Box& box) const;
 
 	virtual double get_sphere_radius(const Sphere& sphere) const;
 
@@ -121,7 +125,7 @@ private:
 	const Obstacle& resolve_obstacle_ref(ObstacleRef obstacle) const;
 	const RobotData& resolve_robot_ref(RobotRef robot) const;
 	const WorldObject& resolve_marker_ref(MarkerRef marker) const;
-	const Box& resolve_box_ref(BoxRef marker) const;
+	const Box& resolve_box_ref(BoxRef box) const;
 	const Sphere& resolve_sphere_ref(SphereRef sphere) const;
 
 	const Obstacle& resolve_obstacle_ref_safe(ObstacleRef obstacle) const;

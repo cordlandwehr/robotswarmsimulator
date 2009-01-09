@@ -15,7 +15,7 @@ class MarkerInformation;
 class WorldObject {
 public:
 	WorldObject();
-	~WorldObject();
+	virtual ~WorldObject();
 
 	/**
 	 * Sets the marker information of this object.

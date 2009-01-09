@@ -15,7 +15,7 @@
 class Obstacle : public WorldObject {
 public:
 	Obstacle();
-	~Obstacle();
+	virtual ~Obstacle();
 
 	/**
 	 * Checks whether the given point is contained in the obstacle.

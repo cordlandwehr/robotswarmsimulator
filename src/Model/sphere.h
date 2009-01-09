@@ -12,7 +12,7 @@
 class Sphere : public Obstacle {
 public:
 	Sphere();
-	~Sphere();
+	virtual ~Sphere();
 
 	/**
 	 * Returns the radius of the sphere.

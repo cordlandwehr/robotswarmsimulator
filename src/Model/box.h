@@ -13,7 +13,7 @@
 class Box : public Obstacle {
 public:
 	Box();
-	~Box();
+	virtual ~Box();
 
 	/**
 	 * Returns the length of the box.
