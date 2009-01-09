@@ -1,4 +1,4 @@
-#include "SimulationControl.h"
+#include "simulation_control.h"
 #include "../Model/world_information.h"
 #include "../SimulationControl/history.h"
 
