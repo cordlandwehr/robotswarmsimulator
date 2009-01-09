@@ -28,14 +28,14 @@ public:
 	/**
 	 * gets the oldest WorldInformation object in the buffer and marks it as consumed
 	 */
-	boost::shared_ptr<WorldInformation> get_oldest();
+	const WorldInformation& get_oldest();
 
 	/**
 	 * returns a const reference to the newest world information object in the buffer.
 	 * Should never be called if there is another thread which might call push_back()
 	 * concurrently
 	 */
-	const WorldInformation& get_newest();
+	const WorldInformation& get_newest() const;
 
 	// .. other accessors may follow
 private:

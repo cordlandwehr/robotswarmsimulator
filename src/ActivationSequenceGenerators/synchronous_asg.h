@@ -19,6 +19,9 @@
 
 using namespace std;
 
+// forward declarations
+class History;
+
 /**
  * \class SynchronousASG
  * \brief The synchronous ASG produces a sequence of events according to the fully-synchronous time-model.
@@ -32,7 +35,7 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(boost::shared_ptr<WorldInformation> world_state);
+	void initialize(boost::shared_ptr<History> history);
 
 	/**
 	 * Returns the next event. Since the ASG is synchronous the sequence of events will have the form
@@ -52,11 +55,11 @@ public:
 	/**
 	 * Updates the sequence of events. For the synchronous ASG this only stores the requests of robots
 	 * stored in compute events. The requests are added to the next handle_requests event.
-	 * \param A pointer to the history of world states.
+	 * \param A constant refrence to the newest world information
 	 * \param The last handled event
 	 */
-	void update_sequence(boost::shared_ptr<boost::circular_buffer <WorldInformation> > history,
-				         boost::shared_ptr<Event> last_event);
+	void update(const WorldInformation& world_information,
+			    boost::shared_ptr<Event> event);
 
 private:
 	/**

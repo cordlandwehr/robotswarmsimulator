@@ -29,7 +29,7 @@ class History;
 
 /**
  *
- *  * \brief The event handler determines, according to some user–specified rules,
+ * \brief The event handler determines, according to some user–specified rules,
  * how to apply the different requests to the world.
  *
  * The abstract event handler class provides the following functionality:
@@ -46,7 +46,7 @@ public:
 	virtual ~EventHandler() {}
 
 	/**
-	 * handles the given event.
+	 * handles the given event. By calling appropriate handlers and updating the listeners.
 	 */
 	void handle_event(boost::shared_ptr<Event> event);
 
@@ -70,9 +70,8 @@ private:
 	 * handles the given HandleRequests event by doing the following
 	 * 1. producing a new WorldInformation object by extrapolating and handling requests
 	 * 2. adding the new WorldInformation object to the history
-	 * 3. informing all listeners of the changed world state
 	 */
-	void handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
+	void handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
 
 	/**
 	 * handles the given request by delegating to one of the custom handler methods
@@ -105,6 +104,11 @@ private:
 	virtual void handle_velocity_request(boost::shared_ptr<VelocityRequest> velocity_request) = 0;
 
 	/**
+	 * informs all listeners after each event
+	 */
+	void update_listeners(boost::shared_ptr<Event> event);
+
+	/**
 	 * generates a new WorldInformation object by extrapolating and handling requests
 	 */
 	boost::shared_ptr<WorldInformation> produce_world_information();
@@ -114,14 +118,9 @@ private:
 	 */
 	boost::shared_ptr<WorldInformation> extrapolate_old_world_information(int time);
 
-	/**
-	 * informs all listeners of the changed world state
-	 */
-	void update_listeners();
 
-
-	boost::shared_ptr<History> history_;
 	vector<boost::shared_ptr<SimulationListener> > listeners_;
+	boost::shared_ptr<History> history_;
 };
 
 #endif /* EVENT_HANDLER_H_ */

@@ -12,8 +12,12 @@
 #include <boost/circular_buffer.hpp>
 #include "../Model/world_information.h"
 #include "../Events/look_event.h"
+#include "../SimulationKernel/simulation_listener.h"
 
 using namespace std;
+
+// forward declarations
+class History;
 
 /**
  * \class ActivationSequenceGenerator
@@ -23,8 +27,10 @@ using namespace std;
  * how to time the different events. In other words, it manages the timing of the execution
  * of the robot algorithms.
  *
+ * The ActivationSequenceGenerator class inherits from the SimulationListener interface.
+ *
  */
-class ActivationSequenceGenerator {
+class ActivationSequenceGenerator : public SimulationListener {
 
 
 public:
@@ -33,9 +39,9 @@ public:
 
 	/**
 	 * Initializes the ASG.
-	 * \param The initial world state
+	 * \param The history
 	 */
-	virtual void initialize(boost::shared_ptr<WorldInformation> world_state) = 0;
+	virtual void initialize(boost::shared_ptr<History> history) = 0;
 
 	/**
 	 * Returns the next event.
@@ -49,13 +55,6 @@ public:
 	 */
 	virtual int get_time_of_next_event() = 0;
 
-	/**
-	 * Updates the activation sequence (for example because we want to implement an adversary)
-	 * \param The history of world states
-	 * \param The last handled event
-	 */
-	virtual void update_sequence(boost::shared_ptr<boost::circular_buffer <WorldInformation> > history,
-			                     boost::shared_ptr<Event> last_event) = 0;
 };
 
 #endif /* ACTIVATION_SEQUENCE_GENERATOR_H_ */

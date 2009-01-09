@@ -16,10 +16,11 @@
 #include "../Events/look_event.h"
 #include "../Events/compute_event.h"
 #include "../Events/handle_requests_event.h"
+#include "../SimulationControl/history.h"
 
 #include "synchronous_asg.h"
 
-void SynchronousASG::initialize(boost::shared_ptr<WorldInformation> world_state) {
+void SynchronousASG::initialize(boost::shared_ptr<History> history) {
 	// TODO(craupach) this needs to somehow extract a pointer to the set of all robots
 }
 
@@ -48,8 +49,8 @@ boost::shared_ptr<Event> SynchronousASG::get_next_event() {
 	return event;
 }
 
-void SynchronousASG::update_sequence(boost::shared_ptr<boost::circular_buffer <WorldInformation> > history,
-									 boost::shared_ptr<Event> last_event) {
+void SynchronousASG::update(const WorldInformation& world_information,
+                            boost::shared_ptr<Event> last_event) {
 	// check if it is a compute event
 	ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (last_event.get());
 	if(compute_event != NULL) {

@@ -28,7 +28,7 @@ const WorldInformation& SimulationControl::get_current_world_information() {
 	fill_count_.wait();
 	fill_count_.post();
 	//TODO:
-	return *simulation_kernel_.history()->get_oldest();
+	return simulation_kernel_.history()->get_oldest();
 }
 
 void SimulationControl::proceed_to_next_world_information() {

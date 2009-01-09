@@ -18,11 +18,11 @@ void History::push_back(boost::shared_ptr<WorldInformation> world_information) {
 
 }
 
-boost::shared_ptr<WorldInformation> History::get_oldest() {
-	boost::shared_ptr<WorldInformation> ptr;
-	return ptr;
+const WorldInformation& History::get_oldest() {
+	//TODO(craupach) implement this
+	return *(history_.at(0));
 }
 
-const WorldInformation& History::get_newest() {
+const WorldInformation& History::get_newest() const {
 	return *history_.at(0);
 }

@@ -13,16 +13,25 @@
 class WorldInformation;
 class HandleRequestsEvent;
 
+/**
+ * SimulationListener is an interface to be implemented by classes which wish to be informed of handled
+ * events.
+ */
 class SimulationListener {
 public:
 	virtual ~SimulationListener() {}
 
 	/**
-	 * updates the listener after the HandleRequestsEvent event has happened.
-	 * world_information is guranteed to be a pointer to the most recently generated WorldInformation object.
+	 * updates the listener after a event has happened.
+	 * World_information is guaranteed to be a pointer to the most recently generated WorldInformation object.
+	 * It is not guaranteed that last_event is a handle_request event and that world_information was generated
+	 * for last_event.
+	 *
+	 * \param A constant refrence to the newest world information
+	 * \param The last handled event
 	 */
-	virtual update(boost::shared_ptr<WorldInformation> world_information,
-			       boost::shared_ptr<HandleRequestsEvent> event) = 0;
+	virtual void update(const WorldInformation& world_information,
+			            boost::shared_ptr<Event> last_event) = 0;
 };
 
 #endif /* SIMULATION_LISTENER_H_ */
