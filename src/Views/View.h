@@ -4,14 +4,12 @@
  *  Created on: 08.01.2009
  *      Author: Daniel Wonisch
  */
-#if 0
 #ifndef VIEW_H_
 #define VIEW_H_
 
 #include <cstddef>
 #include <set>
 #include <boost/shared_ptr.hpp>
-
 #include "../Model/robot_data.h"
 
 class Identifier;
@@ -26,8 +24,7 @@ class MarkerInformation;
 class Obstacle;
 class Box;
 class Sphere;
-class RobotData;
-
+class WorldInformation;
 
 class View {
 protected:
@@ -43,79 +40,99 @@ public:
 	View();
 	virtual ~View();
 
+	/**
+	 * Although init is trivial, it is nice to have a default constructor in virtual
+	 * inherited classes. Otherwise every arbitrary deep sub class has
+	 * to call the non-default constructor.
+	 */
+	virtual void init(boost::shared_ptr<WorldInformation> world_information);
+
 	virtual std::set<RobotRef> get_visible_robots(const Robot& caller) const;
 	virtual std::set<RobotRef> get_visibile_obstacles(const Robot& caller) const;
 	virtual std::set<RobotRef> get_visible_markers(const Robot& caller) const;
 
 	//-- WorldObject--
-	vector3d get_position(const Robot& caller, WorldObjectRef world_object) const;
+	Vector3d get_position(const Robot& caller, WorldObjectRef world_object) const;
 	const MarkerInformation& get_marker_information(const Robot& caller, WorldObjectRef world_object) const;
 
 	//-- RobotData --
-	//TODO: This looks strange, but the Robot.compute method is not allowed to get the id
-	//      out of the Identifier object. Therefore we provide an additional method to
-	//		get this id of the Identifier. That may be forbidden, if the Robot must not
-	//		be able to receive identities of the (other) Robots.
 	std::size_t get_robot_id(const Robot& caller, RobotRef robot) const;
-	vector3d get_robot_acceleration(const Robot& caller, RobotRef robot) const;
-	boost::tuple<vector3d> get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const;
-	Type get_robot_type(const Robot& caller, RobotRef robot) const;
-	vector3d get_robot_velocity(const Robot& caller, RobotRef robot) const;
-	Status get_robot_status(const Robot& caller, RobotRef robot) const;
+	Vector3d get_robot_acceleration(const Robot& caller, RobotRef robot) const;
+	boost::tuple<Vector3d> get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const;
+	RobotType get_robot_type(const Robot& caller, RobotRef robot) const;
+	Vector3d get_robot_velocity(const Robot& caller, RobotRef robot) const;
+	RobotStatus get_robot_status(const Robot& caller, RobotRef robot) const;
 
 	//-- Obstacle --
-	//TODO: needed?
-	virtual bool is_point_in_obstacle(ObstacleRef obstacle, vector3d point) const;
+	bool is_point_in_obstacle(ObstacleRef obstacle, const Vector3d& point) const;
 
 	//-- Box --
-	virtual double get_box_depth(BoxRef obstacle) const;
-	virtual double get_box_width(BoxRef obstacle) const;
-	virtual double get_box_height(BoxRef obstacle) const;
+	double get_box_depth(BoxRef obstacle) const;
+	double get_box_width(BoxRef obstacle) const;
+	double get_box_height(BoxRef obstacle) const;
 
 	//-- Sphere --
-	virtual double get_sphere_radius(SphereRef sphere) const;
+	double get_sphere_radius(SphereRef sphere) const;
 
 
 
 protected:
 	//Helper methods for non virtual methods
-	virtual vector3d get_own_position(RobotRef robot) const;
-	virtual vector3d get_robot_position(RobotRef robot) const;
-	virtual vector3d get_obstacle_position(ObstacleRef robot) const;
-	virtual vector3d get_marker_position(MarkerRef robot) const;
+	virtual Vector3d get_own_position(const RobotData& robot) const;
+	virtual Vector3d get_robot_position(const RobotData& robot) const;
+	virtual Vector3d get_obstacle_position(const Obstacle& obstacle) const;
+	virtual Vector3d get_marker_position(const WorldObject& marker) const;
 
-	virtual const MarkerInformation& get_own_marker_information(RobotRef robot) const;
-	virtual const MarkerInformation& get_robots_marker_information(RobotRef robot) const;
-	virtual const MarkerInformation& get_obstacles_marker_information(ObstacleRef robot) const;
-	virtual const MarkerInformation& get_markers_marker_information(MarkerRef robot) const;
+	virtual const MarkerInformation& get_own_marker_information(const RobotData& robot) const;
+	virtual const MarkerInformation& get_robots_marker_information(const RobotData& robot) const;
+	virtual const MarkerInformation& get_obstacles_marker_information(const Obstacle& obstacle) const;
+	virtual const MarkerInformation& get_markers_marker_information(const WorldObject& marker) const;
 
-	virtual std::size_t get_robot_id(RobotRef robot) const;
-	virtual std::size_t get_own_id(RobotRef robot) const;
+	virtual std::size_t get_robot_id(const RobotData& robot) const;
+	virtual std::size_t get_own_id(const RobotData& robot) const;
 
-	virtual boost::tuple<vector3d> get_own_acceleration(RobotRef robot) const;
-	virtual boost::tuple<vector3d> get_robot_acceleration(RobotRef robot) const;
+	virtual boost::tuple<Vector3d> get_own_acceleration(const RobotData& robot) const;
+	virtual boost::tuple<Vector3d> get_robot_acceleration(const RobotData& robot) const;
 
-	virtual boost::tuple<vector3d> get_own_coordinate_system_axis(RobotRef robot) const;
-	virtual boost::tuple<vector3d> get_robot_coordinate_system_axis(RobotRef robot) const;
+	virtual boost::tuple<Vector3d> get_own_coordinate_system_axis(const RobotData& robot) const;
+	virtual boost::tuple<Vector3d> get_robot_coordinate_system_axis(const RobotData& robot) const;
 
-	virtual Type get_own_type(RobotRef robot) const;
-	virtual Type get_robot_type(RobotRef robot) const;
+	virtual RobotType get_own_type(const RobotData& robot) const;
+	virtual RobotType get_robot_type(const RobotData& robot) const;
 
-	virtual vector3d get_own_velocity(RobotRef robot) const;
-	virtual vector3d get_robot_velocity(RobotRef robot) const;
+	virtual Vector3d get_own_velocity(const RobotData& robot) const;
+	virtual Vector3d get_robot_velocity(const RobotData& robot) const;
 
-	virtual Status get_own_status(RobotRef robot) const;
-	virtual Status get_robot_status(RobotRef robot) const;
+	virtual RobotStatus get_own_status(const RobotData& robot) const;
+	virtual RobotStatus get_robot_status(const RobotData& robot) const;
+
+	virtual bool is_point_in_obstacle(const Obstacle& obstacle, const Vector3d& point) const;
+
+	virtual double get_box_depth(const Box& obstacle) const;
+	virtual double get_box_width(const Box& obstacle) const;
+	virtual double get_box_height(const Box& obstacle) const;
+
+	virtual double get_sphere_radius(const Sphere& sphere) const;
 
 
+	const boost::shared_ptr<WorldInformation>& world_information() const;
 
-	const Obstacle& resolveObstacleRef(ObstacleRef obstacle);
-	const RobotData& resolveRobotRef(RobotRef robot);
-	const WorldObject& resolveMarkerRef(MarkerRef marker);
-	const Box& resolveMarkerRef(BoxRef marker);
-	const Sphere& resolveMarkerRef(SphereRef marker);
+private:
+	const Obstacle& resolve_obstacle_ref(ObstacleRef obstacle) const;
+	const RobotData& resolve_robot_ref(RobotRef robot) const;
+	const WorldObject& resolve_marker_ref(MarkerRef marker) const;
+	const Box& resolve_box_ref(BoxRef marker) const;
+	const Sphere& resolve_sphere_ref(SphereRef sphere) const;
+
+	const Obstacle& resolve_obstacle_ref_safe(ObstacleRef obstacle) const;
+	const RobotData& resolve_robot_ref_safe(RobotRef robot) const;
+	const WorldObject& resolve_marker_ref_safe(MarkerRef marker) const;
+	const Box& resolve_box_ref_safe(BoxRef box) const;
+	const Sphere& resolve_sphere_ref_safe(SphereRef sphere) const;
+
+private:
+	boost::shared_ptr<WorldInformation> world_information_;
 
 };
 
 #endif /* VIEW_H_ */
-#endif
