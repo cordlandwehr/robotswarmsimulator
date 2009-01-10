@@ -11,8 +11,9 @@
 
 class BoxIdentifier : public ObstacleIdentifier {
 public:
-	BoxIdentifier();
 	virtual ~BoxIdentifier();
+protected:
+	BoxIdentifier();
 };
 
 #endif /* BOX_IDENTIFIER_H_ */

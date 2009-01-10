@@ -11,8 +11,9 @@
 
 class MarkerIdentifier : public Identifier {
 public:
-	MarkerIdentifier();
 	~MarkerIdentifier();
+protected:
+	MarkerIdentifier();
 };
 
 #endif /* MARKER_IDENTIFIER_H_ */

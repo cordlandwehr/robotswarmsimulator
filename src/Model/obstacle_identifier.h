@@ -11,8 +11,9 @@
 
 class ObstacleIdentifier : public Identifier {
 public:
-	ObstacleIdentifier();
 	virtual ~ObstacleIdentifier();
+protected:
+	ObstacleIdentifier();
 };
 
 #endif /* OBSTACLE_IDENTIFIER_H_ */

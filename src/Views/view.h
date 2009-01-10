@@ -134,6 +134,8 @@ private:
 	const Box& resolve_box_ref_safe(BoxRef box) const;
 	const Sphere& resolve_sphere_ref_safe(SphereRef sphere) const;
 
+	static bool is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifier> identifier);
+
 private:
 	boost::shared_ptr<WorldInformation> world_information_;
 

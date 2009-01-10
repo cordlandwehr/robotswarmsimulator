@@ -11,9 +11,10 @@
 
 class Identifier {
 public:
-	Identifier();
 	virtual ~Identifier();
 
+protected:
+	Identifier();
 	/**
 	 * Return ID of identifier.
 	 * \return ID of identifier.
@@ -22,6 +23,9 @@ public:
 
 private:
 	std::size_t id_;
+
+	friend class View;
+	friend class WorldInformation; //TODO: needed?
 };
 
 #endif /* IDENTIFIER_H_ */

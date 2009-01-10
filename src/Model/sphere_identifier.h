@@ -11,8 +11,9 @@
 
 class SphereIdentifier : public ObstacleIdentifier {
 public:
-	SphereIdentifier();
 	~SphereIdentifier();
+protected:
+	SphereIdentifier();
 };
 
 #endif /* SPHERE_IDENTIFIER_H_ */

@@ -11,8 +11,9 @@
 
 class RobotIdentifier : public Identifier {
 public:
-	RobotIdentifier();
 	~RobotIdentifier();
+protected:
+	RobotIdentifier();
 };
 
 #endif /* ROBOT_IDENTIFIER_H_ */

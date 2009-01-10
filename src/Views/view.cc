@@ -36,14 +36,14 @@ View::~View() {
 namespace {
 	void validate_identifier(const WorldObject& obj, boost::shared_ptr<Identifier> identifier) {
 		//TODO: remove comments
-		/*if(obj.id().get() != identifier.get()) {
+		/*if(obj.id() != identifier) {
 			throw std::invalid_argument("Illegal identifier. Outdated?");
 		}*/
 	}
+}
 
-	bool is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifier> identifier) {
-		return robot.id()->id() == identifier->id();
-	}
+bool View::is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifier> identifier) {
+	return robot.id()->id() == identifier->id();
 }
 
 const Obstacle& View::resolve_obstacle_ref(ObstacleRef obstacle) const {
