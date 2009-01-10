@@ -35,7 +35,7 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(boost::shared_ptr<History> history);
+	void initialize(const History& history);
 
 	/**
 	 * Returns the next event. Since the ASG is synchronous the sequence of events will have the form

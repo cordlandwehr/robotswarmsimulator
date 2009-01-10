@@ -33,7 +33,7 @@ enum RobotType { TYPE };
 class RobotData : public WorldObject{
 public:
 	RobotData();
-	virtual ~RobotData();
+	~RobotData();
 
 	/**
 	 * Returns constant reference to the robot's id.

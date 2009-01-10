@@ -33,13 +33,13 @@ public:
 	 * Sets the position of this object.
 	 * \param Pointer to new position vector.
 	 */
-	void set_position(boost::shared_ptr<Vector3d> new_position);
+	void set_position(boost::shared_ptr<Vector3d> new_position) {position_ = new_position;};
 
 	/**
 	 * Returns constant reference to position vector.
 	 * \return Constant reference to position vector.
 	 */
-	const Vector3d & position() const;
+	const Vector3d & position() const {return *position_;};
 
 private:
 	/**

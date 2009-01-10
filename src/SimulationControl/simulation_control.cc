@@ -25,6 +25,9 @@ void SimulationControl::run() {
 }
 
 const WorldInformation& SimulationControl::get_current_world_information() {
+	//TODO(craupach): Better move all these Semaphore operations into the history class:
+	// The event handler should not need to know about the SimulationControl class but it
+	// needs to access the history in a protected way.
 	fill_count_.wait();
 	fill_count_.post();
 	//TODO:
@@ -32,6 +35,7 @@ const WorldInformation& SimulationControl::get_current_world_information() {
 }
 
 void SimulationControl::proceed_to_next_world_information() {
+	//TODO(craupach): Better move all these Semaphore operations into the history class
 	fill_count_.wait();
 	//TODO:
 	//simulation_kernel_.history()->pop_front();

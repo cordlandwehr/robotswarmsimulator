@@ -20,7 +20,7 @@
 
 #include "synchronous_asg.h"
 
-void SynchronousASG::initialize(boost::shared_ptr<History> history) {
+void SynchronousASG::initialize(const History& history) {
 	// TODO(craupach) this needs to somehow extract a pointer to the set of all robots
 }
 

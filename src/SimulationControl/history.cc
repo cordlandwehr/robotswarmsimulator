@@ -9,20 +9,26 @@
 
 /**
  * \file Empty implementation of the history to prevent the compiler from complaining
+ * TODO(craupach) Semaphores should go in here
  */
 
 #include "../Model/world_information.h"
 #include "history.h"
 
-void History::push_back(boost::shared_ptr<WorldInformation> world_information) {
+History::History(int size) {
+	// create new history with given size
+	history_.reset(new boost::circular_buffer<boost::shared_ptr<WorldInformation> > (size));
+}
 
+void History::push_back(boost::shared_ptr<WorldInformation> world_information) {
+	history_->push_front(world_information);
 }
 
 const WorldInformation& History::get_oldest() {
-	//TODO(craupach) implement this
-	return *(history_.at(0));
+	//TODO(craupach) implement this. Should consume.
+	return *history_->back();
 }
 
 const WorldInformation& History::get_newest() const {
-	return *history_.at(0);
+	return *history_->front();
 }

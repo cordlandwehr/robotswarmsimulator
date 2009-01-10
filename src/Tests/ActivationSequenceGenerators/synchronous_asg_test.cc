@@ -8,13 +8,16 @@
 #include "../../Model/robot.h"
 #include "../../SimulationControl/history.h"
 
+#include <iostream>
+
 BOOST_AUTO_TEST_CASE(synchronous_asg_smoke_test)
 {
 	//TODO(craupach) there should be an init here... robots being added and stuff
 	boost::shared_ptr<History> history;
+	history.reset(new History(5));
 
 	SynchronousASG synchronous_asg;
-	synchronous_asg.initialize(history);
+	synchronous_asg.initialize(*history);
 
 	// first event should be at time 0
 	BOOST_CHECK_EQUAL(synchronous_asg.get_time_of_next_event(), 0);

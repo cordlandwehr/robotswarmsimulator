@@ -72,6 +72,12 @@ public:
 	int time() const;
 
 	/**
+	 * Setter for the time variable
+	 * \param the new time
+	 */
+	void set_time(int time) {time_ = time;}
+
+	/**
 	 * Return constant reference to according robotData of given robot ID
 	 *
 	 * This method assumes, that the according reference to the

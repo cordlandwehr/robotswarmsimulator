@@ -25,31 +25,25 @@
 
 #include "event_handler.h"
 
+#include <iostream>
+
 void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 	// check if it is a look event
-	LookEvent* look_event = dynamic_cast<LookEvent*> (event.get());
-	if(look_event != NULL) {
+	boost::shared_ptr<LookEvent> look_event = boost::dynamic_pointer_cast<LookEvent>(event);
+	if(look_event.get() != NULL) {
 		// TODO(craupach) can this be done more elegantly?
-		// TODO(dwonisch) this will lead to undefined behavior, because look_event_ptr and event will have an own
-		//                reference count each, leading to 2 deletes on the same object.
-		//                Use boost::dynamic_pointer_cast (http://www.boost.org/doc/libs/1_37_0/libs/smart_ptr/shared_ptr.htm#dynamic_pointer_cast)
-		boost::shared_ptr<LookEvent> look_event_ptr;
-		look_event_ptr.reset(look_event);
-		handle_look_event(look_event_ptr);
+		handle_look_event(look_event);
 	} else {
 		// check if it is a compute event
-		ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (event.get());
-		if(compute_event != NULL) {
-			boost::shared_ptr<ComputeEvent> compute_event_ptr;
-			compute_event_ptr.reset(compute_event);
-			handle_compute_event(compute_event_ptr);
+		boost::shared_ptr<ComputeEvent> compute_event = boost::dynamic_pointer_cast<ComputeEvent>(event);
+		if(compute_event.get() != NULL) {
+			handle_compute_event(compute_event);
 		} else {
 			// check if it is a handle request event
-			HandleRequestsEvent* handle_requests_event = dynamic_cast<HandleRequestsEvent*> (event.get());
-			if(handle_requests_event != NULL) {
-				boost::shared_ptr<HandleRequestsEvent> handle_requests_event_ptr;
-				handle_requests_event_ptr.reset(handle_requests_event);
-				handle_handle_requests_event(handle_requests_event_ptr);
+			boost::shared_ptr<HandleRequestsEvent> handle_requests_event =
+			     boost::dynamic_pointer_cast<HandleRequestsEvent> (event);
+			if(handle_requests_event.get() != NULL) {
+				handle_handle_requests_event(handle_requests_event);
 			} else {
 				// TODO(craupach) should never happen. Log error.
 			}
@@ -69,6 +63,10 @@ void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_
 
 void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event) {
 
+}
+
+void EventHandler::register_listener(boost::shared_ptr<SimulationListener> listener) {
+	listeners_.push_back(listener);
 }
 
 void EventHandler::update_listeners(boost::shared_ptr<Event> event) {

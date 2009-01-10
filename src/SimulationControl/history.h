@@ -21,6 +21,11 @@ class WorldInformation;
 class History {
 public:
 	/**
+	 * creates a new history with given size
+	 */
+	History(int size);
+
+	/**
 	 * inserts a new WorldInformation object into the history
 	 */
 	void push_back(boost::shared_ptr<WorldInformation> world_information);
@@ -39,7 +44,7 @@ public:
 
 	// .. other accessors may follow
 private:
-	boost::circular_buffer<boost::shared_ptr<WorldInformation> > history_;
+	boost::shared_ptr<boost::circular_buffer<boost::shared_ptr<WorldInformation> > > history_;
 };
 
 #endif /* HISTORY_H_ */
