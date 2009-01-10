@@ -26,6 +26,21 @@ class Box;
 class Sphere;
 class WorldInformation;
 
+/**
+ * \class View
+ * \brief Interface for Robot::compute() to the WorldInformation.
+ *
+ * The View class represents the robots view to the world, i.e. a View class describes the information model
+ * that should be used for this simulation.
+ * This class is designed as a base class for more concrete models. Still there are no abstract methods. Instead,
+ * all methods are implemented such, that they throw a NotSupportedOperationException.
+ *
+ * Note: Most methods specified in this class need to know the calling Robot, so they determine whether
+ *       e.g. the own position is queried or the position of an other Robot.
+ *
+ * Assigning this class to a Robot corresponds to a "no informations at all" model for each Robot.
+ *
+ */
 class View {
 protected:
 	typedef boost::shared_ptr<RobotIdentifier> RobotRef;
@@ -44,15 +59,46 @@ public:
 	 * Although init is trivial, it is nice to have a default constructor in virtual
 	 * inherited classes. Otherwise every arbitrary deep sub class has
 	 * to call the non-default constructor.
+	 * Call this method before using any other method of View.
+	 * @param WorldInformation
 	 */
-	virtual void init(boost::shared_ptr<WorldInformation> world_information);
+	virtual void init(const WorldInformation& world_information);
 
+	/**
+	 * Returns the set of robots visible for the calling Robot.
+	 * @param Robot that should take a look-around
+	 * @return set of robots visible
+	 */
 	std::set<RobotRef> get_visible_robots(const Robot& caller) const;
+	/**
+	* Returns the set of obstacles visible for the calling Robot.
+	* @param Robot that should take a look-around
+	* @return set of obstacles visible
+	*/
 	std::set<ObstacleRef> get_visible_obstacles(const Robot& caller) const;
+	/**
+	* Returns the set of markers visible for the calling Robot.
+	* @param Robot that should take a look-around
+	* @return set of markers visible
+	*/
 	std::set<MarkerRef> get_visible_markers(const Robot& caller) const;
 
 	//-- WorldObject--
+	/**
+	 * Queries for the position of a WorldObject identified by an given Identifier.
+	 * @param The Robot which is asking..
+	 * @param Identifier for a WorldObject
+	 * @return Position
+	 * @see WorldObject::position()
+	 */
 	Vector3d get_position(const Robot& caller, WorldObjectRef world_object) const;
+	/**
+	 * Queries for the marker information of a WorldObject identified by an given Identifier.
+	 * @param The Robot which is asking..
+	 * @param Identifier for a WorldObject
+	 * @return MarkerInformation
+	 * @see WorldObject::marker_information()
+	 */
 	const MarkerInformation& get_marker_information(const Robot& caller, WorldObjectRef world_object) const;
 
 	//-- RobotData --
@@ -119,7 +165,7 @@ protected:
 	virtual double get_sphere_radius(const Sphere& sphere) const;
 
 
-	const boost::shared_ptr<WorldInformation>& world_information() const;
+	const WorldInformation& world_information() const;
 
 private:
 	const Obstacle& resolve_obstacle_ref(ObstacleRef obstacle) const;
@@ -137,7 +183,7 @@ private:
 	static bool is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifier> identifier);
 
 private:
-	boost::shared_ptr<WorldInformation> world_information_;
+	const WorldInformation* world_information_;
 
 };
 

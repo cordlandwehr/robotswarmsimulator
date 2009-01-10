@@ -9,15 +9,6 @@
 #include "../Model/marker_identifier.h"
 #include "../Model/box_identifier.h"
 #include "../Model/sphere_identifier.h"
-//TODO: remove this classes and replace with includes above.
-/*
-class RobotIdentifier : public Identifier {};
-class ObstacleIdentifier : public Identifier {};
-class BoxIdentifier : public ObstacleIdentifier {};
-class SphereIdentifier : public ObstacleIdentifier {};
-class MarkerIdentifier : public Identifier {};
-*/
-
 #include "../Model/robot.h"
 #include "../Utilities/vector3d.h"
 #include "../Model/marker_information.h"
@@ -47,13 +38,13 @@ bool View::is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifi
 }
 
 const Obstacle& View::resolve_obstacle_ref(ObstacleRef obstacle) const {
-	return *(world_information()->obstacles())[obstacle->id()];
+	return *(world_information().obstacles())[obstacle->id()];
 }
 const RobotData& View::resolve_robot_ref(RobotRef robot) const {
-	return *(world_information()->robot_data())[robot->id()];
+	return *(world_information().robot_data())[robot->id()];
 }
 const WorldObject& View::resolve_marker_ref(MarkerRef marker) const {
-	return *(world_information()->markers())[marker->id()];
+	return *(world_information().markers())[marker->id()];
 }
 const Box& View::resolve_box_ref(BoxRef box) const {
 	return dynamic_cast<const Box&>(resolve_obstacle_ref(box));
@@ -88,8 +79,8 @@ const Sphere& View::resolve_sphere_ref_safe(SphereRef sphere) const {
 	return result;
 }
 
-void View::init(boost::shared_ptr<WorldInformation> world_information) {
-	world_information_ = world_information;
+void View::init(const WorldInformation& world_information) {
+	world_information_ = &world_information;
 }
 
 std::set<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
@@ -318,6 +309,6 @@ double View::get_sphere_radius(const Sphere& sphere) const {
 	throw UnsupportedOperationException("get_sphere_radius not implemented in this model.");
 }
 
-const boost::shared_ptr<WorldInformation>& View::world_information() const {
-	return world_information_;
+const WorldInformation& View::world_information() const {
+	return *world_information_;
 }
