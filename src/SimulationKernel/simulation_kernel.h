@@ -53,7 +53,6 @@ public:
 
 	//TODO(martinah) add doxygen comments
 	int asg() const { return asg_; }
-	string algorithm() const { return algorithm_; }
 	string compass_model() const { return compass_model_; }
 	int event_handler() const { return event_handler_; }
 	string obstacle_filename() const { return obstacle_filename_; }
@@ -63,8 +62,8 @@ public:
 
 private:
 	//TODO(martinah) comment variables
+	//variables initialized with values in the main project file
 	int asg_;
-	string algorithm_;
 	string compass_model_;
 	int event_handler_;
 	string obstacle_filename_;
@@ -73,8 +72,8 @@ private:
 	int statistics_module_;
 
 	/**
-	* Set of robots in the world
-	*/
+	 * Set of robots in the world
+	 */
 	std::vector< boost::shared_ptr<Robot> > robots_;
 
 	/**
@@ -83,10 +82,31 @@ private:
 	boost::shared_ptr<History> history_;
 
 	/**
-	 * This methods loads the data written in the given project file
+	 * This method loads the data written in the given project files
+	 * (main project file, robot file, obstacle file)
 	 * and initializes the according variables.
+	 * \param Name of the main project file.
 	 */
-	void load_projectfile(const string& project_filename);
+	void load_projectfiles(const string& project_filename);
+
+	/**
+	 * This method loads the data written in the main project file
+	 * and initializes the following variables:
+	 * asg_, compass_model_, event_handler_, obstacle_filename_,
+	 * project_name_, robot_filename_, statistics_module_
+	 * \param Name of the main project file.
+	 */
+	void load_main_project_file(const string& project_filename);
+
+	/**
+	 * This method loads the data written in the robot file.
+	 */
+	void load_robot_file();
+
+	/**
+	 * This method loads the data written in the obstacle file.
+	 */
+	void load_obstacle_file();
 
 	/**
 	 * This method checks whether the given line is a comment,

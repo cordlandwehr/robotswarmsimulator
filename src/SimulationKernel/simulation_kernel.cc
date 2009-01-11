@@ -19,7 +19,7 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 }
 
 void SimulationKernel::init(const string& project_filename) {
-	load_projectfile(project_filename);
+	load_projectfiles(project_filename);
 	//TODO implement rest of initialization
 	//create Robot
 	//create Robot-Data and pass a reference to the according robot-object
@@ -90,7 +90,6 @@ void SimulationKernel::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
 	asg_= get_int_value_from_map(variables_and_values, "ASG");
-	algorithm_ = get_string_value_from_map(variables_and_values, "ALGORITHM");
 	compass_model_ = get_string_value_from_map(variables_and_values, "COMPASS_MODEL");
 	event_handler_ = get_int_value_from_map(variables_and_values, "EVENT_HANDLER");
 	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
@@ -99,7 +98,7 @@ void SimulationKernel::init_variables(map<string,string> variables_and_values) {
 	statistics_module_ = get_int_value_from_map(variables_and_values, "STATISTICS_MODULE");
 }
 
-void SimulationKernel::load_projectfile(const string& project_filename) {
+void SimulationKernel::load_main_project_file(const string& project_filename) {
 	string line;
 	ifstream project_file;
 	map<string, string> variables_and_values;
@@ -136,4 +135,18 @@ void SimulationKernel::load_projectfile(const string& project_filename) {
 		//TODO(martinah) throw according exception
 		cout << "Unable to open given project file." << endl;
 	}
+}
+
+void SimulationKernel::load_robot_file() {
+	//TODO implement
+}
+
+void SimulationKernel::load_obstacle_file() {
+	//TODO implement
+}
+
+void SimulationKernel::load_projectfiles(const string& project_filename) {
+	load_main_project_file(project_filename);
+	load_robot_file();
+	load_obstacle_file();
 }
