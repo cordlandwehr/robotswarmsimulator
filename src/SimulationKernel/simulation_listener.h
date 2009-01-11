@@ -11,7 +11,7 @@
 #include <boost/smart_ptr.hpp>
 
 class WorldInformation;
-class HandleRequestsEvent;
+class Event;
 
 /**
  * SimulationListener is an interface to be implemented by classes which wish to be informed of handled

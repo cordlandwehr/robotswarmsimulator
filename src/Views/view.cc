@@ -27,7 +27,7 @@ View::~View() {
 namespace {
 	void validate_identifier(const WorldObject& obj, boost::shared_ptr<Identifier> identifier) {
 		if(obj.id() != identifier) {
-			throw std::invalid_argument("Illegal identifier. Outdated? Cloned?");
+			throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
 		}
 	}
 }
