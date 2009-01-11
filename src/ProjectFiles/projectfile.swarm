@@ -1,0 +1,12 @@
+# 
+# Description about configuration.
+#
+ 
+PROJECT_NAME ="My Exciting Project"
+COMPASS_MODEL="NO_COMPASS"
+ROBOT_FILENAME="myrobots"
+OBSTACLE_FILENAME="myobstacles"
+STATISTICS_MODULE="0"
+ASG="0"
+EVENT_HANDLER="0"
+ALGORITHM="CLEVER_ALGO"
