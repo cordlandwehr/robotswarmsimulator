@@ -28,9 +28,11 @@ enum RobotStatus { STATUS };
  */
 enum RobotType { TYPE };
 
+class Robot;
+
 class RobotData : public WorldObject{
 public:
-	RobotData();
+	RobotData(const Robot& robot);
 	~RobotData();
 
 	/**
@@ -50,13 +52,15 @@ public:
 	 * containing the coordinate system axis.
 	 * \return Triple of vectors containing the coordinate system axis.
 	 */
-	boost::tuple<boost::shared_ptr<Vector3d> > coordinate_system_axis() const;
+	boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >
+			coordinate_system_axis() const;
 
 	/**
 	 * Sets the coordinate system to the given triple of vectors.
 	 * \return Triple of vectors for new axes.
 	 */
-	void set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d> > new_axes);
+	void set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+			boost::shared_ptr<Vector3d> > new_axes);
 
 	/**
 	 * Returns type of the robot.
@@ -88,13 +92,29 @@ public:
 	 */
 	void set_status(RobotStatus new_status);
 
+	/**
+	 * Returns reference to according robot-object.
+	 * \return Reference to according robot-object.
+	 */
+	const Robot& get_robot() const;
+
 
 private:
+	/**
+	 * Pointer to according robot.
+	 * TODO(martinah) I'm not sure, if this is the nicest way to hold
+	 *                a pointer to the according robot-object.
+	 *                Maybe use boost::shared_ptr<Robot> instead?
+	 *                But an object of this class should not be the owner of the
+	 *                according robot-object...
+	 *                Thus, feel free to modify it ;-).
+	 */
+	const Robot* robot_;
 	boost::shared_ptr<Vector3d> acceleration_;
 	/**
 	 * \var Triple with the three coordinate axes of the robot.
 	 */
-	boost::tuple<boost::shared_ptr<Vector3d> > coordinate_system_axis_;
+	boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > coordinate_system_axis_;
 	RobotType type_;
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;

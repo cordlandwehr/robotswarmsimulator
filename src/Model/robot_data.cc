@@ -1,8 +1,8 @@
 #include "robot_data.h"
+#include "robot.h"
 
-RobotData::RobotData() {
-	// TODO Auto-generated constructor stub
-
+RobotData::RobotData(const Robot& robot) {
+	robot_ = &robot;
 }
 
 RobotData::~RobotData() {
@@ -17,11 +17,13 @@ void RobotData::set_acceleration(boost::shared_ptr<Vector3d> new_acceleration) {
 	acceleration_ = new_acceleration;
 }
 
-boost::tuple<boost::shared_ptr<Vector3d> > RobotData::coordinate_system_axis() const {
+boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >
+	RobotData::coordinate_system_axis() const {
 	return coordinate_system_axis_;
 }
 
-void RobotData::set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d> > new_axes) {
+void RobotData::set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+		boost::shared_ptr<Vector3d> > new_axes) {
 	coordinate_system_axis_ = new_axes;
 }
 
@@ -43,4 +45,8 @@ RobotStatus RobotData::status() const {
 
 void RobotData::set_status(RobotStatus new_status) {
 	status_ = new_status;
+}
+
+const Robot& RobotData::get_robot() const {
+	return *robot_;
 }
