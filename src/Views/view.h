@@ -10,7 +10,9 @@
 #include <cstddef>
 #include <set>
 #include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 #include "../Model/robot_data.h"
+#include "../Utilities/vector3d.h"
 
 class Identifier;
 class RobotIdentifier;
@@ -19,7 +21,6 @@ class MarkerIdentifier;
 class BoxIdentifier;
 class SphereIdentifier;
 class Robot;
-class vector3d;
 class MarkerInformation;
 class Obstacle;
 class Box;
@@ -104,7 +105,7 @@ public:
 	//-- RobotData --
 	std::size_t get_robot_id(const Robot& caller, RobotRef robot) const;
 	Vector3d get_robot_acceleration(const Robot& caller, RobotRef robot) const;
-	boost::tuple<Vector3d> get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const;
+	boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const;
 	RobotType get_robot_type(const Robot& caller, RobotRef robot) const;
 	Vector3d get_robot_velocity(const Robot& caller, RobotRef robot) const;
 	RobotStatus get_robot_status(const Robot& caller, RobotRef robot) const;
@@ -144,8 +145,8 @@ protected:
 	virtual Vector3d get_own_acceleration(const RobotData& robot) const;
 	virtual Vector3d get_robot_acceleration(const RobotData& robot) const;
 
-	virtual boost::tuple<Vector3d> get_own_coordinate_system_axis(const RobotData& robot) const;
-	virtual boost::tuple<Vector3d> get_robot_coordinate_system_axis(const RobotData& robot) const;
+	virtual boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_own_coordinate_system_axis(const RobotData& robot) const;
+	virtual boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_robot_coordinate_system_axis(const RobotData& robot) const;
 
 	virtual RobotType get_own_type(const RobotData& robot) const;
 	virtual RobotType get_robot_type(const RobotData& robot) const;

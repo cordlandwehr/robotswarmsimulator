@@ -144,7 +144,7 @@ Vector3d View::get_robot_acceleration(const Robot& caller, RobotRef robot) const
 	}
 }
 
-boost::tuple<Vector3d> View::get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const {
+boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const {
 	if(is_own_identifier(caller, robot)) {
 		return get_own_coordinate_system_axis(resolve_robot_ref(robot));
 	} else {
@@ -256,11 +256,11 @@ Vector3d View::get_robot_acceleration(const RobotData& robot) const {
 	throw UnsupportedOperationException("get_robot_acceleration not implemented in this model.");
 }
 
-boost::tuple<Vector3d> View::get_own_coordinate_system_axis(const RobotData& robot) const {
+boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_own_coordinate_system_axis(const RobotData& robot) const {
 	throw UnsupportedOperationException("get_own_coordinate_system_axis not implemented in this model.");
 }
 
-boost::tuple<Vector3d> View::get_robot_coordinate_system_axis(const RobotData& robot) const {
+boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(const RobotData& robot) const {
 	throw UnsupportedOperationException("get_robot_coordinate_system_axis not implemented in this model.");
 }
 

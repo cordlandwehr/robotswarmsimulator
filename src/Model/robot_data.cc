@@ -1,8 +1,8 @@
 #include "robot_data.h"
 #include "robot.h"
 
-RobotData::RobotData(const Robot& robot) {
-	robot_ = &robot;
+RobotData::RobotData(const Robot& robot) : robot_(robot){
+	;
 }
 
 RobotData::~RobotData() {
@@ -48,5 +48,5 @@ void RobotData::set_status(RobotStatus new_status) {
 }
 
 const Robot& RobotData::get_robot() const {
-	return *robot_;
+	return robot_;
 }

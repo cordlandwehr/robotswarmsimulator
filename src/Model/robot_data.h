@@ -101,15 +101,9 @@ public:
 
 private:
 	/**
-	 * Pointer to according robot.
-	 * TODO(martinah) I'm not sure, if this is the nicest way to hold
-	 *                a pointer to the according robot-object.
-	 *                Maybe use boost::shared_ptr<Robot> instead?
-	 *                But an object of this class should not be the owner of the
-	 *                according robot-object...
-	 *                Thus, feel free to modify it ;-).
+	 * Reference to according robot.
 	 */
-	const Robot* robot_;
+	const Robot& robot_;
 	boost::shared_ptr<Vector3d> acceleration_;
 	/**
 	 * \var Triple with the three coordinate axes of the robot.
