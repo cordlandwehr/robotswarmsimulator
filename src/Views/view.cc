@@ -128,11 +128,20 @@ const MarkerInformation& View::get_marker_information(const Robot& caller, World
 	}
 }
 
-std::size_t View::get_robot_id(const Robot& caller, RobotRef robot) const {
-	if(is_own_identifier(caller, robot)) {
-		return get_own_id(resolve_robot_ref(robot));
-	} else {
-		return get_robot_id(resolve_robot_ref_safe(robot));
+std::size_t View::get_id(const Robot& caller, WorldObjectRef world_object) const {
+	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
+		if(is_own_identifier(caller, ref)) {
+			return get_own_id(resolve_robot_ref(ref));
+		} else {
+			return get_robot_id(resolve_robot_ref_safe(ref));
+		}
+	} else if(ObstacleRef ref = boost::dynamic_pointer_cast<ObstacleIdentifier>(world_object)) {
+		return get_obstacle_id(resolve_obstacle_ref_safe(ref));
+	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
+		return get_marker_id(resolve_marker_ref_safe(ref));
+	}
+	else {
+		throw std::invalid_argument("Illegal type of world_object.");
 	}
 }
 
@@ -245,6 +254,14 @@ std::size_t View::get_own_id(const RobotData& robot) const {
 }
 
 std::size_t View::get_robot_id(const RobotData& robot) const {
+	throw UnsupportedOperationException("get_robot_id not implemented in this model.");
+}
+
+std::size_t View::get_obstacle_id(const Obstacle& robot) const {
+	throw UnsupportedOperationException("get_robot_id not implemented in this model.");
+}
+
+std::size_t View::get_marker_id(const WorldObject& robot) const {
 	throw UnsupportedOperationException("get_robot_id not implemented in this model.");
 }
 

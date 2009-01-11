@@ -101,30 +101,102 @@ public:
 	 * @see WorldObject::marker_information()
 	 */
 	const MarkerInformation& get_marker_information(const Robot& caller, WorldObjectRef world_object) const;
-
+	/**
+	 * Queries for the id of a WordObject identified by an given Identifier.
+	 * @param The Robot which is asking..
+	 * @param Identifier for a WorldObject
+	 * @return id
+	 * @see WorldObject::id()
+	 */
+	std::size_t get_id(const Robot& caller, WorldObjectRef robot) const;
 	//-- RobotData --
-	std::size_t get_robot_id(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries for the acceleration of a Robot identified by an given RobotIdentifier.
+	 * @param The Robot which is asking..
+	 * @param RobotIdentifier
+	 * @return Vector3d
+	 * @see RobotData::acceleration()
+	 */
 	Vector3d get_robot_acceleration(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries for the coordinate system axes of a Robot identified by an given RobotIdentifier.
+	 * @param The Robot which is asking..
+	 * @param RobotIdentifier
+	 * @return Vector3d
+	 * @see RobotData::coordinate_system_axis()
+	 */
 	boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries for the robot type of a Robot identified by an given RobotIdentifier.
+	 * @param The Robot which is asking..
+	 * @param RobotIdentifier
+	 * @return RobotType
+	 * @see RobotData::type()
+	 */
 	RobotType get_robot_type(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries for the velocity of a Robot identified by an given RobotIdentifier.
+	 * @param The Robot which is asking..
+	 * @param RobotIdentifier
+	 * @return Vector3d
+	 * @see RobotData::velocity()
+	 */
 	Vector3d get_robot_velocity(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries for the status of a Robot identified by an given RobotIdentifier.
+	 * @param The Robot which is asking..
+	 * @param RobotIdentifier
+	 * @return RobotStatus
+	 * @see RobotData::status()
+	 */
 	RobotStatus get_robot_status(const Robot& caller, RobotRef robot) const;
 
 	//-- Obstacle --
+	/**
+	 * Checks for a given point whether it is contained in a Obstacle identified by a given ObstacleIdentifier.
+	 * @param ObstacleIdentifier
+	 * @param point
+	 * @return true if point is contained in the obstacle; false, otherwise
+	 * @see Obstacle::contains_point()
+	 */
 	bool is_point_in_obstacle(ObstacleRef obstacle, const Vector3d& point) const;
 
 	//-- Box --
-	double get_box_depth(BoxRef obstacle) const;
-	double get_box_width(BoxRef obstacle) const;
-	double get_box_height(BoxRef obstacle) const;
+	/**
+	 * Queries for the depth of a Box identified by an given BoxIdentifier.
+	 * @param BoxIdentifier
+	 * @return depth
+	 * @see Box::depth()
+	 */
+	double get_box_depth(BoxRef box) const;
+	/**
+	 * Queries for the width of a Box identified by an given BoxIdentifier.
+	 * @param BoxIdentifier
+	 * @return width
+	 * @see Box::width()
+	 */
+	double get_box_width(BoxRef box) const;
+	/**
+	 * Queries for the height of a Box identified by an given BoxIdentifier.
+	 * @param BoxIdentifier
+	 * @return height
+	 * @see Box::height()
+	 */
+	double get_box_height(BoxRef box) const;
 
 	//-- Sphere --
+	/**
+	 * Queries for the radius of a Sphere identified by an given SphereIdentifier.
+	 * @param SphereIdentifier
+	 * @return radius
+	 * @see Sphere::radius()
+	 */
 	double get_sphere_radius(SphereRef sphere) const;
 
 
 
 protected:
-	//Helper methods for non virtual methods
+	//Helper methods for non virtual methods.
 	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
 	virtual std::set<MarkerRef> get_visible_markers(const RobotData& robot) const;
@@ -141,6 +213,8 @@ protected:
 
 	virtual std::size_t get_own_id(const RobotData& robot) const;
 	virtual std::size_t get_robot_id(const RobotData& robot) const;
+	virtual std::size_t get_obstacle_id(const Obstacle& obstacle) const;
+	virtual std::size_t get_marker_id(const WorldObject& marker) const;
 
 	virtual Vector3d get_own_acceleration(const RobotData& robot) const;
 	virtual Vector3d get_robot_acceleration(const RobotData& robot) const;
