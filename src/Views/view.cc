@@ -26,10 +26,9 @@ View::~View() {
 
 namespace {
 	void validate_identifier(const WorldObject& obj, boost::shared_ptr<Identifier> identifier) {
-		//TODO: remove comments
-		/*if(obj.id() != identifier) {
+		if(obj.id() != identifier) {
 			throw std::invalid_argument("Illegal identifier. Outdated?");
-		}*/
+		}
 	}
 }
 

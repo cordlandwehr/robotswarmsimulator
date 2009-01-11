@@ -9,14 +9,12 @@
 #ifndef ROBOT_DATA_H_
 #define ROBOT_DATA_H_
 
-#include "boost/tuple/tuple.hpp"
+#include <boost/tuple/tuple.hpp>
 #include "../Utilities/vector3d.h"
 
 using namespace std;
 
 #include "world_object.h"
-
-class Identifier;
 
 //TODO(martinah) set possible stati of a robot
 /**
@@ -34,12 +32,6 @@ class RobotData : public WorldObject{
 public:
 	RobotData();
 	~RobotData();
-
-	/**
-	 * Returns constant reference to the robot's id.
-	 * \return Constant reference to the robot's id.
-	 */
-	const boost::shared_ptr<Identifier>& id() const;
 
 	/**
 	 * Returns constant reference to acceleration vector of the robot.
@@ -91,7 +83,6 @@ public:
 	void set_status(RobotStatus new_status);
 
 private:
-	boost::shared_ptr<Identifier> id_;
 	boost::shared_ptr<Vector3d> acceleration_;
 	/**
 	 * \var Triple with the three coordinate axis of the robot.

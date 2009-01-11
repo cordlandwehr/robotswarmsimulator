@@ -1,4 +1,5 @@
 #include "world_information.h"
+#include "identifier.h"
 
 WorldInformation::WorldInformation() {
 	// TODO Auto-generated destructor stub

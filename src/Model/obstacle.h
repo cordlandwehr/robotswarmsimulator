@@ -22,7 +22,7 @@ public:
 	 * \param Pointer to vector of point to check whether it's
 	 *        contained in the obstacle.
 	 */
-	bool contains_point(boost::shared_ptr<Vector3d> point);
+	virtual bool contains_point(boost::shared_ptr<Vector3d> point) = 0;
 };
 
 #endif /* OBSTACLE_H_ */

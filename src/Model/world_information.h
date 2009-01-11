@@ -11,10 +11,9 @@
 #include <vector>
 #include <boost/smart_ptr.hpp>
 
-#include "identifier.h"
-
 using namespace std;
 
+class Identifier;
 class WorldObject;
 class RobotData;
 class Obstacle;

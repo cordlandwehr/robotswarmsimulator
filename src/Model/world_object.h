@@ -11,6 +11,7 @@
 #include "../Utilities/vector3d.h"
 
 class MarkerInformation;
+class Identifier;
 
 class WorldObject {
 public:
@@ -41,7 +42,14 @@ public:
 	 */
 	const Vector3d & position() const {return *position_;};
 
+	/**
+	 * Returns constant reference to the object's id.
+	 * \return Constant reference to the object's id.
+	*/
+	const boost::shared_ptr<Identifier>& id() const;
+
 private:
+	boost::shared_ptr<Identifier> id_;
 	/**
 	 * Information about the marker an instance of WorldObject may contain
 	 */

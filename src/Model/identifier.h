@@ -11,7 +11,7 @@
 
 class Identifier {
 public:
-	virtual ~Identifier();
+	virtual ~Identifier() = 0;
 
 protected:
 	Identifier();

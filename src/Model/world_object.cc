@@ -17,3 +17,7 @@ const MarkerInformation& WorldObject::marker_information() const {
 void WorldObject::set_marker_information(boost::shared_ptr<MarkerInformation> new_marker_information) {
 	marker_information_ = new_marker_information;
 }
+
+const boost::shared_ptr<Identifier>& WorldObject::id() const {
+	return id_;
+}
