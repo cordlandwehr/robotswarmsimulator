@@ -21,6 +21,10 @@ boost::tuple<boost::shared_ptr<Vector3d> > RobotData::coordinate_system_axis() c
 	return coordinate_system_axis_;
 }
 
+void RobotData::set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d> > new_axes) {
+	coordinate_system_axis_ = new_axes;
+}
+
 const RobotType RobotData::type() const {
 	return type_;
 }

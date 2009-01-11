@@ -53,6 +53,12 @@ public:
 	boost::tuple<boost::shared_ptr<Vector3d> > coordinate_system_axis() const;
 
 	/**
+	 * Sets the coordinate system to the given triple of vectors.
+	 * \return Triple of vectors for new axes.
+	 */
+	void set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d> > new_axes);
+
+	/**
 	 * Returns type of the robot.
 	 * \return type of the robot.
 	 */
@@ -82,10 +88,11 @@ public:
 	 */
 	void set_status(RobotStatus new_status);
 
+
 private:
 	boost::shared_ptr<Vector3d> acceleration_;
 	/**
-	 * \var Triple with the three coordinate axis of the robot.
+	 * \var Triple with the three coordinate axes of the robot.
 	 */
 	boost::tuple<boost::shared_ptr<Vector3d> > coordinate_system_axis_;
 	RobotType type_;
