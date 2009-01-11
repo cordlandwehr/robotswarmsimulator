@@ -74,44 +74,39 @@ private:
 	void handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
 
 	/**
-	 * handles the given request by delegating to one of the custom handler methods
-	 */
-	void handle_request(boost::shared_ptr<Request> request);
-
-	/**
 	 * virtual method for handling acceleration requests
 	 */
-	virtual void handle_acceleration_request(boost::shared_ptr<AccelerationRequest> acceleration_request) = 0;
+	virtual void handle_acceleration_request(boost::shared_ptr<WorldInformation> world_information,
+	                                         boost::shared_ptr<AccelerationRequest> acceleration_request) = 0;
 
 	/**
 	 * virtual method for handling marker requests
 	 */
-	virtual void handle_marker_request(boost::shared_ptr<MarkerRequest> marker_request) = 0;
+	virtual void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
+	                                   boost::shared_ptr<MarkerRequest> marker_request) = 0;
 
 	/**
 	 * virtual method for handling position requests
 	 */
-	virtual void handle_position_request(boost::shared_ptr<PositionRequest> position_request) = 0;
+	virtual void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
+	                                     boost::shared_ptr<PositionRequest> position_request) = 0;
 
 	/**
 	 * virtual method for handling type change requests
 	 */
-	virtual void handle_type_change_request(boost::shared_ptr<TypeChangeRequest> type_change_request) = 0;
+	virtual void handle_type_change_request(boost::shared_ptr<WorldInformation> world_information,
+	                                        boost::shared_ptr<TypeChangeRequest> type_change_request) = 0;
 
 	/**
 	 * virtual method for handling velocity requests
 	 */
-	virtual void handle_velocity_request(boost::shared_ptr<VelocityRequest> velocity_request) = 0;
+	virtual void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
+	                                     boost::shared_ptr<VelocityRequest> velocity_request) = 0;
 
 	/**
 	 * informs all listeners after each event
 	 */
 	void update_listeners(boost::shared_ptr<Event> event);
-
-	/**
-	 * generates a new WorldInformation object by extrapolating and handling requests
-	 */
-	boost::shared_ptr<WorldInformation> produce_world_information();
 
 	/**
 	 * generates a new WorldInformation object by extrapolating it from the newest old one to time t

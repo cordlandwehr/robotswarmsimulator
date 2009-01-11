@@ -34,35 +34,40 @@ private:
 	/**
 	 * Method for handling acceleration requests
 	 */
-	void handle_acceleration_request(boost::shared_ptr<AccelerationRequest> acceleration_request) {
+	void handle_acceleration_request(boost::shared_ptr<WorldInformation> world_information,
+	                                 boost::shared_ptr<AccelerationRequest> acceleration_request) {
 		calls_acceleration_request_++;
 	};
 
 	/**
 	 * Method for handling marker requests
 	 */
-	void handle_marker_request(boost::shared_ptr<MarkerRequest> marker_request) {
+	void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
+	                           boost::shared_ptr<MarkerRequest> marker_request) {
 		calls_marker_request_++;
 	};
 
 	/**
 	 * Method for handling position requests
 	 */
-	void handle_position_request(boost::shared_ptr<PositionRequest> position_request) {
+	void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
+	                             boost::shared_ptr<PositionRequest> position_request) {
 		calls_position_request_++;
 	};
 
 	/**
 	 * Method for handling type change requests
 	 */
-	void handle_type_change_request(boost::shared_ptr<TypeChangeRequest> type_change_request) {
+	void handle_type_change_request(boost::shared_ptr<WorldInformation> world_information,
+	                                boost::shared_ptr<TypeChangeRequest> type_change_request) {
 		calls_type_change_request_++;
 	};
 
 	/**
 	 * Method for handling velocity requests
 	 */
-	void handle_velocity_request(boost::shared_ptr<VelocityRequest> velocity_request) {
+	void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
+	                             boost::shared_ptr<VelocityRequest> velocity_request) {
 		calls_velocity_request_++;
 	};
 

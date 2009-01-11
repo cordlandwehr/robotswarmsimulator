@@ -30,8 +30,10 @@ struct SimpleWorldFixture {
 		initial_world_information.reset(new WorldInformation());
 		history.reset(new History(5));
 
-		robot_data_a.reset(new RobotData());
-		robot_data_b.reset(new RobotData());
+		robot_a.reset(new Robot());
+		robot_b.reset(new Robot());
+		robot_data_a.reset(new RobotData(*robot_a));
+		robot_data_b.reset(new RobotData(*robot_b));
 
 		// create position for robot a: (0,0,0)
 		Vector3d * pos_a_ptr = new Vector3d;

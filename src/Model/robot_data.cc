@@ -47,6 +47,6 @@ void RobotData::set_status(RobotStatus new_status) {
 	status_ = new_status;
 }
 
-const Robot& RobotData::get_robot() const {
+const Robot& RobotData::robot() const {
 	return robot_;
 }

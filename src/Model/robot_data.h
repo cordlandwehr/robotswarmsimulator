@@ -69,6 +69,12 @@ public:
 	const RobotType type() const;
 
 	/**
+	 * Sets the type of the robot.
+	 * \param new type
+	 */
+	void set_type(RobotType type) {type_ = type;}
+
+	/**
 	 * Returns constant reference to velocity vector of the robot.
 	 * \return constant reference Velocity vector of the robot.
 	 */
@@ -96,7 +102,7 @@ public:
 	 * Returns reference to according robot-object.
 	 * \return Reference to according robot-object.
 	 */
-	const Robot& get_robot() const;
+	const Robot& robot() const;
 
 
 private:

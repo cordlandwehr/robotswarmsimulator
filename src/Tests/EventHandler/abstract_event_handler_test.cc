@@ -76,6 +76,8 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	 *    Robot Bs Position is extrapolated to (1.0 + 7, 0.5, 3.0) = (8.0, 0.5, 3.0)
 	 *    Robot As Position remains at (0,0,0)
 	 *    Handle method for position requests called once in the event handler
+	 *    New WorldInformation should contain both robots with the same order
+	 *    GetAccordingRobotData should work for both robots and the new world information
 	 */
 
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event;
@@ -89,6 +91,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 
 	boost::shared_ptr<PositionRequest> position_request;
 	position_request.reset(new PositionRequest(robot_a, new_position));
+	handle_requests_event->add_to_requests(position_request);
 
 	event_handler.handle_event(handle_requests_event);
 
@@ -117,9 +120,57 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_CLOSE(robot_data_a->position()(1), 0.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_a->position()(2), 0.0, 0.1);
 
+	// handle_position_request was called once
+	BOOST_CHECK_EQUAL(event_handler.calls_position_request(),1);
+
+	// new world information contains the same robots...
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().size(), 2);
+
+	// ... with the same positions
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(0),
+	                  robot_data_a->position()(0));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(1),
+		                  robot_data_a->position()(1));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(2),
+		                  robot_data_a->position()(2));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(0),
+	                  robot_data_b->position()(0));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(1),
+		                  robot_data_b->position()(1));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(2),
+		                  robot_data_b->position()(2));
+
+	// get_according_robot for both world information still works
+	// TODO(craupach) calls to get_according_robot_data are very complicated right now
+	// TODO(craupach) set IDs in the fixture. How is this supposed to be done?
+	BOOST_CHECK_EQUAL(robot_data_a.get(),
+	                  &(initial_world_information->get_according_robot_data(robot_a->id().get())));
+	BOOST_CHECK_EQUAL(robot_data_a.get(),
+	                  &(listener_a->last_world_information().get_according_robot_data(robot_a->id().get())));
+
+	/*
+	 * Test: Pass another Handle Requests Event
+	 * Expected Results: ...
+	 *
+	 */
+
 	/*
 	 * Test: pass an event for a past time ( t = 1 )
 	 * Expected Results: don't know yet
 	 */
 
+	/*
+	 * Test: pass an nonexisting request
+	 * Expected Results: An exception is thrown
+	 */
+
+	/*
+	 * Test: pass an nonexisting event
+	 * Expected Results: An exception is thrown
+	 */
+
+	/*
+	 * Test: check if obstacles / marker information get copied correctly
+	 * TODO(craupach) add obstacles and markers to the fixture.
+	 */
 }

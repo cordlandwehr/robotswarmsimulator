@@ -11,9 +11,11 @@
 #include <vector>
 #include <boost/smart_ptr.hpp>
 
+
 using namespace std;
 
 class Identifier;
+class RobotIdentifier;
 class WorldObject;
 class RobotData;
 class Obstacle;
@@ -83,10 +85,12 @@ public:
 	 * robotData of a robot with ID i is saved at position i in
 	 * the robot_datas-vector.
 	 *
+	 * TODO(craupach) match this parameter with the return value of robot.id(). Why does this take a raw pointer?
+	 *
 	 * \param reference to identifier of robot whose robotData's reference shall be returned.
 	 * \return Constant reference to according robotData of given robot ID.
 	 */
-	const RobotData& get_according_robot_data(Identifier * id) const;
+	const RobotData& get_according_robot_data(RobotIdentifier * id) const;
 
 private:
 	/**
