@@ -7,7 +7,7 @@
 
 #include "sphere_identifier.h"
 
-SphereIdentifier::SphereIdentifier() {
+SphereIdentifier::SphereIdentifier(std::size_t id) : ObstacleIdentifier(id) {
 	// TODO Auto-generated constructor stub
 
 }

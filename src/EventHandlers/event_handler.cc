@@ -12,6 +12,7 @@
 #include "../Model/sphere.h"
 #include "../Model/box.h"
 #include "../Model/robot_data.h"
+#include "../Model/identifier.h"
 
 #include "../Events/compute_event.h"
 #include "../Events/event.h"
@@ -124,7 +125,8 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 	// extrapolate all robots
 	BOOST_FOREACH(boost::shared_ptr<RobotData> old_robot, old_world_information.robot_data()) {
 		// create new robot
-		boost::shared_ptr<RobotData> new_robot(new RobotData(old_robot->robot()));
+		//TODO (dwonisch): RobotData constructor needs Identifier now.
+		boost::shared_ptr<RobotData> new_robot(new RobotData(old_robot->id()->clone(), old_robot->robot()));
 
 		// TODO(craupach) extrapolate from old one instead of just making a copy.
 		// TODO(craupach) there should be some way to copy the identifier too. Ask Martina about how the Kernel team wants to do this.
@@ -157,14 +159,16 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 			// check if box or sphere
 			boost::shared_ptr<Sphere> old_sphere = boost::dynamic_pointer_cast<Sphere> (old_obstacle);
 			if(old_sphere.get() != NULL) {
-				boost::shared_ptr<Sphere> new_sphere(new Sphere());
+				//TODO (dwonisch): Sphere constructor needs Identifier now.
+				boost::shared_ptr<Sphere> new_sphere(new Sphere(old_sphere->id()->clone()));
 				new_sphere->set_position(new_position);
 				new_sphere->set_radius(old_sphere->radius());
 				new_world_information->add_obstacle(new_sphere);
 			} else {
 				boost::shared_ptr<Box> old_box = boost::dynamic_pointer_cast<Box> (old_obstacle);
 				if(old_box.get() != NULL) {
-					boost::shared_ptr<Box> new_box(new Box());
+					//TODO (dwonisch): Box constructor needs Identifier now.
+					boost::shared_ptr<Box> new_box(new Box(old_box->id()->clone()));
 					new_box->set_position(new_position);
 					new_box->set_depth(old_box->depth());
 					new_box->set_height(old_box->height());

@@ -1,6 +1,6 @@
 #include "identifier.h"
 
-Identifier::Identifier() {
+Identifier::Identifier(std::size_t id) : id_(id){
 	// TODO Auto-generated constructor stub
 
 }

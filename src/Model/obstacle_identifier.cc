@@ -1,6 +1,6 @@
 #include "obstacle_identifier.h"
 
-ObstacleIdentifier::ObstacleIdentifier() {
+ObstacleIdentifier::ObstacleIdentifier(std::size_t id) : Identifier(id) {
 	// TODO Auto-generated constructor stub
 
 }

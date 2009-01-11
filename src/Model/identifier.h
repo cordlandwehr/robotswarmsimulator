@@ -8,13 +8,16 @@
 #define IDENTIFIER_H_
 
 #include <cstddef>
+#include <boost/shared_ptr.hpp>
 
 class Identifier {
 public:
-	virtual ~Identifier() = 0;
+	virtual ~Identifier();
+
+	virtual boost::shared_ptr<Identifier> clone() = 0;
 
 protected:
-	Identifier();
+	Identifier(std::size_t id);
 	/**
 	 * Return ID of identifier.
 	 * \return ID of identifier.

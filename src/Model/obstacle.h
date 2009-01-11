@@ -7,14 +7,16 @@
 #ifndef OBSTACLE_H_
 #define OBSTACLE_H_
 
-#include <boost/smart_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "world_object.h"
 #include "../Utilities/vector3d.h"
 
 class Obstacle : public WorldObject {
 public:
-	Obstacle();
+	Obstacle(boost::shared_ptr<Identifier> id,
+             boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
+             boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>());
 	virtual ~Obstacle();
 
 	/**

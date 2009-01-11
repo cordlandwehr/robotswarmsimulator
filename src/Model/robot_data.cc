@@ -1,7 +1,11 @@
 #include "robot_data.h"
 #include "robot.h"
 
-RobotData::RobotData(const Robot& robot) : robot_(robot){
+RobotData::RobotData(boost::shared_ptr<Identifier> id, const Robot& robot,
+                     boost::shared_ptr<Vector3d> position,
+                     boost::shared_ptr<MarkerInformation> marker_information)
+                     : WorldObject(id, position, marker_information), robot_(robot)
+{
 	;
 }
 

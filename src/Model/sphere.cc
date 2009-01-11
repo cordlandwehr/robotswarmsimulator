@@ -1,7 +1,10 @@
 #include "sphere.h"
 #include "math.h"
 
-Sphere::Sphere() {
+Sphere::Sphere(boost::shared_ptr<Identifier> id, double radius,
+        boost::shared_ptr<Vector3d> position, boost::shared_ptr<MarkerInformation> marker_information)
+        : Obstacle(id, position, marker_information), radius_(radius)
+{
 	// TODO Auto-generated constructor stub
 
 }

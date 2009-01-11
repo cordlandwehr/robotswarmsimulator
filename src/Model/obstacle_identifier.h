@@ -11,9 +11,10 @@
 
 class ObstacleIdentifier : public Identifier {
 public:
-	virtual ~ObstacleIdentifier() = 0;
+	virtual ~ObstacleIdentifier();
+	virtual boost::shared_ptr<Identifier> clone() = 0;
 protected:
-	ObstacleIdentifier();
+	ObstacleIdentifier(std::size_t id);
 };
 
 #endif /* OBSTACLE_IDENTIFIER_H_ */

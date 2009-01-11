@@ -13,7 +13,7 @@ class SphereIdentifier : public ObstacleIdentifier {
 public:
 	~SphereIdentifier();
 protected:
-	SphereIdentifier();
+	SphereIdentifier(std::size_t id);
 };
 
 #endif /* SPHERE_IDENTIFIER_H_ */

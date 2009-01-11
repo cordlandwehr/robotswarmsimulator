@@ -32,7 +32,10 @@ class Robot;
 
 class RobotData : public WorldObject{
 public:
-	RobotData(const Robot& robot);
+	RobotData(boost::shared_ptr<Identifier> id,
+			  const Robot& robot,
+			  boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
+		      boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>());
 	~RobotData();
 
 	/**

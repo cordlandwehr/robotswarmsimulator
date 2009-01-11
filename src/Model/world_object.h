@@ -7,7 +7,7 @@
 #ifndef WORLD_OBJECT_H_
 #define WORLD_OBJECT_H_
 
-#include <boost/smart_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include "../Utilities/vector3d.h"
 
 class MarkerInformation;
@@ -15,7 +15,10 @@ class Identifier;
 
 class WorldObject {
 public:
-	WorldObject();
+	WorldObject(boost::shared_ptr<Identifier> id,
+	            boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
+	            boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>()
+	            );
 	virtual ~WorldObject();
 
 	/**
@@ -53,14 +56,17 @@ private:
 	/**
 	 * Information about the marker an instance of WorldObject may contain
 	 */
-	boost::shared_ptr<MarkerInformation> marker_information_;
-
 protected:
 	/**
-	 * Position of the world object in the world.
-	 * This point always is the point in the center of the object
-	 */
+	* Position of the world object in the world.
+	* This point always is the point in the center of the object
+	*/
 	boost::shared_ptr<Vector3d> position_;
+private:
+	boost::shared_ptr<MarkerInformation> marker_information_;
+
+
+
 };
 
 #endif /* WORLD_OBJECT_H_ */

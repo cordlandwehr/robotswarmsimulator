@@ -1,6 +1,6 @@
 #include "box_identifier.h"
 
-BoxIdentifier::BoxIdentifier() {
+BoxIdentifier::BoxIdentifier(std::size_t id) : ObstacleIdentifier(id){
 	// TODO Auto-generated constructor stub
 
 }

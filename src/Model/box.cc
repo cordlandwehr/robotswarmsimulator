@@ -1,9 +1,12 @@
 #include "box.h"
 
-Box::Box() {
+Box::Box(boost::shared_ptr<Identifier> id, double depth, double width, double height,
+        boost::shared_ptr<Vector3d> position, boost::shared_ptr<MarkerInformation> marker_information)
+        : Obstacle(id, position, marker_information), depth_(depth), width_(width), height_(height)
+{
 	// TODO Auto-generated constructor stub
-
 }
+
 
 Box::~Box() {
 	// TODO Auto-generated destructor stub

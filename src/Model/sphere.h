@@ -11,7 +11,10 @@
 
 class Sphere : public Obstacle {
 public:
-	Sphere();
+	Sphere(boost::shared_ptr<Identifier> id,
+           double radius = 0,
+	       boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
+	       boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>());
 	~Sphere();
 
 	/**

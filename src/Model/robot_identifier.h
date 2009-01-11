@@ -12,8 +12,12 @@
 class RobotIdentifier : public Identifier {
 public:
 	~RobotIdentifier();
+
+	virtual boost::shared_ptr<Identifier> clone() {
+		return boost::shared_ptr<Identifier>(new RobotIdentifier(id()));
+	}
 protected:
-	RobotIdentifier();
+	RobotIdentifier(std::size_t id);
 };
 
 #endif /* ROBOT_IDENTIFIER_H_ */

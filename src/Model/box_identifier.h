@@ -12,8 +12,12 @@
 class BoxIdentifier : public ObstacleIdentifier {
 public:
 	virtual ~BoxIdentifier();
+
+	virtual boost::shared_ptr<Identifier> clone() {
+		return boost::shared_ptr<Identifier>(new BoxIdentifier(id()));
+	}
 protected:
-	BoxIdentifier();
+	BoxIdentifier(std::size_t id);
 };
 
 #endif /* BOX_IDENTIFIER_H_ */
