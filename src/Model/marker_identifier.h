@@ -13,7 +13,7 @@ class MarkerIdentifier : public Identifier {
 public:
 	~MarkerIdentifier();
 
-	virtual boost::shared_ptr<Identifier> clone() {
+	virtual boost::shared_ptr<Identifier> clone() const {
 		return boost::shared_ptr<Identifier>(new MarkerIdentifier(id()));
 	}
 protected:

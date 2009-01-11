@@ -12,6 +12,10 @@
 class SphereIdentifier : public ObstacleIdentifier {
 public:
 	~SphereIdentifier();
+
+	virtual boost::shared_ptr<Identifier> clone() const {
+			return boost::shared_ptr<Identifier>(new SphereIdentifier(id()));
+		}
 protected:
 	SphereIdentifier(std::size_t id);
 };

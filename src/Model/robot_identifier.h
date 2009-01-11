@@ -13,7 +13,7 @@ class RobotIdentifier : public Identifier {
 public:
 	~RobotIdentifier();
 
-	virtual boost::shared_ptr<Identifier> clone() {
+	virtual boost::shared_ptr<Identifier> clone() const {
 		return boost::shared_ptr<Identifier>(new RobotIdentifier(id()));
 	}
 protected:

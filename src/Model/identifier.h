@@ -14,7 +14,7 @@ class Identifier {
 public:
 	virtual ~Identifier();
 
-	virtual boost::shared_ptr<Identifier> clone() = 0;
+	virtual boost::shared_ptr<Identifier> clone() const = 0;
 
 protected:
 	Identifier(std::size_t id);
