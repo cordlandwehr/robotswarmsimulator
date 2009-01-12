@@ -17,7 +17,7 @@ public:
 	virtual boost::shared_ptr<Identifier> clone() const = 0;
 
 protected:
-	Identifier(std::size_t id);
+	explicit Identifier(std::size_t id);
 	/**
 	 * Return ID of identifier.
 	 * \return ID of identifier.

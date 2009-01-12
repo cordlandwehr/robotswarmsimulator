@@ -12,7 +12,7 @@
 
 class Box : public Obstacle {
 public:
-	Box(boost::shared_ptr<Identifier> id,
+	explicit Box(boost::shared_ptr<Identifier> id,
 	    double depth = 0,
 	    double width = 0,
 	    double height = 0,

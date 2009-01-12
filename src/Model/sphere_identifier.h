@@ -17,7 +17,7 @@ public:
 			return boost::shared_ptr<Identifier>(new SphereIdentifier(id()));
 		}
 protected:
-	SphereIdentifier(std::size_t id);
+	explicit SphereIdentifier(std::size_t id);
 };
 
 #endif /* SPHERE_IDENTIFIER_H_ */

@@ -32,6 +32,7 @@ bool SimulationKernel::is_comment(const string& line) {
 bool SimulationKernel::contains_assignment(const string& line) {
 	unsigned int pos_of_equal_sign = line.find_first_of("=");
 
+	//TODO (dwonsich): return pos_of_equal_sign != string::npos; ?
 	//check if equal sign exists in given string
 	if(pos_of_equal_sign < 0 || pos_of_equal_sign >= line.size())
 		return false;

@@ -14,7 +14,7 @@ public:
 	virtual ~ObstacleIdentifier();
 	virtual boost::shared_ptr<Identifier> clone() const = 0;
 protected:
-	ObstacleIdentifier(std::size_t id);
+	explicit ObstacleIdentifier(std::size_t id);
 };
 
 #endif /* OBSTACLE_IDENTIFIER_H_ */

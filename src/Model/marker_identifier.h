@@ -17,7 +17,7 @@ public:
 		return boost::shared_ptr<Identifier>(new MarkerIdentifier(id()));
 	}
 protected:
-	MarkerIdentifier(size_t id);
+	explicit MarkerIdentifier(size_t id);
 };
 
 #endif /* MARKER_IDENTIFIER_H_ */

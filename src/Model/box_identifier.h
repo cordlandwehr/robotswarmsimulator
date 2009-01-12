@@ -17,7 +17,7 @@ public:
 		return boost::shared_ptr<Identifier>(new BoxIdentifier(id()));
 	}
 protected:
-	BoxIdentifier(std::size_t id);
+	explicit BoxIdentifier(std::size_t id);
 };
 
 #endif /* BOX_IDENTIFIER_H_ */
