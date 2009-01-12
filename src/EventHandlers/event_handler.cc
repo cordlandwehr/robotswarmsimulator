@@ -67,7 +67,15 @@ void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
 }
 
 void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event) {
-  // TODO(craupach) to be implemented later after the RobotControl is finished
+  BOOST_FOREACH(boost::shared_ptr<Robot> robot, compute_event->robot_subset()) {
+	  // compute the requests for this robot.
+	  std::set<boost::shared_ptr<Request> > request_set = robot_control_->compute_new_request(*robot);
+
+	  // add the requests to the set.
+	  BOOST_FOREACH(boost::shared_ptr<Request> request, request_set) {
+		  compute_event->add_to_requests(request);
+	  }
+  }
 }
 
 void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event) {

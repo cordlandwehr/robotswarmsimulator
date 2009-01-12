@@ -52,7 +52,7 @@ boost::shared_ptr<Event> SynchronousASG::get_next_event() {
 
 		// add all robots. This uses the raw pointer because it is of the right type.
 		// (it is protected by a shared_ptr and I'm saving a cast)
-		BOOST_FOREACH(boost::shared_ptr<const Robot> robot, robots_) {
+		BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots_) {
 			compute_event->add_to_robot_subset(robot);
 		}
 
