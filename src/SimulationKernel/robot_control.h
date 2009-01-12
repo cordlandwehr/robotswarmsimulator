@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include "simulation_listener.h"
 
-class ViewFactory;
+class AbstractViewFactory;
 class Request;
 class Robot;
 /**
@@ -26,7 +26,7 @@ class Robot;
 
 class RobotControl: public SimulationListener {
 public:
-	RobotControl(boost::shared_ptr<ViewFactory> view_factory);
+	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory);
 	~RobotControl();
 
 	virtual void update(const WorldInformation& world_information,
@@ -36,7 +36,7 @@ public:
 	//TODO: I changed the return type from View to void. Adds the View to the given robot by itself.
 	void compute_view(Robot& robot);
 private:
-	boost::shared_ptr<ViewFactory> view_factory_;
+	boost::shared_ptr<AbstractViewFactory> view_factory_;
 };
 
 #endif /* ROBOT_CONTROL_H_ */

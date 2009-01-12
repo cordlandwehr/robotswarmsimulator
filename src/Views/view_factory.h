@@ -8,34 +8,26 @@
 #ifndef VIEW_FACTORY_H_
 #define VIEW_FACTORY_H_
 
-#include <string>
-#include <boost/shared_ptr.hpp>
-
-class View;
-class WorldInformation;
+#include "abstract_view_factory.h"
+#include "view.h"
 
 /**
  * \class ViewFactory
- * Factory which can produce new View objects.
+ * Factory which can produce new View objects. The type created is the template type
+ * of the factory.
  * Constructor parameter determines which sub class of View should actually be used.
  */
-class ViewFactory {
+template<typename T>
+class ViewFactory : public AbstractViewFactory {
 public:
-	enum KnownViewClass { VIEW };
-public:
-	ViewFactory(KnownViewClass view_class);
-	~ViewFactory();
+	ViewFactory() {;}
+	virtual ~ViewFactory() {;}
 
-	/**
-	 * Creates an new instance of a View class. The runtime type depends on the
-	 * value ViewFactory was constructed with.
-	 * Note: The created instance is already initialized.
-	 * @param const ref to WorldInformation
-	 * @return Newly constructed View object
-	 */
-	boost::shared_ptr<View> createNewViewInstance(const WorldInformation& world_information) const;
-private:
-	KnownViewClass view_class_;
+	virtual boost::shared_ptr<View> createNewViewInstance(const WorldInformation& world_information) const {
+		boost::shared_ptr<View> result(new T);
+		result->init(world_information);
+		return result;
+	}
 };
 
 #endif /* VIEW_FACTORY_H_ */
