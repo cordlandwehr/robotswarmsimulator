@@ -9,16 +9,26 @@
 #define ROBOT_CONTROL_H_
 
 #include <set>
+#include <cstddef>
 #include <boost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/circular_buffer.hpp>
 #include "simulation_listener.h"
 
 class AbstractViewFactory;
 class Request;
 class Robot;
+class View;
 /**
  * \class RobotControl
- * \brief Controls the Robots. Mainly assigns Views and calls Robot::compute().
  *
+ * Controls the Robots. Responsible for assigning the View to each Robot and
+ * calling the compute method when requested.
+ *
+ * RobotControl holds a buffer of Views of length history_length. To do this, the
+ * RobotControl implements the SimulationListener interface. Whenever update is called
+ * together with an HandleRequestsEvent RobotControl creates a new View
+ * for the new WorldInfortion.
  *
  */
 
@@ -26,17 +36,36 @@ class Robot;
 
 class RobotControl: public SimulationListener {
 public:
-	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory);
+	/**
+	 * Constructs a new RobotControl.
+	 * @param The view_factory given determines which
+	 * view model should be used for the robots
+	 * @param The length of the history
+	 * @see ModelParameters::HISTORY_LENGTH
+	 */
+	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length);
 	~RobotControl();
 
 	virtual void update(const WorldInformation& world_information,
 				            boost::shared_ptr<Event> last_event);
 
+	/**
+	 * Equivalent to robot.compute().
+	 * @param robot
+	 * @param Set of Requests
+	 * @see Robot::compute()
+	 */
 	std::set<boost::shared_ptr<Request> > compute_new_request(Robot& robot);
-	//TODO: I changed the return type from View to void. Adds the View to the given robot by itself.
+	/**
+	 * Computes and assigns the newest View to the given robot.
+	 * @param robot
+	 */
 	void compute_view(Robot& robot);
+
+	void set_view_facotry(const boost::shared_ptr<AbstractViewFactory>& view_factory);
 private:
 	boost::shared_ptr<AbstractViewFactory> view_factory_;
+	boost::circular_buffer<boost::shared_ptr<View> > view_buffer_;
 };
 
 #endif /* ROBOT_CONTROL_H_ */
