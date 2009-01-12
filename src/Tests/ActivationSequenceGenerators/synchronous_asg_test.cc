@@ -17,7 +17,7 @@ BOOST_FIXTURE_TEST_CASE(synchronous_asg_smoke_test, SimpleWorldFixture)
 {
 
 	SynchronousASG synchronous_asg;
-	synchronous_asg.initialize(*history);
+	synchronous_asg.initialize(*history,robots);
 
 	// first event should be at time 0
 	BOOST_CHECK_EQUAL(synchronous_asg.get_time_of_next_event(), 0);
@@ -46,5 +46,6 @@ BOOST_FIXTURE_TEST_CASE(synchronous_asg_smoke_test, SimpleWorldFixture)
 	look_event = dynamic_cast<LookEvent*>(next_event.get());
 	BOOST_CHECK(look_event != NULL);
 	BOOST_CHECK_EQUAL(look_event->robot_subset().size(),2);
+
 
 }

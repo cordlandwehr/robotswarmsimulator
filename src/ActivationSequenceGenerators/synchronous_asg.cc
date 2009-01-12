@@ -21,13 +21,14 @@
 
 #include "synchronous_asg.h"
 
-void SynchronousASG::initialize(const History& history) {
+void SynchronousASG::initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) {
 	// get initial world information
 	WorldInformation world_information = history.get_newest();
 
 	// extract robots from robot data
-	BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data, world_information.robot_data()) {
-		boost::shared_ptr<const Robot> robot(&robot_data->robot());
+	// TODO(craupach): Where to get mutable pointers to the robots?
+	// TODO(craupach): Rethink interface: what should be const?
+	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		robots_.push_back(robot);
 	}
 }
@@ -40,7 +41,7 @@ boost::shared_ptr<Event> SynchronousASG::get_next_event() {
 
 		// add all robots. This uses the raw pointer because it is of the right type.
 		// (it is protected by a shared_ptr and I'm saving a cast)
-		BOOST_FOREACH(boost::shared_ptr<const Robot> robot, robots_) {
+		BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots_) {
 			look_event->add_to_robot_subset(robot);
 		}
 

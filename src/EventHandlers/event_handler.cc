@@ -28,6 +28,7 @@
 
 #include "../SimulationControl/history.h"
 #include "../SimulationKernel/simulation_listener.h"
+#include "../SimulationKernel/robot_control.h"
 
 #include "event_handler.h"
 
@@ -60,7 +61,9 @@ void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 }
 
 void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
-  // TODO(craupach) to be implementend later after the RobotControl is finished
+  BOOST_FOREACH(boost::shared_ptr<Robot> robot, look_event->robot_subset()) {
+	  robot_control_->compute_view(*robot);
+  }
 }
 
 void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event) {

@@ -25,6 +25,7 @@ class VelocityRequest;
 
 class WorldInformation;
 class SimulationListener;
+class RobotControl;
 class History;
 
 /**
@@ -42,7 +43,8 @@ class History;
  */
 class EventHandler {
 public:
-	EventHandler(boost::shared_ptr<History> history):history_(history) {}
+	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
+	                                                                                                 robot_control_(robot_control){}
 	virtual ~EventHandler() {}
 
 	/**
@@ -117,6 +119,7 @@ private:
 
 	vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;
+	boost::shared_ptr<RobotControl> robot_control_;
 };
 
 #endif /* EVENT_HANDLER_H_ */

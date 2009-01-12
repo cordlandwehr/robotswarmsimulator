@@ -2,13 +2,14 @@
 #include <boost/smart_ptr.hpp>
 #include "../../Events/compute_event.h"
 #include "../../Model/robot.h"
+#include "../Fixtures/simple_world_fixture.h"
 
 /*
  * Helper function to test adding a robot in a different scope
  */
 void add_robot(ComputeEvent& event) {
     boost::shared_ptr<Robot> robot;
-    robot.reset(new Robot());
+    robot.reset(new SimpleRobot());
     event.add_to_robot_subset(robot);
 }
 
@@ -24,7 +25,7 @@ BOOST_AUTO_TEST_CASE(compute_event_smoke_test)
 
     // create a shared pointer on a robot
     boost::shared_ptr<Robot> robot;
-    robot.reset(new Robot());
+    robot.reset(new SimpleRobot());
     event.add_to_robot_subset(robot);
 
     // there should be a robot in the subset now

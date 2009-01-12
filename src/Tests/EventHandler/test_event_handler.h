@@ -17,7 +17,8 @@
  */
 class TestEventHandler : public EventHandler {
 public:
-	TestEventHandler(boost::shared_ptr<History> history) : EventHandler(history),
+	TestEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control) :
+	                                                       EventHandler(history, robot_control),
 	                                                       calls_acceleration_request_(0),
 	                                                       calls_marker_request_(0),
 	                                                       calls_position_request_(0),

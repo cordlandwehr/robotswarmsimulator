@@ -35,7 +35,7 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(const History& history);
+	void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event. Since the ASG is synchronous the sequence of events will have the form
@@ -75,7 +75,7 @@ private:
 	/**
 	 * The set of all robots
 	 */
-	vector<boost::shared_ptr<const Robot> > robots_;
+	vector<boost::shared_ptr<Robot> > robots_;
 
 	// constants for readability
 	const static int kTimeToLook = 0;

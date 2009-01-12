@@ -13,6 +13,9 @@
 #include "../../SimulationControl/history.h"
 #include "../../EventHandlers/event_handler.h"
 #include "../../Utilities/vector3d.h"
+#include "../../Views/view_factory.h"
+#include "../../Views/view.h"
+#include "../../SimulationKernel/robot_control.h"
 #include "test_event_handler.h"
 #include "test_simulation_listener.h"
 
@@ -20,7 +23,12 @@
 
 BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 {
-	TestEventHandler event_handler(history);
+	boost::shared_ptr<AbstractViewFactory> view_factory;
+	view_factory.reset(new ViewFactory<View> ());
+
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	TestEventHandler event_handler(history, robot_control);
+
 
 	boost::shared_ptr<TestSimulationListener> listener_a;
 	listener_a.reset(new TestSimulationListener());

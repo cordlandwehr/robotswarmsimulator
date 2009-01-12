@@ -41,7 +41,7 @@ public:
 	 * Initializes the ASG.
 	 * \param The history
 	 */
-	virtual void initialize(const History& history) = 0;
+	virtual void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) = 0;
 
 	/**
 	 * Returns the next event.

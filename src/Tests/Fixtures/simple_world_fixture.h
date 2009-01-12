@@ -15,6 +15,12 @@
 #include "../../EventHandlers/event_handler.h"
 #include "../../Utilities/vector3d.h"
 
+
+class SimpleRobot : public Robot {
+public:
+	std::set<boost::shared_ptr<Request> > compute() {}
+};
+
 /**
  * This fixture creates a simple world with a history (size 5) and a world information for time 0
  * which contains two robots:
@@ -32,8 +38,10 @@ struct SimpleWorldFixture {
 		history.reset(new History(5));
 		id_a.reset(new RobotIdentifier(0));
 		id_b.reset(new RobotIdentifier(1));
-		robot_a.reset(new Robot());
-		robot_b.reset(new Robot());
+		robot_a.reset(new SimpleRobot());
+		robot_b.reset(new SimpleRobot());
+		robots.push_back(robot_a);
+		robots.push_back(robot_b);
 		robot_data_a.reset(new RobotData(id_a, *robot_a));
 		robot_data_b.reset(new RobotData(id_b, *robot_b));
 
@@ -113,7 +121,7 @@ struct SimpleWorldFixture {
 	boost::shared_ptr<Robot> robot_b;
 	boost::shared_ptr<Identifier> id_a;
 	boost::shared_ptr<Identifier> id_b;
-
+	vector<boost::shared_ptr<Robot> > robots;
 };
 
 #endif /* SIMPLE_WORLD_FIXTURE_H_ */
