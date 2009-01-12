@@ -70,7 +70,18 @@ private:
 	/**
 	 * A set of unhandled requests from the last compute event.
 	 */
-	vector<boost::shared_ptr<Request> > unhandled_request_set_;
+	vector<boost::shared_ptr<const Request> > unhandled_request_set_;
+
+	/**
+	 * The set of all robots
+	 */
+	vector<boost::shared_ptr<const Robot> > robots_;
+
+	// constants for readability
+	const static int kTimeToLook = 0;
+	const static int kTimeToCompute = 1;
+	const static int kTimeToMove = 2;
+	const static int kNumberOfEvents = 3;
 };
 
 #endif /* SYNCHRONOUSASG_H_ */

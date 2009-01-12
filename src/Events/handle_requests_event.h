@@ -30,19 +30,19 @@ public:
 	 * Adds a new request to the set of requests.
 	 * \param A shared pointer to the new request.
 	 */
-	void add_to_requests(boost::shared_ptr<Request> new_request);
+	void add_to_requests(boost::shared_ptr<const Request> new_request);
 
 	/**
 	 * Returns a constant reference to the set of requests.
 	 * \return A constant reference to the set of requests.
 	 */
-	const vector<boost::shared_ptr<Request> >& requests() const;
+	const vector<boost::shared_ptr<const Request> >& requests() const;
 
 private:
 	/**
 	 * The set of resulting requests
 	 */
-	vector<boost::shared_ptr<Request> > requests_;
+	vector<boost::shared_ptr<const Request> > requests_;
 };
 
 #endif /* HANDLE_REQUEST_EVENT_H_ */

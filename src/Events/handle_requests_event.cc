@@ -7,10 +7,10 @@
 
 #include "handle_requests_event.h"
 
-void HandleRequestsEvent::add_to_requests(boost::shared_ptr<Request> new_request) {
+void HandleRequestsEvent::add_to_requests(boost::shared_ptr<const Request> new_request) {
 	requests_.push_back(new_request);
 }
 
-const vector<boost::shared_ptr<Request> >& HandleRequestsEvent::requests() const {
+const vector<boost::shared_ptr<const Request> >& HandleRequestsEvent::requests() const {
 	return requests_;
 }

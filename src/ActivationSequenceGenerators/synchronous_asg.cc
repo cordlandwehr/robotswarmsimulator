@@ -17,30 +17,49 @@
 #include "../Events/compute_event.h"
 #include "../Events/handle_requests_event.h"
 #include "../SimulationControl/history.h"
+#include "../Model/robot_data.h"
 
 #include "synchronous_asg.h"
 
 void SynchronousASG::initialize(const History& history) {
-	// TODO(craupach) this needs to somehow extract a pointer to the set of all robots
+	// get initial world information
+	WorldInformation world_information = history.get_newest();
+
+	// extract robots from robot data
+	BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data, world_information.robot_data()) {
+		boost::shared_ptr<const Robot> robot(&robot_data->robot());
+		robots_.push_back(robot);
+	}
 }
 
 boost::shared_ptr<Event> SynchronousASG::get_next_event() {
 	boost::shared_ptr<Event> event;
-	if(time_of_next_event_ % 3 == 0) {
+	if(time_of_next_event_ % kNumberOfEvents == kTimeToLook) {
 		LookEvent * look_event = new LookEvent(time_of_next_event_);
 		event.reset(look_event);
-		//TODO(craupach) this needs to add all robots to the event
 
-	} else if(time_of_next_event_ % 3 == 1) {
+		// add all robots. This uses the raw pointer because it is of the right type.
+		// (it is protected by a shared_ptr and I'm saving a cast)
+		BOOST_FOREACH(boost::shared_ptr<const Robot> robot, robots_) {
+			look_event->add_to_robot_subset(robot);
+		}
+
+
+	} else if(time_of_next_event_ % kNumberOfEvents == kTimeToCompute) {
 		ComputeEvent * compute_event = new ComputeEvent(time_of_next_event_);
 		event.reset(compute_event);
-		//TODO(craupach) again this needs to add all robots to the event
 
-	} else if(time_of_next_event_ % 3 == 2) {
+		// add all robots. This uses the raw pointer because it is of the right type.
+		// (it is protected by a shared_ptr and I'm saving a cast)
+		BOOST_FOREACH(boost::shared_ptr<const Robot> robot, robots_) {
+			compute_event->add_to_robot_subset(robot);
+		}
+
+	} else if(time_of_next_event_ % kNumberOfEvents == kTimeToMove) {
 		HandleRequestsEvent * handle_requests_event = new HandleRequestsEvent(time_of_next_event_);
 		event.reset(handle_requests_event);
 		// copy over all requests
-		BOOST_FOREACH(boost::shared_ptr<Request> cur_request, unhandled_request_set_) {
+		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request, unhandled_request_set_) {
 			handle_requests_event->add_to_requests(cur_request);
 		}
 		unhandled_request_set_.clear();
@@ -54,7 +73,7 @@ void SynchronousASG::update(const WorldInformation& world_information,
 	// check if it is a compute event
 	ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (last_event.get());
 	if(compute_event != NULL) {
-		BOOST_FOREACH(boost::shared_ptr<Request> cur_request, compute_event->requests()) {
+		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request, compute_event->requests()) {
 			unhandled_request_set_.push_back(cur_request);
 		}
 	}

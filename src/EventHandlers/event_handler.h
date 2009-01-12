@@ -77,31 +77,31 @@ private:
 	 * virtual method for handling acceleration requests
 	 */
 	virtual void handle_acceleration_request(boost::shared_ptr<WorldInformation> world_information,
-	                                         boost::shared_ptr<AccelerationRequest> acceleration_request) = 0;
+	                                         boost::shared_ptr<const AccelerationRequest> acceleration_request) = 0;
 
 	/**
 	 * virtual method for handling marker requests
 	 */
 	virtual void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
-	                                   boost::shared_ptr<MarkerRequest> marker_request) = 0;
+	                                   boost::shared_ptr<const MarkerRequest> marker_request) = 0;
 
 	/**
 	 * virtual method for handling position requests
 	 */
 	virtual void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<PositionRequest> position_request) = 0;
+	                                     boost::shared_ptr<const PositionRequest> position_request) = 0;
 
 	/**
 	 * virtual method for handling type change requests
 	 */
 	virtual void handle_type_change_request(boost::shared_ptr<WorldInformation> world_information,
-	                                        boost::shared_ptr<TypeChangeRequest> type_change_request) = 0;
+	                                        boost::shared_ptr<const TypeChangeRequest> type_change_request) = 0;
 
 	/**
 	 * virtual method for handling velocity requests
 	 */
 	virtual void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<VelocityRequest> velocity_request) = 0;
+	                                     boost::shared_ptr<const VelocityRequest> velocity_request) = 0;
 
 	/**
 	 * informs all listeners after each event
@@ -109,6 +109,7 @@ private:
 	void update_listeners(boost::shared_ptr<Event> event);
 
 	/**
+	 * TODO(craupach) change name, comment?
 	 * generates a new WorldInformation object by extrapolating it from the newest old one to time t
 	 */
 	boost::shared_ptr<WorldInformation> extrapolate_old_world_information(int time);

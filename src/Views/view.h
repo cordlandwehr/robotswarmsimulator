@@ -39,7 +39,7 @@ class WorldInformation;
  * Note: Most methods specified in this class need to know the calling Robot, so they determine whether
  *       e.g. the own position is queried or the position of an other Robot.
  *
- * Assigning this class to a Robot corresponds to a "no informations at all" model for each Robot.
+ * Assigning this class to a Robot corresponds to a "no information at all" model for each Robot.
  *
  */
 class View {

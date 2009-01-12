@@ -8,6 +8,7 @@
 #include "../../Model/world_object.h"
 #include "../../Model/robot_data.h"
 #include "../../Model/robot.h"
+#include "../../Model/robot_identifier.h"
 #include "../../Events/look_event.h"
 #include "../../Events/event.h"
 #include "../../SimulationControl/history.h"
@@ -29,11 +30,12 @@ struct SimpleWorldFixture {
 
 		initial_world_information.reset(new WorldInformation());
 		history.reset(new History(5));
-
+		id_a.reset(new RobotIdentifier(0));
+		id_b.reset(new RobotIdentifier(1));
 		robot_a.reset(new Robot());
 		robot_b.reset(new Robot());
-		robot_data_a.reset(new RobotData(*robot_a));
-		robot_data_b.reset(new RobotData(*robot_b));
+		robot_data_a.reset(new RobotData(id_a, *robot_a));
+		robot_data_b.reset(new RobotData(id_b, *robot_b));
 
 		// create position for robot a: (0,0,0)
 		Vector3d * pos_a_ptr = new Vector3d;
@@ -109,6 +111,8 @@ struct SimpleWorldFixture {
 	boost::shared_ptr<RobotData> robot_data_b;
 	boost::shared_ptr<Robot> robot_a;
 	boost::shared_ptr<Robot> robot_b;
+	boost::shared_ptr<Identifier> id_a;
+	boost::shared_ptr<Identifier> id_b;
 
 };
 

@@ -27,7 +27,7 @@ public:
 	 * It is not guaranteed that last_event is a handle_request event and that world_information was generated
 	 * for last_event.
 	 *
-	 * \param A constant refrence to the newest world information
+	 * \param A constant reference to the newest world information
 	 * \param The last handled event
 	 */
 	virtual void update(const WorldInformation& world_information,
