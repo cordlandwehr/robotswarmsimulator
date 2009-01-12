@@ -11,6 +11,7 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/utility.hpp>
 #include "../Model/robot_data.h"
 #include "../Utilities/vector3d.h"
 
@@ -42,7 +43,7 @@ class WorldInformation;
  * Assigning this class to a Robot corresponds to a "no information at all" model for each Robot.
  *
  */
-class View {
+class View : private boost::noncopyable {
 protected:
 	typedef boost::shared_ptr<RobotIdentifier> RobotRef;
 	typedef boost::shared_ptr<ObstacleIdentifier> ObstacleRef;
