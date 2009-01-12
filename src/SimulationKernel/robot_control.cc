@@ -6,7 +6,6 @@
  */
 
 #include "robot_control.h"
-#include "../Views/view_factory.h"
 
 RobotControl::RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory) : view_factory_(view_factory) {
 	;
