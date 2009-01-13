@@ -18,7 +18,7 @@
 #include "octree.h"
 
 
-namespace {
+
 
 Octree::Octree() {
 
@@ -779,7 +779,7 @@ float Octree::determine_obstacle_max_size(boost::shared_ptr<Obstacle> & obstacle
 	float size = 0.0;
 
 	switch(obstacle_type){
-		case 1:
+		case 1: {
 				Box * box = dynamic_cast<Box*>( obstacle.get() );
 				size = box->width();
 
@@ -792,10 +792,12 @@ float Octree::determine_obstacle_max_size(boost::shared_ptr<Obstacle> & obstacle
 				}
 
 				break;
-		case 2:
+		}
+		case 2: {
 				Sphere * sphere = dynamic_cast<Sphere*>( obstacle.get() );
 				size = sphere->radius();
 				break;
+		}
 		default:
 			break;
 
@@ -848,6 +850,4 @@ void Octree::destroy_octree() {
 	init_octree();
 
 }
-
-}// namespace
 
