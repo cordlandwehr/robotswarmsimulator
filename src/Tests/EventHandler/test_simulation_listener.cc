@@ -13,7 +13,6 @@
 
 void TestSimulationListener::update(const WorldInformation& world_information,
                                     boost::shared_ptr<Event> last_event) {
-	cout << "Last Event time: " << last_event->time() << endl;
 	times_update_called_++;
 	last_world_information_ = world_information;
 	last_event_ = last_event;

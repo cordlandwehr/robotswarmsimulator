@@ -18,6 +18,7 @@
 
 class SimpleRobot : public Robot {
 public:
+	SimpleRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {}
 	std::set<boost::shared_ptr<Request> > compute() {}
 };
 
@@ -38,8 +39,8 @@ struct SimpleWorldFixture {
 		history.reset(new History(5));
 		id_a.reset(new RobotIdentifier(0));
 		id_b.reset(new RobotIdentifier(1));
-		robot_a.reset(new SimpleRobot());
-		robot_b.reset(new SimpleRobot());
+		robot_a.reset(new SimpleRobot(id_a));
+		robot_b.reset(new SimpleRobot(id_b));
 		robots.push_back(robot_a);
 		robots.push_back(robot_b);
 		robot_data_a.reset(new RobotData(id_a, *robot_a));
@@ -49,54 +50,54 @@ struct SimpleWorldFixture {
 		Vector3d * pos_a_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> pos_a;
 		pos_a.reset(pos_a_ptr);
-		pos_a->insert_element(0,0.0);
-		pos_a->insert_element(1,0.0);
-		pos_a->insert_element(2,0.0);
+		pos_a->insert_element(kXCoord,0.0);
+		pos_a->insert_element(kYCoord,0.0);
+		pos_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_position(pos_a);
 
 		// create velocity for robot a: (0,0,0)
 		Vector3d * vel_a_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> vel_a;
 		vel_a.reset(vel_a_ptr);
-		vel_a->insert_element(0,0.0);
-		vel_a->insert_element(1,0.0);
-		vel_a->insert_element(2,0.0);
+		vel_a->insert_element(kXCoord,0.0);
+		vel_a->insert_element(kYCoord,0.0);
+		vel_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_velocity(vel_a);
 
 		// create acceleration for robot a: (0,0,0)
 		Vector3d * acc_a_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> acc_a;
 		acc_a.reset(acc_a_ptr);
-		acc_a->insert_element(0,0.0);
-		acc_a->insert_element(0,0.0);
-		acc_a->insert_element(0,0.0);
+		acc_a->insert_element(kXCoord,0.0);
+		acc_a->insert_element(kYCoord,0.0);
+		acc_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_acceleration(acc_a);
 
 		// create position for robot b: (1,0.5,3)
 		Vector3d * pos_b_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> pos_b;
 		pos_b.reset(pos_b_ptr);
-		pos_b->insert_element(0,1.0);
-		pos_b->insert_element(1,0.5);
-		pos_b->insert_element(2,3.0);
+		pos_b->insert_element(kXCoord,1.0);
+		pos_b->insert_element(kYCoord,0.5);
+		pos_b->insert_element(kZCoord,3.0);
 		robot_data_b->set_position(pos_b);
 
 		// create  velocity for robot b: (1,0,0)
 		Vector3d * vel_b_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> vel_b;
 		vel_b.reset(vel_b_ptr);
-		vel_b->insert_element(0,1.0);
-		vel_b->insert_element(1,0.0);
-		vel_b->insert_element(2,0.0);
+		vel_b->insert_element(kXCoord,1.0);
+		vel_b->insert_element(kYCoord,0.0);
+		vel_b->insert_element(kZCoord,0.0);
 		robot_data_b->set_velocity(vel_b);
 
 		// create acceleration for robot b: (0,0,0)
 		Vector3d * acc_b_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> acc_b;
 		acc_b.reset(acc_b_ptr);
-		acc_b->insert_element(0,0.0);
-		acc_b->insert_element(1,0.0);
-		acc_b->insert_element(2,0.0);
+		acc_b->insert_element(kXCoord,0.0);
+		acc_b->insert_element(kYCoord,0.0);
+		acc_b->insert_element(kZCoord,0.0);
 		robot_data_b->set_acceleration(acc_b);
 
 
@@ -119,8 +120,8 @@ struct SimpleWorldFixture {
 	boost::shared_ptr<RobotData> robot_data_b;
 	boost::shared_ptr<Robot> robot_a;
 	boost::shared_ptr<Robot> robot_b;
-	boost::shared_ptr<Identifier> id_a;
-	boost::shared_ptr<Identifier> id_b;
+	boost::shared_ptr<RobotIdentifier> id_a;
+	boost::shared_ptr<RobotIdentifier> id_b;
 	vector<boost::shared_ptr<Robot> > robots;
 };
 

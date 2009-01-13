@@ -24,7 +24,7 @@ using namespace std;
 class ComputeEvent : public Event {
 public:
 
-	ComputeEvent(int time) : Event(time) {};
+	explicit ComputeEvent(int time) : Event(time) {};
 
 	/**
 	 * Adds a new robot to the subset of robots in the event.

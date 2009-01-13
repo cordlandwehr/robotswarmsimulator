@@ -10,8 +10,8 @@
 
 class Event {
 public:
-	Event(int time) : time_(time) {};
-	virtual ~Event() {};
+	explicit Event(int time) : time_(time) {};
+	virtual ~Event() = 0;
 
 	int time() const {return time_;};
 private:

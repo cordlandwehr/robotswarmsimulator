@@ -15,10 +15,13 @@ class Request;
 
 class Robot {
 public:
-	Robot();
+	// TODO(craupach) temporary fix. No way to set identifier before.
+	Robot(boost::shared_ptr<RobotIdentifier> id) : id_(id) {};
 	virtual ~Robot();
 
-	const boost::shared_ptr<RobotIdentifier>& id() const {
+	// TODO(craupach) temporary fix. This should really returning a const reference but then view.cc doesn't compile
+	// and I don't want to change it.
+	boost::shared_ptr<RobotIdentifier> id() const {
 		return id_;
 	}
 

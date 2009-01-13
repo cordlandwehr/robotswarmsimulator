@@ -90,7 +90,7 @@ public:
 	 * \param reference to identifier of robot whose robotData's reference shall be returned.
 	 * \return Constant reference to according robotData of given robot ID.
 	 */
-	const RobotData& get_according_robot_data(RobotIdentifier * id) const;
+	const RobotData& get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) const;
 
 private:
 	/**

@@ -24,7 +24,7 @@ using namespace std;
 class HandleRequestsEvent : public Event {
 public:
 
-	HandleRequestsEvent(int time): Event(time) {};
+	explicit HandleRequestsEvent(int time): Event(time) {};
 
 	/**
 	 * Adds a new request to the set of requests.

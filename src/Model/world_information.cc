@@ -2,6 +2,8 @@
 #include "identifier.h"
 #include "robot_identifier.h"
 
+#include <iostream>
+
 WorldInformation::WorldInformation() {
 	// TODO Auto-generated destructor stub
 }
@@ -38,7 +40,7 @@ int WorldInformation::time() const {
 	return time_;
 }
 
-const RobotData& WorldInformation::get_according_robot_data(RobotIdentifier * id) const {
+const RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) const {
 	//TODO(martinah) maybe check if robot_datas_[id->id()] exists? (should exist!)
 	return *(robot_data_[id->id()]);
 }

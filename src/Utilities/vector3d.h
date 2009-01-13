@@ -11,6 +11,13 @@
 #include <boost/numeric/ublas/vector.hpp>
 
 /**
+ * constants for better readability of vector arithmetic
+ */
+const int kXCoord = 0;
+const int kYCoord = 1;
+const int kZCoord = 2;
+
+/**
  * \brief Support class for three-dimensional vectors.
  *
  * This is a convenient typedef for the vector type of boost::ublas.

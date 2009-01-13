@@ -18,8 +18,8 @@
  */
 class Request {
 public:
-	Request(boost::shared_ptr<Robot> robot) : robot_(robot) {}
-	virtual ~Request() {};
+	explicit Request(boost::shared_ptr<Robot> robot) : robot_(robot) {}
+	virtual ~Request() = 0;
 
 	/**
 	 * returns a constant reference to the robot which issued the request

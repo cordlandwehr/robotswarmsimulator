@@ -32,7 +32,6 @@
 
 #include "event_handler.h"
 
-#include <iostream>
 
 void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 	// check if it is a look event
@@ -71,7 +70,7 @@ void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_
 	  // compute the requests for this robot.
 	  std::set<boost::shared_ptr<Request> > request_set = robot_control_->compute_new_request(*robot);
 
-	  // add the requests to the set.
+	  // add the requests to the event.
 	  BOOST_FOREACH(boost::shared_ptr<Request> request, request_set) {
 		  compute_event->add_to_requests(request);
 	  }

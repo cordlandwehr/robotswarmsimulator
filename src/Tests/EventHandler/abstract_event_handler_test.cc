@@ -21,6 +21,8 @@
 
 #include "../Fixtures/simple_world_fixture.h"
 
+#include <iostream>
+
 BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 {
 	boost::shared_ptr<AbstractViewFactory> view_factory;
@@ -69,9 +71,10 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(listener_b->last_world_information().time(), 0);
 
 	// robot b is at (1.0, 0.5, 3.0)
-	BOOST_CHECK_CLOSE(robot_data_b->position()(0), 1.0, 0.1);
-	BOOST_CHECK_CLOSE(robot_data_b->position()(1), 0.5, 0.1);
-	BOOST_CHECK_CLOSE(robot_data_b->position()(2), 3.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kXCoord), 1.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kYCoord), 0.5, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kZCoord), 3.0, 0.1);
+
 
 	/*
 	 *  Test: pass an handle requests event for t = 7 containing a position request for robot a
@@ -93,9 +96,9 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 
 	boost::shared_ptr<Vector3d> new_position;
 	new_position.reset(new Vector3d());
-	new_position->insert_element(0,1.0);
-	new_position->insert_element(1,2.0);
-	new_position->insert_element(2,3.0);
+	new_position->insert_element(kXCoord,1.0);
+	new_position->insert_element(kYCoord,2.0);
+	new_position->insert_element(kZCoord,3.0);
 
 	boost::shared_ptr<PositionRequest> position_request;
 	position_request.reset(new PositionRequest(robot_a, new_position));
@@ -119,14 +122,14 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(listener_b->last_world_information().time(), 7);
 
 	// robot b is at (8.0, 0.5, 3.0)
-	BOOST_CHECK_CLOSE(robot_data_b->position()(0), 8.0, 0.1);
-	BOOST_CHECK_CLOSE(robot_data_b->position()(1), 0.5, 0.1);
-	BOOST_CHECK_CLOSE(robot_data_b->position()(2), 3.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kXCoord), 8.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kYCoord), 0.5, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kZCoord), 3.0, 0.1);
 
 	// robot a is at (0.0, 0.0, 0.0)
-	BOOST_CHECK_CLOSE(robot_data_a->position()(0), 0.0, 0.1);
-	BOOST_CHECK_CLOSE(robot_data_a->position()(1), 0.0, 0.1);
-	BOOST_CHECK_CLOSE(robot_data_a->position()(2), 0.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_a->position()(kXCoord), 0.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_a->position()(kYCoord), 0.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_a->position()(kZCoord), 0.0, 0.1);
 
 	// handle_position_request was called once
 	BOOST_CHECK_EQUAL(event_handler.calls_position_request(),1);
@@ -135,27 +138,29 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().size(), 2);
 
 	// ... with the same positions
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(0),
-	                  robot_data_a->position()(0));
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(1),
-		                  robot_data_a->position()(1));
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(2),
-		                  robot_data_a->position()(2));
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(0),
-	                  robot_data_b->position()(0));
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(1),
-		                  robot_data_b->position()(1));
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(2),
-		                  robot_data_b->position()(2));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(kXCoord),
+	                  robot_data_a->position()(kXCoord));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(kYCoord),
+		                  robot_data_a->position()(kYCoord));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(kZCoord),
+		                  robot_data_a->position()(kZCoord));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(kXCoord),
+	                  robot_data_b->position()(kXCoord));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(kYCoord),
+		                  robot_data_b->position()(kYCoord));
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(kZCoord),
+		                  robot_data_b->position()(kZCoord));
 
 	// get_according_robot for both world information still works
-	// TODO(craupach) calls to get_according_robot_data are very complicated right now
-	// TODO(craupach) set IDs in the fixture. How is this supposed to be done?
+	cout << "Testing get according... " << endl;
 	BOOST_CHECK_EQUAL(robot_data_a.get(),
-	                  &(initial_world_information->get_according_robot_data(robot_a->id().get())));
-	BOOST_CHECK_EQUAL(robot_data_a.get(),
-	                  &(listener_a->last_world_information().get_according_robot_data(robot_a->id().get())));
+	                  &(initial_world_information->get_according_robot_data(robot_a->id())));
 
+	// should NOT be the same robot_data!
+	BOOST_CHECK_NE(robot_data_a.get(),
+	                  &(listener_a->last_world_information().get_according_robot_data(robot_a->id())));
+
+	cout << "End of Test " << endl;
 	/*
 	 * Test: Pass another Handle Requests Event
 	 * Expected Results: ...
