@@ -15,8 +15,10 @@ class Request;
 
 class Robot {
 public:
+
 	explicit Robot(boost::shared_ptr<RobotIdentifier> id) : id_(id) {};
 	virtual ~Robot();
+
 
 	const boost::shared_ptr<RobotIdentifier>& id() const {
 		return id_;

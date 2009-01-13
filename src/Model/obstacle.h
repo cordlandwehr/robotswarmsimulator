@@ -11,12 +11,13 @@
 
 #include "world_object.h"
 #include "../Utilities/vector3d.h"
+#include "marker_information.h"
 
 class Obstacle : public WorldObject {
 public:
 	explicit Obstacle(boost::shared_ptr<Identifier> id,
              boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
-             boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>());
+             boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>(new MarkerInformation()));
 	virtual ~Obstacle();
 
 	/**

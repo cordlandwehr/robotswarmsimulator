@@ -9,15 +9,15 @@
 
 #include <boost/shared_ptr.hpp>
 #include "../Utilities/vector3d.h"
+#include "marker_information.h"
 
-class MarkerInformation;
 class Identifier;
 
 class WorldObject {
 public:
 	explicit WorldObject(boost::shared_ptr<Identifier> id,
 	            boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
-	            boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>()
+	            boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>(new MarkerInformation())
 	            );
 	virtual ~WorldObject();
 
