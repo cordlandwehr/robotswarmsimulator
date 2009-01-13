@@ -9,16 +9,21 @@
 
 #include "obstacle.h"
 #include "../Utilities/vector3d.h"
-#include "marker_information.h"
+
 
 class Box : public Obstacle {
 public:
-	explicit Box(boost::shared_ptr<Identifier> id,
-	    double depth = 0,
-	    double width = 0,
-	    double height = 0,
-        boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
-        boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>(new MarkerInformation()));
+	Box(boost::shared_ptr<Identifier> id,
+		boost::shared_ptr<Vector3d> position,
+		double depth,
+		double width,
+		double height);
+	Box(boost::shared_ptr<Identifier> id,
+	    boost::shared_ptr<Vector3d> position,
+        boost::shared_ptr<MarkerInformation> marker_information,
+        double depth,
+       	double width,
+       	double height);
 	~Box();
 
 	/**

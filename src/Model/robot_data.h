@@ -15,7 +15,6 @@
 using namespace std;
 
 #include "world_object.h"
-#include "marker_information.h"
 
 //TODO(martinah) set possible stati of a robot
 /**
@@ -34,9 +33,12 @@ class Robot;
 class RobotData : public WorldObject{
 public:
 	RobotData(boost::shared_ptr<Identifier> id,
-			  const Robot& robot,
-			  boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
-		      boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>(new MarkerInformation()));
+	          boost::shared_ptr<Vector3d> position,
+	          const Robot& robot);
+	RobotData(boost::shared_ptr<Identifier> id,
+			  boost::shared_ptr<Vector3d> position,
+		      boost::shared_ptr<MarkerInformation> marker_information,
+		      const Robot& robot);
 	~RobotData();
 
 	/**
