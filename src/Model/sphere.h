@@ -8,13 +8,14 @@
 #define SPHERE_H_
 
 #include "obstacle.h"
+#include "marker_information.h"
 
 class Sphere : public Obstacle {
 public:
 	explicit Sphere(boost::shared_ptr<Identifier> id,
            double radius = 0,
 	       boost::shared_ptr<Vector3d> position = boost::shared_ptr<Vector3d>(),
-	       boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>());
+	       boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>(new MarkerInformation()));
 	~Sphere();
 
 	/**
