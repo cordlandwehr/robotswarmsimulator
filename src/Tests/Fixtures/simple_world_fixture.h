@@ -43,8 +43,6 @@ struct SimpleWorldFixture {
 		robot_b.reset(new SimpleRobot(id_b));
 		robots.push_back(robot_a);
 		robots.push_back(robot_b);
-		robot_data_a.reset(new RobotData(id_a, *robot_a));
-		robot_data_b.reset(new RobotData(id_b, *robot_b));
 
 		// create position for robot a: (0,0,0)
 		Vector3d * pos_a_ptr = new Vector3d;
@@ -53,7 +51,19 @@ struct SimpleWorldFixture {
 		pos_a->insert_element(kXCoord,0.0);
 		pos_a->insert_element(kYCoord,0.0);
 		pos_a->insert_element(kZCoord,0.0);
-		robot_data_a->set_position(pos_a);
+
+		// create position for robot b: (1,0.5,3)
+		Vector3d * pos_b_ptr = new Vector3d;
+		boost::shared_ptr<Vector3d> pos_b;
+		pos_b.reset(pos_b_ptr);
+		pos_b->insert_element(kXCoord,1.0);
+		pos_b->insert_element(kYCoord,0.5);
+		pos_b->insert_element(kZCoord,3.0);
+
+		// create robot_data objects with corresponding initial position
+		robot_data_a.reset(new RobotData(id_a, pos_a, *robot_a));
+		robot_data_b.reset(new RobotData(id_b, pos_b, *robot_b));
+
 
 		// create velocity for robot a: (0,0,0)
 		Vector3d * vel_a_ptr = new Vector3d;
@@ -72,15 +82,6 @@ struct SimpleWorldFixture {
 		acc_a->insert_element(kYCoord,0.0);
 		acc_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_acceleration(acc_a);
-
-		// create position for robot b: (1,0.5,3)
-		Vector3d * pos_b_ptr = new Vector3d;
-		boost::shared_ptr<Vector3d> pos_b;
-		pos_b.reset(pos_b_ptr);
-		pos_b->insert_element(kXCoord,1.0);
-		pos_b->insert_element(kYCoord,0.5);
-		pos_b->insert_element(kZCoord,3.0);
-		robot_data_b->set_position(pos_b);
 
 		// create  velocity for robot b: (1,0,0)
 		Vector3d * vel_b_ptr = new Vector3d;
