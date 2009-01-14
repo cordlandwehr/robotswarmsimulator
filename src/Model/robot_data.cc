@@ -16,6 +16,24 @@ RobotData::RobotData(boost::shared_ptr<Identifier> id,
 	;
 }
 
+RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_), status_(rhs.status_) {
+	if(rhs.acceleration_) {
+		this->acceleration_.reset(new Vector3d(*rhs.acceleration_));
+	}
+	if(rhs.coordinate_system_axis_.get<0>()) {
+		this->coordinate_system_axis_.get<0>().reset(new Vector3d(*rhs.coordinate_system_axis_.get<0>()));
+	}
+	if(rhs.coordinate_system_axis_.get<1>()) {
+		this->coordinate_system_axis_.get<1>().reset(new Vector3d(*rhs.coordinate_system_axis_.get<1>()));
+	}
+	if(rhs.coordinate_system_axis_.get<2>()) {
+		this->coordinate_system_axis_.get<2>().reset(new Vector3d(*rhs.coordinate_system_axis_.get<2>()));
+	}
+	if(rhs.velocity_) {
+		this->velocity_.reset(new Vector3d(*rhs.velocity_));
+	}
+}
+
 RobotData::~RobotData() {
 	// TODO Auto-generated destructor stub
 }
@@ -76,4 +94,8 @@ void RobotData::set_status(RobotStatus new_status) {
 
 const Robot& RobotData::robot() const {
 	return robot_;
+}
+
+boost::shared_ptr<WorldObject> RobotData::clone() const {
+	return boost::shared_ptr<WorldObject>(new RobotData(*this));
 }

@@ -14,7 +14,7 @@ public:
 	~SphereIdentifier();
 
 	virtual boost::shared_ptr<Identifier> clone() const {
-			return boost::shared_ptr<Identifier>(new SphereIdentifier(id()));
+			return boost::shared_ptr<Identifier>(new SphereIdentifier(*this));
 		}
 protected:
 	explicit SphereIdentifier(std::size_t id);

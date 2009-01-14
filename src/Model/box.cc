@@ -43,6 +43,10 @@ void Box::set_width(double new_width) {
 	depth_ = new_width;
 }
 
+boost::shared_ptr<WorldObject> Box::clone() const {
+	return boost::shared_ptr<WorldObject>(new Box(*this));
+}
+
 
 bool Box::contains_point(boost::shared_ptr<Vector3d> point) {
 	//Point is contained if:

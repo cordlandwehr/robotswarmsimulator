@@ -28,6 +28,7 @@ public:
 	 *        contained in the obstacle.
 	 */
 	virtual bool contains_point(boost::shared_ptr<Vector3d> point) = 0;
+	virtual boost::shared_ptr<WorldObject> clone() const = 0;
 };
 
 #endif /* OBSTACLE_H_ */

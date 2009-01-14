@@ -40,6 +40,7 @@ public:
 		      boost::shared_ptr<MarkerInformation> marker_information,
 		      const Robot& robot);
 	~RobotData();
+	RobotData(const RobotData& rhs);
 
 	/**
 	 * Returns constant reference to acceleration vector of the robot.
@@ -124,7 +125,7 @@ public:
 	 */
 	const Robot& robot() const;
 
-
+	virtual boost::shared_ptr<WorldObject> clone() const;
 private:
 	/**
 	 * Reference to according robot.

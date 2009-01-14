@@ -26,6 +26,7 @@ class WorldInformation {
 public:
 	WorldInformation();
 	~WorldInformation();
+	WorldInformation(const WorldInformation& rhs);
 
 	/**
 	 * Returns a constant reference to the set of the markers.

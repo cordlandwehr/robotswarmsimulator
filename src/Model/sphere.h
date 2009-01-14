@@ -40,6 +40,8 @@ public:
 	 */
 	bool contains_point(boost::shared_ptr<Vector3d> point);
 
+	virtual boost::shared_ptr<WorldObject> clone() const;
+
 private:
 	double radius_;
 };

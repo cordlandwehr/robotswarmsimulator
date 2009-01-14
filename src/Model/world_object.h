@@ -19,6 +19,7 @@ public:
 	            boost::shared_ptr<Vector3d> position,
 	            boost::shared_ptr<MarkerInformation> marker_information = boost::shared_ptr<MarkerInformation>(new MarkerInformation()));
 	virtual ~WorldObject();
+	WorldObject(const WorldObject& rhs);
 
 	/**
 	 * Sets the marker information of this object.
@@ -50,11 +51,15 @@ public:
 	*/
 	const boost::shared_ptr<Identifier>& id() const;
 
+	/**
+	 * Clones this object and returns a shared ptr to the cloned object.
+	 * typeid(*id) == typeid(clone)
+	 * @return shared ptr to the cloned object
+	 */
+	virtual boost::shared_ptr<WorldObject> clone() const;
+
 private:
 	boost::shared_ptr<Identifier> id_;
-	/**
-	 * Information about the marker an instance of WorldObject may contain
-	 */
 protected:
 	/**
 	* Position of the world object in the world.
@@ -62,6 +67,9 @@ protected:
 	*/
 	boost::shared_ptr<Vector3d> position_;
 private:
+	/**
+	 * Information about the marker an instance of WorldObject may contain
+	 */
 	boost::shared_ptr<MarkerInformation> marker_information_;
 
 

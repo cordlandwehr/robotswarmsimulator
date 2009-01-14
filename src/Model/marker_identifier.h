@@ -14,7 +14,7 @@ public:
 	~MarkerIdentifier();
 
 	virtual boost::shared_ptr<Identifier> clone() const {
-		return boost::shared_ptr<Identifier>(new MarkerIdentifier(id()));
+		return boost::shared_ptr<Identifier>(new MarkerIdentifier(*this));
 	}
 protected:
 	explicit MarkerIdentifier(size_t id);

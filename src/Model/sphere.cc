@@ -44,3 +44,7 @@ bool Sphere::contains_point(boost::shared_ptr<Vector3d> point) {
 	else*/
 		return false;
 }
+
+boost::shared_ptr<WorldObject> Sphere::clone() const {
+	return boost::shared_ptr<WorldObject>(new Sphere(*this));
+}
