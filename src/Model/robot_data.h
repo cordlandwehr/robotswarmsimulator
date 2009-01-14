@@ -93,6 +93,20 @@ public:
 	void set_velocity(boost::shared_ptr<Vector3d> new_velocity);
 
 	/**
+	 * Returns position of the robot at the moment some timesteps in the future.
+	 * \param int for additional timesteps
+	 * \return Vector3d for coordinates
+	 */
+	Vector3d extrapolated_position(int timesteps) const;
+
+	/**
+	 * Returns velocity of the robot at the moment some timesteps in the future.
+	 * \param int for additional timesteps
+	 * \return Vector3d for coordinates
+	 */
+	Vector3d extrapolated_velocity(int timesteps) const;
+
+	/**
 	 * Returns status of the robot.
 	 * \return Status of the robot.
 	 */
