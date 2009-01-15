@@ -25,8 +25,6 @@ public:
 	NeighborView(unsigned seen_objects_count);
 	virtual ~NeighborView();
 
-	virtual void init(const WorldInformation& world_information);
-
 protected:
 	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;

@@ -15,10 +15,6 @@ NeighborView::~NeighborView() {
 
 }
 
-void NeighborView::init(const WorldInformation& world_information) {
-	OctreeView::init(world_information);
-}
-
 std::set<View::RobotRef> NeighborView::get_visible_robots(const RobotData& robot) const {
 	//TODO: implement
 	return std::set<RobotRef>();
