@@ -82,3 +82,7 @@ const RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<Ro
 	return *(robot_data_[id->id()]);
 }
 
+RobotData& WorldInformation::get_mutable_according_robot_data(boost::shared_ptr<RobotIdentifier> id) {
+	//TODO(martinah) maybe check if robot_datas_[id->id()] exists? (should exist!)
+	return *(robot_data_[id->id()]);
+}

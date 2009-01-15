@@ -86,12 +86,26 @@ public:
 	 * robotData of a robot with ID i is saved at position i in
 	 * the robot_datas-vector.
 	 *
-	 * TODO(craupach) match this parameter with the return value of robot.id(). Why does this take a raw pointer?
-	 *
 	 * \param reference to identifier of robot whose robotData's reference shall be returned.
 	 * \return Constant reference to according robotData of given robot ID.
 	 */
 	const RobotData& get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) const;
+
+	/**
+	* Return mutable reference to according robotData of given robot ID.
+	*
+	* This method is needed in the EventHandler to handle Request for a given robot.
+	* After the WorldInformation leaves the EventHandler only constant references/pointers
+	* to it will be accessible.
+	*
+	* This method assumes, that the according reference to the
+	* robotData of a robot with ID i is saved at position i in
+	* the robot_datas-vector.
+	*
+	* \param reference to identifier of robot whose robotData's reference shall be returned.
+	* \return Mutable reference to according robotData of given robot ID.
+	*/
+	RobotData& get_mutable_according_robot_data(boost::shared_ptr<RobotIdentifier> id);
 
 private:
 	/**
