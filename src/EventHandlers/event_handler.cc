@@ -7,6 +7,7 @@
 
 #include <boost/smart_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <typeinfo>
 
 #include "../Model/world_information.h"
 #include "../Model/sphere.h"
@@ -87,6 +88,12 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 
 		boost::shared_ptr<const PositionRequest> position_request =
 		    boost::dynamic_pointer_cast<const PositionRequest> (request);
+		/*
+		 * TODO(craupach) The following does not work. See if it can be fixed
+		 * (would cut down indentations on if-else constructs).
+		 * Write a unit test for it.
+		 * typeid(request.get()) == typeid(const PositionRequest *)
+		 */
 		if(position_request.get() != NULL) {
 			handle_position_request(new_world_information, position_request);
 		} else {

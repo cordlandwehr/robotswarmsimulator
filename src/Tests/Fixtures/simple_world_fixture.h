@@ -51,6 +51,7 @@ struct SimpleWorldFixture {
 		pos_a->insert_element(kXCoord,0.0);
 		pos_a->insert_element(kYCoord,0.0);
 		pos_a->insert_element(kZCoord,0.0);
+		robot_data_a.reset(new RobotData(id_a, pos_a, *robot_a));
 
 		// create position for robot b: (1,0.5,3)
 		Vector3d * pos_b_ptr = new Vector3d;
@@ -59,11 +60,7 @@ struct SimpleWorldFixture {
 		pos_b->insert_element(kXCoord,1.0);
 		pos_b->insert_element(kYCoord,0.5);
 		pos_b->insert_element(kZCoord,3.0);
-
-		// create robot_data objects with corresponding initial position
-		robot_data_a.reset(new RobotData(id_a, pos_a, *robot_a));
 		robot_data_b.reset(new RobotData(id_b, pos_b, *robot_b));
-
 
 		// create velocity for robot a: (0,0,0)
 		Vector3d * vel_a_ptr = new Vector3d;
