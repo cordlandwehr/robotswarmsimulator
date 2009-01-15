@@ -89,6 +89,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	 *    Handle method for position requests called once in the event handler
 	 *    New WorldInformation should contain both robots with the same order
 	 *    GetAccordingRobotData should work for both robots and the new world information
+	 *    TODO(craupach): Rewrite the checks to make them more clear and readable!
 	 */
 
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event;
@@ -121,12 +122,12 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().time(), 7);
 	BOOST_CHECK_EQUAL(listener_b->last_world_information().time(), 7);
 
-	// robot b is at (8.0, 0.5, 3.0)
-	BOOST_CHECK_CLOSE(robot_data_b->position()(kXCoord), 8.0, 0.1);
+	// robot b is  still at (1.0, 0.5, 3.0) since its the old object
+	BOOST_CHECK_CLOSE(robot_data_b->position()(kXCoord), 1.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_b->position()(kYCoord), 0.5, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_b->position()(kZCoord), 3.0, 0.1);
 
-	// robot a is at (0.0, 0.0, 0.0)
+	// robot a is still at (0.0, 0.0, 0.0) since its the old object
 	BOOST_CHECK_CLOSE(robot_data_a->position()(kXCoord), 0.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_a->position()(kYCoord), 0.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_a->position()(kZCoord), 0.0, 0.1);
@@ -137,7 +138,8 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	// new world information contains the same robots...
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().size(), 2);
 
-	// ... with the same positions
+	// ... with extrapolated positions (meaning)
+	// TODO(craupach) should realy use get_according_robot_data for these!
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(kXCoord),
 	                  robot_data_a->position()(kXCoord));
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(kYCoord),
@@ -145,7 +147,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(0)->position()(kZCoord),
 		                  robot_data_a->position()(kZCoord));
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(kXCoord),
-	                  robot_data_b->position()(kXCoord));
+	                  robot_data_b->position()(kXCoord) + 7.0);
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(kYCoord),
 		                  robot_data_b->position()(kYCoord));
 	BOOST_CHECK_EQUAL(listener_a->last_world_information().robot_data().at(1)->position()(kZCoord),

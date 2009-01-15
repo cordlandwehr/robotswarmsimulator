@@ -139,13 +139,16 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 	// set the time
 	new_world_information->set_time(time);
 
+	// compute the time difference between old and new world_infrmation
+	int time_difference = time - old_world_information.time();
+
 	// extrapolate all robots
 	BOOST_FOREACH(boost::shared_ptr<RobotData> old_robot, old_world_information.robot_data()) {
-		// TODO(craupach) extrapolate from old one instead of just making a copy.
+
 
 		boost::shared_ptr<Vector3d> new_acceleration(new Vector3d(old_robot->acceleration()));
-		boost::shared_ptr<Vector3d> new_velocity(new Vector3d(old_robot->velocity()));
-		boost::shared_ptr<Vector3d> new_position(new Vector3d(old_robot->position()));
+		boost::shared_ptr<Vector3d> new_velocity = old_robot->extrapolated_velocity(time_difference);
+		boost::shared_ptr<Vector3d> new_position = old_robot->extrapolated_position(time_difference);
 
 		// create new robot
 		boost::shared_ptr<RobotData> new_robot(new RobotData(old_robot->id()->clone(), new_position, old_robot->robot()));
@@ -165,7 +168,7 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 		new_world_information->add_robot_data(new_robot);
 	}
 
-	// extrapolate all obstacles
+	// copy all obstacles
 	BOOST_FOREACH(boost::shared_ptr<Obstacle> old_obstacle, old_world_information.obstacles()) {
 			// copy position, marker information
 			boost::shared_ptr<Vector3d> new_position(new Vector3d(old_obstacle->position()));
@@ -191,7 +194,7 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 			}
 	}
 
-	// extrapolate all markers
+	// copy all markers
 	BOOST_FOREACH(boost::shared_ptr<WorldObject> old_marker, old_world_information.markers()) {
 		boost::shared_ptr<Vector3d> new_position(new Vector3d(old_marker->position()));
 		boost::shared_ptr<WorldObject> new_marker(new WorldObject(old_marker->id()->clone(), new_position));

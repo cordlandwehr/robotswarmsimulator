@@ -98,14 +98,14 @@ public:
 	 * \param int for additional timesteps
 	 * \return Vector3d for coordinates
 	 */
-	Vector3d extrapolated_position(int timesteps) const;
+	boost::shared_ptr<Vector3d> extrapolated_position(int timesteps) const;
 
 	/**
 	 * Returns velocity of the robot at the moment some timesteps in the future.
 	 * \param int for additional timesteps
 	 * \return Vector3d for coordinates
 	 */
-	Vector3d extrapolated_velocity(int timesteps) const;
+	boost::shared_ptr<Vector3d> extrapolated_velocity(int timesteps) const;
 
 	/**
 	 * Returns status of the robot.
