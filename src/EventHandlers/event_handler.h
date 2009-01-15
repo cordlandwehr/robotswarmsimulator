@@ -39,12 +39,18 @@ class History;
  * 3. registering of simulation listeners and updating them when the world changes
  *
  * In most cases a subclass of EventHandler should only define custom handle_request functions for the
- * possible requests
+ * possible requests. If it does not provide a custom implementation for a particular handle_*_request method, a warning
+ * message is issued upon the occurrence of such a request.
  */
 class EventHandler {
-public:
+protected:
+	/**
+	 * Protected constructor, to mark class as abstract.
+	 */
 	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
 	                                                                                                 robot_control_(robot_control){}
+
+public:
 	virtual ~EventHandler() {}
 
 	/**
@@ -77,33 +83,45 @@ private:
 
 	/**
 	 * virtual method for handling acceleration requests
+	 * TODO(peter) Will we provide some kind of logging facility to be used by the whole project? If so, adopt this
+	 * method (and all other handle_*_request methods).
 	 */
 	virtual void handle_acceleration_request(boost::shared_ptr<WorldInformation> world_information,
-	                                         boost::shared_ptr<const AccelerationRequest> acceleration_request) = 0;
+	                                         boost::shared_ptr<const AccelerationRequest> acceleration_request) {
+		std::cerr << "Warning: AccelerationRequest not supported" << std::endl;
+	}
 
 	/**
 	 * virtual method for handling marker requests
 	 */
 	virtual void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
-	                                   boost::shared_ptr<const MarkerRequest> marker_request) = 0;
+	                                   boost::shared_ptr<const MarkerRequest> marker_request) {
+		std::cerr << "Warning: MarkerRequest not supported" << std::endl;
+	}
 
 	/**
 	 * virtual method for handling position requests
 	 */
 	virtual void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<const PositionRequest> position_request) = 0;
+	                                     boost::shared_ptr<const PositionRequest> position_request) {
+		std::cerr << "Warning: PositionRequest not supported" << std::endl;
+	}
 
 	/**
 	 * virtual method for handling type change requests
 	 */
 	virtual void handle_type_change_request(boost::shared_ptr<WorldInformation> world_information,
-	                                        boost::shared_ptr<const TypeChangeRequest> type_change_request) = 0;
+	                                        boost::shared_ptr<const TypeChangeRequest> type_change_request) {
+		std::cerr << "Warning: TypeChangeRequest not supported" << std::endl;
+	}
 
 	/**
 	 * virtual method for handling velocity requests
 	 */
 	virtual void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<const VelocityRequest> velocity_request) = 0;
+	                                     boost::shared_ptr<const VelocityRequest> velocity_request) {
+		std::cerr << "Warning: VelocityRequest not supported" << std::endl;
+	}
 
 	/**
 	 * informs all listeners after each event
