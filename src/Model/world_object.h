@@ -53,7 +53,7 @@ public:
 
 	/**
 	 * Clones this object and returns a shared ptr to the cloned object.
-	 * typeid(*id) == typeid(clone)
+	 * typeid(*this) == typeid(*clone)
 	 * @return shared ptr to the cloned object
 	 */
 	virtual boost::shared_ptr<WorldObject> clone() const;
