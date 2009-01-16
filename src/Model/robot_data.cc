@@ -1,5 +1,6 @@
 #include "robot_data.h"
 #include "robot.h"
+#include <math.h>
 
 RobotData::RobotData(boost::shared_ptr<Identifier> id,
                      boost::shared_ptr<Vector3d> position, const Robot& robot)
@@ -71,9 +72,12 @@ void RobotData::set_velocity(boost::shared_ptr<Vector3d> new_velocity) {
 boost::shared_ptr<Vector3d> RobotData::extrapolated_position(int timesteps) const {
 	boost::shared_ptr<Vector3d> next_position(new Vector3d());
 	// the next lines compute the new position by formula: s(t) = v*t + 1/2 * a * t^2
-	next_position->insert_element(kXCoord, position()(0) + timesteps * velocity()(0) + 0.5*acceleration()(0)*pow(timesteps,2));
-	next_position->insert_element(kYCoord, position()(1) + timesteps * velocity()(1) + 0.5*acceleration()(1)*pow(timesteps,2));
-	next_position->insert_element(kZCoord, position()(2) + timesteps * velocity()(2) + 0.5*acceleration()(2)*pow(timesteps,2));
+	next_position->insert_element(kXCoord,
+	                              position()(0) + timesteps * velocity()(0) + 0.5*acceleration()(0)*pow(static_cast<float>(timesteps),2));
+	next_position->insert_element(kYCoord,
+	                              position()(1) + timesteps * velocity()(1) + 0.5*acceleration()(1)*pow(static_cast<float>(timesteps),2));
+	next_position->insert_element(kZCoord,
+	                              position()(2) + timesteps * velocity()(2) + 0.5*acceleration()(2)*pow(static_cast<float>(timesteps),2));
 	return next_position;
 }
 
