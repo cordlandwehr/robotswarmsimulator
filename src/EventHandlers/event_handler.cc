@@ -34,6 +34,8 @@
 #include "event_handler.h"
 #include <iostream>
 
+EventHandler::~EventHandler() {}
+
 void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 	// check that it is not for a past time
 	int time_difference = event->time() - time_of_last_event_;
