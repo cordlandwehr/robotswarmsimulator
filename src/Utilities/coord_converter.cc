@@ -25,7 +25,27 @@ Vector3d CoordConverter::global_to_local(const Vector3d &absolute_coord, const V
 	return global_translated;
 }
 
+boost::shared_ptr<Vector3d> CoordConverter::local_to_global(const Vector3d &local_coord,
+                                                            const boost::tuple<boost::shared_ptr<const Vector3d> ,
+                                                                               boost::shared_ptr<const Vector3d> ,
+                                                                               boost::shared_ptr<const Vector3d> > &local_coord_system) {
+	boost::shared_ptr<Vector3d> result(new Vector3d);
 
+	// compute the result vector by multiplying the coefficents (in local_coord) with the bases
+	result->insert_element(kXCoord, local_coord(kXCoord) * (*boost::get<0>(local_coord_system))(kXCoord) +
+	                                local_coord(kYCoord) * (*boost::get<1>(local_coord_system))(kXCoord) +
+	                                local_coord(kZCoord) * (*boost::get<2>(local_coord_system))(kXCoord));
+
+	result->insert_element(kYCoord, local_coord(kXCoord) * (*boost::get<0>(local_coord_system))(kYCoord) +
+		                            local_coord(kYCoord) * (*boost::get<1>(local_coord_system))(kYCoord) +
+		                            local_coord(kZCoord) * (*boost::get<2>(local_coord_system))(kYCoord));
+
+	result->insert_element(kZCoord, local_coord(kXCoord) * (*boost::get<0>(local_coord_system))(kZCoord) +
+		                            local_coord(kYCoord) * (*boost::get<1>(local_coord_system))(kZCoord) +
+		                            local_coord(kZCoord) * (*boost::get<2>(local_coord_system))(kZCoord));
+
+	return result;
+}
 
 
 
