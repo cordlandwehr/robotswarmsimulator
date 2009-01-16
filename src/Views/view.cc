@@ -17,6 +17,7 @@
 #include "../Model/sphere.h"
 #include "../Model/world_information.h"
 #include "../Utilities/unsupported_operation_exception.h"
+#include "../Utilities/coord_converter.h"
 
 View::View() {
 }
@@ -95,20 +96,25 @@ std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
 }
 
 Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
+	Vector3d position_global_coords;
+	RobotData robot_data = world_information_->get_according_robot_data(caller.id());
+
 	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
 		if(is_own_identifier(caller, ref)) {
-			return get_own_position(resolve_robot_ref(ref));
+			position_global_coords= get_own_position(resolve_robot_ref(ref));
 		} else {
-			return get_robot_position(resolve_robot_ref_safe(ref));
+			position_global_coords= get_robot_position(resolve_robot_ref_safe(ref));
 		}
 	} else if(ObstacleRef ref = boost::dynamic_pointer_cast<ObstacleIdentifier>(world_object)) {
-		return get_obstacle_position(resolve_obstacle_ref_safe(ref));
+		position_global_coords= get_obstacle_position(resolve_obstacle_ref_safe(ref));
 	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
-		return get_marker_position(resolve_marker_ref_safe(ref));
+		position_global_coords= get_marker_position(resolve_marker_ref_safe(ref));
 	}
 	else {
 		throw std::invalid_argument("Illegal type of world_object.");
 	}
+
+	return CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 
 const MarkerInformation& View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
