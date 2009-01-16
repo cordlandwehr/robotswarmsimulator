@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/utility.hpp>
+#include <boost/function.hpp>
 #include "../Model/robot_data.h"
 #include "../Utilities/vector3d.h"
 
@@ -218,19 +219,19 @@ protected:
 	virtual std::size_t get_marker_id(const WorldObject& marker) const;
 
 	virtual Vector3d get_own_acceleration(const RobotData& robot) const;
-	virtual Vector3d get_robot_acceleration(const RobotData& robot) const;
+	virtual Vector3d get_others_acceleration(const RobotData& robot) const;
 
 	virtual boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_own_coordinate_system_axis(const RobotData& robot) const;
-	virtual boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_robot_coordinate_system_axis(const RobotData& robot) const;
+	virtual boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_others_coordinate_system_axis(const RobotData& robot) const;
 
 	virtual RobotType get_own_type(const RobotData& robot) const;
-	virtual RobotType get_robot_type(const RobotData& robot) const;
+	virtual RobotType get_others_type(const RobotData& robot) const;
 
 	virtual Vector3d get_own_velocity(const RobotData& robot) const;
-	virtual Vector3d get_robot_velocity(const RobotData& robot) const;
+	virtual Vector3d get_others_velocity(const RobotData& robot) const;
 
 	virtual RobotStatus get_own_status(const RobotData& robot) const;
-	virtual RobotStatus get_robot_status(const RobotData& robot) const;
+	virtual RobotStatus get_others_status(const RobotData& robot) const;
 
 	virtual bool is_point_in_obstacle(const Obstacle& obstacle, const Vector3d& point) const;
 
@@ -257,6 +258,13 @@ private:
 	const Sphere& resolve_sphere_ref_safe(SphereRef sphere) const;
 
 	static bool is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifier> identifier);
+	template<typename T>
+	T delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
+						boost::function<T (const View*, const Obstacle&)> obstacle_fun, boost::function<T (const View*, const WorldObject&)> marker_fun,
+						const Robot& caller, WorldObjectRef world_object) const;
+	template<typename T>
+	T delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
+	                    const Robot& caller, RobotRef robot) const;
 
 private:
 	const WorldInformation* world_information_;

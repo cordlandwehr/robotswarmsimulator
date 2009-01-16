@@ -31,6 +31,41 @@ namespace {
 			throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
 		}
 	}
+
+	std::string get_error_message(std::string method_name) {
+		return method_name + "not implemented in this model.";
+	}
+
+}
+
+template<typename T>
+T View::delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
+						boost::function<T (const View*, const Obstacle&)> obstacle_fun, boost::function<T (const View*, const WorldObject&)> marker_fun,
+						const Robot& caller, WorldObjectRef world_object) const {
+	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
+		if(is_own_identifier(caller, ref)) {
+			return own_robot_fun(this, resolve_robot_ref(ref));
+		} else {
+			return other_robot_fun(this, resolve_robot_ref_safe(ref));
+		}
+	} else if(ObstacleRef ref = boost::dynamic_pointer_cast<ObstacleIdentifier>(world_object)) {
+		return obstacle_fun(this, resolve_obstacle_ref_safe(ref));
+	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
+		return marker_fun(this, resolve_marker_ref_safe(ref));
+	}
+	else {
+		throw std::invalid_argument("Illegal type of world_object.");
+	}
+}
+
+template<typename T>
+T View::delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
+		                  const Robot& caller, RobotRef robot) const {
+	if(is_own_identifier(caller, robot)) {
+		return own_robot_fun(this, resolve_robot_ref(robot));
+	} else {
+		return other_robot_fun(this, resolve_robot_ref_safe(robot));
+	}
 }
 
 bool View::is_own_identifier(const Robot& robot, boost::shared_ptr<RobotIdentifier> identifier) {
@@ -97,97 +132,43 @@ std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
 
 Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
 	Vector3d position_global_coords;
-
-	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
-		if(is_own_identifier(caller, ref)) {
-			position_global_coords= get_own_position(resolve_robot_ref(ref));
-		} else {
-			position_global_coords= get_robot_position(resolve_robot_ref_safe(ref));
-		}
-	} else if(ObstacleRef ref = boost::dynamic_pointer_cast<ObstacleIdentifier>(world_object)) {
-		position_global_coords= get_obstacle_position(resolve_obstacle_ref_safe(ref));
-	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
-		position_global_coords= get_marker_position(resolve_marker_ref_safe(ref));
-	}
-	else {
-		throw std::invalid_argument("Illegal type of world_object.");
-	}
+	position_global_coords = delegate_function<Vector3d>(&View::get_own_position, &View::get_robot_position,
+			                                             &View::get_obstacle_position, &View::get_marker_position,
+	                                                     caller, world_object);
 	const RobotData& robot_data = resolve_robot_ref(caller.id());
 	return CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 
 const MarkerInformation& View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
-	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
-		if(is_own_identifier(caller, ref)) {
-			return get_own_marker_information(resolve_robot_ref(ref));
-		} else {
-			return get_robots_marker_information(resolve_robot_ref_safe(ref));
-		}
-	} else if(ObstacleRef ref = boost::dynamic_pointer_cast<ObstacleIdentifier>(world_object)) {
-		return get_obstacles_marker_information(resolve_obstacle_ref_safe(ref));
-	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
-		return get_markers_marker_information(resolve_marker_ref_safe(ref));
-	}
-	else {
-		throw std::invalid_argument("Illegal type of world_object.");
-	}
+	return delegate_function<const MarkerInformation&>(&View::get_own_marker_information, &View::get_robots_marker_information,
+			                                           &View::get_obstacles_marker_information, &View::get_markers_marker_information,
+			                                           caller, world_object);
 }
 
 std::size_t View::get_id(const Robot& caller, WorldObjectRef world_object) const {
-	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
-		if(is_own_identifier(caller, ref)) {
-			return get_own_id(resolve_robot_ref(ref));
-		} else {
-			return get_robot_id(resolve_robot_ref_safe(ref));
-		}
-	} else if(ObstacleRef ref = boost::dynamic_pointer_cast<ObstacleIdentifier>(world_object)) {
-		return get_obstacle_id(resolve_obstacle_ref_safe(ref));
-	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
-		return get_marker_id(resolve_marker_ref_safe(ref));
-	}
-	else {
-		throw std::invalid_argument("Illegal type of world_object.");
-	}
+	return delegate_function<std::size_t>(&View::get_own_id, &View::get_robot_id,
+	                                      &View::get_obstacle_id, &View::get_marker_id,
+	                                      caller, world_object);
 }
 
 Vector3d View::get_robot_acceleration(const Robot& caller, RobotRef robot) const {
-	if(is_own_identifier(caller, robot)) {
-		return get_own_acceleration(resolve_robot_ref(robot));
-	} else {
-		return get_robot_acceleration(resolve_robot_ref_safe(robot));
-	}
+	return delegate_function<Vector3d>(&View::get_own_acceleration, &View::get_others_acceleration, caller, robot);
 }
 
 boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const {
-	if(is_own_identifier(caller, robot)) {
-		return get_own_coordinate_system_axis(resolve_robot_ref(robot));
-	} else {
-		return get_robot_coordinate_system_axis(resolve_robot_ref_safe(robot));
-	}
+	return delegate_function<boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > >(&View::get_own_coordinate_system_axis, &View::get_others_coordinate_system_axis, caller, robot);
 }
 
 RobotType View::get_robot_type(const Robot& caller, RobotRef robot) const {
-	if(is_own_identifier(caller, robot)) {
-		return get_own_type(resolve_robot_ref(robot));
-	} else {
-		return get_robot_type(resolve_robot_ref_safe(robot));
-	}
+	return delegate_function<RobotType>(&View::get_own_type, &View::get_others_type, caller, robot);
 }
 
 Vector3d View::get_robot_velocity(const Robot& caller, RobotRef robot) const {
-	if(is_own_identifier(caller, robot)) {
-		return get_own_velocity(resolve_robot_ref(robot));
-	} else {
-		return get_robot_velocity(resolve_robot_ref_safe(robot));
-	}
+	return delegate_function<Vector3d>(&View::get_own_velocity, &View::get_others_velocity, caller, robot);
 }
 
 RobotStatus View::get_robot_status(const Robot& caller, RobotRef robot) const {
-	if(is_own_identifier(caller, robot)) {
-		return get_own_status(resolve_robot_ref(robot));
-	} else {
-		return get_robot_status(resolve_robot_ref_safe(robot));
-	}
+	return delegate_function<RobotStatus>(&View::get_own_status, &View::get_others_status, caller, robot);
 }
 
 bool View::is_point_in_obstacle(ObstacleRef obstacle, const Vector3d& point) const {
@@ -211,123 +192,123 @@ double View::get_sphere_radius(SphereRef sphere) const {
 }
 
 std::set<View::RobotRef> View::get_visible_robots(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_visible_robots not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_visible_robots"));
 }
 
 std::set<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_visible_obstacles not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_visible_obstacles"));
 }
 
 std::set<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_visible_marker not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_visible_markers"));
 }
 
 Vector3d View::get_own_position(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_position not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_position"));
 }
 
 Vector3d View::get_robot_position(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_position not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_robot_position"));
 }
 
 Vector3d View::get_obstacle_position(const Obstacle& obstacle) const {
-	throw UnsupportedOperationException("get_obstacle_position not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_obstacle_position"));
 }
 
 Vector3d View::get_marker_position(const WorldObject& marker) const {
-	throw UnsupportedOperationException("get_marker_position not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_obstacle_position"));
 }
 
 const MarkerInformation& View::get_own_marker_information(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_marker_information not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_marker_information"));
 }
 
 const MarkerInformation& View::get_robots_marker_information(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robots_marker_information not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_robots_marker_information"));
 }
 
 const MarkerInformation& View::get_obstacles_marker_information(const Obstacle& obstacle) const {
-	throw UnsupportedOperationException("get_obstacles_marker_information not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_obstacles_marker_information"));
 }
 
 const MarkerInformation& View::get_markers_marker_information(const WorldObject& marker) const {
-	throw UnsupportedOperationException("get_markers_marker_information not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_markers_marker_information"));
 }
 
 std::size_t View::get_own_id(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_id not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_id"));
 }
 
 std::size_t View::get_robot_id(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_id not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_sphere_radius"));
 }
 
 std::size_t View::get_obstacle_id(const Obstacle& robot) const {
-	throw UnsupportedOperationException("get_robot_id not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_obstacle_id"));
 }
 
 std::size_t View::get_marker_id(const WorldObject& robot) const {
-	throw UnsupportedOperationException("get_robot_id not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_marker_id"));
 }
 
 Vector3d View::get_own_acceleration(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_acceleration not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_acceleration"));
 }
 
-Vector3d View::get_robot_acceleration(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_acceleration not implemented in this model.");
+Vector3d View::get_others_acceleration(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_robot_acceleration"));
 }
 
 boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_own_coordinate_system_axis(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_coordinate_system_axis not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_coordinate_system_axis"));
 }
 
-boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_coordinate_system_axis not implemented in this model.");
+boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_others_coordinate_system_axis(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_robot_coordinate_system_axis"));
 }
 
 RobotType View::get_own_type(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_type not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_type"));
 }
 
-RobotType View::get_robot_type(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_type not implemented in this model.");
+RobotType View::get_others_type(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_robot_type"));
 }
 
 Vector3d View::get_own_velocity(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_velocity not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_velocity"));
 }
 
-Vector3d View::get_robot_velocity(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_velocity not implemented in this model.");
+Vector3d View::get_others_velocity(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_robot_velocity"));
 }
 
 RobotStatus View::get_own_status(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_own_status not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_own_status"));
 }
 
-RobotStatus View::get_robot_status(const RobotData& robot) const {
-	throw UnsupportedOperationException("get_robot_status not implemented in this model.");
+RobotStatus View::get_others_status(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_robot_status"));
 }
 
 bool View::is_point_in_obstacle(const Obstacle& obstacle, const Vector3d& point) const {
-	throw UnsupportedOperationException("is_point_in_obstacle not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("is_point_in_obstacle"));
 }
 
 double View::get_box_depth(const Box& box) const {
-	throw UnsupportedOperationException("get_box_depth not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_box_depth"));
 }
 
 double View::get_box_width(const Box& box) const {
-	throw UnsupportedOperationException("get_box_width not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_box_width"));
 }
 
 double View::get_box_height(const Box& box) const {
-	throw UnsupportedOperationException("get_box_height not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_box_height"));
 }
 
 double View::get_sphere_radius(const Sphere& sphere) const {
-	throw UnsupportedOperationException("get_sphere_radius not implemented in this model.");
+	throw UnsupportedOperationException(get_error_message("get_sphere_radius"));
 }
 
 const WorldInformation& View::world_information() const {
