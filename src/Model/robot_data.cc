@@ -69,17 +69,15 @@ void RobotData::set_velocity(boost::shared_ptr<Vector3d> new_velocity) {
 }
 
 boost::shared_ptr<Vector3d> RobotData::extrapolated_position(int timesteps) const {
-	boost::shared_ptr<Vector3d> next_position(new Vector3d()); // TODO cola: maybe the velocity should be increased by acceleration
-	// TODO(craupach) : This may be more elegant using the overloaded operators of Vector3d.
-	// I kept it this way to avoid making an unnecessary copy. I didn't look into it very deep though.
-	next_position->insert_element(kXCoord, position()(0) + timesteps * velocity()(0));
-	next_position->insert_element(kYCoord, position()(1) + timesteps * velocity()(1));
-	next_position->insert_element(kZCoord, position()(2) + timesteps * velocity()(2));
+	boost::shared_ptr<Vector3d> next_position(new Vector3d());
+	// the next lines compute the new position by formula: s(t) = v*t + 1/2 * a * t^2
+	next_position->insert_element(kXCoord, position()(0) + timesteps * velocity()(0) + 0.5*acceleration()(0)*pow(timesteps,2));
+	next_position->insert_element(kYCoord, position()(1) + timesteps * velocity()(1) + 0.5*acceleration()(1)*pow(timesteps,2));
+	next_position->insert_element(kZCoord, position()(2) + timesteps * velocity()(2) + 0.5*acceleration()(2)*pow(timesteps,2));
 	return next_position;
 }
 
 boost::shared_ptr<Vector3d> RobotData::extrapolated_velocity(int timesteps) const {
-	// TODO(craupach) see comment for extrapolated_position.
 	boost::shared_ptr<Vector3d> next_velocity(new Vector3d());
 	next_velocity->insert_element(kXCoord, velocity()(0) + timesteps * acceleration()(0));
 	next_velocity->insert_element(kYCoord, velocity()(1) + timesteps * acceleration()(1));
