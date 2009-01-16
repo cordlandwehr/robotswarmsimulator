@@ -48,7 +48,8 @@ protected:
 	 * Protected constructor, to mark class as abstract.
 	 */
 	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
-	                                                                                                 robot_control_(robot_control){}
+	                                                                                                 robot_control_(robot_control),
+	                                                                                                 time_of_last_event_(0) {}
 
 public:
 	virtual ~EventHandler() {}
@@ -129,7 +130,6 @@ private:
 	void update_listeners(boost::shared_ptr<Event> event);
 
 	/**
-	 * TODO(craupach) change name, comment?
 	 * generates a new WorldInformation object by extrapolating it from the newest old one to time t
 	 */
 	boost::shared_ptr<WorldInformation> extrapolate_old_world_information(int time);
@@ -138,6 +138,11 @@ private:
 	vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;
 	boost::shared_ptr<RobotControl> robot_control_;
+
+	/**
+	 * The time the last event has happened. Used to ensure correct ordering of events.
+	 */
+	int time_of_last_event_;
 };
 
 #endif /* EVENT_HANDLER_H_ */

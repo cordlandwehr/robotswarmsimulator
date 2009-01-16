@@ -26,8 +26,6 @@ void SynchronousASG::initialize(const History& history, const vector<boost::shar
 	WorldInformation world_information = history.get_newest();
 
 	// extract robots from robot data
-	// TODO(craupach): Where to get mutable pointers to the robots?
-	// TODO(craupach): Rethink interface: what should be const?
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		robots_.push_back(robot);
 	}

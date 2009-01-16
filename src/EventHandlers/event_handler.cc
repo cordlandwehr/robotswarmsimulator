@@ -32,30 +32,32 @@
 #include "../SimulationKernel/robot_control.h"
 
 #include "event_handler.h"
-
+#include <iostream>
 
 void EventHandler::handle_event(boost::shared_ptr<Event> event) {
-	// check if it is a look event
-	boost::shared_ptr<LookEvent> look_event = boost::dynamic_pointer_cast<LookEvent>(event);
-	if(look_event.get() != NULL) {
-		// TODO(craupach) can this be done more elegantly?
-		handle_look_event(look_event);
-	} else {
-		// check if it is a compute event
-		boost::shared_ptr<ComputeEvent> compute_event = boost::dynamic_pointer_cast<ComputeEvent>(event);
-		if(compute_event.get() != NULL) {
-			handle_compute_event(compute_event);
-		} else {
-			// check if it is a handle request event
-			boost::shared_ptr<HandleRequestsEvent> handle_requests_event =
-			     boost::dynamic_pointer_cast<HandleRequestsEvent> (event);
-			if(handle_requests_event.get() != NULL) {
-				handle_handle_requests_event(handle_requests_event);
-			} else {
-				throw std::invalid_argument("Illegal type of world_event.");
-			}
-		}
+	// check that it is not for a past time
+	int time_difference = event->time() - time_of_last_event_;
+	if(time_difference < 0) {
+		// the event is in the past.
+		throw std::invalid_argument("Event in the past!");
 	}
+	time_of_last_event_ = event->time();
+
+	// Try to cast the pointer to look event, compute event, handle_request event
+	// to see what kind of event it is.
+	// The cast will return NULL if it is the wrong kind of event.
+	// A shared_ptr pointing to NULL converts to FALSE in a condition.
+	if(boost::shared_ptr<LookEvent> look_event = boost::dynamic_pointer_cast<LookEvent>(event)) {
+		handle_look_event(look_event);
+	} else if(boost::shared_ptr<ComputeEvent> compute_event = boost::dynamic_pointer_cast<ComputeEvent>(event)) {
+		handle_compute_event(compute_event);
+	} else if(boost::shared_ptr<HandleRequestsEvent> handle_requests_event =
+	          boost::dynamic_pointer_cast<HandleRequestsEvent> (event)) {
+		handle_handle_requests_event(handle_requests_event);
+	} else {
+		throw std::invalid_argument("Illegal type of event.");
+	}
+
 	// update all simulation listeners
 	update_listeners(event);
 }
@@ -86,42 +88,31 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 	// handle requests
 	BOOST_FOREACH(boost::shared_ptr<const Request> request, handle_requests_event->requests()) {
 
-		boost::shared_ptr<const PositionRequest> position_request =
-		    boost::dynamic_pointer_cast<const PositionRequest> (request);
-		/*
-		 * TODO(craupach) The following does not work. See if it can be fixed
-		 * (would cut down indentations on if-else constructs).
-		 * Write a unit test for it.
-		 * typeid(request.get()) == typeid(const PositionRequest *)
-		 */
-		if(position_request.get() != NULL) {
+		// Try to cast the pointer to all types of request to see what kind of request it is.
+		// The cast will return NULL if it is the wrong kind of event.
+		// A shared_ptr pointing to NULL converts to FALSE in a condition.
+		if(boost::shared_ptr<const PositionRequest> position_request =
+		   boost::dynamic_pointer_cast<const PositionRequest> (request)) {
 			handle_position_request(new_world_information, position_request);
+
+		} else if(boost::shared_ptr<const AccelerationRequest> acceleration_request =
+		          boost::dynamic_pointer_cast<const AccelerationRequest> (request)) {
+			handle_acceleration_request(new_world_information, acceleration_request);
+
+		} else if(boost::shared_ptr<const MarkerRequest> marker_request =
+		          boost::dynamic_pointer_cast<const MarkerRequest> (request)) {
+			handle_marker_request(new_world_information, marker_request);
+
+		} else if(boost::shared_ptr<const TypeChangeRequest> type_change_request =
+		          boost::dynamic_pointer_cast<const TypeChangeRequest>(request)) {
+			handle_type_change_request(new_world_information, type_change_request);
+
+		} else if(boost::shared_ptr<const VelocityRequest> velocity_request =
+		          boost::dynamic_pointer_cast<const VelocityRequest> (request)) {
+			handle_velocity_request(new_world_information, velocity_request);
+
 		} else {
-			boost::shared_ptr<const AccelerationRequest> acceleration_request =
-			    boost::dynamic_pointer_cast<const AccelerationRequest> (request);
-			if(acceleration_request.get() != NULL) {
-				handle_acceleration_request(new_world_information, acceleration_request);
-			} else {
-				boost::shared_ptr<const MarkerRequest> marker_request =
-					boost::dynamic_pointer_cast<const MarkerRequest> (request);
-				if(marker_request.get() != NULL) {
-					handle_marker_request(new_world_information, marker_request);
-				} else {
-					boost::shared_ptr<const TypeChangeRequest> type_change_request =
-					    boost::dynamic_pointer_cast<const TypeChangeRequest>(request);
-					if(type_change_request.get() != NULL) {
-						handle_type_change_request(new_world_information, type_change_request);
-					} else {
-						boost::shared_ptr<const VelocityRequest> velocity_request =
-						    boost::dynamic_pointer_cast<const VelocityRequest> (request);
-						if(velocity_request.get() != NULL) {
-							handle_velocity_request(new_world_information, velocity_request);
-						} else {
-							throw std::invalid_argument("Illegal type of request.");
-						}
-					}
-				}
-			}
+			throw std::invalid_argument("Illegal type of request.");
 		}
 	}
 
@@ -144,7 +135,6 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 
 	// extrapolate all robots
 	BOOST_FOREACH(boost::shared_ptr<RobotData> old_robot, old_world_information.robot_data()) {
-
 
 		boost::shared_ptr<Vector3d> new_acceleration(new Vector3d(old_robot->acceleration()));
 		boost::shared_ptr<Vector3d> new_velocity = old_robot->extrapolated_velocity(time_difference);

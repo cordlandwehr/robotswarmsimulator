@@ -9,6 +9,7 @@
 #define TEST_EVENT_HANDLER_H_
 
 #include "../../EventHandlers/event_handler.h"
+#include "../../Events/event.h"
 
 /**
  * simple event handler that does nothing but to log how many times its handle methods have been
@@ -80,5 +81,11 @@ private:
 
 };
 
-
+/**
+ * a nonexisting event class
+ */
+class ThePigsCanFlyEvent : public Event {
+public:
+	explicit ThePigsCanFlyEvent(int time): Event(time) {};
+};
 #endif /* TEST_EVENT_HANDLER_H_ */

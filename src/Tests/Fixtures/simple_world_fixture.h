@@ -24,12 +24,13 @@ public:
 
 /**
  * This fixture creates a simple world with a history (size 5) and a world information for time 0
- * which contains two robots:
+ * which contains three robots:
  *
  * robot a at (0.0, 0.0, 0.0) with zero acceleration and velocity
  *
  * robot b at (1.0, 0.5, 3.0) with zero acceleration and velocity (1.0, 0.0, 0.0)
  *
+ * robot c at (1.0, 1.0, 1.0) with acceleration (1.0, 1.0, 1.0) and zero velocity
  */
 struct SimpleWorldFixture {
 	SimpleWorldFixture() {
@@ -37,12 +38,18 @@ struct SimpleWorldFixture {
 
 		initial_world_information.reset(new WorldInformation());
 		history.reset(new History(5));
+
 		id_a.reset(new RobotIdentifier(0));
 		id_b.reset(new RobotIdentifier(1));
+		id_c.reset(new RobotIdentifier(2));
+
 		robot_a.reset(new SimpleRobot(id_a));
 		robot_b.reset(new SimpleRobot(id_b));
+		robot_c.reset(new SimpleRobot(id_c));
+
 		robots.push_back(robot_a);
 		robots.push_back(robot_b);
+		robots.push_back(robot_c);
 
 		// create position for robot a: (0,0,0)
 		Vector3d * pos_a_ptr = new Vector3d;
@@ -62,46 +69,61 @@ struct SimpleWorldFixture {
 		pos_b->insert_element(kZCoord,3.0);
 		robot_data_b.reset(new RobotData(id_b, pos_b, *robot_b));
 
+		// create position for robot c: (1.0, 1.0, 1.0)
+		boost::shared_ptr<Vector3d> pos_c;
+		pos_c.reset(new Vector3d());
+		pos_c->insert_element(kXCoord,1.0);
+		pos_c->insert_element(kYCoord,1.0);
+		pos_c->insert_element(kZCoord,1.0);
+		robot_data_c.reset(new RobotData(id_c, pos_c, *robot_c));
+
 		// create velocity for robot a: (0,0,0)
-		Vector3d * vel_a_ptr = new Vector3d;
-		boost::shared_ptr<Vector3d> vel_a;
-		vel_a.reset(vel_a_ptr);
+		boost::shared_ptr<Vector3d> vel_a(new Vector3d());
 		vel_a->insert_element(kXCoord,0.0);
 		vel_a->insert_element(kYCoord,0.0);
 		vel_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_velocity(vel_a);
 
 		// create acceleration for robot a: (0,0,0)
-		Vector3d * acc_a_ptr = new Vector3d;
-		boost::shared_ptr<Vector3d> acc_a;
-		acc_a.reset(acc_a_ptr);
+		boost::shared_ptr<Vector3d> acc_a(new Vector3d());
 		acc_a->insert_element(kXCoord,0.0);
 		acc_a->insert_element(kYCoord,0.0);
 		acc_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_acceleration(acc_a);
 
 		// create  velocity for robot b: (1,0,0)
-		Vector3d * vel_b_ptr = new Vector3d;
-		boost::shared_ptr<Vector3d> vel_b;
-		vel_b.reset(vel_b_ptr);
+		boost::shared_ptr<Vector3d> vel_b(new Vector3d());
 		vel_b->insert_element(kXCoord,1.0);
 		vel_b->insert_element(kYCoord,0.0);
 		vel_b->insert_element(kZCoord,0.0);
 		robot_data_b->set_velocity(vel_b);
 
 		// create acceleration for robot b: (0,0,0)
-		Vector3d * acc_b_ptr = new Vector3d;
-		boost::shared_ptr<Vector3d> acc_b;
-		acc_b.reset(acc_b_ptr);
+		boost::shared_ptr<Vector3d> acc_b(new Vector3d());
 		acc_b->insert_element(kXCoord,0.0);
 		acc_b->insert_element(kYCoord,0.0);
 		acc_b->insert_element(kZCoord,0.0);
 		robot_data_b->set_acceleration(acc_b);
 
+		// create velocity for robot c: (0,0,0)
+		boost::shared_ptr<Vector3d> vel_c(new Vector3d());
+		vel_c->insert_element(kXCoord,0.0);
+		vel_c->insert_element(kYCoord,0.0);
+		vel_c->insert_element(kZCoord,0.0);
+		robot_data_c->set_velocity(vel_c);
 
-		// add both robots to the world information
+		// create acceleration for robot c: (1.0, 1.0, 1.0)
+		boost::shared_ptr<Vector3d> acc_c(new Vector3d());
+		acc_c->insert_element(kXCoord,1.0);
+		acc_c->insert_element(kYCoord,1.0);
+		acc_c->insert_element(kZCoord,1.0);
+		robot_data_c->set_acceleration(acc_c);
+
+
+		// add all robots to the world information
 		initial_world_information->add_robot_data(robot_data_a);
 		initial_world_information->add_robot_data(robot_data_b);
+		initial_world_information->add_robot_data(robot_data_c);
 
 		// set time of inital world information
 		initial_world_information->set_time(0);
@@ -114,12 +136,21 @@ struct SimpleWorldFixture {
 	boost::shared_ptr<WorldInformation> initial_world_information;
 	boost::shared_ptr<History> history;
 
+	// Robot Datas
 	boost::shared_ptr<RobotData> robot_data_a;
 	boost::shared_ptr<RobotData> robot_data_b;
+	boost::shared_ptr<RobotData> robot_data_c;
+
+	// Robots
 	boost::shared_ptr<Robot> robot_a;
 	boost::shared_ptr<Robot> robot_b;
+	boost::shared_ptr<Robot> robot_c;
+
+	// Robot Identifiers
 	boost::shared_ptr<RobotIdentifier> id_a;
 	boost::shared_ptr<RobotIdentifier> id_b;
+	boost::shared_ptr<RobotIdentifier> id_c;
+
 	vector<boost::shared_ptr<Robot> > robots;
 };
 
