@@ -7,8 +7,6 @@
 
 #include "coord_converter.h"
 
-CoordConverter::~CoordConverter() {}
-
 Vector3d CoordConverter::global_to_local(const Vector3d &absolute_coord, const Vector3d  &origin, boost::tuple<boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> > local_coord_system)
 {
 	Vector3d global_translated;

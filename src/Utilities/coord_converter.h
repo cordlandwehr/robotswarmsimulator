@@ -20,15 +20,10 @@ using namespace std;
  *
  * This class provides functions for converting coordinates between respective coordinate systems
  *
- * Abstract class, because it should not be instantiated, utility methods are static.
  *
  *
  */
-class CoordConverter {
-public:
-	CoordConverter();
-	virtual ~CoordConverter() = 0;
-
+namespace CoordConverter {
 	/**
 	 * calculates local coordinates from global ones
 	 * @param absolute_coord: the global cordinate
@@ -36,7 +31,7 @@ public:
 	 * @param local_coord_system: three base vectors
 	 * \return the local coordinate
 	 */
-	static Vector3d global_to_local(const Vector3d &absolute_coord, const Vector3d  &origin, boost::tuple<boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> > local_coord_system);
+	Vector3d global_to_local(const Vector3d &absolute_coord, const Vector3d  &origin, boost::tuple<boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> > local_coord_system);
 
 	/**
 	 * calculates global coordinates from local ones. The origin of both systems is assumed to be (0,0,0).
@@ -45,10 +40,11 @@ public:
 	 * @param local_coord_system: the three base vectors of the local coordinate system
 	 *
 	 */
-	static boost::shared_ptr<Vector3d> local_to_global(const Vector3d &local_coord,
+	boost::shared_ptr<Vector3d> local_to_global(const Vector3d &local_coord,
 			                                           const boost::tuple<boost::shared_ptr<const Vector3d> ,
 			                                                 boost::shared_ptr<const Vector3d> ,
 			                                                 boost::shared_ptr<const Vector3d> > &local_coord_system);
+
 
 };
 

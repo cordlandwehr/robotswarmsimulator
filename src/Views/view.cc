@@ -97,7 +97,6 @@ std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
 
 Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
 	Vector3d position_global_coords;
-	RobotData robot_data = world_information_->get_according_robot_data(caller.id());
 
 	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
 		if(is_own_identifier(caller, ref)) {
@@ -113,7 +112,7 @@ Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) co
 	else {
 		throw std::invalid_argument("Illegal type of world_object.");
 	}
-
+	const RobotData& robot_data = resolve_robot_ref(caller.id());
 	return CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 

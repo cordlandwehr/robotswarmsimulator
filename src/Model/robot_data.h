@@ -99,7 +99,7 @@ public:
 	 * \return Vector3d for coordinates
 	 */
 	boost::shared_ptr<Vector3d> extrapolated_position(int timesteps) const;
-
+	//TODO (dwonisch): why is timesteps int? (Visualisation may want to extrapolate 0.5 steps?)
 	/**
 	 * Returns velocity of the robot at the moment some timesteps in the future.
 	 * \param int for additional timesteps

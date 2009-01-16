@@ -44,6 +44,7 @@ class History;
  */
 class EventHandler {
 protected:
+	//TODO (dwonisch): why not make destructor pure virtual instead? ("virtual ~EventHandler() = 0 {}")
 	/**
 	 * Protected constructor, to mark class as abstract.
 	 */
