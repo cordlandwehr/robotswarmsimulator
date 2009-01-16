@@ -8,6 +8,7 @@
 #ifndef EVENT_HANDLER_H_
 #define EVENT_HANDLER_H_
 
+#include <iostream>
 #include <boost/smart_ptr.hpp>
 
 // forward declarations
@@ -43,16 +44,11 @@ class History;
  * message is issued upon the occurrence of such a request.
  */
 class EventHandler {
-protected:
-
-	/**
-	 * Protected constructor, to mark class as abstract.
-	 */
+public:
 	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
 	                                                                                                 robot_control_(robot_control),
 	                                                                                                 time_of_last_event_(0) {}
 
-public:
 	virtual ~EventHandler() = 0;
 
 	/**
