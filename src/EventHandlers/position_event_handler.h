@@ -8,14 +8,21 @@
 #ifndef POSITION_EVENT_HANDLER_H_
 #define POSITION_EVENT_HANDLER_H_
 
+
 #include <boost/smart_ptr.hpp>
 
 #include "event_handler.h"
-#include "../Requests/position_request.h"
+
 
 // forward declarations
+class MarkerRequest;
+class PositionRequest;
+
+class WorldInformation;
+
 class History;
 class RobotControl;
+
 
 /**
  * An event handler supporting only PositionRequest for movement.
@@ -30,9 +37,12 @@ public:
 	PositionEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };
 
+private:
 	void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
 	                             boost::shared_ptr<const PositionRequest> position_request);
-private:
+
+	void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
+	                           boost::shared_ptr<const MarkerRequest> marker_request);
 };
 
 #endif /* POSITION_EVENT_HANDLER_H_ */
