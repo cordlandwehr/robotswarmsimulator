@@ -129,7 +129,7 @@ struct SimpleWorldFixture {
 		initial_world_information->set_time(0);
 
 		// insert initial world information into history
-		history->push_back(initial_world_information);
+		history->insert(initial_world_information);
 
 	}
 

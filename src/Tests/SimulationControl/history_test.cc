@@ -17,19 +17,19 @@ BOOST_FIXTURE_TEST_CASE(history_test, SimpleWorldFixture)
 	boost::shared_ptr<WorldInformation> second_world_information;
 	second_world_information.reset(new WorldInformation());
 	second_world_information->set_time(1);
-	history->push_back(second_world_information);
+	history->insert(second_world_information);
 
 	// newest shoud be the second world information
 	BOOST_CHECK_EQUAL(history->get_newest().time(), 1);
 
 	// oldest should be the initial world information now be the initial one
-	BOOST_CHECK_EQUAL(history->get_oldest().time(), 0);
+	BOOST_CHECK_EQUAL(history->get_oldest_unused()->time(), 0);
 
 	// newest shoud be the second world information
 	BOOST_CHECK_EQUAL(history->get_newest().time(), 1);
 
 	// initial world info should be consumed now. So oldest should be the second world information.
-	BOOST_CHECK_EQUAL(history->get_oldest().time(), 1);
+	BOOST_CHECK_EQUAL(history->get_oldest_unused()->time(), 1);
 
 
 }

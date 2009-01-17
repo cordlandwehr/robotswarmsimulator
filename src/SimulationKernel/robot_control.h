@@ -11,7 +11,6 @@
 #include <set>
 #include <cstddef>
 #include <boost/shared_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/circular_buffer.hpp>
 #include "simulation_listener.h"
 

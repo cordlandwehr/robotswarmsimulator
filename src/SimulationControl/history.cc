@@ -7,28 +7,29 @@
  *
  */
 
-/**
- * \file Empty implementation of the history to prevent the compiler from complaining
- * TODO(craupach) Semaphores should go in here
- */
-
-#include "../Model/world_information.h"
 #include "history.h"
+#include "../Model/world_information.h"
 
-History::History(int size) {
-	// create new history with given size
-	history_.reset(new boost::circular_buffer<boost::shared_ptr<WorldInformation> > (size));
+
+History::History(std::size_t size) : history_(size), consumer_position_(0), empty_count_(size), fill_count_(0){
+
 }
 
-void History::push_back(boost::shared_ptr<WorldInformation> world_information) {
-	history_->push_front(world_information);
+void History::insert(boost::shared_ptr<WorldInformation> world_information) {
+	empty_count_.wait();
+	history_.push_front(world_information);
+	++consumer_position_;
+	fill_count_.post();
 }
 
-const WorldInformation& History::get_oldest() {
-	//TODO(craupach) implement this. Should consume.
-	return *history_->back();
+boost::shared_ptr<WorldInformation> History::get_oldest_unused() {
+	fill_count_.wait();
+	--consumer_position_;
+	boost::shared_ptr<WorldInformation> result(new WorldInformation(*history_[consumer_position_]));
+	empty_count_.post();
+	return result;
 }
 
 const WorldInformation& History::get_newest() const {
-	return *history_->front();
+	return *history_.front();
 }

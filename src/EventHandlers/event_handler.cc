@@ -119,7 +119,7 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 	}
 
 	// push back new world information
-	history_->push_back(new_world_information);
+	history_->insert(new_world_information);
 }
 
 boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(int time) {

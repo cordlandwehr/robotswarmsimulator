@@ -69,19 +69,19 @@ void RobotData::set_velocity(boost::shared_ptr<Vector3d> new_velocity) {
 	velocity_ = new_velocity;
 }
 
-boost::shared_ptr<Vector3d> RobotData::extrapolated_position(int timesteps) const {
+boost::shared_ptr<Vector3d> RobotData::extrapolated_position(double timesteps) const {
 	boost::shared_ptr<Vector3d> next_position(new Vector3d());
 	// the next lines compute the new position by formula: s(t) = v*t + 1/2 * a * t^2
 	next_position->insert_element(kXCoord,
-	                              position()(0) + timesteps * velocity()(0) + 0.5*acceleration()(0)*pow(static_cast<float>(timesteps),2));
+	                              position()(0) + timesteps * velocity()(0) + 0.5*acceleration()(0)*timesteps*timesteps);
 	next_position->insert_element(kYCoord,
-	                              position()(1) + timesteps * velocity()(1) + 0.5*acceleration()(1)*pow(static_cast<float>(timesteps),2));
+	                              position()(1) + timesteps * velocity()(1) + 0.5*acceleration()(1)*timesteps*timesteps);
 	next_position->insert_element(kZCoord,
-	                              position()(2) + timesteps * velocity()(2) + 0.5*acceleration()(2)*pow(static_cast<float>(timesteps),2));
+	                              position()(2) + timesteps * velocity()(2) + 0.5*acceleration()(2)*timesteps*timesteps);
 	return next_position;
 }
 
-boost::shared_ptr<Vector3d> RobotData::extrapolated_velocity(int timesteps) const {
+boost::shared_ptr<Vector3d> RobotData::extrapolated_velocity(double timesteps) const {
 	boost::shared_ptr<Vector3d> next_velocity(new Vector3d());
 	next_velocity->insert_element(kXCoord, velocity()(0) + timesteps * acceleration()(0));
 	next_velocity->insert_element(kYCoord, velocity()(1) + timesteps * acceleration()(1));
