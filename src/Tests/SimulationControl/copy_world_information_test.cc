@@ -13,7 +13,7 @@
 #include "../../Utilities/vector3d.h"
 #include "../Fixtures/simple_world_fixture.h"
 
-const unsigned kCopyCount = 1233;
+const unsigned kCopyCount = 127;
 
 BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 {
@@ -37,14 +37,14 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 	//Note: WorldInformations added to array so optimizer hopefully does not remove the copying.
 	boost::array<boost::shared_ptr<WorldInformation>, kCopyCount> array;
 
-	long start_time = time(NULL);
+	std::clock_t start_time = clock();
 
 	for(unsigned i = 0; i < kCopyCount; i++) {
 		array[i] = boost::shared_ptr<WorldInformation>(new WorldInformation(*initial_world_information));
 	}
 
-	long time_needed = time(NULL)-start_time;
+	std::clock_t time_needed = clock()-start_time;
 
-	std::cout << "Total time: " << time_needed << "s." << std::endl;
-	std::cout << "Time per copy: " << std::setprecision(5) << time_needed*1000.0/kCopyCount << "ms." << std::endl;
+	std::cout << "Total time: " << time_needed*1000.0/CLOCKS_PER_SEC << "ms." << std::endl;
+	std::cout << "Time per copy: " << std::setprecision(5) << time_needed*1000.0/kCopyCount/CLOCKS_PER_SEC << "ms." << std::endl;
 }
