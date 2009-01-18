@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/circular_buffer.hpp>
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
+#include <boost/thread/mutex.hpp>
 
 class WorldInformation;
 
@@ -50,6 +51,7 @@ private:
 	std::size_t consumer_position_;
 	boost::interprocess::interprocess_semaphore empty_count_;
 	boost::interprocess::interprocess_semaphore fill_count_;
+	boost::mutex mutex_;
 };
 
 #endif /* HISTORY_H_ */
