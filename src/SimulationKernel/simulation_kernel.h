@@ -26,6 +26,8 @@ class Robot;
 class Identifier;
 class WorldInformation;
 class History;
+class Obstacle;
+
 
 class SimulationKernel {
 public:
@@ -82,6 +84,18 @@ private:
 	boost::shared_ptr<History> history_;
 
 	/**
+	 * Method for performing one event-based step of the simulation
+	 * by calling the current EventHandler
+	 */
+	void step();
+
+	/**
+	 * calls the step-method multiple times
+	 * \param number of steps
+	 */
+	void multistep(int steps);
+
+	/**
 	 * This method loads the data written in the given project files
 	 * (main project file, robot file, obstacle file)
 	 * and initializes the according variables.
@@ -107,6 +121,32 @@ private:
 	 * This method loads the data written in the obstacle file.
 	 */
 	void load_obstacle_file();
+
+	/**
+	 * This method saves the data to the predefined project files
+	 * (main project file, robot file, obstacle file)
+	 * \param Name of the main project file.
+	 */
+	void save_projectfiles(const string& project_filename);
+
+	/**
+	 * This method saves the following variables with their current
+	 * values to the specified main project file:
+	 * asg_, compass_model_, event_handler_, obstacle_filename_,
+	 * project_name_, robot_filename_, statistics_module_
+	 * \param Name of the main project file.
+	 */
+	void save_main_project_file(const string& project_filename);
+
+	/**
+	 * This method saves information about the robots.
+	 */
+	void save_robot_file();
+
+	/**
+	 * This method saves information about the obstacles
+	 */
+	void save_obstacle_file();
 
 	/**
 	 * This method checks whether the given line is a comment,
@@ -160,6 +200,19 @@ private:
 	 * Checks whether the given string contains an assignment.
 	 */
 	bool contains_assignment(const string& line);
+
+	/**
+	 * Used to write the standard header for the obstacle file
+	 * \param outputstream to obstacle file
+	 */
+	void write_obstacle_header(ofstream obstacle_file);
+
+	/**
+	 * This method writes the output to the obstaclefile
+	 * \param obstacle_file	outputstream to obstacle file
+	 * \param obs the obstacle to print
+	 */
+	void write_obstacle(ofstream obstacle_file, boost::shared_ptr<Obstacle>);
 };
 
 #endif /* SIMULATION_KERNEL_H_ */
