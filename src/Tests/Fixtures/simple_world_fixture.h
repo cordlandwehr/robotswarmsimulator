@@ -52,9 +52,8 @@ struct SimpleWorldFixture {
 		robots.push_back(robot_c);
 
 		// create position for robot a: (0,0,0)
-		Vector3d * pos_a_ptr = new Vector3d;
 		boost::shared_ptr<Vector3d> pos_a;
-		pos_a.reset(pos_a_ptr);
+		pos_a.reset(new Vector3d);
 		pos_a->insert_element(kXCoord,0.0);
 		pos_a->insert_element(kYCoord,0.0);
 		pos_a->insert_element(kZCoord,0.0);
