@@ -26,7 +26,7 @@ SimulationControl::~SimulationControl() {
 
 }
 
-void SimulationControl::start_new_simulation(const std::string& configuration_filename) {
+void SimulationControl::create_new_simulation(const std::string& configuration_filename) {
 	//TODO (dwonisch): does this method terminate the old simulation thread?
 	//                 I assume it does.
 	terminate_simulation();
@@ -103,6 +103,10 @@ void SimulationControl::process_simulation() {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
 		visualizer_->draw(extrapolation_time, current_world_information_);
 	}
+}
+
+void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {
+	visualizer_ = visualizer;
 }
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)

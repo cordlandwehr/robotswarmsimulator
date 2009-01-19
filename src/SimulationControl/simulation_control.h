@@ -24,7 +24,7 @@ public:
 	SimulationControl();
 	~SimulationControl();
 
-	void start_new_simulation(const std::string& configuration_filename);
+	void create_new_simulation(const std::string& configuration_filename);
 	void start_simulation();
 	void pause_simulation();
 	void terminate_simulation();
