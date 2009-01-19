@@ -162,3 +162,58 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFix
 	BOOST_CHECK_EQUAL(marker_information_after3.value(), 2);
 	/* END: EventHandledTest2 */
 }
+
+/*
+ * Test: Set a different local coordinate system for robot a and issue a position request for it.
+ * Expected Results:
+ *   Robot a's position changes according to its local coordinate system.
+ */
+BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_local_coordinate_system, SimpleWorldFixture) {
+	// setting up event handler
+	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	PositionEventHandler event_handler(history, robot_control);
+
+	// build a coordinate axes for a robot with unit distance 2
+	boost::shared_ptr<Vector3d> x_axis(new Vector3d());
+	x_axis->insert_element(kXCoord, 2.0);
+	x_axis->insert_element(kYCoord, 0.0);
+	x_axis->insert_element(kZCoord, 0.0);
+
+	boost::shared_ptr<Vector3d> y_axis(new Vector3d());
+	y_axis->insert_element(kXCoord, 0.0);
+	y_axis->insert_element(kYCoord, 2.0);
+	y_axis->insert_element(kZCoord, 0.0);
+
+	boost::shared_ptr<Vector3d> z_axis(new Vector3d());
+	z_axis->insert_element(kXCoord, 0.0);
+	z_axis->insert_element(kYCoord, 0.0);
+	z_axis->insert_element(kZCoord, 2.0);
+
+	boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+	              boost::shared_ptr<Vector3d> > axes(x_axis, y_axis, z_axis);
+
+	robot_data_a->set_coordinate_system_axis(axes);
+
+	// build a position request
+	boost::shared_ptr<Vector3d> new_position(new Vector3d);
+	(*new_position)(kXCoord) = -5.;
+	(*new_position)(kYCoord) = 0.1;
+	(*new_position)(kZCoord) = 3.;
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+
+	// construction of handle_requests_event
+	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(4));
+	handle_requests_event->add_to_requests(position_request);
+
+	// handling the event
+	event_handler.handle_event(handle_requests_event);
+
+	// checking new position of robot_a: should be at (-10.0, 0.2, 6.0)
+	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().time(), 4);
+	BOOST_CHECK_CLOSE(robot_data_after.position()(kXCoord), -10.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_after.position()(kYCoord), 0.2, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_after.position()(kZCoord), 6.0, 0.1);
+
+}
