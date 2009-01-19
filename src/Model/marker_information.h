@@ -7,6 +7,11 @@
 
 #include <boost/smart_ptr.hpp>
 
+// TODO(peter) comment class
+// TODO(peter) redesign class to met the following design (eMail discussion Christoph/Martina/Peter)
+//             - it is NOT designed as a base class, so do not use any virtual methods
+//             - carried data will be placed inside a map using a string ('variable name') as key and boost::any as
+//               value for the key (boost::any holding the custom data)
 class MarkerInformation {
 public:
 	MarkerInformation();
@@ -17,9 +22,6 @@ public:
 	 * typeid(*this) == typeid(*clone)
 	 * @return shared ptr to the cloned object
 	 */
-	// TODO(peter) Why is this method not pure virtual (while still providing the current default implementation)?
-	//             Shouldn't subclasses of MarkerInformation be required to provide a custom implementation returning
-	//             something like 'boost::shared_ptr<MarkerInformation>(new CustomMarkerInformation(*this))'?
 	virtual boost::shared_ptr<MarkerInformation> clone() const;
 };
 

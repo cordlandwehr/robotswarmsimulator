@@ -31,7 +31,9 @@ class RobotControl;
  * - MarkerRequest
  * - TypeChangeRequest
  */
-// TODO(peter) implement marker request handling
+// TODO(peter) implement correct handling of position requests for robots with a local coordinate system
+// TODO(peter) implement parameters for accuracy and unreliable request handling (requests are discarded now and then)
+// TODO(peter) such simple request handling methods can be implemented using static methods
 class PositionEventHandler : public EventHandler {
 public:
 	PositionEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
