@@ -62,6 +62,18 @@ public:
 	string robot_filename() const { return robot_filename_; }
 	int statistics_module() const { return statistics_module_; }
 
+	/**
+	 * Method for performing one event-based step of the simulation
+	 * by calling the current EventHandler
+	 */
+	void step();
+
+	/**
+	 * calls the step-method multiple times
+	 * \param number of steps
+	 */
+	void multistep(int steps);
+
 private:
 	//TODO(martinah) comment variables
 	//variables initialized with values in the main project file
@@ -82,18 +94,6 @@ private:
 	 * Reference to a History of the WorldInformations.
 	 */
 	boost::shared_ptr<History> history_;
-
-	/**
-	 * Method for performing one event-based step of the simulation
-	 * by calling the current EventHandler
-	 */
-	void step();
-
-	/**
-	 * calls the step-method multiple times
-	 * \param number of steps
-	 */
-	void multistep(int steps);
 
 	/**
 	 * This method loads the data written in the given project files

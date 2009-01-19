@@ -28,7 +28,9 @@ void History::insert(boost::shared_ptr<WorldInformation> world_information) {
 }
 
 boost::shared_ptr<WorldInformation> History::get_oldest_unused() {
-	fill_count_.wait();
+	if(!fill_count_.try_wait()) {
+		return boost::shared_ptr<WorldInformation>();
+	}
 
 	boost::mutex::scoped_lock lock(mutex_);
 	--consumer_position_;

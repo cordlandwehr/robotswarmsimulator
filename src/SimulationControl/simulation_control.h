@@ -11,31 +11,58 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/interprocess/sync/interprocess_semaphore.hpp>
 #include <cstddef>
 
-#include "../SimulationKernel/simulation_kernel.h"
-
-
-//TODO: use puffer length from history?
-std::size_t kBufferLength = 10;
+class SimulationKernel;
+class Visualizer;
+class WorldInformation;
+class History;
 
 class SimulationControl {
 public:
 	SimulationControl();
 	~SimulationControl();
 
-	boost::shared_ptr<History> start_new_simulation(const std::string& filename);
+	void start_new_simulation(const std::string& configuration_filename);
+	void start_simulation();
+	void pause_simulation();
+	void terminate_simulation();
+	void process_simulation();
+	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
+private:
+
+	class SimulationKernelFunctor {
+	public:
+		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel);
+		void unpause();
+		void pause();
+		void terminate();
+
+		void operator()();
+
+	private:
+		bool terminated_;
+		bool paused_;
+		//TODO (dwonisch): Semaphore should do the job, but there might be better solutions.
+		boost::interprocess::interprocess_semaphore unpaused_;
+		boost::shared_ptr<SimulationKernel> simulation_kernel_;
+	};
 
 private:
-	/**
-	 * This method is called when the simulation thread is started
-	 */
-	void run_simulation();
+	//TODO (dwonsich): processing_time_factor_ == \Delta in paper; Maybe should be moved to somewhere else
+	double processing_time_factor_;
+	double current_processing_time_;
 
-private:
+	//TODO:
+	long last_process_simulation_time_;
+
+	boost::shared_ptr<WorldInformation> current_world_information_;
+	boost::shared_ptr<WorldInformation> next_world_information_;
 	boost::shared_ptr<History> history_;
-	boost::shared_ptr<SimulationKernel> simulation_kernel_;
+	boost::shared_ptr<SimulationKernelFunctor> simulation_kernel_functor_;
 	boost::thread simulation_thread_;
+	boost::shared_ptr<Visualizer> visualizer_;
 };
 
 #endif

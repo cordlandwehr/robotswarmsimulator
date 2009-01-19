@@ -34,7 +34,8 @@ public:
 	void insert(boost::shared_ptr<WorldInformation> world_information);
 
 	/**
-	 * gets the oldest WorldInformation object in the buffer as copy and marks it as consumed
+	 * gets the oldest WorldInformation object in the buffer as copy and marks it as consumed.
+	 * If no consumeable WorldInformation is available, a NULL pointer is returned.
 	 */
 	boost::shared_ptr<WorldInformation> get_oldest_unused();
 
