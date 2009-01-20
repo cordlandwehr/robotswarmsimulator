@@ -243,6 +243,7 @@ protected:
 
 
 	const WorldInformation& world_information() const;
+	const std::size_t get_id(boost::shared_ptr<Identifier> identifier) const;
 
 private:
 	const Obstacle& resolve_obstacle_ref(ObstacleRef obstacle) const;

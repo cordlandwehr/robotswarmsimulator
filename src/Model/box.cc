@@ -48,7 +48,7 @@ boost::shared_ptr<WorldObject> Box::clone() const {
 }
 
 
-bool Box::contains_point(boost::shared_ptr<Vector3d> point) {
+bool Box::contains_point(boost::shared_ptr<Vector3d> point) const {
 	//Point is contained if:
 	//this.x - width/2 <= point.x <= this.x + width/2 AND
 	//this.y - height/2 <= point.y <= this.y + height/2 AND

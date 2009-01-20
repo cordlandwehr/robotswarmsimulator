@@ -47,4 +47,26 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 
 	std::cout << "Total time: " << time_needed*1000.0/CLOCKS_PER_SEC << "ms." << std::endl;
 	std::cout << "Time per copy: " << std::setprecision(5) << time_needed*1000.0/kCopyCount/CLOCKS_PER_SEC << "ms." << std::endl;
+
+/*	start_time = clock();
+	for(unsigned i = 0; i < 1000000; i++) {
+		Vector3d test;
+		test.insert_element(kXCoord,0.0);
+		test.insert_element(kYCoord,0.0);
+		test.insert_element(kZCoord,0.0);
+		Vector3d bla(test);
+	}
+	time_needed = clock()-start_time;
+	std::cout << "Total time (copy): " << time_needed*1000.0/CLOCKS_PER_SEC << "ms." << std::endl;
+
+	start_time = clock();
+	for(unsigned i = 0; i < 1000000; i++) {
+		boost::shared_ptr<Vector3d> test3(new Vector3d());
+		test3->insert_element(kXCoord,0.0);
+		test3->insert_element(kYCoord,0.0);
+		test3->insert_element(kZCoord,0.0);
+	}
+	time_needed = clock()-start_time;
+	std::cout << "Total time (shared): " << time_needed*1000.0/CLOCKS_PER_SEC << "ms." << std::endl;
+	*/
 }

@@ -27,7 +27,7 @@ public:
 	 * \param Pointer to vector of point to check whether it's
 	 *        contained in the obstacle.
 	 */
-	virtual bool contains_point(boost::shared_ptr<Vector3d> point) = 0;
+	virtual bool contains_point(boost::shared_ptr<Vector3d> point) const = 0;
 	virtual boost::shared_ptr<WorldObject> clone() const = 0;
 };
 

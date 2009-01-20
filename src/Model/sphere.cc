@@ -32,7 +32,7 @@ void Sphere::set_radius(double new_radius) {
 	radius_ = new_radius;
 }
 
-bool Sphere::contains_point(boost::shared_ptr<Vector3d> point) {
+bool Sphere::contains_point(boost::shared_ptr<Vector3d> point) const {
 	//Point is contained if
 	//(point.x - position.x)^2 + (point.y - position.y)^2 + (point.z - position.z)^2 <= r^2
 	/*

@@ -3,15 +3,14 @@
 
 
 #include "../Model/identifier.h"
-
 #include "../Model/robot_identifier.h"
 #include "../Model/obstacle_identifier.h"
 #include "../Model/marker_identifier.h"
 #include "../Model/box_identifier.h"
 #include "../Model/sphere_identifier.h"
-#include "../Model/robot.h"
 #include "../Utilities/vector3d.h"
 #include "../Model/marker_information.h"
+#include "../Model/robot.h"
 #include "../Model/obstacle.h"
 #include "../Model/box.h"
 #include "../Model/sphere.h"
@@ -313,4 +312,8 @@ double View::get_sphere_radius(const Sphere& sphere) const {
 
 const WorldInformation& View::world_information() const {
 	return *world_information_;
+}
+
+const std::size_t View::get_id(boost::shared_ptr<Identifier> identifier) const {
+	return identifier->id();
 }
