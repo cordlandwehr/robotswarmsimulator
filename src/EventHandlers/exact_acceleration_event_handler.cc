@@ -21,5 +21,14 @@
 
 void ExactAccelerationEventHandler::handle_acceleration_request(boost::shared_ptr<WorldInformation> world_information,
                                                                 boost::shared_ptr<const AccelerationRequest> acceleration_request) {
-	// TODO(peter) implement
+	const boost::shared_ptr<RobotIdentifier>& robot_id = acceleration_request->robot().id();
+	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
+	const Vector3d& requested_local_acceleration(acceleration_request->requested_acceleration());
+	boost::shared_ptr<Vector3d> requested_global_acceleration;
+	// TODO(peter) robot_data should provide a more readable method to query wether the robot uses a local coord. system
+	if (robot_data.coordinate_system_axis().get<0>()) // there is a local coordinate system for this robot
+		requested_global_acceleration.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_acceleration, robot_data.coordinate_system_axis())));
+	else
+		requested_global_acceleration.reset(new Vector3d(requested_local_acceleration));
+	robot_data.set_acceleration(requested_global_acceleration);
 }

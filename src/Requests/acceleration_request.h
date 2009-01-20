@@ -33,7 +33,7 @@ public:
 	 * Returns a constant reference to the requested acceleration vector
 	 * \Return A Constant reference to the requested acceleration vector
 	 */
-	const Vector3d& new_acceleration() const { return *requested_acceleration_;}
+	const Vector3d& requested_acceleration() const { return *requested_acceleration_;}
 
 private:
 	/**

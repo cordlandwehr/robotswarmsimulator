@@ -68,7 +68,7 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	BOOST_CHECK_CLOSE(robot_data_before.acceleration()(2), 0., 0.1);
 	/* END: InitialTest */
 
-	// handle event for position request
+	// handle event for velocity request
 	event_handler.handle_event(handle_requests_event);
 
 	/* BEGIN: EventHandledTest1
