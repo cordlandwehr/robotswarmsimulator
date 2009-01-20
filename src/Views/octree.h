@@ -54,6 +54,11 @@ public:
 	 * max_levels_ is set to 20000 and min_width_ is set to 0.
 	 */
 	Octree();
+
+	explicit Octree(int max_levels);
+
+	explicit Octree(float min_width);
+
 	/*!
 	 * \brief Set up the Octree Node
 	 *
@@ -71,9 +76,9 @@ public:
 	 *  \param obstacles The obstacles in an vector of shared_ptr
 	 *  \param robot_datas The robot_datas in an vector of shared_ptr
 	 */
-	void scene_dimensions(std::vector< boost::shared_ptr<WorldObject> > & markers,
-						  std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-						  std::vector< boost::shared_ptr<RobotData> > & robot_datas);
+	void scene_dimensions(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+						  const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+						  const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
 
 
@@ -98,10 +103,10 @@ public:
 	 * \param width the width of this node
 	 *
 	 */
-	void create_node(std::vector< boost::shared_ptr<WorldObject> > & markers,
-					 std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-					 std::vector< boost::shared_ptr<RobotData> > & robot_datas,
-					 Vector3d center,
+	void create_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+					 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+					 const std::vector< boost::shared_ptr<RobotData> > & robot_datas,
+					 const Vector3d center,
 					 float width);
 
 
@@ -115,22 +120,37 @@ public:
 	 * \param center The center point of the new node
 	 * \param width the width of the bounding box
 	 */
-	void create_new_node(std::vector< boost::shared_ptr<WorldObject> > & markers,
-						 std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-						 std::vector< boost::shared_ptr<RobotData> > & robot_datas,
+	void create_new_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+						 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+						 const std::vector< boost::shared_ptr<RobotData> > & robot_datas,
 						 Vector3d center,
 						 float width,
 						 int node_id);
 
+	/**
+	 * \brief This is the starting point of the tree creation.
+	 *
+	 * \param markers the markers to be stored in this tree
+	 * \param obstacles the obstacles to be stored in this tree
+	 * \param robot_datas the robot datas to be stored in this tree
+	 */
+	void create_tree(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+					 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+					 const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
-
+	/**
+	 * \brief Calculates the distance to this node from a given point
+	 *
+	 * \param pos The position
+	 * \return Returns the distance to this node from the given point
+	 */
 	float calculate_dist_to_node(const Vector3d &pos) const;
 
 	bool does_obstacle_fit(boost::shared_ptr<Obstacle> & obstacle) const ;
 
-	void assign_objects_to_node(std::vector< boost::shared_ptr<WorldObject> > & markers,
-								std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-								std::vector< boost::shared_ptr<RobotData> > & robot_datas);
+	void assign_objects_to_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+								const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+								const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
 
 	void add_marker_to_node(boost::shared_ptr<WorldObject> marker);
@@ -151,12 +171,12 @@ public:
 		return robot_datas_;
 	}
 
-	void set_parent(boost::shared_ptr<Octree> & parent){
+	void set_parent(Octree * parent){
 		parent_ = parent;
 	}
 
-	boost::shared_ptr<Octree> & parent(){
-		return parent_;
+	Octree & parent(){
+		return *parent_;
 	}
 
 	int level(){
@@ -217,13 +237,13 @@ protected:
 	 * \param obstacle The obstacle to retrieve the real type of
 	 * \return The type of the obstacle: 1 Box, 2 Sphere
 	 */
-	int determine_obstacle_type(boost::shared_ptr<Obstacle> & obstacle) const;
+	int determine_obstacle_type(const boost::shared_ptr<Obstacle> & obstacle) const;
 
 	/**
 	 * \brief Returns the maximum size of an obstacle
 	 * \param obstacle the obstacle
 	 */
-	float determine_obstacle_max_size(boost::shared_ptr<Obstacle> & obstacle) const;
+	float determine_obstacle_max_size(const boost::shared_ptr<Obstacle> & obstacle) const;
 
 
 private:
@@ -234,9 +254,8 @@ private:
 
 	/**
 	 * this stores an pointer to its parent.
-	 * TODO: Check if this has to be replaced by an raw pointer
 	 */
-	boost::shared_ptr<Octree> parent_;
+	Octree * parent_;
 
 	/**
 	 * The depth of this node.

@@ -1,5 +1,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 
 #include "../../Model/world_information.h"
 #include "../../Model/world_object.h"

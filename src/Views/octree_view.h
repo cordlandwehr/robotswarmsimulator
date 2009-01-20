@@ -32,8 +32,9 @@ public:
 
 protected:
 	const boost::shared_ptr<Octree>& octree() const;
-private:
 	boost::shared_ptr<Octree> octree_;
+private:
+
 };
 
 #endif /* OCTREE_VIEW_H_ */
