@@ -35,9 +35,10 @@ public:
 
 	/**
 	 * gets the oldest WorldInformation object in the buffer as copy and marks it as consumed.
-	 * If no consumeable WorldInformation is available, a NULL pointer is returned.
+	 * If no consumeable WorldInformation is available either the thread is blocked (blocked = true)
+	 * or a NULL pointer is returned (block = false).
 	 */
-	boost::shared_ptr<WorldInformation> get_oldest_unused();
+	boost::shared_ptr<WorldInformation> get_oldest_unused(bool block = false);
 
 	/**
 	 * returns a const reference to the newest world information object in the buffer.

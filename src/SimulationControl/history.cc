@@ -27,8 +27,11 @@ void History::insert(boost::shared_ptr<WorldInformation> world_information) {
 	fill_count_.post();
 }
 
-boost::shared_ptr<WorldInformation> History::get_oldest_unused() {
-	if(!fill_count_.try_wait()) {
+boost::shared_ptr<WorldInformation> History::get_oldest_unused(bool block) {
+	if(block) {
+		fill_count_.wait();
+	}
+	else if(!fill_count_.try_wait()) {
 		return boost::shared_ptr<WorldInformation>();
 	}
 

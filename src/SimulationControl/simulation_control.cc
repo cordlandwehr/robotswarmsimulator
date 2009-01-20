@@ -5,8 +5,8 @@
 #include "../Model/world_information.h"
 #include "visualizer.h"
 #include "history.h"
-#include "gui.h";
-#include "glut_gui.h";
+#include "gui.h"
+#include "glut_gui.h"
 
 
 
@@ -57,6 +57,9 @@ void SimulationControl::start_simulation() {
 	if(!is_thread_started(simulation_thread_)) {
 		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::operator(), simulation_kernel_functor_));
 		simulation_thread_.swap(simulation_thread);
+		//fetch first two WorldInformations
+		current_world_information_ = history_->get_oldest_unused(true);
+		next_world_information_ = history_->get_oldest_unused(true);
 	}
 	else {
 		simulation_kernel_functor_->unpause();
@@ -81,8 +84,6 @@ void SimulationControl::terminate_simulation() {
 }
 
 void SimulationControl::process_simulation() {
-	/*
-	 * TODO: isolated crash to this method...
 	//compute new processing time
 	long current_time = current_time_in_millisec();
 	double new_processing_time = current_processing_time_ + (current_time - last_process_simulation_time_);
@@ -107,7 +108,7 @@ void SimulationControl::process_simulation() {
 	if(visualizer_) {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
 		visualizer_->draw(extrapolation_time, current_world_information_);
-	}*/
+	}
 }
 
 void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {

@@ -1,5 +1,8 @@
-#include <math.h>
+#include <cmath>
+#include <limits>
 #include <sstream>
+#include <algorithm>
+
 
 #include "numset_stats.h"
 
@@ -49,7 +52,7 @@ void NumSetStats::handle(const std::vector<double> & data) {
 		// update sum_
 		sum_ += val;
 		// update abssum_
-		abssum_ += abs(val);
+		abssum_ += std::abs(val);
 		// update stddeviation helper-variable
 		stddeviation_ += (val*val);
 	}

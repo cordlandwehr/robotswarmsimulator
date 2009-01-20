@@ -4,7 +4,7 @@
  *  Created on: 20.01.2009
  *      Author: Alexander
  */
-#include "gui.h";
+#include "gui.h"
 #ifndef GLUT_GUI_H_
 #define GLUT_GUI_H_
 

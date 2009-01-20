@@ -7,8 +7,8 @@
 #include "glut_gui.h"
 
 GlutGUI::GlutGUI() {
-	// TODO Auto-generated constructor stub
-
+	SimulationControl::getInstance()->create_new_simulation("foobar");
+	SimulationControl::getInstance()->start_simulation();
 }
 
 GlutGUI::~GlutGUI() {

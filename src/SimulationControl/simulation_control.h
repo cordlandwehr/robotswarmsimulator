@@ -33,7 +33,7 @@ public:
 	void process_simulation();
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 	void set_gui(boost::shared_ptr<GUI> gui);
-	static boost::shared_ptr<SimulationControl> SimulationControl::getInstance();
+	static boost::shared_ptr<SimulationControl> getInstance();
 	static void setInstance(boost::shared_ptr<SimulationControl>);
 
 
