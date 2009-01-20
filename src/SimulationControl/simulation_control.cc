@@ -161,13 +161,13 @@ boost::shared_ptr<SimulationControl> SimulationControl::getInstance(){
 }
 
 
-int main( int argc, char *argv[] ) {
-
-	//boost::shared_ptr<SimulationControl> simcontrol=boost::shared_ptr<SimulationControl>(new SimulationControl());
-	boost::shared_ptr<GUI> gui=boost::shared_ptr<GUI>(new GlutGUI());
-	gui->initGUI(argc,argv);
-
-	//SimulationControl::getInstance()->set_gui(gui);
-}
+//int main( int argc, char *argv[] ) {
+//
+//	//boost::shared_ptr<SimulationControl> simcontrol=boost::shared_ptr<SimulationControl>(new SimulationControl());
+//	boost::shared_ptr<GUI> gui=boost::shared_ptr<GUI>(new GlutGUI());
+//	gui->initGUI(argc,argv);
+//
+//	//SimulationControl::getInstance()->set_gui(gui);
+//}
 
 boost::shared_ptr<SimulationControl> SimulationControl::simcontrol_instance_=boost::shared_ptr<SimulationControl>(new SimulationControl());

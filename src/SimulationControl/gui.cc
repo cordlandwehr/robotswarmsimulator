@@ -4,12 +4,6 @@
  *  Created on: 20.01.2009
  *      Author: Alexander
  */
-/*
- * glut_gui.cpp
- *
- *  Created on: 20.01.2009
- *      Author: Alexander
- */
 #include "gui.h"
 
 GUI::GUI() {

@@ -2,10 +2,6 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-#ifndef __linux__
-#include <windows.h>
-#endif
-#include <GL/glut.h>
 #include "simulation_control.h"
 
 
