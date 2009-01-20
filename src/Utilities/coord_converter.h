@@ -15,13 +15,7 @@ using namespace std;
 
 
 /**
- * \class CoordConverter
- * \brief Utility class to convert global to local coordinates and vice versa
- *
- * This class provides functions for converting coordinates between respective coordinate systems
- *
- *
- *
+ * \brief Namespace providing utility methods to convert global to local coordinates and vice versa.
  */
 namespace CoordConverter {
 	/**
@@ -31,21 +25,23 @@ namespace CoordConverter {
 	 * @param local_coord_system: three base vectors
 	 * \return the local coordinate
 	 */
-	Vector3d global_to_local(const Vector3d &absolute_coord, const Vector3d  &origin, boost::tuple<boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> ,boost::shared_ptr<Vector3d> > local_coord_system);
+	Vector3d global_to_local(const Vector3d& absolute_coord, const Vector3d& origin,
+	                         const boost::tuple<boost::shared_ptr<Vector3d>,
+	                                            boost::shared_ptr<Vector3d>,
+	                                            boost::shared_ptr<Vector3d> >& local_coord_system);
 
 	/**
 	 * calculates global coordinates from local ones. The origin of both systems is assumed to be (0,0,0).
 	 * The global coordinate system is assumed to use unit vectors as base.
 	 * @param local_coord: the local coordinate
 	 * @param local_coord_system: the three base vectors of the local coordinate system
+	 * \return the global coordinate
 	 *
 	 */
-	boost::shared_ptr<Vector3d> local_to_global(const Vector3d &local_coord,
-			                                           const boost::tuple<boost::shared_ptr<const Vector3d> ,
-			                                                 boost::shared_ptr<const Vector3d> ,
-			                                                 boost::shared_ptr<const Vector3d> > &local_coord_system);
-
-
+	Vector3d local_to_global(const Vector3d& local_coord,
+	                         const boost::tuple<boost::shared_ptr<const Vector3d>,
+	                                            boost::shared_ptr<const Vector3d>,
+	                                            boost::shared_ptr<const Vector3d> >& local_coord_system);
 };
 
 #endif /* COORD_CONVERTER_H_ */

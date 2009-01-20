@@ -137,22 +137,9 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 
 	// extrapolate all robots
 	BOOST_FOREACH(boost::shared_ptr<RobotData> old_robot, old_world_information.robot_data()) {
-
-		boost::shared_ptr<Vector3d> new_acceleration(new Vector3d(old_robot->acceleration()));
-		boost::shared_ptr<Vector3d> new_velocity = old_robot->extrapolated_velocity(time_difference);
-		boost::shared_ptr<Vector3d> new_position = old_robot->extrapolated_position(time_difference);
-
-		// create new robot
-		boost::shared_ptr<RobotData> new_robot(new RobotData(old_robot->id()->clone(), new_position, old_robot->robot()));
-		new_robot->set_velocity(new_velocity);
-		new_robot->set_acceleration(new_acceleration);
-
-		boost::shared_ptr<MarkerInformation> new_marker_information(
-		    new MarkerInformation(old_robot->marker_information()));
-		new_robot->set_marker_information(new_marker_information);
-
-		new_robot->set_status(old_robot->status());
-		new_robot->set_type(old_robot->type());
+		boost::shared_ptr<RobotData> new_robot = boost::dynamic_pointer_cast<RobotData>(old_robot->clone());
+		new_robot->set_position(old_robot->extrapolated_position(time_difference));
+		new_robot->set_velocity(old_robot->extrapolated_velocity(time_difference));
 
 		// insert new robot
 		// TODO(craupach) test if this preserves the ordering. There should be a way of inserting at a specific
@@ -162,39 +149,13 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 
 	// copy all obstacles
 	BOOST_FOREACH(boost::shared_ptr<Obstacle> old_obstacle, old_world_information.obstacles()) {
-			// copy position, marker information
-			boost::shared_ptr<Vector3d> new_position(new Vector3d(old_obstacle->position()));
-			boost::shared_ptr<MarkerInformation> new_marker_information(
-			    new MarkerInformation(old_obstacle->marker_information()));
-
-			// check if box or sphere
-			boost::shared_ptr<Sphere> old_sphere = boost::dynamic_pointer_cast<Sphere> (old_obstacle);
-			if(old_sphere.get() != NULL) {
-				boost::shared_ptr<Sphere> new_sphere(new Sphere(old_sphere->id()->clone(), new_position, old_sphere->radius()));
-				new_sphere->set_marker_information(new_marker_information);
-				new_world_information->add_obstacle(new_sphere);
-			} else {
-				boost::shared_ptr<Box> old_box = boost::dynamic_pointer_cast<Box> (old_obstacle);
-				if(old_box.get() != NULL) {
-					boost::shared_ptr<Box> new_box(new Box(old_box->id()->clone(), new_position,
-					                               old_box->depth(), old_box->width(), old_box->height()));
-					new_box->set_marker_information(new_marker_information);
-					new_world_information->add_obstacle(new_box);
-				} else {
-					throw std::invalid_argument("Illegal type of world_object.");
-				}
-			}
+		boost::shared_ptr<Obstacle> new_obstacle = boost::dynamic_pointer_cast<Obstacle>(old_obstacle->clone());
+		new_world_information->add_obstacle(new_obstacle);
 	}
 
 	// copy all markers
 	BOOST_FOREACH(boost::shared_ptr<WorldObject> old_marker, old_world_information.markers()) {
-		boost::shared_ptr<Vector3d> new_position(new Vector3d(old_marker->position()));
-		boost::shared_ptr<WorldObject> new_marker(new WorldObject(old_marker->id()->clone(), new_position));
-
-		boost::shared_ptr<MarkerInformation> new_marker_information(
-		    new MarkerInformation(old_marker->marker_information()));
-		new_marker->set_marker_information(new_marker_information);
-
+		boost::shared_ptr<WorldObject> new_marker = old_marker->clone();
 		new_world_information->add_marker(new_marker);
 	}
 

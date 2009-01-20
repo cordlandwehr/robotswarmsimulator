@@ -47,7 +47,7 @@ void RobotData::set_acceleration(boost::shared_ptr<Vector3d> new_acceleration) {
 	acceleration_ = new_acceleration;
 }
 
-boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >
+const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >&
 	RobotData::coordinate_system_axis() const {
 	return coordinate_system_axis_;
 }

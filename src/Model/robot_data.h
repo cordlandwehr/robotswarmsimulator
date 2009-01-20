@@ -59,7 +59,7 @@ public:
 	 * containing the coordinate system axis.
 	 * \return Triple of vectors containing the coordinate system axis.
 	 */
-	boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >
+	const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >&
 			coordinate_system_axis() const;
 
 	/**
