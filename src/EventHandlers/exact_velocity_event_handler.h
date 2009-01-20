@@ -24,9 +24,9 @@ class RobotControl;
  * - TypeChangeRequest
  */
 // TODO(peter): implement
-class VelocityEventHandler : public EventHandler {
+class ExactVelocityEventHandler : virtual public EventHandler {
 public:
-	VelocityEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
+	ExactVelocityEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };
 
 private:
