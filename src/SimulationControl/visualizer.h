@@ -12,6 +12,7 @@ class Visualizer {
 public:
 	virtual ~Visualizer() {}
 	virtual void draw(double extrapolation_time, boost::shared_ptr<WorldInformation> world_information) = 0;
+	virtual void init() = 0;
 };
 
 #endif /* VISUALIZER_H_ */

@@ -5,6 +5,9 @@
 #include "../Model/world_information.h"
 #include "visualizer.h"
 #include "history.h"
+#include "gui.h";
+#include "glut_gui.h";
+
 
 
 namespace {
@@ -78,6 +81,8 @@ void SimulationControl::terminate_simulation() {
 }
 
 void SimulationControl::process_simulation() {
+	/*
+	 * TODO: isolated crash to this method...
 	//compute new processing time
 	long current_time = current_time_in_millisec();
 	double new_processing_time = current_processing_time_ + (current_time - last_process_simulation_time_);
@@ -102,11 +107,16 @@ void SimulationControl::process_simulation() {
 	if(visualizer_) {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
 		visualizer_->draw(extrapolation_time, current_world_information_);
-	}
+	}*/
 }
 
 void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {
 	visualizer_ = visualizer;
+}
+
+void SimulationControl::set_gui(boost::shared_ptr<GUI> gui){
+	gui_=gui;
+
 }
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)
@@ -144,4 +154,19 @@ void SimulationControl::SimulationKernelFunctor::operator()() {
 	}
 }
 
+boost::shared_ptr<SimulationControl> SimulationControl::getInstance(){
+	return simcontrol_instance_;
 
+}
+
+
+int main( int argc, char *argv[] ) {
+
+	//boost::shared_ptr<SimulationControl> simcontrol=boost::shared_ptr<SimulationControl>(new SimulationControl());
+	boost::shared_ptr<GUI> gui=boost::shared_ptr<GUI>(new GlutGUI());
+	gui->initGUI(argc,argv);
+
+	//SimulationControl::getInstance()->set_gui(gui);
+}
+
+boost::shared_ptr<SimulationControl> SimulationControl::simcontrol_instance_=boost::shared_ptr<SimulationControl>(new SimulationControl());
