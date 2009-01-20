@@ -29,6 +29,7 @@ enum RobotStatus { STATUS };
 enum RobotType { TYPE };
 
 class Robot;
+class MarkerInformation;
 
 class RobotData : public WorldObject{
 public:

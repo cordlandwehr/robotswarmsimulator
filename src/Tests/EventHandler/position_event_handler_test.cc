@@ -12,7 +12,9 @@
 
 #include "../../Events/handle_requests_event.h"
 
-#include "../../EventHandlers/position_event_handler.h"
+#include "../../EventHandlers/exact_position_event_handler.h"
+#include "../../EventHandlers/exact_marker_event_handler.h"
+#include "../../EventHandlers/exact_full_event_handler.h"
 
 #include "../../Requests/marker_request.h"
 #include "../../Requests/position_request.h"
@@ -41,7 +43,7 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	PositionEventHandler event_handler(history, robot_control);
+	ExactPositionEventHandler event_handler(history, robot_control);
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -86,13 +88,16 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
  * Expected Results:
  *   - robot_a's marker information after first event is of correct type and carries integral value '1'
  *   - robot_a's marker information after second event is of correct type and carries integral value '2'
+ *
+ *   TODO(craupach) This test is not accurate. It should be rewriten after MarkerInformation has been
+ *   changed
  */
 BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	PositionEventHandler event_handler(history, robot_control);
+	ExactFullEventHandler event_handler(history, robot_control);
 
 	// construction of first marker request
 	boost::shared_ptr<MarkerInformation> new_marker_information(new TestMarkerInformation(1));
@@ -172,7 +177,7 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_local_coordinate_system, Si
 	// setting up event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
-	PositionEventHandler event_handler(history, robot_control);
+	ExactPositionEventHandler event_handler(history, robot_control);
 
 	// build a coordinate axes for a robot with unit distance 2
 	boost::shared_ptr<Vector3d> x_axis(new Vector3d());
