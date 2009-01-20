@@ -137,7 +137,8 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 
 	// extrapolate all robots
 	BOOST_FOREACH(boost::shared_ptr<RobotData> old_robot, old_world_information.robot_data()) {
-		boost::shared_ptr<RobotData> new_robot = boost::dynamic_pointer_cast<RobotData>(old_robot->clone());
+		// TODO(craupach) this unnecessarily copies position and velocity. May be too inefficient.
+		boost::shared_ptr<RobotData> new_robot(new RobotData(*old_robot));
 		new_robot->set_position(old_robot->extrapolated_position(time_difference));
 		new_robot->set_velocity(old_robot->extrapolated_velocity(time_difference));
 
@@ -155,7 +156,7 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 
 	// copy all markers
 	BOOST_FOREACH(boost::shared_ptr<WorldObject> old_marker, old_world_information.markers()) {
-		boost::shared_ptr<WorldObject> new_marker = old_marker->clone();
+		boost::shared_ptr<WorldObject> new_marker(new WorldObject(*old_marker));
 		new_world_information->add_marker(new_marker);
 	}
 
