@@ -52,7 +52,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 
 void SimulationControl::start_simulation() {
 	if(!is_thread_started(simulation_thread_)) {
-		boost::thread simulation_thread(boost::ref(*simulation_kernel_functor_));
+		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::operator(), simulation_kernel_functor_));
 		simulation_thread_.swap(simulation_thread);
 	}
 	else {
