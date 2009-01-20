@@ -25,8 +25,8 @@ namespace CoordConverter {
 	 * @param local_coord_system: three base vectors
 	 * \return the local coordinate
 	 */
-	Vector3d global_to_local(const Vector3d& absolute_coord, const Vector3d& origin,
-	                         const boost::tuple<boost::shared_ptr<Vector3d>,
+	boost::shared_ptr<Vector3d> global_to_local(const Vector3d& absolute_coord, const Vector3d& origin,
+	                                            const boost::tuple<boost::shared_ptr<Vector3d>,
 	                                            boost::shared_ptr<Vector3d>,
 	                                            boost::shared_ptr<Vector3d> >& local_coord_system);
 
@@ -38,8 +38,8 @@ namespace CoordConverter {
 	 * \return the global coordinate
 	 *
 	 */
-	Vector3d local_to_global(const Vector3d& local_coord,
-	                         const boost::tuple<boost::shared_ptr<const Vector3d>,
+	boost::shared_ptr<Vector3d> local_to_global(const Vector3d& local_coord,
+	                                            const boost::tuple<boost::shared_ptr<const Vector3d>,
 	                                            boost::shared_ptr<const Vector3d>,
 	                                            boost::shared_ptr<const Vector3d> >& local_coord_system);
 };

@@ -136,7 +136,8 @@ Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) co
 			                                             &View::get_obstacle_position, &View::get_marker_position,
 	                                                     caller, world_object);
 	const RobotData& robot_data = resolve_robot_ref(caller.id());
-	return CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
+	// TODO(craupach) it might make more sense to return the shared_ptr directly?
+	return *CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 
 const MarkerInformation& View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
