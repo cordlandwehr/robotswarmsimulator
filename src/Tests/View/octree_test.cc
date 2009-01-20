@@ -32,7 +32,7 @@
 BOOST_FIXTURE_TEST_CASE(octree_test, SimpleWorldFixture)
 {
 
-	std::vector<boost::shared_ptr<RobotData> > robots;
+/*	std::vector<boost::shared_ptr<RobotData> > robots;
 	std::vector<boost::shared_ptr<WorldObject> > markers;
 	std::vector<boost::shared_ptr<Obstacle> > obstacles;
 
@@ -40,7 +40,7 @@ BOOST_FIXTURE_TEST_CASE(octree_test, SimpleWorldFixture)
 
 	// set the starting seed, so we get always the same numbers in rand
 	std::srand(47);
-/*
+
 
 	for(int i = 0; i < 1000; i++){
 
