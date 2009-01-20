@@ -8,19 +8,17 @@
 #ifndef EXACT_MARKER_EVENT_HANDLER_H_
 #define EXACT_MARKER_EVENT_HANDLER_H_
 
+
 #include <boost/smart_ptr.hpp>
 
 #include "event_handler.h"
 
 
 // forward declarations
-class MarkerRequest;
-class PositionRequest;
-
-class WorldInformation;
-
 class History;
+class MarkerRequest;
 class RobotControl;
+class WorldInformation;
 
 
 /**
@@ -32,9 +30,13 @@ public:
 		: EventHandler(history, robot_control) { };
 
 private:
-
+	/**
+	 * \brief Provides default handling of marker requests.
+	 * \param world_information WorldInformation object to be affected by the request
+	 * \param marker_request marker request to handle
+	 */
 	void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
-	                           boost::shared_ptr<const MarkerRequest> marker_request);
+							   boost::shared_ptr<const MarkerRequest> marker_request);
 };
 
 #endif /* EXACT_MARKER_EVENT_HANDLER_H_ */

@@ -15,29 +15,28 @@
 
 
 // forward declarations
-class MarkerRequest;
-class PositionRequest;
-
-class WorldInformation;
-
 class History;
+class PositionRequest;
 class RobotControl;
+class WorldInformation;
 
 
 /**
  * An event handler supporting only PositionRequest for movement.
  */
-// TODO(peter) implement correct handling of position requests for robots with a local coordinate system
-// TODO(peter) such simple request handling methods can be implemented using static methods
 class ExactPositionEventHandler : virtual public EventHandler {
 public:
 	ExactPositionEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };
 
 private:
+	/**
+	 * \brief Provides default handling of position requests.
+	 * \param world_information WorldInformation object to be affected by the request
+	 * \param position_request position request to handle
+	 */
 	void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
 	                             boost::shared_ptr<const PositionRequest> position_request);
-
 };
 
 #endif /* POSITION_EVENT_HANDLER_H_ */

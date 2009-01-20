@@ -5,18 +5,13 @@
  *      Author: peter
  */
 
-#include <typeinfo> // for std::bad_cast
-
 #include <boost/test/unit_test.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "../../Events/handle_requests_event.h"
 
 #include "../../EventHandlers/exact_position_event_handler.h"
-#include "../../EventHandlers/exact_marker_event_handler.h"
-#include "../../EventHandlers/exact_full_event_handler.h"
 
-#include "../../Requests/marker_request.h"
 #include "../../Requests/position_request.h"
 
 #include "../../SimulationControl/history.h"
@@ -29,7 +24,6 @@
 #include "../../Views/view.h"
 #include "../../Views/view_factory.h"
 
-#include "test_marker_information.h"
 #include "../Fixtures/simple_world_fixture.h"
 
 
@@ -91,81 +85,82 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
  *
  *   TODO(craupach) This test is not accurate. It should be rewriten after MarkerInformation has been
  *   changed
+ *   TODO(peter) This test should (after having been rewritten) be moved to its own test file.
  */
 BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFixture) {
-	// setup of event handler
-	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
-	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	ExactFullEventHandler event_handler(history, robot_control);
-
-	// construction of first marker request
-	boost::shared_ptr<MarkerInformation> new_marker_information(new TestMarkerInformation(1));
-	boost::shared_ptr<MarkerRequest> marker_request(new MarkerRequest(robot_a, new_marker_information));
-
-	// construction of first handle_requests_event
-	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(3));
-	handle_requests_event->add_to_requests(marker_request);
-
-	/* BEGIN: InitialTest (no event processed yet)
-	 * - only one world information (at time 0)
-	 * - robot_a has default marker information
-	 */
-	const RobotData& robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
-	BOOST_CHECK_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_before.marker_information()), std::bad_cast);
-	/* END: InitialTest */
-
-	// handle first event for marker request
-	event_handler.handle_event(handle_requests_event);
-
-	/* BEGIN: EventHandledTest1
-	 * - world information at time 3
-	 * - robot_a has marker information of type TestMarkerInformation with value '1'
-	 */
-	const RobotData& robot_data_after1 = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 3);
-	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after1.marker_information()));
-	const TestMarkerInformation& marker_information_after1 = dynamic_cast<const TestMarkerInformation&>(robot_data_after1.marker_information());
-	BOOST_CHECK_EQUAL(marker_information_after1.value(), 1);
-	/* END: EventHandledTest1 */
-
-	// construction of second marker request
-	new_marker_information.reset(new TestMarkerInformation(2));
-	marker_request.reset(new MarkerRequest(robot_a, new_marker_information));
-
-	// construction of second handle_request_event
-	handle_requests_event.reset(new HandleRequestsEvent(6));
-	handle_requests_event->add_to_requests(marker_request);
-
-	// handle second event for marker request
-	event_handler.handle_event(handle_requests_event);
-
-	/* BEGIN: EventHandledTest2
-	 * - world information at time 6
-	 * - robot_a has marker information of type TestMarkerInformation with value '2'
-	 */
-	const RobotData& robot_data_after2 = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 6);
-	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after2.marker_information()));
-	const TestMarkerInformation& marker_information_after2 = dynamic_cast<const TestMarkerInformation&>(robot_data_after2.marker_information());
-	BOOST_CHECK_EQUAL(marker_information_after2.value(), 2);
-	/* END: EventHandledTest2 */
-
-	// construction and handling of third (empty) handle_request_event
-	handle_requests_event.reset(new HandleRequestsEvent(9));
-	event_handler.handle_event(handle_requests_event);
-
-	/* BEGIN: EventHandledTest3
-	 * - world information at time 9
-	 * - robot_a has marker information of type TestMarkerInformation with value '2'
-	 */
-	const RobotData& robot_data_after3 = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 9);
-	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after3.marker_information()));
-	const TestMarkerInformation& marker_information_after3 = dynamic_cast<const TestMarkerInformation&>(robot_data_after3.marker_information());
-	BOOST_CHECK_EQUAL(marker_information_after3.value(), 2);
-	/* END: EventHandledTest2 */
+//	// setup of event handler
+//	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
+//	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+//	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
+//	ExactFullEventHandler event_handler(history, robot_control);
+//
+//	// construction of first marker request
+//	boost::shared_ptr<MarkerInformation> new_marker_information(new TestMarkerInformation(1));
+//	boost::shared_ptr<MarkerRequest> marker_request(new MarkerRequest(robot_a, new_marker_information));
+//
+//	// construction of first handle_requests_event
+//	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(3));
+//	handle_requests_event->add_to_requests(marker_request);
+//
+//	/* BEGIN: InitialTest (no event processed yet)
+//	 * - only one world information (at time 0)
+//	 * - robot_a has default marker information
+//	 */
+//	const RobotData& robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
+//	BOOST_CHECK_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_before.marker_information()), std::bad_cast);
+//	/* END: InitialTest */
+//
+//	// handle first event for marker request
+//	event_handler.handle_event(handle_requests_event);
+//
+//	/* BEGIN: EventHandledTest1
+//	 * - world information at time 3
+//	 * - robot_a has marker information of type TestMarkerInformation with value '1'
+//	 */
+//	const RobotData& robot_data_after1 = history->get_newest().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().time(), 3);
+//	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after1.marker_information()));
+//	const TestMarkerInformation& marker_information_after1 = dynamic_cast<const TestMarkerInformation&>(robot_data_after1.marker_information());
+//	BOOST_CHECK_EQUAL(marker_information_after1.value(), 1);
+//	/* END: EventHandledTest1 */
+//
+//	// construction of second marker request
+//	new_marker_information.reset(new TestMarkerInformation(2));
+//	marker_request.reset(new MarkerRequest(robot_a, new_marker_information));
+//
+//	// construction of second handle_request_event
+//	handle_requests_event.reset(new HandleRequestsEvent(6));
+//	handle_requests_event->add_to_requests(marker_request);
+//
+//	// handle second event for marker request
+//	event_handler.handle_event(handle_requests_event);
+//
+//	/* BEGIN: EventHandledTest2
+//	 * - world information at time 6
+//	 * - robot_a has marker information of type TestMarkerInformation with value '2'
+//	 */
+//	const RobotData& robot_data_after2 = history->get_newest().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().time(), 6);
+//	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after2.marker_information()));
+//	const TestMarkerInformation& marker_information_after2 = dynamic_cast<const TestMarkerInformation&>(robot_data_after2.marker_information());
+//	BOOST_CHECK_EQUAL(marker_information_after2.value(), 2);
+//	/* END: EventHandledTest2 */
+//
+//	// construction and handling of third (empty) handle_request_event
+//	handle_requests_event.reset(new HandleRequestsEvent(9));
+//	event_handler.handle_event(handle_requests_event);
+//
+//	/* BEGIN: EventHandledTest3
+//	 * - world information at time 9
+//	 * - robot_a has marker information of type TestMarkerInformation with value '2'
+//	 */
+//	const RobotData& robot_data_after3 = history->get_newest().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().time(), 9);
+//	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after3.marker_information()));
+//	const TestMarkerInformation& marker_information_after3 = dynamic_cast<const TestMarkerInformation&>(robot_data_after3.marker_information());
+//	BOOST_CHECK_EQUAL(marker_information_after3.value(), 2);
+//	/* END: EventHandledTest2 */
 }
 
 /*
@@ -220,5 +215,4 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_local_coordinate_system, Si
 	BOOST_CHECK_CLOSE(robot_data_after.position()(kXCoord), -10.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(kYCoord), 0.2, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(kZCoord), 6.0, 0.1);
-
 }

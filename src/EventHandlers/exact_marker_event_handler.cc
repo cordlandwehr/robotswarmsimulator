@@ -18,7 +18,7 @@
 
 
 void ExactMarkerEventHandler::handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
-                                                 boost::shared_ptr<const MarkerRequest> marker_request) {
+                                                    boost::shared_ptr<const MarkerRequest> marker_request) {
 	const boost::shared_ptr<RobotIdentifier>& robot_id = marker_request->robot().id();
 	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
 	boost::shared_ptr<MarkerInformation> new_marker_information(marker_request->requested_marker_information().clone());
