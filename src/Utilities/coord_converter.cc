@@ -31,7 +31,7 @@ boost::shared_ptr<Vector3d> CoordConverter::local_to_global(const Vector3d& loca
                                          const boost::tuple<boost::shared_ptr<const Vector3d>,
                                                             boost::shared_ptr<const Vector3d>,
                                                             boost::shared_ptr<const Vector3d> >& local_coord_system) {
-	boost::shared_ptr<Vector3d> result;
+	boost::shared_ptr<Vector3d> result(new Vector3d());
 
 	// compute the result vector by multiplying the coefficents (in local_coord) with the bases
 	result->insert_element(kXCoord, local_coord(kXCoord) * (*boost::get<0>(local_coord_system))(kXCoord) +
