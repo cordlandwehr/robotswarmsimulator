@@ -15,9 +15,9 @@
 //	#include <glu.h>
 //	#include <glut.h>
 //#endif
-#include "../OpenGL/GLHeaders.h";
-#include "../OpenGL/GLUHeaders.h";
-#include "../OpenGL/GLUTHeaders.h";
+#include "../OpenGL/GLHeaders.h"
+#include "../OpenGL/GLUHeaders.h"
+#include "../OpenGL/GLUTHeaders.h"
 
 #include "../Utilities/vector3d.h"
 
