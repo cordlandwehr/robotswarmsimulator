@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include <boost/function.h>
+#include <boost/function.hpp>
 
 #include "GLHeaders.h";
 #include "GLUTHeaders.h";
@@ -41,9 +41,9 @@ namespace PgGLUT {
 
 		// delegates to be registered as GLUT callbacks
 		void display_callback_delegate() { display_callback_(); }
-		void keyboard_callback_delegate(unsigned char key, int x, int y) { keyboard_callback_(); }
-		void mouse_callback_delegate(int button, int state, int x, int y) { mouse_callback_(); }
-		void reshape_callback_delegate(int width, int height) { reshape_callback_(); }
+		void keyboard_callback_delegate(unsigned char key, int x, int y) { keyboard_callback_(key, x, y); }
+		void mouse_callback_delegate(int button, int state, int x, int y) { mouse_callback_(button, state, x, y); }
+		void reshape_callback_delegate(int width, int height) { reshape_callback_(width, height); }
 	}
 
 	/**
@@ -52,10 +52,10 @@ namespace PgGLUT {
 	 * Note that calling this method more than once has no effect.
 	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
 	 */
-	void init(const std::string& window_name, int argc, char** argv) {
+	void init(const std::string& window_name, int& argc, char** argv) {
 		if (!initialized) {
 			::glutInit(&argc, argv);
-			::glutCreateWindow(window_name);
+			::glutCreateWindow(window_name.c_str());
 			initialized = true;
 		}
 	}
@@ -80,7 +80,7 @@ namespace PgGLUT {
 	 */
 	void glutDisplayFunc(boost::function<void ()> func) {
 		display_callback_ = func;
-		::glutDisplayFunc(display_callback_delegate());
+		::glutDisplayFunc(&display_callback_delegate);
 	}
 
 	/**
@@ -89,7 +89,7 @@ namespace PgGLUT {
 	 */
 	void glutKeyboardFunc(boost::function<void (unsigned char key, int x, int y)> func) {
 		keyboard_callback_ = func;
-		::glutKeyboardFunc(keyboard_callback_delegate());
+		::glutKeyboardFunc(&keyboard_callback_delegate);
 	}
 
 	/**
@@ -98,7 +98,7 @@ namespace PgGLUT {
 	 */
 	void glutMouseFunc(boost::function<void (int button, int state, int x, int y)> func) {
 		mouse_callback_ = func;
-		::glutMouseFunc(mouse_callback_delegate());
+		::glutMouseFunc(&mouse_callback_delegate);
 	}
 
 	/**
@@ -107,7 +107,7 @@ namespace PgGLUT {
 	 */
 	void glutReshapeFunc(boost::function<void (int width, int height)> func) {
 		reshape_callback_ = func;
-		::glutReshapeFunc(reshape_callback_delegate(int width, int height));
+		::glutReshapeFunc(&reshape_callback_delegate);
 	}
 };
 
