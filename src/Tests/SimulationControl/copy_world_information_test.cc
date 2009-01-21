@@ -22,6 +22,7 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 	//create 1000 Robots and RobotDatas
 	for(unsigned i = 3; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
+		//TODO: undefined behavior here, since robot is deleted after each forloop run.
 		boost::shared_ptr<Robot> robot(new SimpleRobot(id));
 		boost::shared_ptr<Vector3d> pos(new Vector3d());
 		pos->insert_element(kXCoord,0.0);

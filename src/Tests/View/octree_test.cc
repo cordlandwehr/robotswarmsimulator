@@ -43,15 +43,17 @@ BOOST_FIXTURE_TEST_CASE(octree_test, SimpleWorldFixture)
 
 
 	for(int i = 0; i < 1000; i++){
+		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
+		//TODO: undefined behavior here, since robot is deleted after each forloop run.
+		boost::shared_ptr<Robot> robot(new SimpleRobot(id));
 
-		boost::shared_ptr<RobotData> newRobot= boost::shared_ptr(new RobotData);
-		Vector3d robot_pos = Vector3d();
+		boost::shared_ptr<Vector3d> robot_pos = boost::shared_ptr<Vector3d>(new Vector3d());
 
-		robot_pos(0) = std::rand()*100/RAND_MAX;
-		robot_pos(1) = std::rand()*100/RAND_MAX;
-		robot_pos(2) = std::rand()*100/RAND_MAX;
+		robot_pos->insert_element(kXCoord,std::rand()*100.0/RAND_MAX);
+		robot_pos->insert_element(kYCoord,std::rand()*100.0/RAND_MAX);
+		robot_pos->insert_element(kZCoord,std::rand()*100.0/RAND_MAX);
 
-		newRobot->set_position(robot_pos);
+		boost::shared_ptr<RobotData> newRobot = boost::shared_ptr<RobotData>(new RobotData(id, robot_pos, *robot));
 
 		robots.push_back(newRobot);
 
@@ -74,14 +76,14 @@ BOOST_FIXTURE_TEST_CASE(octree_test, SimpleWorldFixture)
 	start = std::clock();
 
 	std::vector<boost::shared_ptr<RobotData> >::iterator it_robots;
-	std::vector<boost::shared_ptr<RobotData> >::iterator it_tobots_comp;
+	std::vector<boost::shared_ptr<RobotData> >::iterator it_robots_comp;
 
 	for(it_robots = robots.begin(); it_robots != robots.end(); ++it_robots){
-		Vector3d robot_pos = *it_robots->position();
+		Vector3d robot_pos = (*it_robots)->position();
 
 		for(it_robots_comp = robots.begin(); it_robots_comp != robots.end(); ++it_robots_comp){
 
-			Vector3d robot_comp = *it_robots_comp->position();
+			Vector3d robot_comp = (*it_robots_comp)->position();
 			float x = robot_pos(0) - robot_comp(0);
 			float y = robot_pos(1) - robot_comp(1);
 			float z = robot_pos(2) - robot_comp(2);
@@ -94,7 +96,7 @@ BOOST_FIXTURE_TEST_CASE(octree_test, SimpleWorldFixture)
 	}
 
 	end = std::clock();
-	float ticks = (end - start) / CLOCKS_PER_SEC;
-	std::printf("time for simple view test: %f \n", ticks); */
+	ticks = (end - start) / CLOCKS_PER_SEC;
+	std::printf("time for simple view test: %f \n", ticks);*/
 
 }
