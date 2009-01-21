@@ -19,7 +19,6 @@ class SimulationKernel;
 class Visualizer;
 class WorldInformation;
 class History;
-class GUI;
 
 class SimulationControl {
 public:
@@ -32,10 +31,6 @@ public:
 	void terminate_simulation();
 	void process_simulation();
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
-	void set_gui(boost::shared_ptr<GUI> gui);
-	static boost::shared_ptr<SimulationControl> getInstance();
-	static void setInstance(boost::shared_ptr<SimulationControl>);
-
 
 private:
 
@@ -64,7 +59,6 @@ private:
 	//TODO (dwonsich): processing_time_factor_ == \Delta in paper; Maybe should be moved to somewhere else
 	double processing_time_factor_;
 	double current_processing_time_;
-	static boost::shared_ptr<SimulationControl> simcontrol_instance_;
 	//TODO:
 	long last_process_simulation_time_;
 
@@ -74,8 +68,6 @@ private:
 	boost::shared_ptr<SimulationKernelFunctor> simulation_kernel_functor_;
 	boost::thread simulation_thread_;
 	boost::shared_ptr<Visualizer> visualizer_;
-	boost::shared_ptr<GUI> gui_;
-
 };
 
 #endif

@@ -21,8 +21,8 @@
 #include "glut_gui.h"
 
 GlutGUI::GlutGUI() {
-	SimulationControl::getInstance()->create_new_simulation("foobar");
-	SimulationControl::getInstance()->start_simulation();
+//	SimulationControl::getInstance()->create_new_simulation("foobar");
+//	SimulationControl::getInstance()->start_simulation();
 }
 
 GlutGUI::~GlutGUI() {
@@ -31,7 +31,7 @@ GlutGUI::~GlutGUI() {
 
 void display() {
 	//use singleton pattern?
-	SimulationControl::getInstance()->process_simulation();
+//	SimulationControl::getInstance()->process_simulation();
 //	glClear( GL_COLOR_BUFFER_BIT ); /* Clear the screen with the clear color */
 	//glutSwapBuffers(); /* Double buffering */
 }

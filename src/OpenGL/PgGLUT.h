@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include <iostream>
+
 #include <boost/function.hpp>
 
 #include "GLHeaders.h";
@@ -24,7 +26,10 @@
  * class member methods as callbacks.
  *
  * Currently supported callbacks:
- *  - ...
+ *  - display callback
+ *  - keyboard callback
+ *  - mouse callback
+ *  - reshape callback
  *
  * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
  */
@@ -52,9 +57,11 @@ namespace PgGLUT {
 	 * Note that calling this method more than once has no effect.
 	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
 	 */
-	void init(const std::string& window_name, int& argc, char** argv) {
+	void init(const std::string& window_name, int& argc, char** argv, int width=500, int height=500, int x=0, int y=0) {
 		if (!initialized) {
 			::glutInit(&argc, argv);
+			::glutInitWindowSize(width, height);
+			::glutInitWindowPosition(x, y);
 			::glutCreateWindow(window_name.c_str());
 			initialized = true;
 		}
