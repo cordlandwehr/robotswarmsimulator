@@ -15,8 +15,8 @@
 
 #include <boost/function.hpp>
 
-#include "GLHeaders.h";
-#include "GLUTHeaders.h";
+#include "GLHeaders.h"
+#include "GLUTHeaders.h"
 
 
 /**
