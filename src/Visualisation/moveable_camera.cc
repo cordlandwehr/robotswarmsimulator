@@ -8,18 +8,9 @@
 
 #include <cmath>
 
-//#include <qpoint.h>
-//#include <qcursor.h>
-
-#ifdef WIN32
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-#else
-	#include <gl.h>
-	#include <glu.h>
-	#include <glut.h>
-#endif
+#include "../OpenGL/GLHeaders.h";
+#include "../OpenGL/GLUHeaders.h";
+#include "../OpenGL/GLUTHeaders.h";
 
 #include "../Utilities/vector3d.h"
 

@@ -6,15 +6,18 @@
  */
 #include <cmath>
 
-#ifdef WIN32
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-#else
-	#include <gl.h>
-	#include <glu.h>
-	#include <glut.h>
-#endif
+//#ifdef WIN32
+//	#include <GL/gl.h>
+//	#include <GL/glu.h>
+//	#include <GL/glut.h>
+//#else
+//	#include <gl.h>
+//	#include <glu.h>
+//	#include <glut.h>
+//#endif
+#include "../OpenGL/GLHeaders.h";
+#include "../OpenGL/GLUHeaders.h";
+#include "../OpenGL/GLUTHeaders.h";
 
 #include "../Utilities/vector3d.h"
 
@@ -191,6 +194,9 @@ void Camera::move_forward(){
 
 void Camera::move_backward(){
 
+}
+
+void Camera::rotate_around_point(Vector3d center, Vector3d rot_vec) {
 }
 
 void Camera::strafe_left(){

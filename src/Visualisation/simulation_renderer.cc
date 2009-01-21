@@ -5,15 +5,9 @@
  *      Author: kamil
  */
 
-#ifdef WIN32
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-#else
-	#include <gl.h>
-	#include <glu.h>
-	#include <glut.h>
-#endif
+#include "../OpenGL/GLHeaders.h";
+#include "../OpenGL/GLUHeaders.h";
+#include "../OpenGL/GLUTHeaders.h";
 
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
