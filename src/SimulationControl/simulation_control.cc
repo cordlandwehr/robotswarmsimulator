@@ -11,11 +11,6 @@ namespace {
 	bool is_thread_started(const boost::thread& thread) {
 		return thread.get_id() != boost::thread::id();
 	}
-
-	long current_time_in_millisec() {
-		//TODO:
-		return 0;
-	}
 }
 
 SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0)  {
@@ -31,7 +26,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	//                 I assume it does.
 	terminate_simulation();
 
-	//create new and initialise new kernel
+	//create new and initialize new kernel
 	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
 	simulation_kernel->init(configuration_filename);
 
@@ -57,6 +52,10 @@ void SimulationControl::start_simulation() {
 		//fetch first two WorldInformations
 		current_world_information_ = history_->get_oldest_unused(true);
 		next_world_information_ = history_->get_oldest_unused(true);
+
+		//some initialization
+		current_processing_time_ = current_world_information_->time() * processing_time_factor_;
+		last_process_simulation_time_ = boost::posix_time::microsec_clock::local_time();
 	}
 	else {
 		simulation_kernel_functor_->unpause();
@@ -81,10 +80,7 @@ void SimulationControl::terminate_simulation() {
 }
 
 void SimulationControl::process_simulation() {
-	//compute new processing time
-	long current_time = current_time_in_millisec();
-	double new_processing_time = current_processing_time_ + (current_time - last_process_simulation_time_);
-	last_process_simulation_time_ = current_time;
+	double new_processing_time = compute_new_processing_time();
 
 	double current_simulation_time = new_processing_time/processing_time_factor_;
 	while(current_simulation_time >= next_world_information_->time()) {
@@ -108,8 +104,11 @@ void SimulationControl::process_simulation() {
 	}
 }
 
-void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {
-	visualizer_ = visualizer;
+double SimulationControl::compute_new_processing_time() {
+	boost::posix_time::ptime current_time = boost::posix_time::microsec_clock::local_time();
+	boost::posix_time::time_duration time_elapsed = current_time - last_process_simulation_time_;
+	last_process_simulation_time_ = current_time;
+	return current_processing_time_ + time_elapsed.total_milliseconds();
 }
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)

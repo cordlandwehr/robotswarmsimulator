@@ -12,6 +12,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <cstddef>
 
 
@@ -33,7 +34,6 @@ public:
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 
 private:
-
 	class SimulationKernelFunctor {
 	public:
 		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel);
@@ -51,16 +51,12 @@ private:
 		boost::shared_ptr<SimulationKernel> simulation_kernel_;
 	};
 
-
-
-
-
+	double compute_new_processing_time();
 private:
 	//TODO (dwonsich): processing_time_factor_ == \Delta in paper; Maybe should be moved to somewhere else
 	double processing_time_factor_;
 	double current_processing_time_;
-	//TODO:
-	long last_process_simulation_time_;
+	boost::posix_time::ptime last_process_simulation_time_;
 
 	boost::shared_ptr<WorldInformation> current_world_information_;
 	boost::shared_ptr<WorldInformation> next_world_information_;

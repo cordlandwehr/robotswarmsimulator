@@ -30,12 +30,12 @@ namespace {
 }
 
 FullView::FullView() {
-	// TODO Auto-generated constructor stub
+
 
 }
 
 FullView::~FullView() {
-	// TODO Auto-generated destructor stub
+
 }
 
 std::set<View::RobotRef> FullView::get_visible_robots(const RobotData& robot) const {

@@ -28,7 +28,7 @@ private:
 	std::size_t id_;
 
 	friend class View;
-	friend class WorldInformation; //TODO: needed?
+	friend class WorldInformation;
 };
 
 #endif /* IDENTIFIER_H_ */

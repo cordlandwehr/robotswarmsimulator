@@ -10,12 +10,12 @@
 #include "octree.h"
 
 OctreeView::OctreeView() {
-	// TODO Auto-generated constructor stub
+
 
 }
 
 OctreeView::~OctreeView() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void OctreeView::init(const WorldInformation& world_information) {
@@ -26,7 +26,6 @@ void OctreeView::init(const WorldInformation& world_information) {
 	octree_->create_tree(world_information.markers(),
 						world_information.obstacles(),
 						world_information.robot_data() );
-	//TODO (dwonisch): initialise octree somehow
 }
 
 const boost::shared_ptr<Octree>& OctreeView::octree() const {
