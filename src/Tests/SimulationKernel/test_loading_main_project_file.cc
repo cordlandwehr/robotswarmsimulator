@@ -1,14 +1,20 @@
 #include <boost/test/unit_test.hpp>
+#include <boost/smart_ptr.hpp>
 
 #include "../../SimulationKernel/simulation_kernel.h"
+#include "../../SimulationControl/history.h"
 
 BOOST_AUTO_TEST_CASE(loading_main_project_file)
 {
+	// create empty history to pass along
+	// TODO(craupach) should make an extra class for the parser so we can test it seperatly from kernel
+	boost::shared_ptr<History> history(new History(10));
+
 	//create simulation kernel
 	SimulationKernel* sim = new SimulationKernel();
 
 	//initialize simulation kernel
-	sim->init("src/ProjectFiles/projectfile.swarm");
+	sim->init("src/ProjectFiles/projectfile.swarm", history);
 
 	//check variables read from main project file
 	BOOST_CHECK_EQUAL(sim->project_name(), "My Exciting Project");
@@ -22,11 +28,15 @@ BOOST_AUTO_TEST_CASE(loading_main_project_file)
 
 BOOST_AUTO_TEST_CASE(loading_garbled_main_project_file_a)
 {
+	// create empty history to pass along
+	// TODO(craupach) should make an extra class for the parser so we can test it seperatly from kernel
+	boost::shared_ptr<History> history(new History(10));
+
 	//create simulation kernel
 	SimulationKernel* sim = new SimulationKernel();
 
 	//initialize simulation kernel
-	sim->init("src/Tests/Testdata/garbled_projectfile_a.swarm");
+	sim->init("src/Tests/Testdata/garbled_projectfile_a.swarm", history);
 
 	//check variables read from main project file
 	BOOST_CHECK_EQUAL(sim->project_name(), "My Exciting Project");
@@ -44,11 +54,15 @@ BOOST_AUTO_TEST_CASE(loading_garbled_main_project_file_a)
 
 BOOST_AUTO_TEST_CASE(loading_garbled_main_project_file_b)
 {
+	// create empty history to pass along
+	// TODO(craupach) should make an extra class for the parser so we can test it seperatly from kernel
+	boost::shared_ptr<History> history(new History(10));
+
 	//create simulation kernel
 	SimulationKernel* sim = new SimulationKernel();
 
 	//initialize simulation kernel
-	sim->init("src/Tests/Testdata/garbled_projectfile_b.swarm");
+	sim->init("src/Tests/Testdata/garbled_projectfile_b.swarm", history);
 
 	//check variables read from main project file
 	BOOST_CHECK_EQUAL(sim->project_name(), "My Exciting Project");

@@ -45,15 +45,17 @@ public:
 	 * \return Constant reference to History of WorldInformations.
 	 *
 	 * TODO(martinah) return History& instead of boost::shared_ptr<History>&
+	 * TODO(craupach) is this method needed?
 	 */
 	const boost::shared_ptr<History>& history() const;
 
 	/**
 	 * This method initializes the simulation kernel
 	 */
-	void init(const string& project_filename);
+	void init(const string& project_filename, boost::shared_ptr<History> history);
 
 	//TODO(martinah) add doxygen comments
+	// TODO(craupach) are these methods needed / do they need to be public
 	int asg() const { return asg_; }
 	string compass_model() const { return compass_model_; }
 	int event_handler() const { return event_handler_; }

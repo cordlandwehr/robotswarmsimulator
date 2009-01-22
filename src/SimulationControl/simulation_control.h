@@ -21,31 +21,91 @@ class Visualizer;
 class WorldInformation;
 class History;
 
+/**
+ * The class SimulationControl provides code to set up a new simulation (and cleanup
+ * any old one) as well as start/pause/terminate the Simulation–Thread. Furthermore it
+ * provides a method called process simulation that is responsible for consuming the
+ * history’s elements according to the Processing–Time.
+ */
 class SimulationControl {
 public:
 	SimulationControl();
 	~SimulationControl();
 
-	void create_new_simulation(const std::string& configuration_filename);
+	/**
+	 * cleans up the old simulation and creates a new one without starting it.
+	 */
+	void create_new_simulation(const std::string& configuration_filename, std::size_t history_length);
+
+	/**
+	 * starts the simulation
+	 */
 	void start_simulation();
+
+	/**
+	 * pauses the simulation
+	 */
 	void pause_simulation();
+
+	/**
+	 * terminates simulation and cleans up the simulation thread
+	 */
 	void terminate_simulation();
+
+	/**
+	 * process the simulation: advances the processing time and calls the visualizer if there is one.
+	 */
 	void process_simulation();
+
+	/**
+	 * supplies the control with a new visualizer.
+	 */
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 
 private:
+	/**
+	 * Thread-Wrapper for the simulation kernel. Allows the simulation kernel thread to be paused and
+	 * unpaused.
+	 */
 	class SimulationKernelFunctor {
 	public:
+		/**
+		 * constructs a new functor with the given simulation kernel thread.
+		 */
 		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel);
+
+		/**
+		 * unpauses the simulation thread using a semaphor
+		 */
 		void unpause();
+
+		/**
+		 * pauses the simulation thread using a semaphor
+		 */
 		void pause();
+
+		/**
+		 * terminates the simulation thread by exiting the endless loop
+		 */
 		void terminate();
 
+		// TODO(craupach) why did you choose to overload this operator instead of giving this function a name?
+		/**
+		 * a endless loop performing simulation steps until terminated.
+		 */
 		void operator()();
 
 	private:
+		/**
+		 * true iff the endless loop belonging to this functor should exit / is already exited.
+		 */
 		bool terminated_;
+
+		/**
+		 * true iff the thread should pause / is already pausing.
+		 */
 		bool paused_;
+
 		//TODO (dwonisch): Semaphore should do the job, but there might be better solutions.
 		boost::interprocess::interprocess_semaphore unpaused_;
 		boost::shared_ptr<SimulationKernel> simulation_kernel_;

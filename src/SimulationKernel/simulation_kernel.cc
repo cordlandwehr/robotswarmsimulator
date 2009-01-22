@@ -17,7 +17,9 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 	return history_;
 }
 
-void SimulationKernel::init(const string& project_filename) {
+void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history) {
+	// set history
+	history_ = history;
 	load_projectfiles(project_filename);
 	//TODO implement rest of initialization
 	//2. Create according ViewObject.

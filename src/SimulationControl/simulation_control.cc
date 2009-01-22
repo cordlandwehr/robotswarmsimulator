@@ -21,24 +21,27 @@ SimulationControl::~SimulationControl() {
 
 }
 
-void SimulationControl::create_new_simulation(const std::string& configuration_filename) {
-	//TODO (dwonisch): does this method terminate the old simulation thread?
-	//                 I assume it does.
+void SimulationControl::create_new_simulation(const std::string& configuration_filename, std::size_t history_length) {
+	// terminate the old simulation including the old simulation thread.
 	terminate_simulation();
 
-	//create new and initialize new kernel
-	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
-	simulation_kernel->init(configuration_filename);
-
 	//set up a new history
-	//TODO:
-	//std::size_t history_length = simulation_kernel->history_length_(); //project parameter?
-	std::size_t history_length = 123;
+	// TODO:
+	// std::size_t history_length = simulation_kernel->history_length_(); //project parameter?
+	// std::size_t history_length = 123;
+	// craupach: I changed history length to be a parameter to this method.
+	// I don't like it being in the project file for following reasons:
+	// * It does not really influence how the simulation will develop
+	// * We would need to parse it out of the project file ourselves. If its passed a parameter
+	//   the project file needs only be touched in SimKernel
+	// * We may want to rerun the same project with different history lengths for collecting statistics
+	// * We can easily pass it in the UI or as a commandline parameter
 	history_.reset(new History(history_length));
 
-	//give simulation_kernel the history object. May also be done through init?
-	//TODO:
-	//simulation_kernel_->set_history(history_);
+	// create and initialize new kernel. History should be passed here because the init method
+	// of the SimulationKernel will need it to construct EventHandler, ASG, StatisticKernel.
+	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
+	simulation_kernel->init(configuration_filename, history_);
 
 	simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
 
@@ -49,6 +52,7 @@ void SimulationControl::start_simulation() {
 	if(!is_thread_started(simulation_thread_)) {
 		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::operator(), simulation_kernel_functor_));
 		simulation_thread_.swap(simulation_thread);
+
 		//fetch first two WorldInformations
 		current_world_information_ = history_->get_oldest_unused(true);
 		next_world_information_ = history_->get_oldest_unused(true);
@@ -82,6 +86,13 @@ void SimulationControl::terminate_simulation() {
 void SimulationControl::process_simulation() {
 	double new_processing_time = compute_new_processing_time();
 
+	// Try and get the two world informations matching our processing time.
+	// This may skip world informations if we are processing too fast.
+	// (may happen if the simulation time distance between two world informations
+	// has a high variance. We would need to dynamically adjust the processing time factor
+	// if we would want to avoid this).
+	// If the Simulation has not produced the needed world informations yet, we pause
+	// the processing time.
 	double current_simulation_time = new_processing_time/processing_time_factor_;
 	while(current_simulation_time >= next_world_information_->time()) {
 		boost::shared_ptr<WorldInformation> new_world_information = history_->get_oldest_unused();
@@ -98,6 +109,8 @@ void SimulationControl::process_simulation() {
 			current_processing_time_ = new_processing_time;
 		}
 	}
+
+	// draw the simulation state for the current processing time if there is a visualizer.
 	if(visualizer_) {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
 		visualizer_->draw(extrapolation_time, current_world_information_);
