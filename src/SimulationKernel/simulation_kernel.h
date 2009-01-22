@@ -13,6 +13,8 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/tuple/tuple.hpp>
+
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -20,14 +22,17 @@
 #include <cstddef>
 #include <map>
 
+#include "../Utilities/vector3d.h"
+
 
 using namespace std;
 
-class Robot;
 class Identifier;
 class WorldInformation;
 class History;
 class Obstacle;
+class RobotData;
+class Robot;
 class WorldObject;
 
 class SimulationKernel {
@@ -151,7 +156,7 @@ private:
 	 * the current robot
 	 * \param Pointer to the robot
 	 */
-	string write_robot(boost::shared_ptr<Robot> current_robot);
+	string write_robot(boost::shared_ptr<RobotData> robot_data);
 
 	/**
 	 * This method saves information about the obstacles

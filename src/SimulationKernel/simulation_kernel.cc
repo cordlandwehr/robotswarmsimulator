@@ -4,6 +4,8 @@
 #include "../Model/world_information.h"
 #include "../Model/sphere.h"
 #include "../Model/box.h"
+#include "../Model/robot_data.h"
+#include "../Model/robot.h"
 
 #include "../SimulationControl/history.h"
 
@@ -180,7 +182,7 @@ void SimulationKernel::load_projectfiles(const string& project_filename) {
 void SimulationKernel::save_main_project_file(const string& project_filename) {
 
 	//TODO(mmarcus) catch exceptions
-	// open outputstream
+
 	ofstream project_file;
 	project_file.open(project_filename.c_str());
 
@@ -198,6 +200,7 @@ void SimulationKernel::save_main_project_file(const string& project_filename) {
 }
 
 void SimulationKernel::save_robot_file() {
+
 	ofstream robot_file;
 
 	//TODO(mmarcus) this will not work - path needs to be specified
@@ -217,10 +220,10 @@ void SimulationKernel::save_robot_file() {
 	robot_file << "\"y-axis-1\",\"y-axis-2\",\"y-axis-3\"";
 	robot_file << "\"z-axis-1\",\"z-axis-2\",\"z-axis-3\"" << endl;
 
-	//TODO(mmarcus)fetching obstacles from the actual world-information through history-reference
-	vector<boost::shared_ptr<Robot> > robots; // = ???
+	vector<boost::shared_ptr<RobotData> > robots_data = history_->get_newest().robot_data();
 
-	for (vector<boost::shared_ptr<Robot> >::iterator it = robots.begin(); it!=robots.end(); ++it) {
+	for (vector<boost::shared_ptr<RobotData> >::iterator it = robots_data.begin();
+			it!=robots_data.end(); ++it) {
 		robot_file << write_robot(*it);
 	}
 
@@ -228,10 +231,34 @@ void SimulationKernel::save_robot_file() {
 
 }
 
-string SimulationKernel::write_robot(boost::shared_ptr<Robot> current_robot) {
-	//TODO(mmarcus) implement
-	//current_robot->id();
-	return "";
+string SimulationKernel::write_robot(boost::shared_ptr<RobotData> robot_data) {
+
+	stringstream output;
+
+	output << robot_data->id() << ",";
+	output << robot_data->position()(0) << ",";
+	output << robot_data->position()(1) << ",";
+	output << robot_data->position()(2) << ",";
+	output << robot_data->type() << ",";	//TODO(mmarcus) Type correct?
+	output << robot_data->velocity()(0) << ",";
+	output << robot_data->velocity()(1) << ",";
+	output << robot_data->velocity()(2) << ",";
+
+	//TODO(mmarcus) Why does this not work?
+	//boost::shared_ptr<Vector3d> vec;
+	//vec = robot_data->acceleration();
+
+	/*	output << robot_data->acceleration()(0) << ",";
+	output << robot_data->acceleration()(1) << ",";
+	output << robot_data->acceleration()(2) << ",";*/
+	output << robot_data->status() << ",";
+	//TODO(mmarcus) include marker-information
+	//TODO(mmarcus) include algorithm-information
+	//TODO(mmarcus) include color-information
+	//TODO(mmarcus) this doesn't work and I don't know why...
+	//output << robot_data->coordinate_system_axis().get<0>()(0) << ",";
+
+	return output.str();
 }
 
 void SimulationKernel::save_obstacle_file() {
@@ -267,7 +294,6 @@ void SimulationKernel::save_obstacle_file() {
 		obstacle_file << write_marker(*it);
 	}
 
-
 	obstacle_file.close();
 }
 
@@ -279,18 +305,18 @@ string SimulationKernel::write_obstacle(boost::shared_ptr<Obstacle> current_obst
 	//See event_handler.cc for details to this technique
 	if(boost::shared_ptr<Box> box_obstacle = boost::dynamic_pointer_cast<Box>(current_obstacle)) {
 		output << "\"box\",";
+		output << box_obstacle->position()(0) << ",";
 		output << box_obstacle->position()(1) << ",";
 		output << box_obstacle->position()(2) << ",";
-		output << box_obstacle->position()(3) << ",";
 		//TODO(mmarcus) include marker-information
 		output << box_obstacle->width() << ",";
 		output << box_obstacle->height() << ",";
 		output << box_obstacle->depth() << endl;
 	} else if(boost::shared_ptr<Sphere> sphere_obstacle = boost::dynamic_pointer_cast<Sphere>(current_obstacle)) {
 		output << "\"sphere\",";
+		output << sphere_obstacle->position()(0) << ",";
 		output << sphere_obstacle->position()(1) << ",";
 		output << sphere_obstacle->position()(2) << ",";
-		output << sphere_obstacle->position()(3) << ",";
 		//TODO(mmarcus) include marker-information
 		output << sphere_obstacle->radius() << ",\"\",\"\"" << endl;
 	} else {
@@ -305,15 +331,14 @@ string SimulationKernel::write_marker(boost::shared_ptr<WorldObject> marker) {
 	stringstream output;
 
 	output << "\"marker\",";
+	output << marker->position()(0) << ",";
 	output << marker->position()(1) << ",";
 	output << marker->position()(2) << ",";
-	output << marker->position()(3) << ",";
 	//TODO(mmarcus) include marker-information
 	output << "\"\",\"\",\"\"" << endl;
 
 	return output.str();
 }
-
 
 void SimulationKernel::save_projectfiles(const string& project_filename) {
 	save_main_project_file(project_filename);
