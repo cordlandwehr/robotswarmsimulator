@@ -9,7 +9,10 @@
 #include <cstdlib>
 #include <cstdio>
 
+
+
 #include <vector>
+#include <set>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
@@ -21,82 +24,107 @@
 #include "../../Model/obstacle.h"
 #include "../../Model/box.h"
 #include "../../Model/sphere.h"
-#include "../../Events/look_event.h"
-#include "../../Events/event.h"
-#include "../../SimulationControl/history.h"
-#include "../../EventHandlers/event_handler.h"
+#include "../../Model/robot_identifier.h"
+
 #include "../../Utilities/vector3d.h"
-#include "../Fixtures/simple_world_fixture.h"
+
 #include "../../Views/octree.h"
 
-BOOST_FIXTURE_TEST_CASE(octree_test, SimpleWorldFixture)
-{
+class Request;
 
-/*	std::vector<boost::shared_ptr<RobotData> > robots;
-	std::vector<boost::shared_ptr<WorldObject> > markers;
-	std::vector<boost::shared_ptr<Obstacle> > obstacles;
+class MyRobot : public Robot{
 
-	float radius = 2.0;
+public:
+	MyRobot(boost::shared_ptr<RobotIdentifier> id): Robot(id) {}
+	std::set<boost::shared_ptr<Request> > compute(){
 
-	// set the starting seed, so we get always the same numbers in rand
-	std::srand(47);
-
-
-	for(int i = 0; i < 1000; i++){
-		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
-		//TODO: undefined behavior here, since robot is deleted after each forloop run.
-		boost::shared_ptr<Robot> robot(new SimpleRobot(id));
-
-		boost::shared_ptr<Vector3d> robot_pos = boost::shared_ptr<Vector3d>(new Vector3d());
-
-		robot_pos->insert_element(kXCoord,std::rand()*100.0/RAND_MAX);
-		robot_pos->insert_element(kYCoord,std::rand()*100.0/RAND_MAX);
-		robot_pos->insert_element(kZCoord,std::rand()*100.0/RAND_MAX);
-
-		boost::shared_ptr<RobotData> newRobot = boost::shared_ptr<RobotData>(new RobotData(id, robot_pos, *robot));
-
-		robots.push_back(newRobot);
-
-
+		std::set<boost::shared_ptr<Request> > ret;
+		return ret;
 	}
 
-	float start = std::clock();
 
-	boost::shared_ptr<Octree> octree(new Octree(10,radius*2.0));
-	octree->scene_dimensions(markers, obstacles, robots);
-
-	octree->create_tree(markers,obstacles,robots);
+};
 
 
-	float end = std::clock();
+BOOST_AUTO_TEST_CASE(octree_test) {
+	std::vector<boost::shared_ptr<RobotData> > robots;
+		std::vector<boost::shared_ptr<WorldObject> > markers;
+		std::vector<boost::shared_ptr<Obstacle> > obstacles;
 
-	float ticks = (end - start) / CLOCKS_PER_SEC;
-	std::printf("Built time for Octree: %f \n", ticks);
+		float radius = 2.0;
 
-	start = std::clock();
+		// set the starting seed, so we get always the same numbers in rand
+		std::srand(47);
 
-	std::vector<boost::shared_ptr<RobotData> >::iterator it_robots;
-	std::vector<boost::shared_ptr<RobotData> >::iterator it_robots_comp;
+		boost::shared_ptr<RobotData> newRobot((RobotData*)0);
+		Robot * robot;
+		boost::shared_ptr<RobotIdentifier> ident;
+		boost::shared_ptr<Vector3d> robot_pos;
+		for(int i = 0; i < 1000; i++){
 
-	for(it_robots = robots.begin(); it_robots != robots.end(); ++it_robots){
-		Vector3d robot_pos = (*it_robots)->position();
 
-		for(it_robots_comp = robots.begin(); it_robots_comp != robots.end(); ++it_robots_comp){
+			robot_pos.reset( new Vector3d());
+			boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
+			//TODO: undefined behavior here, since robot is deleted after each forloop run.
+			robot = new MyRobot(id);
 
-			Vector3d robot_comp = (*it_robots_comp)->position();
-			float x = robot_pos(0) - robot_comp(0);
-			float y = robot_pos(1) - robot_comp(1);
-			float z = robot_pos(2) - robot_comp(2);
-			float dist = std::sqrt(x*x + y*y + z*z);
-			if(dist < radius){
-				// put it into an awesome list ;)
-			}
+
+			boost::shared_ptr<Vector3d> robot_pos = boost::shared_ptr<Vector3d>(new Vector3d());
+
+			robot_pos->insert_element(kXCoord,std::rand()*1000.0/RAND_MAX);
+			robot_pos->insert_element(kYCoord,std::rand()*1000.0/RAND_MAX);
+			robot_pos->insert_element(kZCoord,std::rand()*1000.0/RAND_MAX);
+
+
+			boost::shared_ptr<RobotData> newRobot = boost::shared_ptr<RobotData>(new RobotData(id, robot_pos, *robot));
+
+
+			robots.push_back(newRobot);
+
 
 		}
-	}
 
-	end = std::clock();
-	ticks = (end - start) / CLOCKS_PER_SEC;
-	std::printf("time for simple view test: %f \n", ticks);*/
+		std::printf("test\n");
+		float start = std::clock();
+
+		boost::shared_ptr<Octree> octree(new Octree(10,radius*2.0));
+		octree->scene_dimensions(markers, obstacles, robots);
+
+		octree->create_tree(markers,obstacles,robots);
+
+
+		float end = std::clock();
+
+		float ticks = (end - start) / CLOCKS_PER_SEC;
+		std::printf("Built time for Octree: %f \n", ticks);
+
+		start = std::clock();
+
+		std::vector<boost::shared_ptr<RobotData> >::iterator it_robots;
+		std::vector<boost::shared_ptr<RobotData> >::iterator it_robots_comp;
+
+		for(it_robots = robots.begin(); it_robots != robots.end(); ++it_robots){
+			Vector3d robot_pos = (*it_robots)->position();
+
+			for(it_robots_comp = robots.begin(); it_robots_comp != robots.end(); ++it_robots_comp){
+
+				Vector3d robot_comp = (*it_robots_comp)->position();
+				float x = robot_pos(0) - robot_comp(0);
+				float y = robot_pos(1) - robot_comp(1);
+				float z = robot_pos(2) - robot_comp(2);
+				float dist = std::sqrt(x*x + y*y + z*z);
+				if(dist < radius){
+					// put it into an awesome list ;)
+				}
+
+			}
+		}
+
+		end = std::clock();
+
+		ticks = (end - start) / CLOCKS_PER_SEC;
+		std::printf("time for simple view test: %f \n", ticks);
+
+
 
 }

@@ -336,10 +336,7 @@ void Octree::create_new_node(const std::vector< boost::shared_ptr<WorldObject> >
 					  	     float width,
 					  	     int node_id) {
 
-	// When there are no objects added to this node, dont't create it
-		if(markers.size() + obstacles.size() + robot_datas.size() < 1 ){
-			return;
-		}
+
 
 
 		// Create new node
@@ -359,6 +356,11 @@ void Octree::create_new_node(const std::vector< boost::shared_ptr<WorldObject> >
 		// Set some tree specific attributes.
 		octree_nodes_[node_id]->set_max_levels(max_levels_);
 		octree_nodes_[node_id]->set_min_width(min_width_);
+
+		// When there are no objects added to this node, dont't create it
+			if(markers.size() + obstacles.size() + robot_datas.size() < 1 ){
+				return;
+			}
 
 		// Recurse through this node and subdivide it if necessary
 		octree_nodes_[node_id]->create_node(markers, obstacles, robot_datas, node_center, width / 2);
@@ -834,9 +836,9 @@ void Octree::assign_objects_to_node(const std::vector< boost::shared_ptr<WorldOb
 									const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
 									const std::vector< boost::shared_ptr<RobotData> > & robot_datas) {
 
-	markers_.insert(markers_.end()+1,markers.begin(), markers.end());
-	obstacles_.insert(obstacles_.end()+1, obstacles.begin(), obstacles.end());
-	robot_datas_.insert(robot_datas_.end() + 1, robot_datas.begin(), robot_datas.end() );
+	markers_.insert(markers_.end(),markers.begin(), markers.end());
+	obstacles_.insert(obstacles_.end(), obstacles.begin(), obstacles.end());
+	robot_datas_.insert(robot_datas_.end() , robot_datas.begin(), robot_datas.end() );
 }
 
 void Octree::add_marker_to_node(boost::shared_ptr<WorldObject> marker) {
