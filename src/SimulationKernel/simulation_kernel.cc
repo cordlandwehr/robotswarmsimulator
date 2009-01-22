@@ -1,6 +1,12 @@
 #include "simulation_kernel.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
+#include "../Model/world_information.h"
+#include "../Model/sphere.h"
+#include "../Model/box.h"
+
+#include "../SimulationControl/history.h"
+
 SimulationKernel::SimulationKernel() {
 	// TODO Auto-generated constructor stub
 }
@@ -192,29 +198,50 @@ void SimulationKernel::save_main_project_file(const string& project_filename) {
 }
 
 void SimulationKernel::save_robot_file() {
+	ofstream robot_file;
+
+	//TODO(mmarcus) this will not work - path needs to be specified
+	robot_file.open(robot_filename().c_str());
+
+	//write robot header
+	robot_file << "\"ID\"";
+	robot_file << "\"x-position\",\"y-position\",\"z-position\"";
+	robot_file << "\"type\"";
+	robot_file << "\"x-velocity\",\"y-velocity\",\"z-velocity\"";
+	robot_file << "\"x-acceleration\",\"y-acceleration\",\"z-acceleration\"";
+	robot_file << "\"status\"";
+	robot_file << "\"marker-info\"";
+	robot_file << "\"algorithm\"";
+	robot_file << "\"color\"";
+	robot_file << "\"x-axis-1\",\"x-axis-2\",\"x-axis-3\"";
+	robot_file << "\"y-axis-1\",\"y-axis-2\",\"y-axis-3\"";
+	robot_file << "\"z-axis-1\",\"z-axis-2\",\"z-axis-3\"" << endl;
+
+	//TODO(mmarcus)fetching obstacles from the actual world-information through history-reference
+	vector<boost::shared_ptr<Robot> > robots; // = ???
+
+	for (vector<boost::shared_ptr<Robot> >::iterator it = robots.begin(); it!=robots.end(); ++it) {
+		robot_file << write_robot(*it);
+	}
+
+	robot_file.close();
+
+}
+
+string SimulationKernel::write_robot(boost::shared_ptr<Robot> current_robot) {
 	//TODO(mmarcus) implement
+	//current_robot->id();
+	return "";
 }
 
 void SimulationKernel::save_obstacle_file() {
 
 	ofstream obstacle_file;
+
 	//TODO(mmarcus) this will not work - path needs to be specified
 	obstacle_file.open(obstacle_filename().c_str());
 
-	//TODO(mmarcus) get obstacle-vector from current world_information and iterate
-	// write_obstacle(...);
-
-	obstacle_file.close();
-
-}
-
-void SimulationKernel::save_projectfiles(const string& project_filename) {
-	save_main_project_file(project_filename);
-	save_robot_file();
-	save_obstacle_file();
-}
-
-void SimulationKernel::write_obstacle_header(ofstream obstacle_file) {
+	//write obstacle header
 	obstacle_file << "\"type\",";
 	obstacle_file << "\"x-position\",";
 	obstacle_file << "\"y-position\",";
@@ -223,8 +250,73 @@ void SimulationKernel::write_obstacle_header(ofstream obstacle_file) {
 	obstacle_file << "\"size-info\",";
 	obstacle_file << "\"\",";
 	obstacle_file << "\"\"" << endl;
+
+	//fetching obstacles from the actual world-information through history-reference
+	vector<boost::shared_ptr<Obstacle> > obstacles = history_->get_newest().obstacles();
+
+	//iterate over all obstacles
+	for (vector<boost::shared_ptr<Obstacle> >::iterator it = obstacles.begin(); it!=obstacles.end(); ++it) {
+		obstacle_file << write_obstacle(*it);
+	}
+
+	//fetching marker-informations from actual world-information through history-reference
+	vector<boost::shared_ptr<WorldObject> > markers = history_->get_newest().markers();
+
+	//iterate over all markers
+	for (vector<boost::shared_ptr<WorldObject> >::iterator it = markers.begin(); it!=markers.end(); ++it) {
+		obstacle_file << write_marker(*it);
+	}
+
+
+	obstacle_file.close();
 }
 
-void SimulationKernel::write_obstacle(ofstream obstacle_file, boost::shared_ptr<Obstacle> obs) {
-	//TODO(mmarcus) implement
+string SimulationKernel::write_obstacle(boost::shared_ptr<Obstacle> current_obstacle) {
+
+	stringstream output;
+
+	//check by dynamic typecast if the obstacle is a sphere or a box.
+	//See event_handler.cc for details to this technique
+	if(boost::shared_ptr<Box> box_obstacle = boost::dynamic_pointer_cast<Box>(current_obstacle)) {
+		output << "\"box\",";
+		output << box_obstacle->position()(1) << ",";
+		output << box_obstacle->position()(2) << ",";
+		output << box_obstacle->position()(3) << ",";
+		//TODO(mmarcus) include marker-information
+		output << box_obstacle->width() << ",";
+		output << box_obstacle->height() << ",";
+		output << box_obstacle->depth() << endl;
+	} else if(boost::shared_ptr<Sphere> sphere_obstacle = boost::dynamic_pointer_cast<Sphere>(current_obstacle)) {
+		output << "\"sphere\",";
+		output << sphere_obstacle->position()(1) << ",";
+		output << sphere_obstacle->position()(2) << ",";
+		output << sphere_obstacle->position()(3) << ",";
+		//TODO(mmarcus) include marker-information
+		output << sphere_obstacle->radius() << ",\"\",\"\"" << endl;
+	} else {
+		throw std::invalid_argument("Illegal type of obstacle.");
+	}
+
+	return output.str();
+}
+
+string SimulationKernel::write_marker(boost::shared_ptr<WorldObject> marker) {
+
+	stringstream output;
+
+	output << "\"marker\",";
+	output << marker->position()(1) << ",";
+	output << marker->position()(2) << ",";
+	output << marker->position()(3) << ",";
+	//TODO(mmarcus) include marker-information
+	output << "\"\",\"\",\"\"" << endl;
+
+	return output.str();
+}
+
+
+void SimulationKernel::save_projectfiles(const string& project_filename) {
+	save_main_project_file(project_filename);
+	save_robot_file();
+	save_obstacle_file();
 }

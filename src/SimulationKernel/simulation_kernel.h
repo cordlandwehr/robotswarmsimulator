@@ -15,6 +15,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <cstddef>
 #include <map>
@@ -27,7 +28,7 @@ class Identifier;
 class WorldInformation;
 class History;
 class Obstacle;
-
+class WorldObject;
 
 class SimulationKernel {
 public:
@@ -146,9 +147,30 @@ private:
 	void save_robot_file();
 
 	/**
+	 * This method constructs a line for the robot_file which describes
+	 * the current robot
+	 * \param Pointer to the robot
+	 */
+	string write_robot(boost::shared_ptr<Robot> current_robot);
+
+	/**
 	 * This method saves information about the obstacles
 	 */
 	void save_obstacle_file();
+
+	/**
+	 * This method constructs a line for the obstacle_file which describes
+	 * the current obstacle
+	 * \param Pointer to the obstacle
+	 */
+	string write_obstacle(boost::shared_ptr<Obstacle> current_obstacle);
+
+	/**
+	 * This method constructs a line for the obstacle_file which describes
+	 * the current marker
+	 * \param Pointer to the marker
+	 */
+	string write_marker(boost::shared_ptr<WorldObject> marker);
 
 	/**
 	 * This method checks whether the given line is a comment,
@@ -203,18 +225,6 @@ private:
 	 */
 	bool contains_assignment(const string& line);
 
-	/**
-	 * Used to write the standard header for the obstacle file
-	 * \param outputstream to obstacle file
-	 */
-	void write_obstacle_header(ofstream obstacle_file);
-
-	/**
-	 * This method writes the output to the obstaclefile
-	 * \param obstacle_file	outputstream to obstacle file
-	 * \param obs the obstacle to print
-	 */
-	void write_obstacle(ofstream obstacle_file, boost::shared_ptr<Obstacle>);
 };
 
 #endif /* SIMULATION_KERNEL_H_ */

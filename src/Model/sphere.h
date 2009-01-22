@@ -1,5 +1,5 @@
 /**
- * \class	Box
+ * \class	Sphere
  * \author	Martina Hüllmann
  * \brief	Denotes a sphere-obstacle
  */
