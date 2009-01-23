@@ -50,7 +50,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 
 void SimulationControl::start_simulation() {
 	if(!is_thread_started(simulation_thread_)) {
-		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::operator(), simulation_kernel_functor_));
+		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::loop, simulation_kernel_functor_));
 		simulation_thread_.swap(simulation_thread);
 
 		//fetch first two WorldInformations
@@ -149,7 +149,7 @@ void SimulationControl::SimulationKernelFunctor::terminate() {
 	terminated_ = true;
 }
 
-void SimulationControl::SimulationKernelFunctor::operator()() {
+void SimulationControl::SimulationKernelFunctor::loop() {
 	while(!terminated_) {
 		//wait if unpaused == 0
 		unpaused_.wait();

@@ -89,11 +89,10 @@ private:
 		 */
 		void terminate();
 
-		// TODO(craupach) why did you choose to overload this operator instead of giving this function a name?
 		/**
 		 * a endless loop performing simulation steps until terminated.
 		 */
-		void operator()();
+		void loop();
 
 	private:
 		/**
