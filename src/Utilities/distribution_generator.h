@@ -112,10 +112,16 @@ public:
 	std::vector<double> get_value_uniform_in_sphere();
 
 	/**
+	 * Sets the seed vor PNG
+	 * @param seed must be unsigned int
+	 */
+	void set_seed(unsigned int seed);
+
+	/**
 	 * Constructor
 	 * \param int seed for pseudorandom number generator
 	 */
-	DistributionGenerator(int seed);
+	DistributionGenerator(unsigned int seed);
 	virtual ~DistributionGenerator();
 
 private:
