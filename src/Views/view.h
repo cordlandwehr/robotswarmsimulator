@@ -69,6 +69,7 @@ public:
 
 	/**
 	 * Returns the set of robots visible for the calling Robot.
+	 * Note: The Identifier of the calling Robot is never returned by this method.
 	 * @param Robot that should take a look-around
 	 * @return set of robots visible
 	 */
@@ -102,7 +103,7 @@ public:
 	 * @return MarkerInformation
 	 * @see WorldObject::marker_information()
 	 */
-	const MarkerInformation& get_marker_information(const Robot& caller, WorldObjectRef world_object) const;
+	MarkerInformation get_marker_information(const Robot& caller, WorldObjectRef world_object) const;
 	/**
 	 * Queries for the id of a WordObject identified by an given Identifier.
 	 * @param The Robot which is asking..
@@ -208,10 +209,10 @@ protected:
 	virtual Vector3d get_obstacle_position(const Obstacle& obstacle) const;
 	virtual Vector3d get_marker_position(const WorldObject& marker) const;
 
-	virtual const MarkerInformation& get_own_marker_information(const RobotData& robot) const;
-	virtual const MarkerInformation& get_robots_marker_information(const RobotData& robot) const;
-	virtual const MarkerInformation& get_obstacles_marker_information(const Obstacle& obstacle) const;
-	virtual const MarkerInformation& get_markers_marker_information(const WorldObject& marker) const;
+	virtual MarkerInformation get_own_marker_information(const RobotData& robot) const;
+	virtual MarkerInformation get_robots_marker_information(const RobotData& robot) const;
+	virtual MarkerInformation get_obstacles_marker_information(const Obstacle& obstacle) const;
+	virtual MarkerInformation get_markers_marker_information(const WorldObject& marker) const;
 
 	virtual std::size_t get_own_id(const RobotData& robot) const;
 	virtual std::size_t get_robot_id(const RobotData& robot) const;

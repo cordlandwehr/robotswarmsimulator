@@ -15,7 +15,7 @@ public:
 	virtual ~Identifier();
 
 	virtual boost::shared_ptr<Identifier> clone() const = 0;
-
+	//TODO (dwonisch): Why is this class needed?
 	class Comp{
 		public:
 			bool operator() (const boost::shared_ptr<Identifier> & id1, const boost::shared_ptr<Identifier> &id2){

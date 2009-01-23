@@ -138,8 +138,8 @@ Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) co
 	return *CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 
-const MarkerInformation& View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
-	return delegate_function<const MarkerInformation&>(&View::get_own_marker_information, &View::get_robots_marker_information,
+MarkerInformation View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
+	return delegate_function<MarkerInformation>(&View::get_own_marker_information, &View::get_robots_marker_information,
 			                                           &View::get_obstacles_marker_information, &View::get_markers_marker_information,
 			                                           caller, world_object);
 }
@@ -218,19 +218,19 @@ Vector3d View::get_marker_position(const WorldObject& marker) const {
 	throw UnsupportedOperationException(get_error_message("get_obstacle_position"));
 }
 
-const MarkerInformation& View::get_own_marker_information(const RobotData& robot) const {
+MarkerInformation View::get_own_marker_information(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_own_marker_information"));
 }
 
-const MarkerInformation& View::get_robots_marker_information(const RobotData& robot) const {
+MarkerInformation View::get_robots_marker_information(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_robots_marker_information"));
 }
 
-const MarkerInformation& View::get_obstacles_marker_information(const Obstacle& obstacle) const {
+MarkerInformation View::get_obstacles_marker_information(const Obstacle& obstacle) const {
 	throw UnsupportedOperationException(get_error_message("get_obstacles_marker_information"));
 }
 
-const MarkerInformation& View::get_markers_marker_information(const WorldObject& marker) const {
+MarkerInformation View::get_markers_marker_information(const WorldObject& marker) const {
 	throw UnsupportedOperationException(get_error_message("get_markers_marker_information"));
 }
 
