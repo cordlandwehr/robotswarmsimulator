@@ -120,12 +120,12 @@ public:
 
 private:
 	// distributions
-	boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::uniform_int<> > > gen_uniform_int_;
-	boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::normal_distribution<> > > gen_normal_;
-	boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::bernoulli_distribution<> > > gen_bernoulli_;
-	boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::exponential_distribution<> > > gen_exponential_;
-	boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::uniform_real<> > > gen_uniform_real_;
-	boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::uniform_on_sphere<> > > gen_uniform_on_sphere_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_int<> > > gen_uniform_int_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > > gen_normal_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::bernoulli_distribution<> > > gen_bernoulli_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > > gen_exponential_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_real<> > > gen_uniform_real_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_on_sphere<> > > gen_uniform_on_sphere_;
 
 	// PNG
 	boost::mt19937 png_mersenne_;

@@ -21,8 +21,8 @@
 
 void DistributionGenerator::init_uniform(int min, int max) {
 	boost::uniform_int<> range(min,max);
-	gen_uniform_int_ = boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::uniform_int<> > >
-		(new boost::variate_generator <boost::mt19937, boost::uniform_int<> > (png_mersenne_, range));
+	gen_uniform_int_ = boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_int<> > >
+		(new boost::variate_generator <boost::mt19937&, boost::uniform_int<> > (png_mersenne_, range));
 }
 
 
@@ -33,8 +33,8 @@ int DistributionGenerator::get_value_uniform() {
 void DistributionGenerator::init_normal(double mean, double sigma) {
 	/* p(x) = 1/sqrt(2*pi*sigma) * exp(- (x-mean)^2 / (2*sigma^2) ) */
 	boost::normal_distribution<> params(mean,sigma);	// parameter for normal distribution
-	gen_normal_ = boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::normal_distribution<> > >
-		(new boost::variate_generator <boost::mt19937, boost::normal_distribution<> > (png_mersenne_, params));
+	gen_normal_ = boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > >
+		(new boost::variate_generator <boost::mt19937&, boost::normal_distribution<> > (png_mersenne_, params));
 }
 
 double DistributionGenerator::get_value_normal() {
@@ -43,8 +43,8 @@ double DistributionGenerator::get_value_normal() {
 
 void DistributionGenerator::init_bernoulli(double p) {
 	boost::bernoulli_distribution<> probability(p);
-	gen_bernoulli_ = boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::bernoulli_distribution<> > >
-		(new boost::variate_generator <boost::mt19937, boost::bernoulli_distribution<> > (png_mersenne_, probability));
+	gen_bernoulli_ = boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::bernoulli_distribution<> > >
+		(new boost::variate_generator <boost::mt19937&, boost::bernoulli_distribution<> > (png_mersenne_, probability));
 }
 
 bool DistributionGenerator::get_value_bernoulli() {
@@ -53,8 +53,8 @@ bool DistributionGenerator::get_value_bernoulli() {
 
 void DistributionGenerator::init_exponential(double lambda) {
 	boost::exponential_distribution<> params(lambda);
-	gen_exponential_ = boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::exponential_distribution<> > >
-		(new boost::variate_generator <boost::mt19937, boost::exponential_distribution<> > (png_mersenne_, params));
+	gen_exponential_ = boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > >
+		(new boost::variate_generator <boost::mt19937&, boost::exponential_distribution<> > (png_mersenne_, params));
 }
 
 double DistributionGenerator::get_value_exponential() {
@@ -63,8 +63,8 @@ double DistributionGenerator::get_value_exponential() {
 
 void DistributionGenerator::init_uniform_real(double min, double max) {
 	boost::uniform_real<> range(min,max);
-	gen_uniform_real_ = boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::uniform_real<> > >
-		(new boost::variate_generator <boost::mt19937, boost::uniform_real<> > (png_mersenne_, range));
+	gen_uniform_real_ = boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_real<> > >
+		(new boost::variate_generator <boost::mt19937&, boost::uniform_real<> > (png_mersenne_, range));
 }
 
 double DistributionGenerator::get_value_uniform_real() {
@@ -73,8 +73,8 @@ double DistributionGenerator::get_value_uniform_real() {
 
 void DistributionGenerator::init_uniform_on_sphere(int dim) {
 	boost::uniform_on_sphere<> params(dim);
-	gen_uniform_on_sphere_ = boost::shared_ptr < boost::variate_generator<boost::mt19937, boost::uniform_on_sphere<> > >
-		(new boost::variate_generator <boost::mt19937, boost::uniform_on_sphere<> > (png_mersenne_, params));
+	gen_uniform_on_sphere_ = boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_on_sphere<> > >
+		(new boost::variate_generator <boost::mt19937&, boost::uniform_on_sphere<> > (png_mersenne_, params));
 }
 
 std::vector<double> DistributionGenerator::get_value_uniform_in_sphere() {
@@ -82,7 +82,7 @@ std::vector<double> DistributionGenerator::get_value_uniform_in_sphere() {
 }
 
 DistributionGenerator::DistributionGenerator(int seed) {
-	png_mersenne_.seed(seed);
+//	png_mersenne_.seed(seed);
 }
 
 DistributionGenerator::~DistributionGenerator() {
