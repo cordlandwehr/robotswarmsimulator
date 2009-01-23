@@ -117,21 +117,21 @@ void Octree::scene_dimensions(const std::vector< boost::shared_ptr<WorldObject> 
 	int num_objects = 0;
 
 	std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;
-	for(it_markers = markers.begin(); it_markers < markers.end(); it_markers++){
+	for(it_markers = markers.begin(); it_markers != markers.end(); it_markers++){
 		center_+= (*it_markers)->position();
 		num_objects++;
 
 	}
 
 	std::vector< boost::shared_ptr<Obstacle> >::const_iterator it_obstacles;
-	for(it_obstacles = obstacles.begin(); it_obstacles < obstacles.end(); it_obstacles++){
+	for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); it_obstacles++){
 		center_ +=  (*it_obstacles)->position();
 		num_objects++;
 	}
 
 	std::vector< boost::shared_ptr<RobotData> >::const_iterator it_robot_data;
 
-	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
+	for(it_robot_data = robot_datas.begin(); it_robot_data != robot_datas.end(); it_robot_data++){
 		center_ += (*it_robot_data)->position();
 		num_objects++;
 	}
@@ -388,6 +388,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 	// Initialize this nodes cube width.  Now we know the width of this current node.
 
 	width_ = width;
+	float squared_width = width * width;
 
 	int object_count = markers.size() + obstacles.size() + robot_datas.size();
 
@@ -602,7 +603,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[0](0) - pos(0);
 				float y = centers[0](1) - pos(1);
 				float z = centers[0](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_1.push_back(*it_obstacles);
 
 					continue;
@@ -614,7 +615,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[1](0) - pos(0);
 				float y = centers[1](1) - pos(1);
 				float z = centers[1](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_2.push_back(*it_obstacles);
 
 					continue;
@@ -628,7 +629,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[2](0) - pos(0);
 				float y = centers[2](1) - pos(1);
 				float z = centers[2](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_3.push_back(*it_obstacles);
 
 					continue;
@@ -642,7 +643,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[3](0) - pos(0);
 				float y = centers[3](1) - pos(1);
 				float z = centers[3](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_4.push_back(*it_obstacles);
 
 					continue;
@@ -656,7 +657,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[4](0) - pos(0);
 				float y = centers[4](1) - pos(1);
 				float z = centers[4](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_5.push_back(*it_obstacles);
 
 					continue;
@@ -670,7 +671,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[5](0) - pos(0);
 				float y = centers[5](1) - pos(1);
 				float z = centers[5](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_6.push_back(*it_obstacles);
 
 					continue;
@@ -685,7 +686,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[6](0) - pos(0);
 				float y = centers[6](1) - pos(1);
 				float z = centers[6](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_7.push_back(*it_obstacles);
 
 					continue;
@@ -700,7 +701,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float x = centers[7](0) - pos(0);
 				float y = centers[7](1) - pos(1);
 				float z = centers[7](2) - pos(2);
-				if(std::sqrt( x*x + y*y + z*z )+ max_size < width_ / 2 ){
+				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
 					obstacles_8.push_back(*it_obstacles);
 
 					continue;

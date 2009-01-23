@@ -9,6 +9,7 @@
 #define SPHERIC_VIEW_H_
 
 #include "octree_view.h"
+#include "../Model/identifier.h"
 
 /**
  * \class SphericView
@@ -28,9 +29,9 @@ public:
 	void init(const WorldInformation & world_information );
 
 protected:
-	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
-	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
-	virtual std::set<MarkerRef> get_visible_markers(const RobotData& robot) const;
+	virtual std::set<RobotRef,Identifier::Comp> get_visible_robots(const RobotData& robot) const;
+	virtual std::set<ObstacleRef, Identifier::Comp> get_visible_obstacles(const RobotData& robot) const;
+	virtual std::set<MarkerRef, Identifier::Comp> get_visible_markers(const RobotData& robot) const;
 
 	double view_radius() const;
 

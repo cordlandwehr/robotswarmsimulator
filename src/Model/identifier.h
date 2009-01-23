@@ -16,6 +16,18 @@ public:
 
 	virtual boost::shared_ptr<Identifier> clone() const = 0;
 
+	class Comp{
+		public:
+			bool operator() (const boost::shared_ptr<Identifier> & id1, const boost::shared_ptr<Identifier> &id2){
+				if(id1->id() < id2->id() ){
+					return true;
+				}
+
+				return false;
+			}
+
+		};
+
 protected:
 	explicit Identifier(std::size_t id);
 	/**

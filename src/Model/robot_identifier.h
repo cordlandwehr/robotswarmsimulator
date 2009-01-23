@@ -9,6 +9,9 @@
 
 #include "identifier.h"
 
+
+
+
 class RobotIdentifier : public Identifier {
 public:
 	explicit RobotIdentifier(std::size_t id);
@@ -17,6 +20,10 @@ public:
 	virtual boost::shared_ptr<Identifier> clone() const {
 		return boost::shared_ptr<Identifier>(new RobotIdentifier(*this));
 	}
+
+
 };
+
+
 
 #endif /* ROBOT_IDENTIFIER_H_ */

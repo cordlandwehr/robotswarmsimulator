@@ -146,6 +146,8 @@ public:
 	 */
 	float calculate_dist_to_node(const Vector3d &pos) const;
 
+
+
 	bool does_obstacle_fit(boost::shared_ptr<Obstacle> & obstacle) const ;
 
 	void assign_objects_to_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,

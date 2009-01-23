@@ -8,3 +8,4 @@ RobotIdentifier::RobotIdentifier(std::size_t id) : Identifier(id) {
 RobotIdentifier::~RobotIdentifier() {
 	// TODO Auto-generated destructor stub
 }
+
