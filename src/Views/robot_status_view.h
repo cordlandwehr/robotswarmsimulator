@@ -8,14 +8,13 @@
 #ifndef ROBOT_STATUS_VIEW_H_
 #define ROBOT_STATUS_VIEW_H_
 
-#include "view.h"
+#include "own_status_view.h"
 
-class RobotStatusView: public virtual View {
+class RobotStatusView: public virtual OwnStatusView {
 public:
 	RobotStatusView();
 	virtual ~RobotStatusView();
 protected:
-	virtual RobotStatus get_own_status(const RobotData& robot) const;
 	virtual RobotStatus get_others_status(const RobotData& robot) const;
 };
 

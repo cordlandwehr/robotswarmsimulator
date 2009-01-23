@@ -16,9 +16,6 @@ VelocityView::~VelocityView() {
 
 }
 
-Vector3d VelocityView::get_own_velocity(const RobotData& robot) const {
-	return robot.velocity();
-}
 Vector3d VelocityView::get_others_velocity(const RobotData& robot) const {
 	return robot.velocity();
 }

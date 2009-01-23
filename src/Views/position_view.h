@@ -8,15 +8,14 @@
 #ifndef POSITION_VIEW_H_
 #define POSITION_VIEW_H_
 
-#include "view.h"
+#include "own_position_view.h"
 
-class PositionView : public virtual View {
+class PositionView : public virtual OwnPositionView {
 public:
 	PositionView();
 	virtual ~PositionView();
 
 protected:
-	virtual Vector3d get_own_position(const RobotData& robot) const;
 	virtual Vector3d get_robot_position(const RobotData& robot) const;
 	virtual Vector3d get_obstacle_position(const Obstacle& obstacle) const;
 	virtual Vector3d get_marker_position(const WorldObject& marker) const;

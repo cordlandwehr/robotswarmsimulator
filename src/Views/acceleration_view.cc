@@ -14,10 +14,6 @@ AccelerationView::AccelerationView() {
 AccelerationView::~AccelerationView() {
 }
 
-Vector3d AccelerationView::get_own_acceleration(const RobotData& robot) const {
-	return robot.acceleration();
-}
-
 Vector3d AccelerationView::get_others_acceleration(const RobotData& robot) const {
 	return robot.acceleration();
 }

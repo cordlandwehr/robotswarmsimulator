@@ -16,9 +16,6 @@ RobotTypeView::~RobotTypeView() {
 
 }
 
-RobotType RobotTypeView::get_own_type(const RobotData& robot) const {
-	return robot.type();
-}
 RobotType RobotTypeView::get_others_type(const RobotData& robot) const {
 	return robot.type();
 }

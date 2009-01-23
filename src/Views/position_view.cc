@@ -15,9 +15,6 @@ PositionView::PositionView() {
 PositionView::~PositionView() {
 }
 
-Vector3d PositionView::get_own_position(const RobotData& robot) const {
-	return robot.position();
-}
 Vector3d PositionView::get_robot_position(const RobotData& robot) const {
 	return robot.position();
 }

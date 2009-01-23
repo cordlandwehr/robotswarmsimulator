@@ -191,15 +191,15 @@ double View::get_sphere_radius(SphereRef sphere) const {
 }
 
 std::set<View::RobotRef> View::get_visible_robots(const RobotData& robot) const {
-	throw UnsupportedOperationException(get_error_message("get_visible_robots"));
+	return std::set<RobotRef>();
 }
 
 std::set<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robot) const {
-	throw UnsupportedOperationException(get_error_message("get_visible_obstacles"));
+	return std::set<ObstacleRef>();
 }
 
 std::set<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
-	throw UnsupportedOperationException(get_error_message("get_visible_markers"));
+	return std::set<MarkerRef>();
 }
 
 Vector3d View::get_own_position(const RobotData& robot) const {

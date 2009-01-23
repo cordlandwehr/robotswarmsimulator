@@ -8,14 +8,13 @@
 #ifndef ID_VIEW_H_
 #define ID_VIEW_H_
 
-#include "view.h"
+#include "own_id_view.h"
 
-class IdView : public virtual View {
+class IdView : public virtual OwnIdView {
 public:
 	IdView();
 	virtual ~IdView();
 protected:
-	virtual std::size_t get_own_id(const RobotData& robot) const;
 	virtual std::size_t get_robot_id(const RobotData& robot) const;
 	virtual std::size_t get_obstacle_id(const Obstacle& obstacle) const;
 	virtual std::size_t get_marker_id(const WorldObject& marker) const;

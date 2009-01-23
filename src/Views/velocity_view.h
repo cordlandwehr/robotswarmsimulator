@@ -8,14 +8,13 @@
 #ifndef VELOCITY_VIEW_H_
 #define VELOCITY_VIEW_H_
 
-#include "view.h"
+#include "own_velocity_view.h"
 
-class VelocityView: public virtual View {
+class VelocityView: public virtual OwnVelocityView {
 public:
 	VelocityView();
 	virtual ~VelocityView();
 protected:
-	virtual Vector3d get_own_velocity(const RobotData& robot) const;
 	virtual Vector3d get_others_velocity(const RobotData& robot) const;
 };
 

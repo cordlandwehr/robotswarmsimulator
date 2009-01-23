@@ -8,15 +8,14 @@
 #ifndef MARKER_INFORMATION_VIEW_H_
 #define MARKER_INFORMATION_VIEW_H_
 
-#include "view.h"
+#include "own_marker_view.h"
 
-class MarkerInformationView: public virtual View {
+class MarkerInformationView: public virtual OwnMarkerView {
 public:
 	MarkerInformationView();
 	virtual ~MarkerInformationView();
 
 protected:
-	virtual MarkerInformation get_own_marker_information(const RobotData& robot) const;
 	virtual MarkerInformation get_robots_marker_information(const RobotData& robot) const;
 	virtual MarkerInformation get_obstacles_marker_information(const Obstacle& obstacle) const;
 	virtual MarkerInformation get_markers_marker_information(const WorldObject& marker) const;

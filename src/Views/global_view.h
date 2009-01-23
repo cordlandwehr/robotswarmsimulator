@@ -21,6 +21,14 @@
 #include "sphere_view.h"
 #include "velocity_view.h"
 
+/**
+ * \class GlobalView
+ * \brief Global information view model.
+ *
+ * Assigning this class to a Robot corresponds to a "see everything, everywhere" model.
+ *
+ */
+
 class GlobalView: public virtual BoxView,
 		public virtual AccelerationView,
 		public virtual CoordinateSystemView,

@@ -17,9 +17,6 @@ MarkerInformationView::~MarkerInformationView() {
 
 }
 
-MarkerInformation MarkerInformationView::get_own_marker_information(const RobotData& robot) const {
-	return robot.marker_information();
-}
 MarkerInformation MarkerInformationView::get_robots_marker_information(const RobotData& robot) const {
 	return robot.marker_information();
 }
