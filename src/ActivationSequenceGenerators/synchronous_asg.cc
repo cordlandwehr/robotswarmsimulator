@@ -22,8 +22,6 @@
 #include "synchronous_asg.h"
 
 void SynchronousASG::initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) {
-	// get initial world information
-	WorldInformation world_information = history.get_newest();
 
 	// extract robots from robot data
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {

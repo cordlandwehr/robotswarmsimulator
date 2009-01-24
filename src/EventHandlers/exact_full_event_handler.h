@@ -10,6 +10,8 @@
 
 #include "exact_position_event_handler.h"
 #include "exact_marker_event_handler.h"
+#include "exact_acceleration_event_handler.h"
+#include "exact_velocity_event_handler.h"
 
 /**
  * This EventHandler handles the following requests:
@@ -19,10 +21,17 @@
  * - MarkerRequest: As ExactMarkerEventHandler
  * - TypeChangeRequest: As ExactTypeChangeEventHandler
  */
-class ExactFullEventHandler : public ExactPositionEventHandler, public ExactMarkerEventHandler {
+class ExactFullEventHandler : virtual public ExactPositionEventHandler,
+                              virtual public ExactMarkerEventHandler,
+                              virtual public ExactAccelerationEventHandler,
+                              virtual public ExactVelocityEventHandler {
 public:
 	ExactFullEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
-		: EventHandler(history, robot_control), ExactPositionEventHandler(history, robot_control), ExactMarkerEventHandler(history, robot_control)
+		: EventHandler(history, robot_control),
+		  ExactPositionEventHandler(history, robot_control),
+		  ExactMarkerEventHandler(history, robot_control),
+		  ExactAccelerationEventHandler(history, robot_control),
+		  ExactVelocityEventHandler(history, robot_control)
 		{ };
 };
 

@@ -24,7 +24,7 @@ class WorldInformation;
 /**
  * \brief An event handler supporting only AccelerationRequest.
  */
-class ExactAccelerationEventHandler : public EventHandler {
+class ExactAccelerationEventHandler : virtual public EventHandler {
 public:
 	ExactAccelerationEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };

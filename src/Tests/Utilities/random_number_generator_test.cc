@@ -6,6 +6,7 @@
 
 
 #include <boost/smart_ptr.hpp>
+#include <vector>
 #include <iostream>
 
 BOOST_AUTO_TEST_CASE(random_number_generator_test)
