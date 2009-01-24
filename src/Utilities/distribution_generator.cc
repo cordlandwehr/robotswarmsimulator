@@ -81,9 +81,9 @@ std::vector<double> DistributionGenerator::get_value_uniform_in_sphere() {
 	return (*gen_uniform_on_sphere_)();
 }
 
+
 void DistributionGenerator::set_seed(unsigned int seed) {
-	unsigned int rseed = static_cast<unsigned int>(seed);
-	png_mersenne_.seed( static_cast<unsigned int>(rseed) ); // int is not possible
+	png_mersenne_.seed(seed); // int is not possible
 }
 
 DistributionGenerator::DistributionGenerator(unsigned int seed) {
