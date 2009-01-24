@@ -23,6 +23,7 @@
 #include <map>
 
 #include "../Utilities/vector3d.h"
+#include "../Utilities/unsupported_operation_exception.h"
 
 using namespace std;
 
@@ -45,6 +46,7 @@ private:
 	string project_name_;
 	string robot_filename_;
 	int statistics_module_;
+
 
 	/**
 	 * This method loads the data written in the given project files

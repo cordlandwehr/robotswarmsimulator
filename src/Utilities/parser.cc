@@ -48,9 +48,7 @@ string Parser::get_string_value_from_map(map<string,string> variables_and_values
 
 	//check if var_name exists in given map
 	if(map_iterator == variables_and_values.end()) {
-		//TODO(martinah) throw exception
-		cout << "Variable according to " << var_name << " has not been initialized." << endl;
-		return "";
+		throw UnsupportedOperationException("Variable according to "+var_name+" has not been initialized.");
 	} else {
 		//return value of var_name
 		return variables_and_values.find(var_name)->second;
@@ -67,9 +65,8 @@ int Parser::get_int_value_from_map(map<string,string> variables_and_values,
 		return boost::lexical_cast<int>(string_value);
 
 	} catch(const boost::bad_lexical_cast& ) {
-		//TODO(martinah) throw exception
+		throw UnsupportedOperationException("Failed casting string to integer.");
 	}
-	return 0;
 }
 
 void Parser::init_variables(map<string,string> variables_and_values) {
@@ -118,8 +115,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 		init_variables(variables_and_values);
 
 	} else {
-		//TODO(martinah) throw according exception
-		cout << "Unable to open given project file." << endl;
+		throw UnsupportedOperationException("Unable to open given project file.");
 	}
 }
 
