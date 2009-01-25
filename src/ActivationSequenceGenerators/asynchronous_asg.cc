@@ -71,8 +71,8 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 		}
 	} else if(boost::shared_ptr<HandleRequestsEvent> handle_requests_event =
 		      boost::dynamic_pointer_cast<HandleRequestsEvent> (event)) {
-		list<boost::shared_ptr<Robot> >::iterator cur_robot = looking_robots_.begin();
-		while(cur_robot != looking_robots_.end()) {
+		list<boost::shared_ptr<Robot> >::iterator cur_robot = handling_robots_.begin();
+		while(cur_robot != handling_robots_.end()) {
 			if(distribution_generator_->get_value_bernoulli()) {
 				// get all requests for this robot
 				list<boost::shared_ptr<const Request> >::iterator cur_request = unhandled_request_set_.begin();
