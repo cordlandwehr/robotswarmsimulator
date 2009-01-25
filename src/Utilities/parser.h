@@ -47,6 +47,12 @@ private:
 	string robot_filename_;
 	int statistics_module_;
 
+	//file name of project file
+	string project_filename_;
+
+	//default values (if variable not defined or set in input file)
+	vector<string> variables_with_default_values;
+	vector<string> default_values_of_varialbes;
 
 	/**
 	 * This method loads the data written in the given project files
@@ -55,6 +61,19 @@ private:
 	 * \param Name of the main project file.
 	 */
 	void load_projectfiles(const string& project_filename);
+
+	/**
+	 * This method sets default variables and values.
+	 */
+	void init();
+
+	/**
+	 * This method returns the default value of the given variable, if the given variable has a default value,
+	 * otherwise "" will be returned.
+	 * \param var Variable which default value will be returned.
+	 * \return Default value of given variable, if given variable has a default value, otherwise "".
+	 */
+	string get_default_value(const string& var);
 
 	/**
 	 * This method loads the data written in the main project file
@@ -91,9 +110,12 @@ private:
 
 	/**
 	 * This methods returns the value of the assignment in this line.
-	 * Excepts, that the given line contains an assignment.
+	 * Returns default value of variable, if variable has a default value and
+	 * variable name isn't set in input file.
+	 * \param line Line from file containing an assignment.
+	 * \param name Variable name in line.
 	 */
-	string get_var_value(const string& line);
+	string get_var_value(const string& line, const string& name);
 
 
 	/**
@@ -107,11 +129,13 @@ private:
 	void init_variables(map<string,string> variables_and_values);
 
 	/**
-	 * This methods returns the (string) value of the variable according to var_name saved in the given map
+	 * This methods returns the (string) value of the variable according to var_name saved in the given map.
+	 * If var_name doesn't exist in the map, and var_name has a default value, default value will be returned.
 	 *
-	 * \param variables_and_values Map that variable names and its values.
-	 * \param var_name Name of the variable whose value shall be returned from the map.
-	 * \return If var_name exists in the map, return (string) value of var_name saved in the map.
+	 * \param	 variables_and_values Map that variable names and its values.
+	 * \param 	var_name Name of the variable whose value shall be returned from the map.
+	 * \return 	If var_name exists in the map, return (string) value of var_name saved in the map.
+	 * 			If var_name doesn't exist in the map, but var_name has a default value, return this default_value.
 	 */
 	string get_string_value_from_map(map<string,string> variables_and_values, const string& var_name);
 

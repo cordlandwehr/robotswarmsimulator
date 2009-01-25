@@ -1,10 +1,9 @@
 # 
-# Description about configuration.
+# Variable COMPASS_MODEL missing
 #
  
-PROJECT_NAME ="My Exciting Project"
-COMPASS_MODEL=NO_COMPASS
-ROBOT_FILENAME="myrobots"
+PROJECT_NAME = "My Exciting Project"
+ROBOT_FILENAME=
 OBSTACLE_FILENAME="myobstacles"
 STATISTICS_MODULE="0"
 ASG="0"
