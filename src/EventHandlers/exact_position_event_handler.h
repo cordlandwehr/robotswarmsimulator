@@ -29,7 +29,7 @@ public:
 	ExactPositionEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };
 
-private:
+protected:
 	/**
 	 * \brief Provides default handling of position requests.
 	 * \param world_information WorldInformation object to be affected by the request

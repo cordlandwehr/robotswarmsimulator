@@ -32,7 +32,7 @@ public:
 	int calls_type_change_request() {return calls_type_change_request_;}
 	int calls_velocity_request() {return calls_velocity_request_;}
 
-private:
+protected:
 	/**
 	 * Method for handling acceleration requests
 	 */
@@ -73,6 +73,7 @@ private:
 		calls_velocity_request_++;
 	};
 
+private:
 	int calls_acceleration_request_;
 	int calls_marker_request_;
 	int calls_position_request_;

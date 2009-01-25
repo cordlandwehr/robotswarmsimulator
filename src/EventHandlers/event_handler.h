@@ -61,24 +61,7 @@ public:
 	 */
 	void register_listener(boost::shared_ptr<SimulationListener> listener);
 
-private:
-	/**
-	 * handles the given look event by delegating it to RobotControl
-	 */
-	void handle_look_event(boost::shared_ptr<LookEvent> look_event);
-
-	/**
-	 * handles the given compute event by delegating it to RobotControl
-	 */
-	void handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event);
-
-	/**
-	 * handles the given HandleRequests event by doing the following
-	 * 1. producing a new WorldInformation object by extrapolating and handling requests
-	 * 2. adding the new WorldInformation object to the history
-	 */
-	void handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
-
+protected:
 	/**
 	 * virtual method for handling acceleration requests
 	 * TODO(peter) Will we provide some kind of logging facility to be used by the whole project? If so, adopt this
@@ -120,6 +103,24 @@ private:
 	                                     boost::shared_ptr<const VelocityRequest> velocity_request) {
 		std::cerr << "Warning: VelocityRequest not supported" << std::endl;
 	}
+
+private:
+	/**
+	 * handles the given look event by delegating it to RobotControl
+	 */
+	void handle_look_event(boost::shared_ptr<LookEvent> look_event);
+
+	/**
+	 * handles the given compute event by delegating it to RobotControl
+	 */
+	void handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event);
+
+	/**
+	 * handles the given HandleRequests event by doing the following
+	 * 1. producing a new WorldInformation object by extrapolating and handling requests
+	 * 2. adding the new WorldInformation object to the history
+	 */
+	void handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
 
 	/**
 	 * informs all listeners after each event

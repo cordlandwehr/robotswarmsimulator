@@ -77,7 +77,7 @@ void DistributionGenerator::init_uniform_on_sphere(int dim) {
 		(new boost::variate_generator <boost::mt19937&, boost::uniform_on_sphere<> > (png_mersenne_, params));
 }
 
-std::vector<double> DistributionGenerator::get_value_uniform_in_sphere() {
+std::vector<double> DistributionGenerator::get_value_uniform_on_sphere() {
 	return (*gen_uniform_on_sphere_)();
 }
 

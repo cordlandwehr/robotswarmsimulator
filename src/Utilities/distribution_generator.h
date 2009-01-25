@@ -109,7 +109,7 @@ public:
 	 * Generates vector according to distribution
 	 * @return vector of doubles
 	 */
-	std::vector<double> get_value_uniform_in_sphere();
+	std::vector<double> get_value_uniform_on_sphere();
 
 	/**
 	 * Sets the seed vor PNG
