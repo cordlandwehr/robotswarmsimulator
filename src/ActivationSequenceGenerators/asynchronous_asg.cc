@@ -78,6 +78,7 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 				list<boost::shared_ptr<const Request> >::iterator cur_request = unhandled_request_set_.begin();
 				while(cur_request != unhandled_request_set_.end()) {
 					// if the robot issued this request: add it to the event and delete it.
+					// TODO(craupach) sleep about this and see if this comparison can fail.
 					if(&((*cur_request)->robot().id()) == &(*cur_robot)->id()) {
 						handle_requests_event->add_to_requests(*cur_request);
 						cur_request = unhandled_request_set_.erase(cur_request);
