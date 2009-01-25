@@ -31,6 +31,8 @@
 #include "../SimulationKernel/simulation_listener.h"
 #include "../SimulationKernel/robot_control.h"
 
+#include "../Utilities/coord_converter.h"
+
 #include "event_handler.h"
 #include <iostream>
 
@@ -171,4 +173,65 @@ void EventHandler::update_listeners(boost::shared_ptr<Event> event) {
 	BOOST_FOREACH(boost::shared_ptr<SimulationListener> listener, listeners_) {
 		listener->update(history_->get_newest(), event);
 	}
+}
+
+
+void EventHandler::handle_acceleration_request_default(boost::shared_ptr<WorldInformation> world_information,
+	                                                   boost::shared_ptr<const AccelerationRequest> acceleration_request) {
+	const boost::shared_ptr<RobotIdentifier>& robot_id = acceleration_request->robot().id();
+	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
+	const Vector3d& requested_local_acceleration(acceleration_request->requested_acceleration());
+	boost::shared_ptr<Vector3d> requested_global_acceleration;
+	// TODO(peter) robot_data should provide a more readable method to query wether the robot uses a local coord. system
+	if (robot_data.coordinate_system_axis().get<0>()) // there is a local coordinate system for this robot
+		requested_global_acceleration.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_acceleration, robot_data.coordinate_system_axis())));
+	else
+		requested_global_acceleration.reset(new Vector3d(requested_local_acceleration));
+	robot_data.set_acceleration(requested_global_acceleration);
+}
+
+
+void EventHandler::handle_marker_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                         boost::shared_ptr<const MarkerRequest> marker_request) {
+	const boost::shared_ptr<RobotIdentifier>& robot_id = marker_request->robot().id();
+	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
+	boost::shared_ptr<MarkerInformation> new_marker_information(marker_request->requested_marker_information().clone());
+	robot_data.set_marker_information(new_marker_information);
+}
+
+
+void EventHandler::handle_position_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                           boost::shared_ptr<const PositionRequest> position_request) {
+	const boost::shared_ptr<RobotIdentifier>& robot_id = position_request->robot().id();
+	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
+	const Vector3d& requested_local_position(position_request->requested_position());
+	boost::shared_ptr<Vector3d> requested_global_position;
+	// TODO(peter) robot_data should provide a more readable method to query wether the robot uses a local coord. system
+	// TODO(craupach) Until now I assumed that every robot would have a coordinate_system set. (Maybe the same for all robots)
+	if (robot_data.coordinate_system_axis().get<0>()) // there is a local coordinate system for this robot
+		requested_global_position.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_position, robot_data.coordinate_system_axis())));
+	else
+		requested_global_position.reset(new Vector3d(requested_local_position));
+	robot_data.set_position(requested_global_position);
+}
+
+
+void EventHandler::handle_type_change_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                              boost::shared_ptr<const TypeChangeRequest> type_change_request) {
+	// TODO(peter) implement
+}
+
+
+void EventHandler::handle_velocity_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                           boost::shared_ptr<const VelocityRequest> velocity_request) {
+	const boost::shared_ptr<RobotIdentifier>& robot_id = velocity_request->robot().id();
+	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
+	const Vector3d& requested_local_velocity(velocity_request->requested_velocity());
+	boost::shared_ptr<Vector3d> requested_global_velocity;
+	// TODO(peter) robot_data should provide a more readable method to query wether the robot uses a local coord. system
+	if (robot_data.coordinate_system_axis().get<0>()) // there is a local coordinate system for this robot
+		requested_global_velocity.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_velocity, robot_data.coordinate_system_axis())));
+	else
+		requested_global_velocity.reset(new Vector3d(requested_local_velocity));
+	robot_data.set_velocity(requested_global_velocity);
 }

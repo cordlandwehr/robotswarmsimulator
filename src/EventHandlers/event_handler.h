@@ -11,6 +11,7 @@
 #include <iostream>
 #include <boost/smart_ptr.hpp>
 
+
 // forward declarations
 class Event;
 class ComputeEvent;
@@ -42,6 +43,8 @@ class History;
  * In most cases a subclass of EventHandler should only define custom handle_request functions for the
  * possible requests. If it does not provide a custom implementation for a particular handle_*_request method, a warning
  * message is issued upon the occurrence of such a request.
+ *
+ * Note that this class provides some protected static member methods for exact handling of requests.
  */
 class EventHandler {
 public:
@@ -73,12 +76,24 @@ protected:
 	}
 
 	/**
+	 * \brief Default handling of acceleration requests to be used by subclasses (request is fulfilled, exactly).
+	 */
+	static void handle_acceleration_request_default(boost::shared_ptr<WorldInformation> world_information,
+	                                                boost::shared_ptr<const AccelerationRequest> acceleration_request);
+
+	/**
 	 * virtual method for handling marker requests
 	 */
 	virtual void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
 	                                   boost::shared_ptr<const MarkerRequest> marker_request) {
 		std::cerr << "Warning: MarkerRequest not supported" << std::endl;
 	}
+
+	/**
+	 * \brief Default handling of marker requests to be used by subclasses (request is fulfilled, exactly).
+	 */
+	static void handle_marker_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                       boost::shared_ptr<const MarkerRequest> marker_request);
 
 	/**
 	 * virtual method for handling position requests
@@ -89,6 +104,12 @@ protected:
 	}
 
 	/**
+	 * \brief Default handling of position requests to be used by subclasses (request is fulfilled, exactly).
+	 */
+	static void handle_position_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                        boost::shared_ptr<const PositionRequest> position_request);
+
+	/**
 	 * virtual method for handling type change requests
 	 */
 	virtual void handle_type_change_request(boost::shared_ptr<WorldInformation> world_information,
@@ -97,12 +118,24 @@ protected:
 	}
 
 	/**
+	 * \brief Default handling of type change requests to be used by subclasses (request is fulfilled, exactly).
+	 */
+	static void handle_type_change_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                           boost::shared_ptr<const TypeChangeRequest> type_change_request);
+
+	/**
 	 * virtual method for handling velocity requests
 	 */
 	virtual void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
 	                                     boost::shared_ptr<const VelocityRequest> velocity_request) {
 		std::cerr << "Warning: VelocityRequest not supported" << std::endl;
 	}
+
+	/**
+	 * \brief Default handling of velocity requests to be used by subclasses (request is fulfilled, exactly).
+	 */
+	static void handle_velocity_request_default(boost::shared_ptr<WorldInformation> world_information,
+		                                        boost::shared_ptr<const VelocityRequest> velocity_request);
 
 private:
 	/**

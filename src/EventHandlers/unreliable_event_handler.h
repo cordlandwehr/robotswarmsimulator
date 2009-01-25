@@ -110,7 +110,6 @@ protected:
 	}
 
 private:
-
 	// member variables used for the unreliability effect
 	boost::shared_ptr<DistributionGenerator> distribution_generator_;
 	double discard_probability_;
