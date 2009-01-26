@@ -3,6 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
+#include <set>
 
 #include "../../Model/world_information.h"
 #include "../../Model/world_object.h"
@@ -19,7 +20,10 @@
 class SimpleRobot : public Robot {
 public:
 	SimpleRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {}
-	std::set<boost::shared_ptr<Request> > compute() {}
+	std::set<boost::shared_ptr<Request> > compute() {
+		std::set<boost::shared_ptr<Request> > empty_set;
+		return empty_set;
+	}
 };
 
 /**

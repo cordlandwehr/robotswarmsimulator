@@ -14,6 +14,7 @@
 #include <cmath>
 #include <boost/smart_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 
 #include "../Events/event.h"
 #include "../Events/look_event.h"
@@ -25,17 +26,24 @@
 
 #include "asynchronous_asg.h"
 
+AsynchronousASG::AsynchronousASG(unsigned int seed,
+	                             double participation_probability,
+	                             double lambda): ActivationSequenceGenerator(),
+	                                             time_of_next_event_(0),
+	                                             distribution_generator_(new DistributionGenerator(seed)) {
+	// initalize the source of randomness
+	distribution_generator_->init_exponential(lambda); // needed for time of next event
+	distribution_generator_->init_bernoulli(participation_probability); // needed to choose robots participating in an event
+	distribution_generator_->init_uniform(1,6); // needed to choose type of events
+}
+
+
 void AsynchronousASG::initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) {
 
 	// extract robots from robot data. At start each will need a look event.
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		looking_robots_.push_back(robot);
 	}
-
-	// initalize the source of randomness
-	distribution_generator_->init_exponential(0.5); // needed for time of next event
-	distribution_generator_->init_bernoulli(0.5); // needed to choose robots participating in an event
-	distribution_generator_->init_uniform(1,6); // needed to choose type of events
 }
 
 boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
@@ -95,7 +103,8 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 	}
 
 	// 3. Choose the time of the next event
-	time_of_next_event_ = time_of_next_event_ + 1 + distribution_generator_->get_value_exponential();
+	// TODO(craupach) use geometric distribution instead.
+	time_of_next_event_ = time_of_next_event_ + 1 + boost::numeric_cast<int>(distribution_generator_->get_value_exponential());
 	return event;
 }
 

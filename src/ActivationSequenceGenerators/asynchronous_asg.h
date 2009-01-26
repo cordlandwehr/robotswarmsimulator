@@ -37,9 +37,14 @@ class History;
  */
 class AsynchronousASG : public ActivationSequenceGenerator {
 public:
-	AsynchronousASG(unsigned int seed): ActivationSequenceGenerator(),
-	                                    time_of_next_event_(0),
-	                                    distribution_generator_(new DistributionGenerator(seed)) {}
+	/**
+	 * declare a friend class for doing unit tests with this class.
+	 */
+	friend class AsynchronousASGTestAccessor;
+
+	AsynchronousASG(unsigned int seed,
+	                double participation_probability,
+	                double lambda);
 
 	/**
 	 * initializes the asynchronous ASG from the given intial world_state. Needs to be called before the

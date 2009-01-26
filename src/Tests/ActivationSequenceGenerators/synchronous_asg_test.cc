@@ -26,13 +26,13 @@ BOOST_FIXTURE_TEST_CASE(synchronous_asg_smoke_test, SimpleWorldFixture)
 	boost::shared_ptr<Event> next_event = synchronous_asg.get_next_event();
 	LookEvent * look_event = dynamic_cast<LookEvent*>(next_event.get());
 	BOOST_CHECK(look_event != NULL);
-	BOOST_CHECK_EQUAL(look_event->robot_subset().size(),3);
+	BOOST_CHECK_EQUAL(look_event->robot_subset().size(), robots.size());
 
 	// second event should be a compute event for all robots
 	next_event = synchronous_asg.get_next_event();
 	ComputeEvent * compute_event = dynamic_cast<ComputeEvent*>(next_event.get());
 	BOOST_CHECK(look_event != NULL);
-	BOOST_CHECK_EQUAL(compute_event->robot_subset().size(),3);
+	BOOST_CHECK_EQUAL(compute_event->robot_subset().size(), robots.size());
 
 	// third event should be a handle requests event with no request (since we did not update)
 	next_event = synchronous_asg.get_next_event();
@@ -45,7 +45,7 @@ BOOST_FIXTURE_TEST_CASE(synchronous_asg_smoke_test, SimpleWorldFixture)
 	next_event = synchronous_asg.get_next_event();
 	look_event = dynamic_cast<LookEvent*>(next_event.get());
 	BOOST_CHECK(look_event != NULL);
-	BOOST_CHECK_EQUAL(look_event->robot_subset().size(),3);
+	BOOST_CHECK_EQUAL(look_event->robot_subset().size(),robots.size());
 
 
 }
