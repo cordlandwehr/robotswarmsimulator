@@ -17,6 +17,9 @@ void Parser::init() {
 	variables_with_default_values.push_back("ASG");
 	default_values_of_varialbes.push_back("ASG_SYNCHRON");
 
+	variables_with_default_values.push_back("STATISTICS_MODULE");
+	default_values_of_varialbes.push_back("NONE");
+
 	variables_with_default_values.push_back("EVENT_HANDLER");
 	default_values_of_varialbes.push_back("EH_DO_ALL");
 }
@@ -137,7 +140,7 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
 	project_name_ = get_string_value_from_map(variables_and_values, "PROJECT_NAME");
 	robot_filename_ = get_string_value_from_map(variables_and_values, "ROBOT_FILENAME");
-	statistics_module_ = get_int_value_from_map(variables_and_values, "STATISTICS_MODULE");
+	statistics_module_ = get_string_value_from_map(variables_and_values, "STATISTICS_MODULE");
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -180,8 +183,171 @@ void Parser::load_main_project_file(const string& project_filename) {
 	}
 }
 
+string Parser::get_next_value_in_line(const string& line, int line_number, bool last_value) {
+	//character that seperates values in line
+	char seperator = ',';
+	string value;
+
+	size_t pos_of_next_seperator = line.find_first_of(seperator, position_in_line_);
+
+	//check if there exists a next seperator
+	if(pos_of_next_seperator == string::npos) {
+
+		if(last_value) {
+			//value to read is last value => return end of line beginning at given position
+			value = line.substr(position_in_line_,line.size()-position_in_line_);
+			position_in_line_ += value.size()+1;
+			return value;
+		} else {
+			//if value to read is not supposed to be the last value, an error occured
+			string line_num;
+			std::stringstream out;
+			out << line_number;
+			line_num = out.str();
+			throw UnsupportedOperationException("Syntax error in line "+line_num+" of robot file.");
+		}
+	}
+
+	value = line.substr(position_in_line_,pos_of_next_seperator-position_in_line_);
+	position_in_line_ += value.size()+1;
+	return value;
+}
+
+double Parser::get_next_double_value_in_line(const string& line, int line_number, bool last_value) {
+	//get next value (as string) from given line
+	string next_value = get_next_value_in_line(line, line_number, last_value);
+
+	//cast value to double value
+	double next_double_value = string_to_double(next_value);
+
+	return next_double_value;
+}
+
+Vector3d Parser::get_next_vector3d_in_line(const string& line, int line_number, bool last_value) {
+
+	//TODO(martinah) maybe use arrays here
+
+	//get next three values (as string) from given line
+	string value_1 = get_next_value_in_line(line, line_number, false);
+	string value_2 = get_next_value_in_line(line, line_number, false);
+	string value_3 = get_next_value_in_line(line, line_number, last_value);
+
+	//cast values to double values
+	double double_value_1 = string_to_double(value_1);
+	double double_value_2 = string_to_double(value_2);
+	double double_value_3 = string_to_double(value_3);
+
+	//create Vector3d with from these three values
+	Vector3d my_vector;
+	my_vector.insert_element(kXCoord, double_value_1);
+	my_vector.insert_element(kYCoord, double_value_2);
+	my_vector.insert_element(kZCoord, double_value_3);
+
+	return my_vector;
+}
+
+double Parser::string_to_double(const string& my_string) {
+	//cast given string value to double
+	try {
+		return boost::lexical_cast<double>(my_string);
+	} catch(const boost::bad_lexical_cast& ) {
+		throw UnsupportedOperationException("Failed casting string "+my_string+" to double.");
+	}
+}
+
+void Parser::init_robot_values_for_line(const string& line, int line_number) {
+
+	//begin at beginning of line
+	position_in_line_ = 0;
+
+	//The order of these initializations is important!
+	double id = get_next_double_value_in_line(line, line_number, false);
+	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
+	string type = get_next_value_in_line(line, line_number, false);
+	Vector3d velocity = get_next_vector3d_in_line(line, line_number, false);
+	Vector3d acceleration = get_next_vector3d_in_line(line, line_number, false);
+	string status = get_next_value_in_line(line, line_number, false);
+	string marker_info = get_next_value_in_line(line, line_number, false);
+	string algorithm = get_next_value_in_line(line, line_number, false);
+	string color = get_next_value_in_line(line, line_number, false);
+	Vector3d x_axis = get_next_vector3d_in_line(line, line_number, false);
+	Vector3d y_axis = get_next_vector3d_in_line(line, line_number, false);
+	Vector3d z_axis = get_next_vector3d_in_line(line, line_number, true);
+
+	/*
+	//TODO(martinah) create unit test
+	cout << "Line: " << line << endl;
+	cout << "ID: " << id << endl;
+	cout << "x-position: " << position(kXCoord) << endl;
+	cout << "y-position: " << position(kYCoord) << endl;
+	cout << "z-position: " << position(kZCoord) << endl;
+	cout << "type" << type << endl;
+	cout << "x-velocity: " << velocity(kXCoord) << endl;
+	cout << "y-velocity: " << velocity(kYCoord) << endl;
+	cout << "z-velocity: " << velocity(kZCoord) << endl;
+	cout << "x-acceleration: " << acceleration(kXCoord) << endl;
+	cout << "y-acceleration: " << acceleration(kYCoord) << endl;
+	cout << "z-acceleration: " << acceleration(kZCoord) << endl;
+	cout << "status: " << status << endl;
+	cout << "marker_info: " << marker_info << endl;
+	cout << "algorithm: " << algorithm << endl;
+	cout << "color: " << color << endl;
+	cout << "x-axis-1: " << x_axis(kXCoord) << endl;
+	cout << "x-axis-2: " << x_axis(kYCoord) << endl;
+	cout << "x-axis-3: " << x_axis(kZCoord) << endl;
+	cout << "y-axis-1: " << y_axis(kXCoord) << endl;
+	cout << "y-axis-2: " << y_axis(kYCoord) << endl;
+	cout << "y-axis-3: " << y_axis(kZCoord) << endl;
+	cout << "z-axis-1: " << z_axis(kXCoord) << endl;
+	cout << "z-axis-2: " << z_axis(kYCoord) << endl;
+	cout << "z-axis-3: " << z_axis(kZCoord) << endl;
+	*/
+
+	//if no exception is thrown up to this point, values read correctly
+	//=> add values to global variables
+	initiale_robot_positions_.push_back(position);
+	initiale_robot_velocities_.push_back(velocity);
+	initiale_robot_accelerations_.push_back(acceleration);
+	initiale_robot_types_.push_back(type);
+	initiale_robot_stati_.push_back(status);
+	initiale_robot_marker_information_.push_back(marker_info);
+	initiale_robot_algorithms_.push_back(algorithm);
+	initiale_robot_colors_.push_back(color);
+
+	boost::tuple<Vector3d, Vector3d, Vector3d> tmp(x_axis, y_axis, z_axis);
+	initiale_robot_coordinate_sytems_.push_back(tmp);
+}
+
 void Parser::load_robot_file() {
-	//TODO implement
+	string line;
+	ifstream project_file;
+	string filename = robot_filename_ + ".robot";
+	int line_number = 0;
+
+	project_file.open(filename.c_str());
+	if(project_file.is_open()) {
+
+		//read first line of file (only contains header not used here)
+		if(!project_file.eof()) {
+			getline(project_file, line);
+			line_number++;
+		}
+
+		//read whole file line by line
+		while(!project_file.eof()) {
+			getline(project_file, line);
+
+			//check if line is not empty
+			if(!line.empty()) {
+				//initialize values of robot of this line
+				init_robot_values_for_line(line, ++line_number);
+			}
+		}
+		project_file.close();
+
+	} else {
+		throw UnsupportedOperationException("Unable to open file "+filename+".");
+	}
 }
 
 void Parser::load_obstacle_file() {

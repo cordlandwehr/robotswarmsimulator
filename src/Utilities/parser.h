@@ -45,7 +45,7 @@ private:
 	string obstacle_filename_;
 	string project_name_;
 	string robot_filename_;
-	int statistics_module_;
+	string statistics_module_;
 
 	//file name of project file
 	string project_filename_;
@@ -53,6 +53,33 @@ private:
 	//default values (if variable not defined or set in input file)
 	vector<string> variables_with_default_values;
 	vector<string> default_values_of_varialbes;
+
+	//position in line for getting values
+	size_t position_in_line_;
+
+	////////////////////////////////////////////////////////
+	// ROBOT DATA
+	////////////////////////////////////////////////////////
+	//TODO(martinah) maybe adapt types of some variables
+	std::vector<Vector3d> initiale_robot_positions_;
+	std::vector<Vector3d> initiale_robot_velocities_;
+	std::vector<Vector3d> initiale_robot_accelerations_;
+	std::vector<string> initiale_robot_types_;
+	std::vector<string> initiale_robot_stati_;
+	std::vector<string> initiale_robot_marker_information_;
+	std::vector<string> initiale_robot_algorithms_;
+	std::vector<string> initiale_robot_colors_;
+	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d> > initiale_robot_coordinate_sytems_;
+
+	////////////////////////////////////////////////////////
+	// OBSTACLE DATA
+	////////////////////////////////////////////////////////
+	//TODO(martinah) maybe adapt types of some variables
+	std::vector<string> initiale_obstacle_types_;
+	std::vector<Vector3d> initiale_obstacle_positions_;
+	std::vector<string> initiale_obstacle_marker_information_;
+	std::vector<double> initiale_obstacle_raduis_;
+	std::vector<Vector3d> initiale_obstacle_size_;
 
 	/**
 	 * This method loads the data written in the given project files
@@ -152,6 +179,51 @@ private:
 	 * Checks whether the given string contains an assignment.
 	 */
 	bool contains_assignment(const string& line);
+
+	/**
+	 * This methods reads the in the given line and initializes the according variables.
+	 * \param line Line containing information for one robot
+	 * \param line_number number of given line in file
+	 */
+	void init_robot_values_for_line(const string& line, int line_number);
+
+	/**
+	 * This methods returns the next value in the given line (beginning at given postion).
+	 * \param line 	Line with values
+	 * \param pos	Position from where to get next value
+	 * \param line_number Number of current line (needed for error message)
+	 * \param last_value Denotes whether the value to read is the last value of this line (i.e. this value
+	 * 				is not limited by the seperator specified, but by the end of line)
+	 * \return Next value in given line.
+	 */
+	string get_next_value_in_line(const string& line, int line_number, bool last_value);
+
+	/**
+	 * This method returns the next double value in given line.
+	 * \param line 	Line with values
+	 * \param line_number Number of current line (needed for error message)
+	 * \param last_value Denotes whether the value to read is the last value of this line (i.e. this value
+	 * 				is not limited by the seperator specified, but by the end of line)
+	 * \return Next double in given line.
+	 */
+	double get_next_double_value_in_line(const string& line, int line_number, bool last_value);
+
+	/**
+	 * This methods reads the next 3 values from line and returns a vector3d containing these values.
+	 * \param line 	Line with values
+	 * \param pos	Position from where to get next values
+	 * \param line_number Number of current line (needed for error message)
+	 * \param last_value Denotes whether the values to read are the last values of this line (i.e. the third value
+	 * 				is not limited by the seperator specified, but by the end of line)
+	 * \return Vector3d containing the next 3 values in line.
+	 */
+	Vector3d get_next_vector3d_in_line(const string& line, int line_number, bool last_value);
+
+	/**
+	 * This method converts the given string to double (if given string represents a double value)
+	 * \return double value of given string
+	 */
+	double string_to_double(const string& my_string);
 };
 
 #endif /* PARSER_H_ */
