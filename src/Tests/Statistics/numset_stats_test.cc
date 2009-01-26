@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(numset_stats_test) {
 	BOOST_CHECK_EQUAL(s.diam(), 4);
 	BOOST_CHECK_EQUAL(s.avg(), 0);
 	BOOST_CHECK_EQUAL(s.sum(), 0);
-	BOOST_CHECK_EQUAL(s.abssum(), 6);
+	BOOST_CHECK_EQUAL(s.abssum(), 7);
 	BOOST_CHECK_EQUAL(s.median(), -0.5);
 	BOOST_CHECK_CLOSE(s.stddeviation(), sqrt(1.75), 0.00001);
 }
