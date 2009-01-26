@@ -38,9 +38,11 @@ namespace {
 }
 
 template<typename T>
-T View::delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
-						boost::function<T (const View*, const Obstacle&)> obstacle_fun, boost::function<T (const View*, const WorldObject&)> marker_fun,
-						const Robot& caller, WorldObjectRef world_object) const {
+T View::delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun,
+		                  boost::function<T (const View*, const RobotData&)> other_robot_fun,
+						  boost::function<T (const View*, const Obstacle&)> obstacle_fun,
+						  boost::function<T (const View*, const WorldObject&)> marker_fun,
+						  const Robot& caller, WorldObjectRef world_object) const {
 	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
 		if(is_own_identifier(caller, ref)) {
 			return own_robot_fun(this, resolve_robot_ref(ref));
@@ -51,14 +53,14 @@ T View::delegate_function(boost::function<T (const View*, const RobotData&)> own
 		return obstacle_fun(this, resolve_obstacle_ref_safe(ref));
 	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
 		return marker_fun(this, resolve_marker_ref_safe(ref));
-	}
-	else {
+	} else {
 		throw std::invalid_argument("Illegal type of world_object.");
 	}
 }
 
 template<typename T>
-T View::delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
+T View::delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun,
+		                  boost::function<T (const View*, const RobotData&)> other_robot_fun,
 		                  const Robot& caller, RobotRef robot) const {
 	if(is_own_identifier(caller, robot)) {
 		return own_robot_fun(this, resolve_robot_ref(robot));
@@ -81,10 +83,10 @@ const WorldObject& View::resolve_marker_ref(MarkerRef marker) const {
 	return *(world_information().markers())[marker->id()];
 }
 const Box& View::resolve_box_ref(BoxRef box) const {
-	return dynamic_cast<const Box&>(resolve_obstacle_ref(box));
+	return static_cast<const Box&>(resolve_obstacle_ref(box));
 }
 const Sphere& View::resolve_sphere_ref(SphereRef sphere) const {
-	return dynamic_cast<const Sphere&>(resolve_obstacle_ref(sphere));
+	return static_cast<const Sphere&>(resolve_obstacle_ref(sphere));
 }
 
 const Obstacle& View::resolve_obstacle_ref_safe(ObstacleRef obstacle) const {
@@ -117,19 +119,19 @@ void View::init(const WorldInformation& world_information) {
 	world_information_ = &world_information;
 }
 
-std::set<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
+const std::set<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
 	return get_visible_robots(resolve_robot_ref(caller.id()));
 }
 
-std::set<View::ObstacleRef> View::get_visible_obstacles(const Robot& caller) const {
+const std::set<View::ObstacleRef> View::get_visible_obstacles(const Robot& caller) const {
 	return get_visible_obstacles(resolve_robot_ref(caller.id()));
 }
 
-std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
+const std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
 	return get_visible_markers(resolve_robot_ref(caller.id()));
 }
 
-Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
+const Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
 	Vector3d position_global_coords;
 	position_global_coords = delegate_function<Vector3d>(&View::get_own_position, &View::get_robot_position,
 			                                             &View::get_obstacle_position, &View::get_marker_position,
@@ -138,68 +140,70 @@ Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) co
 	return *CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 
-MarkerInformation View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
+const MarkerInformation View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
 	return delegate_function<MarkerInformation>(&View::get_own_marker_information, &View::get_robots_marker_information,
 			                                           &View::get_obstacles_marker_information, &View::get_markers_marker_information,
 			                                           caller, world_object);
 }
 
-std::size_t View::get_id(const Robot& caller, WorldObjectRef world_object) const {
+const std::size_t View::get_id(const Robot& caller, WorldObjectRef world_object) const {
 	return delegate_function<std::size_t>(&View::get_own_id, &View::get_robot_id,
 	                                      &View::get_obstacle_id, &View::get_marker_id,
 	                                      caller, world_object);
 }
 
-Vector3d View::get_robot_acceleration(const Robot& caller, RobotRef robot) const {
+const Vector3d View::get_robot_acceleration(const Robot& caller, RobotRef robot) const {
 	return delegate_function<Vector3d>(&View::get_own_acceleration, &View::get_others_acceleration, caller, robot);
 }
 
-boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const {
-	return delegate_function<boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > >(&View::get_own_coordinate_system_axis, &View::get_others_coordinate_system_axis, caller, robot);
+const boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(
+		const Robot& caller, RobotRef robot) const {
+	return delegate_function<boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > > (
+			&View::get_own_coordinate_system_axis, &View::get_others_coordinate_system_axis, caller, robot);
 }
 
-RobotType View::get_robot_type(const Robot& caller, RobotRef robot) const {
+const RobotType View::get_robot_type(const Robot& caller, RobotRef robot) const {
 	return delegate_function<RobotType>(&View::get_own_type, &View::get_others_type, caller, robot);
 }
 
-Vector3d View::get_robot_velocity(const Robot& caller, RobotRef robot) const {
+const Vector3d View::get_robot_velocity(const Robot& caller, RobotRef robot) const {
 	return delegate_function<Vector3d>(&View::get_own_velocity, &View::get_others_velocity, caller, robot);
 }
 
-RobotStatus View::get_robot_status(const Robot& caller, RobotRef robot) const {
+const RobotStatus View::get_robot_status(const Robot& caller, RobotRef robot) const {
 	return delegate_function<RobotStatus>(&View::get_own_status, &View::get_others_status, caller, robot);
 }
 
-bool View::is_point_in_obstacle(ObstacleRef obstacle, const Vector3d& point) const {
+const bool View::is_point_in_obstacle(ObstacleRef obstacle, const Vector3d& point) const {
 	return is_point_in_obstacle(resolve_obstacle_ref_safe(obstacle), point);
 }
 
-double View::get_box_depth(BoxRef box) const {
+const double View::get_box_depth(BoxRef box) const {
 	return get_box_depth(resolve_box_ref_safe(box));
 }
 
-double View::get_box_width(BoxRef box) const {
+const double View::get_box_width(BoxRef box) const {
 	return get_box_width(resolve_box_ref_safe(box));
 }
 
-double View::get_box_height(BoxRef box) const {
+const double View::get_box_height(BoxRef box) const {
 	return get_box_height(resolve_box_ref_safe(box));
 }
 
-double View::get_sphere_radius(SphereRef sphere) const {
+const double View::get_sphere_radius(SphereRef sphere) const {
 	return get_sphere_radius(resolve_sphere_ref_safe(sphere));
 }
 
 std::set<View::RobotRef> View::get_visible_robots(const RobotData& robot) const {
-	return std::set<RobotRef>();
+	throw UnsupportedOperationException(get_error_message("get_visible_robots"));
 }
 
 std::set<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robot) const {
-	return std::set<ObstacleRef>();
+	throw UnsupportedOperationException(get_error_message("get_visible_obstacles"));
 }
 
 std::set<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
-	return std::set<MarkerRef>();
+	throw UnsupportedOperationException(get_error_message("get_visible_markers"));
 }
 
 Vector3d View::get_own_position(const RobotData& robot) const {
@@ -258,11 +262,13 @@ Vector3d View::get_others_acceleration(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_robot_acceleration"));
 }
 
-boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_own_coordinate_system_axis(const RobotData& robot) const {
+boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > View::get_own_coordinate_system_axis(
+		const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_own_coordinate_system_axis"));
 }
 
-boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > View::get_others_coordinate_system_axis(const RobotData& robot) const {
+boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > View::get_others_coordinate_system_axis(
+		const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_robot_coordinate_system_axis"));
 }
 
