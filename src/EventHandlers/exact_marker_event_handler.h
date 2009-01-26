@@ -24,7 +24,7 @@ class WorldInformation;
 /**
  * An event handler supporting only MarkerRequests.
  */
-class ExactMarkerEventHandler : public EventHandler {
+class ExactMarkerEventHandler : virtual public EventHandler {
 public:
 	ExactMarkerEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };
@@ -36,9 +36,7 @@ protected:
 	 * \param marker_request marker request to handle
 	 */
 	void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
-							   boost::shared_ptr<const MarkerRequest> marker_request) {
-		EventHandler::handle_marker_request_default(world_information, marker_request);
-	}
+							   boost::shared_ptr<const MarkerRequest> marker_request);
 };
 
 #endif /* EXACT_MARKER_EVENT_HANDLER_H_ */

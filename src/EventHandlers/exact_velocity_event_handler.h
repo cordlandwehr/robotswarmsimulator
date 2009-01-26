@@ -24,7 +24,7 @@ class WorldInformation;
 /**
  * An event handler supporting only VelocityRequest for movement.
  */
-class ExactVelocityEventHandler : public EventHandler {
+class ExactVelocityEventHandler : virtual public EventHandler {
 public:
 	ExactVelocityEventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control)
 		: EventHandler(history, robot_control) { };
@@ -36,9 +36,7 @@ protected:
 	 * \param velocity_request velocity request to handle
 	 */
 	void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
-								 boost::shared_ptr<const VelocityRequest> velocity_request) {
-		EventHandler::handle_velocity_request_default(world_information, velocity_request);
-	}
+								 boost::shared_ptr<const VelocityRequest> velocity_request);
 };
 
 #endif /* VELOCITY_EVENT_HANDLER_H_ */
