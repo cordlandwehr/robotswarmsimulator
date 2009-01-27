@@ -45,7 +45,7 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	(*new_velocity)(0) = 0.;
 	(*new_velocity)(1) = 1.;
 	(*new_velocity)(2) = -0.5;
-	boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(robot_a, new_velocity));
+	boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(3));
@@ -141,7 +141,7 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_local_coordinate_system, Sim
 	(*new_velocity)(kXCoord) =  1.0;
 	(*new_velocity)(kYCoord) = -0.5;
 	(*new_velocity)(kZCoord) =  1.5;
-	boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(robot_a, new_velocity));
+	boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(4));

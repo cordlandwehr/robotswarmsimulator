@@ -12,6 +12,7 @@
 
 RobotControl::RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length) : view_factory_(view_factory), view_buffer_(history_length) {
 	;
+	// TODO(craupach): There may be a LOOK Event before the first update happens. But the view buffer is empty then.
 }
 
 RobotControl::~RobotControl() {

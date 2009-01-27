@@ -27,7 +27,7 @@ public:
 	 * constructs a new AccelerationRequest.
 	 * The request cannot be changed after construction.
 	 */
-	AccelerationRequest(boost::shared_ptr<Robot> robot,
+	AccelerationRequest(Robot& robot,
 			            boost::shared_ptr<Vector3d> new_acceleration) : Request(robot), requested_acceleration_(new_acceleration) {}
 	/**
 	 * Returns a constant reference to the requested acceleration vector

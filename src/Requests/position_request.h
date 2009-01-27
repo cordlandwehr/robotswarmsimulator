@@ -27,7 +27,7 @@ public:
 	 * constructs a new Position Request.
 	 * The request cannot be changed after construction.
 	 */
-	PositionRequest(boost::shared_ptr<Robot> robot, boost::shared_ptr<Vector3d> requested_position) :
+	PositionRequest(Robot& robot, boost::shared_ptr<Vector3d> requested_position) :
 	               Request(robot), requested_position_(requested_position) {}
 
 	/**

@@ -27,9 +27,11 @@ public:
 	void set_view(const boost::weak_ptr<View>& view);
 
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
+protected:
+	boost::weak_ptr<View> view_;
 private:
 	boost::shared_ptr<RobotIdentifier> id_;
-	boost::weak_ptr<View> view_;
+
 };
 
 #endif /* ROBOT_H_ */

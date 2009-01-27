@@ -27,7 +27,7 @@ public:
 	 * constructs a new Velocity Request.
 	 * The request cannot be changed after construction.
 	 */
-	VelocityRequest(boost::shared_ptr<Robot> robot, boost::shared_ptr<Vector3d> requested_velocity) :
+	VelocityRequest(Robot& robot, boost::shared_ptr<Vector3d> requested_velocity) :
 	               Request(robot), requested_velocity_(requested_velocity) {}
 
 	/**

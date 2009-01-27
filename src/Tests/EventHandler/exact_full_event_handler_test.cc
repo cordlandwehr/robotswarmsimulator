@@ -43,7 +43,7 @@ BOOST_FIXTURE_TEST_CASE(full_event_handler_test_position_test, SimpleWorldFixtur
 	(*new_position)(0) = -5.;
 	(*new_position)(1) = 0.1;
 	(*new_position)(2) = 3.;
-	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(4));
@@ -199,7 +199,7 @@ BOOST_FIXTURE_TEST_CASE(full_event_handler_test_local_coordinate_system, SimpleW
 	(*new_position)(kXCoord) = -5.;
 	(*new_position)(kYCoord) = 0.1;
 	(*new_position)(kZCoord) = 3.;
-	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(4));

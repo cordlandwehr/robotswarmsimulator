@@ -43,7 +43,7 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, Simpl
 	(*new_acceleration)(0) = 10.;
 	(*new_acceleration)(1) = 1.;
 	(*new_acceleration)(2) = -1.2;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(3));
@@ -118,7 +118,7 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system,
 	(*new_acceleration)(kXCoord) =  1.0;
 	(*new_acceleration)(kYCoord) = -0.5;
 	(*new_acceleration)(kZCoord) =  1.5;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(1));

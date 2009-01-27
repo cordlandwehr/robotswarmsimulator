@@ -62,6 +62,8 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 				// should add the robot to handling_robots_ and remove it from computing_robots_
 				handling_robots_.push_back(*cur_robot);
 				cur_robot = computing_robots_.erase(cur_robot); // TODO(craupach) test if the iterator behaves as expected
+			} else {
+				cur_robot++;
 			}
 		}
 	} else if(boost::shared_ptr<LookEvent> look_event =

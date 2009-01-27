@@ -51,23 +51,23 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
 	// TODO: marker request (marker_information not yet redesigned)
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
 	(*new_position)(0) = -5.; (*new_position)(1) = 0.1; (*new_position)(2) = 3.;
-	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
 	RobotType new_type;
-	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(robot_a, new_type));
+	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
 	boost::shared_ptr<Vector3d> new_velocity(new Vector3d);
 		(*new_velocity)(0) = -5.; (*new_velocity)(1) = 0.1; (*new_velocity)(2) = 3.;
-		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(robot_a, new_velocity));
+		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 100;
@@ -113,23 +113,23 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
 	// TODO: marker request (marker_information not yet redesigned)
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
 	(*new_position)(0) = -5.; (*new_position)(1) = 0.1; (*new_position)(2) = 3.;
-	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
 	RobotType new_type;
-	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(robot_a, new_type));
+	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
 	boost::shared_ptr<Vector3d> new_velocity(new Vector3d);
 		(*new_velocity)(0) = -5.; (*new_velocity)(1) = 0.1; (*new_velocity)(2) = 3.;
-		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(robot_a, new_velocity));
+		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 100;
@@ -175,23 +175,23 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
 	// TODO: marker request (marker_information not yet redesigned)
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
 	(*new_position)(0) = -5.; (*new_position)(1) = 0.1; (*new_position)(2) = 3.;
-	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
 	RobotType new_type;
-	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(robot_a, new_type));
+	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
 	boost::shared_ptr<Vector3d> new_velocity(new Vector3d);
 		(*new_velocity)(0) = -5.; (*new_velocity)(1) = 0.1; (*new_velocity)(2) = 3.;
-		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(robot_a, new_velocity));
+		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;
@@ -238,23 +238,23 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
 	// TODO: marker request (marker_information not yet redesigned)
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
 	(*new_position)(0) = -5.; (*new_position)(1) = 0.1; (*new_position)(2) = 3.;
-	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(robot_a, new_position));
+	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
 	RobotType new_type;
-	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(robot_a, new_type));
+	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
 	boost::shared_ptr<Vector3d> new_velocity(new Vector3d);
 		(*new_velocity)(0) = -5.; (*new_velocity)(1) = 0.1; (*new_velocity)(2) = 3.;
-		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(robot_a, new_velocity));
+		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;

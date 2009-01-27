@@ -28,7 +28,7 @@ public:
 	 * Constructs a new type change request.
 	 * The request cannot be changed after construction.
 	 */
-	TypeChangeRequest(boost::shared_ptr<Robot> robot, RobotType requested_type) : Request(robot),
+	TypeChangeRequest(Robot& robot, RobotType requested_type) : Request(robot),
 	                                                                         requested_type_(requested_type) {}
 
 	/**

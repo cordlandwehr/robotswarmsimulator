@@ -24,7 +24,7 @@ public:
 	 * constructs a new MarkerRequest.
 	 * The request cannot be changed after constructing.
 	 */
-	MarkerRequest(boost::shared_ptr<Robot> robot,
+	MarkerRequest(Robot& robot,
 	              boost::shared_ptr<MarkerInformation> requested_marker_information) : Request(robot),
 	                                                                                   requested_marker_information_(requested_marker_information) {}
 

@@ -125,7 +125,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_extrapolation_test, SimpleWorldFi
 	new_position->insert_element(kZCoord,3.0);
 
 	boost::shared_ptr<PositionRequest> position_request;
-	position_request.reset(new PositionRequest(robot_a, new_position));
+	position_request.reset(new PositionRequest(*robot_a, new_position));
 	handle_requests_event->add_to_requests(position_request);
 
 	// Pass the Event to the Handler
