@@ -13,7 +13,7 @@ boost::shared_ptr<Vector3d> CoordConverter::global_to_local(const Vector3d& abso
                                                             boost::shared_ptr<Vector3d>,
                                                             boost::shared_ptr<Vector3d> >& local_coord_system)
 {
-	boost::shared_ptr<Vector3d> global_translated;
+	boost::shared_ptr<Vector3d> global_translated(new Vector3d());
 //first, translate point in absolute space according to origin
 	global_translated->insert_element(0, absolute_coord(0)-origin(0));
 	global_translated->insert_element(1, absolute_coord(1)-origin(1));
