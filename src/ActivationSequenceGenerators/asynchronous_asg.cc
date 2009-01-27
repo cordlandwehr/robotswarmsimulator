@@ -75,6 +75,8 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 				// remove it from looking_robots_ and add it to computing_robots_
 				computing_robots_.push_back(*cur_robot);
 				cur_robot = looking_robots_.erase(cur_robot);
+			} else {
+				cur_robot++;
 			}
 		}
 	} else if(boost::shared_ptr<HandleRequestsEvent> handle_requests_event =

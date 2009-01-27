@@ -75,7 +75,7 @@ BOOST_FIXTURE_TEST_CASE(asynchronous_asg_smoke_test, SimpleWorldFixture)
 BOOST_FIXTURE_TEST_CASE(asynchronous_asg_robot_strike_test, SimpleWorldFixture)
 {
 
-	// seed = 67581, participation probability 1.0, lamda 0.5
+	// seed = 67581, participation probability 0.0, lamda 0.5
 	AsynchronousASG asynchronous_asg(67581, 0.0, 0.5);
 	asynchronous_asg.initialize(*history,robots);
 
