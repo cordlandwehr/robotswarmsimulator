@@ -34,7 +34,7 @@
 BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 	ExactAccelerationEventHandler event_handler(history, robot_control);
 
@@ -89,7 +89,7 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, Simpl
 BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system, SimpleWorldFixture) {
 	// setting up event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	ExactAccelerationEventHandler event_handler(history, robot_control);
 
 	// build a local coordinate axes for a robot

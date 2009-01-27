@@ -40,7 +40,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	TestEventHandler event_handler(history, robot_control);
 
 
@@ -101,7 +101,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_extrapolation_test, SimpleWorldFi
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	TestEventHandler event_handler(history, robot_control);
 
 
@@ -214,7 +214,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_past_event_test, SimpleWorldFixtu
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	TestEventHandler event_handler(history, robot_control);
 
 
@@ -261,7 +261,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_invalid_event_test, SimpleWorldFi
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	TestEventHandler event_handler(history, robot_control);
 
 

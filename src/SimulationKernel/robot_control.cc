@@ -10,9 +10,10 @@
 #include "../Views/view.h"
 #include "../Views/abstract_view_factory.h"
 
-RobotControl::RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length) : view_factory_(view_factory), view_buffer_(history_length) {
-	;
-	// TODO(craupach): There may be a LOOK Event before the first update happens. But the view buffer is empty then.
+RobotControl::RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const WorldInformation& initial_world_information)
+                           : view_factory_(view_factory), view_buffer_(history_length) {
+	boost::shared_ptr<View> view(view_factory_->create_new_view_instance(initial_world_information));
+	view_buffer_.push_back(view);
 }
 
 RobotControl::~RobotControl() {

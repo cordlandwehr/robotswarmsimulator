@@ -29,7 +29,7 @@
 BOOST_FIXTURE_TEST_CASE(integration_test_1, IntegrationFixture) {
 	// setup of view
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, kHistorySize));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, kHistorySize, *initial_world_information));
 	std::cout << "Checkpoint" << std::endl;
 
 	// setup of event handler

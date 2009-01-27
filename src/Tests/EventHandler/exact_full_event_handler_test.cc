@@ -35,7 +35,7 @@
 BOOST_FIXTURE_TEST_CASE(full_event_handler_test_position_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	ExactFullEventHandler event_handler(history, robot_control);
 
 	// construction of position request
@@ -170,7 +170,7 @@ BOOST_FIXTURE_TEST_CASE(full_event_handler_test_marker_test, SimpleWorldFixture)
 BOOST_FIXTURE_TEST_CASE(full_event_handler_test_local_coordinate_system, SimpleWorldFixture) {
 	// setting up event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	ExactFullEventHandler event_handler(history, robot_control);
 
 	// build a coordinate axes for a robot with unit distance 2

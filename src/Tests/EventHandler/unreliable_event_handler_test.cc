@@ -40,7 +40,7 @@
 BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler
@@ -102,7 +102,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler
@@ -164,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler
@@ -227,7 +227,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleWorldFixture) {
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler

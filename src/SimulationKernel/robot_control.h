@@ -40,9 +40,10 @@ public:
 	 * @param The view_factory given determines which
 	 * view model should be used for the robots
 	 * @param The length of the history
+	 * @param intial WorldInformation
 	 * @see ModelParameters::HISTORY_LENGTH
 	 */
-	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length);
+	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const WorldInformation& initial_world_information);
 	~RobotControl();
 
 	virtual void update(const WorldInformation& world_information,
