@@ -318,10 +318,37 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	initiale_robot_coordinate_sytems_.push_back(tmp);
 }
 
+void Parser::init_obstacle_values_for_line(const string& line, int line_number) {
+
+	//begin at beginning of line
+	position_in_line_ = 0;
+
+	//TODO(martinah) get values of line for obstacle
+
+	//if no exception is thrown up to this point, values read correctly
+	//=> add values to global variables
+	//TODO(martinah) add values to global variables
+}
+
 void Parser::load_robot_file() {
+	load_robot_or_obstacle_file(true);
+}
+
+void Parser::load_obstacle_file() {
+	load_robot_or_obstacle_file(false);
+}
+
+void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 	string line;
 	ifstream project_file;
-	string filename = robot_filename_ + ".robot";
+	string filename = robot_filename_;
+
+	//depending on which file to load, specify file extension
+	if(load_robot_file)
+		filename += ".robot";
+	else
+		filename += ".obstacle";
+
 	int line_number = 0;
 
 	project_file.open(filename.c_str());
@@ -339,8 +366,15 @@ void Parser::load_robot_file() {
 
 			//check if line is not empty
 			if(!line.empty()) {
-				//initialize values of robot of this line
-				init_robot_values_for_line(line, ++line_number);
+
+				//check which type of file to load
+				if(load_robot_file) {
+					//initialize values of robot of this line
+					init_robot_values_for_line(line, ++line_number);
+				} else {
+					//initialize values of obstacle of this line
+					init_obstacle_values_for_line(line, ++line_number);
+				}
 			}
 		}
 		project_file.close();
@@ -348,10 +382,6 @@ void Parser::load_robot_file() {
 	} else {
 		throw UnsupportedOperationException("Unable to open file "+filename+".");
 	}
-}
-
-void Parser::load_obstacle_file() {
-	//TODO implement
 }
 
 void Parser::load_projectfiles(const string& project_filename) {

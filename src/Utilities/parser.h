@@ -122,6 +122,12 @@ private:
 	void load_obstacle_file();
 
 	/**
+	 * This method loads an obstacle or a robot file.
+	 * \param load_robot_file true, if file to load is robot file
+	 */
+	void load_robot_or_obstacle_file(bool load_robot_file);
+
+	/**
 	 * This method checks whether the given line is a comment,
 	 * i.e. begins with a '#'.
 	 *
@@ -181,11 +187,18 @@ private:
 	bool contains_assignment(const string& line);
 
 	/**
-	 * This methods reads the in the given line and initializes the according variables.
+	 * This methods reads the values in the given line and initializes the according variables.
 	 * \param line Line containing information for one robot
 	 * \param line_number number of given line in file
 	 */
 	void init_robot_values_for_line(const string& line, int line_number);
+
+	/**
+	 * This methods reads the in the given line and initializes the according variables.
+	 * \param line Line containing information for one obstacle
+	 * \param line_number number of given line in file
+	 */
+	void init_obstacle_values_for_line(const string& line, int line_number);
 
 	/**
 	 * This methods returns the next value in the given line (beginning at given postion).
