@@ -210,6 +210,9 @@ string Parser::get_next_value_in_line(const string& line, int line_number, bool 
 
 	value = line.substr(position_in_line_,pos_of_next_seperator-position_in_line_);
 	position_in_line_ += value.size()+1;
+	//Just to be sure: get rid of leading and trailing spaces
+	//(if the input file is correct, then value doesn't contain any leading or trailing spaces)
+	boost::trim(value);
 	return value;
 }
 
@@ -323,11 +326,38 @@ void Parser::init_obstacle_values_for_line(const string& line, int line_number) 
 	//begin at beginning of line
 	position_in_line_ = 0;
 
-	//TODO(martinah) get values of line for obstacle
+	//The order of these initializations is important!
+	string type = get_next_value_in_line(line, line_number, false);
+	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
+	string marker_info = get_next_value_in_line(line, line_number, false);
+
+	//if object is a sphere or a marker, size will equal to the zero-vector,
+	//otherwise the values of this vector will be set later.
+	Vector3d size;
+	size.insert_element(kXCoord, 0);
+	size.insert_element(kYCoord, 0);
+	size.insert_element(kZCoord, 0);
+
+	//if object is a box or a  marker, radius will equal to zero,
+	//otherwise the radius will be set later.
+	double radius = 0;
+
+	//depending on type get either radius or width, height and depth
+	if(type.compare("box")) {
+		//get last three values from line
+		size = get_next_vector3d_in_line(line, line_number, true);
+	} else if(type.compare("sphere")) {
+		//get only next value, which denotes the radius the sphere
+		radius = get_next_double_value_in_line(line, line_number, false);
+	}
 
 	//if no exception is thrown up to this point, values read correctly
 	//=> add values to global variables
-	//TODO(martinah) add values to global variables
+	initiale_obstacle_types_.push_back(type);
+	initiale_obstacle_positions_.push_back(position);
+	initiale_obstacle_marker_information_.push_back(marker_info);
+	initiale_obstacle_raduis_.push_back(radius);
+	initiale_obstacle_size_.push_back(size);
 }
 
 void Parser::load_robot_file() {
