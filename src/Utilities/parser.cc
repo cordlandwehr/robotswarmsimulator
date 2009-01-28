@@ -210,10 +210,31 @@ string Parser::get_next_value_in_line(const string& line, int line_number, bool 
 
 	value = line.substr(position_in_line_,pos_of_next_seperator-position_in_line_);
 	position_in_line_ += value.size()+1;
+
 	//Just to be sure: get rid of leading and trailing spaces
 	//(if the input file is correct, then value doesn't contain any leading or trailing spaces)
 	boost::trim(value);
+
+	//remove leading and trailing quotes, if value is quoted
+	value = remove_quotes(value);
+
 	return value;
+}
+
+string Parser::remove_quotes(const string& value) {
+
+	string return_value = value;
+
+	//get first and last character of given string
+	char first_char = value.at(0);
+	char last_char = value.at(value.length()-1);
+
+	if(first_char == '\"' && last_char == '\"') {
+		//first and last characters are quotes => remove quotes
+		return_value = value.substr(1,value.length()-2);
+	}
+
+	return return_value;
 }
 
 double Parser::get_next_double_value_in_line(const string& line, int line_number, bool last_value) {
@@ -314,10 +335,10 @@ void Parser::init_obstacle_values_for_line(const string& line, int line_number) 
 	double radius = 0;
 
 	//depending on type get either radius or width, height and depth
-	if(!type.compare("box")) {
+	if(type.compare("box") == 0) {
 		//get last three values from line
 		size = get_next_vector3d_in_line(line, line_number, true);
-	} else if(!type.compare("sphere")) {
+	} else if(type.compare("sphere") == 0) {
 		//get only next value, which denotes the radius the sphere
 		radius = get_next_double_value_in_line(line, line_number, false);
 	}
@@ -327,7 +348,7 @@ void Parser::init_obstacle_values_for_line(const string& line, int line_number) 
 	initiale_obstacle_types_.push_back(type);
 	initiale_obstacle_positions_.push_back(position);
 	initiale_obstacle_marker_information_.push_back(marker_info);
-	initiale_obstacle_raduis_.push_back(radius);
+	initiale_obstacle_radius_.push_back(radius);
 	initiale_obstacle_size_.push_back(size);
 }
 

@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[0](2), 6.4);
 
 	//type
-	BOOST_CHECK_EQUAL((parser->initiale_robot_types_[0]).compare("master"),0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_types_[0], "master");
 
 	//velocity
 	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[0](0), 1.5);
@@ -51,17 +51,16 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[0](2), 3.5);
 
 	//status
-	BOOST_CHECK_EQUAL((parser->initiale_robot_stati_[0]).compare("sleeping"), 0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_stati_[0], "sleeping");
 
-	//marker info
-	BOOST_CHECK_EQUAL((parser->initiale_robot_marker_information_[0]).compare("0"), 0);
+	//status
+	BOOST_CHECK_EQUAL(parser->initiale_robot_marker_information_[0], "0");
 
 	//algorithm
-	BOOST_CHECK_EQUAL((parser->initiale_robot_algorithms_[0]).compare("MASTER_ALGO"),0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[0], "MASTER_ALGO");
 
 	//color
-	BOOST_CHECK_EQUAL((parser->initiale_robot_colors_[0]).compare("0"), 0);
-
+	BOOST_CHECK_EQUAL(parser->initiale_robot_colors_[0], "0");
 
 	//x-axis
 	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[0])(0), 1);
@@ -89,7 +88,7 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[1](2), 8.8);
 
 	//type
-	BOOST_CHECK_EQUAL((parser->initiale_robot_types_[0]).compare("slave"),0);
+	//BOOST_CHECK_EQUAL(parser->initiale_robot_types_[0], "slave");
 
 	//velocity
 	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[1](0), 1.5);
@@ -102,16 +101,16 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[1](2), 3.5);
 
 	//status
-	BOOST_CHECK_EQUAL((parser->initiale_robot_stati_[1]).compare("ready"), 0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_stati_[1], "ready");
 
 	//status
-	BOOST_CHECK_EQUAL((parser->initiale_robot_marker_information_[1]).compare("0"), 0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_marker_information_[1], "0");
 
 	//algorithm
-	BOOST_CHECK_EQUAL((parser->initiale_robot_algorithms_[1]).compare("SLAVE_ALGO"), 0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[1], "SLAVE_ALGO");
 
 	//color
-	BOOST_CHECK_EQUAL((parser->initiale_robot_colors_[1]).compare("0"), 0);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_colors_[1], "0");
 
 	//x-axis
 	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[1])(0), 1);
@@ -130,3 +129,34 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 
 }
 
+BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
+{
+	Parser* parser = new Parser();
+	parser->init();
+	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
+
+	// Check data of obstacle 1
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[0], "box");
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[0], "0");
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[0](0), 2.0);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[0](1), 3.0);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[0](2), 4.0);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_size_[0](0), 1.0);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_size_[0](1), 2.0);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_size_[0](2), 3.0);
+
+	// Check data of obstacle 2
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[1], "sphere");
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[1], "0");
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[1](0), 3.4);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[1](1), 5.2);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[1](2), 5.1);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_radius_[1], 5.0);
+
+	// Check data of obstacle 3
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[2], "marker");
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[2], "0");
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](0), 3.5);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](1), 1.4);
+	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](2), 5.1);
+}

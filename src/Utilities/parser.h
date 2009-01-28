@@ -31,6 +31,8 @@ class Parser {
 
 	friend class load_main_project_file;
 	friend class load_robot_file_1;
+	friend class load_obstacle_file_1;
+
 public:
 	Parser();
 	virtual ~Parser();
@@ -77,7 +79,7 @@ private:
 	std::vector<string> initiale_obstacle_types_;
 	std::vector<Vector3d> initiale_obstacle_positions_;
 	std::vector<string> initiale_obstacle_marker_information_;
-	std::vector<double> initiale_obstacle_raduis_;
+	std::vector<double> initiale_obstacle_radius_;
 	std::vector<Vector3d> initiale_obstacle_size_;
 
 	/**
@@ -109,6 +111,13 @@ private:
 	 * \param Name of the main project file.
 	 */
 	void load_main_project_file(const string& project_filename);
+
+	/**
+	 * This method removes leading and trailing quotes if the given string is quoted.
+	 * \param value String which may contain quotes to be removed.
+	 * \return Given string without leading or trainling quotes.
+	 */
+	string remove_quotes(const string& value);
 
 	/**
 	 * This method loads the data written in the robot file.
