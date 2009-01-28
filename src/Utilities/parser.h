@@ -29,9 +29,8 @@ using namespace std;
 
 class Parser {
 
-	friend class loading_main_project_file_1;
-	friend class loading_main_project_file_2;
-	friend class loading_main_project_file_3;
+	friend class load_main_project_file;
+	friend class load_robot_file_1;
 public:
 	Parser();
 	virtual ~Parser();

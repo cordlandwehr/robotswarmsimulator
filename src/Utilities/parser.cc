@@ -277,35 +277,6 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	Vector3d y_axis = get_next_vector3d_in_line(line, line_number, false);
 	Vector3d z_axis = get_next_vector3d_in_line(line, line_number, true);
 
-	/*
-	//TODO(martinah) create unit test
-	cout << "Line: " << line << endl;
-	cout << "ID: " << id << endl;
-	cout << "x-position: " << position(kXCoord) << endl;
-	cout << "y-position: " << position(kYCoord) << endl;
-	cout << "z-position: " << position(kZCoord) << endl;
-	cout << "type" << type << endl;
-	cout << "x-velocity: " << velocity(kXCoord) << endl;
-	cout << "y-velocity: " << velocity(kYCoord) << endl;
-	cout << "z-velocity: " << velocity(kZCoord) << endl;
-	cout << "x-acceleration: " << acceleration(kXCoord) << endl;
-	cout << "y-acceleration: " << acceleration(kYCoord) << endl;
-	cout << "z-acceleration: " << acceleration(kZCoord) << endl;
-	cout << "status: " << status << endl;
-	cout << "marker_info: " << marker_info << endl;
-	cout << "algorithm: " << algorithm << endl;
-	cout << "color: " << color << endl;
-	cout << "x-axis-1: " << x_axis(kXCoord) << endl;
-	cout << "x-axis-2: " << x_axis(kYCoord) << endl;
-	cout << "x-axis-3: " << x_axis(kZCoord) << endl;
-	cout << "y-axis-1: " << y_axis(kXCoord) << endl;
-	cout << "y-axis-2: " << y_axis(kYCoord) << endl;
-	cout << "y-axis-3: " << y_axis(kZCoord) << endl;
-	cout << "z-axis-1: " << z_axis(kXCoord) << endl;
-	cout << "z-axis-2: " << z_axis(kYCoord) << endl;
-	cout << "z-axis-3: " << z_axis(kZCoord) << endl;
-	*/
-
 	//if no exception is thrown up to this point, values read correctly
 	//=> add values to global variables
 	initiale_robot_positions_.push_back(position);
@@ -343,10 +314,10 @@ void Parser::init_obstacle_values_for_line(const string& line, int line_number) 
 	double radius = 0;
 
 	//depending on type get either radius or width, height and depth
-	if(type.compare("box")) {
+	if(!type.compare("box")) {
 		//get last three values from line
 		size = get_next_vector3d_in_line(line, line_number, true);
-	} else if(type.compare("sphere")) {
+	} else if(!type.compare("sphere")) {
 		//get only next value, which denotes the radius the sphere
 		radius = get_next_double_value_in_line(line, line_number, false);
 	}
