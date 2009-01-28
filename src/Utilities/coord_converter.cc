@@ -28,6 +28,7 @@ boost::shared_ptr<Vector3d> CoordConverter::global_to_local(const Vector3d& abso
 }
 
 boost::shared_ptr<Vector3d> CoordConverter::local_to_global(const Vector3d& local_coord,
+                                                            const Vector3d& local_origin,
                                          const boost::tuple<boost::shared_ptr<const Vector3d>,
                                                             boost::shared_ptr<const Vector3d>,
                                                             boost::shared_ptr<const Vector3d> >& local_coord_system) {
@@ -45,7 +46,8 @@ boost::shared_ptr<Vector3d> CoordConverter::local_to_global(const Vector3d& loca
 	result->insert_element(kZCoord, local_coord(kXCoord) * (*boost::get<0>(local_coord_system))(kZCoord) +
 		                           local_coord(kYCoord) * (*boost::get<1>(local_coord_system))(kZCoord) +
 		                           local_coord(kZCoord) * (*boost::get<2>(local_coord_system))(kZCoord));
-
+	// add the origin
+	*result = *result + local_origin;
 	return result;
 }
 

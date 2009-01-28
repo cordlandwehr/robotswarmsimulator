@@ -27,7 +27,8 @@ void ExactVelocityEventHandler::handle_velocity_request(boost::shared_ptr<WorldI
 	boost::shared_ptr<Vector3d> requested_global_velocity;
 	// TODO(peter) robot_data should provide a more readable method to query wether the robot uses a local coord. system
 	if (robot_data.coordinate_system_axis().get<0>()) // there is a local coordinate system for this robot
-		requested_global_velocity.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_velocity, robot_data.coordinate_system_axis())));
+		requested_global_velocity.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_velocity, robot_data.position(),
+		                                                                              robot_data.coordinate_system_axis())));
 	else
 		requested_global_velocity.reset(new Vector3d(requested_local_velocity));
 	robot_data.set_velocity(requested_global_velocity);

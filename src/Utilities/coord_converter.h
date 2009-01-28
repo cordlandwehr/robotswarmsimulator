@@ -31,7 +31,7 @@ namespace CoordConverter {
 	                                            boost::shared_ptr<Vector3d> >& local_coord_system);
 
 	/**
-	 * calculates global coordinates from local ones. The origin of both systems is assumed to be (0,0,0).
+	 * calculates global coordinates from local ones. The origin of global systems is assumed to be (0,0,0).
 	 * The global coordinate system is assumed to use unit vectors as base.
 	 * @param local_coord: the local coordinate
 	 * @param local_coord_system: the three base vectors of the local coordinate system
@@ -39,6 +39,7 @@ namespace CoordConverter {
 	 *
 	 */
 	boost::shared_ptr<Vector3d> local_to_global(const Vector3d& local_coord,
+	                                            const Vector3d& local_origin,
 	                                            const boost::tuple<boost::shared_ptr<const Vector3d>,
 	                                            boost::shared_ptr<const Vector3d>,
 	                                            boost::shared_ptr<const Vector3d> >& local_coord_system);

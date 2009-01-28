@@ -1,5 +1,5 @@
-#ifndef SIMPLE_WORLD_FIXTURE_H_
-#define SIMPLE_WORLD_FIXTURE_H_
+#ifndef INTEGRATION_FIXTURE_H_
+#define INTEGRATION_FIXTURE_H_
 
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
@@ -13,16 +13,19 @@
 #include "../../Model/robot_identifier.h"
 #include "../../Events/look_event.h"
 #include "../../Events/event.h"
+#include "../../Requests/position_request.h"
 #include "../../SimulationControl/history.h"
 #include "../../EventHandlers/event_handler.h"
 #include "../../Utilities/vector3d.h"
 
+#include <iostream>
 
 class SimpleCOGRobot : public Robot {
 public:
 	SimpleCOGRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
 		boost::shared_ptr<View> view = view_.lock();
+
 		// compute the center of gravity of all robots
 		std::set<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(*this);
 		Vector3d result = view->get_position(*this, id());
@@ -31,8 +34,15 @@ public:
 		}
 		result /= visible_robots.size() + 1;
 
-		std::set<boost::shared_ptr<Request> > empty_set;
-		return empty_set;
+		// build position request
+		boost::shared_ptr<Vector3d> result_ptr(new Vector3d(result));
+		boost::shared_ptr<PositionRequest> request(new PositionRequest(*this, result_ptr));
+
+		// insert request into request set
+		std::set<boost::shared_ptr<Request> > result_set;
+		result_set.insert(request);
+
+		return result_set;
 	}
 };
 
@@ -106,9 +116,9 @@ struct IntegrationFixture {
 		acc_a->insert_element(kZCoord,0.0);
 		robot_data_a->set_acceleration(acc_a);
 
-		// create  velocity for robot b: (1,0,0)
+		// create  velocity for robot b: (0,0,0)
 		boost::shared_ptr<Vector3d> vel_b(new Vector3d());
-		vel_b->insert_element(kXCoord,1.0);
+		vel_b->insert_element(kXCoord,0.0);
 		vel_b->insert_element(kYCoord,0.0);
 		vel_b->insert_element(kZCoord,0.0);
 		robot_data_b->set_velocity(vel_b);
@@ -127,13 +137,75 @@ struct IntegrationFixture {
 		vel_c->insert_element(kZCoord,0.0);
 		robot_data_c->set_velocity(vel_c);
 
-		// create acceleration for robot c: (1.0, 1.0, 1.0)
+		// create acceleration for robot c: (0.0, 0.0, 0.0)
 		boost::shared_ptr<Vector3d> acc_c(new Vector3d());
-		acc_c->insert_element(kXCoord,1.0);
-		acc_c->insert_element(kYCoord,1.0);
-		acc_c->insert_element(kZCoord,1.0);
+		acc_c->insert_element(kXCoord,0.0);
+		acc_c->insert_element(kYCoord,0.0);
+		acc_c->insert_element(kZCoord,0.0);
 		robot_data_c->set_acceleration(acc_c);
 
+		// build a coordinate axes for a robot with unit distance 2 for robot a
+		boost::shared_ptr<Vector3d> x_axis_a(new Vector3d());
+		x_axis_a->insert_element(kXCoord, 2.0);
+		x_axis_a->insert_element(kYCoord, 0.0);
+		x_axis_a->insert_element(kZCoord, 0.0);
+
+		boost::shared_ptr<Vector3d> y_axis_a(new Vector3d());
+		y_axis_a->insert_element(kXCoord, 0.0);
+		y_axis_a->insert_element(kYCoord, 2.0);
+		y_axis_a->insert_element(kZCoord, 0.0);
+
+		boost::shared_ptr<Vector3d> z_axis_a(new Vector3d());
+		z_axis_a->insert_element(kXCoord, 0.0);
+		z_axis_a->insert_element(kYCoord, 0.0);
+		z_axis_a->insert_element(kZCoord, 2.0);
+
+		boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+		              boost::shared_ptr<Vector3d> > axes_a(x_axis_a, y_axis_a, z_axis_a);
+
+		robot_data_a->set_coordinate_system_axis(axes_a);
+
+		// build a coordinate axes for a robot with unit distance 1 for robot b
+		boost::shared_ptr<Vector3d> x_axis_b(new Vector3d());
+		x_axis_b->insert_element(kXCoord, 1.0);
+		x_axis_b->insert_element(kYCoord, 0.0);
+		x_axis_b->insert_element(kZCoord, 0.0);
+
+		boost::shared_ptr<Vector3d> y_axis_b(new Vector3d());
+		y_axis_b->insert_element(kXCoord, 0.0);
+		y_axis_b->insert_element(kYCoord, 1.0);
+		y_axis_b->insert_element(kZCoord, 0.0);
+
+		boost::shared_ptr<Vector3d> z_axis_b(new Vector3d());
+		z_axis_b->insert_element(kXCoord, 0.0);
+		z_axis_b->insert_element(kYCoord, 0.0);
+		z_axis_b->insert_element(kZCoord, 1.0);
+
+		boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+		              boost::shared_ptr<Vector3d> > axes_b(x_axis_b, y_axis_b, z_axis_b);
+
+		robot_data_b->set_coordinate_system_axis(axes_b);
+
+		// build a coordinate axes with wacky axes for robot c
+		boost::shared_ptr<Vector3d> x_axis_c(new Vector3d());
+		x_axis_c->insert_element(kXCoord, 1.5);
+		x_axis_c->insert_element(kYCoord, 1.0);
+		x_axis_c->insert_element(kZCoord, 0.0);
+
+		boost::shared_ptr<Vector3d> y_axis_c(new Vector3d());
+		y_axis_c->insert_element(kXCoord, 0.0);
+		y_axis_c->insert_element(kYCoord, 1.9);
+		y_axis_c->insert_element(kZCoord, 1.0);
+
+		boost::shared_ptr<Vector3d> z_axis_c(new Vector3d());
+		z_axis_c->insert_element(kXCoord, 1.8);
+		z_axis_c->insert_element(kYCoord, 0.0);
+		z_axis_c->insert_element(kZCoord, 1.3);
+
+		boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+		              boost::shared_ptr<Vector3d> > axes_c(x_axis_c, y_axis_c, z_axis_c);
+
+		robot_data_c->set_coordinate_system_axis(axes_c);
 
 		// add all robots to the world information
 		initial_world_information->add_robot_data(robot_data_a);
@@ -172,4 +244,4 @@ struct IntegrationFixture {
 	static const int kHistorySize = 5;
 };
 
-#endif /* SIMPLE_WORLD_FIXTURE_H_ */
+#endif /* INTEGRATION_FIXTURE_H_ */
