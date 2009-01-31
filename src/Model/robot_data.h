@@ -136,7 +136,10 @@ private:
 	/**
 	 * \var Triple with the three coordinate axes of the robot.
 	 */
-	boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > coordinate_system_axis_;
+	boost::tuple<boost::shared_ptr<Vector3d>,
+				 boost::shared_ptr<Vector3d>,
+				 boost::shared_ptr<Vector3d> > coordinate_system_axis_;
+
 	RobotType type_;
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;

@@ -1,14 +1,25 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
+#include <iostream>
+
+#include "../../Model/sphere.h"
+#include "../../Model/sphere_identifier.h"
+#include "../../Model/box.h"
+#include "../../Model/box_identifier.h"
+#include "../../Model/marker_information.h"
+#include "../../Model/marker_identifier.h"
 
 #include "../../Utilities/parser.h"
 #include "../../SimulationKernel/simulation_kernel.h"
 #include "../../SimulationControl/history.h"
 
+#include "../Fixtures/simple_world_fixture.h"
 
 BOOST_AUTO_TEST_CASE(load_main_project_file)
 {
-	Parser* parser = new Parser();
+	boost::shared_ptr<SimulationKernel> sim_kernel;
+	sim_kernel.reset(new SimulationKernel());
+	Parser* parser = new Parser(sim_kernel);
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
@@ -24,7 +35,9 @@ BOOST_AUTO_TEST_CASE(load_main_project_file)
 
 BOOST_AUTO_TEST_CASE(load_robot_file_1)
 {
-	Parser* parser = new Parser();
+	boost::shared_ptr<SimulationKernel> sim_kernel;
+	sim_kernel.reset(new SimulationKernel());
+	Parser* parser = new Parser(sim_kernel);
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
@@ -131,7 +144,9 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 
 BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 {
-	Parser* parser = new Parser();
+	boost::shared_ptr<SimulationKernel> sim_kernel;
+	sim_kernel.reset(new SimulationKernel());
+	Parser* parser = new Parser(sim_kernel);
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
@@ -160,3 +175,64 @@ BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](1), 1.4);
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](2), 5.1);
 }
+
+BOOST_AUTO_TEST_CASE(save_main_project_file_1)
+{
+	boost::shared_ptr<SimulationKernel> sim_kernel;
+	sim_kernel.reset(new SimulationKernel());
+	Parser* parser = new Parser(sim_kernel);
+
+	//dummy values
+	parser->asg_ = 0;
+	parser->compass_model_ = "NO_COMPASS";
+	parser->event_handler_ = 42;
+	parser->obstacle_filename_ = "src/Tests/TestData/obsti.obstacle";
+	parser->robot_filename_ = "src/Tests/TestData/i.robot";
+	parser->statistics_module_ = 23;
+
+	parser->save_main_project_file("src/Tests/TestData/garbled_projectfile_c.swarm");
+}
+
+BOOST_AUTO_TEST_CASE(write_obstacle_1)
+{
+	boost::shared_ptr<SimulationKernel> sim_kernel;
+	sim_kernel.reset(new SimulationKernel());
+	Parser* parser = new Parser(sim_kernel);
+
+	struct SimpleWorldFixture myworld = SimpleWorldFixture();
+
+	// create obstacle-ids
+	boost::shared_ptr<SphereIdentifier> id_sphere;
+	id_sphere.reset(new SphereIdentifier(0));
+
+	boost::shared_ptr<BoxIdentifier> id_box;
+	id_box.reset(new BoxIdentifier(1));
+
+	boost::shared_ptr<MarkerIdentifier> id_marker;
+	id_marker.reset(new MarkerIdentifier(2));
+
+	// create position for the sphere: (1.0, 1.0, 1.0)
+	boost::shared_ptr<Vector3d> pos_sphere;
+	pos_sphere.reset(new Vector3d());
+	pos_sphere->insert_element(kXCoord,1.0);
+	pos_sphere->insert_element(kYCoord,1.0);
+	pos_sphere->insert_element(kZCoord,1.0);
+
+	boost::shared_ptr<Sphere> sphere;
+//	sphere.reset(new Sphere(id_sphere, pos_sphere, 2.0));
+
+//	cout << simkernel->write_obstacle(sphere);
+
+}
+BOOST_FIXTURE_TEST_CASE(write_robot_1, SimpleWorldFixture)
+{
+	boost::shared_ptr<SimulationKernel> sim_kernel;
+	sim_kernel.reset(new SimulationKernel());
+	Parser* parser = new Parser(sim_kernel);
+
+	cout << "robotwriting-test-case-" << endl;
+	cout << parser->write_robot(robot_data_a) << endl;
+	cout << parser->write_robot(robot_data_b) << endl;
+	cout << parser->write_robot(robot_data_c) << endl;
+}
+

@@ -1,8 +1,7 @@
 #include "parser.h"
 
-Parser::Parser() {
-	// TODO Auto-generated constructor stub
-
+Parser::Parser(boost::shared_ptr<SimulationKernel> sim_kernel) {
+	sim_kernel_ = sim_kernel;
 }
 
 Parser::~Parser() {
@@ -453,49 +452,64 @@ void Parser::save_robot_file() {
 	robot_file << "\"y-axis-1\",\"y-axis-2\",\"y-axis-3\"";
 	robot_file << "\"z-axis-1\",\"z-axis-2\",\"z-axis-3\"" << endl;
 
-/*	vector<boost::shared_ptr<RobotData> > robots_data = sim_kernel_->history()->get_newest().robot_data();
+	//getting all RobotData from current world-information
+	vector<boost::shared_ptr<RobotData> > robots_data = sim_kernel_->history()->get_newest().robot_data();
 
+	//iterate over all RobotData to parse them Robot by Robot
 	for (vector<boost::shared_ptr<RobotData> >::iterator it = robots_data.begin();
 			it!=robots_data.end(); ++it) {
 		robot_file << write_robot(*it);
-	}*/
+	}
 
 	robot_file.close();
-
 }
 
 string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	stringstream output;
-//	boost::shared_ptr<Identifier> foo = new(robot_data->id());
 
+	output << robot_data->id()->id() << ",";
 
-	//cout << "ID: " << robot_a->id()->id() << endl;
-//	output << robot_data->id()->id() << ",";
 	output << robot_data->position()(0) << ",";
 	output << robot_data->position()(1) << ",";
 	output << robot_data->position()(2) << ",";
-	output << robot_data->type() << ",";	//TODO(mmarcus) Type correct?
+
+	//TODO(mmarcus) Type correct?
+	output << robot_data->type() << ",";
+
 	output << robot_data->velocity()(0) << ",";
 	output << robot_data->velocity()(1) << ",";
 	output << robot_data->velocity()(2) << ",";
 
-	//TODO(mmarcus) Why does this not work?
-	//boost::shared_ptr<Vector3d> vec;
-	//vec = robot_data->acceleration();
-
-	/*	output << robot_data->acceleration()(0) << ",";
+	output << robot_data->acceleration()(0) << ",";
 	output << robot_data->acceleration()(1) << ",";
-	output << robot_data->acceleration()(2) << ",";*/
+	output << robot_data->acceleration()(2) << ",";
+
 	output << robot_data->status() << ",";
+
 	//TODO(mmarcus) include marker-information
 	//TODO(mmarcus) include algorithm-information
 	//TODO(mmarcus) include color-information
 	//TODO(mmarcus) this doesn't work and I don't know why...
-	//output << robot_data->coordinate_system_axis().boost::get<0>()(0) << ",";
+
+	//x-axis
+/*	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(0) << ",";
+	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(1) << ",";
+	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(2) << ",";
+
+	//y-axis
+	output << (*(boost::get<1>(robot_data->coordinate_system_axis())))(0) << ",";
+	output << (*(boost::get<1>(robot_data->coordinate_system_axis())))(1) << ",";
+	output << (*(boost::get<1>(robot_data->coordinate_system_axis())))(2) << ",";
+
+	//z-axis
+	output << (*(boost::get<2>(robot_data->coordinate_system_axis())))(0) << ",";
+	output << (*(boost::get<2>(robot_data->coordinate_system_axis())))(1) << ",";
+	output << (*(boost::get<2>(robot_data->coordinate_system_axis())))(2) << ",";*/
 
 	return output.str();
-}
+
+	}
 
 void Parser::save_obstacle_file() {
 
@@ -515,20 +529,20 @@ void Parser::save_obstacle_file() {
 	obstacle_file << "\"\"" << endl;
 
 	//fetching obstacles from the actual world-information through history-reference
-	//vector<boost::shared_ptr<Obstacle> > obstacles = history_->get_newest().obstacles();
+	vector<boost::shared_ptr<Obstacle> > obstacles = sim_kernel_->history()->get_newest().obstacles();
 
-	//iterate over all obstacles
-/*	for (vector<boost::shared_ptr<Obstacle> >::iterator it = obstacles.begin(); it!=obstacles.end(); ++it) {
+	//iterate over all obstacles to parse them obstacle by obstacle
+	for (vector<boost::shared_ptr<Obstacle> >::iterator it = obstacles.begin(); it!=obstacles.end(); ++it) {
 		obstacle_file << write_obstacle(*it);
-	}*/
+	}
 
 	//fetching marker-informations from actual world-information through history-reference
-	//vector<boost::shared_ptr<WorldObject> > markers = history_->get_newest().markers();
+	vector<boost::shared_ptr<WorldObject> > markers = sim_kernel_->history()->get_newest().markers();
 
 	//iterate over all markers
-/*	for (vector<boost::shared_ptr<WorldObject> >::iterator it = markers.begin(); it!=markers.end(); ++it) {
+	for (vector<boost::shared_ptr<WorldObject> >::iterator it = markers.begin(); it!=markers.end(); ++it) {
 		obstacle_file << write_marker(*it);
-	}*/
+	}
 
 	obstacle_file.close();
 }
@@ -540,23 +554,27 @@ string Parser::write_obstacle(boost::shared_ptr<Obstacle> current_obstacle) {
 	//check by dynamic typecast if the obstacle is a sphere or a box.
 	//See event_handler.cc for details to this technique
 	if(boost::shared_ptr<Box> box_obstacle = boost::dynamic_pointer_cast<Box>(current_obstacle)) {
-		output << "\"box\",";
+			output << "\"box\",";
+
 		output << box_obstacle->position()(0) << ",";
 		output << box_obstacle->position()(1) << ",";
 		output << box_obstacle->position()(2) << ",";
+
 		//TODO(mmarcus) include marker-information
 		output << box_obstacle->width() << ",";
 		output << box_obstacle->height() << ",";
 		output << box_obstacle->depth() << endl;
 	} else if(boost::shared_ptr<Sphere> sphere_obstacle = boost::dynamic_pointer_cast<Sphere>(current_obstacle)) {
 		output << "\"sphere\",";
+
 		output << sphere_obstacle->position()(0) << ",";
 		output << sphere_obstacle->position()(1) << ",";
 		output << sphere_obstacle->position()(2) << ",";
+
 		//TODO(mmarcus) include marker-information
 		output << sphere_obstacle->radius() << ",\"\",\"\"" << endl;
 	} else {
-		throw std::invalid_argument("Illegal type of obstacle.");
+		throw UnsupportedOperationException("Illegal type of obstacle found.");
 	}
 
 	return output.str();
@@ -567,6 +585,7 @@ string Parser::write_marker(boost::shared_ptr<WorldObject> marker) {
 	stringstream output;
 
 	output << "\"marker\",";
+
 	output << marker->position()(0) << ",";
 	output << marker->position()(1) << ",";
 	output << marker->position()(2) << ",";
@@ -581,4 +600,3 @@ void Parser::save_projectfiles(const string& project_filename) {
 	save_robot_file();
 	save_obstacle_file();
 }
-

@@ -32,6 +32,8 @@
 #include "../Utilities/vector3d.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
+#include "../SimulationKernel/simulation_kernel.h"
+
 using namespace std;
 
 class Parser {
@@ -43,15 +45,17 @@ class Parser {
 
 	//test cases for saving project files
 	friend class save_main_project_file_1;
-	friend class save_robot_file_1;
 	friend class write_obstacle_1;
 	friend class write_robot_1;
 
 public:
-	Parser();
+	Parser(boost::shared_ptr<SimulationKernel> sim_kernel);
 	virtual ~Parser();
 
 private:
+	//reference to SimulationKernel
+	boost::shared_ptr<SimulationKernel> sim_kernel_;
+
 	//TODO(martinah) comment variables
 	//variables initialized with values in the main project file
 	int asg_;
