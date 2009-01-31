@@ -1,13 +1,12 @@
 /**
  * \class	SimulationKernel
  * \author	Martina Hüllmann
- * \brief	Class for reading project files.
+ * \brief	Class for reading and saving project files.
  *
  */
 
 #ifndef PARSER_H_
 #define PARSER_H_
-
 
 #include <vector>
 #include <boost/smart_ptr.hpp>
@@ -22,6 +21,14 @@
 #include <cstddef>
 #include <map>
 
+#include "../Model/sphere.h"
+#include "../Model/box.h"
+#include "../Model/robot_data.h"
+
+#include "../Model/world_information.h"
+#include "../Model/robot.h"
+#include "../Model/identifier.h"
+
 #include "../Utilities/vector3d.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
@@ -29,9 +36,16 @@ using namespace std;
 
 class Parser {
 
+	//test cases for loading project files
 	friend class load_main_project_file;
 	friend class load_robot_file_1;
 	friend class load_obstacle_file_1;
+
+	//test cases for saving project files
+	friend class save_main_project_file_1;
+	friend class save_robot_file_1;
+	friend class write_obstacle_1;
+	friend class write_robot_1;
 
 public:
 	Parser();
@@ -245,6 +259,53 @@ private:
 	 * \return double value of given string
 	 */
 	double string_to_double(const string& my_string);
+
+	/**
+	 * This method saves the data to the predefined project files
+	 * (main project file, robot file, obstacle file)
+	 * \param Name of the main project file.
+	 */
+	void save_projectfiles(const string& project_filename);
+
+	/**
+	 * This method saves the following variables with their current
+	 * values to the specified main project file:
+	 * asg_, compass_model_, event_handler_, obstacle_filename_,
+	 * project_name_, robot_filename_, statistics_module_
+	 * \param Name of the main project file.
+	 */
+	void save_main_project_file(const string& project_filename);
+
+	/**
+	 * This method saves information about the robots.
+	 */
+	void save_robot_file();
+
+	/**
+	 * This method constructs a line for the robot_file which describes
+	 * the current robot
+	 * \param Pointer to the robot
+	 */
+	string write_robot(boost::shared_ptr<RobotData> robot_data);
+
+	/**
+	 * This method saves information about the obstacles
+	 */
+	void save_obstacle_file();
+
+	/**
+	 * This method constructs a line for the obstacle_file which describes
+	 * the current obstacle
+	 * \param Pointer to the obstacle
+	 */
+	string write_obstacle(boost::shared_ptr<Obstacle> current_obstacle);
+
+	/**
+	 * This method constructs a line for the obstacle_file which describes
+	 * the current marker
+	 * \param Pointer to the marker
+	 */
+	string write_marker(boost::shared_ptr<WorldObject> marker);
 };
 
 #endif /* PARSER_H_ */

@@ -23,19 +23,19 @@
 #include <map>
 
 #include "../Utilities/vector3d.h"
+#include "../Utilities/unsupported_operation_exception.h"
 
+#include "../Model/robot.h"
+
+#include "../SimulationControl/history.h"
 
 using namespace std;
 
-class Identifier;
-class WorldInformation;
-class History;
-class Obstacle;
-class RobotData;
-class Robot;
-class WorldObject;
-
 class SimulationKernel {
+	friend class save_main_project_file_1;
+	friend class save_robot_file_1;
+	friend class write_obstacle_1;
+	friend class write_robot_1;
 public:
 	SimulationKernel();
 	~SimulationKernel();
@@ -73,15 +73,6 @@ public:
 	void multistep(int steps);
 
 private:
-	//TODO(martinah) comment variables
-	//variables initialized with values in the main project file
-	int asg_;
-	string compass_model_;
-	int event_handler_;
-	string obstacle_filename_;
-	string project_name_;
-	string robot_filename_;
-	int statistics_module_;
 
 	/**
 	 * Set of robots in the world
@@ -92,53 +83,6 @@ private:
 	 * Reference to a History of the WorldInformations.
 	 */
 	boost::shared_ptr<History> history_;
-
-	/**
-	 * This method saves the data to the predefined project files
-	 * (main project file, robot file, obstacle file)
-	 * \param Name of the main project file.
-	 */
-	void save_projectfiles(const string& project_filename);
-
-	/**
-	 * This method saves the following variables with their current
-	 * values to the specified main project file:
-	 * asg_, compass_model_, event_handler_, obstacle_filename_,
-	 * project_name_, robot_filename_, statistics_module_
-	 * \param Name of the main project file.
-	 */
-	void save_main_project_file(const string& project_filename);
-
-	/**
-	 * This method saves information about the robots.
-	 */
-	void save_robot_file();
-
-	/**
-	 * This method constructs a line for the robot_file which describes
-	 * the current robot
-	 * \param Pointer to the robot
-	 */
-	string write_robot(boost::shared_ptr<RobotData> robot_data);
-
-	/**
-	 * This method saves information about the obstacles
-	 */
-	void save_obstacle_file();
-
-	/**
-	 * This method constructs a line for the obstacle_file which describes
-	 * the current obstacle
-	 * \param Pointer to the obstacle
-	 */
-	string write_obstacle(boost::shared_ptr<Obstacle> current_obstacle);
-
-	/**
-	 * This method constructs a line for the obstacle_file which describes
-	 * the current marker
-	 * \param Pointer to the marker
-	 */
-	string write_marker(boost::shared_ptr<WorldObject> marker);
 
 };
 

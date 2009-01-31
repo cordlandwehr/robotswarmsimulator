@@ -28,7 +28,7 @@ public:
 
 		};
 
-protected:
+//protected:
 	explicit Identifier(std::size_t id);
 	/**
 	 * Return ID of identifier.
