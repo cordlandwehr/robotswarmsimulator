@@ -11,6 +11,9 @@
 #include "../../Events/handle_requests_event.h"
 
 #include "../../EventHandlers/event_handler.h"
+#include "../../EventHandlers/vector_request_handler.h"
+#include "../../EventHandlers/marker_request_handler.h"
+#include "../../EventHandlers/type_change_request_handler.h"
 
 #include "../../Requests/acceleration_request.h"
 #include "../../Requests/marker_request.h"
@@ -46,7 +49,21 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 	unsigned int seed = 219684;
 	double discard_probability = 1.0;
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add request handlers
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_acceleration_request_handler(request_handler_acc);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_velocity_request_handler(request_handler_vel);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
+
+	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	event_handler.set_marker_request_handler(request_handler_marker);
+
+	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
@@ -109,7 +126,21 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	unsigned int seed = 23458;
 	double discard_probability = 0.0;
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add request handlers
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_acceleration_request_handler(request_handler_acc);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_velocity_request_handler(request_handler_vel);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
+
+	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	event_handler.set_marker_request_handler(request_handler_marker);
+
+	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
@@ -172,7 +203,21 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 	unsigned int seed = 768334;
 	double discard_probability = 0.25;
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add request handlers
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_acceleration_request_handler(request_handler_acc);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_velocity_request_handler(request_handler_vel);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
+
+	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	event_handler.set_marker_request_handler(request_handler_marker);
+
+	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
@@ -236,6 +281,21 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 	unsigned int seed = 34579;
 	double discard_probability = 0.75;
 	EventHandler event_handler(history, robot_control);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_acceleration_request_handler(request_handler_acc);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_velocity_request_handler(request_handler_vel);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
+
+	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	event_handler.set_marker_request_handler(request_handler_marker);
+
+	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);

@@ -9,8 +9,7 @@
 #define POSITION_REQUEST_H_
 
 #include <boost/smart_ptr.hpp>
-#include "request.h"
-#include "../Utilities/vector3d.h"
+#include "vector_request.h"
 
 /**
  * \brief A position request is issued by a robot which wants to change its position to a new value
@@ -21,26 +20,11 @@
  *
  * The request cannot be changed after construction.
  */
-class PositionRequest : public Request{
+class PositionRequest : public VectorRequest {
 public:
-	/**
-	 * constructs a new Position Request.
-	 * The request cannot be changed after construction.
-	 */
-	PositionRequest(Robot& robot, boost::shared_ptr<Vector3d> requested_position) :
-	               Request(robot), requested_position_(requested_position) {}
+	PositionRequest(Robot& robot, boost::shared_ptr<Vector3d> requested_vector) :
+	    VectorRequest(robot, requested_vector) {}
 
-	/**
-	 * Returns a constant reference to the requested position
-	 * \Return A constant reference to the requested position
-	 */
-	const Vector3d& requested_position() const {return *requested_position_;}
-
-private:
-	/**
-	 * the requested position expressed in terms of the local coordinate system of the robot
-	 */
-	boost::shared_ptr<Vector3d> requested_position_;
 };
 
 

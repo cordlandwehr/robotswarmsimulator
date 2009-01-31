@@ -11,6 +11,7 @@
 #include "../../Events/handle_requests_event.h"
 
 #include "../../EventHandlers/event_handler.h"
+#include "../../EventHandlers/vector_request_handler.h"
 
 #include "../../Requests/velocity_request.h"
 
@@ -39,7 +40,9 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add request handler
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(5, 0.0, *history));
+	event_handler.set_velocity_request_handler(request_handler_vel);
+
 
 	// construction of velocity request
 	boost::shared_ptr<Vector3d> new_velocity(new Vector3d);
@@ -115,7 +118,8 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_local_coordinate_system, Sim
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add request handler
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(5, 0.0, *history));
+		event_handler.set_velocity_request_handler(request_handler_vel);
 
 	// build a local coordinate axes for a robot
 	boost::shared_ptr<Vector3d> x_axis(new Vector3d());

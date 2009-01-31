@@ -11,6 +11,7 @@
 #include "../../Events/handle_requests_event.h"
 
 #include "../../EventHandlers/event_handler.h"
+#include "../../EventHandlers/vector_request_handler.h"
 
 #include "../../Requests/position_request.h"
 
@@ -38,7 +39,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add position request handler
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(5, 0.0, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -174,7 +176,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_local_coordinate_system, Si
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	EventHandler event_handler(history, robot_control);
-	// TODO(craupach) add position request handler
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(5, 0.0, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
 
 	// build a coordinate axes for a robot with unit distance 2
 	boost::shared_ptr<Vector3d> x_axis(new Vector3d());

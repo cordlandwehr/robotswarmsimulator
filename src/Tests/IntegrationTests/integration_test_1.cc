@@ -37,6 +37,23 @@ BOOST_FIXTURE_TEST_CASE(integration_test_1, IntegrationFixture) {
 
 	// setup of event handler and register the robot control and asg as listeners
 	EventHandler event_handler(history, robot_control);
+	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(5, 0.0, *history));
+	event_handler.set_acceleration_request_handler(request_handler_acc);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(5, 0.0, *history));
+	event_handler.set_velocity_request_handler(request_handler_vel);
+
+	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(5, 0.0, *history));
+	event_handler.set_position_request_handler(request_handler_pos);
+
+	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(5, 0.0, *history));
+	event_handler.set_marker_request_handler(request_handler_marker);
+
+	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(5, 0.0, *history));
+	event_handler.set_type_change_request_handler(request_handler_type);
+
+
+
 	boost::shared_ptr<SimulationListener> robot_control_listener =
 	    boost::dynamic_pointer_cast<SimulationListener>(robot_control);
 	boost::shared_ptr<SimulationListener> asg_listener =
