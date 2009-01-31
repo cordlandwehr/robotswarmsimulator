@@ -28,7 +28,7 @@ public:
 
 		};
 
-//protected:
+protected:
 	explicit Identifier(std::size_t id);
 	/**
 	 * Return ID of identifier.
@@ -41,6 +41,7 @@ private:
 
 	friend class View;
 	friend class WorldInformation;
+	friend class Parser;
 };
 
 #endif /* IDENTIFIER_H_ */
