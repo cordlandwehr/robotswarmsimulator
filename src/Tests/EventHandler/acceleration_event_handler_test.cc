@@ -10,7 +10,7 @@
 
 #include "../../Events/handle_requests_event.h"
 
-#include "../../EventHandlers/exact_acceleration_event_handler.h"
+#include "../../EventHandlers/event_handler.h"
 
 #include "../../Requests/acceleration_request.h"
 
@@ -35,8 +35,10 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, Simpl
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
+
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	ExactAccelerationEventHandler event_handler(history, robot_control);
+	EventHandler event_handler(history, robot_control);
+	// TODO(craupach) add acceleration request handler
 
 	// construction of acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
@@ -90,7 +92,8 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system,
 	// setting up event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
-	ExactAccelerationEventHandler event_handler(history, robot_control);
+	EventHandler event_handler(history, robot_control);
+	// TODO(craupach) add acceleration request handler
 
 	// build a local coordinate axes for a robot
 	boost::shared_ptr<Vector3d> x_axis(new Vector3d());

@@ -11,6 +11,10 @@
 #include <iostream>
 #include <boost/smart_ptr.hpp>
 
+#include "vector_request_handler.h"
+#include "marker_request_handler.h"
+#include "type_change_request_handler.h"
+
 // forward declarations
 class Event;
 class ComputeEvent;
@@ -28,6 +32,7 @@ class WorldInformation;
 class SimulationListener;
 class RobotControl;
 class History;
+
 
 /**
  *
@@ -49,7 +54,7 @@ public:
 	                                                                                                 robot_control_(robot_control),
 	                                                                                                 time_of_last_event_(0) {}
 
-	virtual ~EventHandler() = 0;
+	EventHandler() {};
 
 	/**
 	 * handles the given event. By calling appropriate handlers and updating the listeners.
@@ -61,47 +66,39 @@ public:
 	 */
 	void register_listener(boost::shared_ptr<SimulationListener> listener);
 
-protected:
 	/**
-	 * virtual method for handling acceleration requests
-	 * TODO(peter) Will we provide some kind of logging facility to be used by the whole project? If so, adopt this
-	 * method (and all other handle_*_request methods).
+	 * setter for position request handler
 	 */
-	virtual void handle_acceleration_request(boost::shared_ptr<WorldInformation> world_information,
-	                                         boost::shared_ptr<const AccelerationRequest> acceleration_request) {
-		std::cerr << "Warning: AccelerationRequest not supported" << std::endl;
+	void set_position_request_handler(boost::shared_ptr<VectorRequestHandler> position_request_handler) {
+		position_request_handler_ = position_request_handler;
 	}
 
 	/**
-	 * virtual method for handling marker requests
+	 * setter for velocity request handler
 	 */
-	virtual void handle_marker_request(boost::shared_ptr<WorldInformation> world_information,
-	                                   boost::shared_ptr<const MarkerRequest> marker_request) {
-		std::cerr << "Warning: MarkerRequest not supported" << std::endl;
+	void set_velocity_request_handler(boost::shared_ptr<VectorRequestHandler> velocity_request_handler) {
+		velocity_request_handler_ = velocity_request_handler;
 	}
 
 	/**
-	 * virtual method for handling position requests
+	 * setter for acceleration request handler
 	 */
-	virtual void handle_position_request(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<const PositionRequest> position_request) {
-		std::cerr << "Warning: PositionRequest not supported" << std::endl;
+	void set_acceleration_request_handler(boost::shared_ptr<VectorRequestHandler> acceleration_request_handler) {
+		acceleration_request_handler_ = acceleration_request_handler;
 	}
 
 	/**
-	 * virtual method for handling type change requests
+	 * setter for marker request handler
 	 */
-	virtual void handle_type_change_request(boost::shared_ptr<WorldInformation> world_information,
-	                                        boost::shared_ptr<const TypeChangeRequest> type_change_request) {
-		std::cerr << "Warning: TypeChangeRequest not supported" << std::endl;
+	void set_marker_request_handler(boost::shared_ptr<MarkerRequestHandler> marker_request_handler) {
+		marker_request_handler_ = marker_request_handler;
 	}
 
 	/**
-	 * virtual method for handling velocity requests
+	 * setter for type change request handler
 	 */
-	virtual void handle_velocity_request(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<const VelocityRequest> velocity_request) {
-		std::cerr << "Warning: VelocityRequest not supported" << std::endl;
+	void set_type_change_request_handler(boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler) {
+		type_change_request_handler_ = type_change_request_handler;
 	}
 
 private:
@@ -132,6 +129,14 @@ private:
 	 */
 	boost::shared_ptr<WorldInformation> extrapolate_old_world_information(int time);
 
+	/**
+	 * Request Handlers. One for each type of request.
+	 */
+	boost::shared_ptr<VectorRequestHandler> position_request_handler_;
+	boost::shared_ptr<VectorRequestHandler> velocity_request_handler_;
+	boost::shared_ptr<VectorRequestHandler> acceleration_request_handler_;
+	boost::shared_ptr<MarkerRequestHandler> marker_request_handler_;
+	boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler_;
 
 	vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;

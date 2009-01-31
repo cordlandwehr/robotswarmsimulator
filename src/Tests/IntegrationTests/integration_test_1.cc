@@ -9,7 +9,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "../../ActivationSequenceGenerators/synchronous_asg.h"
-#include "../../EventHandlers/exact_full_event_handler.h"
+#include "../../EventHandlers/event_handler.h"
 
 #include "../../SimulationControl/history.h"
 
@@ -36,7 +36,7 @@ BOOST_FIXTURE_TEST_CASE(integration_test_1, IntegrationFixture) {
 	asg->initialize(*history, robots);
 
 	// setup of event handler and register the robot control and asg as listeners
-	ExactFullEventHandler event_handler(history, robot_control);
+	EventHandler event_handler(history, robot_control);
 	boost::shared_ptr<SimulationListener> robot_control_listener =
 	    boost::dynamic_pointer_cast<SimulationListener>(robot_control);
 	boost::shared_ptr<SimulationListener> asg_listener =
