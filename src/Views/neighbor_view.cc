@@ -17,6 +17,10 @@ NeighborView::~NeighborView() {
 
 }
 
+unsigned NeighborView::seen_objects_count() const {
+	return seen_objects_count_;
+}
+
 std::set<View::RobotRef> NeighborView::get_visible_robots(const RobotData& robot) const {
 
 	return OctreeUtilities::get_nearest_robots( octree(), robot.position(), robot.robot().id(), std::size_t(seen_objects_count() ) );

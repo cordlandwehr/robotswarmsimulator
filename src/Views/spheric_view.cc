@@ -17,6 +17,10 @@ SphericView::SphericView(double view_radius) : view_radius_(view_radius) {
 SphericView::~SphericView() {
 }
 
+double SphericView::view_radius() const {
+	return view_radius_;
+}
+
 void SphericView::init(const WorldInformation & world_information ){
 	View::init(world_information);
 	octree_.reset(new Octree(8,view_radius_ * 2.0));

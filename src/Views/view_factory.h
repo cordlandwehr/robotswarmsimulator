@@ -15,7 +15,6 @@
  * \class ViewFactory
  * Factory which can produce new View objects. The type created is the template type
  * of the factory.
- * Constructor parameter determines which sub class of View should actually be used.
  */
 template<typename T>
 class ViewFactory : public AbstractViewFactory {
@@ -29,5 +28,4 @@ public:
 		return result;
 	}
 };
-
 #endif /* VIEW_FACTORY_H_ */
