@@ -45,7 +45,6 @@ class Parser {
 
 	//test cases for saving project files
 	friend class save_main_project_file_1;
-	friend class write_obstacle_1;
 	friend class write_robot_1;
 
 public:

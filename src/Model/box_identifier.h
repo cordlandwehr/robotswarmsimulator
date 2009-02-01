@@ -10,6 +10,9 @@
 #include "obstacle_identifier.h"
 
 class BoxIdentifier : public ObstacleIdentifier {
+
+	friend class SimpleWorldFixture;
+
 public:
 	virtual ~BoxIdentifier();
 

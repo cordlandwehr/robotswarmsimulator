@@ -10,6 +10,9 @@
 #include "obstacle_identifier.h"
 
 class SphereIdentifier : public ObstacleIdentifier {
+
+	friend class SimpleWorldFixture;
+
 public:
 	~SphereIdentifier();
 

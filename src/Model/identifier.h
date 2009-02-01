@@ -42,6 +42,7 @@ private:
 	friend class View;
 	friend class WorldInformation;
 	friend class Parser;
+	friend class write_obstacle_1;
 };
 
 #endif /* IDENTIFIER_H_ */

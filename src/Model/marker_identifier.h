@@ -10,6 +10,9 @@
 #include "identifier.h"
 
 class MarkerIdentifier : public Identifier {
+
+	friend class SimpleWorldFixture;
+
 public:
 	~MarkerIdentifier();
 

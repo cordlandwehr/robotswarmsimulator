@@ -20,13 +20,13 @@ using namespace std;
 /**
  * \enum Status a robot can have.
  */
-enum RobotStatus { STATUS };
+enum RobotStatus { SLEEPING, READY };
 
 //TODO(martinah) set possible types of a robot
 /**
  * \enum Type a robot can have.
  */
-enum RobotType { TYPE };
+enum RobotType { MASTER, SLAVE };
 
 class Robot;
 class MarkerInformation;
@@ -65,7 +65,7 @@ public:
 
 	/**
 	 * Sets the coordinate system to the given triple of vectors.
-	 * \return Triple of vectors for new axes.
+	 * \param Triple of vectors for new axes.
 	 */
 	void set_coordinate_system_axis(boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
 			boost::shared_ptr<Vector3d> > new_axes);
