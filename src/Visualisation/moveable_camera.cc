@@ -134,7 +134,7 @@ void MoveableCamera::strafe_camera(float speed) {
 	// Add the strafe vector to our position
 
 	position_(0) += strafe_(0) * speed;
-	position_(1) += strafe_(1) * speed;
+	//position_(1) += strafe_(1) * speed;
 	position_(2) += strafe_(2) * speed;
 
 
@@ -142,7 +142,7 @@ void MoveableCamera::strafe_camera(float speed) {
 	// Add the strafe vector to our view
 
 	view_(0) += strafe_(0) * speed;
-	view_(1) += strafe_(1) * speed;
+	//view_(1) += strafe_(1) * speed;
 	view_(2) += strafe_(2) * speed;
 
 }
@@ -161,11 +161,11 @@ void MoveableCamera::move_camera(float speed) {
 
 
 	position_(0) += vector(0) * speed;		// Add our acceleration to our position's X
-	position_(1) += vector(1) * speed;
+	//position_(1) += vector(1) * speed;
 	position_(2) += vector(2) * speed;		// Add our acceleration to our position's Z
 
 	view_(0) += vector(0) * speed;			// Add our acceleration to our view's X
-	view_(1) += vector(1) * speed;
+	//view_(1) += vector(1) * speed;
 	view_(2) += vector(2) * speed;			// Add our acceleration to our view's Z
 
 }

@@ -16,6 +16,7 @@ class RobotData;
 
 class FollowSwarmCamera : public Camera{
 
+public:
 	FollowSwarmCamera();
 
 	/**

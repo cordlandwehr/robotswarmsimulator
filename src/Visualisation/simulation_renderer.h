@@ -142,33 +142,91 @@ public:
 
 private:
 
+	/**
+	 * Draws an obstacle. It Determines the type of the obstacle
+	 * and calls the corresponding method.
+	 *
+	 * \param obstacle The Obstacle to draw
+	 */
 	void draw_obstacle(const boost::shared_ptr<Obstacle> & obstacle);
+
+	/**
+	 * Draws a box.
+	 * \param box the box
+	 */
 	void draw_box(const Box*  box);
+
+	/**
+	 * Draws a sphere.
+	 * \param sphere The sphere
+	 */
 	void draw_sphere(const Sphere*  sphere);
+
+	/**
+	 * Draws a robot.
+	 */
 	void draw_robot(const boost::shared_ptr<RobotData> & robot);
 
+	/**
+	 * Draws a marker.
+	 *
+	 * \param marker The marker to draw
+	 */
 	void draw_marker(const boost::shared_ptr<WorldObject> & marker);
 
 	void draw_text2d(int x, int y, const std::string &str);
 	void draw_text3d(const Vector3d & vector, const std::string &str );
 
+	/**
+	 * A helper function to draw text
+	 */
 	int font_bitmap_string(const std::string & str);
 
 	boost::shared_ptr<Camera> camera_;
 
+	/**
+	 * The width of the screen
+	 */
 	int screen_width_;
+
+	/**
+	 * The height of the screen
+	 */
 	int screen_height_;
 
+	/**
+	 * The color of drawn text in RGBA
+	 */
 	float text_color_[4];
+
+	/**
+	 * The color of drawn obstacles in RGBA
+	 */
 	float obstacle_color_[4];
+
+	/**
+	 * The color of drawn robots in RGBA
+	 */
 	float robot_color_[4];
+
+	/**
+	 * The color of drawn markers in RGBA
+	 */
 	float marker_color_[4];
 
+	/**
+	 * Decides whether Robots Id get drawn or not
+	 */
 	bool render_robot_ids_;
 
-
+	/**
+	 * Decides whether the mouse function should do anything
+	 */
 	bool use_mouse_;
 
+	/**
+	 * The value for extrapolating
+	 */
 	double extrapolate_;
 
 };

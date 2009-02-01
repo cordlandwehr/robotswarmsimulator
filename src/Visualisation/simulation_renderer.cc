@@ -73,6 +73,7 @@ void SimulationRenderer::init(int x, int y){
 
 	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_POLYGON_SMOOTH);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 
 	glPointSize(kMarkerPointSize);
@@ -271,7 +272,7 @@ void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
 	glDisable(GL_TEXTURE_2D);
 	//glColor3f(1.0f,1.0f,1.0f);
 
-    glRasterPos2i(x, y);
+    glRasterPos2i(x- screen_width_, y - screen_height_);
 	glColor4fv(text_color_);
 
 

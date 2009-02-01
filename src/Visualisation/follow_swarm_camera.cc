@@ -137,10 +137,9 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	view_(2) = center(2);
 
 
-	//TODO: Test whether this really works
-	position_(0) = center(0);
-	position_(1) = center(0) + width * 2.25;
-	position_(2) = center(0);
+	position_(0) = center(0) + width;
+	position_(1) = center(0) + width * 3.25;
+	position_(2) = center(0) + width* 2.25;
 
 
 }
