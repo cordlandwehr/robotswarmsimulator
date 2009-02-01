@@ -6,6 +6,8 @@
  */
 
 #include "neighbor_view.h"
+#include "octree_utilities.h"
+#include "../Model/robot.h"
 
 NeighborView::NeighborView(unsigned seen_objects_count) : seen_objects_count_(seen_objects_count) {
 
@@ -16,14 +18,14 @@ NeighborView::~NeighborView() {
 }
 
 std::set<View::RobotRef> NeighborView::get_visible_robots(const RobotData& robot) const {
-	//TODO: implement
-	return std::set<RobotRef>();
+
+	return OctreeUtilities::get_nearest_robots( octree(), robot.position(), robot.robot().id(), std::size_t(seen_objects_count() ) );
 }
 std::set<View::ObstacleRef> NeighborView::get_visible_obstacles(const RobotData& robot) const {
-	//TODO: implement
-	return std::set<ObstacleRef>();
+
+	return OctreeUtilities::get_nearest_obstacles(octree(), robot.position(), std::size_t(seen_objects_count() ) );
 }
 std::set<View::MarkerRef> NeighborView::get_visible_markers(const RobotData& robot) const {
-	//TODO: implement
-	return std::set<MarkerRef>();
+
+	return OctreeUtilities::get_nearest_markers( octree(), robot.position(), std::size_t(seen_objects_count() ) );
 }

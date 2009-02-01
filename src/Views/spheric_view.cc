@@ -6,6 +6,7 @@
  */
 #include "../Model/world_information.h"
 #include "octree.h"
+#include "octree_utilities.h"
 #include "spheric_view.h"
 
 
@@ -26,14 +27,14 @@ void SphericView::init(const WorldInformation & world_information ){
 }
 
 std::set<View::RobotRef> SphericView::get_visible_robots(const RobotData& robot) const {
-	//TODO: implement
-	return std::set<RobotRef>();
+
+	return OctreeUtilities::get_visible_robots_by_radius(octree(),robot.position(), float(view_radius()) );
 }
 std::set<View::ObstacleRef> SphericView::get_visible_obstacles(const RobotData& robot) const {
-	//TODO: implement
-	return std::set<ObstacleRef>();
+
+	return OctreeUtilities::get_visible_obstacles_by_radius(octree(), robot.position(), float(view_radius()) );
 }
 std::set<View::MarkerRef> SphericView::get_visible_markers(const RobotData& robot) const {
-	//TODO: implement
-	return std::set<MarkerRef>();
+
+	return OctreeUtilities::get_visible_markers_by_radius(octree(),robot.position() , float(view_radius()) );
 }

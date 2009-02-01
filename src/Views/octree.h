@@ -17,7 +17,7 @@
 class Obstacle;
 class RobotData;
 class WorldObject;
-
+class OctreeUtilities;
 
 
 /*!
@@ -38,7 +38,7 @@ public:
 
 		TOP_LEFT_FRONT,			// 0
 		TOP_LEFT_BACK,			// 1
-		TOP_RIGHT_BACK,			// etc...
+		TOP_RIGHT_BACK,
 		TOP_RIGHT_FRONT,
 		BOTTOM_LEFT_FRONT,
 		BOTTOM_LEFT_BACK,
@@ -147,76 +147,158 @@ public:
 	float calculate_dist_to_node(const Vector3d &pos) const;
 
 
+	/**
+	 * Returns the index of the child node in which the point would belong to
+	 *
+	 * \param pos The position of the point
+	 *
+	 */
+	int point_in_node(const Vector3d & pos);
 
+
+	/**
+	 * Returns whether an obstacle would fit into this node or not
+	 *
+	 * \param obstacle the obstacle
+	 */
 	bool does_obstacle_fit(boost::shared_ptr<Obstacle> & obstacle) const ;
 
+	/**
+	 * This method allows to add objects to the octree.
+	 *
+	 * \param markers The new marker objects
+	 * \param obstacles The new obstacles
+	 * \param robot_datas The new robot_datas
+	 */
 	void assign_objects_to_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
 								const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
 								const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
 
+	/**
+	 * This method allows to add a marker to this node
+	 *
+	 * \param marker The marker to add to this node
+	 */
 	void add_marker_to_node(boost::shared_ptr<WorldObject> marker);
+
+	/**
+	 * This method allows to add an obstacle to this node
+	 *
+	 * \param obstacle The obstacle to add to this node
+	 *
+	 */
 	void add_obstacle_to_node(boost::shared_ptr<Obstacle> obstacle);
+
+	/**
+	 * This method allows to add a robot data to this node
+	 *
+	 * \param robot_data the new robot_data to add to this node
+	 */
 	void add_robot_data_to_node(boost::shared_ptr<RobotData> robot_data);
 
 
+	/**
+	 * Returns the marker stored in this node.
+	 *
+	 */
 	std::vector< boost::shared_ptr<WorldObject> > & marker_information(){
 		return markers_;
 	}
 
+	/**
+	 * Returns the obstacles stored in this node.
+	 */
 	std::vector< boost::shared_ptr<Obstacle> > & obstacles() {
 		return obstacles_;
 	}
 
-
+	/**
+	 * Returns the robot datas stored in this node.
+	 */
 	std::vector< boost::shared_ptr<RobotData> > & robot_datas(){
 		return robot_datas_;
 	}
 
+	/**
+	 * This sets the parent of this node
+	 *
+	 * \param parent A pointer to the parent of this node
+	 */
 	void set_parent(Octree * parent){
 		parent_ = parent;
 	}
 
+	/**
+	 * Returns the parent of this node.
+	 * This is node a boost::shared_ptr
+	 * because the child nodes get destroyed before their parent.
+	 */
 	Octree & parent(){
 		return *parent_;
 	}
 
+	/**
+	 * Returns the depth of this node in the octree
+	 */
 	int level(){
 		return level_;
 	}
 
-	// This returns the center of this node
+	/**
+	 * This returns the center of this node
+	 */
+	Vector3d center() const {	 return center_; }
 
-	Vector3d center() const {	 return center_;	}
 
 
-
-	// This returns the triangle count stored in this node
-
+	/**
+	 * This return the number of objects which were stored in this node
+	 */
 	int object_count()  const {   return object_count_;	}
 
 
 
-	// This returns the widht of this node (since it's a cube the height and depth are the same)
-
+	/**
+	 * This returns the width of this node (since it's a cube the height and depth are the same)
+	 */
 	float width() const {	 return width_;	}
 
 
 
-		// This returns if this node is subdivided or not
 
+	/**
+	 * This return whether the node is subdivided or not.
+	 * If a node is subdivided, then it has all eight children.
+	 */
 	bool sub_divided()  const {   return sub_divided_;	}
 
 
+	/**
+	 * Returns the maximal depth of this octree
+	 */
 	int max_levels(){return max_levels_;}
+
+	/**
+	 * Returns the minimal width of a node in this octree.
+	 */
 	float min_width(){return min_width_;}
 
+	/**
+	 * Returns a child node.
+	 *
+	 * \param child_id The number of the child. Values in between 0 and 7 are legal numbers
+	 */
 	const boost::shared_ptr<Octree> & child(int child_id ) {
 		return octree_nodes_[child_id];
 	}
 
 
 protected:
+	/**
+	 * Sets the actual depth of this node.
+	 * \param level The depth of this node
+	 */
 	void set_level(int level){
 		level_ = level;
 	}
@@ -314,6 +396,8 @@ private:
 	 * This are the links to the child nodes
 	 */
 	boost::shared_ptr<Octree> octree_nodes_[8];
+
+	friend class OctreeUtilities;
 
 };
 

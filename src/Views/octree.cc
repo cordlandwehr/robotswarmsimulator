@@ -822,6 +822,58 @@ float Octree::determine_obstacle_max_size( const boost::shared_ptr<Obstacle> & o
 	return size;
 }
 
+int Octree::point_in_node(const Vector3d & pos){
+	if( (pos(0) <= center_(0)) && (pos(1) >= center_(1)) && (pos(2) >= center_(2)) ){
+			return TOP_LEFT_FRONT;
+	}
+
+	// Check if the point lines within the TOP LEFT BACK node
+	if( (pos(0) <= center_(0)) && (pos(1) >= center_(1)) && (pos(2) <= center_(2)) ) {
+		return TOP_LEFT_BACK;
+	}
+
+	// Check if the point lines within the TOP RIGHT BACK node
+
+	if( (pos(0) >= center_(0)) && (pos(1) >= center_(1)) && (pos(2) <= center_(2)) ) {
+		return TOP_RIGHT_BACK;
+	}
+
+	// Check if the point lines within the TOP RIGHT FRONT node
+
+	if( (pos(0) >= center_(0)) && (pos(1) >= center_(1)) && (pos(2) >= center_(2)) ) {
+		return TOP_RIGHT_FRONT;
+	}
+
+	// Check if the point lines within the BOTTOM LEFT FRONT node
+
+	if( (pos(0) <= center_(0)) && (pos(1) <= center_(1)) && (pos(2) >= center_(2)) ) {
+		return BOTTOM_LEFT_FRONT;
+	}
+
+	// Check if the point lines within the BOTTOM LEFT BACK node
+
+	if( (pos(0) <= center_(0)) && (pos(1) <= center_(1)) && (pos(2) <= center_(2)) ) {
+		return BOTTOM_LEFT_BACK;
+	}
+
+
+	// Check if the point lines within the BOTTOM RIGHT BACK node
+
+	if( (pos(0) >= center_(0)) && (pos(1) <= center_(1)) && (pos(2) <= center_(2)) ) {
+		return BOTTOM_RIGHT_BACK;
+	}
+
+
+	// Check if the point lines within the BOTTOM RIGHT FRONT node
+
+	if( (pos(0) >= center_(0)) && (pos(1) <= center_(1)) && (pos(2) >= center_(2)) ) {
+		return BOTTOM_RIGHT_FRONT;
+	}
+
+   // Never returned
+	return -1;
+}
+
 void Octree::create_tree(const std::vector< boost::shared_ptr<WorldObject> > & markers,
 					 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
 					 const std::vector< boost::shared_ptr<RobotData> > & robot_datas){

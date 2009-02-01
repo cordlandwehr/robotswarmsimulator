@@ -15,8 +15,8 @@
 #include <boost/function.hpp>
 #include "../Model/robot_data.h"
 #include "../Utilities/vector3d.h"
-
-class Identifier;
+#include "../Model/identifier.h"
+//class Identifier;
 class RobotIdentifier;
 class ObstacleIdentifier;
 class MarkerIdentifier;
@@ -73,19 +73,24 @@ public:
 	 * @param Robot that should take a look-around
 	 * @return set of robots visible
 	 */
+
 	const std::set<RobotRef> get_visible_robots(const Robot& caller) const;
 	/**
 	* Returns the set of obstacles visible for the calling Robot.
 	* @param Robot that should take a look-around
 	* @return set of obstacles visible
 	*/
+
 	const std::set<ObstacleRef> get_visible_obstacles(const Robot& caller) const;
+
 	/**
 	* Returns the set of markers visible for the calling Robot.
 	* @param Robot that should take a look-around
 	* @return set of markers visible
 	*/
+
 	const std::set<MarkerRef> get_visible_markers(const Robot& caller) const;
+
 
 	//-- WorldObject--
 	/**
@@ -204,6 +209,7 @@ protected:
 	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
 	virtual std::set<MarkerRef> get_visible_markers(const RobotData& robot) const;
+
 
 	//Following methods are called by the non virtual method get_position. Which of the four methods
 	//is called is decided by the actual type of the given WorldObject type and by the question whether

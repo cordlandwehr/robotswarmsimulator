@@ -119,15 +119,21 @@ void View::init(const WorldInformation& world_information) {
 	world_information_ = &world_information;
 }
 
+
 const std::set<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
+
 	return get_visible_robots(resolve_robot_ref(caller.id()));
 }
 
+
 const std::set<View::ObstacleRef> View::get_visible_obstacles(const Robot& caller) const {
+
 	return get_visible_obstacles(resolve_robot_ref(caller.id()));
 }
 
+
 const std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
+
 	return get_visible_markers(resolve_robot_ref(caller.id()));
 }
 
