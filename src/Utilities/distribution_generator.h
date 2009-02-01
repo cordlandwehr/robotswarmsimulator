@@ -9,6 +9,7 @@
 #define DISTRIBUTION_GENERATOR_H_
 
 #include "distribution_generator.h"
+
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
@@ -21,6 +22,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <vector>
+#include "vector3d.h"
 
 /**
  * This class provides different random number generators for different distributions.
@@ -110,6 +112,14 @@ public:
 	 * @return vector of doubles
 	 */
 	std::vector<double> get_value_uniform_on_sphere();
+
+	/**
+	 * Generates Vector3d according to distribution uniform on sphere 3d
+	 * Needs former initialization by @see init_uniform_on_sphere
+	 * @return vector of doubles
+	 */
+	Vector3d get_value_uniform_on_sphere_3d();
+
 
 	/**
 	 * Sets the seed vor PNG

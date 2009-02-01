@@ -18,6 +18,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <vector>
+#include "vector3d.h"
 
 void DistributionGenerator::init_uniform(int min, int max) {
 	boost::uniform_int<> range(min,max);
@@ -81,6 +82,21 @@ std::vector<double> DistributionGenerator::get_value_uniform_on_sphere() {
 	return (*gen_uniform_on_sphere_)();
 }
 
+Vector3d DistributionGenerator::get_value_uniform_on_sphere_3d() {
+	Vector3d randomVector3d;
+	randomVector3d.insert_element(kXCoord,0.0);
+	randomVector3d.insert_element(kYCoord,0.0);
+	randomVector3d.insert_element(kZCoord,0.0);
+
+	std::vector<double> randomVector = (*gen_uniform_on_sphere_)();
+	std::vector<double>::iterator iter;
+
+	int currentDimension = 0;
+	for(iter=randomVector.begin(); iter != randomVector.end(); iter++ ) {
+		randomVector3d.insert_element(currentDimension, *iter);
+	}
+	return randomVector3d;
+}
 
 void DistributionGenerator::set_seed(unsigned int seed) {
 	png_mersenne_.seed(seed); // int is not possible
