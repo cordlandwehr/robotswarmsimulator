@@ -20,11 +20,9 @@ RobotControl::~RobotControl() {
 
 }
 
-void RobotControl::update(const WorldInformation& world_information, boost::shared_ptr<Event> last_event) {
-	if(boost::dynamic_pointer_cast<HandleRequestsEvent>(last_event)) {
-		boost::shared_ptr<View> view(view_factory_->create_new_view_instance(world_information));
-		view_buffer_.push_back(view);
-	}
+void RobotControl::update(const WorldInformation& world_information) {
+	boost::shared_ptr<View> view(view_factory_->create_new_view_instance(world_information));
+	view_buffer_.push_back(view);
 }
 
 std::set<boost::shared_ptr<Request> > RobotControl::compute_new_request(Robot& robot) {

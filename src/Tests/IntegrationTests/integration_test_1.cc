@@ -54,8 +54,6 @@ BOOST_FIXTURE_TEST_CASE(integration_test_1, IntegrationFixture) {
 
 
 
-	boost::shared_ptr<SimulationListener> robot_control_listener =
-	    boost::dynamic_pointer_cast<SimulationListener>(robot_control);
 	boost::shared_ptr<SimulationListener> asg_listener =
 		    boost::dynamic_pointer_cast<SimulationListener>(asg);
 	event_handler.register_listener(asg_listener);

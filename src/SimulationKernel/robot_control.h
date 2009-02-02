@@ -33,7 +33,7 @@ class View;
 
 //TODO: Register me as Listener!
 
-class RobotControl: public SimulationListener {
+class RobotControl {
 public:
 	/**
 	 * Constructs a new RobotControl.
@@ -46,8 +46,7 @@ public:
 	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const WorldInformation& initial_world_information);
 	~RobotControl();
 
-	virtual void update(const WorldInformation& world_information,
-				            boost::shared_ptr<Event> last_event);
+	void update(const WorldInformation& world_information);
 
 	/**
 	 * Equivalent to robot.compute().
