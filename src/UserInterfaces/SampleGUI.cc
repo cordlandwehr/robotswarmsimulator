@@ -38,7 +38,7 @@ void SampleControl::process_simulation() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glPushMatrix();
-	glTranslated(sin(clock()/2E5), cos(clock()/2E5), 0.);
+	glTranslated(sin((double)clock()/CLOCKS_PER_SEC), cos((double)clock()/CLOCKS_PER_SEC), 0.);
 	glutSolidSphere(0.1, 20, 20);
 	glPopMatrix();
 
