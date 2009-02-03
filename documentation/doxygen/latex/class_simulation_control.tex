@@ -1,0 +1,165 @@
+\hypertarget{class_simulation_control}{
+\section{SimulationControl Class Reference}
+\label{class_simulation_control}\index{SimulationControl@{SimulationControl}}
+}
+Controls the simulation.  
+
+
+{\tt \#include $<$simulation\_\-control.h$>$}
+
+Inherited by SampleControl.
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{class_simulation_control_4571c7dae922020316b8f2069a6297a2}{create\_\-new\_\-simulation} (const std::string \&configuration\_\-filename, std::size\_\-t history\_\-length)
+\item 
+void \hyperlink{class_simulation_control_cf99b31b2a40f9162445b4e06095dda2}{start\_\-simulation} ()
+\item 
+void \hyperlink{class_simulation_control_edae523153b33eea2bb79c0f7b3076f1}{pause\_\-simulation} ()
+\item 
+void \hyperlink{class_simulation_control_8e9cd7b65a4757d3af067a459144a94c}{terminate\_\-simulation} ()
+\item 
+void \hyperlink{class_simulation_control_c22664bf7cf9fd4280787123b01a970e}{process\_\-simulation} ()
+\item 
+void \hyperlink{class_simulation_control_2e3eb01723381bbaaa80f4700e4aba4e}{set\_\-visualizer} (boost::shared\_\-ptr$<$ Visualizer $>$ visualizer)
+\end{CompactItemize}
+\subsection*{Private Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_simulation_control_44d5e77f43e0b3cd5e008bc63c19f65d}{
+double \textbf{compute\_\-new\_\-processing\_\-time} ()}
+\label{class_simulation_control_44d5e77f43e0b3cd5e008bc63c19f65d}
+
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_simulation_control_0435ad5ef168d1952c733ae05ce06784}{
+double \textbf{processing\_\-time\_\-factor\_\-}}
+\label{class_simulation_control_0435ad5ef168d1952c733ae05ce06784}
+
+\item 
+\hypertarget{class_simulation_control_ce445691937d7972b7fd19e590b5279e}{
+double \textbf{current\_\-processing\_\-time\_\-}}
+\label{class_simulation_control_ce445691937d7972b7fd19e590b5279e}
+
+\item 
+\hypertarget{class_simulation_control_34faee52b56375399307ec229bdbd412}{
+boost::posix\_\-time::ptime \textbf{last\_\-process\_\-simulation\_\-time\_\-}}
+\label{class_simulation_control_34faee52b56375399307ec229bdbd412}
+
+\item 
+\hypertarget{class_simulation_control_a22c3ae0c981bd7cc956a7189606d3df}{
+boost::shared\_\-ptr$<$ \hyperlink{class_world_information}{WorldInformation} $>$ \textbf{current\_\-world\_\-information\_\-}}
+\label{class_simulation_control_a22c3ae0c981bd7cc956a7189606d3df}
+
+\item 
+\hypertarget{class_simulation_control_ab2be5f82be231fc495ef504df050a15}{
+boost::shared\_\-ptr$<$ \hyperlink{class_world_information}{WorldInformation} $>$ \textbf{next\_\-world\_\-information\_\-}}
+\label{class_simulation_control_ab2be5f82be231fc495ef504df050a15}
+
+\item 
+\hypertarget{class_simulation_control_69e51cca0a4925987cba9b00aa604290}{
+boost::shared\_\-ptr$<$ \hyperlink{class_history}{History} $>$ \textbf{history\_\-}}
+\label{class_simulation_control_69e51cca0a4925987cba9b00aa604290}
+
+\item 
+\hypertarget{class_simulation_control_3bad0ca00bcec0a1580cccde6545114a}{
+boost::shared\_\-ptr$<$ \hyperlink{class_simulation_control_1_1_simulation_kernel_functor}{SimulationKernelFunctor} $>$ \textbf{simulation\_\-kernel\_\-functor\_\-}}
+\label{class_simulation_control_3bad0ca00bcec0a1580cccde6545114a}
+
+\item 
+\hypertarget{class_simulation_control_54cbf830e33518eea2c1305921f46657}{
+boost::thread \textbf{simulation\_\-thread\_\-}}
+\label{class_simulation_control_54cbf830e33518eea2c1305921f46657}
+
+\item 
+\hypertarget{class_simulation_control_e0921fe6a32e848db09a3bf5d53dbc37}{
+boost::shared\_\-ptr$<$ Visualizer $>$ \textbf{visualizer\_\-}}
+\label{class_simulation_control_e0921fe6a32e848db09a3bf5d53dbc37}
+
+\end{CompactItemize}
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+class \hyperlink{class_simulation_control_1_1_simulation_kernel_functor}{SimulationKernelFunctor}
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Controls the simulation. 
+
+The class \hyperlink{class_simulation_control}{SimulationControl} provides code to set up a new simulation (and cleanup any old one) as well as start/pause/terminate the Simulation–Thread. Furthermore it provides a method called process simulation that is responsible for consuming the history’s elements according to the Processing–Time.
+
+\begin{Desc}
+\item[Author:]Daniel Wonisch \end{Desc}
+
+
+Definition at line 30 of file simulation\_\-control.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_simulation_control_4571c7dae922020316b8f2069a6297a2}{
+\index{SimulationControl@{SimulationControl}!create\_\-new\_\-simulation@{create\_\-new\_\-simulation}}
+\index{create\_\-new\_\-simulation@{create\_\-new\_\-simulation}!SimulationControl@{SimulationControl}}
+\subsubsection[create\_\-new\_\-simulation]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::create\_\-new\_\-simulation (const std::string \& {\em configuration\_\-filename}, \/  std::size\_\-t {\em history\_\-length})}}
+\label{class_simulation_control_4571c7dae922020316b8f2069a6297a2}
+
+
+cleans up the old simulation and creates a new one without starting it. 
+
+Definition at line 24 of file simulation\_\-control.cc.
+
+References terminate\_\-simulation().\hypertarget{class_simulation_control_cf99b31b2a40f9162445b4e06095dda2}{
+\index{SimulationControl@{SimulationControl}!start\_\-simulation@{start\_\-simulation}}
+\index{start\_\-simulation@{start\_\-simulation}!SimulationControl@{SimulationControl}}
+\subsubsection[start\_\-simulation]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::start\_\-simulation ()}}
+\label{class_simulation_control_cf99b31b2a40f9162445b4e06095dda2}
+
+
+starts the simulation 
+
+Definition at line 51 of file simulation\_\-control.cc.
+
+References SimulationControl::SimulationKernelFunctor::loop().\hypertarget{class_simulation_control_edae523153b33eea2bb79c0f7b3076f1}{
+\index{SimulationControl@{SimulationControl}!pause\_\-simulation@{pause\_\-simulation}}
+\index{pause\_\-simulation@{pause\_\-simulation}!SimulationControl@{SimulationControl}}
+\subsubsection[pause\_\-simulation]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::pause\_\-simulation ()}}
+\label{class_simulation_control_edae523153b33eea2bb79c0f7b3076f1}
+
+
+pauses the simulation 
+
+Definition at line 69 of file simulation\_\-control.cc.\hypertarget{class_simulation_control_8e9cd7b65a4757d3af067a459144a94c}{
+\index{SimulationControl@{SimulationControl}!terminate\_\-simulation@{terminate\_\-simulation}}
+\index{terminate\_\-simulation@{terminate\_\-simulation}!SimulationControl@{SimulationControl}}
+\subsubsection[terminate\_\-simulation]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::terminate\_\-simulation ()}}
+\label{class_simulation_control_8e9cd7b65a4757d3af067a459144a94c}
+
+
+terminates simulation and cleans up the simulation thread 
+
+Definition at line 75 of file simulation\_\-control.cc.
+
+Referenced by create\_\-new\_\-simulation().\hypertarget{class_simulation_control_c22664bf7cf9fd4280787123b01a970e}{
+\index{SimulationControl@{SimulationControl}!process\_\-simulation@{process\_\-simulation}}
+\index{process\_\-simulation@{process\_\-simulation}!SimulationControl@{SimulationControl}}
+\subsubsection[process\_\-simulation]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::process\_\-simulation ()}}
+\label{class_simulation_control_c22664bf7cf9fd4280787123b01a970e}
+
+
+process the simulation: advances the processing time and calls the visualizer if there is one. 
+
+Definition at line 86 of file simulation\_\-control.cc.\hypertarget{class_simulation_control_2e3eb01723381bbaaa80f4700e4aba4e}{
+\index{SimulationControl@{SimulationControl}!set\_\-visualizer@{set\_\-visualizer}}
+\index{set\_\-visualizer@{set\_\-visualizer}!SimulationControl@{SimulationControl}}
+\subsubsection[set\_\-visualizer]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::set\_\-visualizer (boost::shared\_\-ptr$<$ Visualizer $>$ {\em visualizer})}}
+\label{class_simulation_control_2e3eb01723381bbaaa80f4700e4aba4e}
+
+
+supplies the control with a new visualizer. 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/SimulationControl/simulation\_\-control.h\item 
+src/SimulationControl/simulation\_\-control.cc\end{CompactItemize}

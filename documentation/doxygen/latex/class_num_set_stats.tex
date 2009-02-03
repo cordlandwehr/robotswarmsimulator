@@ -1,0 +1,452 @@
+\hypertarget{class_num_set_stats}{
+\section{NumSetStats Class Reference}
+\label{class_num_set_stats}\index{NumSetStats@{NumSetStats}}
+}
+creates information on a numerical set  
+
+
+{\tt \#include $<$numset\_\-stats.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_num_set_stats_889c116c12f1f1d08b71c78393abc2e4}{NumSetStats} ()
+\item 
+\hyperlink{class_num_set_stats_6453c26039df38b6a9dd8e5c039d1db1}{NumSetStats} (int cfg)
+\item 
+const int \hyperlink{class_num_set_stats_93c7b65ee1d6b2b618cf6d4fff0909ee}{cfg} () const 
+\item 
+void \hyperlink{class_num_set_stats_6306db6c6b350053c548421871ff9599}{set\_\-cfg} (int cfg)
+\item 
+void \hyperlink{class_num_set_stats_097be7d38f92b8618f9c5f5e8e86d07b}{handle} (const std::vector$<$ double $>$ \&data)
+\item 
+const double \hyperlink{class_num_set_stats_a20ab577f51080f3798a825a6392fda2}{min} () const 
+\item 
+const double \hyperlink{class_num_set_stats_ca1e3149eda7dc53aa884b577f61a12f}{max} () const 
+\item 
+const double \hyperlink{class_num_set_stats_36ddcdd2cdc3c01ae0b5253e26f3599e}{diam} () const 
+\item 
+const double \hyperlink{class_num_set_stats_c89ea68555e034fc8ad61a24e8105bbc}{avg} () const 
+\item 
+const double \hyperlink{class_num_set_stats_8576d0ce14fa99580e6f78666c841637}{sum} () const 
+\item 
+const double \hyperlink{class_num_set_stats_09c585c3187b3355b9c4e4f20bdef394}{abssum} () const 
+\item 
+const double \hyperlink{class_num_set_stats_09e5689d2b6635e1f7bf42cfb38d511c}{median} () const 
+\item 
+const double \hyperlink{class_num_set_stats_e531b9144515a839e21b0a9c9c74daae}{stddeviation} () const 
+\item 
+const std::string \hyperlink{class_num_set_stats_639732de39c31d82ade97d8e204db3c0}{to\_\-string} () const 
+\end{CompactItemize}
+\subsection*{Static Public Attributes}
+\begin{CompactItemize}
+\item 
+static const int \hyperlink{class_num_set_stats_a650f090e33b5d6e21b4cb20d567d7d4}{MIN} = 0x01
+\item 
+static const int \hyperlink{class_num_set_stats_b9a7841be40024bbf113e9c936b3deab}{MAX} = 0x02
+\item 
+static const int \hyperlink{class_num_set_stats_b1820301209131d98f7cfab065d0440f}{DIAM} = 0x04
+\item 
+static const int \hyperlink{class_num_set_stats_c862317b59207332f5e0c8542ca31ce6}{AVG} = 0x08
+\item 
+static const int \hyperlink{class_num_set_stats_cc13e2095d277cf2e864e0fcb9504014}{MEDIAN} = 0x10
+\item 
+static const int \hyperlink{class_num_set_stats_d6d1e1e12eb76587059af855219f02a3}{SUM} = 0x20
+\item 
+static const int \hyperlink{class_num_set_stats_afd3e476b938988fc3ed9aef347d83f8}{ABSSUM} = 0x40
+\item 
+static const int \hyperlink{class_num_set_stats_e7880d38dc58838bda30a0554ef7af59}{STDDEVIATION} = 0x80
+\item 
+static const int \hyperlink{class_num_set_stats_0d368de57b461369635aced38be32b25}{DEFAULT} = \hyperlink{class_num_set_stats_a650f090e33b5d6e21b4cb20d567d7d4}{MIN}$|$\hyperlink{class_num_set_stats_b9a7841be40024bbf113e9c936b3deab}{MAX}$|$\hyperlink{class_num_set_stats_b1820301209131d98f7cfab065d0440f}{DIAM}$|$\hyperlink{class_num_set_stats_c862317b59207332f5e0c8542ca31ce6}{AVG}$|$\hyperlink{class_num_set_stats_e7880d38dc58838bda30a0554ef7af59}{STDDEVIATION}
+\item 
+static const int \hyperlink{class_num_set_stats_4e4f9d0b733c13f3c6feb99cde24bcec}{ALL} = 0xFFFFFFFF
+\end{CompactItemize}
+\subsection*{Private Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{class_num_set_stats_c16a5891e33db010aac26d062de620fd}{init} ()
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+int \hyperlink{class_num_set_stats_a70473f5a35e86e19224550b7a919871}{cfg\_\-}
+\item 
+double \hyperlink{class_num_set_stats_e268eba5a003e3932b16e90ce8bad405}{min\_\-}
+\item 
+\hypertarget{class_num_set_stats_f5f15a621edab3e612c2d7430c78f892}{
+double \textbf{max\_\-}}
+\label{class_num_set_stats_f5f15a621edab3e612c2d7430c78f892}
+
+\item 
+\hypertarget{class_num_set_stats_87b5909c45d4fbe93fc16ab142e93bf6}{
+double \textbf{diam\_\-}}
+\label{class_num_set_stats_87b5909c45d4fbe93fc16ab142e93bf6}
+
+\item 
+\hypertarget{class_num_set_stats_1f384a596365ae07382cc5301493fe4a}{
+double \textbf{avg\_\-}}
+\label{class_num_set_stats_1f384a596365ae07382cc5301493fe4a}
+
+\item 
+\hypertarget{class_num_set_stats_def1065f51479ef02a8f4dbdc0f28c2c}{
+double \textbf{median\_\-}}
+\label{class_num_set_stats_def1065f51479ef02a8f4dbdc0f28c2c}
+
+\item 
+\hypertarget{class_num_set_stats_50d3d004ede70cd212499d5568f1fdc6}{
+double \textbf{sum\_\-}}
+\label{class_num_set_stats_50d3d004ede70cd212499d5568f1fdc6}
+
+\item 
+\hypertarget{class_num_set_stats_9a1f6e0f9634df90757a34da7ba9e7d7}{
+double \textbf{abssum\_\-}}
+\label{class_num_set_stats_9a1f6e0f9634df90757a34da7ba9e7d7}
+
+\item 
+\hypertarget{class_num_set_stats_a4ae52c9e1debca8595801eddb27e202}{
+double \textbf{stddeviation\_\-}}
+\label{class_num_set_stats_a4ae52c9e1debca8595801eddb27e202}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+creates information on a numerical set 
+
+\begin{Desc}
+\item[Author:]Sven Kurras 1. create an instance of this class 2. configure it by a $|$$|$-combination of the various bitflags that are given as static ints in the class. Pass the configuration to the constructor or to set\_\-cfg(...)-function. 3. call handle(...) on a vector of the numbers to analyse. The currently configured information will now become (re)calculated. 4. read out the information by the respective getter-function or get an overview of all configured information by the \hyperlink{class_num_set_stats_639732de39c31d82ade97d8e204db3c0}{to\_\-string()}-function. 5. continue with any of the points above. \end{Desc}
+
+
+Definition at line 23 of file numset\_\-stats.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_num_set_stats_889c116c12f1f1d08b71c78393abc2e4}{
+\index{NumSetStats@{NumSetStats}!NumSetStats@{NumSetStats}}
+\index{NumSetStats@{NumSetStats}!NumSetStats@{NumSetStats}}
+\subsubsection[NumSetStats]{\setlength{\rightskip}{0pt plus 5cm}NumSetStats::NumSetStats ()\hspace{0.3cm}{\tt  \mbox{[}explicit\mbox{]}}}}
+\label{class_num_set_stats_889c116c12f1f1d08b71c78393abc2e4}
+
+
+default constructor 
+
+Definition at line 9 of file numset\_\-stats.cc.
+
+References cfg\_\-, and DEFAULT.\hypertarget{class_num_set_stats_6453c26039df38b6a9dd8e5c039d1db1}{
+\index{NumSetStats@{NumSetStats}!NumSetStats@{NumSetStats}}
+\index{NumSetStats@{NumSetStats}!NumSetStats@{NumSetStats}}
+\subsubsection[NumSetStats]{\setlength{\rightskip}{0pt plus 5cm}NumSetStats::NumSetStats (int {\em cfg})\hspace{0.3cm}{\tt  \mbox{[}explicit\mbox{]}}}}
+\label{class_num_set_stats_6453c26039df38b6a9dd8e5c039d1db1}
+
+
+constructor with initial configuration \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em the}]cfg-flag-combination to use \end{description}
+\end{Desc}
+
+
+Definition at line 13 of file numset\_\-stats.cc.
+
+References cfg\_\-.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_num_set_stats_93c7b65ee1d6b2b618cf6d4fff0909ee}{
+\index{NumSetStats@{NumSetStats}!cfg@{cfg}}
+\index{cfg@{cfg}!NumSetStats@{NumSetStats}}
+\subsubsection[cfg]{\setlength{\rightskip}{0pt plus 5cm}const int NumSetStats::cfg () const}}
+\label{class_num_set_stats_93c7b65ee1d6b2b618cf6d4fff0909ee}
+
+
+\begin{Desc}
+\item[Returns:]current configuration-flags \end{Desc}
+
+
+Definition at line 20 of file numset\_\-stats.cc.
+
+References cfg\_\-.\hypertarget{class_num_set_stats_6306db6c6b350053c548421871ff9599}{
+\index{NumSetStats@{NumSetStats}!set\_\-cfg@{set\_\-cfg}}
+\index{set\_\-cfg@{set\_\-cfg}!NumSetStats@{NumSetStats}}
+\subsubsection[set\_\-cfg]{\setlength{\rightskip}{0pt plus 5cm}void NumSetStats::set\_\-cfg (int {\em cfg})}}
+\label{class_num_set_stats_6306db6c6b350053c548421871ff9599}
+
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em cfg}]new configuration-flags to use \end{description}
+\end{Desc}
+
+
+Definition at line 24 of file numset\_\-stats.cc.
+
+References cfg\_\-.\hypertarget{class_num_set_stats_097be7d38f92b8618f9c5f5e8e86d07b}{
+\index{NumSetStats@{NumSetStats}!handle@{handle}}
+\index{handle@{handle}!NumSetStats@{NumSetStats}}
+\subsubsection[handle]{\setlength{\rightskip}{0pt plus 5cm}void NumSetStats::handle (const std::vector$<$ double $>$ \& {\em data})}}
+\label{class_num_set_stats_097be7d38f92b8618f9c5f5e8e86d07b}
+
+
+Calculates all information on the numerical data in this vector that is requested by the currently set flags. Access the individual information via the respective getter-function, or all combined as a string via the \hyperlink{class_num_set_stats_639732de39c31d82ade97d8e204db3c0}{to\_\-string()}-function. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em data}]the numerical data to analyse \end{description}
+\end{Desc}
+
+
+Definition at line 37 of file numset\_\-stats.cc.
+
+References cfg\_\-, init(), MEDIAN, and min\_\-.\hypertarget{class_num_set_stats_a20ab577f51080f3798a825a6392fda2}{
+\index{NumSetStats@{NumSetStats}!min@{min}}
+\index{min@{min}!NumSetStats@{NumSetStats}}
+\subsubsection[min]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::min () const}}
+\label{class_num_set_stats_a20ab577f51080f3798a825a6392fda2}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated minimum-value, unspecified if not calculated \end{Desc}
+
+
+Definition at line 77 of file numset\_\-stats.cc.
+
+References min\_\-.\hypertarget{class_num_set_stats_ca1e3149eda7dc53aa884b577f61a12f}{
+\index{NumSetStats@{NumSetStats}!max@{max}}
+\index{max@{max}!NumSetStats@{NumSetStats}}
+\subsubsection[max]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::max () const}}
+\label{class_num_set_stats_ca1e3149eda7dc53aa884b577f61a12f}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated maximum-value, unspecified if not calculated \end{Desc}
+
+
+Definition at line 81 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_36ddcdd2cdc3c01ae0b5253e26f3599e}{
+\index{NumSetStats@{NumSetStats}!diam@{diam}}
+\index{diam@{diam}!NumSetStats@{NumSetStats}}
+\subsubsection[diam]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::diam () const}}
+\label{class_num_set_stats_36ddcdd2cdc3c01ae0b5253e26f3599e}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated diameter-value (max-min) unspecified if not calculated \end{Desc}
+
+
+Definition at line 85 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_c89ea68555e034fc8ad61a24e8105bbc}{
+\index{NumSetStats@{NumSetStats}!avg@{avg}}
+\index{avg@{avg}!NumSetStats@{NumSetStats}}
+\subsubsection[avg]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::avg () const}}
+\label{class_num_set_stats_c89ea68555e034fc8ad61a24e8105bbc}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated average-value, unspecified if not calculated \end{Desc}
+
+
+Definition at line 89 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_8576d0ce14fa99580e6f78666c841637}{
+\index{NumSetStats@{NumSetStats}!sum@{sum}}
+\index{sum@{sum}!NumSetStats@{NumSetStats}}
+\subsubsection[sum]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::sum () const}}
+\label{class_num_set_stats_8576d0ce14fa99580e6f78666c841637}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated overall-sum, unspecified if not calculated \end{Desc}
+
+
+Definition at line 93 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_09c585c3187b3355b9c4e4f20bdef394}{
+\index{NumSetStats@{NumSetStats}!abssum@{abssum}}
+\index{abssum@{abssum}!NumSetStats@{NumSetStats}}
+\subsubsection[abssum]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::abssum () const}}
+\label{class_num_set_stats_09c585c3187b3355b9c4e4f20bdef394}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated overall-sum of absolute values, unspecified if not calculated \end{Desc}
+
+
+Definition at line 97 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_09e5689d2b6635e1f7bf42cfb38d511c}{
+\index{NumSetStats@{NumSetStats}!median@{median}}
+\index{median@{median}!NumSetStats@{NumSetStats}}
+\subsubsection[median]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::median () const}}
+\label{class_num_set_stats_09e5689d2b6635e1f7bf42cfb38d511c}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated median value, unspecified if not calculated \end{Desc}
+
+
+Definition at line 101 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_e531b9144515a839e21b0a9c9c74daae}{
+\index{NumSetStats@{NumSetStats}!stddeviation@{stddeviation}}
+\index{stddeviation@{stddeviation}!NumSetStats@{NumSetStats}}
+\subsubsection[stddeviation]{\setlength{\rightskip}{0pt plus 5cm}const double NumSetStats::stddeviation () const}}
+\label{class_num_set_stats_e531b9144515a839e21b0a9c9c74daae}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated standard-deviation, unspecified if not calculated \end{Desc}
+
+
+Definition at line 105 of file numset\_\-stats.cc.\hypertarget{class_num_set_stats_639732de39c31d82ade97d8e204db3c0}{
+\index{NumSetStats@{NumSetStats}!to\_\-string@{to\_\-string}}
+\index{to\_\-string@{to\_\-string}!NumSetStats@{NumSetStats}}
+\subsubsection[to\_\-string]{\setlength{\rightskip}{0pt plus 5cm}const std::string NumSetStats::to\_\-string () const}}
+\label{class_num_set_stats_639732de39c31d82ade97d8e204db3c0}
+
+
+\begin{Desc}
+\item[Returns:]string-representation of all latest calculated values with flags set in cfg, unspecified if nothing calculated \end{Desc}
+
+
+Definition at line 109 of file numset\_\-stats.cc.
+
+References ABSSUM, AVG, cfg\_\-, DIAM, MAX, MEDIAN, MIN, min\_\-, STDDEVIATION, and SUM.\hypertarget{class_num_set_stats_c16a5891e33db010aac26d062de620fd}{
+\index{NumSetStats@{NumSetStats}!init@{init}}
+\index{init@{init}!NumSetStats@{NumSetStats}}
+\subsubsection[init]{\setlength{\rightskip}{0pt plus 5cm}void NumSetStats::init ()\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_num_set_stats_c16a5891e33db010aac26d062de620fd}
+
+
+performs required initializations before calculation 
+
+Definition at line 28 of file numset\_\-stats.cc.
+
+References min\_\-.
+
+Referenced by handle().
+
+\subsection{Member Data Documentation}
+\hypertarget{class_num_set_stats_a650f090e33b5d6e21b4cb20d567d7d4}{
+\index{NumSetStats@{NumSetStats}!MIN@{MIN}}
+\index{MIN@{MIN}!NumSetStats@{NumSetStats}}
+\subsubsection[MIN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::MIN} = 0x01\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_a650f090e33b5d6e21b4cb20d567d7d4}
+
+
+flag for minimum 
+
+Definition at line 30 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_b9a7841be40024bbf113e9c936b3deab}{
+\index{NumSetStats@{NumSetStats}!MAX@{MAX}}
+\index{MAX@{MAX}!NumSetStats@{NumSetStats}}
+\subsubsection[MAX]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::MAX} = 0x02\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_b9a7841be40024bbf113e9c936b3deab}
+
+
+flag for maximum 
+
+Definition at line 35 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_b1820301209131d98f7cfab065d0440f}{
+\index{NumSetStats@{NumSetStats}!DIAM@{DIAM}}
+\index{DIAM@{DIAM}!NumSetStats@{NumSetStats}}
+\subsubsection[DIAM]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::DIAM} = 0x04\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_b1820301209131d98f7cfab065d0440f}
+
+
+flag for maximum 
+
+Definition at line 40 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_c862317b59207332f5e0c8542ca31ce6}{
+\index{NumSetStats@{NumSetStats}!AVG@{AVG}}
+\index{AVG@{AVG}!NumSetStats@{NumSetStats}}
+\subsubsection[AVG]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::AVG} = 0x08\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_c862317b59207332f5e0c8542ca31ce6}
+
+
+flag for average 
+
+Definition at line 45 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_cc13e2095d277cf2e864e0fcb9504014}{
+\index{NumSetStats@{NumSetStats}!MEDIAN@{MEDIAN}}
+\index{MEDIAN@{MEDIAN}!NumSetStats@{NumSetStats}}
+\subsubsection[MEDIAN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::MEDIAN} = 0x10\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_cc13e2095d277cf2e864e0fcb9504014}
+
+
+flag for calculating median 
+
+Definition at line 50 of file numset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_num_set_stats_d6d1e1e12eb76587059af855219f02a3}{
+\index{NumSetStats@{NumSetStats}!SUM@{SUM}}
+\index{SUM@{SUM}!NumSetStats@{NumSetStats}}
+\subsubsection[SUM]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::SUM} = 0x20\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_d6d1e1e12eb76587059af855219f02a3}
+
+
+flag for calculating the sum 
+
+Definition at line 55 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_afd3e476b938988fc3ed9aef347d83f8}{
+\index{NumSetStats@{NumSetStats}!ABSSUM@{ABSSUM}}
+\index{ABSSUM@{ABSSUM}!NumSetStats@{NumSetStats}}
+\subsubsection[ABSSUM]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::ABSSUM} = 0x40\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_afd3e476b938988fc3ed9aef347d83f8}
+
+
+flag for calculating the sum of absolute values 
+
+Definition at line 60 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_e7880d38dc58838bda30a0554ef7af59}{
+\index{NumSetStats@{NumSetStats}!STDDEVIATION@{STDDEVIATION}}
+\index{STDDEVIATION@{STDDEVIATION}!NumSetStats@{NumSetStats}}
+\subsubsection[STDDEVIATION]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::STDDEVIATION} = 0x80\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_e7880d38dc58838bda30a0554ef7af59}
+
+
+flag for calculating the standard deviation 
+
+Definition at line 65 of file numset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_num_set_stats_0d368de57b461369635aced38be32b25}{
+\index{NumSetStats@{NumSetStats}!DEFAULT@{DEFAULT}}
+\index{DEFAULT@{DEFAULT}!NumSetStats@{NumSetStats}}
+\subsubsection[DEFAULT]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::DEFAULT} = {\bf MIN}$|${\bf MAX}$|${\bf DIAM}$|${\bf AVG}$|${\bf STDDEVIATION}\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_0d368de57b461369635aced38be32b25}
+
+
+combined flag of default parameters 
+
+Definition at line 70 of file numset\_\-stats.h.
+
+Referenced by NumSetStats().\hypertarget{class_num_set_stats_4e4f9d0b733c13f3c6feb99cde24bcec}{
+\index{NumSetStats@{NumSetStats}!ALL@{ALL}}
+\index{ALL@{ALL}!NumSetStats@{NumSetStats}}
+\subsubsection[ALL]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf NumSetStats::ALL} = 0xFFFFFFFF\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_num_set_stats_4e4f9d0b733c13f3c6feb99cde24bcec}
+
+
+combined flag of all parameters 
+
+Definition at line 75 of file numset\_\-stats.h.\hypertarget{class_num_set_stats_a70473f5a35e86e19224550b7a919871}{
+\index{NumSetStats@{NumSetStats}!cfg\_\-@{cfg\_\-}}
+\index{cfg\_\-@{cfg\_\-}!NumSetStats@{NumSetStats}}
+\subsubsection[cfg\_\-]{\setlength{\rightskip}{0pt plus 5cm}int {\bf NumSetStats::cfg\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_num_set_stats_a70473f5a35e86e19224550b7a919871}
+
+
+the current configuration of the calculation 
+
+Definition at line 168 of file numset\_\-stats.h.
+
+Referenced by cfg(), handle(), NumSetStats(), set\_\-cfg(), and to\_\-string().\hypertarget{class_num_set_stats_e268eba5a003e3932b16e90ce8bad405}{
+\index{NumSetStats@{NumSetStats}!min\_\-@{min\_\-}}
+\index{min\_\-@{min\_\-}!NumSetStats@{NumSetStats}}
+\subsubsection[min\_\-]{\setlength{\rightskip}{0pt plus 5cm}double {\bf NumSetStats::min\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_num_set_stats_e268eba5a003e3932b16e90ce8bad405}
+
+
+the values to calculate 
+
+Definition at line 173 of file numset\_\-stats.h.
+
+Referenced by handle(), init(), min(), and to\_\-string().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Statistics/numset\_\-stats.h\item 
+src/Statistics/numset\_\-stats.cc\end{CompactItemize}

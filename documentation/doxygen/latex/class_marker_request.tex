@@ -1,0 +1,66 @@
+\hypertarget{class_marker_request}{
+\section{MarkerRequest Class Reference}
+\label{class_marker_request}\index{MarkerRequest@{MarkerRequest}}
+}
+A Marker \hyperlink{class_request}{Request} is issued by a robot which wants to change its marker information.  
+
+
+{\tt \#include $<$marker\_\-request.h$>$}
+
+Inheritance diagram for MarkerRequest::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{class_marker_request}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_marker_request_70e6f1fa26f348ec9cfc8e9880a4bb29}{MarkerRequest} (Robot \&robot, boost::shared\_\-ptr$<$ \hyperlink{class_marker_information}{MarkerInformation} $>$ requested\_\-marker\_\-information)
+\item 
+const \hyperlink{class_marker_information}{MarkerInformation} \& \hyperlink{class_marker_request_709617b7716a3f5305782bc18067d357}{requested\_\-marker\_\-information} () const 
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_marker_request_663c5ca8defcffb014b12787068ff94d}{
+boost::shared\_\-ptr$<$ \hyperlink{class_marker_information}{MarkerInformation} $>$ \textbf{requested\_\-marker\_\-information\_\-}}
+\label{class_marker_request_663c5ca8defcffb014b12787068ff94d}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+A Marker \hyperlink{class_request}{Request} is issued by a robot which wants to change its marker information. 
+
+Notes: The request cannot be changed after creating. 
+
+Definition at line 21 of file marker\_\-request.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_marker_request_70e6f1fa26f348ec9cfc8e9880a4bb29}{
+\index{MarkerRequest@{MarkerRequest}!MarkerRequest@{MarkerRequest}}
+\index{MarkerRequest@{MarkerRequest}!MarkerRequest@{MarkerRequest}}
+\subsubsection[MarkerRequest]{\setlength{\rightskip}{0pt plus 5cm}MarkerRequest::MarkerRequest (Robot \& {\em robot}, \/  boost::shared\_\-ptr$<$ {\bf MarkerInformation} $>$ {\em requested\_\-marker\_\-information})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_marker_request_70e6f1fa26f348ec9cfc8e9880a4bb29}
+
+
+constructs a new \hyperlink{class_marker_request}{MarkerRequest}. The request cannot be changed after constructing. 
+
+Definition at line 27 of file marker\_\-request.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_marker_request_709617b7716a3f5305782bc18067d357}{
+\index{MarkerRequest@{MarkerRequest}!requested\_\-marker\_\-information@{requested\_\-marker\_\-information}}
+\index{requested\_\-marker\_\-information@{requested\_\-marker\_\-information}!MarkerRequest@{MarkerRequest}}
+\subsubsection[requested\_\-marker\_\-information]{\setlength{\rightskip}{0pt plus 5cm}const {\bf MarkerInformation}\& MarkerRequest::requested\_\-marker\_\-information () const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_marker_request_709617b7716a3f5305782bc18067d357}
+
+
+Returns a constant reference to the requested marker information  A constant reference to the requested marker information 
+
+Definition at line 35 of file marker\_\-request.h.
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+src/Requests/marker\_\-request.h\end{CompactItemize}

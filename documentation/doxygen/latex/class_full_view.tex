@@ -1,0 +1,48 @@
+\hypertarget{class_full_view}{
+\section{FullView Class Reference}
+\label{class_full_view}\index{FullView@{FullView}}
+}
+All objects visible to all robots view model.  
+
+
+{\tt \#include $<$full\_\-view.h$>$}
+
+Inheritance diagram for FullView::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3cm]{class_full_view}
+\end{center}
+\end{figure}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_full_view_2cf3b852e0fe260e10720d0d15c7f955}{
+virtual std::set$<$ RobotRef $>$ \textbf{get\_\-visible\_\-robots} (const \hyperlink{class_robot_data}{RobotData} \&robot) const }
+\label{class_full_view_2cf3b852e0fe260e10720d0d15c7f955}
+
+\item 
+\hypertarget{class_full_view_c70e733b24bcff73a2396738c2b0b7d5}{
+virtual std::set$<$ ObstacleRef $>$ \textbf{get\_\-visible\_\-obstacles} (const \hyperlink{class_robot_data}{RobotData} \&robot) const }
+\label{class_full_view_c70e733b24bcff73a2396738c2b0b7d5}
+
+\item 
+\hypertarget{class_full_view_cd69a9cdcc846e1b3f6394f0221b395c}{
+virtual std::set$<$ MarkerRef $>$ \textbf{get\_\-visible\_\-markers} (const \hyperlink{class_robot_data}{RobotData} \&robot) const }
+\label{class_full_view_cd69a9cdcc846e1b3f6394f0221b395c}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+All objects visible to all robots view model. 
+
+Provides implementations of getVisible... methods.
+
+Assigning this class to a Robot corresponds to a \char`\"{}all objects visible to all robots\char`\"{} model. 
+
+Definition at line 22 of file full\_\-view.h.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Views/full\_\-view.h\item 
+src/Views/full\_\-view.cc\end{CompactItemize}

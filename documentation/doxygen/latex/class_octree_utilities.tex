@@ -1,0 +1,350 @@
+\hypertarget{class_octree_utilities}{
+\section{OctreeUtilities Class Reference}
+\label{class_octree_utilities}\index{OctreeUtilities@{OctreeUtilities}}
+}
+{\tt \#include $<$octree\_\-utilities.h$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static std::set$<$ RobotRef $>$ \hyperlink{class_octree_utilities_5a89e609e139c6b82ad9d94579811d71}{get\_\-nearest\_\-robots} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, const RobotRef \&id, std::size\_\-t num\_\-nearest)
+\item 
+static std::set$<$ MarkerRef $>$ \hyperlink{class_octree_utilities_881aca84cc863219aa0b96123b70f0ca}{get\_\-nearest\_\-markers} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, std::size\_\-t num\_\-nearest)
+\item 
+static std::set$<$ ObstacleRef $>$ \hyperlink{class_octree_utilities_45cebd25791115e73902559da1d3b5b7}{get\_\-nearest\_\-obstacles} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, std::size\_\-t num\_\-nearest)
+\item 
+static std::set$<$ RobotRef $>$ \hyperlink{class_octree_utilities_05c722135a9cab040b67890ac5a1b8bd}{get\_\-visible\_\-robots\_\-by\_\-radius} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, float view\_\-radius)
+\item 
+static std::set$<$ MarkerRef $>$ \hyperlink{class_octree_utilities_ae9db0d29166f40f0691a21f7a8e2290}{get\_\-visible\_\-markers\_\-by\_\-radius} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, float view\_\-radius)
+\item 
+static std::set$<$ ObstacleRef $>$ \hyperlink{class_octree_utilities_18b26e822f6ebec9c655a65cfb12768b}{get\_\-visible\_\-obstacles\_\-by\_\-radius} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, float view\_\-radius)
+\end{CompactItemize}
+\subsection*{Protected Types}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_octree_utilities_defea31b9e1f51132deebe397c4afaf8}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{class_robot_identifier}{RobotIdentifier} $>$ \textbf{RobotRef}}
+\label{class_octree_utilities_defea31b9e1f51132deebe397c4afaf8}
+
+\item 
+\hypertarget{class_octree_utilities_1efe8125ddbeae47ee06fae5fb15ef6a}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{class_obstacle_identifier}{ObstacleIdentifier} $>$ \textbf{ObstacleRef}}
+\label{class_octree_utilities_1efe8125ddbeae47ee06fae5fb15ef6a}
+
+\item 
+\hypertarget{class_octree_utilities_f0ab4d17f6e4cbf89169d2db408f5987}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{class_marker_identifier}{MarkerIdentifier} $>$ \textbf{MarkerRef}}
+\label{class_octree_utilities_f0ab4d17f6e4cbf89169d2db408f5987}
+
+\end{CompactItemize}
+\subsection*{Private Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_octree_utilities_f202963d538bef3e5513d51dc118705d}{OctreeUtilities} ()
+\end{CompactItemize}
+\subsection*{Static Private Member Functions}
+\begin{CompactItemize}
+\item 
+static void \hyperlink{class_octree_utilities_082a4c0a6384ee0a467378f5e6552d9a}{get\_\-nearest\_\-robots\_\-Rec} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, std::size\_\-t num\_\-nearest, PriorityQueue$<$ RobotRef $>$::Type \&queue, const RobotRef \&id)
+\item 
+static void \hyperlink{class_octree_utilities_9ccc20518e6adfa2f2d7d28d368d53c2}{get\_\-nearest\_\-markers\_\-Rec} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, std::size\_\-t num\_\-nearest, PriorityQueue$<$ MarkerRef $>$::Type \&queue)
+\item 
+static void \hyperlink{class_octree_utilities_168f67374ca6c78060e016441c11f399}{get\_\-nearest\_\-obstacles\_\-Rec} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, std::size\_\-t num\_\-nearest, PriorityQueue$<$ ObstacleRef $>$::Type \&queue)
+\item 
+static void \hyperlink{class_octree_utilities_6f5879dfd1fd84edcadb03de4cf03dd6}{get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, std::set$<$ RobotRef $>$ \&robots\_\-found, float sq\_\-radius, const Vector3d \&pos)
+\item 
+static void \hyperlink{class_octree_utilities_9067642270dc482ceee34c004af054b6}{get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, std::set$<$ MarkerRef $>$ \&markers\_\-found, float sq\_\-radius, const Vector3d \&pos)
+\item 
+static void \hyperlink{class_octree_utilities_2d10ca715823cfe5ff3804e2b5c1628a}{get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, std::set$<$ ObstacleRef $>$ \&obstacles\_\-found, float radius, const Vector3d \&pos)
+\item 
+static bool \hyperlink{class_octree_utilities_25ecea967e3734fd326470404a043489}{compare\_\-to\_\-squared\_\-radius} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos, float sq\_\-radius)
+\item 
+static float \hyperlink{class_octree_utilities_9a9c30e007a5b97651933c3ab76a7801}{calculate\_\-squared\_\-dist} (const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \&octree, const Vector3d \&pos)
+\end{CompactItemize}
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+struct \textbf{PriorityQueue}
+\item 
+class \hyperlink{class_octree_utilities_1_1_queue_entry}{QueueEntry}
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This Class adds some Methods for searching in the octree: $\ast$ by maximal radius $\ast$ k Nearest 
+
+Definition at line 36 of file octree\_\-utilities.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_octree_utilities_f202963d538bef3e5513d51dc118705d}{
+\index{OctreeUtilities@{OctreeUtilities}!OctreeUtilities@{OctreeUtilities}}
+\index{OctreeUtilities@{OctreeUtilities}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[OctreeUtilities]{\setlength{\rightskip}{0pt plus 5cm}OctreeUtilities::OctreeUtilities ()\hspace{0.3cm}{\tt  \mbox{[}inline, private\mbox{]}}}}
+\label{class_octree_utilities_f202963d538bef3e5513d51dc118705d}
+
+
+Do not allow any Objects of this type. So the constructor is private. 
+
+Definition at line 141 of file octree\_\-utilities.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_octree_utilities_5a89e609e139c6b82ad9d94579811d71}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-nearest\_\-robots@{get\_\-nearest\_\-robots}}
+\index{get\_\-nearest\_\-robots@{get\_\-nearest\_\-robots}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-nearest\_\-robots]{\setlength{\rightskip}{0pt plus 5cm}std::set$<$ OctreeUtilities::RobotRef $>$ OctreeUtilities::get\_\-nearest\_\-robots (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  const RobotRef \& {\em id}, \/  std::size\_\-t {\em num\_\-nearest})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_octree_utilities_5a89e609e139c6b82ad9d94579811d71}
+
+
+Returns the num\_\-nearest robots relative to a point. To speed up the computation this works on the octree used by some \hyperlink{class_view}{View} Objects.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The \hyperlink{class_octree}{Octree} in which all robots are saved. \item[{\em pos}]The position for which to calculate the nearest robots \item[{\em num\_\-nearest}]The number of nearest robots to find\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]A set of Roboter Identifiers \end{Desc}
+
+
+Definition at line 229 of file octree\_\-utilities.cc.
+
+References get\_\-nearest\_\-robots\_\-Rec().\hypertarget{class_octree_utilities_881aca84cc863219aa0b96123b70f0ca}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-nearest\_\-markers@{get\_\-nearest\_\-markers}}
+\index{get\_\-nearest\_\-markers@{get\_\-nearest\_\-markers}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-nearest\_\-markers]{\setlength{\rightskip}{0pt plus 5cm}std::set$<$ OctreeUtilities::MarkerRef $>$ OctreeUtilities::get\_\-nearest\_\-markers (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  std::size\_\-t {\em num\_\-nearest})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_octree_utilities_881aca84cc863219aa0b96123b70f0ca}
+
+
+Returns the num\_\-nearest robots relative to a point. To speed up the computation this works on the octree used by some \hyperlink{class_view}{View} Objects.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The \hyperlink{class_octree}{Octree} in which all robots are saved. \item[{\em pos}]The position for which to calculate the nearest markers \item[{\em num\_\-nearest}]The number of nearest markers to find\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]A set of Roboter Identifiers \end{Desc}
+
+
+Definition at line 359 of file octree\_\-utilities.cc.
+
+References get\_\-nearest\_\-markers\_\-Rec().\hypertarget{class_octree_utilities_45cebd25791115e73902559da1d3b5b7}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-nearest\_\-obstacles@{get\_\-nearest\_\-obstacles}}
+\index{get\_\-nearest\_\-obstacles@{get\_\-nearest\_\-obstacles}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-nearest\_\-obstacles]{\setlength{\rightskip}{0pt plus 5cm}std::set$<$ OctreeUtilities::ObstacleRef $>$ OctreeUtilities::get\_\-nearest\_\-obstacles (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  std::size\_\-t {\em num\_\-nearest})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_octree_utilities_45cebd25791115e73902559da1d3b5b7}
+
+
+Returns the num\_\-nearest obstacles relative to a point. To speed up the computation this works on the octree used by some \hyperlink{class_view}{View} Objects.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The \hyperlink{class_octree}{Octree} in which all robots are saved. \item[{\em pos}]The position for which to calculate the nearest obstacles \item[{\em num\_\-nearest}]The number of nearest obstacles to find\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]A set of Obstacle Identifiers \end{Desc}
+
+
+Definition at line 486 of file octree\_\-utilities.cc.
+
+References get\_\-nearest\_\-obstacles\_\-Rec().\hypertarget{class_octree_utilities_05c722135a9cab040b67890ac5a1b8bd}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-visible\_\-robots\_\-by\_\-radius@{get\_\-visible\_\-robots\_\-by\_\-radius}}
+\index{get\_\-visible\_\-robots\_\-by\_\-radius@{get\_\-visible\_\-robots\_\-by\_\-radius}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-visible\_\-robots\_\-by\_\-radius]{\setlength{\rightskip}{0pt plus 5cm}std::set$<$ OctreeUtilities::RobotRef $>$ OctreeUtilities::get\_\-visible\_\-robots\_\-by\_\-radius (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  float {\em view\_\-radius})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_octree_utilities_05c722135a9cab040b67890ac5a1b8bd}
+
+
+Returns the robots which have a distance to the point 'pos' at most view\_\-radius. To speed up the computation this works on an octree used by some \hyperlink{class_view}{View} Objects.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em pos}]The position to calculate the distance from \item[{\em view\_\-radius}]The maximal distance from the point pos\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]A set of Robot Identifiers. \end{Desc}
+
+
+Definition at line 53 of file octree\_\-utilities.cc.
+
+References get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec().\hypertarget{class_octree_utilities_ae9db0d29166f40f0691a21f7a8e2290}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-visible\_\-markers\_\-by\_\-radius@{get\_\-visible\_\-markers\_\-by\_\-radius}}
+\index{get\_\-visible\_\-markers\_\-by\_\-radius@{get\_\-visible\_\-markers\_\-by\_\-radius}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-visible\_\-markers\_\-by\_\-radius]{\setlength{\rightskip}{0pt plus 5cm}std::set$<$ OctreeUtilities::MarkerRef $>$ OctreeUtilities::get\_\-visible\_\-markers\_\-by\_\-radius (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  float {\em view\_\-radius})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_octree_utilities_ae9db0d29166f40f0691a21f7a8e2290}
+
+
+Returns the markers which have a distance to the point 'pos' at most view\_\-radius. To speed up the computation this works on an octree used by some \hyperlink{class_view}{View} Objects.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em pos}]The position to calculate the distance from \item[{\em view\_\-radius}]The maximal distance from the point pos\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]A set of Marker Identifiers. \end{Desc}
+
+
+Definition at line 114 of file octree\_\-utilities.cc.
+
+References get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec().\hypertarget{class_octree_utilities_18b26e822f6ebec9c655a65cfb12768b}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-visible\_\-obstacles\_\-by\_\-radius@{get\_\-visible\_\-obstacles\_\-by\_\-radius}}
+\index{get\_\-visible\_\-obstacles\_\-by\_\-radius@{get\_\-visible\_\-obstacles\_\-by\_\-radius}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-visible\_\-obstacles\_\-by\_\-radius]{\setlength{\rightskip}{0pt plus 5cm}std::set$<$ OctreeUtilities::ObstacleRef $>$ OctreeUtilities::get\_\-visible\_\-obstacles\_\-by\_\-radius (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  float {\em view\_\-radius})\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_octree_utilities_18b26e822f6ebec9c655a65cfb12768b}
+
+
+Returns the obstacles which have a distance to the point 'pos' at most view\_\-radius. To speed up the computation this works on an octree used by some \hyperlink{class_view}{View} Objects.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em pos}]The position to calculate the distance from \item[{\em view\_\-radius}]The maximal distance from the point pos\end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]A set of Obstacle Identifiers. \end{Desc}
+
+
+Definition at line 170 of file octree\_\-utilities.cc.
+
+References get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec().\hypertarget{class_octree_utilities_082a4c0a6384ee0a467378f5e6552d9a}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-nearest\_\-robots\_\-Rec@{get\_\-nearest\_\-robots\_\-Rec}}
+\index{get\_\-nearest\_\-robots\_\-Rec@{get\_\-nearest\_\-robots\_\-Rec}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-nearest\_\-robots\_\-Rec]{\setlength{\rightskip}{0pt plus 5cm}void OctreeUtilities::get\_\-nearest\_\-robots\_\-Rec (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  std::size\_\-t {\em num\_\-nearest}, \/  PriorityQueue$<$ RobotRef $>$::Type \& {\em queue}, \/  const RobotRef \& {\em id})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_082a4c0a6384ee0a467378f5e6552d9a}
+
+
+Does the real work for computing the nearest robots.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em pos}]The position to calculate the nearest robots for. \item[{\em num\_\-nearest}]The number of robots to find. \item[{\em queue}]A Max Heap with the already found robots. New Robots will be added to this Heap. \item[{\em id}]the id of the Robot, so we can distinguish the robot from the other \end{description}
+\end{Desc}
+
+
+Definition at line 255 of file octree\_\-utilities.cc.
+
+Referenced by get\_\-nearest\_\-robots().\hypertarget{class_octree_utilities_9ccc20518e6adfa2f2d7d28d368d53c2}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-nearest\_\-markers\_\-Rec@{get\_\-nearest\_\-markers\_\-Rec}}
+\index{get\_\-nearest\_\-markers\_\-Rec@{get\_\-nearest\_\-markers\_\-Rec}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-nearest\_\-markers\_\-Rec]{\setlength{\rightskip}{0pt plus 5cm}void OctreeUtilities::get\_\-nearest\_\-markers\_\-Rec (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  std::size\_\-t {\em num\_\-nearest}, \/  PriorityQueue$<$ MarkerRef $>$::Type \& {\em queue})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_9ccc20518e6adfa2f2d7d28d368d53c2}
+
+
+Does the real work for computing the nearest markers.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em pos}]The position to calculate the markers robots for. \item[{\em num\_\-nearest}]The number of markers to find. \item[{\em queue}]A Max Heap with the already found markers. New markers will be added to this Heap. \end{description}
+\end{Desc}
+
+
+Definition at line 384 of file octree\_\-utilities.cc.
+
+Referenced by get\_\-nearest\_\-markers().\hypertarget{class_octree_utilities_168f67374ca6c78060e016441c11f399}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-nearest\_\-obstacles\_\-Rec@{get\_\-nearest\_\-obstacles\_\-Rec}}
+\index{get\_\-nearest\_\-obstacles\_\-Rec@{get\_\-nearest\_\-obstacles\_\-Rec}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-nearest\_\-obstacles\_\-Rec]{\setlength{\rightskip}{0pt plus 5cm}void OctreeUtilities::get\_\-nearest\_\-obstacles\_\-Rec (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  std::size\_\-t {\em num\_\-nearest}, \/  PriorityQueue$<$ ObstacleRef $>$::Type \& {\em queue})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_168f67374ca6c78060e016441c11f399}
+
+
+Does the real work for computing the nearest obstacles.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em pos}]The position to calculate the nearest obstacles for. \item[{\em num\_\-nearest}]The number of obstacles to find. \item[{\em queue}]A Max Heap with the already found obstacles. New obstacles will be added to this Heap. \end{description}
+\end{Desc}
+
+
+Definition at line 512 of file octree\_\-utilities.cc.
+
+Referenced by get\_\-nearest\_\-obstacles().\hypertarget{class_octree_utilities_6f5879dfd1fd84edcadb03de4cf03dd6}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec@{get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec}}
+\index{get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec@{get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec]{\setlength{\rightskip}{0pt plus 5cm}void OctreeUtilities::get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  std::set$<$ RobotRef $>$ \& {\em robots\_\-found}, \/  float {\em sq\_\-radius}, \/  const Vector3d \& {\em pos})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_6f5879dfd1fd84edcadb03de4cf03dd6}
+
+
+Does the real Work on finding robots by radius.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em robots\_\-found}]The set of already found robots. New found robots will be added to this set. \item[{\em sq\_\-radius}]The square of the view radius \item[{\em pos}]The position of the robot \end{description}
+\end{Desc}
+
+
+Definition at line 65 of file octree\_\-utilities.cc.
+
+References compare\_\-to\_\-squared\_\-radius().
+
+Referenced by get\_\-visible\_\-robots\_\-by\_\-radius().\hypertarget{class_octree_utilities_9067642270dc482ceee34c004af054b6}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec@{get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec}}
+\index{get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec@{get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec]{\setlength{\rightskip}{0pt plus 5cm}void OctreeUtilities::get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  std::set$<$ MarkerRef $>$ \& {\em markers\_\-found}, \/  float {\em sq\_\-radius}, \/  const Vector3d \& {\em pos})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_9067642270dc482ceee34c004af054b6}
+
+
+Does the real Work on finding robots by radius.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em robots\_\-found}]The set of already found robots. New found robots will be added to this set. \item[{\em sq\_\-radius}]The square of the view radius \item[{\em pos}]The position of the robot \end{description}
+\end{Desc}
+
+
+Definition at line 126 of file octree\_\-utilities.cc.
+
+References compare\_\-to\_\-squared\_\-radius().
+
+Referenced by get\_\-visible\_\-markers\_\-by\_\-radius().\hypertarget{class_octree_utilities_2d10ca715823cfe5ff3804e2b5c1628a}{
+\index{OctreeUtilities@{OctreeUtilities}!get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec@{get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec}}
+\index{get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec@{get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec]{\setlength{\rightskip}{0pt plus 5cm}void OctreeUtilities::get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  std::set$<$ ObstacleRef $>$ \& {\em obstacles\_\-found}, \/  float {\em radius}, \/  const Vector3d \& {\em pos})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_2d10ca715823cfe5ff3804e2b5c1628a}
+
+
+Does the real Work on finding robots by radius.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em octree}]The octree to work on \item[{\em obstacles\_\-found}]The set of already found obstacles. New found obstacles will be added to this set. \item[{\em radius}]The view radius \item[{\em pos}]The position of the robot \end{description}
+\end{Desc}
+
+
+Definition at line 182 of file octree\_\-utilities.cc.
+
+References compare\_\-to\_\-squared\_\-radius().
+
+Referenced by get\_\-visible\_\-obstacles\_\-by\_\-radius().\hypertarget{class_octree_utilities_25ecea967e3734fd326470404a043489}{
+\index{OctreeUtilities@{OctreeUtilities}!compare\_\-to\_\-squared\_\-radius@{compare\_\-to\_\-squared\_\-radius}}
+\index{compare\_\-to\_\-squared\_\-radius@{compare\_\-to\_\-squared\_\-radius}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[compare\_\-to\_\-squared\_\-radius]{\setlength{\rightskip}{0pt plus 5cm}bool OctreeUtilities::compare\_\-to\_\-squared\_\-radius (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos}, \/  float {\em sq\_\-radius})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_25ecea967e3734fd326470404a043489}
+
+
+Helper function to get rid of roots. 
+
+Definition at line 30 of file octree\_\-utilities.cc.
+
+Referenced by get\_\-visible\_\-markers\_\-by\_\-radius\_\-Rec(), get\_\-visible\_\-obstacles\_\-by\_\-radius\_\-Rec(), and get\_\-visible\_\-robots\_\-by\_\-radius\_\-Rec().\hypertarget{class_octree_utilities_9a9c30e007a5b97651933c3ab76a7801}{
+\index{OctreeUtilities@{OctreeUtilities}!calculate\_\-squared\_\-dist@{calculate\_\-squared\_\-dist}}
+\index{calculate\_\-squared\_\-dist@{calculate\_\-squared\_\-dist}!OctreeUtilities@{OctreeUtilities}}
+\subsubsection[calculate\_\-squared\_\-dist]{\setlength{\rightskip}{0pt plus 5cm}float OctreeUtilities::calculate\_\-squared\_\-dist (const boost::shared\_\-ptr$<$ {\bf Octree} $>$ \& {\em octree}, \/  const Vector3d \& {\em pos})\hspace{0.3cm}{\tt  \mbox{[}static, private\mbox{]}}}}
+\label{class_octree_utilities_9a9c30e007a5b97651933c3ab76a7801}
+
+
+Helper function to get rid of roots. 
+
+Definition at line 42 of file octree\_\-utilities.cc.
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Views/octree\_\-utilities.h\item 
+src/Views/octree\_\-utilities.cc\end{CompactItemize}

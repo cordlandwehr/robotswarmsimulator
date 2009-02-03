@@ -1,0 +1,70 @@
+\hypertarget{class_type_change_request}{
+\section{TypeChangeRequest Class Reference}
+\label{class_type_change_request}\index{TypeChangeRequest@{TypeChangeRequest}}
+}
+A Type Change \hyperlink{class_request}{Request} is issued by a robot which wants to change its type (e.g. become leader).  
+
+
+{\tt \#include $<$type\_\-change\_\-request.h$>$}
+
+Inheritance diagram for TypeChangeRequest::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{class_type_change_request}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_type_change_request_2722d08bb752b22163f2cb0fd82e1d6d}{TypeChangeRequest} (Robot \&robot, RobotType requested\_\-type)
+\item 
+const RobotType \& \hyperlink{class_type_change_request_bba308af9b35aa89b2feb9665249ea9a}{requested\_\-type} () const 
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_type_change_request_612c0385a16030c01d4324080408c52f}{
+RobotType \textbf{requested\_\-type\_\-}}
+\label{class_type_change_request_612c0385a16030c01d4324080408c52f}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+A Type Change \hyperlink{class_request}{Request} is issued by a robot which wants to change its type (e.g. become leader). 
+
+Notes: This request differs from the other request classes since it doesn't take a pointer to the requested type but rather the type directly. Since Type is only a small enum we don't need the overhead of the shared pointer.
+
+The request cannot be changed after creating. 
+
+Definition at line 25 of file type\_\-change\_\-request.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_type_change_request_2722d08bb752b22163f2cb0fd82e1d6d}{
+\index{TypeChangeRequest@{TypeChangeRequest}!TypeChangeRequest@{TypeChangeRequest}}
+\index{TypeChangeRequest@{TypeChangeRequest}!TypeChangeRequest@{TypeChangeRequest}}
+\subsubsection[TypeChangeRequest]{\setlength{\rightskip}{0pt plus 5cm}TypeChangeRequest::TypeChangeRequest (Robot \& {\em robot}, \/  RobotType {\em requested\_\-type})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_type_change_request_2722d08bb752b22163f2cb0fd82e1d6d}
+
+
+Constructs a new type change request. The request cannot be changed after construction. 
+
+Definition at line 31 of file type\_\-change\_\-request.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_type_change_request_bba308af9b35aa89b2feb9665249ea9a}{
+\index{TypeChangeRequest@{TypeChangeRequest}!requested\_\-type@{requested\_\-type}}
+\index{requested\_\-type@{requested\_\-type}!TypeChangeRequest@{TypeChangeRequest}}
+\subsubsection[requested\_\-type]{\setlength{\rightskip}{0pt plus 5cm}const RobotType\& TypeChangeRequest::requested\_\-type () const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_type_change_request_bba308af9b35aa89b2feb9665249ea9a}
+
+
+Returns a constant reference to the requested type \begin{Desc}
+\item[Returns:]A constant reference to the requested type \end{Desc}
+
+
+Definition at line 38 of file type\_\-change\_\-request.h.
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+src/Requests/type\_\-change\_\-request.h\end{CompactItemize}

@@ -1,0 +1,583 @@
+\hypertarget{class_vec_set_stats}{
+\section{VecSetStats Class Reference}
+\label{class_vec_set_stats}\index{VecSetStats@{VecSetStats}}
+}
+creates information on a set of Vector3d  
+
+
+{\tt \#include $<$vecset\_\-stats.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_vec_set_stats_c4f1f328da6ba34452e433c6d28b313a}{VecSetStats} ()
+\item 
+\hyperlink{class_vec_set_stats_15b02682930db0edc827dfcdcfbfcf69}{VecSetStats} (int cfg)
+\item 
+void \hyperlink{class_vec_set_stats_cf9ea6b5b6b3880f6a55f68c3546b859}{handle} (const std::vector$<$ boost::shared\_\-ptr$<$ Vector3d $>$ $>$ \&data)
+\item 
+const int \hyperlink{class_vec_set_stats_8d51d3b79744c15c0fa669abbad1d469}{cfg} () const 
+\item 
+void \hyperlink{class_vec_set_stats_41912c77a81f3fbaeaf15dbdcdb4b4b8}{set\_\-cfg} (int cfg)
+\item 
+const Vector3d \& \hyperlink{class_vec_set_stats_dddc218d55693faa61892774a28b1929}{sum} () const 
+\item 
+const Vector3d \& \hyperlink{class_vec_set_stats_cb1197a75e96a53182cc0904312240b3}{sumnorm} () const 
+\item 
+const double \hyperlink{class_vec_set_stats_c3cb153b88e051899d7d731181bef46c}{sumlen} () const 
+\item 
+const Vector3d \& \hyperlink{class_vec_set_stats_9b87664854b8b4eaf4d4a9b7ce6dd9dd}{avg} () const 
+\item 
+const Vector3d \& \hyperlink{class_vec_set_stats_7a17760a90c4ae82919f7976df427ba2}{avgnorm} () const 
+\item 
+const double \hyperlink{class_vec_set_stats_823c982b6d964b040bcd0afe5623ae5a}{avglen} () const 
+\item 
+const Vector3d \& \hyperlink{class_vec_set_stats_6fb6a02bbdabbcfb815cdb591c850030}{shortest} () const 
+\item 
+const double \hyperlink{class_vec_set_stats_b91c568dbcd9cd91a16f2610af2b66aa}{shortestlen} () const 
+\item 
+const Vector3d \& \hyperlink{class_vec_set_stats_c5e5192e85e5633cdedf4900f46adb1d}{longest} () const 
+\item 
+const double \hyperlink{class_vec_set_stats_746c64887edd603e6bf6d139078f8a5c}{longestlen} () const 
+\item 
+const double \hyperlink{class_vec_set_stats_bada15ff01d5ab8b4a5addae68cd8b02}{cumullen} () const 
+\item 
+const std::string \hyperlink{class_vec_set_stats_1618681fee0ab61e61243be352a4cee5}{to\_\-string} () const 
+\end{CompactItemize}
+\subsection*{Static Public Attributes}
+\begin{CompactItemize}
+\item 
+static const int \hyperlink{class_vec_set_stats_d40b4c031735e61869d380bec761041a}{SUM} = 0x01
+\item 
+static const int \hyperlink{class_vec_set_stats_5c6b167522f05f04d0357f9c525404ed}{SUMNORM} = 0x02
+\item 
+static const int \hyperlink{class_vec_set_stats_1a5991a18254611aec6ea124f916b650}{SUMLEN} = 0x04
+\item 
+static const int \hyperlink{class_vec_set_stats_8d4885dfc7b4e4d631e12b1031dabfa8}{AVG} = 0x08
+\item 
+static const int \hyperlink{class_vec_set_stats_0972452644e7552d3de11d9763f04d13}{AVGNORM} = 0x10
+\item 
+static const int \hyperlink{class_vec_set_stats_6d85082797085df8918a799163244e20}{AVGLEN} = 0x20
+\item 
+static const int \hyperlink{class_vec_set_stats_5ec901fadff91737ffd16ca3d89e08f2}{SHORTEST} = 0x40
+\item 
+static const int \hyperlink{class_vec_set_stats_3023bfabad5006b6dce50482725a2319}{SHORTEST\_\-LEN} = 0x80
+\item 
+static const int \hyperlink{class_vec_set_stats_0be7215a7373552c5fabd78881735003}{LONGEST} = 0x100
+\item 
+static const int \hyperlink{class_vec_set_stats_6fcd640961e61b328785f8c030e30181}{LONGEST\_\-LEN} = 0x200
+\item 
+static const int \hyperlink{class_vec_set_stats_8fe79d213b693917d14bcacd86ff62aa}{CUMUL\_\-LEN} = 0x400
+\item 
+static const int \hyperlink{class_vec_set_stats_dd7f69167d67da63e03c36f57335c92c}{DEFAULT} = \hyperlink{class_vec_set_stats_d40b4c031735e61869d380bec761041a}{SUM}$|$\hyperlink{class_vec_set_stats_8d4885dfc7b4e4d631e12b1031dabfa8}{AVG}$|$\hyperlink{class_vec_set_stats_5ec901fadff91737ffd16ca3d89e08f2}{SHORTEST}$|$\hyperlink{class_vec_set_stats_0be7215a7373552c5fabd78881735003}{LONGEST}
+\item 
+static const int \hyperlink{class_vec_set_stats_b56c7865a2064a85a8e46d6add9bda9f}{ALL} = 0xFFFFFFFF
+\end{CompactItemize}
+\subsection*{Private Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{class_vec_set_stats_37fbc88237b5eb4d2ec81656bbf2ecc1}{init} ()
+\item 
+const double \hyperlink{class_vec_set_stats_e33f29edbe292df8f90a7baed6875d4c}{vec\_\-len} (const Vector3d \&vec) const 
+\item 
+const std::string \hyperlink{class_vec_set_stats_65b3c5457a2fe6b5fa784263356ab8ac}{to\_\-string} (const Vector3d \&vec) const 
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+int \hyperlink{class_vec_set_stats_c389362aaab290a37301168295c1bb07}{cfg\_\-}
+\item 
+Vector3d \hyperlink{class_vec_set_stats_6b267c33c513e2ca267d1e75e54828dd}{sum\_\-}
+\item 
+\hypertarget{class_vec_set_stats_43cfe7e1b1a01a7e46682782741f3ba8}{
+Vector3d \textbf{sumnorm\_\-}}
+\label{class_vec_set_stats_43cfe7e1b1a01a7e46682782741f3ba8}
+
+\item 
+\hypertarget{class_vec_set_stats_7dd2bb9237bb3d5319a7123f6c9bb5f7}{
+Vector3d \textbf{avg\_\-}}
+\label{class_vec_set_stats_7dd2bb9237bb3d5319a7123f6c9bb5f7}
+
+\item 
+\hypertarget{class_vec_set_stats_eecd2407a225f3adebe9c5c673c0dd9a}{
+Vector3d \textbf{avgnorm\_\-}}
+\label{class_vec_set_stats_eecd2407a225f3adebe9c5c673c0dd9a}
+
+\item 
+\hypertarget{class_vec_set_stats_eea888e9caf34a5a03049f2882fb098e}{
+Vector3d \textbf{shortest\_\-}}
+\label{class_vec_set_stats_eea888e9caf34a5a03049f2882fb098e}
+
+\item 
+\hypertarget{class_vec_set_stats_84e222df5cffb87fa471e100993469b3}{
+Vector3d \textbf{longest\_\-}}
+\label{class_vec_set_stats_84e222df5cffb87fa471e100993469b3}
+
+\item 
+\hypertarget{class_vec_set_stats_1bcb8977d966b38050bf48eee16ff6dd}{
+double \textbf{sumlen\_\-}}
+\label{class_vec_set_stats_1bcb8977d966b38050bf48eee16ff6dd}
+
+\item 
+\hypertarget{class_vec_set_stats_b660e97626286d70e381fe3df33b4220}{
+double \textbf{avglen\_\-}}
+\label{class_vec_set_stats_b660e97626286d70e381fe3df33b4220}
+
+\item 
+\hypertarget{class_vec_set_stats_5915bff1a81fa0ae62d8f3c1bc7dc213}{
+double \textbf{shortestlen\_\-}}
+\label{class_vec_set_stats_5915bff1a81fa0ae62d8f3c1bc7dc213}
+
+\item 
+\hypertarget{class_vec_set_stats_f802bcd03f9504792ca0d7d75b388015}{
+double \textbf{longestlen\_\-}}
+\label{class_vec_set_stats_f802bcd03f9504792ca0d7d75b388015}
+
+\item 
+\hypertarget{class_vec_set_stats_e54054f7d22ab2c2e8c7295bf8f1dc9b}{
+double \textbf{cumullen\_\-}}
+\label{class_vec_set_stats_e54054f7d22ab2c2e8c7295bf8f1dc9b}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+creates information on a set of Vector3d 
+
+\begin{Desc}
+\item[Author:]Sven Kurras 1. create an instance of this class 2. configure it by a $|$$|$-combination of the various bitflags that are given as static ints in the class. Pass the configuration to the constructor or to set\_\-cfg(...)-function. 3. call handle(...) on a vector of Vector3d to analyse. The currently configured information will now become (re)calculated. 4. read out the information by the respective getter-function or get an overview of all configured information by the \hyperlink{class_vec_set_stats_1618681fee0ab61e61243be352a4cee5}{to\_\-string()}-function. 5. continue with any of the points above. \end{Desc}
+
+
+Definition at line 23 of file vecset\_\-stats.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_vec_set_stats_c4f1f328da6ba34452e433c6d28b313a}{
+\index{VecSetStats@{VecSetStats}!VecSetStats@{VecSetStats}}
+\index{VecSetStats@{VecSetStats}!VecSetStats@{VecSetStats}}
+\subsubsection[VecSetStats]{\setlength{\rightskip}{0pt plus 5cm}VecSetStats::VecSetStats ()\hspace{0.3cm}{\tt  \mbox{[}explicit\mbox{]}}}}
+\label{class_vec_set_stats_c4f1f328da6ba34452e433c6d28b313a}
+
+
+default constructor 
+
+Definition at line 3 of file vecset\_\-stats.cc.
+
+References cfg\_\-, and DEFAULT.\hypertarget{class_vec_set_stats_15b02682930db0edc827dfcdcfbfcf69}{
+\index{VecSetStats@{VecSetStats}!VecSetStats@{VecSetStats}}
+\index{VecSetStats@{VecSetStats}!VecSetStats@{VecSetStats}}
+\subsubsection[VecSetStats]{\setlength{\rightskip}{0pt plus 5cm}VecSetStats::VecSetStats (int {\em cfg})\hspace{0.3cm}{\tt  \mbox{[}explicit\mbox{]}}}}
+\label{class_vec_set_stats_15b02682930db0edc827dfcdcfbfcf69}
+
+
+constructor with initial configuration \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em the}]cfg-flag-combination to use \end{description}
+\end{Desc}
+
+
+Definition at line 7 of file vecset\_\-stats.cc.
+
+References cfg\_\-.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_vec_set_stats_cf9ea6b5b6b3880f6a55f68c3546b859}{
+\index{VecSetStats@{VecSetStats}!handle@{handle}}
+\index{handle@{handle}!VecSetStats@{VecSetStats}}
+\subsubsection[handle]{\setlength{\rightskip}{0pt plus 5cm}void VecSetStats::handle (const std::vector$<$ boost::shared\_\-ptr$<$ Vector3d $>$ $>$ \& {\em data})}}
+\label{class_vec_set_stats_cf9ea6b5b6b3880f6a55f68c3546b859}
+
+
+Calculates all information on all the Vector3D in this std::vector that is requested by the currently set flags. Access the individual information via the respective getter-function, or all combined as a string via the \hyperlink{class_vec_set_stats_1618681fee0ab61e61243be352a4cee5}{to\_\-string()}-function. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em data}]the vectorial data to analyse \end{description}
+\end{Desc}
+
+
+Definition at line 30 of file vecset\_\-stats.cc.
+
+References AVG, AVGLEN, AVGNORM, cfg\_\-, init(), LONGEST, LONGEST\_\-LEN, SHORTEST, SHORTEST\_\-LEN, SUM, sum\_\-, SUMLEN, SUMNORM, and vec\_\-len().\hypertarget{class_vec_set_stats_8d51d3b79744c15c0fa669abbad1d469}{
+\index{VecSetStats@{VecSetStats}!cfg@{cfg}}
+\index{cfg@{cfg}!VecSetStats@{VecSetStats}}
+\subsubsection[cfg]{\setlength{\rightskip}{0pt plus 5cm}const int VecSetStats::cfg () const}}
+\label{class_vec_set_stats_8d51d3b79744c15c0fa669abbad1d469}
+
+
+\begin{Desc}
+\item[Returns:]current configuration-flags \end{Desc}
+
+
+Definition at line 14 of file vecset\_\-stats.cc.
+
+References cfg\_\-.\hypertarget{class_vec_set_stats_41912c77a81f3fbaeaf15dbdcdb4b4b8}{
+\index{VecSetStats@{VecSetStats}!set\_\-cfg@{set\_\-cfg}}
+\index{set\_\-cfg@{set\_\-cfg}!VecSetStats@{VecSetStats}}
+\subsubsection[set\_\-cfg]{\setlength{\rightskip}{0pt plus 5cm}void VecSetStats::set\_\-cfg (int {\em cfg})}}
+\label{class_vec_set_stats_41912c77a81f3fbaeaf15dbdcdb4b4b8}
+
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em cfg}]new configuration-flags to use \end{description}
+\end{Desc}
+
+
+Definition at line 18 of file vecset\_\-stats.cc.
+
+References cfg\_\-.\hypertarget{class_vec_set_stats_dddc218d55693faa61892774a28b1929}{
+\index{VecSetStats@{VecSetStats}!sum@{sum}}
+\index{sum@{sum}!VecSetStats@{VecSetStats}}
+\subsubsection[sum]{\setlength{\rightskip}{0pt plus 5cm}const Vector3d \& VecSetStats::sum () const}}
+\label{class_vec_set_stats_dddc218d55693faa61892774a28b1929}
+
+
+\begin{Desc}
+\item[Returns:]constant reference to latest calculated sum-vector, unspecified if not calculated \end{Desc}
+
+
+Definition at line 97 of file vecset\_\-stats.cc.
+
+References sum\_\-.\hypertarget{class_vec_set_stats_cb1197a75e96a53182cc0904312240b3}{
+\index{VecSetStats@{VecSetStats}!sumnorm@{sumnorm}}
+\index{sumnorm@{sumnorm}!VecSetStats@{VecSetStats}}
+\subsubsection[sumnorm]{\setlength{\rightskip}{0pt plus 5cm}const Vector3d \& VecSetStats::sumnorm () const}}
+\label{class_vec_set_stats_cb1197a75e96a53182cc0904312240b3}
+
+
+\begin{Desc}
+\item[Returns:]constant reference to latest calculated normalized sum-vector, unspecified if not calculated \end{Desc}
+
+
+Definition at line 101 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_c3cb153b88e051899d7d731181bef46c}{
+\index{VecSetStats@{VecSetStats}!sumlen@{sumlen}}
+\index{sumlen@{sumlen}!VecSetStats@{VecSetStats}}
+\subsubsection[sumlen]{\setlength{\rightskip}{0pt plus 5cm}const double VecSetStats::sumlen () const}}
+\label{class_vec_set_stats_c3cb153b88e051899d7d731181bef46c}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated sum-vector's length, unspecified if not calculated \end{Desc}
+
+
+Definition at line 105 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_9b87664854b8b4eaf4d4a9b7ce6dd9dd}{
+\index{VecSetStats@{VecSetStats}!avg@{avg}}
+\index{avg@{avg}!VecSetStats@{VecSetStats}}
+\subsubsection[avg]{\setlength{\rightskip}{0pt plus 5cm}const Vector3d \& VecSetStats::avg () const}}
+\label{class_vec_set_stats_9b87664854b8b4eaf4d4a9b7ce6dd9dd}
+
+
+\begin{Desc}
+\item[Returns:]constant reference to latest calculated average-vector, unspecified if not calculated \end{Desc}
+
+
+Definition at line 109 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_7a17760a90c4ae82919f7976df427ba2}{
+\index{VecSetStats@{VecSetStats}!avgnorm@{avgnorm}}
+\index{avgnorm@{avgnorm}!VecSetStats@{VecSetStats}}
+\subsubsection[avgnorm]{\setlength{\rightskip}{0pt plus 5cm}const Vector3d \& VecSetStats::avgnorm () const}}
+\label{class_vec_set_stats_7a17760a90c4ae82919f7976df427ba2}
+
+
+\begin{Desc}
+\item[Returns:]constant reference to latest calculated normalized average-vector, unspecified if not calculated \end{Desc}
+
+
+Definition at line 113 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_823c982b6d964b040bcd0afe5623ae5a}{
+\index{VecSetStats@{VecSetStats}!avglen@{avglen}}
+\index{avglen@{avglen}!VecSetStats@{VecSetStats}}
+\subsubsection[avglen]{\setlength{\rightskip}{0pt plus 5cm}const double VecSetStats::avglen () const}}
+\label{class_vec_set_stats_823c982b6d964b040bcd0afe5623ae5a}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated average-vector's length, unspecified if not calculated \end{Desc}
+
+
+Definition at line 117 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_6fb6a02bbdabbcfb815cdb591c850030}{
+\index{VecSetStats@{VecSetStats}!shortest@{shortest}}
+\index{shortest@{shortest}!VecSetStats@{VecSetStats}}
+\subsubsection[shortest]{\setlength{\rightskip}{0pt plus 5cm}const Vector3d \& VecSetStats::shortest () const}}
+\label{class_vec_set_stats_6fb6a02bbdabbcfb815cdb591c850030}
+
+
+\begin{Desc}
+\item[Returns:]constant reference to latest calculated shortest vector, unspecified if not calculated \end{Desc}
+
+
+Definition at line 121 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_b91c568dbcd9cd91a16f2610af2b66aa}{
+\index{VecSetStats@{VecSetStats}!shortestlen@{shortestlen}}
+\index{shortestlen@{shortestlen}!VecSetStats@{VecSetStats}}
+\subsubsection[shortestlen]{\setlength{\rightskip}{0pt plus 5cm}const double VecSetStats::shortestlen () const}}
+\label{class_vec_set_stats_b91c568dbcd9cd91a16f2610af2b66aa}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated shortest vector's length, unspecified if not calculated \end{Desc}
+
+
+Definition at line 125 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_c5e5192e85e5633cdedf4900f46adb1d}{
+\index{VecSetStats@{VecSetStats}!longest@{longest}}
+\index{longest@{longest}!VecSetStats@{VecSetStats}}
+\subsubsection[longest]{\setlength{\rightskip}{0pt plus 5cm}const Vector3d \& VecSetStats::longest () const}}
+\label{class_vec_set_stats_c5e5192e85e5633cdedf4900f46adb1d}
+
+
+\begin{Desc}
+\item[Returns:]constant reference to latest calculated longest vector, unspecified if not calculated \end{Desc}
+
+
+Definition at line 129 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_746c64887edd603e6bf6d139078f8a5c}{
+\index{VecSetStats@{VecSetStats}!longestlen@{longestlen}}
+\index{longestlen@{longestlen}!VecSetStats@{VecSetStats}}
+\subsubsection[longestlen]{\setlength{\rightskip}{0pt plus 5cm}const double VecSetStats::longestlen () const}}
+\label{class_vec_set_stats_746c64887edd603e6bf6d139078f8a5c}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated longest vector's length, unspecified if not calculated \end{Desc}
+
+
+Definition at line 133 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_bada15ff01d5ab8b4a5addae68cd8b02}{
+\index{VecSetStats@{VecSetStats}!cumullen@{cumullen}}
+\index{cumullen@{cumullen}!VecSetStats@{VecSetStats}}
+\subsubsection[cumullen]{\setlength{\rightskip}{0pt plus 5cm}const double VecSetStats::cumullen () const}}
+\label{class_vec_set_stats_bada15ff01d5ab8b4a5addae68cd8b02}
+
+
+\begin{Desc}
+\item[Returns:]latest calculated cumulated length over all vectors, unspecified if not calculated \end{Desc}
+
+
+Definition at line 137 of file vecset\_\-stats.cc.\hypertarget{class_vec_set_stats_1618681fee0ab61e61243be352a4cee5}{
+\index{VecSetStats@{VecSetStats}!to\_\-string@{to\_\-string}}
+\index{to\_\-string@{to\_\-string}!VecSetStats@{VecSetStats}}
+\subsubsection[to\_\-string]{\setlength{\rightskip}{0pt plus 5cm}const std::string VecSetStats::to\_\-string () const}}
+\label{class_vec_set_stats_1618681fee0ab61e61243be352a4cee5}
+
+
+\begin{Desc}
+\item[Returns:]string-representation of all latest calculated values with flags set in cfg, unspecified if nothing calculated \end{Desc}
+
+
+Definition at line 151 of file vecset\_\-stats.cc.
+
+References AVG, AVGLEN, AVGNORM, cfg\_\-, CUMUL\_\-LEN, LONGEST, LONGEST\_\-LEN, SHORTEST, SHORTEST\_\-LEN, SUM, sum\_\-, SUMLEN, and SUMNORM.\hypertarget{class_vec_set_stats_37fbc88237b5eb4d2ec81656bbf2ecc1}{
+\index{VecSetStats@{VecSetStats}!init@{init}}
+\index{init@{init}!VecSetStats@{VecSetStats}}
+\subsubsection[init]{\setlength{\rightskip}{0pt plus 5cm}void VecSetStats::init ()\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_vec_set_stats_37fbc88237b5eb4d2ec81656bbf2ecc1}
+
+
+performs required initializations before calculation 
+
+Definition at line 22 of file vecset\_\-stats.cc.
+
+References sum\_\-.
+
+Referenced by handle().\hypertarget{class_vec_set_stats_e33f29edbe292df8f90a7baed6875d4c}{
+\index{VecSetStats@{VecSetStats}!vec\_\-len@{vec\_\-len}}
+\index{vec\_\-len@{vec\_\-len}!VecSetStats@{VecSetStats}}
+\subsubsection[vec\_\-len]{\setlength{\rightskip}{0pt plus 5cm}const double VecSetStats::vec\_\-len (const Vector3d \& {\em vec}) const\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_vec_set_stats_e33f29edbe292df8f90a7baed6875d4c}
+
+
+helper-function that calculates the euclidean length of the given vector \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em vec}]the vector for which to get the length \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]euclidean length of vec \end{Desc}
+
+
+Definition at line 141 of file vecset\_\-stats.cc.
+
+Referenced by handle().\hypertarget{class_vec_set_stats_65b3c5457a2fe6b5fa784263356ab8ac}{
+\index{VecSetStats@{VecSetStats}!to\_\-string@{to\_\-string}}
+\index{to\_\-string@{to\_\-string}!VecSetStats@{VecSetStats}}
+\subsubsection[to\_\-string]{\setlength{\rightskip}{0pt plus 5cm}const std::string VecSetStats::to\_\-string (const Vector3d \& {\em vec}) const\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_vec_set_stats_65b3c5457a2fe6b5fa784263356ab8ac}
+
+
+helper-function that constructs a string-representation of a Vector3d \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em vec}]the vector for which to get the coordinates as string \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]string-representation of vec \end{Desc}
+
+
+Definition at line 145 of file vecset\_\-stats.cc.
+
+\subsection{Member Data Documentation}
+\hypertarget{class_vec_set_stats_d40b4c031735e61869d380bec761041a}{
+\index{VecSetStats@{VecSetStats}!SUM@{SUM}}
+\index{SUM@{SUM}!VecSetStats@{VecSetStats}}
+\subsubsection[SUM]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::SUM} = 0x01\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_d40b4c031735e61869d380bec761041a}
+
+
+flag for sum-vector 
+
+Definition at line 30 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_5c6b167522f05f04d0357f9c525404ed}{
+\index{VecSetStats@{VecSetStats}!SUMNORM@{SUMNORM}}
+\index{SUMNORM@{SUMNORM}!VecSetStats@{VecSetStats}}
+\subsubsection[SUMNORM]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::SUMNORM} = 0x02\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_5c6b167522f05f04d0357f9c525404ed}
+
+
+flag for normalized sum-vector 
+
+Definition at line 35 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_1a5991a18254611aec6ea124f916b650}{
+\index{VecSetStats@{VecSetStats}!SUMLEN@{SUMLEN}}
+\index{SUMLEN@{SUMLEN}!VecSetStats@{VecSetStats}}
+\subsubsection[SUMLEN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::SUMLEN} = 0x04\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_1a5991a18254611aec6ea124f916b650}
+
+
+flag for length of sum-vector 
+
+Definition at line 40 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_8d4885dfc7b4e4d631e12b1031dabfa8}{
+\index{VecSetStats@{VecSetStats}!AVG@{AVG}}
+\index{AVG@{AVG}!VecSetStats@{VecSetStats}}
+\subsubsection[AVG]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::AVG} = 0x08\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_8d4885dfc7b4e4d631e12b1031dabfa8}
+
+
+flag for average-vector 
+
+Definition at line 45 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_0972452644e7552d3de11d9763f04d13}{
+\index{VecSetStats@{VecSetStats}!AVGNORM@{AVGNORM}}
+\index{AVGNORM@{AVGNORM}!VecSetStats@{VecSetStats}}
+\subsubsection[AVGNORM]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::AVGNORM} = 0x10\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_0972452644e7552d3de11d9763f04d13}
+
+
+flag for normalized average-vector 
+
+Definition at line 50 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_6d85082797085df8918a799163244e20}{
+\index{VecSetStats@{VecSetStats}!AVGLEN@{AVGLEN}}
+\index{AVGLEN@{AVGLEN}!VecSetStats@{VecSetStats}}
+\subsubsection[AVGLEN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::AVGLEN} = 0x20\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_6d85082797085df8918a799163244e20}
+
+
+flag for length of average-vector 
+
+Definition at line 55 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_5ec901fadff91737ffd16ca3d89e08f2}{
+\index{VecSetStats@{VecSetStats}!SHORTEST@{SHORTEST}}
+\index{SHORTEST@{SHORTEST}!VecSetStats@{VecSetStats}}
+\subsubsection[SHORTEST]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::SHORTEST} = 0x40\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_5ec901fadff91737ffd16ca3d89e08f2}
+
+
+flag for shortest vector 
+
+Definition at line 60 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_3023bfabad5006b6dce50482725a2319}{
+\index{VecSetStats@{VecSetStats}!SHORTEST\_\-LEN@{SHORTEST\_\-LEN}}
+\index{SHORTEST\_\-LEN@{SHORTEST\_\-LEN}!VecSetStats@{VecSetStats}}
+\subsubsection[SHORTEST\_\-LEN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::SHORTEST\_\-LEN} = 0x80\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_3023bfabad5006b6dce50482725a2319}
+
+
+flag for shortest length 
+
+Definition at line 65 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_0be7215a7373552c5fabd78881735003}{
+\index{VecSetStats@{VecSetStats}!LONGEST@{LONGEST}}
+\index{LONGEST@{LONGEST}!VecSetStats@{VecSetStats}}
+\subsubsection[LONGEST]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::LONGEST} = 0x100\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_0be7215a7373552c5fabd78881735003}
+
+
+flag for longest vector 
+
+Definition at line 70 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_6fcd640961e61b328785f8c030e30181}{
+\index{VecSetStats@{VecSetStats}!LONGEST\_\-LEN@{LONGEST\_\-LEN}}
+\index{LONGEST\_\-LEN@{LONGEST\_\-LEN}!VecSetStats@{VecSetStats}}
+\subsubsection[LONGEST\_\-LEN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::LONGEST\_\-LEN} = 0x200\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_6fcd640961e61b328785f8c030e30181}
+
+
+flag for longest length 
+
+Definition at line 75 of file vecset\_\-stats.h.
+
+Referenced by handle(), and to\_\-string().\hypertarget{class_vec_set_stats_8fe79d213b693917d14bcacd86ff62aa}{
+\index{VecSetStats@{VecSetStats}!CUMUL\_\-LEN@{CUMUL\_\-LEN}}
+\index{CUMUL\_\-LEN@{CUMUL\_\-LEN}!VecSetStats@{VecSetStats}}
+\subsubsection[CUMUL\_\-LEN]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::CUMUL\_\-LEN} = 0x400\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_8fe79d213b693917d14bcacd86ff62aa}
+
+
+flag for cumulated length of all vectors 
+
+Definition at line 80 of file vecset\_\-stats.h.
+
+Referenced by to\_\-string().\hypertarget{class_vec_set_stats_dd7f69167d67da63e03c36f57335c92c}{
+\index{VecSetStats@{VecSetStats}!DEFAULT@{DEFAULT}}
+\index{DEFAULT@{DEFAULT}!VecSetStats@{VecSetStats}}
+\subsubsection[DEFAULT]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::DEFAULT} = {\bf SUM}$|${\bf AVG}$|${\bf SHORTEST}$|${\bf LONGEST}\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_dd7f69167d67da63e03c36f57335c92c}
+
+
+combined flag of default parameters 
+
+Definition at line 85 of file vecset\_\-stats.h.
+
+Referenced by VecSetStats().\hypertarget{class_vec_set_stats_b56c7865a2064a85a8e46d6add9bda9f}{
+\index{VecSetStats@{VecSetStats}!ALL@{ALL}}
+\index{ALL@{ALL}!VecSetStats@{VecSetStats}}
+\subsubsection[ALL]{\setlength{\rightskip}{0pt plus 5cm}const int {\bf VecSetStats::ALL} = 0xFFFFFFFF\hspace{0.3cm}{\tt  \mbox{[}static\mbox{]}}}}
+\label{class_vec_set_stats_b56c7865a2064a85a8e46d6add9bda9f}
+
+
+combined flag of all parameters 
+
+Definition at line 90 of file vecset\_\-stats.h.\hypertarget{class_vec_set_stats_c389362aaab290a37301168295c1bb07}{
+\index{VecSetStats@{VecSetStats}!cfg\_\-@{cfg\_\-}}
+\index{cfg\_\-@{cfg\_\-}!VecSetStats@{VecSetStats}}
+\subsubsection[cfg\_\-]{\setlength{\rightskip}{0pt plus 5cm}int {\bf VecSetStats::cfg\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_vec_set_stats_c389362aaab290a37301168295c1bb07}
+
+
+the current configuration of the calculation 
+
+Definition at line 201 of file vecset\_\-stats.h.
+
+Referenced by cfg(), handle(), set\_\-cfg(), to\_\-string(), and VecSetStats().\hypertarget{class_vec_set_stats_6b267c33c513e2ca267d1e75e54828dd}{
+\index{VecSetStats@{VecSetStats}!sum\_\-@{sum\_\-}}
+\index{sum\_\-@{sum\_\-}!VecSetStats@{VecSetStats}}
+\subsubsection[sum\_\-]{\setlength{\rightskip}{0pt plus 5cm}Vector3d {\bf VecSetStats::sum\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_vec_set_stats_6b267c33c513e2ca267d1e75e54828dd}
+
+
+the values to calculate 
+
+Definition at line 206 of file vecset\_\-stats.h.
+
+Referenced by handle(), init(), sum(), and to\_\-string().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Statistics/vecset\_\-stats.h\item 
+src/Statistics/vecset\_\-stats.cc\end{CompactItemize}

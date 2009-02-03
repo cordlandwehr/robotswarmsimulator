@@ -1,0 +1,92 @@
+\hypertarget{class_spheric_view}{
+\section{SphericView Class Reference}
+\label{class_spheric_view}\index{SphericView@{SphericView}}
+}
+Basic spherical view model.  
+
+
+{\tt \#include $<$spheric\_\-view.h$>$}
+
+Inheritance diagram for SphericView::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4cm]{class_spheric_view}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_spheric_view_bfe97f597005a4de0a36ef639990ab63}{
+\textbf{SphericView} (double view\_\-radius)}
+\label{class_spheric_view_bfe97f597005a4de0a36ef639990ab63}
+
+\item 
+void \hyperlink{class_spheric_view_dbd6a1d5e2f17594f82e831c38d35ec6}{init} (const \hyperlink{class_world_information}{WorldInformation} \&world\_\-information)
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_spheric_view_432056355d892add503c2950df457209}{
+virtual std::set$<$ RobotRef $>$ \textbf{get\_\-visible\_\-robots} (const \hyperlink{class_robot_data}{RobotData} \&robot) const }
+\label{class_spheric_view_432056355d892add503c2950df457209}
+
+\item 
+\hypertarget{class_spheric_view_63302af51818598dd14b4a41f68424de}{
+virtual std::set$<$ ObstacleRef $>$ \textbf{get\_\-visible\_\-obstacles} (const \hyperlink{class_robot_data}{RobotData} \&robot) const }
+\label{class_spheric_view_63302af51818598dd14b4a41f68424de}
+
+\item 
+\hypertarget{class_spheric_view_daa935af0af47909afd7234f024ab1f2}{
+virtual std::set$<$ MarkerRef $>$ \textbf{get\_\-visible\_\-markers} (const \hyperlink{class_robot_data}{RobotData} \&robot) const }
+\label{class_spheric_view_daa935af0af47909afd7234f024ab1f2}
+
+\item 
+\hypertarget{class_spheric_view_83c5707136239b6c1c7af5fb2f320030}{
+double \textbf{view\_\-radius} () const }
+\label{class_spheric_view_83c5707136239b6c1c7af5fb2f320030}
+
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_spheric_view_5145c1290593cd597136d588dae1c060}{
+double \textbf{view\_\-radius\_\-}}
+\label{class_spheric_view_5145c1290593cd597136d588dae1c060}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Basic spherical view model. 
+
+Provides implementations of getVisible... methods. To efficiently implement them the classes uses an \hyperlink{class_octree}{Octree} as internal data structure.
+
+Assigning this class to a Robot corresponds to a \char`\"{}see all objects in a given radius\char`\"{} model. 
+
+Definition at line 25 of file spheric\_\-view.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_spheric_view_dbd6a1d5e2f17594f82e831c38d35ec6}{
+\index{SphericView@{SphericView}!init@{init}}
+\index{init@{init}!SphericView@{SphericView}}
+\subsubsection[init]{\setlength{\rightskip}{0pt plus 5cm}void SphericView::init (const {\bf WorldInformation} \& {\em world\_\-information})\hspace{0.3cm}{\tt  \mbox{[}virtual\mbox{]}}}}
+\label{class_spheric_view_dbd6a1d5e2f17594f82e831c38d35ec6}
+
+
+Although init is trivial, it is nice to have a default constructor in virtual inherited classes. Otherwise every arbitrary deep sub class has to call the non-default constructor. Call this method before using any other method of \hyperlink{class_view}{View}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em \hyperlink{class_world_information}{WorldInformation}}]\end{description}
+\end{Desc}
+
+
+Reimplemented from \hyperlink{class_octree_view_800b8d09dbd898769439f1765e7d87b1}{OctreeView}.
+
+Definition at line 24 of file spheric\_\-view.cc.
+
+References View::init(), WorldInformation::markers(), WorldInformation::obstacles(), and WorldInformation::robot\_\-data().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Views/spheric\_\-view.h\item 
+src/Views/spheric\_\-view.cc\end{CompactItemize}

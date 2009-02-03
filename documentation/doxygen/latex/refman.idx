@@ -1,0 +1,129 @@
+\indexentry{src/ActivationSequenceGenerators/ Directory Reference@{src/ActivationSequenceGenerators/ Directory Reference}|hyperpage}{13}
+\indexentry{src/EventHandlers/ Directory Reference@{src/EventHandlers/ Directory Reference}|hyperpage}{14}
+\indexentry{src/Events/ Directory Reference@{src/Events/ Directory Reference}|hyperpage}{15}
+\indexentry{src/Model/ Directory Reference@{src/Model/ Directory Reference}|hyperpage}{16}
+\indexentry{src/OpenGL/ Directory Reference@{src/OpenGL/ Directory Reference}|hyperpage}{17}
+\indexentry{src/Requests/ Directory Reference@{src/Requests/ Directory Reference}|hyperpage}{18}
+\indexentry{src/SimulationControl/ Directory Reference@{src/SimulationControl/ Directory Reference}|hyperpage}{19}
+\indexentry{src/SimulationKernel/ Directory Reference@{src/SimulationKernel/ Directory Reference}|hyperpage}{20}
+\indexentry{src/ Directory Reference@{src/ Directory Reference}|hyperpage}{21}
+\indexentry{src/Statistics/ Directory Reference@{src/Statistics/ Directory Reference}|hyperpage}{22}
+\indexentry{src/UserInterfaces/ Directory Reference@{src/UserInterfaces/ Directory Reference}|hyperpage}{23}
+\indexentry{src/Utilities/ Directory Reference@{src/Utilities/ Directory Reference}|hyperpage}{24}
+\indexentry{src/Views/ Directory Reference@{src/Views/ Directory Reference}|hyperpage}{25}
+\indexentry{src/Visualisation/ Directory Reference@{src/Visualisation/ Directory Reference}|hyperpage}{27}
+\indexentry{CoordConverter@{CoordConverter}|hyperpage}{29}
+\indexentry{CoordConverter@{CoordConverter}!global\_\discretionary {-}{}{}to\_\discretionary {-}{}{}local@{global\_\discretionary {-}{}{}to\_\discretionary {-}{}{}local}|hyperpage}{29}
+\indexentry{global\_\discretionary {-}{}{}to\_\discretionary {-}{}{}local@{global\_\discretionary {-}{}{}to\_\discretionary {-}{}{}local}!CoordConverter@{CoordConverter}|hyperpage}{29}
+\indexentry{CoordConverter@{CoordConverter}!local\_\discretionary {-}{}{}to\_\discretionary {-}{}{}global@{local\_\discretionary {-}{}{}to\_\discretionary {-}{}{}global}|hyperpage}{30}
+\indexentry{local\_\discretionary {-}{}{}to\_\discretionary {-}{}{}global@{local\_\discretionary {-}{}{}to\_\discretionary {-}{}{}global}!CoordConverter@{CoordConverter}|hyperpage}{30}
+\indexentry{PgGLUT@{PgGLUT}|hyperpage}{31}
+\indexentry{PgGLUT@{PgGLUT}!glutDisplayFunc@{glutDisplayFunc}|hyperpage}{32}
+\indexentry{glutDisplayFunc@{glutDisplayFunc}!PgGLUT@{PgGLUT}|hyperpage}{32}
+\indexentry{PgGLUT@{PgGLUT}!glutKeyboardFunc@{glutKeyboardFunc}|hyperpage}{32}
+\indexentry{glutKeyboardFunc@{glutKeyboardFunc}!PgGLUT@{PgGLUT}|hyperpage}{32}
+\indexentry{PgGLUT@{PgGLUT}!glutMainLoop@{glutMainLoop}|hyperpage}{32}
+\indexentry{glutMainLoop@{glutMainLoop}!PgGLUT@{PgGLUT}|hyperpage}{32}
+\indexentry{PgGLUT@{PgGLUT}!glutMouseFunc@{glutMouseFunc}|hyperpage}{32}
+\indexentry{glutMouseFunc@{glutMouseFunc}!PgGLUT@{PgGLUT}|hyperpage}{32}
+\indexentry{PgGLUT@{PgGLUT}!glutReshapeFunc@{glutReshapeFunc}|hyperpage}{33}
+\indexentry{glutReshapeFunc@{glutReshapeFunc}!PgGLUT@{PgGLUT}|hyperpage}{33}
+\indexentry{PgGLUT@{PgGLUT}!init@{init}|hyperpage}{33}
+\indexentry{init@{init}!PgGLUT@{PgGLUT}|hyperpage}{33}
+\indexentry{AccelerationRequest@{AccelerationRequest}|hyperpage}{35}
+\indexentry{ActivationSequenceGenerator@{ActivationSequenceGenerator}|hyperpage}{37}
+\indexentry{ActivationSequenceGenerator@{ActivationSequenceGenerator}!initialize@{initialize}|hyperpage}{37}
+\indexentry{initialize@{initialize}!ActivationSequenceGenerator@{ActivationSequenceGenerator}|hyperpage}{37}
+\indexentry{ActivationSequenceGenerator@{ActivationSequenceGenerator}!get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}|hyperpage}{37}
+\indexentry{get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}!ActivationSequenceGenerator@{ActivationSequenceGenerator}|hyperpage}{37}
+\indexentry{ActivationSequenceGenerator@{ActivationSequenceGenerator}!get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}|hyperpage}{38}
+\indexentry{get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}!ActivationSequenceGenerator@{ActivationSequenceGenerator}|hyperpage}{38}
+\indexentry{AsynchronousASG@{AsynchronousASG}|hyperpage}{39}
+\indexentry{AsynchronousASG@{AsynchronousASG}!initialize@{initialize}|hyperpage}{40}
+\indexentry{initialize@{initialize}!AsynchronousASG@{AsynchronousASG}|hyperpage}{40}
+\indexentry{AsynchronousASG@{AsynchronousASG}!get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}|hyperpage}{40}
+\indexentry{get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}!AsynchronousASG@{AsynchronousASG}|hyperpage}{40}
+\indexentry{AsynchronousASG@{AsynchronousASG}!get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}|hyperpage}{40}
+\indexentry{get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event@{get\_\discretionary {-}{}{}time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event}!AsynchronousASG@{AsynchronousASG}|hyperpage}{40}
+\indexentry{AsynchronousASG@{AsynchronousASG}!update@{update}|hyperpage}{41}
+\indexentry{update@{update}!AsynchronousASG@{AsynchronousASG}|hyperpage}{41}
+\indexentry{AsynchronousASG@{AsynchronousASG}!choose\_\discretionary {-}{}{}event\_\discretionary {-}{}{}type@{choose\_\discretionary {-}{}{}event\_\discretionary {-}{}{}type}|hyperpage}{41}
+\indexentry{choose\_\discretionary {-}{}{}event\_\discretionary {-}{}{}type@{choose\_\discretionary {-}{}{}event\_\discretionary {-}{}{}type}!AsynchronousASG@{AsynchronousASG}|hyperpage}{41}
+\indexentry{AsynchronousASG@{AsynchronousASG}!AsynchronousASGTestAccessor@{AsynchronousASGTestAccessor}|hyperpage}{41}
+\indexentry{AsynchronousASGTestAccessor@{AsynchronousASGTestAccessor}!AsynchronousASG@{AsynchronousASG}|hyperpage}{41}
+\indexentry{AsynchronousASG@{AsynchronousASG}!time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event\_\discretionary {-}{}{}@{time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event\_\discretionary {-}{}{}}|hyperpage}{41}
+\indexentry{time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event\_\discretionary {-}{}{}@{time\_\discretionary {-}{}{}of\_\discretionary {-}{}{}next\_\discretionary {-}{}{}event\_\discretionary {-}{}{}}!AsynchronousASG@{AsynchronousASG}|hyperpage}{41}
+\indexentry{AsynchronousASG@{AsynchronousASG}!unhandled\_\discretionary {-}{}{}request\_\discretionary {-}{}{}set\_\discretionary {-}{}{}@{unhandled\_\discretionary {-}{}{}request\_\discretionary {-}{}{}set\_\discretionary {-}{}{}}|hyperpage}{42}
+\indexentry{unhandled\_\discretionary {-}{}{}request\_\discretionary {-}{}{}set\_\discretionary {-}{}{}@{unhandled\_\discretionary {-}{}{}request\_\discretionary {-}{}{}set\_\discretionary {-}{}{}}!AsynchronousASG@{AsynchronousASG}|hyperpage}{42}
+\indexentry{AsynchronousASG@{AsynchronousASG}!looking\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}@{looking\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}}|hyperpage}{42}
+\indexentry{looking\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}@{looking\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}}!AsynchronousASG@{AsynchronousASG}|hyperpage}{42}
+\indexentry{AsynchronousASG@{AsynchronousASG}!computing\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}@{computing\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}}|hyperpage}{42}
+\indexentry{computing\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}@{computing\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}}!AsynchronousASG@{AsynchronousASG}|hyperpage}{42}
+\indexentry{AsynchronousASG@{AsynchronousASG}!handling\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}@{handling\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}}|hyperpage}{42}
+\indexentry{handling\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}@{handling\_\discretionary {-}{}{}robots\_\discretionary {-}{}{}}!AsynchronousASG@{AsynchronousASG}|hyperpage}{42}
+\indexentry{AsynchronousASG@{AsynchronousASG}!distribution\_\discretionary {-}{}{}generator\_\discretionary {-}{}{}@{distribution\_\discretionary {-}{}{}generator\_\discretionary {-}{}{}}|hyperpage}{42}
+\indexentry{distribution\_\discretionary {-}{}{}generator\_\discretionary {-}{}{}@{distribution\_\discretionary {-}{}{}generator\_\discretionary {-}{}{}}!AsynchronousASG@{AsynchronousASG}|hyperpage}{42}
+\indexentry{Box@{Box}|hyperpage}{44}
+\indexentry{Box@{Box}!height@{height}|hyperpage}{45}
+\indexentry{height@{height}!Box@{Box}|hyperpage}{45}
+\indexentry{Box@{Box}!set\_\discretionary {-}{}{}height@{set\_\discretionary {-}{}{}height}|hyperpage}{45}
+\indexentry{set\_\discretionary {-}{}{}height@{set\_\discretionary {-}{}{}height}!Box@{Box}|hyperpage}{45}
+\indexentry{Box@{Box}!depth@{depth}|hyperpage}{45}
+\indexentry{depth@{depth}!Box@{Box}|hyperpage}{45}
+\indexentry{Box@{Box}!set\_\discretionary {-}{}{}depth@{set\_\discretionary {-}{}{}depth}|hyperpage}{45}
+\indexentry{set\_\discretionary {-}{}{}depth@{set\_\discretionary {-}{}{}depth}!Box@{Box}|hyperpage}{45}
+\indexentry{Box@{Box}!width@{width}|hyperpage}{45}
+\indexentry{width@{width}!Box@{Box}|hyperpage}{45}
+\indexentry{Box@{Box}!set\_\discretionary {-}{}{}width@{set\_\discretionary {-}{}{}width}|hyperpage}{46}
+\indexentry{set\_\discretionary {-}{}{}width@{set\_\discretionary {-}{}{}width}!Box@{Box}|hyperpage}{46}
+\indexentry{Box@{Box}!contains\_\discretionary {-}{}{}point@{contains\_\discretionary {-}{}{}point}|hyperpage}{46}
+\indexentry{contains\_\discretionary {-}{}{}point@{contains\_\discretionary {-}{}{}point}!Box@{Box}|hyperpage}{46}
+\indexentry{Box@{Box}!clone@{clone}|hyperpage}{46}
+\indexentry{clone@{clone}!Box@{Box}|hyperpage}{46}
+\indexentry{BoxIdentifier@{BoxIdentifier}|hyperpage}{47}
+\indexentry{ChainView@{ChainView}|hyperpage}{48}
+\indexentry{CogView@{CogView}|hyperpage}{49}
+\indexentry{ComputeEvent@{ComputeEvent}|hyperpage}{50}
+\indexentry{ComputeEvent@{ComputeEvent}!add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}robot\_\discretionary {-}{}{}subset@{add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}robot\_\discretionary {-}{}{}subset}|hyperpage}{50}
+\indexentry{add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}robot\_\discretionary {-}{}{}subset@{add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}robot\_\discretionary {-}{}{}subset}!ComputeEvent@{ComputeEvent}|hyperpage}{50}
+\indexentry{ComputeEvent@{ComputeEvent}!robot\_\discretionary {-}{}{}subset@{robot\_\discretionary {-}{}{}subset}|hyperpage}{51}
+\indexentry{robot\_\discretionary {-}{}{}subset@{robot\_\discretionary {-}{}{}subset}!ComputeEvent@{ComputeEvent}|hyperpage}{51}
+\indexentry{ComputeEvent@{ComputeEvent}!add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}requests@{add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}requests}|hyperpage}{51}
+\indexentry{add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}requests@{add\_\discretionary {-}{}{}to\_\discretionary {-}{}{}requests}!ComputeEvent@{ComputeEvent}|hyperpage}{51}
+\indexentry{ComputeEvent@{ComputeEvent}!requests@{requests}|hyperpage}{51}
+\indexentry{requests@{requests}!ComputeEvent@{ComputeEvent}|hyperpage}{51}
+\indexentry{ComputeEvent@{ComputeEvent}!robot\_\discretionary {-}{}{}subset\_\discretionary {-}{}{}@{robot\_\discretionary {-}{}{}subset\_\discretionary {-}{}{}}|hyperpage}{51}
+\indexentry{robot\_\discretionary {-}{}{}subset\_\discretionary {-}{}{}@{robot\_\discretionary {-}{}{}subset\_\discretionary {-}{}{}}!ComputeEvent@{ComputeEvent}|hyperpage}{51}
+\indexentry{ComputeEvent@{ComputeEvent}!requests\_\discretionary {-}{}{}@{requests\_\discretionary {-}{}{}}|hyperpage}{52}
+\indexentry{requests\_\discretionary {-}{}{}@{requests\_\discretionary {-}{}{}}!ComputeEvent@{ComputeEvent}|hyperpage}{52}
+\indexentry{DistributionGenerator@{DistributionGenerator}|hyperpage}{53}
+\indexentry{DistributionGenerator@{DistributionGenerator}!DistributionGenerator@{DistributionGenerator}|hyperpage}{54}
+\indexentry{DistributionGenerator@{DistributionGenerator}!DistributionGenerator@{DistributionGenerator}|hyperpage}{54}
+\indexentry{DistributionGenerator@{DistributionGenerator}!init\_\discretionary {-}{}{}uniform@{init\_\discretionary {-}{}{}uniform}|hyperpage}{54}
+\indexentry{init\_\discretionary {-}{}{}uniform@{init\_\discretionary {-}{}{}uniform}!DistributionGenerator@{DistributionGenerator}|hyperpage}{54}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform}|hyperpage}{54}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform}!DistributionGenerator@{DistributionGenerator}|hyperpage}{54}
+\indexentry{DistributionGenerator@{DistributionGenerator}!init\_\discretionary {-}{}{}normal@{init\_\discretionary {-}{}{}normal}|hyperpage}{54}
+\indexentry{init\_\discretionary {-}{}{}normal@{init\_\discretionary {-}{}{}normal}!DistributionGenerator@{DistributionGenerator}|hyperpage}{54}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}normal@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}normal}|hyperpage}{54}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}normal@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}normal}!DistributionGenerator@{DistributionGenerator}|hyperpage}{54}
+\indexentry{DistributionGenerator@{DistributionGenerator}!init\_\discretionary {-}{}{}bernoulli@{init\_\discretionary {-}{}{}bernoulli}|hyperpage}{55}
+\indexentry{init\_\discretionary {-}{}{}bernoulli@{init\_\discretionary {-}{}{}bernoulli}!DistributionGenerator@{DistributionGenerator}|hyperpage}{55}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}bernoulli@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}bernoulli}|hyperpage}{55}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}bernoulli@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}bernoulli}!DistributionGenerator@{DistributionGenerator}|hyperpage}{55}
+\indexentry{DistributionGenerator@{DistributionGenerator}!init\_\discretionary {-}{}{}exponential@{init\_\discretionary {-}{}{}exponential}|hyperpage}{55}
+\indexentry{init\_\discretionary {-}{}{}exponential@{init\_\discretionary {-}{}{}exponential}!DistributionGenerator@{DistributionGenerator}|hyperpage}{55}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}exponential@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}exponential}|hyperpage}{55}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}exponential@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}exponential}!DistributionGenerator@{DistributionGenerator}|hyperpage}{55}
+\indexentry{DistributionGenerator@{DistributionGenerator}!init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real@{init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real}|hyperpage}{55}
+\indexentry{init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real@{init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real}!DistributionGenerator@{DistributionGenerator}|hyperpage}{55}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real}|hyperpage}{56}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}real}!DistributionGenerator@{DistributionGenerator}|hyperpage}{56}
+\indexentry{DistributionGenerator@{DistributionGenerator}!init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere@{init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere}|hyperpage}{56}
+\indexentry{init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere@{init\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere}!DistributionGenerator@{DistributionGenerator}|hyperpage}{56}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere}|hyperpage}{56}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere}!DistributionGenerator@{DistributionGenerator}|hyperpage}{56}
+\indexentry{DistributionGenerator@{DistributionGenerator}!get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere\_\discretionary {-}{}{}3d@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere\_\discretionary {-}{}{}3d}|hyperpage}{56}
+\indexentry{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere\_\discretionary {-}{}{}3d@{get\_\discretionary {-}{}{}value\_\discretionary {-}{}{}uniform\_\discretionary {-}{}{}on\_\discretionary {-}{}{}sphere\_\discretionary {-}{}{}3d}!DistributionGenerator@{DistributionGenerator}|hyperpage}{56}
+\indexentry{DistributionGenerator@{DistributionGenerator}!set\_\discretionary {-}{}{}seed@{set\_\discretionary {-}{}{}seed}|hyperpage}{57}
+\indexentry{set\_\discretionary {-}{}{}seed@{set\_\discretionary {-}{}{}seed}!DistributionGenerator@{DistributionGenerator}|hyperpage}{57}

@@ -1,0 +1,55 @@
+\hypertarget{namespace_coord_converter}{
+\section{CoordConverter Namespace Reference}
+\label{namespace_coord_converter}\index{CoordConverter@{CoordConverter}}
+}
+Namespace providing utility methods to convert global to local coordinates and vice versa.  
+
+
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+boost::shared\_\-ptr$<$ Vector3d $>$ \hyperlink{namespace_coord_converter_7e349878b96f2912c0ca387ffe8cb86a}{global\_\-to\_\-local} (const Vector3d \&absolute\_\-coord, const Vector3d \&origin, const boost::tuple$<$ boost::shared\_\-ptr$<$ Vector3d $>$, boost::shared\_\-ptr$<$ Vector3d $>$, boost::shared\_\-ptr$<$ Vector3d $>$ $>$ \&local\_\-coord\_\-system)
+\item 
+boost::shared\_\-ptr$<$ Vector3d $>$ \hyperlink{namespace_coord_converter_4b23c9940a307b7cc9e3e9d843a48770}{local\_\-to\_\-global} (const Vector3d \&local\_\-coord, const Vector3d \&local\_\-origin, const boost::tuple$<$ boost::shared\_\-ptr$<$ const Vector3d $>$, boost::shared\_\-ptr$<$ const Vector3d $>$, boost::shared\_\-ptr$<$ const Vector3d $>$ $>$ \&local\_\-coord\_\-system)
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Namespace providing utility methods to convert global to local coordinates and vice versa. 
+
+\subsection{Function Documentation}
+\hypertarget{namespace_coord_converter_7e349878b96f2912c0ca387ffe8cb86a}{
+\index{CoordConverter@{CoordConverter}!global\_\-to\_\-local@{global\_\-to\_\-local}}
+\index{global\_\-to\_\-local@{global\_\-to\_\-local}!CoordConverter@{CoordConverter}}
+\subsubsection[global\_\-to\_\-local]{\setlength{\rightskip}{0pt plus 5cm}boost::shared\_\-ptr$<$ Vector3d $>$ CoordConverter::global\_\-to\_\-local (const Vector3d \& {\em absolute\_\-coord}, \/  const Vector3d \& {\em origin}, \/  const boost::tuple$<$ boost::shared\_\-ptr$<$ Vector3d $>$, boost::shared\_\-ptr$<$ Vector3d $>$, boost::shared\_\-ptr$<$ Vector3d $>$ $>$ \& {\em local\_\-coord\_\-system})}}
+\label{namespace_coord_converter_7e349878b96f2912c0ca387ffe8cb86a}
+
+
+calculates local coordinates from global ones \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em absolute\_\-coord,:}]the global cordinate \item[{\em origin,:}]the origin in global coordinates (typically a robot position) \item[{\em local\_\-coord\_\-system,:}]three base vectors \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]the local coordinate \end{Desc}
+
+
+Definition at line 11 of file coord\_\-converter.cc.
+
+Referenced by View::get\_\-position().\hypertarget{namespace_coord_converter_4b23c9940a307b7cc9e3e9d843a48770}{
+\index{CoordConverter@{CoordConverter}!local\_\-to\_\-global@{local\_\-to\_\-global}}
+\index{local\_\-to\_\-global@{local\_\-to\_\-global}!CoordConverter@{CoordConverter}}
+\subsubsection[local\_\-to\_\-global]{\setlength{\rightskip}{0pt plus 5cm}boost::shared\_\-ptr$<$ Vector3d $>$ CoordConverter::local\_\-to\_\-global (const Vector3d \& {\em local\_\-coord}, \/  const Vector3d \& {\em local\_\-origin}, \/  const boost::tuple$<$ boost::shared\_\-ptr$<$ const Vector3d $>$, boost::shared\_\-ptr$<$ const Vector3d $>$, boost::shared\_\-ptr$<$ const Vector3d $>$ $>$ \& {\em local\_\-coord\_\-system})}}
+\label{namespace_coord_converter_4b23c9940a307b7cc9e3e9d843a48770}
+
+
+calculates global coordinates from local ones. The origin of global systems is assumed to be (0,0,0). The global coordinate system is assumed to use unit vectors as base. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em local\_\-coord,:}]the local coordinate \item[{\em local\_\-coord\_\-system,:}]the three base vectors of the local coordinate system \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]the global coordinate \end{Desc}
+
+
+Definition at line 30 of file coord\_\-converter.cc.

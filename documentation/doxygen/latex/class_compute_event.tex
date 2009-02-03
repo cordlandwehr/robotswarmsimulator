@@ -1,0 +1,139 @@
+\hypertarget{class_compute_event}{
+\section{ComputeEvent Class Reference}
+\label{class_compute_event}\index{ComputeEvent@{ComputeEvent}}
+}
+A \hyperlink{class_compute_event}{ComputeEvent} is an event which causes a subset of the robots to calculate new requests.  
+
+
+{\tt \#include $<$compute\_\-event.h$>$}
+
+Inheritance diagram for ComputeEvent::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{class_compute_event}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_compute_event_4dc6eee8abfa25658b1cf2b9661ff540}{
+\textbf{ComputeEvent} (int time)}
+\label{class_compute_event_4dc6eee8abfa25658b1cf2b9661ff540}
+
+\item 
+void \hyperlink{class_compute_event_7268b70a949c8e9fb1116a1ced0e0071}{add\_\-to\_\-robot\_\-subset} (boost::shared\_\-ptr$<$ Robot $>$ new\_\-robot)
+\item 
+const vector$<$ boost::shared\_\-ptr$<$ Robot $>$ $>$ \& \hyperlink{class_compute_event_ab47f53949412a2ae5f182206aebf438}{robot\_\-subset} () const 
+\item 
+void \hyperlink{class_compute_event_97884cf9d3eebb04629883c239a7ecfa}{add\_\-to\_\-requests} (boost::shared\_\-ptr$<$ const \hyperlink{class_request}{Request} $>$ new\_\-request)
+\item 
+const vector$<$ boost::shared\_\-ptr$<$ const \hyperlink{class_request}{Request} $>$ $>$ \& \hyperlink{class_compute_event_0e685c0e02288e058d59f7eeff83b74d}{requests} () const 
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+vector$<$ boost::shared\_\-ptr$<$ Robot $>$ $>$ \hyperlink{class_compute_event_2dbee5c3df3a079df940e2992b0afc30}{robot\_\-subset\_\-}
+\item 
+vector$<$ boost::shared\_\-ptr$<$ const \hyperlink{class_request}{Request} $>$ $>$ \hyperlink{class_compute_event_31c8515c8d6eeddecf1111fc8fd0ba67}{requests\_\-}
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+A \hyperlink{class_compute_event}{ComputeEvent} is an event which causes a subset of the robots to calculate new requests. 
+
+Definition at line 24 of file compute\_\-event.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_compute_event_7268b70a949c8e9fb1116a1ced0e0071}{
+\index{ComputeEvent@{ComputeEvent}!add\_\-to\_\-robot\_\-subset@{add\_\-to\_\-robot\_\-subset}}
+\index{add\_\-to\_\-robot\_\-subset@{add\_\-to\_\-robot\_\-subset}!ComputeEvent@{ComputeEvent}}
+\subsubsection[add\_\-to\_\-robot\_\-subset]{\setlength{\rightskip}{0pt plus 5cm}void ComputeEvent::add\_\-to\_\-robot\_\-subset (boost::shared\_\-ptr$<$ Robot $>$ {\em new\_\-robot})}}
+\label{class_compute_event_7268b70a949c8e9fb1116a1ced0e0071}
+
+
+Adds a new robot to the subset of robots in the event. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em A}]shared pointer to the new robot. \end{description}
+\end{Desc}
+
+
+Definition at line 10 of file compute\_\-event.cc.
+
+References robot\_\-subset\_\-.
+
+Referenced by SynchronousASG::get\_\-next\_\-event().\hypertarget{class_compute_event_ab47f53949412a2ae5f182206aebf438}{
+\index{ComputeEvent@{ComputeEvent}!robot\_\-subset@{robot\_\-subset}}
+\index{robot\_\-subset@{robot\_\-subset}!ComputeEvent@{ComputeEvent}}
+\subsubsection[robot\_\-subset]{\setlength{\rightskip}{0pt plus 5cm}const vector$<$ boost::shared\_\-ptr$<$ Robot $>$ $>$ \& ComputeEvent::robot\_\-subset () const}}
+\label{class_compute_event_ab47f53949412a2ae5f182206aebf438}
+
+
+Returns a constant reference to the robot subset. \begin{Desc}
+\item[Returns:]A constant reference to the robot subset. \end{Desc}
+
+
+Definition at line 15 of file compute\_\-event.cc.
+
+References robot\_\-subset\_\-.\hypertarget{class_compute_event_97884cf9d3eebb04629883c239a7ecfa}{
+\index{ComputeEvent@{ComputeEvent}!add\_\-to\_\-requests@{add\_\-to\_\-requests}}
+\index{add\_\-to\_\-requests@{add\_\-to\_\-requests}!ComputeEvent@{ComputeEvent}}
+\subsubsection[add\_\-to\_\-requests]{\setlength{\rightskip}{0pt plus 5cm}void ComputeEvent::add\_\-to\_\-requests (boost::shared\_\-ptr$<$ const {\bf Request} $>$ {\em new\_\-request})}}
+\label{class_compute_event_97884cf9d3eebb04629883c239a7ecfa}
+
+
+Adds a new request to the set of requests. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em A}]shared pointer to the new request. \end{description}
+\end{Desc}
+
+
+Definition at line 19 of file compute\_\-event.cc.
+
+References requests\_\-.\hypertarget{class_compute_event_0e685c0e02288e058d59f7eeff83b74d}{
+\index{ComputeEvent@{ComputeEvent}!requests@{requests}}
+\index{requests@{requests}!ComputeEvent@{ComputeEvent}}
+\subsubsection[requests]{\setlength{\rightskip}{0pt plus 5cm}const vector$<$ boost::shared\_\-ptr$<$ const {\bf Request} $>$ $>$ \& ComputeEvent::requests () const}}
+\label{class_compute_event_0e685c0e02288e058d59f7eeff83b74d}
+
+
+Returns a constant reference to the set of requests. \begin{Desc}
+\item[Returns:]A constant reference to the set of requests. \end{Desc}
+
+
+Definition at line 23 of file compute\_\-event.cc.
+
+References requests\_\-.
+
+Referenced by SynchronousASG::update().
+
+\subsection{Member Data Documentation}
+\hypertarget{class_compute_event_2dbee5c3df3a079df940e2992b0afc30}{
+\index{ComputeEvent@{ComputeEvent}!robot\_\-subset\_\-@{robot\_\-subset\_\-}}
+\index{robot\_\-subset\_\-@{robot\_\-subset\_\-}!ComputeEvent@{ComputeEvent}}
+\subsubsection[robot\_\-subset\_\-]{\setlength{\rightskip}{0pt plus 5cm}vector$<$boost::shared\_\-ptr$<$Robot$>$ $>$ {\bf ComputeEvent::robot\_\-subset\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_compute_event_2dbee5c3df3a079df940e2992b0afc30}
+
+
+The robot subset for this event. 
+
+Definition at line 57 of file compute\_\-event.h.
+
+Referenced by add\_\-to\_\-robot\_\-subset(), and robot\_\-subset().\hypertarget{class_compute_event_31c8515c8d6eeddecf1111fc8fd0ba67}{
+\index{ComputeEvent@{ComputeEvent}!requests\_\-@{requests\_\-}}
+\index{requests\_\-@{requests\_\-}!ComputeEvent@{ComputeEvent}}
+\subsubsection[requests\_\-]{\setlength{\rightskip}{0pt plus 5cm}vector$<$boost::shared\_\-ptr$<$const {\bf Request}$>$ $>$ {\bf ComputeEvent::requests\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_compute_event_31c8515c8d6eeddecf1111fc8fd0ba67}
+
+
+The set of resulting requests 
+
+Definition at line 62 of file compute\_\-event.h.
+
+Referenced by add\_\-to\_\-requests(), and requests().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Events/compute\_\-event.h\item 
+src/Events/compute\_\-event.cc\end{CompactItemize}

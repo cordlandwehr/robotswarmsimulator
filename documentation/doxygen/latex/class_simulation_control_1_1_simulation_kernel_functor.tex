@@ -1,0 +1,131 @@
+\hypertarget{class_simulation_control_1_1_simulation_kernel_functor}{
+\section{SimulationControl::SimulationKernelFunctor Class Reference}
+\label{class_simulation_control_1_1_simulation_kernel_functor}\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_simulation_control_1_1_simulation_kernel_functor_5264e83328beeaafae7e87179614c436}{SimulationKernelFunctor} (boost::shared\_\-ptr$<$ \hyperlink{class_simulation_kernel}{SimulationKernel} $>$ simulation\_\-kernel)
+\item 
+void \hyperlink{class_simulation_control_1_1_simulation_kernel_functor_c23f51cedb9c10e346a7bb6a66ed98ab}{unpause} ()
+\item 
+void \hyperlink{class_simulation_control_1_1_simulation_kernel_functor_1228e457d2a780ba379b36e66f57e8cd}{pause} ()
+\item 
+void \hyperlink{class_simulation_control_1_1_simulation_kernel_functor_afb53670154b6460d79358f9b866ef24}{terminate} ()
+\item 
+void \hyperlink{class_simulation_control_1_1_simulation_kernel_functor_44aaca5c7b6605436b889d41cc4b9472}{loop} ()
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+bool \hyperlink{class_simulation_control_1_1_simulation_kernel_functor_0803093cc15c83a7b85044ae2d630270}{terminated\_\-}
+\item 
+bool \hyperlink{class_simulation_control_1_1_simulation_kernel_functor_c0b1b92a6a04db5775afbcbae5a734ec}{paused\_\-}
+\item 
+\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_d513c7e18afaed223c9477654d33638e}{
+boost::interprocess::interprocess\_\-semaphore \textbf{unpaused\_\-}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_d513c7e18afaed223c9477654d33638e}
+
+\item 
+\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_ee9b24898cfae41f76f8fd096cdcab24}{
+boost::shared\_\-ptr$<$ \hyperlink{class_simulation_kernel}{SimulationKernel} $>$ \textbf{simulation\_\-kernel\_\-}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_ee9b24898cfae41f76f8fd096cdcab24}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Thread-Wrapper for the simulation kernel. Allows the simulation kernel thread to be paused and unpaused. 
+
+Definition at line 70 of file simulation\_\-control.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_5264e83328beeaafae7e87179614c436}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!SimulationKernelFunctor@{SimulationKernelFunctor}}
+\index{SimulationKernelFunctor@{SimulationKernelFunctor}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[SimulationKernelFunctor]{\setlength{\rightskip}{0pt plus 5cm}SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor (boost::shared\_\-ptr$<$ {\bf SimulationKernel} $>$ {\em simulation\_\-kernel})}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_5264e83328beeaafae7e87179614c436}
+
+
+constructs a new functor with the given simulation kernel thread. 
+
+Definition at line 127 of file simulation\_\-control.cc.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_c23f51cedb9c10e346a7bb6a66ed98ab}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!unpause@{unpause}}
+\index{unpause@{unpause}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[unpause]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::SimulationKernelFunctor::unpause ()}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_c23f51cedb9c10e346a7bb6a66ed98ab}
+
+
+unpauses the simulation thread using a semaphor 
+
+Definition at line 132 of file simulation\_\-control.cc.
+
+References paused\_\-.\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_1228e457d2a780ba379b36e66f57e8cd}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!pause@{pause}}
+\index{pause@{pause}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[pause]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::SimulationKernelFunctor::pause ()}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_1228e457d2a780ba379b36e66f57e8cd}
+
+
+pauses the simulation thread using a semaphor 
+
+Definition at line 140 of file simulation\_\-control.cc.
+
+References paused\_\-.\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_afb53670154b6460d79358f9b866ef24}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!terminate@{terminate}}
+\index{terminate@{terminate}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[terminate]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::SimulationKernelFunctor::terminate ()}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_afb53670154b6460d79358f9b866ef24}
+
+
+terminates the simulation thread by exiting the endless loop 
+
+Definition at line 148 of file simulation\_\-control.cc.
+
+References terminated\_\-.\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_44aaca5c7b6605436b889d41cc4b9472}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!loop@{loop}}
+\index{loop@{loop}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[loop]{\setlength{\rightskip}{0pt plus 5cm}void SimulationControl::SimulationKernelFunctor::loop ()}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_44aaca5c7b6605436b889d41cc4b9472}
+
+
+a endless loop performing simulation steps until terminated. 
+
+Definition at line 152 of file simulation\_\-control.cc.
+
+References terminated\_\-.
+
+Referenced by SimulationControl::start\_\-simulation().
+
+\subsection{Member Data Documentation}
+\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_0803093cc15c83a7b85044ae2d630270}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!terminated\_\-@{terminated\_\-}}
+\index{terminated\_\-@{terminated\_\-}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[terminated\_\-]{\setlength{\rightskip}{0pt plus 5cm}bool {\bf SimulationControl::SimulationKernelFunctor::terminated\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_0803093cc15c83a7b85044ae2d630270}
+
+
+true iff the endless loop belonging to this functor should exit / is already exited. 
+
+Definition at line 101 of file simulation\_\-control.h.
+
+Referenced by loop(), and terminate().\hypertarget{class_simulation_control_1_1_simulation_kernel_functor_c0b1b92a6a04db5775afbcbae5a734ec}{
+\index{SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}!paused\_\-@{paused\_\-}}
+\index{paused\_\-@{paused\_\-}!SimulationControl::SimulationKernelFunctor@{SimulationControl::SimulationKernelFunctor}}
+\subsubsection[paused\_\-]{\setlength{\rightskip}{0pt plus 5cm}bool {\bf SimulationControl::SimulationKernelFunctor::paused\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_simulation_control_1_1_simulation_kernel_functor_c0b1b92a6a04db5775afbcbae5a734ec}
+
+
+true iff the thread should pause / is already pausing. 
+
+Definition at line 106 of file simulation\_\-control.h.
+
+Referenced by pause(), and unpause().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/SimulationControl/simulation\_\-control.h\item 
+src/SimulationControl/simulation\_\-control.cc\end{CompactItemize}

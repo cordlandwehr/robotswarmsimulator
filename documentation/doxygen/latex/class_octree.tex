@@ -1,0 +1,821 @@
+\hypertarget{class_octree}{
+\section{Octree Class Reference}
+\label{class_octree}\index{Octree@{Octree}}
+}
+Implements an \hyperlink{class_octree}{Octree} for WorldObjects.  
+
+
+{\tt \#include $<$octree.h$>$}
+
+\subsection*{Public Types}
+\begin{CompactItemize}
+\item 
+enum \hyperlink{class_octree_0279a06c2f71637befe827a037c89311}{OctreeNodes} \{ \par
+\textbf{TOP\_\-LEFT\_\-FRONT}, 
+\textbf{TOP\_\-LEFT\_\-BACK}, 
+\textbf{TOP\_\-RIGHT\_\-BACK}, 
+\par
+\textbf{TOP\_\-RIGHT\_\-FRONT}, 
+\textbf{BOTTOM\_\-LEFT\_\-FRONT}, 
+\textbf{BOTTOM\_\-LEFT\_\-BACK}, 
+\par
+\textbf{BOTTOM\_\-RIGHT\_\-BACK}, 
+\textbf{BOTTOM\_\-RIGHT\_\-FRONT}
+ \}
+\begin{CompactList}\small\item\em Gives Names to Child Nodes of the octree instead of numeric values. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_octree_5a8d6069e6a7848f8f1df2a4975cd446}{Octree} ()
+\begin{CompactList}\small\item\em Set up the \hyperlink{class_octree}{Octree} Node. \item\end{CompactList}\item 
+\hypertarget{class_octree_53a9d3f5b99977ece75cc5e00c4e9aed}{
+\textbf{Octree} (int max\_\-levels)}
+\label{class_octree_53a9d3f5b99977ece75cc5e00c4e9aed}
+
+\item 
+\hypertarget{class_octree_9e3744a765883d1d20f345a4336fc639}{
+\textbf{Octree} (float min\_\-width)}
+\label{class_octree_9e3744a765883d1d20f345a4336fc639}
+
+\item 
+\hyperlink{class_octree_1fba0564f41c14943a79fc874e92a60d}{Octree} (int max\_\-levels, float min\_\-width)
+\begin{CompactList}\small\item\em Set up the \hyperlink{class_octree}{Octree} Node. \item\end{CompactList}\item 
+\hypertarget{class_octree_ed978900fdafcf488b852f15d7690f42}{
+void \textbf{destroy\_\-octree} ()}
+\label{class_octree_ed978900fdafcf488b852f15d7690f42}
+
+\item 
+void \hyperlink{class_octree_d09d7848f637b4322aa94f93217ef686}{scene\_\-dimensions} (const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \&markers, const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \&obstacles, const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \&robot\_\-datas)
+\begin{CompactList}\small\item\em This sets the initial width, height and depth for the whole scene. \item\end{CompactList}\item 
+Vector3d \hyperlink{class_octree_65c7cdf803bfb02dab9681ff6bc03520}{new\_\-node\_\-center} (Vector3d center, float width, int node\_\-id)
+\begin{CompactList}\small\item\em This Method calculates the new center point of a node. \item\end{CompactList}\item 
+void \hyperlink{class_octree_7eb807d724b4caa99d723d07c1d1f4a6}{create\_\-node} (const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \&markers, const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \&obstacles, const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \&robot\_\-datas, const Vector3d center, float width)
+\item 
+void \hyperlink{class_octree_a40e7b86db10838454cf39b3dc04e762}{create\_\-new\_\-node} (const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \&markers, const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \&obstacles, const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \&robot\_\-datas, Vector3d center, float width, int node\_\-id)
+\begin{CompactList}\small\item\em This creates a new node. \item\end{CompactList}\item 
+void \hyperlink{class_octree_2bb5bd9cce1feeebecd645f893647681}{create\_\-tree} (const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \&markers, const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \&obstacles, const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \&robot\_\-datas)
+\begin{CompactList}\small\item\em This is the starting point of the tree creation. \item\end{CompactList}\item 
+float \hyperlink{class_octree_2108bbcd5fecadd8e3f072f871c5632c}{calculate\_\-dist\_\-to\_\-node} (const Vector3d \&pos) const 
+\begin{CompactList}\small\item\em Calculates the distance to this node from a given point. \item\end{CompactList}\item 
+int \hyperlink{class_octree_de868d730ef2ebe1442d0cc65cfc4f39}{point\_\-in\_\-node} (const Vector3d \&pos)
+\item 
+bool \hyperlink{class_octree_09d72bc24be26e5814e01ee2674545b1}{does\_\-obstacle\_\-fit} (boost::shared\_\-ptr$<$ Obstacle $>$ \&obstacle) const 
+\item 
+void \hyperlink{class_octree_7c327c632fbbcac0676ccd8dda9d99ce}{assign\_\-objects\_\-to\_\-node} (const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \&markers, const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \&obstacles, const std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \&robot\_\-datas)
+\item 
+void \hyperlink{class_octree_1e97431b76893f009beca8578f365ca9}{add\_\-marker\_\-to\_\-node} (boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ marker)
+\item 
+void \hyperlink{class_octree_bf82f696a0f350ad2eae35431e971a66}{add\_\-obstacle\_\-to\_\-node} (boost::shared\_\-ptr$<$ Obstacle $>$ obstacle)
+\item 
+void \hyperlink{class_octree_c09b4c93c005fd24b6feb35147d6cfd1}{add\_\-robot\_\-data\_\-to\_\-node} (boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ robot\_\-data)
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \& \hyperlink{class_octree_b87eff58fb428441817a569e4674a414}{marker\_\-information} ()
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \& \hyperlink{class_octree_0f5d4b3c958b35605eb5f8ed808dc021}{obstacles} ()
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \& \hyperlink{class_octree_daef5372a7ebc7e42cc7f3004b68c1ed}{robot\_\-datas} ()
+\item 
+void \hyperlink{class_octree_9b884a39d8adf578ced6df783d477c4c}{set\_\-parent} (\hyperlink{class_octree}{Octree} $\ast$parent)
+\item 
+\hyperlink{class_octree}{Octree} \& \hyperlink{class_octree_1aa93bae9b39e49b97f587357747cd17}{parent} ()
+\item 
+int \hyperlink{class_octree_e6729a08500e8937d91d809db870777c}{level} ()
+\item 
+Vector3d \hyperlink{class_octree_8a7a88c27aa9a48f6fbdfd6db5faa455}{center} () const 
+\item 
+int \hyperlink{class_octree_88cb79978d550bdd2699c15fe9879fc4}{object\_\-count} () const 
+\item 
+float \hyperlink{class_octree_174fc16c8dda632cf8c0ba7bfc9db4b0}{width} () const 
+\item 
+bool \hyperlink{class_octree_c05628e77200a5243dd1b0d84332ef39}{sub\_\-divided} () const 
+\item 
+int \hyperlink{class_octree_f514ecc29e3882b0c2e46ccb5ba4fcd9}{max\_\-levels} ()
+\item 
+float \hyperlink{class_octree_9c9093d2ed7caa8ac16a1f230a66428f}{min\_\-width} ()
+\item 
+const boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \& \hyperlink{class_octree_211c7b90c150193b6124c05229eb2abb}{child} (int child\_\-id)
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{class_octree_3456b71a9ff5067eed4317fe10947fcf}{set\_\-level} (int level)
+\item 
+void \hyperlink{class_octree_eb0215c31bf2b52267e0252940812680}{set\_\-max\_\-levels} (int max\_\-level)
+\item 
+void \hyperlink{class_octree_046a7db4d122f2b8ef6a5188ef78ffda}{set\_\-min\_\-width} (float min\_\-width)
+\item 
+int \hyperlink{class_octree_a721cdd20e21a952ea04721ae756d091}{determine\_\-obstacle\_\-type} (const boost::shared\_\-ptr$<$ Obstacle $>$ \&obstacle) const 
+\begin{CompactList}\small\item\em Helps to determin the type of an obstacle object. \item\end{CompactList}\item 
+float \hyperlink{class_octree_295852d7bca479a4abf01c579d2e93ae}{determine\_\-obstacle\_\-max\_\-size} (const boost::shared\_\-ptr$<$ Obstacle $>$ \&obstacle) const 
+\begin{CompactList}\small\item\em Returns the maximum size of an obstacle. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Private Member Functions}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_octree_311009ce6bc730b736fccde2f3b840d8}{
+void \textbf{init\_\-octree} ()}
+\label{class_octree_311009ce6bc730b736fccde2f3b840d8}
+
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_octree}{Octree} $\ast$ \hyperlink{class_octree_513527d29f670449b0a665625d476ad6}{parent\_\-}
+\item 
+int \hyperlink{class_octree_3955482b438c39aef803253592306217}{level\_\-}
+\item 
+int \hyperlink{class_octree_1b29e2ff7de0ce212008fc928de2e8c0}{max\_\-levels\_\-}
+\item 
+float \hyperlink{class_octree_d8300c6fe2f72671675b351e8b4e65db}{min\_\-width\_\-}
+\item 
+bool \hyperlink{class_octree_1ff3eebef24edecea4359fdaa994d26d}{sub\_\-divided\_\-}
+\item 
+float \hyperlink{class_octree_8f8660a65257ea4368c6ba2e57df86fc}{width\_\-}
+\item 
+int \hyperlink{class_octree_0faf7b0d6e445aee6e6954d4efdafcf9}{object\_\-count\_\-}
+\item 
+Vector3d \hyperlink{class_octree_d1830408734e4435f934a6cb31a0c8a4}{center\_\-}
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_world_object}{WorldObject} $>$ $>$ \hyperlink{class_octree_420b03d97b1631a2809b3b4929a84e89}{markers\_\-}
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \hyperlink{class_octree_7ba27f0c60cc3eceb10799bcc43e8acf}{obstacles\_\-}
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ \hyperlink{class_robot_data}{RobotData} $>$ $>$ \hyperlink{class_octree_f93af4c2615db522f4496fd050a5b61b}{robot\_\-datas\_\-}
+\item 
+boost::shared\_\-ptr$<$ \hyperlink{class_octree}{Octree} $>$ \hyperlink{class_octree_a7b4d7aa295f945512b9e39d8fd2d5d6}{octree\_\-nodes\_\-} \mbox{[}8\mbox{]}
+\end{CompactItemize}
+\subsection*{Friends}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_octree_836eb2cdddfa75db7fe8368e211bbe65}{
+class \hyperlink{class_octree_836eb2cdddfa75db7fe8368e211bbe65}{OctreeUtilities}}
+\label{class_octree_836eb2cdddfa75db7fe8368e211bbe65}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Implements an \hyperlink{class_octree}{Octree} for WorldObjects. 
+
+\begin{Desc}
+\item[Author:]Kamil Swierkot TODO: Describe how to use this class.... \end{Desc}
+
+
+Definition at line 30 of file octree.h.
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_octree_5a8d6069e6a7848f8f1df2a4975cd446}{
+\index{Octree@{Octree}!Octree@{Octree}}
+\index{Octree@{Octree}!Octree@{Octree}}
+\subsubsection[Octree]{\setlength{\rightskip}{0pt plus 5cm}Octree::Octree ()}}
+\label{class_octree_5a8d6069e6a7848f8f1df2a4975cd446}
+
+
+Set up the \hyperlink{class_octree}{Octree} Node. 
+
+max\_\-levels\_\- is set to 20000 and min\_\-width\_\- is set to 0. 
+
+Definition at line 23 of file octree.cc.
+
+References max\_\-levels\_\-, and min\_\-width\_\-.
+
+Referenced by create\_\-new\_\-node().\hypertarget{class_octree_1fba0564f41c14943a79fc874e92a60d}{
+\index{Octree@{Octree}!Octree@{Octree}}
+\index{Octree@{Octree}!Octree@{Octree}}
+\subsubsection[Octree]{\setlength{\rightskip}{0pt plus 5cm}Octree::Octree (int {\em max\_\-levels}, \/  float {\em min\_\-width})}}
+\label{class_octree_1fba0564f41c14943a79fc874e92a60d}
+
+
+Set up the \hyperlink{class_octree}{Octree} Node. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em max\_\-levels}]Used to set the maximum depth of the \hyperlink{class_octree}{Octree} \item[{\em min\_\-width}]Used to set the min\_\-width of an octree node \end{description}
+\end{Desc}
+
+
+Definition at line 45 of file octree.cc.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_octree_d09d7848f637b4322aa94f93217ef686}{
+\index{Octree@{Octree}!scene\_\-dimensions@{scene\_\-dimensions}}
+\index{scene\_\-dimensions@{scene\_\-dimensions}!Octree@{Octree}}
+\subsubsection[scene\_\-dimensions]{\setlength{\rightskip}{0pt plus 5cm}void Octree::scene\_\-dimensions (const std::vector$<$ boost::shared\_\-ptr$<$ {\bf WorldObject} $>$ $>$ \& {\em markers}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \& {\em obstacles}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ {\bf RobotData} $>$ $>$ \& {\em robot\_\-datas})}}
+\label{class_octree_d09d7848f637b4322aa94f93217ef686}
+
+
+This sets the initial width, height and depth for the whole scene. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em markers}]The marker object in an vector of shared\_\-ptr \item[{\em obstacles}]The obstacles in an vector of shared\_\-ptr \item[{\em robot\_\-datas}]The robot\_\-datas in an vector of shared\_\-ptr \end{description}
+\end{Desc}
+
+
+Definition at line 97 of file octree.cc.
+
+References center\_\-, determine\_\-obstacle\_\-max\_\-size(), obstacles(), robot\_\-datas(), and width\_\-.
+
+Referenced by create\_\-tree().\hypertarget{class_octree_65c7cdf803bfb02dab9681ff6bc03520}{
+\index{Octree@{Octree}!new\_\-node\_\-center@{new\_\-node\_\-center}}
+\index{new\_\-node\_\-center@{new\_\-node\_\-center}!Octree@{Octree}}
+\subsubsection[new\_\-node\_\-center]{\setlength{\rightskip}{0pt plus 5cm}Vector3d Octree::new\_\-node\_\-center (Vector3d {\em center}, \/  float {\em width}, \/  int {\em node\_\-id})}}
+\label{class_octree_65c7cdf803bfb02dab9681ff6bc03520}
+
+
+This Method calculates the new center point of a node. 
+
+This takes in the previous nodes center, width and which node ID that will be subdivided. The Result is the center of the new node. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em center}]The center of the parent node \item[{\em width}]The width of the \hyperlink{class_octree}{Octree} Node box. \item[{\em node\_\-id}]The ID of the node \end{description}
+\end{Desc}
+
+
+Definition at line 234 of file octree.cc.
+
+References center().
+
+Referenced by create\_\-new\_\-node(), and create\_\-node().\hypertarget{class_octree_7eb807d724b4caa99d723d07c1d1f4a6}{
+\index{Octree@{Octree}!create\_\-node@{create\_\-node}}
+\index{create\_\-node@{create\_\-node}!Octree@{Octree}}
+\subsubsection[create\_\-node]{\setlength{\rightskip}{0pt plus 5cm}void Octree::create\_\-node (const std::vector$<$ boost::shared\_\-ptr$<$ {\bf WorldObject} $>$ $>$ \& {\em markers}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \& {\em obstacles}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ {\bf RobotData} $>$ $>$ \& {\em robot\_\-datas}, \/  const Vector3d {\em center}, \/  float {\em width})}}
+\label{class_octree_7eb807d724b4caa99d723d07c1d1f4a6}
+
+
+This subdivides a node depending on the objects and node width
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em markers}]the markers to store in this subtree \item[{\em obstacles}]the obstacles to store in this subtree \item[{\em robot\_\-datas}]the robot\_\-datas to store in this subtree \item[{\em center}]the center point of this node \item[{\em width}]the width of this node \end{description}
+\end{Desc}
+
+
+Definition at line 377 of file octree.cc.
+
+References assign\_\-objects\_\-to\_\-node(), center(), center\_\-, create\_\-new\_\-node(), determine\_\-obstacle\_\-max\_\-size(), level\_\-, max\_\-levels\_\-, min\_\-width\_\-, new\_\-node\_\-center(), object\_\-count(), object\_\-count\_\-, obstacles(), obstacles\_\-, octree\_\-nodes\_\-, robot\_\-datas(), sub\_\-divided\_\-, and width\_\-.
+
+Referenced by create\_\-tree().\hypertarget{class_octree_a40e7b86db10838454cf39b3dc04e762}{
+\index{Octree@{Octree}!create\_\-new\_\-node@{create\_\-new\_\-node}}
+\index{create\_\-new\_\-node@{create\_\-new\_\-node}!Octree@{Octree}}
+\subsubsection[create\_\-new\_\-node]{\setlength{\rightskip}{0pt plus 5cm}void Octree::create\_\-new\_\-node (const std::vector$<$ boost::shared\_\-ptr$<$ {\bf WorldObject} $>$ $>$ \& {\em markers}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \& {\em obstacles}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ {\bf RobotData} $>$ $>$ \& {\em robot\_\-datas}, \/  Vector3d {\em center}, \/  float {\em width}, \/  int {\em node\_\-id})}}
+\label{class_octree_a40e7b86db10838454cf39b3dc04e762}
+
+
+This creates a new node. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em markers}]The Markers to be stored in this subtree \item[{\em obstacles}]The obstacles to be stored in this subtree \item[{\em robot\_\-datas}]The robot datas to be stored in this subtree \item[{\em center}]The center point of the new node \item[{\em width}]the width of the bounding box \end{description}
+\end{Desc}
+
+
+Definition at line 332 of file octree.cc.
+
+References level\_\-, max\_\-levels\_\-, min\_\-width\_\-, new\_\-node\_\-center(), obstacles(), Octree(), octree\_\-nodes\_\-, and robot\_\-datas().
+
+Referenced by create\_\-node().\hypertarget{class_octree_2bb5bd9cce1feeebecd645f893647681}{
+\index{Octree@{Octree}!create\_\-tree@{create\_\-tree}}
+\index{create\_\-tree@{create\_\-tree}!Octree@{Octree}}
+\subsubsection[create\_\-tree]{\setlength{\rightskip}{0pt plus 5cm}void Octree::create\_\-tree (const std::vector$<$ boost::shared\_\-ptr$<$ {\bf WorldObject} $>$ $>$ \& {\em markers}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \& {\em obstacles}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ {\bf RobotData} $>$ $>$ \& {\em robot\_\-datas})}}
+\label{class_octree_2bb5bd9cce1feeebecd645f893647681}
+
+
+This is the starting point of the tree creation. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em markers}]the markers to be stored in this tree \item[{\em obstacles}]the obstacles to be stored in this tree \item[{\em robot\_\-datas}]the robot datas to be stored in this tree \end{description}
+\end{Desc}
+
+
+Definition at line 877 of file octree.cc.
+
+References center\_\-, create\_\-node(), obstacles(), robot\_\-datas(), scene\_\-dimensions(), and width\_\-.\hypertarget{class_octree_2108bbcd5fecadd8e3f072f871c5632c}{
+\index{Octree@{Octree}!calculate\_\-dist\_\-to\_\-node@{calculate\_\-dist\_\-to\_\-node}}
+\index{calculate\_\-dist\_\-to\_\-node@{calculate\_\-dist\_\-to\_\-node}!Octree@{Octree}}
+\subsubsection[calculate\_\-dist\_\-to\_\-node]{\setlength{\rightskip}{0pt plus 5cm}float Octree::calculate\_\-dist\_\-to\_\-node (const Vector3d \& {\em pos}) const}}
+\label{class_octree_2108bbcd5fecadd8e3f072f871c5632c}
+
+
+Calculates the distance to this node from a given point. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em pos}]The position \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Returns the distance to this node from the given point \end{Desc}
+
+
+Definition at line 756 of file octree.cc.
+
+References center\_\-, and width\_\-.\hypertarget{class_octree_de868d730ef2ebe1442d0cc65cfc4f39}{
+\index{Octree@{Octree}!point\_\-in\_\-node@{point\_\-in\_\-node}}
+\index{point\_\-in\_\-node@{point\_\-in\_\-node}!Octree@{Octree}}
+\subsubsection[point\_\-in\_\-node]{\setlength{\rightskip}{0pt plus 5cm}int Octree::point\_\-in\_\-node (const Vector3d \& {\em pos})}}
+\label{class_octree_de868d730ef2ebe1442d0cc65cfc4f39}
+
+
+Returns the index of the child node in which the point would belong to
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em pos}]The position of the point \end{description}
+\end{Desc}
+
+
+Definition at line 825 of file octree.cc.
+
+References center\_\-.\hypertarget{class_octree_09d72bc24be26e5814e01ee2674545b1}{
+\index{Octree@{Octree}!does\_\-obstacle\_\-fit@{does\_\-obstacle\_\-fit}}
+\index{does\_\-obstacle\_\-fit@{does\_\-obstacle\_\-fit}!Octree@{Octree}}
+\subsubsection[does\_\-obstacle\_\-fit]{\setlength{\rightskip}{0pt plus 5cm}bool Octree::does\_\-obstacle\_\-fit (boost::shared\_\-ptr$<$ Obstacle $>$ \& {\em obstacle}) const}}
+\label{class_octree_09d72bc24be26e5814e01ee2674545b1}
+
+
+Returns whether an obstacle would fit into this node or not
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em obstacle}]the obstacle \end{description}
+\end{Desc}
+
+
+Definition at line 769 of file octree.cc.
+
+References determine\_\-obstacle\_\-max\_\-size().\hypertarget{class_octree_7c327c632fbbcac0676ccd8dda9d99ce}{
+\index{Octree@{Octree}!assign\_\-objects\_\-to\_\-node@{assign\_\-objects\_\-to\_\-node}}
+\index{assign\_\-objects\_\-to\_\-node@{assign\_\-objects\_\-to\_\-node}!Octree@{Octree}}
+\subsubsection[assign\_\-objects\_\-to\_\-node]{\setlength{\rightskip}{0pt plus 5cm}void Octree::assign\_\-objects\_\-to\_\-node (const std::vector$<$ boost::shared\_\-ptr$<$ {\bf WorldObject} $>$ $>$ \& {\em markers}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ Obstacle $>$ $>$ \& {\em obstacles}, \/  const std::vector$<$ boost::shared\_\-ptr$<$ {\bf RobotData} $>$ $>$ \& {\em robot\_\-datas})}}
+\label{class_octree_7c327c632fbbcac0676ccd8dda9d99ce}
+
+
+This method allows to add objects to the octree.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em markers}]The new marker objects \item[{\em obstacles}]The new obstacles \item[{\em robot\_\-datas}]The new robot\_\-datas \end{description}
+\end{Desc}
+
+
+Definition at line 888 of file octree.cc.
+
+References markers\_\-, obstacles(), obstacles\_\-, robot\_\-datas(), and robot\_\-datas\_\-.
+
+Referenced by create\_\-node().\hypertarget{class_octree_1e97431b76893f009beca8578f365ca9}{
+\index{Octree@{Octree}!add\_\-marker\_\-to\_\-node@{add\_\-marker\_\-to\_\-node}}
+\index{add\_\-marker\_\-to\_\-node@{add\_\-marker\_\-to\_\-node}!Octree@{Octree}}
+\subsubsection[add\_\-marker\_\-to\_\-node]{\setlength{\rightskip}{0pt plus 5cm}void Octree::add\_\-marker\_\-to\_\-node (boost::shared\_\-ptr$<$ {\bf WorldObject} $>$ {\em marker})}}
+\label{class_octree_1e97431b76893f009beca8578f365ca9}
+
+
+This method allows to add a marker to this node
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em marker}]The marker to add to this node \end{description}
+\end{Desc}
+
+
+Definition at line 897 of file octree.cc.
+
+References markers\_\-.\hypertarget{class_octree_bf82f696a0f350ad2eae35431e971a66}{
+\index{Octree@{Octree}!add\_\-obstacle\_\-to\_\-node@{add\_\-obstacle\_\-to\_\-node}}
+\index{add\_\-obstacle\_\-to\_\-node@{add\_\-obstacle\_\-to\_\-node}!Octree@{Octree}}
+\subsubsection[add\_\-obstacle\_\-to\_\-node]{\setlength{\rightskip}{0pt plus 5cm}void Octree::add\_\-obstacle\_\-to\_\-node (boost::shared\_\-ptr$<$ Obstacle $>$ {\em obstacle})}}
+\label{class_octree_bf82f696a0f350ad2eae35431e971a66}
+
+
+This method allows to add an obstacle to this node
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em obstacle}]The obstacle to add to this node \end{description}
+\end{Desc}
+
+
+Definition at line 903 of file octree.cc.
+
+References obstacles\_\-.\hypertarget{class_octree_c09b4c93c005fd24b6feb35147d6cfd1}{
+\index{Octree@{Octree}!add\_\-robot\_\-data\_\-to\_\-node@{add\_\-robot\_\-data\_\-to\_\-node}}
+\index{add\_\-robot\_\-data\_\-to\_\-node@{add\_\-robot\_\-data\_\-to\_\-node}!Octree@{Octree}}
+\subsubsection[add\_\-robot\_\-data\_\-to\_\-node]{\setlength{\rightskip}{0pt plus 5cm}void Octree::add\_\-robot\_\-data\_\-to\_\-node (boost::shared\_\-ptr$<$ {\bf RobotData} $>$ {\em robot\_\-data})}}
+\label{class_octree_c09b4c93c005fd24b6feb35147d6cfd1}
+
+
+This method allows to add a robot data to this node
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em robot\_\-data}]the new robot\_\-data to add to this node \end{description}
+\end{Desc}
+
+
+Definition at line 909 of file octree.cc.
+
+References robot\_\-datas\_\-.\hypertarget{class_octree_b87eff58fb428441817a569e4674a414}{
+\index{Octree@{Octree}!marker\_\-information@{marker\_\-information}}
+\index{marker\_\-information@{marker\_\-information}!Octree@{Octree}}
+\subsubsection[marker\_\-information]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<${\bf WorldObject}$>$ $>$\& Octree::marker\_\-information ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_b87eff58fb428441817a569e4674a414}
+
+
+Returns the marker stored in this node. 
+
+Definition at line 205 of file octree.h.
+
+References markers\_\-.\hypertarget{class_octree_0f5d4b3c958b35605eb5f8ed808dc021}{
+\index{Octree@{Octree}!obstacles@{obstacles}}
+\index{obstacles@{obstacles}!Octree@{Octree}}
+\subsubsection[obstacles]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<$Obstacle$>$ $>$\& Octree::obstacles ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_0f5d4b3c958b35605eb5f8ed808dc021}
+
+
+Returns the obstacles stored in this node. 
+
+Definition at line 212 of file octree.h.
+
+References obstacles\_\-.
+
+Referenced by assign\_\-objects\_\-to\_\-node(), create\_\-new\_\-node(), create\_\-node(), create\_\-tree(), and scene\_\-dimensions().\hypertarget{class_octree_daef5372a7ebc7e42cc7f3004b68c1ed}{
+\index{Octree@{Octree}!robot\_\-datas@{robot\_\-datas}}
+\index{robot\_\-datas@{robot\_\-datas}!Octree@{Octree}}
+\subsubsection[robot\_\-datas]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<${\bf RobotData}$>$ $>$\& Octree::robot\_\-datas ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_daef5372a7ebc7e42cc7f3004b68c1ed}
+
+
+Returns the robot datas stored in this node. 
+
+Definition at line 219 of file octree.h.
+
+References robot\_\-datas\_\-.
+
+Referenced by assign\_\-objects\_\-to\_\-node(), create\_\-new\_\-node(), create\_\-node(), create\_\-tree(), and scene\_\-dimensions().\hypertarget{class_octree_9b884a39d8adf578ced6df783d477c4c}{
+\index{Octree@{Octree}!set\_\-parent@{set\_\-parent}}
+\index{set\_\-parent@{set\_\-parent}!Octree@{Octree}}
+\subsubsection[set\_\-parent]{\setlength{\rightskip}{0pt plus 5cm}void Octree::set\_\-parent ({\bf Octree} $\ast$ {\em parent})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_9b884a39d8adf578ced6df783d477c4c}
+
+
+This sets the parent of this node
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em parent}]A pointer to the parent of this node \end{description}
+\end{Desc}
+
+
+Definition at line 228 of file octree.h.
+
+References parent\_\-.\hypertarget{class_octree_1aa93bae9b39e49b97f587357747cd17}{
+\index{Octree@{Octree}!parent@{parent}}
+\index{parent@{parent}!Octree@{Octree}}
+\subsubsection[parent]{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree}\& Octree::parent ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_1aa93bae9b39e49b97f587357747cd17}
+
+
+Returns the parent of this node. This is node a boost::shared\_\-ptr because the child nodes get destroyed before their parent. 
+
+Definition at line 237 of file octree.h.
+
+References parent\_\-.\hypertarget{class_octree_e6729a08500e8937d91d809db870777c}{
+\index{Octree@{Octree}!level@{level}}
+\index{level@{level}!Octree@{Octree}}
+\subsubsection[level]{\setlength{\rightskip}{0pt plus 5cm}int Octree::level ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_e6729a08500e8937d91d809db870777c}
+
+
+Returns the depth of this node in the octree 
+
+Definition at line 244 of file octree.h.
+
+References level\_\-.\hypertarget{class_octree_8a7a88c27aa9a48f6fbdfd6db5faa455}{
+\index{Octree@{Octree}!center@{center}}
+\index{center@{center}!Octree@{Octree}}
+\subsubsection[center]{\setlength{\rightskip}{0pt plus 5cm}Vector3d Octree::center () const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_8a7a88c27aa9a48f6fbdfd6db5faa455}
+
+
+This returns the center of this node 
+
+Definition at line 251 of file octree.h.
+
+References center\_\-.
+
+Referenced by create\_\-node(), and new\_\-node\_\-center().\hypertarget{class_octree_88cb79978d550bdd2699c15fe9879fc4}{
+\index{Octree@{Octree}!object\_\-count@{object\_\-count}}
+\index{object\_\-count@{object\_\-count}!Octree@{Octree}}
+\subsubsection[object\_\-count]{\setlength{\rightskip}{0pt plus 5cm}int Octree::object\_\-count () const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_88cb79978d550bdd2699c15fe9879fc4}
+
+
+This return the number of objects which were stored in this node 
+
+Definition at line 258 of file octree.h.
+
+References object\_\-count\_\-.
+
+Referenced by create\_\-node().\hypertarget{class_octree_174fc16c8dda632cf8c0ba7bfc9db4b0}{
+\index{Octree@{Octree}!width@{width}}
+\index{width@{width}!Octree@{Octree}}
+\subsubsection[width]{\setlength{\rightskip}{0pt plus 5cm}float Octree::width () const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_174fc16c8dda632cf8c0ba7bfc9db4b0}
+
+
+This returns the width of this node (since it's a cube the height and depth are the same) 
+
+Definition at line 265 of file octree.h.
+
+References width\_\-.\hypertarget{class_octree_c05628e77200a5243dd1b0d84332ef39}{
+\index{Octree@{Octree}!sub\_\-divided@{sub\_\-divided}}
+\index{sub\_\-divided@{sub\_\-divided}!Octree@{Octree}}
+\subsubsection[sub\_\-divided]{\setlength{\rightskip}{0pt plus 5cm}bool Octree::sub\_\-divided () const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_c05628e77200a5243dd1b0d84332ef39}
+
+
+This return whether the node is subdivided or not. If a node is subdivided, then it has all eight children. 
+
+Definition at line 274 of file octree.h.
+
+References sub\_\-divided\_\-.\hypertarget{class_octree_f514ecc29e3882b0c2e46ccb5ba4fcd9}{
+\index{Octree@{Octree}!max\_\-levels@{max\_\-levels}}
+\index{max\_\-levels@{max\_\-levels}!Octree@{Octree}}
+\subsubsection[max\_\-levels]{\setlength{\rightskip}{0pt plus 5cm}int Octree::max\_\-levels ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_f514ecc29e3882b0c2e46ccb5ba4fcd9}
+
+
+Returns the maximal depth of this octree 
+
+Definition at line 280 of file octree.h.
+
+References max\_\-levels\_\-.\hypertarget{class_octree_9c9093d2ed7caa8ac16a1f230a66428f}{
+\index{Octree@{Octree}!min\_\-width@{min\_\-width}}
+\index{min\_\-width@{min\_\-width}!Octree@{Octree}}
+\subsubsection[min\_\-width]{\setlength{\rightskip}{0pt plus 5cm}float Octree::min\_\-width ()\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_9c9093d2ed7caa8ac16a1f230a66428f}
+
+
+Returns the minimal width of a node in this octree. 
+
+Definition at line 285 of file octree.h.
+
+References min\_\-width\_\-.\hypertarget{class_octree_211c7b90c150193b6124c05229eb2abb}{
+\index{Octree@{Octree}!child@{child}}
+\index{child@{child}!Octree@{Octree}}
+\subsubsection[child]{\setlength{\rightskip}{0pt plus 5cm}const boost::shared\_\-ptr$<${\bf Octree}$>$\& Octree::child (int {\em child\_\-id})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{class_octree_211c7b90c150193b6124c05229eb2abb}
+
+
+Returns a child node.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em child\_\-id}]The number of the child. Values in between 0 and 7 are legal numbers \end{description}
+\end{Desc}
+
+
+Definition at line 292 of file octree.h.
+
+References octree\_\-nodes\_\-.\hypertarget{class_octree_3456b71a9ff5067eed4317fe10947fcf}{
+\index{Octree@{Octree}!set\_\-level@{set\_\-level}}
+\index{set\_\-level@{set\_\-level}!Octree@{Octree}}
+\subsubsection[set\_\-level]{\setlength{\rightskip}{0pt plus 5cm}void Octree::set\_\-level (int {\em level})\hspace{0.3cm}{\tt  \mbox{[}inline, protected\mbox{]}}}}
+\label{class_octree_3456b71a9ff5067eed4317fe10947fcf}
+
+
+Sets the actual depth of this node. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em level}]The depth of this node \end{description}
+\end{Desc}
+
+
+Definition at line 302 of file octree.h.
+
+References level\_\-.\hypertarget{class_octree_eb0215c31bf2b52267e0252940812680}{
+\index{Octree@{Octree}!set\_\-max\_\-levels@{set\_\-max\_\-levels}}
+\index{set\_\-max\_\-levels@{set\_\-max\_\-levels}!Octree@{Octree}}
+\subsubsection[set\_\-max\_\-levels]{\setlength{\rightskip}{0pt plus 5cm}void Octree::set\_\-max\_\-levels (int {\em max\_\-level})\hspace{0.3cm}{\tt  \mbox{[}inline, protected\mbox{]}}}}
+\label{class_octree_eb0215c31bf2b52267e0252940812680}
+
+
+Sets the max depth of the tree \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em max\_\-level}]The maximal depth of the tree. \end{description}
+\end{Desc}
+
+
+Definition at line 310 of file octree.h.
+
+References max\_\-levels\_\-.\hypertarget{class_octree_046a7db4d122f2b8ef6a5188ef78ffda}{
+\index{Octree@{Octree}!set\_\-min\_\-width@{set\_\-min\_\-width}}
+\index{set\_\-min\_\-width@{set\_\-min\_\-width}!Octree@{Octree}}
+\subsubsection[set\_\-min\_\-width]{\setlength{\rightskip}{0pt plus 5cm}void Octree::set\_\-min\_\-width (float {\em min\_\-width})\hspace{0.3cm}{\tt  \mbox{[}inline, protected\mbox{]}}}}
+\label{class_octree_046a7db4d122f2b8ef6a5188ef78ffda}
+
+
+Sets the minimal width of a node. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em min\_\-width}]The minimal width of a node. \end{description}
+\end{Desc}
+
+
+Definition at line 316 of file octree.h.
+
+References min\_\-width\_\-.\hypertarget{class_octree_a721cdd20e21a952ea04721ae756d091}{
+\index{Octree@{Octree}!determine\_\-obstacle\_\-type@{determine\_\-obstacle\_\-type}}
+\index{determine\_\-obstacle\_\-type@{determine\_\-obstacle\_\-type}!Octree@{Octree}}
+\subsubsection[determine\_\-obstacle\_\-type]{\setlength{\rightskip}{0pt plus 5cm}int Octree::determine\_\-obstacle\_\-type (const boost::shared\_\-ptr$<$ Obstacle $>$ \& {\em obstacle}) const\hspace{0.3cm}{\tt  \mbox{[}protected\mbox{]}}}}
+\label{class_octree_a721cdd20e21a952ea04721ae756d091}
+
+
+Helps to determin the type of an obstacle object. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em obstacle}]The obstacle to retrieve the real type of \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]The type of the obstacle: 1 \hyperlink{class_box}{Box}, 2 \hyperlink{class_sphere}{Sphere} \end{Desc}
+
+
+Definition at line 780 of file octree.cc.
+
+Referenced by determine\_\-obstacle\_\-max\_\-size().\hypertarget{class_octree_295852d7bca479a4abf01c579d2e93ae}{
+\index{Octree@{Octree}!determine\_\-obstacle\_\-max\_\-size@{determine\_\-obstacle\_\-max\_\-size}}
+\index{determine\_\-obstacle\_\-max\_\-size@{determine\_\-obstacle\_\-max\_\-size}!Octree@{Octree}}
+\subsubsection[determine\_\-obstacle\_\-max\_\-size]{\setlength{\rightskip}{0pt plus 5cm}float Octree::determine\_\-obstacle\_\-max\_\-size (const boost::shared\_\-ptr$<$ Obstacle $>$ \& {\em obstacle}) const\hspace{0.3cm}{\tt  \mbox{[}protected\mbox{]}}}}
+\label{class_octree_295852d7bca479a4abf01c579d2e93ae}
+
+
+Returns the maximum size of an obstacle. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em obstacle}]the obstacle \end{description}
+\end{Desc}
+
+
+Definition at line 792 of file octree.cc.
+
+References Box::depth(), determine\_\-obstacle\_\-type(), Box::height(), Sphere::radius(), and Box::width().
+
+Referenced by create\_\-node(), does\_\-obstacle\_\-fit(), and scene\_\-dimensions().
+
+\subsection{Member Data Documentation}
+\hypertarget{class_octree_513527d29f670449b0a665625d476ad6}{
+\index{Octree@{Octree}!parent\_\-@{parent\_\-}}
+\index{parent\_\-@{parent\_\-}!Octree@{Octree}}
+\subsubsection[parent\_\-]{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree}$\ast$ {\bf Octree::parent\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_513527d29f670449b0a665625d476ad6}
+
+
+this stores an pointer to its parent. 
+
+Definition at line 342 of file octree.h.
+
+Referenced by parent(), and set\_\-parent().\hypertarget{class_octree_3955482b438c39aef803253592306217}{
+\index{Octree@{Octree}!level\_\-@{level\_\-}}
+\index{level\_\-@{level\_\-}!Octree@{Octree}}
+\subsubsection[level\_\-]{\setlength{\rightskip}{0pt plus 5cm}int {\bf Octree::level\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_3955482b438c39aef803253592306217}
+
+
+The depth of this node. 
+
+Definition at line 347 of file octree.h.
+
+Referenced by create\_\-new\_\-node(), create\_\-node(), level(), and set\_\-level().\hypertarget{class_octree_1b29e2ff7de0ce212008fc928de2e8c0}{
+\index{Octree@{Octree}!max\_\-levels\_\-@{max\_\-levels\_\-}}
+\index{max\_\-levels\_\-@{max\_\-levels\_\-}!Octree@{Octree}}
+\subsubsection[max\_\-levels\_\-]{\setlength{\rightskip}{0pt plus 5cm}int {\bf Octree::max\_\-levels\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_1b29e2ff7de0ce212008fc928de2e8c0}
+
+
+The maximal depth of this tree 
+
+Definition at line 351 of file octree.h.
+
+Referenced by create\_\-new\_\-node(), create\_\-node(), max\_\-levels(), Octree(), and set\_\-max\_\-levels().\hypertarget{class_octree_d8300c6fe2f72671675b351e8b4e65db}{
+\index{Octree@{Octree}!min\_\-width\_\-@{min\_\-width\_\-}}
+\index{min\_\-width\_\-@{min\_\-width\_\-}!Octree@{Octree}}
+\subsubsection[min\_\-width\_\-]{\setlength{\rightskip}{0pt plus 5cm}float {\bf Octree::min\_\-width\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_d8300c6fe2f72671675b351e8b4e65db}
+
+
+The minimum size of an node 
+
+Definition at line 355 of file octree.h.
+
+Referenced by create\_\-new\_\-node(), create\_\-node(), min\_\-width(), Octree(), and set\_\-min\_\-width().\hypertarget{class_octree_1ff3eebef24edecea4359fdaa994d26d}{
+\index{Octree@{Octree}!sub\_\-divided\_\-@{sub\_\-divided\_\-}}
+\index{sub\_\-divided\_\-@{sub\_\-divided\_\-}!Octree@{Octree}}
+\subsubsection[sub\_\-divided\_\-]{\setlength{\rightskip}{0pt plus 5cm}bool {\bf Octree::sub\_\-divided\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_1ff3eebef24edecea4359fdaa994d26d}
+
+
+This tells whether the node has been subdivided or not. If this has been set to true, there won't be any robots and markers saved in this node 
+
+Definition at line 361 of file octree.h.
+
+Referenced by create\_\-node(), and sub\_\-divided().\hypertarget{class_octree_8f8660a65257ea4368c6ba2e57df86fc}{
+\index{Octree@{Octree}!width\_\-@{width\_\-}}
+\index{width\_\-@{width\_\-}!Octree@{Octree}}
+\subsubsection[width\_\-]{\setlength{\rightskip}{0pt plus 5cm}float {\bf Octree::width\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_8f8660a65257ea4368c6ba2e57df86fc}
+
+
+This is the size of the cube for this current node 
+
+Definition at line 366 of file octree.h.
+
+Referenced by calculate\_\-dist\_\-to\_\-node(), create\_\-node(), create\_\-tree(), scene\_\-dimensions(), and width().\hypertarget{class_octree_0faf7b0d6e445aee6e6954d4efdafcf9}{
+\index{Octree@{Octree}!object\_\-count\_\-@{object\_\-count\_\-}}
+\index{object\_\-count\_\-@{object\_\-count\_\-}!Octree@{Octree}}
+\subsubsection[object\_\-count\_\-]{\setlength{\rightskip}{0pt plus 5cm}int {\bf Octree::object\_\-count\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_0faf7b0d6e445aee6e6954d4efdafcf9}
+
+
+This holds the count of the objects in this node 
+
+Definition at line 371 of file octree.h.
+
+Referenced by create\_\-node(), and object\_\-count().\hypertarget{class_octree_d1830408734e4435f934a6cb31a0c8a4}{
+\index{Octree@{Octree}!center\_\-@{center\_\-}}
+\index{center\_\-@{center\_\-}!Octree@{Octree}}
+\subsubsection[center\_\-]{\setlength{\rightskip}{0pt plus 5cm}Vector3d {\bf Octree::center\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_d1830408734e4435f934a6cb31a0c8a4}
+
+
+This is the center of the node 
+
+Definition at line 377 of file octree.h.
+
+Referenced by calculate\_\-dist\_\-to\_\-node(), center(), create\_\-node(), create\_\-tree(), point\_\-in\_\-node(), and scene\_\-dimensions().\hypertarget{class_octree_420b03d97b1631a2809b3b4929a84e89}{
+\index{Octree@{Octree}!markers\_\-@{markers\_\-}}
+\index{markers\_\-@{markers\_\-}!Octree@{Octree}}
+\subsubsection[markers\_\-]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<${\bf WorldObject}$>$ $>$ {\bf Octree::markers\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_420b03d97b1631a2809b3b4929a84e89}
+
+
+Set of markers in the world 
+
+Definition at line 382 of file octree.h.
+
+Referenced by add\_\-marker\_\-to\_\-node(), assign\_\-objects\_\-to\_\-node(), and marker\_\-information().\hypertarget{class_octree_7ba27f0c60cc3eceb10799bcc43e8acf}{
+\index{Octree@{Octree}!obstacles\_\-@{obstacles\_\-}}
+\index{obstacles\_\-@{obstacles\_\-}!Octree@{Octree}}
+\subsubsection[obstacles\_\-]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<$Obstacle$>$ $>$ {\bf Octree::obstacles\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_7ba27f0c60cc3eceb10799bcc43e8acf}
+
+
+Set of obstacles in the world 
+
+Definition at line 387 of file octree.h.
+
+Referenced by add\_\-obstacle\_\-to\_\-node(), assign\_\-objects\_\-to\_\-node(), create\_\-node(), and obstacles().\hypertarget{class_octree_f93af4c2615db522f4496fd050a5b61b}{
+\index{Octree@{Octree}!robot\_\-datas\_\-@{robot\_\-datas\_\-}}
+\index{robot\_\-datas\_\-@{robot\_\-datas\_\-}!Octree@{Octree}}
+\subsubsection[robot\_\-datas\_\-]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<${\bf RobotData}$>$ $>$ {\bf Octree::robot\_\-datas\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_f93af4c2615db522f4496fd050a5b61b}
+
+
+Set of robot datas of robots in the world 
+
+Definition at line 392 of file octree.h.
+
+Referenced by add\_\-robot\_\-data\_\-to\_\-node(), assign\_\-objects\_\-to\_\-node(), and robot\_\-datas().\hypertarget{class_octree_a7b4d7aa295f945512b9e39d8fd2d5d6}{
+\index{Octree@{Octree}!octree\_\-nodes\_\-@{octree\_\-nodes\_\-}}
+\index{octree\_\-nodes\_\-@{octree\_\-nodes\_\-}!Octree@{Octree}}
+\subsubsection[octree\_\-nodes\_\-]{\setlength{\rightskip}{0pt plus 5cm}boost::shared\_\-ptr$<${\bf Octree}$>$ {\bf Octree::octree\_\-nodes\_\-}\mbox{[}8\mbox{]}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_octree_a7b4d7aa295f945512b9e39d8fd2d5d6}
+
+
+This are the links to the child nodes 
+
+Definition at line 398 of file octree.h.
+
+Referenced by child(), create\_\-new\_\-node(), and create\_\-node().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/Views/octree.h\item 
+src/Views/octree.cc\end{CompactItemize}

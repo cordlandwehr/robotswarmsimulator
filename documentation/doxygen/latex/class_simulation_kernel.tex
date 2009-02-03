@@ -1,0 +1,161 @@
+\hypertarget{class_simulation_kernel}{
+\section{SimulationKernel Class Reference}
+\label{class_simulation_kernel}\index{SimulationKernel@{SimulationKernel}}
+}
+The central module of the Swarm–Simulator. Manages the data and the progress of the simulated world.  
+
+
+{\tt \#include $<$simulation\_\-kernel.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+const vector$<$ boost::shared\_\-ptr$<$ Robot $>$ $>$ \& \hyperlink{class_simulation_kernel_33dcfe76bf0c0e0cf980c7a6ccdd817b}{robots} () const 
+\item 
+const boost::shared\_\-ptr$<$ \hyperlink{class_history}{History} $>$ \& \hyperlink{class_simulation_kernel_70346340fc146d8582723ee05ee54f33}{history} () const 
+\item 
+void \hyperlink{class_simulation_kernel_c6990f8bb4b86d3b04cb02e5581bc3e1}{init} (const string \&project\_\-filename, boost::shared\_\-ptr$<$ \hyperlink{class_history}{History} $>$ history)
+\item 
+void \hyperlink{class_simulation_kernel_b1d2477386ccc99d784f1d4fce87691d}{step} ()
+\item 
+void \hyperlink{class_simulation_kernel_77c22f17fdbea282e373bb1a0e373918}{multistep} (int steps)
+\end{CompactItemize}
+\subsection*{Private Attributes}
+\begin{CompactItemize}
+\item 
+std::vector$<$ boost::shared\_\-ptr$<$ Robot $>$ $>$ \hyperlink{class_simulation_kernel_3f66cf6d56a17d864955a771086292ea}{robots\_\-}
+\item 
+boost::shared\_\-ptr$<$ \hyperlink{class_history}{History} $>$ \hyperlink{class_simulation_kernel_197d4dccd403ae6bd8f636a458c8b58d}{history\_\-}
+\end{CompactItemize}
+\subsection*{Friends}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_simulation_kernel_0f35710cb67a4ed772bedc38abb66fda}{
+class \textbf{save\_\-main\_\-project\_\-file\_\-1}}
+\label{class_simulation_kernel_0f35710cb67a4ed772bedc38abb66fda}
+
+\item 
+\hypertarget{class_simulation_kernel_7139ec7291f4c3b20402943c2b664758}{
+class \textbf{save\_\-robot\_\-file\_\-1}}
+\label{class_simulation_kernel_7139ec7291f4c3b20402943c2b664758}
+
+\item 
+\hypertarget{class_simulation_kernel_1c533f013e578e25f6831e9076855ec8}{
+class \textbf{write\_\-obstacle\_\-1}}
+\label{class_simulation_kernel_1c533f013e578e25f6831e9076855ec8}
+
+\item 
+\hypertarget{class_simulation_kernel_32c332247c653074ebf0439d6eabfba8}{
+class \textbf{write\_\-robot\_\-1}}
+\label{class_simulation_kernel_32c332247c653074ebf0439d6eabfba8}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+The central module of the Swarm–Simulator. Manages the data and the progress of the simulated world. 
+
+Class for reading and saving project files.
+
+\begin{Desc}
+\item[Author:]Martina Hüllmann \end{Desc}
+
+
+Definition at line 34 of file simulation\_\-kernel.h.
+
+\subsection{Member Function Documentation}
+\hypertarget{class_simulation_kernel_33dcfe76bf0c0e0cf980c7a6ccdd817b}{
+\index{SimulationKernel@{SimulationKernel}!robots@{robots}}
+\index{robots@{robots}!SimulationKernel@{SimulationKernel}}
+\subsubsection[robots]{\setlength{\rightskip}{0pt plus 5cm}const vector$<$ boost::shared\_\-ptr$<$ Robot $>$ $>$ \& SimulationKernel::robots () const}}
+\label{class_simulation_kernel_33dcfe76bf0c0e0cf980c7a6ccdd817b}
+
+
+Returns a constant reference to the set of the robots. \begin{Desc}
+\item[Returns:]Constant reference to the set of the robots. \end{Desc}
+
+
+Definition at line 11 of file simulation\_\-kernel.cc.
+
+References robots\_\-.\hypertarget{class_simulation_kernel_70346340fc146d8582723ee05ee54f33}{
+\index{SimulationKernel@{SimulationKernel}!history@{history}}
+\index{history@{history}!SimulationKernel@{SimulationKernel}}
+\subsubsection[history]{\setlength{\rightskip}{0pt plus 5cm}const boost::shared\_\-ptr$<$ {\bf History} $>$ \& SimulationKernel::history () const}}
+\label{class_simulation_kernel_70346340fc146d8582723ee05ee54f33}
+
+
+Returns a constant reference to \hyperlink{class_history}{History} of WorldInformations. \begin{Desc}
+\item[Returns:]Constant reference to \hyperlink{class_history}{History} of WorldInformations.\end{Desc}
+TODO(martinah) return \hyperlink{class_history}{History}\& instead of boost::shared\_\-ptr$<$History$>$\& TODO(craupach) is this method needed? 
+
+Definition at line 15 of file simulation\_\-kernel.cc.
+
+References history\_\-.\hypertarget{class_simulation_kernel_c6990f8bb4b86d3b04cb02e5581bc3e1}{
+\index{SimulationKernel@{SimulationKernel}!init@{init}}
+\index{init@{init}!SimulationKernel@{SimulationKernel}}
+\subsubsection[init]{\setlength{\rightskip}{0pt plus 5cm}void SimulationKernel::init (const string \& {\em project\_\-filename}, \/  boost::shared\_\-ptr$<$ {\bf History} $>$ {\em history})}}
+\label{class_simulation_kernel_c6990f8bb4b86d3b04cb02e5581bc3e1}
+
+
+This method initializes the simulation kernel 
+
+Definition at line 19 of file simulation\_\-kernel.cc.
+
+References history\_\-.\hypertarget{class_simulation_kernel_b1d2477386ccc99d784f1d4fce87691d}{
+\index{SimulationKernel@{SimulationKernel}!step@{step}}
+\index{step@{step}!SimulationKernel@{SimulationKernel}}
+\subsubsection[step]{\setlength{\rightskip}{0pt plus 5cm}void SimulationKernel::step ()}}
+\label{class_simulation_kernel_b1d2477386ccc99d784f1d4fce87691d}
+
+
+Method for performing one event-based step of the simulation by calling the current \hyperlink{class_event_handler}{EventHandler} 
+
+Definition at line 39 of file simulation\_\-kernel.cc.
+
+Referenced by multistep().\hypertarget{class_simulation_kernel_77c22f17fdbea282e373bb1a0e373918}{
+\index{SimulationKernel@{SimulationKernel}!multistep@{multistep}}
+\index{multistep@{multistep}!SimulationKernel@{SimulationKernel}}
+\subsubsection[multistep]{\setlength{\rightskip}{0pt plus 5cm}void SimulationKernel::multistep (int {\em steps})}}
+\label{class_simulation_kernel_77c22f17fdbea282e373bb1a0e373918}
+
+
+calls the step-method multiple times \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em number}]of steps \end{description}
+\end{Desc}
+
+
+Definition at line 45 of file simulation\_\-kernel.cc.
+
+References step().
+
+\subsection{Member Data Documentation}
+\hypertarget{class_simulation_kernel_3f66cf6d56a17d864955a771086292ea}{
+\index{SimulationKernel@{SimulationKernel}!robots\_\-@{robots\_\-}}
+\index{robots\_\-@{robots\_\-}!SimulationKernel@{SimulationKernel}}
+\subsubsection[robots\_\-]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ boost::shared\_\-ptr$<$Robot$>$ $>$ {\bf SimulationKernel::robots\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_simulation_kernel_3f66cf6d56a17d864955a771086292ea}
+
+
+Set of robots in the world 
+
+Definition at line 80 of file simulation\_\-kernel.h.
+
+Referenced by robots().\hypertarget{class_simulation_kernel_197d4dccd403ae6bd8f636a458c8b58d}{
+\index{SimulationKernel@{SimulationKernel}!history\_\-@{history\_\-}}
+\index{history\_\-@{history\_\-}!SimulationKernel@{SimulationKernel}}
+\subsubsection[history\_\-]{\setlength{\rightskip}{0pt plus 5cm}boost::shared\_\-ptr$<${\bf History}$>$ {\bf SimulationKernel::history\_\-}\hspace{0.3cm}{\tt  \mbox{[}private\mbox{]}}}}
+\label{class_simulation_kernel_197d4dccd403ae6bd8f636a458c8b58d}
+
+
+Reference to a \hyperlink{class_history}{History} of the WorldInformations. 
+
+Definition at line 85 of file simulation\_\-kernel.h.
+
+Referenced by history(), and init().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+src/SimulationKernel/simulation\_\-kernel.h\item 
+src/SimulationKernel/simulation\_\-kernel.cc\end{CompactItemize}
