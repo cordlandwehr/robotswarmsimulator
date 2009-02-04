@@ -107,6 +107,11 @@ public:
 	void handle(const std::vector<double> & data);
 
 	/**
+	 * sets cfg as configuration and calls handle(data)
+	 */
+	void handle(const std::vector<double> & data, int cfg);
+
+	/**
 	 * \return latest calculated minimum-value,
 	 * unspecified if not calculated
 	 */
@@ -160,6 +165,16 @@ public:
 	 * unspecified if nothing calculated
 	 */
 	const std::string to_string() const;
+
+	/**
+	 * \return appends the requested values
+	 */
+	void push_values(std::vector<double> & data) const;
+
+	/**
+	 * \return appends the requested value-names
+	 */
+	void push_names(std::vector<std::string> & designation, std::string praefix) const;
 
 private:
 	/**

@@ -1,6 +1,8 @@
 #include <cmath>
 #include <limits>
 #include <sstream>
+#include <vector>
+#include <string>
 #include <algorithm>
 
 
@@ -74,6 +76,11 @@ void NumSetStats::handle(const std::vector<double> & data) {
 	}
 }
 
+void NumSetStats::handle(const std::vector<double> & data, int cfg) {
+	set_cfg(cfg);
+	handle(data);
+}
+
 const double NumSetStats::min() const {
 	return min_;
 }
@@ -129,4 +136,42 @@ const std::string NumSetStats::to_string() const {
 		o << "stddeviation:" << stddeviation_ << ", ";
 
 	return o.str().substr(0, o.str().size()-2);
+}
+
+void NumSetStats::push_values(std::vector<double> & data) const {
+	if (cfg_ & MIN)
+		data.push_back(min_);
+	if (cfg_ & MAX)
+		data.push_back(max_);
+	if (cfg_ & DIAM)
+		data.push_back(diam_);
+	if (cfg_ & AVG)
+		data.push_back(avg_);
+	if (cfg_ & MEDIAN)
+		data.push_back(median_);
+	if (cfg_ & SUM)
+		data.push_back(sum_);
+	if (cfg_ & ABSSUM)
+		data.push_back(abssum_);
+	if (cfg_ & STDDEVIATION)
+		data.push_back(stddeviation_);
+}
+
+void NumSetStats::push_names(std::vector<std::string> & data, std::string praefix) const {
+	if (cfg_ & MIN)
+		data.push_back(praefix+"_min");
+	if (cfg_ & MAX)
+		data.push_back(praefix+"_max");
+	if (cfg_ & DIAM)
+		data.push_back(praefix+"_diam");
+	if (cfg_ & AVG)
+		data.push_back(praefix+"_avg");
+	if (cfg_ & MEDIAN)
+		data.push_back(praefix+"_median");
+	if (cfg_ & SUM)
+		data.push_back(praefix+"_sum");
+	if (cfg_ & ABSSUM)
+		data.push_back(praefix+"_abssum");
+	if (cfg_ & STDDEVIATION)
+		data.push_back(praefix+"_stddeviation");
 }
