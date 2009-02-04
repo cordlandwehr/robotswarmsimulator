@@ -112,6 +112,11 @@ public:
 	void handle(const std::vector< boost::shared_ptr<Vector3d> >& data);
 
 	/**
+	 * sets cfg as configuration and calls handle(data)
+	 */
+	void handle(const std::vector< boost::shared_ptr<Vector3d> >& data, int cfg);
+
+	/**
 	 * \return current configuration-flags
 	 */
 	const int cfg() const;
@@ -193,6 +198,16 @@ public:
 	 * unspecified if nothing calculated
 	 */
 	const std::string to_string() const;
+
+	/**
+	 * \return appends the requested values
+	 */
+	void push_values(std::vector<double> & data) const;
+
+	/**
+	 * \return appends the requested value-names
+	 */
+	void push_names(std::vector<std::string> & designation, std::string praefix) const;
 
 private:
 	/**

@@ -94,6 +94,11 @@ void VecSetStats::handle(const std::vector< boost::shared_ptr<Vector3d> >& data)
 	}
 }
 
+void VecSetStats::handle(const std::vector< boost::shared_ptr<Vector3d> >& data, int cfg) {
+	set_cfg(cfg);
+	handle(data);
+}
+
 const Vector3d & VecSetStats::sum() const {
 	return sum_;
 }
@@ -179,4 +184,109 @@ const std::string VecSetStats::to_string() const {
 	return o.str().substr(0, o.str().size()-2);
 }
 
+void VecSetStats::push_values(std::vector<double> & data) const {
+	if (cfg_ & SUM) {
+		data.push_back(sum_[kXCoord]);
+		data.push_back(sum_[kYCoord]);
+		data.push_back(sum_[kZCoord]);
+	}
 
+	if (cfg_ & SUMLEN)
+		data.push_back(sumlen_);
+
+	if (cfg_ & SUMNORM) {
+		data.push_back(sumnorm_[kXCoord]);
+		data.push_back(sumnorm_[kYCoord]);
+		data.push_back(sumnorm_[kZCoord]);
+	}
+
+	if (cfg_ & AVG) {
+		data.push_back(avg_[kXCoord]);
+		data.push_back(avg_[kYCoord]);
+		data.push_back(avg_[kZCoord]);
+	}
+
+	if (cfg_ & AVGLEN)
+		data.push_back(avglen_);
+
+	if (cfg_ & AVGNORM) {
+		data.push_back(avgnorm_[kXCoord]);
+		data.push_back(avgnorm_[kYCoord]);
+		data.push_back(avgnorm_[kZCoord]);
+	}
+
+	if (cfg_ & SHORTEST) {
+		data.push_back(shortest_[kXCoord]);
+		data.push_back(shortest_[kYCoord]);
+		data.push_back(shortest_[kZCoord]);
+	}
+
+	if (cfg_ & SHORTEST_LEN)
+		data.push_back(shortestlen_);
+
+	if (cfg_ & LONGEST) {
+		data.push_back(longest_[kXCoord]);
+		data.push_back(longest_[kYCoord]);
+		data.push_back(longest_[kZCoord]);
+	}
+
+	if (cfg_ & LONGEST_LEN)
+		data.push_back(longestlen_);
+
+	if (cfg_ & CUMUL_LEN)
+		data.push_back(cumullen_);
+}
+
+
+void VecSetStats::push_names(std::vector<std::string> & designation, std::string praefix) const {
+	if (cfg_ & SUM) {
+		designation.push_back(praefix+"_sum_x");
+		designation.push_back(praefix+"_sum_y");
+		designation.push_back(praefix+"_sum_z");
+	}
+
+	if (cfg_ & SUMLEN)
+		designation.push_back(praefix+"_sum_len");
+
+	if (cfg_ & SUMNORM) {
+		designation.push_back(praefix+"_sumnorm_x");
+		designation.push_back(praefix+"_sumnorm_y");
+		designation.push_back(praefix+"_sumnorm_z");
+	}
+
+	if (cfg_ & AVG) {
+		designation.push_back(praefix+"_avg_x");
+		designation.push_back(praefix+"_avg_y");
+		designation.push_back(praefix+"_avg_z");
+	}
+
+	if (cfg_ & AVGLEN)
+		designation.push_back(praefix+"_avg_len");
+
+	if (cfg_ & AVGNORM) {
+		designation.push_back(praefix+"_avgnorm_x");
+		designation.push_back(praefix+"_avgnorm_y");
+		designation.push_back(praefix+"_avgnorm_z");
+	}
+
+	if (cfg_ & SHORTEST) {
+		designation.push_back(praefix+"_shortest_x");
+		designation.push_back(praefix+"_shortest_y");
+		designation.push_back(praefix+"_shortest_z");
+	}
+
+	if (cfg_ & SHORTEST_LEN)
+		designation.push_back(praefix+"_shortest_len");
+
+	if (cfg_ & LONGEST) {
+		designation.push_back(praefix+"_longest_x");
+		designation.push_back(praefix+"_longest_y");
+		designation.push_back(praefix+"_longest_z");
+	}
+
+	if (cfg_ & LONGEST_LEN)
+		designation.push_back(praefix+"_longest_len");
+
+	if (cfg_ & CUMUL_LEN)
+		designation.push_back(praefix+"_cumul_len");
+}

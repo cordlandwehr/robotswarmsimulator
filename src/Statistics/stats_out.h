@@ -14,6 +14,8 @@
 class StatsOut {
 public:
 	StatsOut();
+	StatsOut(std::string stat_id);
+	StatsOut(std::string stat_id, std::string stat_dir);
 	virtual ~StatsOut();
 
 	/**

@@ -17,10 +17,18 @@ public:
 
 	void init(Parser& parser);
 
+	/*
+	 *
+	 *
+	 * Subset-configuration following...
+	 *
+	 *
+	 */
+
 	/**
-	 * \return whether or not to for any subset of the robots
+	 * \return whether or not for any subset of the robots
 	 * the latter defined information should be calculated.
-	 * If not, the whole statistics-calculation is deactivated.
+	 * If false, the whole statistics-calculation is deactivated.
 	 */
 	const bool is_any_subset() const;
 
@@ -117,7 +125,11 @@ public:
 	const int vel_cfg() const;
 
 private:
-	bool subset_all_, subset_masters_, subset_slaves_;
+	bool any_subset_;
+	bool subset_all_, subset_actall_, subset_inactall_;
+	bool subset_masters_, subset_actmasters_, subset_inactmasters_;
+	bool subset_slaves_, subset_actslaves_, subset_inactslaves_;
+
 	bool num_robots_, num_masters_, num_slaves_;
 	bool swarm_avg_pos_;
 	int vel_cfg_;

@@ -22,6 +22,15 @@ char StatsOut::stat_output_date [80];
 StatsOut::StatsOut() {
 }
 
+StatsOut::StatsOut(std::string stat_id) {
+	this->stat_id = stat_id;
+}
+
+StatsOut::StatsOut(std::string stat_id, std::string stat_dir) {
+	this->stat_id = stat_id;
+	this->stat_dir = stat_dir;
+}
+
 StatsOut::~StatsOut() {
 }
 
