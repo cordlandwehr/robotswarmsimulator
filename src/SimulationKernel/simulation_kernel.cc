@@ -20,6 +20,11 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// set history
 	history_ = history;
 
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
+	parser->init();
+	parser->load_projectfiles(project_filename);
+
 	//TODO create parser object for loading project files
 	//load_projectfiles(project_filename);
 	//TODO implement rest of initialization

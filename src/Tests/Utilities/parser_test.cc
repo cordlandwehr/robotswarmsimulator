@@ -17,9 +17,8 @@
 
 BOOST_AUTO_TEST_CASE(load_main_project_file)
 {
-	boost::shared_ptr<SimulationKernel> sim_kernel;
-	sim_kernel.reset(new SimulationKernel());
-	Parser* parser = new Parser(sim_kernel);
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
@@ -35,9 +34,8 @@ BOOST_AUTO_TEST_CASE(load_main_project_file)
 
 BOOST_AUTO_TEST_CASE(load_robot_file_1)
 {
-	boost::shared_ptr<SimulationKernel> sim_kernel;
-	sim_kernel.reset(new SimulationKernel());
-	Parser* parser = new Parser(sim_kernel);
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
@@ -144,9 +142,8 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 
 BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 {
-	boost::shared_ptr<SimulationKernel> sim_kernel;
-	sim_kernel.reset(new SimulationKernel());
-	Parser* parser = new Parser(sim_kernel);
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
@@ -180,10 +177,8 @@ BOOST_FIXTURE_TEST_CASE(save_main_project_file_1, SimpleWorldFixture)
 {
 	string project_filename = "src/Tests/TestData/garbled_projectfile_c.swarm";
 
-	boost::shared_ptr<SimulationKernel> sim_kernel;
-	sim_kernel.reset(new SimulationKernel());
-	sim_kernel->init(project_filename, history);
-	Parser* parser = new Parser(sim_kernel);
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
 
 	//dummy values
 	parser->asg_ = 0;
@@ -193,14 +188,13 @@ BOOST_FIXTURE_TEST_CASE(save_main_project_file_1, SimpleWorldFixture)
 	parser->robot_filename_ = "src/Tests/TestData/i.robot";
 	parser->statistics_module_ = "MY_STATISTICMODULE";
 
-	parser->save_projectfiles("src/Tests/TestData/garbled_projectfile_c.swarm");
+	parser->save_projectfiles("src/Tests/TestData/garbled_projectfile_c.swarm", history->get_newest());
 }
 
 BOOST_FIXTURE_TEST_CASE(write_robot_1, SimpleWorldFixture)
 {
-	boost::shared_ptr<SimulationKernel> sim_kernel;
-	sim_kernel.reset(new SimulationKernel());
-	Parser* parser = new Parser(sim_kernel);
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
 
 	cout << "<robotwriting-test-case>" << endl;
 	cout << parser->write_robot(robot_data_a);

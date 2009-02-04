@@ -1,6 +1,6 @@
 #include "parser.h"
 
-Parser::Parser(boost::shared_ptr<SimulationKernel> sim_kernel) : sim_kernel_(sim_kernel) {
+Parser::Parser() {
 	;
 }
 
@@ -432,7 +432,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 	}
 }
 
-void Parser::save_robot_file() {
+void Parser::save_robot_file(const WorldInformation& world_info) {
 
 	ofstream robot_file;
 	robot_file.open(robot_filename_.c_str());
@@ -453,7 +453,8 @@ void Parser::save_robot_file() {
 		robot_file << "\"z-axis-1\",\"z-axis-2\",\"z-axis-3\"" << endl;
 
 		//getting all RobotData from current world-information
-		std::vector< boost::shared_ptr<RobotData> > robots_data = sim_kernel_->history()->get_newest().robot_data();
+	//	std::vector< boost::shared_ptr<RobotData> > robots_data = sim_kernel_->history()->get_newest().robot_data();
+		std::vector< boost::shared_ptr<RobotData> > robots_data = world_info.robot_data();
 
 		//iterate over all RobotData to parse them Robot by Robot
 		for (vector<boost::shared_ptr<RobotData> >::iterator it = robots_data.begin();
@@ -515,7 +516,7 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	}
 
-void Parser::save_obstacle_file() {
+void Parser::save_obstacle_file(const WorldInformation& world_info) {
 
 	ofstream obstacle_file;
 	obstacle_file.open(obstacle_filename_.c_str());
@@ -532,15 +533,15 @@ void Parser::save_obstacle_file() {
 		obstacle_file << "\"\"" << endl;
 
 		//fetching obstacles from the actual world-information through history-reference
-		vector<boost::shared_ptr<Obstacle> > obstacles = sim_kernel_->history()->get_newest().obstacles();
-
+//		vector<boost::shared_ptr<Obstacle> > obstacles = sim_kernel_->history()->get_newest().obstacles();
+		vector<boost::shared_ptr<Obstacle> > obstacles = world_info.obstacles();
 		//iterate over all obstacles to parse them obstacle by obstacle
 		for (vector<boost::shared_ptr<Obstacle> >::iterator it = obstacles.begin(); it!=obstacles.end(); ++it) {
 			obstacle_file << write_obstacle(*it);
 		}
 
 		//fetching marker-informations from actual world-information through history-reference
-		vector<boost::shared_ptr<WorldObject> > markers = sim_kernel_->history()->get_newest().markers();
+		vector<boost::shared_ptr<WorldObject> > markers = world_info.markers();
 
 		//iterate over all markers
 		for (vector<boost::shared_ptr<WorldObject> >::iterator it = markers.begin(); it!=markers.end(); ++it) {
@@ -601,8 +602,8 @@ string Parser::write_marker(boost::shared_ptr<WorldObject> marker) {
 	return output.str();
 }
 
-void Parser::save_projectfiles(const string& project_filename) {
+void Parser::save_projectfiles(const string& project_filename, const WorldInformation& world_info) {
 	save_main_project_file(project_filename);
-	save_robot_file();
-	save_obstacle_file();
+	save_robot_file(world_info);
+	save_obstacle_file(world_info);
 }

@@ -48,13 +48,30 @@ class Parser {
 	friend class write_robot_1;
 
 public:
-	Parser(boost::shared_ptr<SimulationKernel> sim_kernel);
+	Parser();
 	virtual ~Parser();
 
-private:
-	//reference to SimulationKernel
-	boost::shared_ptr<SimulationKernel> sim_kernel_;
+	/**
+	 * This method loads the data written in the given project files
+	 * (main project file, robot file, obstacle file)
+	 * and initializes the according variables.
+	 * \param Name of the main project file.
+	 */
+	void load_projectfiles(const string& project_filename);
 
+	/**
+	 * This method saves the data to the predefined project files
+	 * (main project file, robot file, obstacle file)
+	 * \param Name of the main project file.
+	 */
+	void save_projectfiles(const string& project_filename, const WorldInformation& world_info);
+
+	/**
+	 * This method sets default variables and values.
+	 */
+	void init();
+
+private:
 	//TODO(martinah) comment variables
 	//variables initialized with values in the main project file
 	int asg_;
@@ -98,19 +115,6 @@ private:
 	std::vector<string> initiale_obstacle_marker_information_;
 	std::vector<double> initiale_obstacle_radius_;
 	std::vector<Vector3d> initiale_obstacle_size_;
-
-	/**
-	 * This method loads the data written in the given project files
-	 * (main project file, robot file, obstacle file)
-	 * and initializes the according variables.
-	 * \param Name of the main project file.
-	 */
-	void load_projectfiles(const string& project_filename);
-
-	/**
-	 * This method sets default variables and values.
-	 */
-	void init();
 
 	/**
 	 * This method returns the default value of the given variable, if the given variable has a default value,
@@ -264,13 +268,6 @@ private:
 	double string_to_double(const string& my_string);
 
 	/**
-	 * This method saves the data to the predefined project files
-	 * (main project file, robot file, obstacle file)
-	 * \param Name of the main project file.
-	 */
-	void save_projectfiles(const string& project_filename);
-
-	/**
 	 * This method saves the following variables with their current
 	 * values to the specified main project file:
 	 * asg_, compass_model_, event_handler_, obstacle_filename_,
@@ -281,8 +278,9 @@ private:
 
 	/**
 	 * This method saves information about the robots.
+	 * \Param world_info needed to get the current sets of robots
 	 */
-	void save_robot_file();
+	void save_robot_file(const WorldInformation& world_info);
 
 	/**
 	 * This method constructs a line for the robot_file which describes
@@ -293,8 +291,9 @@ private:
 
 	/**
 	 * This method saves information about the obstacles
+	 * Param world_info needed to get the current sets of obstacles
 	 */
-	void save_obstacle_file();
+	void save_obstacle_file(const WorldInformation& world_info);
 
 	/**
 	 * This method constructs a line for the obstacle_file which describes

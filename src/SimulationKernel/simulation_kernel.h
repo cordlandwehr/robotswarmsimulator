@@ -24,6 +24,7 @@
 
 #include "../Utilities/vector3d.h"
 #include "../Utilities/unsupported_operation_exception.h"
+#include "../Utilities/parser.h"
 
 #include "../Model/robot.h"
 
