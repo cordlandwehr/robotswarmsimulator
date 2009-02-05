@@ -8,7 +8,7 @@
 #ifndef LOOK_EVENT_H_
 #define LOOK_EVENT_H_
 
-#include <vector>
+#include <list>
 #include <boost/smart_ptr.hpp>
 #include "event.h"
 #include "../Model/robot.h"
@@ -36,13 +36,13 @@ public:
 	 * Returns a constant reference to the robot subset.
 	 * \return A constant reference to the robot subset.
 	 */
-	const vector<boost::shared_ptr<Robot> >& robot_subset() const;
+	const list<boost::shared_ptr<Robot> >& robot_subset() const;
 
 private:
 	/**
 	 * The robot subset for this event.
 	 */
-	vector<boost::shared_ptr<Robot> > robot_subset_;
+	list<boost::shared_ptr<Robot> > robot_subset_;
 };
 
 #endif /* LOOK_EVENT_H_ */

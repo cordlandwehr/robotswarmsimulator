@@ -40,7 +40,7 @@ typedef boost::numeric::ublas::c_vector<double, 3> Vector3d;
 // * This is a class and not a struct because there might be a lot of helper functions for it in
 // * the future.
 // *
-// * TODO(craupach): add helper functions for adding, subtracting vectors etc.
+// *
 // */
 //class Vector3d {
 //

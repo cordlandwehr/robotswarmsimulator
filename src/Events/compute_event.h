@@ -8,7 +8,7 @@
 #ifndef COMPUTE_EVENT_H_
 #define COMPUTE_EVENT_H_
 
-#include <vector>
+#include <list>
 #include <boost/smart_ptr.hpp>
 #include "event.h"
 #include "../Model/robot.h"
@@ -36,7 +36,7 @@ public:
 	 * Returns a constant reference to the robot subset.
 	 * \return A constant reference to the robot subset.
 	 */
-	const vector<boost::shared_ptr<Robot> >& robot_subset() const;
+	const list<boost::shared_ptr<Robot> >& robot_subset() const;
 
 	/**
 	 * Adds a new request to the set of requests.
@@ -48,18 +48,18 @@ public:
 	 * Returns a constant reference to the set of requests.
 	 * \return A constant reference to the set of requests.
 	 */
-	const vector<boost::shared_ptr<const Request> >& requests() const;
+	const list<boost::shared_ptr<const Request> >& requests() const;
 
 private:
 	/**
 	 * The robot subset for this event.
 	 */
-	vector<boost::shared_ptr<Robot> > robot_subset_;
+	list<boost::shared_ptr<Robot> > robot_subset_;
 
 	/**
 	 * The set of resulting requests
 	 */
-	vector<boost::shared_ptr<const Request> > requests_;
+	list<boost::shared_ptr<const Request> > requests_;
 };
 
 

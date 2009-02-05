@@ -63,9 +63,19 @@ void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 }
 
 void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
-  BOOST_FOREACH(boost::shared_ptr<Robot> robot, look_event->robot_subset()) {
-	  robot_control_->compute_view(*robot);
-  }
+	// produce extrapolated world information
+	boost::shared_ptr<WorldInformation> new_world_information =
+		extrapolate_old_world_information(look_event->time());
+
+	// push back new world information
+	history_->insert(new_world_information);
+
+	// update robot control with the extrapolated world information
+	robot_control_->update(*new_world_information);
+
+	BOOST_FOREACH(boost::shared_ptr<Robot> robot, look_event->robot_subset()) {
+		robot_control_->compute_view(*robot);
+	}
 }
 
 void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event) {

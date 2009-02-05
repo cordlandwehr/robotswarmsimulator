@@ -26,14 +26,14 @@
 /*
  *  Test: pass an empty look event for t = 5
  *  Expected Results:
- *    No new WorldInformation generated
- *    Last WorldInformation still at t = 0
+ *    WorldInformation extrapolated to t = 5
+ *    Last WorldInformation  at t = 5
  *    All Listeners Update Functions called once
  *    All Listeners last event is look event at t = 5
- *    All listeners last world information is the old one at t = 0
+ *    All listeners last world information is the new one at t = 5
  *    Robot B is at (1.0, 0.5, 3.0)
  */
-BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
+BOOST_FIXTURE_TEST_CASE(event_handler_test, SimpleWorldFixture)
 {
 	// Test set up: EventHandler and Listeners
 	boost::shared_ptr<AbstractViewFactory> view_factory;
@@ -57,8 +57,8 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	look_event.reset(new LookEvent(5));
 	event_handler.handle_event(look_event);
 
-	// newest world information is still for t = 0
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
+	// newest world information is for t = 5
+	BOOST_CHECK_EQUAL(history->get_newest().time(), 5);
 
 	// all listeners update functions called once
 	BOOST_CHECK_EQUAL(listener_a->times_update_called(), 1);
@@ -68,9 +68,9 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_test, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(listener_a->last_event()->time(), 5);
 	BOOST_CHECK_EQUAL(listener_b->last_event()->time(), 5);
 
-	// all listeners world information is the old one at t = 0
-	BOOST_CHECK_EQUAL(listener_a->last_world_information().time(), 0);
-	BOOST_CHECK_EQUAL(listener_b->last_world_information().time(), 0);
+	// all listeners world information is at t = 5
+	BOOST_CHECK_EQUAL(listener_a->last_world_information().time(), 5);
+	BOOST_CHECK_EQUAL(listener_b->last_world_information().time(), 5);
 
 	// robot b is at (1.0, 0.5, 3.0)
 	BOOST_CHECK_CLOSE(robot_data_b->position()(kXCoord), 1.0, 0.1);

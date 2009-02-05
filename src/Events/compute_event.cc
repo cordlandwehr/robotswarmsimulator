@@ -12,7 +12,7 @@ void ComputeEvent::add_to_robot_subset(boost::shared_ptr<Robot> new_robot) {
 }
 
 //TODO(craupach): maybe this should be inline.
-const vector<boost::shared_ptr<Robot> >& ComputeEvent::robot_subset() const {
+const list<boost::shared_ptr<Robot> >& ComputeEvent::robot_subset() const {
 	return robot_subset_;
 }
 
@@ -20,6 +20,6 @@ void ComputeEvent::add_to_requests(boost::shared_ptr<const Request> new_request)
 	requests_.push_back(new_request);
 }
 
-const vector<boost::shared_ptr<const Request> >& ComputeEvent::requests() const {
+const list<boost::shared_ptr<const Request> >& ComputeEvent::requests() const {
 	return requests_;
 }

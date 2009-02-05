@@ -30,9 +30,6 @@ class View;
  * for the new WorldInfortion.
  *
  */
-
-//TODO: Register me as Listener!
-
 class RobotControl {
 public:
 	/**
