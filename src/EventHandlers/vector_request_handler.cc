@@ -5,7 +5,10 @@
  *      Author: craupach
  */
 
+#include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include "vector_modifier.h"
 
 #include "../Model/world_information.h"
 #include "../Model/robot.h"
@@ -30,21 +33,21 @@ void VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInform
 	 if(!vector_request) {
 		 throw std::invalid_argument("Not a vector request.");
 	 }
-    const boost::shared_ptr<RobotIdentifier> & robot_id = vector_request->robot().id();
-    RobotData & robot_data = world_information->get_according_robot_data(robot_id);
-    const Vector3d & requested_local_vector(vector_request->requested_vector());
-    boost::shared_ptr<Vector3d> requested_global_vector;
-    // TODO(craupach) this is a problem: For velocity and acceleration we should set the origin to
-    // (0,0,0)
-    if(robot_data.coordinate_system_axis().get<0>()){
-        requested_global_vector.reset(new Vector3d(*CoordConverter::local_to_global(requested_local_vector, robot_data.position(), robot_data.coordinate_system_axis())));
-    }else{
-        requested_global_vector.reset(new Vector3d(requested_local_vector));
-    }
+    const boost::shared_ptr<RobotIdentifier>& robot_id = vector_request->robot().id();
+    RobotData& robot_data = world_information->get_according_robot_data(robot_id);
+    const Vector3d& local_vector(vector_request->requested_vector());
+    // TODO(craupach) this is a problem: For velocity and acceleration we should set the origin to (0,0,0)
+	boost::shared_ptr<Vector3d> global_vector = CoordConverter::local_to_global(local_vector, robot_data.position(),
+																				robot_data.coordinate_system_axis());
+	const Vector3d global_vector_cpy(*global_vector);
 
-    // TODO(craupach) apply pipeline here
+    // apply vector modifiers from pipeline
+	BOOST_FOREACH(boost::shared_ptr<VectorModifier>& vector_modifier, vector_modifiers_) {
+		vector_modifier->modify_vector(*global_vector, global_vector_cpy);
+	}
 
-    apply_request(vector_request, robot_data, requested_global_vector);
+	// apply request
+    apply_request(vector_request, robot_data, global_vector);
 }
 
 void VectorRequestHandler::apply_request(boost::shared_ptr<const VectorRequest> vector_request, RobotData & robot_data, boost::shared_ptr<Vector3d> processed_global_vector)
@@ -59,4 +62,8 @@ void VectorRequestHandler::apply_request(boost::shared_ptr<const VectorRequest> 
 
         robot_data.set_acceleration(processed_global_vector);
     }
+}
+
+void VectorRequestHandler::add_vector_modifier(boost::shared_ptr<VectorModifier> vector_modifier) {
+	vector_modifiers_.push_back(vector_modifier);
 }

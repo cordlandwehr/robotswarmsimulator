@@ -19,7 +19,8 @@ public:
                          double discard_probability,
                          const History& history) : RequestHandler(seed, discard_probability, history) {}
     virtual ~MarkerRequestHandler() {}
-private:
+
+protected:
 	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                          boost::shared_ptr<const Request> request);
 };

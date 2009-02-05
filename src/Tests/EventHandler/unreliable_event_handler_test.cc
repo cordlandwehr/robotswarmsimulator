@@ -33,6 +33,10 @@
 
 #include "../Fixtures/simple_world_fixture.h"
 
+#include "test_marker_request_handler.h"
+#include "test_vector_request_handler.h"
+#include "test_type_change_request_handler.h"
+
 
 /*
  * Test: pass several requests to an unreliable request handler with discard probability 1.0
@@ -50,19 +54,19 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 	double discard_probability = 1.0;
 	EventHandler event_handler(history, robot_control);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_acc(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_acceleration_request_handler(request_handler_acc);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_vel(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_velocity_request_handler(request_handler_vel);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_pos(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_position_request_handler(request_handler_pos);
 
-	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestMarkerRequestHandler> request_handler_marker(new TestMarkerRequestHandler(seed, discard_probability, *history));
 	event_handler.set_marker_request_handler(request_handler_marker);
 
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestTypeChangeRequestHandler> request_handler_type(new TestTypeChangeRequestHandler(seed, discard_probability, *history));
 	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
@@ -70,7 +74,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
 	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
-	// TODO: marker request (marker_information not yet redesigned)
+	// construction of marker request
+	boost::shared_ptr<MarkerInformation> new_marker_information(new MarkerInformation());
+	boost::shared_ptr<MarkerRequest> marker_request(new MarkerRequest(*robot_a, new_marker_information));
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -83,15 +89,15 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 
 	// construction of velocity request
 	boost::shared_ptr<Vector3d> new_velocity(new Vector3d);
-		(*new_velocity)(0) = -5.; (*new_velocity)(1) = 0.1; (*new_velocity)(2) = 3.;
-		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
+	(*new_velocity)(0) = -5.; (*new_velocity)(1) = 0.1; (*new_velocity)(2) = 3.;
+	boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 100;
 	for (int i=1; i<=nr_requests; i++) {
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(acceleration_request);
-		//handle_requests_event->add_to_requests(marker_request);
+		handle_requests_event->add_to_requests(marker_request);
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
@@ -102,11 +108,11 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 	/* BEGIN: NoneHandledTest
 	 * - none event has been handled
 	 */
-//	BOOST_CHECK_EQUAL(event_handler.calls_acceleration_request(), 0);
-//	BOOST_CHECK_EQUAL(event_handler.calls_marker_request()      , 0);
-//	BOOST_CHECK_EQUAL(event_handler.calls_position_request()    , 0);
-//	BOOST_CHECK_EQUAL(event_handler.calls_type_change_request() , 0);
-//	BOOST_CHECK_EQUAL(event_handler.calls_velocity_request()    , 0);
+	BOOST_CHECK_EQUAL(request_handler_acc->nr_handled(), 0);
+	BOOST_CHECK_EQUAL(request_handler_vel->nr_handled(), 0);
+	BOOST_CHECK_EQUAL(request_handler_pos->nr_handled(), 0);
+	BOOST_CHECK_EQUAL(request_handler_marker->nr_handled(), 0);
+	BOOST_CHECK_EQUAL(request_handler_type->nr_handled(), 0);
 	/* END: NoneHandledTest */
 }
 
@@ -127,19 +133,19 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	double discard_probability = 0.0;
 	EventHandler event_handler(history, robot_control);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_acc(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_acceleration_request_handler(request_handler_acc);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_vel(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_velocity_request_handler(request_handler_vel);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_pos(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_position_request_handler(request_handler_pos);
 
-	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestMarkerRequestHandler> request_handler_marker(new TestMarkerRequestHandler(seed, discard_probability, *history));
 	event_handler.set_marker_request_handler(request_handler_marker);
 
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestTypeChangeRequestHandler> request_handler_type(new TestTypeChangeRequestHandler(seed, discard_probability, *history));
 	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
@@ -147,7 +153,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
 	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
-	// TODO: marker request (marker_information not yet redesigned)
+	// construction of marker request
+	boost::shared_ptr<MarkerInformation> new_marker_information(new MarkerInformation());
+	boost::shared_ptr<MarkerRequest> marker_request(new MarkerRequest(*robot_a, new_marker_information));
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -168,7 +176,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	for (int i=1; i<=nr_requests ; i++) {
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(acceleration_request);
-		//handle_requests_event->add_to_requests(marker_request);
+		handle_requests_event->add_to_requests(marker_request);
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
@@ -179,11 +187,11 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	/* BEGIN: AllHandledTest
 	 * - all events have been handled
 	 */
-//	BOOST_CHECK_EQUAL(event_handler.calls_acceleration_request(), nr_requests);
-//	BOOST_CHECK_EQUAL(event_handler.calls_marker_request()      , nr_requests);
-//	BOOST_CHECK_EQUAL(event_handler.calls_position_request()    , nr_requests);
-//	BOOST_CHECK_EQUAL(event_handler.calls_type_change_request() , nr_requests);
-//	BOOST_CHECK_EQUAL(event_handler.calls_velocity_request()    , nr_requests);
+	BOOST_CHECK_EQUAL(request_handler_acc->nr_handled(), nr_requests);
+	BOOST_CHECK_EQUAL(request_handler_vel->nr_handled(), nr_requests);
+	BOOST_CHECK_EQUAL(request_handler_pos->nr_handled(), nr_requests);
+	BOOST_CHECK_EQUAL(request_handler_type->nr_handled(), nr_requests);
+	BOOST_CHECK_EQUAL(request_handler_marker->nr_handled(), nr_requests);
 	/* END: AllHandledTest */
 }
 
@@ -204,19 +212,19 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 	double discard_probability = 0.25;
 	EventHandler event_handler(history, robot_control);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_acc(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_acceleration_request_handler(request_handler_acc);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_vel(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_velocity_request_handler(request_handler_vel);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_pos(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_position_request_handler(request_handler_pos);
 
-	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestMarkerRequestHandler> request_handler_marker(new TestMarkerRequestHandler(seed, discard_probability, *history));
 	event_handler.set_marker_request_handler(request_handler_marker);
 
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestTypeChangeRequestHandler> request_handler_type(new TestTypeChangeRequestHandler(seed, discard_probability, *history));
 	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
@@ -224,7 +232,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
 	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
-	// TODO: marker request (marker_information not yet redesigned)
+	// construction of marker request
+	boost::shared_ptr<MarkerInformation> new_marker_information(new MarkerInformation());
+	boost::shared_ptr<MarkerRequest> marker_request(new MarkerRequest(*robot_a, new_marker_information));
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -241,11 +251,11 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
-	int nr_requests = 25000;
+	int nr_requests = 50000;
 	for (int i=1; i<=nr_requests ; i++) {
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(acceleration_request);
-		//handle_requests_event->add_to_requests(marker_request);
+		handle_requests_event->add_to_requests(marker_request);
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
@@ -257,11 +267,11 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 	 * - about 3/4 of the events have been handled (we allow an error of 2%)
 	 */
 	double estimated_nr = static_cast<double>(nr_requests) * 3./4.;
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_acceleration_request()), estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_marker_request())      , estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_position_request())    , estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_type_change_request()) , estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_velocity_request())    , estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_acc->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_vel->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_pos->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_type->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_marker->nr_handled()), estimated_nr, 2.0);
 	/* END: FewHandledTest */
 }
 
@@ -282,19 +292,19 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 	double discard_probability = 0.75;
 	EventHandler event_handler(history, robot_control);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_acc(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_acceleration_request_handler(request_handler_acc);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_vel(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_velocity_request_handler(request_handler_vel);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestVectorRequestHandler> request_handler_pos(new TestVectorRequestHandler(seed, discard_probability, *history));
 	event_handler.set_position_request_handler(request_handler_pos);
 
-	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestMarkerRequestHandler> request_handler_marker(new TestMarkerRequestHandler(seed, discard_probability, *history));
 	event_handler.set_marker_request_handler(request_handler_marker);
 
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(seed, discard_probability, *history));
+	boost::shared_ptr<TestTypeChangeRequestHandler> request_handler_type(new TestTypeChangeRequestHandler(seed, discard_probability, *history));
 	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of acceleration request
@@ -302,7 +312,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 	(*new_acceleration)(0) = -3.; (*new_acceleration)(1) = -7.8; (*new_acceleration)(2) = 1.;
 	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
 
-	// TODO: marker request (marker_information not yet redesigned)
+	// construction of marker request
+	boost::shared_ptr<MarkerInformation> new_marker_information(new MarkerInformation());
+	boost::shared_ptr<MarkerRequest> marker_request(new MarkerRequest(*robot_a, new_marker_information));
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -319,11 +331,11 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 		boost::shared_ptr<VelocityRequest> velocity_request(new VelocityRequest(*robot_a, new_velocity));
 
 	// construction and handling of several handle_requests_event
-	int nr_requests = 25000;
+	int nr_requests = 50000;
 	for (int i=1; i<=nr_requests ; i++) {
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(acceleration_request);
-		//handle_requests_event->add_to_requests(marker_request);
+		handle_requests_event->add_to_requests(marker_request);
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
@@ -334,11 +346,11 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 	/* BEGIN: ManyHandledTest
 	 * - about 3/4 of the events have been handled (we allow an error of 2%)
 	 */
-	double estimated_nr = static_cast<double>(nr_requests) * 1./4.;
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_acceleration_request()), estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_marker_request())      , estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_position_request())    , estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_type_change_request()) , estimated_nr, 2.0);
-//	BOOST_CHECK_CLOSE(static_cast<double>(event_handler.calls_velocity_request())    , estimated_nr, 2.0);
+	double estimated_nr = static_cast<double>(nr_requests) * 0.25;
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_acc->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_vel->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_pos->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_type->nr_handled()), estimated_nr, 2.0);
+	BOOST_CHECK_CLOSE(static_cast<double>(request_handler_marker->nr_handled()), estimated_nr, 2.0);
 	/* END: ManyHandledTest */
 }
