@@ -23,11 +23,11 @@
 class VectorRandomizer : public VectorModifier {
 public:
 	VectorRandomizer(unsigned int seed, double standard_deviation)
-	: distribution_generator_(new DistributionGenerator(seed)) {
-		distribution_generator_->init_normal(0., standard_deviation);
+	: distribution_generator_(DistributionGenerator(seed)) {
+		distribution_generator_.init_normal(0., standard_deviation);
 	}
 	
-	~VectorRandomizer() {}
+	~VectorRandomizer() { }
 	
 	/**
 	 * \brief Randomizes the given input vector.
@@ -35,7 +35,7 @@ public:
 	void modify_vector(Vector3d& input_vector, const Vector3d& reference_vector);
 	
 private:
-	boost::shared_ptr<DistributionGenerator> distribution_generator_;
+	DistributionGenerator distribution_generator_;
 };
 
 #endif /* VECTOR_RANDOMIZER_H_ */

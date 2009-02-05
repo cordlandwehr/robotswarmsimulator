@@ -9,6 +9,7 @@
 #define VECTOR3D_H_
 
 #include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/io.hpp>
 
 /**
  * constants for better readability of vector arithmetic

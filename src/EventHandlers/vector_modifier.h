@@ -17,8 +17,8 @@
  */
 class VectorModifier {
 public:
-	VectorModifier() {}
-	virtual ~VectorModifier() {}
+	VectorModifier() { }
+	virtual ~VectorModifier() { }
 	
 	/**
 	 * \brief Modifies the given input vector.

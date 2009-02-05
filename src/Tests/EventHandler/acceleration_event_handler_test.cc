@@ -119,14 +119,14 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system,
 	boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
 	              boost::shared_ptr<Vector3d> > axes(x_axis, y_axis, z_axis);
 
-	robot_data_a->set_coordinate_system_axis(axes);
+	robot_data_b->set_coordinate_system_axis(axes);
 
-	// build a acceleration request
+	// build an acceleration request
 	boost::shared_ptr<Vector3d> new_acceleration(new Vector3d);
 	(*new_acceleration)(kXCoord) =  1.0;
 	(*new_acceleration)(kYCoord) = -0.5;
 	(*new_acceleration)(kZCoord) =  1.5;
-	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_a, new_acceleration));
+	boost::shared_ptr<AccelerationRequest> acceleration_request(new AccelerationRequest(*robot_b, new_acceleration));
 
 	// construction of handle_requests_event
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(1));
@@ -135,10 +135,10 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system,
 	// handling the event
 	event_handler.handle_event(handle_requests_event);
 
-	// checking new acceleration of robot_a: should be (2.0, 0.0, 2.25)
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
+	// checking new acceleration of robot_b: should be (2.0, 0.0, 2.25)
+	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_b->id());
 	BOOST_CHECK_EQUAL(history->get_newest().time(), 1);
-	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kXCoord),  2.0, 0.1);
+	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kXCoord), 2.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kYCoord), 0.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kZCoord), 2.25, 0.1);
 }

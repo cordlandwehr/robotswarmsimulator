@@ -34,10 +34,9 @@ class RobotData;
  */
 class VectorRequestHandler : public RequestHandler {
 public:
-	VectorRequestHandler(unsigned int seed,
-                         double discard_probability,
-                         const History& history) : RequestHandler(seed, discard_probability, history) {}
-    virtual ~VectorRequestHandler() {}
+	VectorRequestHandler(unsigned int seed, double discard_probability, const History& history)
+	: RequestHandler(seed, discard_probability, history) { }
+    virtual ~VectorRequestHandler() { }
 	
 	/**
 	 * \brief Adds the given vector modifier to the request handlers modifier pipeline.
@@ -54,9 +53,18 @@ protected:
                                          boost::shared_ptr<const Request> request);
 	
 private:
-    void apply_request(boost::shared_ptr<const VectorRequest> vector_request,
-    		           RobotData & robot_data,
-    		           boost::shared_ptr<Vector3d> processed_global_vector);
+	/**
+	 * \brief Updates the robot property corresponding to the given vector request using the given vector.
+	 */
+    void update_vector(const VectorRequest& vector_request, RobotData& robot_data, const Vector3d& vector);
+	
+	/**
+	 * \brief Returns a vector that matches the global version of the vector in the given request.
+	 *
+	 * The provided robot data is used to for information needed to transform the local requested vector into the global
+	 * coordinate system.
+	 */
+	static Vector3d extract_global_vector(const VectorRequest& request, const RobotData& robot_data);
 	
 	std::list<boost::shared_ptr<VectorModifier> > vector_modifiers_;
 };
