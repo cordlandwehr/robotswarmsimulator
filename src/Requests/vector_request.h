@@ -8,7 +8,7 @@
 #ifndef VECTOR_REQUEST_H_
 #define VECTOR_REQUEST_H_
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 class VectorRequest : public Request {
 public:

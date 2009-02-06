@@ -10,7 +10,7 @@
 #define ROBOT_DATA_H_
 
 #include <boost/tuple/tuple.hpp>
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 using namespace std;
 

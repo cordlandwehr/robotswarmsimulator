@@ -22,7 +22,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <vector>
-#include "vector3d.h"
+#include "vector_arithmetics.h"
 
 /**
  * This class provides different random number generators for different distributions.

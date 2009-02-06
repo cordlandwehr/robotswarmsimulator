@@ -10,7 +10,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "world_object.h"
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 
 class Obstacle : public WorldObject {

@@ -11,7 +11,7 @@
 
 
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 #include "camera.h"
 
 #define kSpeed	0.1f

@@ -13,7 +13,7 @@
 
 #include <boost/smart_ptr.hpp>
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 class WorldInformation;
 class WorldObject;

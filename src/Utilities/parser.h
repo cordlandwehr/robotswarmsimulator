@@ -29,7 +29,7 @@
 #include "../Model/robot.h"
 #include "../Model/identifier.h"
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
 #include "../SimulationKernel/simulation_kernel.h"

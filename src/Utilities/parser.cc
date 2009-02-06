@@ -50,7 +50,7 @@ string Parser::get_var_name(const string& line) {
 }
 
 string Parser::get_default_value(const string& var) {
-	for(int i=0; i<variables_with_default_values.size(); i++) {
+	for(std::size_t i=0; i<variables_with_default_values.size(); i++) {
 		if(!var.compare(variables_with_default_values[i]) ||
 		   !var.compare("ROBOT_FILENAME") ||
 		   !var.compare("OBSTACLE_FILENAME") ) {
@@ -284,6 +284,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	position_in_line_ = 0;
 
 	//The order of these initializations is important!
+	// TODO(peter) is there a reason that this variable is read but never used? (see compiler warning)
 	double id = get_next_double_value_in_line(line, line_number, false);
 	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
 	string type = get_next_value_in_line(line, line_number, false);

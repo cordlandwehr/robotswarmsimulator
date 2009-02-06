@@ -22,7 +22,7 @@
 #include <cstddef>
 #include <map>
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/unsupported_operation_exception.h"
 #include "../Utilities/parser.h"
 

@@ -15,7 +15,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "vector_modifier.h"
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 class VectorRequest;
 class RobotData;

@@ -9,7 +9,7 @@
 #include "../../Events/event.h"
 #include "../../SimulationControl/history.h"
 #include "../../EventHandlers/event_handler.h"
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 #include "../Fixtures/simple_world_fixture.h"
 
 BOOST_FIXTURE_TEST_CASE(history_test, SimpleWorldFixture)

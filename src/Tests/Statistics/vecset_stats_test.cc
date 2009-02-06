@@ -3,7 +3,7 @@
 
 #include "../../Statistics/vecset_stats.h"
 
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 
 BOOST_AUTO_TEST_CASE(vecset_stats_test) {
 	// 1 or 0 whether or not print output to cout

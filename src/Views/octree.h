@@ -11,7 +11,7 @@
 
 #include <boost/smart_ptr.hpp>
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 // Some forward declarations
 class Obstacle;

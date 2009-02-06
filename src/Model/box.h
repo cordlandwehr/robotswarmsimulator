@@ -8,7 +8,7 @@
 #define BOX_H_
 
 #include "obstacle.h"
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 
 class Box : public Obstacle {

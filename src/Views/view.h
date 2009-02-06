@@ -14,7 +14,7 @@
 #include <boost/utility.hpp>
 #include <boost/function.hpp>
 #include "../Model/robot_data.h"
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 #include "../Model/identifier.h"
 //class Identifier;
 class RobotIdentifier;

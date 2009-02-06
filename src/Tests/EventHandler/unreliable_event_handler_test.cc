@@ -25,7 +25,7 @@
 
 #include "../../SimulationKernel/robot_control.h"
 
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 
 #include "../../Views/abstract_view_factory.h"
 #include "../../Views/view.h"

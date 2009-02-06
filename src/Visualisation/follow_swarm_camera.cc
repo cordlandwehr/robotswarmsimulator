@@ -11,7 +11,7 @@
 #include "../OpenGL/GLUHeaders.h"
 #include "../OpenGL/GLUTHeaders.h"
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 #include "../Model/world_object.h"
 #include "../Model/obstacle.h"

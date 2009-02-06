@@ -8,7 +8,7 @@
 #ifndef VECTOR_MODIFIER_H_
 #define VECTOR_MODIFIER_H_
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 
 /**

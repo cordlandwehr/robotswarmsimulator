@@ -8,7 +8,7 @@
 #define WORLD_OBJECT_H_
 
 #include <boost/shared_ptr.hpp>
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 #include "marker_information.h"
 
 class Identifier;

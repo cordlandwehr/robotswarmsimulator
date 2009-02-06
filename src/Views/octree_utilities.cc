@@ -18,7 +18,7 @@
 #include "../Model/sphere.h"
 #include "../Model/box.h"
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 #include "octree.h"
 #include "octree_utilities.h"

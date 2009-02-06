@@ -12,7 +12,7 @@
 #include "../OpenGL/GLUHeaders.h"
 #include "../OpenGL/GLUTHeaders.h"
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 #include "moveable_camera.h"
 

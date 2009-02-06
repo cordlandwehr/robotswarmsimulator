@@ -8,7 +8,7 @@
 #ifndef COORD_CONVERTER_H_
 #define COORD_CONVERTER_H_
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 #include <boost/tuple/tuple.hpp>
 #include <boost/shared_ptr.hpp>
 using namespace std;

@@ -8,7 +8,7 @@
 #include "../../Statistics/numset_stats.h"
 #include "../../Model/robot.h"
 
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 
 BOOST_AUTO_TEST_CASE(numset_stats_test) {
 	// 1 or 0 whether or not print output to cout

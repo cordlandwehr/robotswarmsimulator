@@ -11,7 +11,7 @@
 #include "../../Model/world_object.h"
 #include "../../Model/robot_data.h"
 #include "../../Model/robot.h"
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 #include "../Fixtures/simple_world_fixture.h"
 #include "../../Views/view.h"
 #include "../../Views/spheric_view.h"

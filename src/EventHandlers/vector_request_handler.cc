@@ -22,7 +22,7 @@
 #include "../Requests/acceleration_request.h"
 
 #include "../Utilities/coord_converter.h"
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 #include "vector_request_handler.h"
 
@@ -63,11 +63,8 @@ Vector3d VectorRequestHandler::extract_global_vector(const VectorRequest& reques
 	
     const Vector3d& local_vector(request.requested_vector());
 	Vector3d position(robot_data.position());
-	if (typeid(request) == typeid(VelocityRequest) || typeid(request) == typeid(AccelerationRequest)) {
-		position(0) = 0.;
-		position(1) = 0.;
-		position(2) = 0.;
-	}
+	if (typeid(request) == typeid(VelocityRequest) || typeid(request) == typeid(AccelerationRequest))
+		position = boost::numeric::ublas::zero_vector<double>(3);
 	shared_ptr<Vector3d> global_vector = local_to_global(local_vector, position, robot_data.coordinate_system_axis());
 	return *global_vector;
 }

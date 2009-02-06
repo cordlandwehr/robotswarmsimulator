@@ -18,7 +18,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <vector>
-#include "vector3d.h"
+#include "vector_arithmetics.h"
 
 void DistributionGenerator::init_uniform(int min, int max) {
 	boost::uniform_int<> range(min,max);

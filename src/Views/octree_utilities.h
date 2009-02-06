@@ -18,7 +18,7 @@
 #include "../Model/obstacle_identifier.h"
 #include "../Model/marker_identifier.h"
 
-#include "../Utilities/vector3d.h"
+#include "../Utilities/vector_arithmetics.h"
 
 #include "view.h"
 

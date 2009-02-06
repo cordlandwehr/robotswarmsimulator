@@ -13,7 +13,7 @@
 #include "../../Requests/position_request.h"
 #include "../../SimulationControl/history.h"
 #include "../../EventHandlers/event_handler.h"
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 #include "../../Views/view_factory.h"
 #include "../../Views/view.h"
 #include "../../SimulationKernel/robot_control.h"

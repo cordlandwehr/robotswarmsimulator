@@ -26,7 +26,7 @@
 #include "../../Model/sphere.h"
 #include "../../Model/robot_identifier.h"
 
-#include "../../Utilities/vector3d.h"
+#include "../../Utilities/vector_arithmetics.h"
 
 #include "../../Views/octree.h"
 
