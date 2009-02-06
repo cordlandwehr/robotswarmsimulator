@@ -107,8 +107,7 @@ BOOST_AUTO_TEST_CASE( coord_converter_projection_test )
  *  Expected Results:
  *    result vector identical to input vector
  */
-BOOST_AUTO_TEST_CASE( coord_converter_inverse_test )
-{
+BOOST_AUTO_TEST_CASE( coord_converter_inverse_test ) {
 	// build the coordinate system
 	boost::shared_ptr<Vector3d> x_axis(new Vector3d());
 	x_axis->insert_element(kXCoord, 2.0);
@@ -150,7 +149,7 @@ BOOST_AUTO_TEST_CASE( coord_converter_inverse_test )
 
 	// pass to local_to_global then global_to_local
 	boost::shared_ptr<Vector3d> tmp_b = CoordConverter::local_to_global(*position, *origin, axes);
-	boost::shared_ptr<Vector3d> result_b = CoordConverter::global_to_local(*tmp, *origin, axes);
+	boost::shared_ptr<Vector3d> result_b = CoordConverter::global_to_local(*tmp_b, *origin, axes);
 
 	BOOST_CHECK_CLOSE((*result_b)(kXCoord), (*position)(kXCoord), 0.1);
 	BOOST_CHECK_CLOSE((*result_b)(kYCoord), (*position)(kYCoord), 0.1);
