@@ -608,3 +608,35 @@ void Parser::save_projectfiles(const string& project_filename, const WorldInform
 	save_robot_file(world_info);
 	save_obstacle_file(world_info);
 }
+
+void Parser::set_asg(int asg) {
+	asg_ = asg;
+}
+
+void Parser::set_compass_model(const string& compass_model) {
+	compass_model_ = compass_model;
+}
+
+void Parser::set_event_handler(int event_handler) {
+	event_handler_ = event_handler;
+}
+
+void Parser::set_obstacle_filename(const string& obstacle_filename) {
+	obstacle_filename_ = obstacle_filename;
+}
+
+void Parser::set_project_name(const string& project_name) {
+	project_name_ = project_name;
+}
+
+void Parser::set_robot_filename(const string& robot_filename) {
+	robot_filename_ = robot_filename;
+}
+
+void Parser::set_statistics_module(const string& statistics_module) {
+	statistics_module_ = statistics_module;
+}
+
+void Parser::set_project_filename(const string& project_filename) {
+	project_filename_ = project_filename;
+}

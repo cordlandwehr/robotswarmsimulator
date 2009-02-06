@@ -74,6 +74,7 @@ public:
 private:
 	//TODO(martinah) comment variables
 	//variables initialized with values in the main project file
+	//on generation of new project files can be set by set-methods
 	int asg_;
 	string compass_model_;
 	int event_handler_;
@@ -308,6 +309,57 @@ private:
 	 * \param Pointer to the marker
 	 */
 	string write_marker(boost::shared_ptr<WorldObject> marker);
+
+
+	/**
+	 * Set-method for ASG
+	 *TODO is there an enum for ASG?
+	 * @param asg int
+	 */
+	void set_asg(int asg);
+
+	/**
+	 * Set-method for compass model
+	 * @param compass_model string
+	 */
+	void set_compass_model(const string& compass_model);
+
+	/**
+	 * Set-method for event handler
+	 * @param event_handler int
+	 */
+	void set_event_handler(int event_handler);
+
+	/**
+	 * Set-method for obstacle filename
+	 * @param obstacle_filename string
+	 */
+	void set_obstacle_filename(const string& obstacle_filename);
+
+	/**
+	 * Set-method for project_name
+	 * @param project_name string
+	 */
+	void set_project_name(const string& project_name);
+
+	/**
+	 * Set-method for robot filename
+	 * @param robot_filename string
+	 */
+	void set_robot_filename(const string& robot_filename);
+
+	/**
+	 * Set-method for statistics_module
+	 * @param statistics module string
+	 */
+	void set_statistics_module(const string& statistics_module);
+
+	/**
+	 * Set-method for project filename
+	 * @param project_filename string
+	 */
+	void set_project_filename(const string& project_filename);
+
 };
 
 #endif /* PARSER_H_ */
