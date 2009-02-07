@@ -37,8 +37,12 @@ namespace {
 		return result;
 	}
 
-	const std::vector<double> transform(const Vector3d& vec) {
-		return std::vector<double>(vec.begin(), vec.end());
+	const std::map<std::string, double> transform(const Vector3d& vec) {
+		std::map<std::string, double> result;
+		result["x"] = vec(0);
+		result["y"] = vec(1);
+		result["z"] = vec(2);
+		return result;
 	}
 
 	const std::vector<std::size_t> get_visible_robots() {
@@ -53,7 +57,7 @@ namespace {
 		return transform(view->get_visible_markers(*robot));
 	}
 
-	const std::vector<double> get_position(std::size_t index) {
+	const std::map<std::string, double> get_position(std::size_t index) {
 		return transform(view->get_position(*robot, resolve<Identifier>(index)));
 	}
 }
@@ -87,7 +91,7 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 		 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
 		 luabind::def("get_visible_obstacles", &get_visible_obstacles, luabind::copy_table(luabind::result)),
 		 luabind::def("get_visible_markers", &get_visible_markers, luabind::copy_table(luabind::result)),
-		 luabind::def("get_position", &get_position, luabind::copy_table(luabind::result))
+		 luabind::def("get_position", &get_position, luabind::copy_table_assoc(luabind::result))
 	];
 
 	if(view = view_.lock()) {
