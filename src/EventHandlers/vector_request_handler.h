@@ -14,9 +14,9 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "vector_modifier.h"
 #include "../Utilities/vector_arithmetics.h"
 
+class VectorModifier;
 class VectorRequest;
 class RobotData;
 
@@ -37,27 +37,27 @@ public:
 	VectorRequestHandler(unsigned int seed, double discard_probability, const History& history)
 	: RequestHandler(seed, discard_probability, history) { }
     virtual ~VectorRequestHandler() { }
-	
+
 	/**
 	 * \brief Adds the given vector modifier to the request handlers modifier pipeline.
 	 *
 	 * Note that the order in which modifiers are added is important.
 	 */
 	void add_vector_modifier(boost::shared_ptr<VectorModifier> vector_modifier);
-	
+
 protected:
 	/**
 	 * \brief Handles a given vector request by extracting the corresponding vector and applying the modifier pipeline.
 	 */
 	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                          boost::shared_ptr<const Request> request);
-	
+
 private:
 	/**
 	 * \brief Updates the robot property corresponding to the given vector request using the given vector.
 	 */
     void update_vector(const VectorRequest& vector_request, RobotData& robot_data, const Vector3d& vector);
-	
+
 	/**
 	 * \brief Returns a vector that matches the global version of the vector in the given request.
 	 *
@@ -65,7 +65,7 @@ private:
 	 * coordinate system.
 	 */
 	static Vector3d extract_global_vector(const VectorRequest& request, const RobotData& robot_data);
-	
+
 	std::list<boost::shared_ptr<VectorModifier> > vector_modifiers_;
 };
 

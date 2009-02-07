@@ -8,8 +8,6 @@
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "vector_modifier.h"
-
 #include "../Model/world_information.h"
 #include "../Model/robot.h"
 #include "../Model/robot_data.h"
@@ -23,6 +21,7 @@
 
 #include "../Utilities/coord_converter.h"
 #include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/VectorModifiers/vector_modifier.h"
 
 #include "vector_request_handler.h"
 
@@ -47,7 +46,7 @@ void VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInform
     update_vector(*vector_request, robot_data, global_vector);
 }
 
-void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData& robot_data, const Vector3d& vector) {		
+void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData& robot_data, const Vector3d& vector) {
 	boost::shared_ptr<Vector3d> vector_ptr(new Vector3d(vector));
 	if (typeid(request) == typeid(PositionRequest))
 		robot_data.set_position(vector_ptr);
@@ -60,7 +59,7 @@ void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData
 Vector3d VectorRequestHandler::extract_global_vector(const VectorRequest& request, const RobotData& robot_data) {
 	using CoordConverter::local_to_global;
 	using boost::shared_ptr;
-	
+
     const Vector3d& local_vector(request.requested_vector());
 	Vector3d position(robot_data.position());
 	if (typeid(request) == typeid(VelocityRequest) || typeid(request) == typeid(AccelerationRequest))

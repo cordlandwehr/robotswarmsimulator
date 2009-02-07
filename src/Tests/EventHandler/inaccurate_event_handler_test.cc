@@ -14,7 +14,6 @@
 
 #include "../../EventHandlers/event_handler.h"
 #include "../../EventHandlers/vector_request_handler.h"
-#include "../../EventHandlers/vector_randomizer.h"
 
 #include "../../Requests/acceleration_request.h"
 #include "../../Requests/marker_request.h"
@@ -28,6 +27,7 @@
 
 #include "../../Utilities/coord_converter.h"
 #include "../../Utilities/vector_arithmetics.h"
+#include "../../Utilities/VectorModifiers/vector_randomizer.h"
 
 #include "../../Views/abstract_view_factory.h"
 #include "../../Views/view.h"
@@ -43,15 +43,15 @@
  */
 BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldFixture) {
 	using CoordConverter::local_to_global;
-	
+
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	
+
 	// create event handler
 	EventHandler event_handler(history, robot_control);
-	
+
 	// create inaccurate position request handler
 	unsigned int seed = 678321;
 	double standard_deviation = 0.221;
@@ -59,14 +59,14 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 	boost::shared_ptr<VectorRequestHandler> request_handler(new VectorRequestHandler(0, 0., *history));
 	request_handler->add_vector_modifier(vector_modifier);
 	event_handler.set_position_request_handler(request_handler);
-	
+
 	// construction of the request
 	boost::shared_ptr<Vector3d> requested_vector(new Vector3d);
 	(*requested_vector)(0) = -5.;
 	(*requested_vector)(1) = 0.1;
 	(*requested_vector)(2) = 3.;
 	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, requested_vector));
-	
+
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;
 	Vector3d mean_vector = boost::numeric::ublas::zero_vector<double>(3);
@@ -76,17 +76,17 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 		RobotData robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
 		boost::shared_ptr<Vector3d> target_point = local_to_global(*requested_vector, robot_data_before.position(),
 																   robot_data_before.coordinate_system_axis());
-		
+
 		// handle event
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(position_request);
 		event_handler.handle_event(handle_requests_event);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
-		
+
 		// get reached point
 		RobotData robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
 		const Vector3d& reached_point = robot_data_after.position();
-		
+
 		// computation of mean displacement and deviation
 		const Vector3d& difference = reached_point - *target_point;
 		mean_vector += difference;
@@ -97,7 +97,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 	deviation_vector(0) = sqrt(deviation_vector(0));
 	deviation_vector(1) = sqrt(deviation_vector(1));
 	deviation_vector(2) = sqrt(deviation_vector(2));
-	
+
 	/* BEGIN: ConformsToInaccuracy
 	 * - every component should conform to the N(0, standard_deviation) distribution
 	 */
@@ -118,15 +118,15 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
  */
 BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWorldFixture) {
 	using CoordConverter::local_to_global;
-	
+
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	
+
 	// create event handler
 	EventHandler event_handler(history, robot_control);
-	
+
 	// create event handler
 	unsigned int seed = 898193;
 	double standard_deviation = 0.489;
@@ -134,19 +134,19 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 	boost::shared_ptr<VectorRequestHandler> request_handler(new VectorRequestHandler(0, 0., *history));
 	request_handler->add_vector_modifier(vector_modifier);
 	event_handler.set_acceleration_request_handler(request_handler);
-	
+
 	// construction of the request
 	boost::shared_ptr<Vector3d> requested_vector(new Vector3d);
 	(*requested_vector)(0) = -15.;
 	(*requested_vector)(1) = 15.1;
 	(*requested_vector)(2) = -345.;
 	boost::shared_ptr<AccelerationRequest> request(new AccelerationRequest(*robot_b, requested_vector));
-	
+
 	// get requested vector in global coordinates
 	boost::numeric::ublas::zero_vector<double> zero(3);
 	boost::shared_ptr<Vector3d> global_req_vector = local_to_global(*requested_vector, zero,
 																	robot_data_b->coordinate_system_axis());
-	
+
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;
 	Vector3d mean_vector = boost::numeric::ublas::zero_vector<double>(3);
@@ -157,7 +157,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 		handle_requests_event->add_to_requests(request);
 		event_handler.handle_event(handle_requests_event);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
-		
+
 		// computation of mean displacement and deviation
 		const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_b->id());
 		const Vector3d& robot_vector_after = robot_data_after.acceleration();
@@ -170,7 +170,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 	deviation_vector(0) = sqrt(deviation_vector(0));
 	deviation_vector(1) = sqrt(deviation_vector(1));
 	deviation_vector(2) = sqrt(deviation_vector(2));
-	
+
 	/* BEGIN: ConformsToInaccuracy
 	 * - every component should conform to the N(0, standard_deviation) distribution
 	 */
@@ -191,15 +191,15 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
  */
 BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldFixture) {
 	using CoordConverter::local_to_global;
-	
+
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
-	
+
 	// create event handler
 	EventHandler event_handler(history, robot_control);
-	
+
 	// create event handler
 	unsigned int seed = 23;
 	double standard_deviation = 0.42;
@@ -207,19 +207,19 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 	boost::shared_ptr<VectorRequestHandler> request_handler(new VectorRequestHandler(0, 0., *history));
 	request_handler->add_vector_modifier(vector_modifier);
 	event_handler.set_velocity_request_handler(request_handler);
-	
+
 	// construction of the request
 	boost::shared_ptr<Vector3d> requested_vector(new Vector3d);
 	(*requested_vector)(0) = 123.;
 	(*requested_vector)(1) = 9.1;
 	(*requested_vector)(2) = 27.9033;
 	boost::shared_ptr<VelocityRequest> request(new VelocityRequest(*robot_b, requested_vector));
-	
+
 	// get requested vector in global coordinates
 	boost::numeric::ublas::zero_vector<double> zero(3);
 	boost::shared_ptr<Vector3d> global_req_vector = local_to_global(*requested_vector, zero,
 																	robot_data_b->coordinate_system_axis());
-	
+
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;
 	Vector3d mean_vector = boost::numeric::ublas::zero_vector<double>(3);
@@ -230,7 +230,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 		handle_requests_event->add_to_requests(request);
 		event_handler.handle_event(handle_requests_event);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
-		
+
 		// computation of mean displacement and deviation
 		const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_b->id());
 		const Vector3d& robot_vector_after = robot_data_after.velocity();
@@ -243,7 +243,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 	deviation_vector(0) = sqrt(deviation_vector(0));
 	deviation_vector(1) = sqrt(deviation_vector(1));
 	deviation_vector(2) = sqrt(deviation_vector(2));
-	
+
 	/* BEGIN: ConformsToInaccuracy
 	 * - every component should conform to the N(0, standard_deviation) distribution
 	 */

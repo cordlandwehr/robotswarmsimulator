@@ -10,7 +10,7 @@
 
 #include "vector_modifier.h"
 
-#include "../Utilities/distribution_generator.h"
+#include "../distribution_generator.h"
 
 
 /**
@@ -26,17 +26,16 @@ public:
 	: distribution_generator_(DistributionGenerator(seed)) {
 		distribution_generator_.init_normal(0., standard_deviation);
 	}
-	
-	~VectorRandomizer() { }
-	
+
 	/**
 	 * \brief Randomizes the given input vector.
+	 *
+	 * Ignores reference vector.
 	 */
 	void modify_vector(Vector3d& input_vector, const Vector3d& reference_vector);
-	
+
 private:
 	DistributionGenerator distribution_generator_;
 };
 
 #endif /* VECTOR_RANDOMIZER_H_ */
-
