@@ -31,7 +31,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/RobotSwarmSimulator/Debug (OSX)}</value>
+					<value>${workspace_loc:/RobotSwarmSimulator/Test (Windows)}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>

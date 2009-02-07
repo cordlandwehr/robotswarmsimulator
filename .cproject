@@ -2982,7 +2982,7 @@
 <folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1428013303.259557249." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.888616104" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
 <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.1044293257" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
-<builder buildPath="${workspace_loc:/RobotSwarmSimulator/Debug (Windows)}" id="cdt.managedbuild.target.gnu.builder.base.1731647914" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+<builder buildPath="${workspace_loc:/RobotSwarmSimulator/Debug (Windows)}" id="cdt.managedbuild.target.gnu.builder.base.1731647914" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.325174374" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1583159228" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
@@ -3001,6 +3001,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.271159953" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
 <option id="gnu.cpp.link.option.libs.1291301098" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="boost_regex"/>
+<listOptionValue builtIn="false" value="lua51"/>
 <listOptionValue builtIn="false" value="glut32"/>
 <listOptionValue builtIn="false" value="glu32"/>
 <listOptionValue builtIn="false" value="opengl32"/>
@@ -5935,7 +5936,7 @@
 <folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1428013303.522995869." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.146985217" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
 <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.1962592065" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
-<builder buildPath="${workspace_loc:/RobotSwarmSimulator/Test (Windows)}" id="cdt.managedbuild.target.gnu.builder.base.1983279504" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+<builder buildPath="${workspace_loc:/RobotSwarmSimulator/Test (Windows)}" id="cdt.managedbuild.target.gnu.builder.base.1983279504" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1163084945" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1758873142" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
@@ -5954,6 +5955,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1735392943" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base">
 <option id="gnu.cpp.link.option.libs.1101362136" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="boost_unit_test_framework"/>
+<listOptionValue builtIn="false" value="lua51"/>
 <listOptionValue builtIn="false" value="glut32"/>
 <listOptionValue builtIn="false" value="glu32"/>
 <listOptionValue builtIn="false" value="opengl32"/>
