@@ -53,7 +53,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="src/Tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+<entry excluding="src/Playground/dwonisch|src/Tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -1538,7 +1538,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="src/Tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+<entry excluding="src/Playground/dwonisch|src/Tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -3015,7 +3015,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="src/Tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<entry excluding="src/Playground/dwonisch|src/Tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>
