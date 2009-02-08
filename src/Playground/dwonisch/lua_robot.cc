@@ -91,7 +91,7 @@ namespace {
 	}
 
 	const MarkerInformationWrapper transform(const MarkerInformation& marker) {
-		return MarkerInformationWrapper();
+		return MarkerInformationWrapper(marker);
 	}
 
 	const CoordinateSystemWrapper transform(const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >& cs) {
