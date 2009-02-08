@@ -11,6 +11,7 @@
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
+#include <luabind/object.hpp>
 #include <deque>
 #include <algorithm>
 
@@ -19,6 +20,7 @@
 #include "../../Model/obstacle_identifier.h"
 #include "../../Model/box_identifier.h"
 #include "../../Model/sphere_identifier.h"
+#include "../../Model/marker_information.h"
 #include "../../Views/view.h"
 
 namespace {
@@ -34,9 +36,20 @@ namespace {
 		double z;
 	};
 
-	struct MarkerInformationWrapper {
-		MarkerInformationWrapper() {;}
-		//TODO: fill
+	class MarkerInformationWrapper {
+	public:
+		MarkerInformationWrapper() : marker_information_() {;}
+		MarkerInformationWrapper(const MarkerInformation& marker_information) : marker_information_(marker_information) {;}
+
+		void add_data(const std::string& var_name, const luabind::object& object) {
+			marker_information_.add_data(var_name, object);
+		}
+
+		luabind::object get_data(const std::string& var_name) {
+			return boost::any_cast<luabind::object>(marker_information_.get_data(var_name));
+		}
+	private:
+		MarkerInformation marker_information_;
 	};
 
 	struct CoordinateSystemWrapper {
@@ -153,6 +166,8 @@ namespace {
 		return view->get_sphere_radius(resolve<SphereIdentifier>(index));
 	}
 
+	//TODO: methods for determining ObstacleIndentifier type
+	//TODO: methods for Request creating
 }
 
 void LuaRobot::report_errors(int status) {
@@ -189,7 +204,9 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 			 .def_readwrite("z", &Vector3dWrapper::z),
 
 		 luabind::class_<MarkerInformationWrapper>("MarkerInformation")
-			 .def(luabind::constructor<>()),
+			 .def(luabind::constructor<>())
+			 .def("add_data", &MarkerInformationWrapper::add_data)
+			 .def("get_data", &MarkerInformationWrapper::get_data),
 
 		 luabind::class_<CoordinateSystemWrapper>("CoordinateSystem")
 			 .def(luabind::constructor<>())

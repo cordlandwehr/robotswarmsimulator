@@ -22,7 +22,7 @@ WorldObject::WorldObject(const WorldObject& rhs) {
 		this->position_.reset(new Vector3d(*rhs.position_));
 	}
 	if(rhs.marker_information_) {
-		this->marker_information_ = rhs.marker_information_->clone();
+		this->marker_information_.reset(new MarkerInformation(*rhs.marker_information_));
 	}
 }
 

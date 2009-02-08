@@ -35,3 +35,9 @@ myvec.y = 3;
 myvec.z = 3;
 print("x = " .. myvec.x .. ", y = " .. myvec.y .. ", z = " .. myvec.z);
 
+test = MarkerInformation();
+test:add_data("my_var", 5);
+test:add_data("my_string_var", "Hello World!");
+print(test:get_data("my_var"));
+print(test:get_data("my_string_var"));
+

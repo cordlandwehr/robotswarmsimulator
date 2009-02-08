@@ -26,6 +26,6 @@ void MarkerRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldInfor
 
 	const boost::shared_ptr<RobotIdentifier>& robot_id = marker_request->robot().id();
 	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
-	boost::shared_ptr<MarkerInformation> new_marker_information(marker_request->requested_marker_information().clone());
+	boost::shared_ptr<MarkerInformation> new_marker_information(new MarkerInformation(marker_request->requested_marker_information()));
 	robot_data.set_marker_information(new_marker_information);
 }
