@@ -15,7 +15,7 @@
  * \brief Vector modifier that changes the input vector if the difference between the input and reference vector exceeds
  *        a specific length.
  *
- * More exactly, if length of 'input-reference' exceeds 'length', input is moved in 'input-reference' direction until
+ * More exactly, if length of 'input - reference' exceeds 'length', input is moved in 'input - reference' direction until
  * the length of 'input-reference' matches exactly 'length'.
  */
 class VectorDifferenceTrimmer : public VectorModifier {

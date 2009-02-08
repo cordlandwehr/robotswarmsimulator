@@ -11,7 +11,6 @@ void LookEvent::add_to_robot_subset(boost::shared_ptr<Robot> new_robot) {
 	robot_subset_.push_back(new_robot);
 }
 
-//TODO(craupach): maybe this should be inline.
 const list<boost::shared_ptr<Robot> >& LookEvent::robot_subset() const {
 	return robot_subset_;
 }

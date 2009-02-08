@@ -28,11 +28,11 @@
 
 AsynchronousASG::AsynchronousASG(unsigned int seed,
 	                             double participation_probability,
-	                             double lambda): ActivationSequenceGenerator(),
-	                                             time_of_next_event_(0),
-	                                             distribution_generator_(new DistributionGenerator(seed)) {
+	                             double p): ActivationSequenceGenerator(),
+	                                        time_of_next_event_(0),
+	                                        distribution_generator_(new DistributionGenerator(seed)) {
 	// initalize the source of randomness
-	distribution_generator_->init_exponential(lambda); // needed for time of next event
+	distribution_generator_->init_geometric(p); // needed for time of next event
 	distribution_generator_->init_bernoulli(participation_probability); // needed to choose robots participating in an event
 	distribution_generator_->init_uniform(1,6); // needed to choose type of events
 }
@@ -107,8 +107,7 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 	}
 
 	// 3. Choose the time of the next event
-	// TODO(craupach) use geometric distribution instead.
-	time_of_next_event_ = time_of_next_event_ + 1 + boost::numeric_cast<int>(distribution_generator_->get_value_exponential());
+	time_of_next_event_ = time_of_next_event_ + 1 + distribution_generator_->get_value_geometric();
 	return event;
 }
 

@@ -15,6 +15,7 @@
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_on_sphere.hpp>
 #include <boost/random/exponential_distribution.hpp>
+#include <boost/random/geometric_distribution.hpp>
 #include <boost/random/bernoulli_distribution.hpp>
 #include <boost/random/uniform_real.hpp>
 
@@ -88,6 +89,20 @@ public:
 	 */
 	double get_value_exponential();
 
+
+	/**
+	 * Initializes variate_generator for geometric distribution
+	 *
+	 * @param p double parameter for distribution, in range [0,1)
+	 */
+	void init_geometric(double p);
+
+	/**
+	 * Generates values according to distribution
+	 * @return double value
+	 */
+	int get_value_geometric();
+
 	/**
 	 * Initializes variate_generator for normal distribution over the reals
 	 * @param min double value of range
@@ -140,6 +155,7 @@ private:
 	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > > gen_normal_;
 	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::bernoulli_distribution<> > > gen_bernoulli_;
 	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::exponential_distribution<> > > gen_exponential_;
+	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::geometric_distribution<> > > gen_geometric_;
 	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_real<> > > gen_uniform_real_;
 	boost::shared_ptr < boost::variate_generator<boost::mt19937&, boost::uniform_on_sphere<> > > gen_uniform_on_sphere_;
 

@@ -39,7 +39,7 @@ public:
     virtual ~VectorRequestHandler() { }
 
 	/**
-	 * \brief Adds the given vector modifier to the request handlers modifier pipeline.
+	 * \brief Adds the given vector modifier to the end of the request handlers modifier pipeline.
 	 *
 	 * Note that the order in which modifiers are added is important.
 	 */

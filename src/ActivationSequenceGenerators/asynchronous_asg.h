@@ -44,7 +44,7 @@ public:
 
 	AsynchronousASG(unsigned int seed,
 	                double participation_probability,
-	                double lambda);
+	                double p);
 
 	/**
 	 * initializes the asynchronous ASG from the given intial world_state. Needs to be called before the

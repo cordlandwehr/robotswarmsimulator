@@ -11,6 +11,7 @@
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_on_sphere.hpp>
 #include <boost/random/exponential_distribution.hpp>
+#include <boost/random/geometric_distribution.hpp>
 #include <boost/random/bernoulli_distribution.hpp>
 #include <boost/random/uniform_real.hpp>
 
@@ -60,6 +61,15 @@ void DistributionGenerator::init_exponential(double lambda) {
 
 double DistributionGenerator::get_value_exponential() {
 	return (*gen_exponential_)() ;
+}
+
+void DistributionGenerator::init_geometric(double p) {
+	boost::geometric_distribution<> params(p);
+	gen_geometric_.reset(new boost::variate_generator <boost::mt19937&, boost::geometric_distribution<> > (png_mersenne_, params));
+}
+
+int DistributionGenerator::get_value_geometric() {
+	return (*gen_geometric_)();
 }
 
 void DistributionGenerator::init_uniform_real(double min, double max) {
