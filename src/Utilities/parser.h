@@ -32,8 +32,6 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
-#include "../SimulationKernel/simulation_kernel.h"
-
 using namespace std;
 
 class Parser {
