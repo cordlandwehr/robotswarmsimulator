@@ -127,7 +127,7 @@ void SimulationRenderer::resize(int width, int height){
 
 }
 
-void SimulationRenderer::draw( double extrapolate, const boost::shared_ptr<WorldInformation> & world_info){
+void SimulationRenderer::draw(double extrapolate, boost::shared_ptr<WorldInformation> world_info){
 	this->extrapolate_ = extrapolate;
 
 	// We draw the time in the upper left corner
