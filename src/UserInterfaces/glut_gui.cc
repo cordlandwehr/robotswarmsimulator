@@ -8,7 +8,7 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "../OpenGL/PgGLUT.h"
+#include "../OpenGL/pg_glut.h"
 
 #include "../SimulationControl/simulation_control.h"
 #include "../Visualisation/simulation_renderer.h"

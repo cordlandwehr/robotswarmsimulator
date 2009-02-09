@@ -1,5 +1,5 @@
 /*
- * GLUTHeaders.h
+ * glut_headers.h
  *
  *  Created on: 21.01.2009
  *      Author: peter

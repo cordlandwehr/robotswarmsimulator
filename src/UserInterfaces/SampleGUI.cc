@@ -12,8 +12,8 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "../OpenGL/GLUTHeaders.h"
-#include "../OpenGL/PgGLUT.h"
+#include "../OpenGL/glut_headers.h"
+#include "../OpenGL/pg_glut.h"
 
 #include "SampleGUI.h"
 

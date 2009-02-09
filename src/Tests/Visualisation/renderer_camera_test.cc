@@ -43,6 +43,11 @@
 #include "../../Visualisation/follow_swarm_camera.h"
 #include "../../Visualisation/simulation_renderer.h"
 
+// TODO(peter) Commented out because of duplicated _main symbol (this file's main method and the test main method)
+//             We should move such 'manual' tests to a dedicated subdirectory of Tests and exclude it in the eclipse
+//             project settings. For such manual tests we could either provide a makefile or add more eclipse
+//             configurations.
+/*
 boost::shared_ptr<WorldInformation> world_info;
 SimulationRenderer * sim_render;
 
@@ -102,7 +107,6 @@ void mouse_proc( int x, int y){
 //BOOST_AUTO_TEST_CASE(octree_test)
 int main(int argc, char ** argv)
 {
-/*
 	std::vector<boost::shared_ptr<RobotData> > robots;
 	std::vector<boost::shared_ptr<WorldObject> > markers;
 	std::vector<boost::shared_ptr<Obstacle> > obstacles;
@@ -172,14 +176,5 @@ int main(int argc, char ** argv)
 		glutMotionFunc( mouse_proc );
 
 		glutMainLoop();
-
-
-*/
-
-
-
 }
-
-
-
-
+*/

@@ -5,9 +5,9 @@
  *      Author: kamil
  */
 
-#include "../OpenGL/GLHeaders.h"
-#include "../OpenGL/GLUHeaders.h"
-#include "../OpenGL/GLUTHeaders.h"
+#include "../OpenGL/gl_headers.h"
+#include "../OpenGL/glu_headers.h"
+#include "../OpenGL/glut_headers.h"
 
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"

@@ -8,7 +8,7 @@
 #ifndef FONT_H_
 #define FONT_H_
 
-#include "../OpenGL/GLHeaders.h"
+#include "../OpenGL/gl_headers.h"
 
 #define kFONTFIRST	32
 #define kFONTLAST	126
