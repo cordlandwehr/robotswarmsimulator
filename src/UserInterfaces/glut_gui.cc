@@ -1,19 +1,14 @@
 /*
- * SampleGUI.cc
+ * glut_gui.cc
  *
  *  Created on: 21.01.2009
  *      Author: peter
  */
 
-
-#include <ctime>
-#include <cmath>
-
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "../OpenGL/GLUTHeaders.h"
-//#include "../OpenGL/PgGLUT.h"
+#include "../OpenGL/PgGLUT.h"
 
 #include "../SimulationControl/simulation_control.h"
 #include "../Visualisation/simulation_renderer.h"
@@ -32,18 +27,23 @@ int main(int argc, char** argv) {
 	boost::shared_ptr<Camera> camera(new Camera());
 	boost::shared_ptr<SimulationRenderer> sim_renderer(new SimulationRenderer(camera));
 
+	// initialize simulation control and start simulation
 	sim_control->set_visualizer(sim_renderer);
+	sim_control->create_new_simulation("<project_file>", 5),
+	sim_control->start_simulation();
 
+	// initialize glut and renderer
+	PgGLUT::init("Schlauer Schwarmsimulator", argc, argv);
 	sim_renderer->init(500,500);
 
-
-	PgGLUT::init("Schlauer Schwarmsimulator", argc, argv);
-	PgGLUT::glutDisplayFunc(boost::bind(&SimulationControl::process_simulation, sim_control)); // use boost::bind for class-member callbacks
+	// set glut callbacks
+	PgGLUT::glutDisplayFunc(boost::bind(&SimulationControl::process_simulation, sim_control));
 	PgGLUT::glutReshapeFunc(boost::bind(&SimulationRenderer::resize, sim_renderer,_1,_2));
 	PgGLUT::glutMouseFunc(boost::bind(&SimulationRenderer::mouse_func,sim_renderer,_1,_2,_3,_4));
 	PgGLUT::glutKeyboardFunc(boost::bind(&SimulationRenderer::keyboard_func,sim_renderer,_1,_2,_3));
-	PgGLUT::glutMainLoop();
 
+	// enter main loop (will never return)
+	PgGLUT::glutMainLoop();
 	return 0;
 }
 */

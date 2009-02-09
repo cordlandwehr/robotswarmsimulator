@@ -117,7 +117,7 @@ void SimulationControl::process_simulation() {
 	// draw the simulation state for the current processing time if there is a visualizer.
 	if(visualizer_) {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
-		visualizer_->draw(current_world_information_,extrapolation_time);
+		visualizer_->draw(extrapolation_time, current_world_information_);
 	}
 }
 
