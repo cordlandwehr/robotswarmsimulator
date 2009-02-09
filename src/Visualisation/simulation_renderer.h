@@ -17,6 +17,7 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Visualisation/simulation_renderer.h"
 #include "../Visualisation/camera.h"
+#include "../SimulationControl/visualizer.h"
 
 class WorldInformation;
 class WorldObject;
@@ -28,7 +29,7 @@ class Camera;
 class RobotRenderer;
 
 
-class SimulationRenderer  {
+class SimulationRenderer : public Visualizer {
 
 public:
 

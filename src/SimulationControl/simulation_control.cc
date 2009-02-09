@@ -3,6 +3,7 @@
 #include "../SimulationControl/history.h"
 #include "../SimulationKernel/simulation_kernel.h"
 #include "../Model/world_information.h"
+#include "visualizer.h"
 #include "history.h"
 
 
@@ -81,11 +82,6 @@ void SimulationControl::terminate_simulation() {
 		simulation_kernel_functor_ = boost::shared_ptr<SimulationKernelFunctor>();
 	}
 }
-void SimulationControl::set_visualizer(boost::shared_ptr<SimulationRenderer> visualizer){
-	visualizer_=visualizer;
-
-}
-
 
 void SimulationControl::process_simulation() {
 	double new_processing_time = compute_new_processing_time();
@@ -161,4 +157,8 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 
 		simulation_kernel_->step();
 	}
+}
+
+void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {
+	visualizer_ = visualizer;
 }

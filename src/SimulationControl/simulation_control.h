@@ -14,10 +14,12 @@
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <cstddef>
-#include "../Visualisation/simulation_renderer.h"
-#include "../SimulationKernel/simulation_kernel.h"
-#include "../Model/world_information.h"
-#include "history.h"
+
+
+class SimulationKernel;
+class Visualizer;
+class WorldInformation;
+class History;
 
 /**
  * The class SimulationControl provides code to set up a new simulation (and cleanup
@@ -58,7 +60,7 @@ public:
 	/**
 	 * supplies the control with a new visualizer.
 	 */
-	void set_visualizer(boost::shared_ptr<SimulationRenderer> visualizer);
+	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 
 private:
 	/**
@@ -120,7 +122,7 @@ private:
 	boost::shared_ptr<History> history_;
 	boost::shared_ptr<SimulationKernelFunctor> simulation_kernel_functor_;
 	boost::thread simulation_thread_;
-	boost::shared_ptr<SimulationRenderer> visualizer_;
+	boost::shared_ptr<Visualizer> visualizer_;
 };
 
 #endif
