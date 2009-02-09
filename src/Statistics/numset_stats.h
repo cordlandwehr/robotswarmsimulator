@@ -25,37 +25,37 @@ class NumSetStats {
 public:
 
 	/**
-	 * flag for minimum
+	 * flag for calculating the minimum value
 	 */
 	static const int MIN	      = 0x01;
 
 	/**
-	 * flag for maximum
+	 * flag for calculating the maximum value
 	 */
 	static const int MAX          = 0x02;
 
 	/**
-	 * flag for maximum
+	 * flag for calculating the diameter (== max-min)
 	 */
 	static const int DIAM         = 0x04;
 
 	/**
-	 * flag for average
+	 * flag for calculating the average of all values
 	 */
 	static const int AVG          = 0x08;
 
 	/**
-	 * flag for calculating median
+	 * flag for calculating the (lower) median of all values
 	 */
 	static const int MEDIAN       = 0x10;
 
 	/**
-	 * flag for calculating the sum
+	 * flag for calculating the (oriented) sum of all values
 	 */
 	static const int SUM          = 0x20;
 
 	/**
-	 * flag for calculating the sum of absolute values
+	 * flag for calculating the absolute sum of all values
 	 */
 	static const int ABSSUM       = 0x40;
 
@@ -65,49 +65,52 @@ public:
 	static const int STDDEVIATION = 0x80;
 
 	/**
-	 * combined flag of default parameters
+	 * combined flags of default parameters
 	 */
 	static const int DEFAULT      = MIN|MAX|DIAM|AVG|STDDEVIATION;
 
 	/**
-	 * combined flag of all parameters
+	 * combined flags of all parameters
 	 */
 	static const int ALL          = 0xFFFFFFFF;
 
 	/**
-	 * default constructor
+	 * default constructor that uses DEFAULT as
+	 * initial configuration.
 	 */
 	explicit NumSetStats();
-	virtual ~NumSetStats();
 
 	/**
-	 * constructor with initial configuration
-	 * \param the cfg-flag-combination to use
+	 * constructor with given initial configuration
+	 * \param the flags-combination to use for configuration
 	 */
 	explicit NumSetStats(int cfg);
 
+	virtual ~NumSetStats();
+
 	/**
-	 * \return current configuration-flags
+	 * \return the current set configuration-flags
 	 */
 	const int cfg() const;
 
 	/**
-	 * \param cfg new configuration-flags to use
+	 * \param cfg the new configuration-flags to use
 	 */
 	void set_cfg(int cfg);
 
 	/**
-	 * Calculates all information on the numerical data
-	 * in this vector that is requested by the currently
-	 * set flags. Access the individual information
-	 * via the respective getter-function, or all combined as
-	 * a string via the to_string()-function.
-	 * \param data the numerical data to analyse
+	 * Calculates for the given vector of numbers
+	 * all the information that is requested by the currently
+	 * set flags.
+	 * \param data the numerical data to analyze
 	 */
 	void handle(const std::vector<double> & data);
 
 	/**
-	 * sets cfg as configuration and calls handle(data)
+	 * sets cfg as configuration using set_cfg(cfg)
+	 * and then calls handle(data)
+	 * \param data the numerical data to analyze
+	 * \param cfg the new configuration-flags to use
 	 */
 	void handle(const std::vector<double> & data, int cfg);
 
@@ -124,7 +127,7 @@ public:
 	const double max() const;
 
 	/**
-	 * \return latest calculated diameter-value (max-min)
+	 * \return latest calculated diameter-value (== max-min)
 	 * unspecified if not calculated
 	 */
 	const double diam() const;
@@ -136,19 +139,19 @@ public:
 	const double avg() const;
 
 	/**
-	 * \return latest calculated overall-sum,
+	 * \return latest calculated (oriented) sum of all values,
 	 * unspecified if not calculated
 	 */
 	const double sum() const;
 
 	/**
-	 * \return latest calculated overall-sum of absolute values,
+	 * \return latest calculated absolute sum of all absolute values,
 	 * unspecified if not calculated
 	 */
 	const double abssum() const;
 
 	/**
-	 * \return latest calculated median value,
+	 * \return latest calculated (lower) median value,
 	 * unspecified if not calculated
 	 */
 	const double median() const;
@@ -160,19 +163,23 @@ public:
 	const double stddeviation() const;
 
 	/**
-	 * \return string-representation of all
-	 * latest calculated values with flags set in cfg,
-	 * unspecified if nothing calculated
+	 * \return string-representation of all the
+	 * latest calculated values whose flags are set in current cfg,
+	 * unspecified if nothing was calculated or the current cfg-flags
+	 * are not fitting the configuration-flags during calculation.
 	 */
 	const std::string to_string() const;
 
 	/**
-	 * \return appends the requested values
+	 * Appends all the configured and already calculated values
+	 * to the given vector.
+	 *
 	 */
 	void push_values(std::vector<double> & data) const;
 
 	/**
-	 * \return appends the requested value-names
+	 * Appends names for all the configured values
+	 * to the given vector using the given praefix.
 	 */
 	void push_names(std::vector<std::string> & designation, std::string praefix) const;
 

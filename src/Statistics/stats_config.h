@@ -1,21 +1,37 @@
-/*
- * stats_config.h
+/**
+ * \class	StatsConfig
+ * \author	Sven Kurras
+ * \brief	holds the configuration for all statistics
  *
- *  Created on: 02.02.2009
- *      Author: sven
+ * This class initializes itself from a given Parser-instance
+ * and sets all configuration-parameters that are latter accessed
+ * from anywhere in the statistics-module to calculate and log
+ * only the information requested by the user.
  */
 
 #ifndef STATS_CONFIG_H_
 #define STATS_CONFIG_H_
 
+#include <boost/smart_ptr.hpp>
+
 #include "../Utilities/parser.h"
 
 class StatsConfig {
 public:
+
 	explicit StatsConfig();
 	virtual ~StatsConfig();
 
-	void init(Parser& parser);
+	/**
+	 * initializes from the given parser (defines the subsets for
+	 * which to perform the calculations and all the configuration
+	 * for it). So any latter invocations to any other functions
+	 * of StatsConfig *after* the initialization will return
+	 * whether or not the respective information should
+	 * be calculated or how it should be configured.
+	 * \param parser the parser from which to initialize
+	 */
+	void init(boost::shared_ptr<Parser> parser);
 
 	/*
 	 *

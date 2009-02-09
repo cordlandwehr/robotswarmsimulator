@@ -5,14 +5,7 @@
  *      Author: sven
  */
 
-#include <boost/smart_ptr.hpp>
-
-#include <vector>
-
-#include "../Model/robot_data.h"
-
 #include "stats_control.h"
-#include "stats_config.h"
 
 StatsControl::StatsControl() {
 	stats_initialized_ = false;
@@ -22,7 +15,7 @@ StatsControl::~StatsControl() {
 	quit();
 }
 
-void StatsControl::init(Parser& parser) {
+void StatsControl::init(boost::shared_ptr<Parser> parser) {
 
 	if (stats_initialized_) {
 		// log error, because no quit was called before this init
@@ -38,26 +31,64 @@ void StatsControl::init(Parser& parser) {
 	if (!stats_cfg_.is_any_subset())
 		return;
 
-	if (stats_cfg_.is_subset_all())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ALL")));
-	if (stats_cfg_.is_subset_actall())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTALL")));
-	if (stats_cfg_.is_subset_inactall())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTALL")));
-	if (stats_cfg_.is_subset_masters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTER")));
-	if (stats_cfg_.is_subset_actmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTER")));
-	if (stats_cfg_.is_subset_inactmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTER")));
-	if (stats_cfg_.is_subset_slaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVE")));
-	if (stats_cfg_.is_subset_actslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVE")));
-	if (stats_cfg_.is_subset_inactslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVE")));
+	string dir = "";
 
-	// TODO
+	// create a StatsOut-instance for each subset
+	if (stats_cfg_.is_subset_all())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ALL", dir)));
+	if (stats_cfg_.is_subset_actall())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTALL", dir)));
+	if (stats_cfg_.is_subset_inactall())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTALL", dir)));
+	if (stats_cfg_.is_subset_masters())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTER", dir)));
+	if (stats_cfg_.is_subset_actmasters())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTER", dir)));
+	if (stats_cfg_.is_subset_inactmasters())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTER", dir)));
+	if (stats_cfg_.is_subset_slaves())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVE", dir)));
+	if (stats_cfg_.is_subset_actslaves())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVE", dir)));
+	if (stats_cfg_.is_subset_inactslaves())
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVE", dir)));
+
+	// create data-praefix for all StatsOut-instances
+	// by calling the respective static function
+	StatsOut::create_date();
+
+	// initialize stats_calc_indata_
+	stats_calc_indata_.prev_world_info_.reset();
+	stats_calc_indata_.world_info_.reset();
+}
+
+void StatsControl::update(const WorldInformation& world_information, boost::shared_ptr<Event> event) {
+
+	if (stats_calc_indata_.world_info_.get() == NULL) {
+		// there's no current world_info_ (== in the first simulation-step) so set it and wait
+		// for any latter one with the same world-time.
+		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
+
+	} else if (stats_calc_indata_.world_info_.get()->time() == world_information.time()) {
+		// there's already a world_info_ for the same time, so overwrite it with the current latter one
+		// but wait if more updates for the same world-time will follow.
+		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
+
+	} else if (stats_calc_indata_.world_info_.get()->time() < world_information.time()) {
+		// the already existing world_info is the latest for the old time.
+		// So NOW do all the calculation and data-output to files...
+		calculate();
+
+		// Move the world_info_ to prev_world_info_
+		// (any existing prev_world_info_-content will be freed through the shared_ptr's destructor)
+		stats_calc_indata_.prev_world_info_ = stats_calc_indata_.world_info_;
+
+		// Set the new world_information from this update-call as the new world_info_
+		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
+
+	} else {
+		std::cerr << "Error in StatsControl::update(...): unhandled case that must not occur." << std::endl;
+	}
 }
 
 void StatsControl::quit() {
@@ -72,12 +103,18 @@ void StatsControl::quit() {
 	for (unsigned int i=0; i<stats_out_.size(); i++)
 		(*stats_out_[i]).quit();
 
+	// clear the vector of StatsOuts
 	stats_out_.clear();
 
-	// TODO
+	stats_initialized_ = false;
 }
 
 void StatsControl::calculate() {
+	if (stats_initialized_) {
+		// log error, because not initialized - but continue
+		std::cerr << "StatsControl::calculate(...) called without any previous StatsControl::init(...)" << std::endl;
+	}
+
 	if (!stats_cfg_.is_any_subset())
 		return;
 
@@ -85,8 +122,11 @@ void StatsControl::calculate() {
 	// so recalculate all of them.
 	update_subsets();
 
-	// TODO
-
+	// for each subset perform the calculation
+	// with the respective StatsOut-instance.
+	// asserts that stats_calc_indata_ contains valid information
+	for(unsigned int i=0; i<cur_subsets_.size(); i++)
+		stats_calc_.calculate(stats_calc_indata_, cur_subsets_[i], stats_out_[i]);
 }
 
 
@@ -110,7 +150,7 @@ void StatsControl::update_subsets() {
 	std::vector<boost::shared_ptr<RobotData> > actslaves;
 	std::vector<boost::shared_ptr<RobotData> > inactslaves;
 
-	std::vector<boost::shared_ptr<RobotData> >& robots = stats_calc_indata_.world_info_.robot_data();
+	std::vector<boost::shared_ptr<RobotData> >& robots = stats_calc_indata_.world_info_->robot_data();
 
 	for (unsigned int i=0; i<robots.size(); i++) {
 		boost::shared_ptr<RobotData> sp_robot = robots[i];

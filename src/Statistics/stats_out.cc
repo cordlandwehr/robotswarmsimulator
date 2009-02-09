@@ -20,6 +20,7 @@ char StatsOut::stat_gnuplot_date [80];
 char StatsOut::stat_output_date [80];
 
 StatsOut::StatsOut() {
+	is_open_ = false;
 }
 
 StatsOut::StatsOut(std::string stat_id) {
@@ -165,10 +166,20 @@ void StatsOut::open(std::vector<std::string> stat_designation) {
 	}
 
 	stat_output << std::endl;
+
+	is_open_ = true;
 };
 
+const bool StatsOut::is_open() const {
+	return is_open_;
+}
 
 void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
+	if (!is_open_) {
+		std::cerr << "logfile for stats not opened" << std::endl;
+		return;
+	}
+
 	int j;
 
 	stat_output << std::right
@@ -182,10 +193,11 @@ void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
 	stat_output << std::endl;
 };
 
-
 void StatsOut::quit() {
 
 	stat_output << "# simulation quit" << std::endl;
 
 	stat_output.close();
+
+	is_open_ = false;
 };

@@ -12,21 +12,36 @@
 #include "../SimulationKernel/simulation_listener.h"
 
 #include "stats_config.h"
-#include "stats_calc_indata.h"
+#include "stats_out.h"
 #include "numset_stats.h"
 #include "vecset_stats.h"
-#include "stats_out.h"
+
+struct StatsCalcInData {
+
+	/**
+	 * Holds a copy of the latest WorldInformation for the simulation-time world_info_.time().
+	 * It is guranteed that *all* events for exactly that time have already been processed.
+	 */
+	boost::shared_ptr<WorldInformation> world_info_;
+
+	/**
+	 * After performing the calculations on world_info_ it is moved to prev_world_info_ for
+	 * latter additional calculations on the differences to future world_info_.
+	 * At simulation's begin it will hold that "prev_world_info_.get() == NULL"
+	 */
+	boost::shared_ptr<WorldInformation> prev_world_info_;
+};
 
 class StatsCalc {
 public:
 	StatsCalc();
 	virtual ~StatsCalc();
 
-	void init(StatsConfig stats_cfg);
+	void init(StatsConfig & stats_cfg);
 
-	void calculate(StatsCalcInData data,
-			std::vector<boost::shared_ptr<RobotData> > subset,
-			StatsOut stats_out);
+	void calculate(StatsCalcInData &data,
+			std::vector<boost::shared_ptr<RobotData> > & subset,
+			boost::shared_ptr<StatsOut> & stats_out);
 
 private:
 	StatsConfig stats_cfg;

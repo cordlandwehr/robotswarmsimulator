@@ -5,15 +5,14 @@
  *      Author: sven
  */
 
+#include <string>
+
 #include "stats_config.h"
 
 StatsConfig::StatsConfig() {
-	// TODO Auto-generated constructor stub
-
 }
 
 StatsConfig::~StatsConfig() {
-	// TODO Auto-generated destructor stub
 }
 
 /*
@@ -24,24 +23,58 @@ StatsConfig::~StatsConfig() {
  *
  */
 
-void StatsConfig::init(Parser& parser) {
-	// initialize subsets
-	//TODO subset_all_ = subset_masters_ = subset_slaves_ = true;
+void StatsConfig::init(boost::shared_ptr<Parser> parser) {
+
+	// get subsets-configuration from Parser's STATS_SUBSETS = ...
+	// e.g. STATS_SUBSETS = {ALL} {MASTERS} {INACTALL} ...
+	std::string s = "{ALL} {MASTERS}"; // TODO get s from Parser
+	// initialize subsets-cfg
+	subset_all_          = (s.find("{ALL}", 0) != std::string::npos);
+	subset_actall_       = (s.find("{ACTALL}", 0) != std::string::npos);
+	subset_inactall_     = (s.find("{INACTALL}", 0) != std::string::npos);
+	subset_masters_      = (s.find("{MASTERS}", 0) != std::string::npos);
+	subset_actmasters_   = (s.find("{ACTMASTERS}", 0) != std::string::npos);
+	subset_inactmasters_ = (s.find("{INACTMASTERS}", 0) != std::string::npos);
+	subset_slaves_       = (s.find("{SLAVES}", 0) != std::string::npos);
+	subset_actslaves_    = (s.find("{ACTSLAVES}", 0) != std::string::npos);
+	subset_inactslaves_  = (s.find("{INACTSLAVES}", 0) != std::string::npos);
+
+	// get template-configuration from Parser's STATS_TEMPLATE = ...
+	// e.g. STATS_TEMPLATE = DEFAULT
+	s = "DEFAULT"; // TODO get s from Parser
+	// initialize template
+	if (s.find("ALL", 0) != std::string::npos)
+		init_activate_all();
+	else if (s.find("BASIC", 0) != std::string::npos)
+		init_activate_basic();
+	else if (s.find("NONE", 0) != std::string::npos)
+		init_activate_none();
+	else {
+		std::cerr << "invalid value for STATS_TEMPLATE in projectfile. Using STATS_TEMPLATE = NONE" << std::endl;
+		init_activate_none();
+	}
+
+	// get all possible individuel configuration from Parser's
+	// respective name=value-pairs
+	// TODO
 }
 
 const void StatsConfig::init_activate_all() {
 	num_robots_ = num_masters_ = num_slaves_ = true;
 	swarm_avg_pos_ = true;
+	// TODO assign all other values
 }
 
 const void StatsConfig::init_activate_basic() {
 	num_robots_ = num_masters_ = num_slaves_ = false;
 	swarm_avg_pos_ = true;
+	// TODO assign all other values
 }
 
 const void StatsConfig::init_activate_none() {
 	num_robots_ = num_masters_ = num_slaves_ = false;
 	swarm_avg_pos_ = false;
+	// TODO assign all other values
 }
 
 /*

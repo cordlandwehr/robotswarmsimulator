@@ -12,24 +12,40 @@
 
 #include <vector>
 
-#include "../Utilities/parser.h"
 #include "../Model/robot_data.h"
+#include "../Model/world_information.h"
+#include "../SimulationKernel/simulation_listener.h"
+#include "../Utilities/parser.h"
 
 #include "stats_config.h"
 #include "stats_calc.h"
-#include "stats_calc_indata.h"
-#include "stats_calc.h"
 
-class StatsControl {
+class StatsControl : public SimulationListener {
 public:
 	StatsControl();
 	virtual ~StatsControl();
 
-	void init(Parser& parser);
+	/**
+	 * Initializes this StatsControl and creates and
+	 * initializes all subcomponents configured by the
+	 * given projectfile.
+	 * \param parser the parser to use for configuration
+	 */
+	void init(boost::shared_ptr<Parser> parser);
 
+	/**
+	 * Updates the sequence of events. Ensures that the events for each fixed robot are in the right
+	 * order
+	 * \param A constant refrence to the newest world information
+	 * \param The last handled event
+	 */
 	void update(const WorldInformation& world_information,
 			    boost::shared_ptr<Event> event);
 
+	/**
+	 * Quits all subcomponents (especially the
+	 * output-files are closed).
+	 */
 	void quit();
 
 private:

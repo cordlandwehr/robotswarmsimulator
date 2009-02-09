@@ -16,21 +16,25 @@ StatsCalc::~StatsCalc() {
 	// TODO Auto-generated destructor stub
 }
 
-void StatsCalc::init(StatsConfig stats_cfg) {
+void StatsCalc::init(StatsConfig & stats_cfg) {
 	this->stats_cfg = stats_cfg;
 }
 
-void StatsCalc::calculate(StatsCalcInData data,
-		std::vector<boost::shared_ptr<RobotData> > subset,
-		StatsOut stats_out) {
+void StatsCalc::calculate(StatsCalcInData & data,
+		std::vector<boost::shared_ptr<RobotData> > & subset,
+		boost::shared_ptr<StatsOut> & stats_out) {
 
 	std::vector<double> values;
 	std::vector<double> tmp_numstats_vector;
 
+	std::vector<string> names;
+	bool push_names = !stats_out->is_open();
 
 	if (stats_cfg.is_num_robots()) {
 		// log num_robots
 		values.push_back(subset.size());
+		if (push_names)
+			names.push_back("num_robots");
 	}
 
 	if (stats_cfg.vel_cfg() != 0) {
@@ -42,10 +46,15 @@ void StatsCalc::calculate(StatsCalcInData data,
 
 		num_stats.handle(tmp_numstats_vector, stats_cfg.vel_cfg());
 		num_stats.push_values(values);
+		if (push_names)
+			num_stats.push_names(names, "vel");
 	}
 
 	// DO ALL THE CALCULATION
 	// ...
 
-	stats_out.update(data.world_info_.time(), values);
+	if (push_names)
+		(*stats_out).open(names);
+
+	stats_out->update(data.world_info_->time(), values);
 }

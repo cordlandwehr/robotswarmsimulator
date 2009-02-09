@@ -51,10 +51,13 @@ public:
 	 */
 	std::string stat_dir;
 
+	bool is_open_;
+
 	static void create_date();
 	void set_id(std::string stat_id);
 	void set_dir(std::string stat_dir);
 	void open(std::vector<std::string> stat_designation);
+	const bool is_open() const;
 	void update(int stat_timestep, std::vector<double> stat_data);
 	void quit();
 };
