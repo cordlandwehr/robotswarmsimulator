@@ -157,6 +157,7 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 
 		simulation_kernel_->step();
 	}
+	simulation_kernel_->quit();
 }
 
 void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {

@@ -30,6 +30,8 @@
 
 #include "../SimulationControl/history.h"
 
+#include "../Statistics/stats_control.h"
+
 using namespace std;
 
 class SimulationKernel {
@@ -73,6 +75,12 @@ public:
 	 */
 	void multistep(int steps);
 
+	/**
+	 * Method called at simulation's termination for a clean
+	 * closing of all resources (e.g. Statistics).
+	 */
+	void quit();
+
 private:
 
 	/**
@@ -84,6 +92,11 @@ private:
 	 * Reference to a History of the WorldInformations.
 	 */
 	boost::shared_ptr<History> history_;
+
+	/**
+	 * Statistics-Module
+	 */
+	boost::shared_ptr<StatsControl> stats_;
 
 };
 

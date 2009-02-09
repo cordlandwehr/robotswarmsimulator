@@ -39,6 +39,15 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	//7. Create according EventHandler.
 	//8. (Create StatisticObject.)
 	//9. Register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
+
+	// Statistics-Module...
+	// ...initialize
+	stats_.reset(new StatsControl());
+	stats_->init(parser);
+	// ...handle initial WorldInformation
+	//TODO(Sven) "stats_->update(initialWorldInformation)"
+	// ...register in EventHandler as a SimulationListener
+	//TODO(Sven) "eventHandler.register_listener(stats_)"
 }
 
 void SimulationKernel::step() {
@@ -51,4 +60,8 @@ void SimulationKernel::multistep(int steps) {
 	for (int i = 0; i < steps; i++) {
 		step();
 	}
+}
+
+void SimulationKernel::quit() {
+	stats_->quit();
 }
