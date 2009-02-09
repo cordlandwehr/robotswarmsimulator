@@ -14,6 +14,8 @@
 #include <boost/smart_ptr.hpp>
 
 #include "../Utilities/vector_arithmetics.h"
+#include "../Visualisation/simulation_renderer.h"
+#include "../Visualisation/camera.h"
 
 class WorldInformation;
 class WorldObject;
@@ -51,8 +53,8 @@ public:
 	 */
     void resize(int width, int height);
 
-    void mouse_func(unsigned int type, int x, int y);
-    void keyboard_func(unsigned int key, int x, int y);
+    void mouse_func(int button, int state, int x, int y);
+    void keyboard_func(unsigned char key, int x, int y);
 
     /**
      * \brief This Method draws the whole szene.

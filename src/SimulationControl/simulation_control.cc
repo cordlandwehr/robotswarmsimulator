@@ -3,7 +3,6 @@
 #include "../SimulationControl/history.h"
 #include "../SimulationKernel/simulation_kernel.h"
 #include "../Model/world_information.h"
-#include "visualizer.h"
 #include "history.h"
 
 
@@ -82,6 +81,11 @@ void SimulationControl::terminate_simulation() {
 		simulation_kernel_functor_ = boost::shared_ptr<SimulationKernelFunctor>();
 	}
 }
+void SimulationControl::set_visualizer(boost::shared_ptr<SimulationRenderer> visualizer){
+	visualizer_=visualizer;
+
+}
+
 
 void SimulationControl::process_simulation() {
 	double new_processing_time = compute_new_processing_time();
@@ -113,7 +117,7 @@ void SimulationControl::process_simulation() {
 	// draw the simulation state for the current processing time if there is a visualizer.
 	if(visualizer_) {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
-		visualizer_->draw(extrapolation_time, current_world_information_);
+		visualizer_->draw(current_world_information_,extrapolation_time);
 	}
 }
 

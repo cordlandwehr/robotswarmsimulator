@@ -156,7 +156,7 @@ void SimulationRenderer::draw(const boost::shared_ptr<WorldInformation> & world_
 
 }
 
-void SimulationRenderer::mouse_func(unsigned int type, int x, int y){
+void SimulationRenderer::mouse_func(int button, int state, int x, int y){
 
 
 	if(use_mouse_){
@@ -166,7 +166,7 @@ void SimulationRenderer::mouse_func(unsigned int type, int x, int y){
 }
 
 
-void SimulationRenderer::keyboard_func(unsigned int key, int x, int y){
+void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 
 	switch(key){
 		case GLUT_KEY_LEFT:
