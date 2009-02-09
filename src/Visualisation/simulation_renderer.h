@@ -13,6 +13,7 @@
 
 #include <boost/smart_ptr.hpp>
 
+
 #include "../Utilities/vector_arithmetics.h"
 #include "../Visualisation/simulation_renderer.h"
 #include "../Visualisation/camera.h"
@@ -24,14 +25,16 @@ class Box;
 class Sphere;
 class RobotData;
 class Camera;
+class RobotRenderer;
 
 
-
-class SimulationRenderer{
+class SimulationRenderer  {
 
 public:
 
 	SimulationRenderer(boost::shared_ptr<Camera> & camera);
+
+	void init();
 
 	/**
 	 * \brief Initializes the Simulation Renderer
@@ -65,7 +68,7 @@ public:
      * \param world_info The WorldInformation Object which describes the current world
      * \param extrapolate The value to use for extrapolating.
      */
-	void draw(const boost::shared_ptr<WorldInformation> & world_info, double extrapolate);
+	void draw(double extrapolate, const boost::shared_ptr<WorldInformation> & world_info);
 
 	/**
 	 * \brief Used to reset the camera.
@@ -230,6 +233,11 @@ private:
 	 * The value for extrapolating
 	 */
 	double extrapolate_;
+
+	/**
+	 * RobotRenderer
+	 */
+	boost::shared_ptr<RobotRenderer> robot_renderer_;
 
 };
 

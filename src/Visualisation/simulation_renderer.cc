@@ -16,8 +16,11 @@
 #include "../Model/sphere.h"
 #include "../Model/robot_data.h"
 
+
+
 #include "camera.h"
 #include "font.h"
+#include "robot_renderer.h"
 #include "simulation_renderer.h"
 
 // some simple constants
@@ -30,15 +33,18 @@ const float kMarkerColor[] = {1.0f,1.0f,0.0f,1.0f};
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
-const float kRobotRadius = 1.0;
-const int kRobotSlices = 30;
-const int kRobotStacks = 30;
+const int kDefHeight = 300;
+const int kDefWidth = 300;
+
 
 const float kMarkerPointSize = 2.0;
 
 
 
 SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : camera_(camera) {
+
+	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
+
 
 	text_color_[0] = kTextColor[0];
 	text_color_[1] = kTextColor[1];
@@ -55,6 +61,8 @@ SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : cam
 	robot_color_[2] = kRobotColor[2];
 	robot_color_[3] = kRobotColor[3];
 
+	robot_renderer_->set_default_color(kRobotColor[0],kRobotColor[1],kRobotColor[2],kRobotColor[3] );
+
 	marker_color_[0] = kMarkerColor[0];
 	marker_color_[1] = kMarkerColor[1];
 	marker_color_[2] = kMarkerColor[2];
@@ -63,6 +71,11 @@ SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : cam
 
 }
 
+void SimulationRenderer::init(){
+
+	init(kDefWidth, kDefHeight );
+
+}
 
 void SimulationRenderer::init(int x, int y){
 
@@ -102,7 +115,7 @@ void SimulationRenderer::resize(int width, int height){
 	glViewport(0, 0, width, height);
 
 	// Set the correct perspective.
-	gluPerspective(45,ratio,1,1000);
+	gluPerspective(60,ratio,1,1000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -114,7 +127,7 @@ void SimulationRenderer::resize(int width, int height){
 
 }
 
-void SimulationRenderer::draw(const boost::shared_ptr<WorldInformation> & world_info, double extrapolate){
+void SimulationRenderer::draw( double extrapolate, const boost::shared_ptr<WorldInformation> & world_info){
 	this->extrapolate_ = extrapolate;
 
 	// We draw the time in the upper left corner
@@ -398,13 +411,8 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 }
 void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
 
-	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position(extrapolate_);
 
-	glPushMatrix();
-		glTranslatef((*rob_pos)(0), (*rob_pos)(1), (*rob_pos)(2) );
-		glColor3f(robot_color_[0], robot_color_[1], robot_color_[2]);
-		glutSolidSphere(kRobotRadius, kRobotSlices, kRobotStacks);
-	glPopMatrix();
+	robot_renderer_->draw_robot( robot, extrapolate_ );
 
 }
 
@@ -440,6 +448,9 @@ void SimulationRenderer::set_obstacle_color(float r, float g ,float b, float alp
 }
 
 void SimulationRenderer::set_robot_color(float r, float g ,float b, float alpha){
+
+	robot_renderer_->set_default_color(r,g,b,alpha);
+
 	robot_color_[0] = r;
 	robot_color_[1] = g;
 	robot_color_[2] = b;

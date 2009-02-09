@@ -541,6 +541,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<Octree>&
 			 float width = octree->determine_obstacle_max_size( (*it_obstacles) );
 			 float dist = std::sqrt(x*x + y*y + z*z ) - width;
 
+			 // not enough found, so we have to add it anyway
 			 if(num_obstacles_found < num_nearest){
 
 				 boost::shared_ptr<QueueEntry<ObstacleRef> > new_entry =
@@ -552,7 +553,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<Octree>&
 				 queue.push(new_entry );
 				 farest_dist = queue.top()->dist();
 
-
+				 //nearer than already found ?
 			 }else if(dist < farest_dist){
 
 				 boost::shared_ptr<QueueEntry<ObstacleRef> > new_entry =

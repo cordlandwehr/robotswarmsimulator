@@ -37,7 +37,7 @@ Octree::Octree(int max_levels): max_levels_(max_levels), min_width_(1.0) {
 	init_octree();
 }
 
-Octree::Octree(float min_width): max_levels_(2000), min_width_(min_width) {
+Octree::Octree(float min_width): max_levels_(10), min_width_(min_width) {
 
 	init_octree();
 }
@@ -83,7 +83,6 @@ void Octree::init_octree() {
 
 	center_ = Vector3d();
 
-	// Set the sub nodes to NULL
 
 
 
@@ -149,7 +148,7 @@ void Octree::scene_dimensions(const std::vector< boost::shared_ptr<WorldObject> 
 
 
 
-	// Calculate the fartest distance to the center point.
+	// Calculate the farest distance to the center point.
 	// Calculate the distance to the center point for all objects
 	for(it_markers = markers.begin(); it_markers < markers.end(); it_markers++){
 		float current_width  = fabsf(center_(0) - (*it_markers)->position()(0));
@@ -410,44 +409,10 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 		// Those will be passed to the create_node method.
 
 		// TOP_LEFT_FRONT node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_1;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_1;
-		std::vector<boost::shared_ptr<WorldObject> > markers_1;
+		std::vector<boost::shared_ptr<Obstacle> > obstaclesA[8];
+				std::vector<boost::shared_ptr<RobotData> > robot_dataA[8];
+				std::vector<boost::shared_ptr<WorldObject> > markersA[8];
 
-		// TOP_LEFT_BACK node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_2;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_2;
-		std::vector<boost::shared_ptr<WorldObject> > markers_2;
-
-		// TOP_RIGHT_BACK node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_3;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_3;
-		std::vector<boost::shared_ptr<WorldObject> > markers_3;
-
-		// TOP_RIGHT_FRONT node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_4;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_4;
-		std::vector<boost::shared_ptr<WorldObject> > markers_4;
-
-		// BOTTOM_LEFT_FRONT node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_5;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_5;
-		std::vector<boost::shared_ptr<WorldObject> > markers_5;
-
-		// BOTTOM_LEFT_BACK node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_6;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_6;
-		std::vector<boost::shared_ptr<WorldObject> > markers_6;
-
-		// BOTTOM_RIGHT_BACK node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_7;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_7;
-		std::vector<boost::shared_ptr<WorldObject> > markers_7;
-
-		// BOTTOM_RIGHT_FRONT node list
-		std::vector<boost::shared_ptr<Obstacle> > obstacles_8;
-		std::vector<boost::shared_ptr<RobotData> > robot_data_8;
-		std::vector<boost::shared_ptr<WorldObject> > markers_8;
 
 
 		//Check to which sub node each object belongs and add them to the corresponding vector.
@@ -455,60 +420,8 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 		for(it_robot_data = robot_datas.begin(); it_robot_data != robot_datas.end(); ++it_robot_data){
 			Vector3d pos = (*it_robot_data)->position();
 
-			if( (pos(0) <= center(0)) && (pos(1) >= center(1)) && (pos(2) >= center(2)) ){
-				robot_data_1.push_back(*it_robot_data);
-				continue;
-			}
-
-			// Check if the point lines within the TOP LEFT BACK node
-			if( (pos(0) <= center(0)) && (pos(1) >= center(1)) && (pos(2) <= center(2)) ) {
-				robot_data_2.push_back(*it_robot_data);
-				continue;
-			}
-
-			// Check if the point lines within the TOP RIGHT BACK node
-
-			if( (pos(0) >= center(0)) && (pos(1) >= center(1)) && (pos(2) <= center(2)) ) {
-				robot_data_3.push_back(*it_robot_data);
-				continue;
-			}
-
-			// Check if the point lines within the TOP RIGHT FRONT node
-
-			if( (pos(0) >= center(0)) && (pos(1) >= center(1)) && (pos(2) >= center(2)) ) {
-				robot_data_4.push_back(*it_robot_data);
-				continue;
-			}
-
-			// Check if the point lines within the BOTTOM LEFT FRONT node
-
-			if( (pos(0) <= center(0)) && (pos(1) <= center(1)) && (pos(2) >= center(2)) ) {
-				robot_data_5.push_back(*it_robot_data);
-				continue;
-			}
-
-			// Check if the point lines within the BOTTOM LEFT BACK node
-
-			if( (pos(0) <= center(0)) && (pos(1) <= center(1)) && (pos(2) <= center(2)) ) {
-				robot_data_6.push_back(*it_robot_data);
-				continue;
-			}
-
-
-			// Check if the point lines within the BOTTOM RIGHT BACK node
-
-			if( (pos(0) >= center(0)) && (pos(1) <= center(1)) && (pos(2) <= center(2)) ) {
-				robot_data_7.push_back(*it_robot_data);
-				continue;
-			}
-
-
-			// Check if the point lines within the BOTTOM RIGHT FRONT node
-
-			if( (pos(0) >= center(0)) && (pos(1) <= center(1)) && (pos(2) >= center(2)) ) {
-				robot_data_8.push_back(*it_robot_data);
-				continue;
-			}
+			int child_num = this->point_in_node( pos );
+			robot_dataA[ child_num ].push_back( *it_robot_data );
 
 
 		}
@@ -518,61 +431,8 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 		for(it_markers = markers.begin(); it_markers != markers.end(); ++it_markers){
 			Vector3d pos = (*it_markers)->position();
 
-			if( (pos(0) <= center(0)) && (pos(1) >= center(1)) && (pos(2) >= center(2)) ){
-				markers_1.push_back(*it_markers);
-				continue;
-			}
-
-			// Check if the point lines within the TOP LEFT BACK node
-			if( (pos(0) <= center(0)) && (pos(1) >= center(1)) && (pos(2) <= center(2)) ) {
-				markers_2.push_back(*it_markers);
-				continue;
-			}
-
-			// Check if the point lines within the TOP RIGHT BACK node
-
-			if( (pos(0) >= center(0)) && (pos(1) >= center(1)) && (pos(2) <= center(2)) ) {
-				markers_3.push_back(*it_markers);
-				continue;
-			}
-
-			// Check if the point lines within the TOP RIGHT FRONT node
-
-			if( (pos(0) >= center(0)) && (pos(1) >= center(1)) && (pos(2) >= center(2)) ) {
-				markers_4.push_back(*it_markers);
-				continue;
-			}
-
-			// Check if the point lines within the BOTTOM LEFT FRONT node
-
-			if( (pos(0) <= center(0)) && (pos(1) <= center(1)) && (pos(2) >= center(2)) ) {
-				markers_5.push_back(*it_markers);
-				continue;
-			}
-
-			// Check if the point lines within the BOTTOM LEFT BACK node
-
-			if( (pos(0) <= center(0)) && (pos(1) <= center(1)) && (pos(2) <= center(2)) ) {
-				markers_6.push_back(*it_markers);
-				continue;
-			}
-
-
-			// Check if the point lines within the BOTTOM RIGHT BACK node
-
-			if( (pos(0) >= center(0)) && (pos(1) <= center(1)) && (pos(2) <= center(2)) ) {
-				markers_7.push_back(*it_markers);
-				continue;
-			}
-
-
-			// Check if the point lines within the BOTTOM RIGHT FRONT node
-
-			if( (pos(0) >= center(0)) && (pos(1) <= center(1)) && (pos(2) >= center(2)) ) {
-				markers_8.push_back(*it_markers);
-				continue;
-			}
-
+			int child_num = point_in_node( pos );
+			markersA[ child_num ].push_back( *it_markers );
 
 		}
 
@@ -582,15 +442,9 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 		// The test for fitting is not accurate; it is a pessimistic test atm.
 
 		Vector3d centers[8];
-		centers[0] = new_node_center(center_, width_, Octree::TOP_LEFT_FRONT);
-		centers[1] = new_node_center(center_, width_, Octree::TOP_LEFT_BACK);
-		centers[2] = new_node_center(center_, width_, Octree::TOP_RIGHT_BACK);
-		centers[3] = new_node_center(center_, width_, Octree::TOP_RIGHT_FRONT);
-		centers[4] = new_node_center(center_, width_, Octree::BOTTOM_LEFT_FRONT);
-		centers[5] = new_node_center(center_, width_, Octree::BOTTOM_LEFT_BACK);
-		centers[6] = new_node_center(center_, width_, Octree::BOTTOM_RIGHT_BACK);
-		centers[7] = new_node_center(center_, width_, Octree::BOTTOM_RIGHT_FRONT);
-
+		for(int i = 0; i < 8; ++i ){
+			centers[i] = new_node_center(center_,width_, i );
+		}
 
 		std::vector<boost::shared_ptr<Obstacle> >::const_iterator it_obstacles;
 		for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); ++it_obstacles){
@@ -604,7 +458,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[0](1) - pos(1);
 				float z = centers[0](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_1.push_back(*it_obstacles);
+					obstaclesA[0].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -616,7 +470,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[1](1) - pos(1);
 				float z = centers[1](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_2.push_back(*it_obstacles);
+					obstaclesA[1].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -630,7 +484,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[2](1) - pos(1);
 				float z = centers[2](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_3.push_back(*it_obstacles);
+					obstaclesA[2].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -644,7 +498,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[3](1) - pos(1);
 				float z = centers[3](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_4.push_back(*it_obstacles);
+					obstaclesA[3].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -658,7 +512,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[4](1) - pos(1);
 				float z = centers[4](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_5.push_back(*it_obstacles);
+					obstaclesA[4].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -672,7 +526,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[5](1) - pos(1);
 				float z = centers[5](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_6.push_back(*it_obstacles);
+					obstaclesA[5].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -687,7 +541,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[6](1) - pos(1);
 				float z = centers[6](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_7.push_back(*it_obstacles);
+					obstaclesA[6].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -702,7 +556,7 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 				float y = centers[7](1) - pos(1);
 				float z = centers[7](2) - pos(2);
 				if( x*x + y*y + z*z + max_size < squared_width / 4 ){
-					obstacles_8.push_back(*it_obstacles);
+					obstaclesA[7].push_back(*it_obstacles);
 
 					continue;
 				}
@@ -718,22 +572,10 @@ void Octree::create_node(const std::vector< boost::shared_ptr<WorldObject> > & m
 
 
 		// Create the new nodes
+		for(int i = 0; i < 8; i++){
+			create_new_node(markersA[i], obstaclesA[i], robot_dataA[i], center_, width_, i );
+		}
 
-		create_new_node(markers_1, obstacles_1, robot_data_1, center_, width_, TOP_LEFT_FRONT);
-
-		create_new_node(markers_2, obstacles_2, robot_data_2, center_, width_, TOP_LEFT_BACK);
-
-		create_new_node(markers_3, obstacles_3, robot_data_3, center_, width_, TOP_RIGHT_BACK);
-
-		create_new_node(markers_4, obstacles_4, robot_data_4, center_, width_, TOP_RIGHT_FRONT);
-
-		create_new_node(markers_5, obstacles_5, robot_data_5, center_, width_, BOTTOM_LEFT_FRONT);
-
-		create_new_node(markers_6, obstacles_6, robot_data_6, center_, width_, BOTTOM_LEFT_BACK);
-
-		create_new_node(markers_7, obstacles_7, robot_data_7, center_, width_, BOTTOM_RIGHT_BACK);
-
-		create_new_node(markers_8, obstacles_8, robot_data_8, center_, width_, BOTTOM_RIGHT_FRONT);
 
 
 
@@ -916,15 +758,10 @@ void Octree::add_robot_data_to_node(boost::shared_ptr<RobotData> robot_data){
 
 void Octree::destroy_octree() {
 
-	// Free the triangle data if it's not NULL
-
-
 
 //TODO
 
-	// Initialize the octree data members
 
-	init_octree();
 
 }
 
