@@ -17,7 +17,8 @@
 
 /*
 // TODO: -move to init or something
- * 		 -set up threads somewhere else
+ * 		 -terminate method
+ * 		 -if !initialized stuff
  *
  *
 int main(int argc, char** argv) {
