@@ -6,6 +6,8 @@
 #include "visualizer.h"
 #include "history.h"
 
+#include <iostream>
+
 
 namespace {
 	bool is_thread_started(const boost::thread& thread) {
@@ -13,7 +15,7 @@ namespace {
 	}
 }
 
-SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0)  {
+SimulationControl::SimulationControl() : processing_time_factor_(10), current_processing_time_(0)  {
 
 }
 
@@ -74,6 +76,7 @@ void SimulationControl::terminate_simulation() {
 }
 
 void SimulationControl::process_simulation() {
+	//std::cout << "processing" << std::endl;
 	double new_processing_time = compute_new_processing_time();
 
 	// Try and get the two world informations matching our processing time.
@@ -91,20 +94,26 @@ void SimulationControl::process_simulation() {
 			//proceed processing_time to next_world_information time instead of setting it to new_processing_time
 			//-> pauses processing_time at next_world_information_->time()
 			current_processing_time_ = next_world_information_->time() * processing_time_factor_;
+			std::cout << "try wait failed" << std::endl;
 			break;
 		}
 		else {
 			current_world_information_ = next_world_information_;
 			next_world_information_ = new_world_information;
 			current_processing_time_ = new_processing_time;
+			std::cout << "fetched new world information, processing time:" << current_processing_time_ << std::endl;
 		}
 	}
 
 	// draw the simulation state for the current processing time if there is a visualizer.
 	if(visualizer_) {
 		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
+		//std::cout << "start drawing time: " << extrapolation_time << std::endl;
+		//std::cout << "for world information at time: " << current_world_information_->time() << std::endl;
 		visualizer_->draw(extrapolation_time, current_world_information_);
+		//std::cout << "end drawing" << std::endl;
 	}
+
 }
 
 double SimulationControl::compute_new_processing_time() {

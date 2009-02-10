@@ -17,6 +17,12 @@
 
 #include "SampleGUI.h"
 
+#include "../SimulationControl/simulation_control.h"
+#include "../Visualisation/simulation_renderer.h"
+#include "../Visualisation/follow_swarm_camera.h"
+
+#include <iostream>
+
 // forward declaration
 void reshapeFractal(int width, int height);
 
@@ -24,11 +30,39 @@ void reshapeFractal(int width, int height);
 int main(int argc, char** argv) {
 	boost::shared_ptr<SampleControl> sample_control(new SampleControl());
 
+	boost::shared_ptr<SimulationControl> control(new SimulationControl());
+
+	PgGLUT::init("NYSS - Not Yet a Swarm Simulator", argc, argv);
+    PgGLUT::glutDisplayFunc(boost::bind(&SimulationControl::process_simulation, control)); // use boost::bind for class-member callbacks
+	// PgGLUT::glutReshapeFunc(&reshapeFractal);
+	//PgGLUT::glutDisplayFunc(boost::bind(&SampleControl::process_simulation, sample_control)); // use boost::bind for class-member callbacks
+
+
+
+	std::cout << "Building Visualizer" << std::endl;
+	boost::shared_ptr<Camera> camera(new FollowSwarmCamera());
+	boost::shared_ptr<Visualizer> visualizer(new SimulationRenderer(camera));
+	std::cout << "Initializing Visualizer" << std::endl;
+	visualizer->init();
+	control->set_visualizer(visualizer);
+
+	std::cout << "Creating new Simulation" << std::endl;
+	control->create_new_simulation("src/Tests/TestData/garbled_projectfile_a", 25);
+
+	std::cout << "Starting Simulation Thread" << std::endl;
+	control->start_simulation();
+
+	PgGLUT::glutMainLoop();
+
+
+	/*
+	boost::shared_ptr<SampleControl> sample_control(new SampleControl());
+
 	PgGLUT::init("NYSS - Not Yet a Swarm Simulator", argc, argv);
 	PgGLUT::glutDisplayFunc(boost::bind(&SampleControl::process_simulation, sample_control)); // use boost::bind for class-member callbacks
 	PgGLUT::glutReshapeFunc(&reshapeFractal);                                                 // normal glut syntax for global callback methods
 	PgGLUT::glutMainLoop();
-
+	*/
 	return 0;
 }
 
@@ -44,6 +78,7 @@ void SampleControl::process_simulation() {
 
 	glFlush();
 	glutPostRedisplay();
+	std::cout << "processing" << std::endl;
 }
 
 // global method callback

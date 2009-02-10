@@ -166,7 +166,7 @@ void SimulationRenderer::draw(double extrapolate, boost::shared_ptr<WorldInforma
 	draw_text2d(2,2,time);
 
 	glutSwapBuffers();
-
+	glutPostRedisplay();
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){

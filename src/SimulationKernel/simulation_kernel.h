@@ -32,6 +32,10 @@
 
 #include "../Statistics/stats_control.h"
 
+
+class EventHandler;
+class ActivationSequenceGenerator;
+
 using namespace std;
 
 class SimulationKernel {
@@ -92,6 +96,20 @@ private:
 	 * Reference to a History of the WorldInformations.
 	 */
 	boost::shared_ptr<History> history_;
+
+	/**
+	 * Event Handler
+	 */
+	boost::shared_ptr<EventHandler> event_handler_;
+
+	/**
+	 * Activation sequence generator
+	 */
+	boost::shared_ptr<ActivationSequenceGenerator> asg_;
+
+	/**
+	 * Robot Control
+	 */
 
 	/**
 	 * Statistics-Module
