@@ -86,12 +86,13 @@ BOOST_AUTO_TEST_CASE(octree_test) {
 
 		std::printf("test\n");
 		float start = std::clock();
-
+		for(int i = 0; i < 1000; i++) {
 		boost::shared_ptr<Octree> octree(new Octree(10,radius*2.0));
 		octree->scene_dimensions(markers, obstacles, robots);
 
-		octree->create_tree(markers,obstacles,robots);
 
+		octree->create_tree(markers,obstacles,robots);
+		}
 
 		float end = std::clock();
 
@@ -102,7 +103,7 @@ BOOST_AUTO_TEST_CASE(octree_test) {
 
 		std::vector<boost::shared_ptr<RobotData> >::iterator it_robots;
 		std::vector<boost::shared_ptr<RobotData> >::iterator it_robots_comp;
-
+		for(int i = 0; i < 1000; i++)
 		for(it_robots = robots.begin(); it_robots != robots.end(); ++it_robots){
 			Vector3d robot_pos = (*it_robots)->position();
 

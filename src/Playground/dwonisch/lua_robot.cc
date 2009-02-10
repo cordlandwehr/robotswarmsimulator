@@ -12,6 +12,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <luabind/object.hpp>
+#include <luabind/operator.hpp>
 #include <deque>
 #include <algorithm>
 
@@ -21,19 +22,45 @@
 #include "../../Model/box_identifier.h"
 #include "../../Model/sphere_identifier.h"
 #include "../../Model/marker_information.h"
+#include "../../Requests/acceleration_request.h"
+#include "../../Requests/marker_request.h"
+#include "../../Requests/position_request.h"
+#include "../../Requests/type_change_request.h"
+#include "../../Requests/velocity_request.h"
 #include "../../Views/view.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
-	const Robot* robot; //needed as "caller" in most view methods
+	Robot* robot; //needed as "caller" in most view methods
 	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
+	std::set<boost::shared_ptr<Request> > requests;
 
 	struct Vector3dWrapper {
-		Vector3dWrapper() {;}
+		Vector3dWrapper() : x(0), y(0), z(0) {;}
 		Vector3dWrapper(double x, double y, double z) : x(x), y(y), z(z) {;}
+
+		const Vector3dWrapper operator+(const Vector3dWrapper& rhs) const {
+			return Vector3dWrapper(x + rhs.x, y + rhs.y, z + rhs.z);
+		}
+
+		const Vector3dWrapper operator*(const Vector3dWrapper& rhs) const {
+			return Vector3dWrapper(x * rhs.x, y * rhs.y, z * rhs.z);
+		}
+
+		const Vector3dWrapper operator/(double div) const {
+			return Vector3dWrapper(x / div, y / div, z / div);
+		}
+
+		friend std::ostream& operator<<(std::ostream& os, const Vector3dWrapper& rhs) {
+			//Note: not implemented using operator<< of Vector3d, because latter is ugly.
+			return os << "{x = " << rhs.x << ", y = " << rhs.y << ", z = " << rhs.z << "}";
+		}
+
+
 		double x;
 		double y;
 		double z;
+
 	};
 
 	class MarkerInformationWrapper {
@@ -47,6 +74,10 @@ namespace {
 
 		luabind::object get_data(const std::string& var_name) {
 			return boost::any_cast<luabind::object>(marker_information_.get_data(var_name));
+		}
+
+		const MarkerInformation& marker_information() const {
+			return marker_information_;
 		}
 	private:
 		MarkerInformation marker_information_;
@@ -104,6 +135,10 @@ namespace {
 		result.insert_element(kYCoord, vec.y);
 		result.insert_element(kZCoord, vec.z);
 		return result;
+	}
+
+	const MarkerInformation transform(const MarkerInformationWrapper& marker) {
+		return marker.marker_information();
 	}
 
 	const std::vector<std::size_t> get_visible_robots() {
@@ -166,8 +201,37 @@ namespace {
 		return view->get_sphere_radius(resolve<SphereIdentifier>(index));
 	}
 
-	//TODO: methods for determining ObstacleIndentifier type
-	//TODO: methods for Request creating
+	const bool is_sphere_identifier(std::size_t index) {
+		return boost::dynamic_pointer_cast<SphereIdentifier>(resolve<Identifier>(index));
+	}
+
+	const bool is_box_identifier(std::size_t index) {
+		return boost::dynamic_pointer_cast<BoxIdentifier>(resolve<Identifier>(index));
+	}
+
+	void add_acceleration_request(Vector3dWrapper requested_vector) {
+		boost::shared_ptr<Vector3d> new_acc(new Vector3d(transform(requested_vector)));
+		requests.insert(boost::shared_ptr<Request>(new AccelerationRequest(*robot, new_acc)));
+	}
+
+	void add_position_request(Vector3dWrapper requested_vector) {
+		boost::shared_ptr<Vector3d> new_pos(new Vector3d(transform(requested_vector)));
+		requests.insert(boost::shared_ptr<Request>(new PositionRequest(*robot, new_pos)));
+	}
+
+	void add_velocity_request(Vector3dWrapper requested_vector) {
+		boost::shared_ptr<Vector3d> new_vel(new Vector3d(transform(requested_vector)));
+		requests.insert(boost::shared_ptr<Request>(new VelocityRequest(*robot, new_vel)));
+	}
+
+	void add_marker_request(MarkerInformationWrapper marker) {
+		boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(transform(marker)));
+		requests.insert(boost::shared_ptr<Request>(new MarkerRequest(*robot, new_marker)));
+	}
+
+	void add_type_change_request(unsigned type) {
+		requests.insert(boost::shared_ptr<Request>(new TypeChangeRequest(*robot, static_cast<RobotType>(type))));
+	}
 }
 
 void LuaRobot::report_errors(int status) {
@@ -188,17 +252,24 @@ LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua
 	int status = luaL_loadfile(lua_state_.get(), lua_file_name.c_str());
 	if(status != 0) {
 		report_errors(status);
-		//TODO: throw some exception
+		throw std::invalid_argument("Could not load given lua file (" + lua_file_name + ").");
 	}
+	status = lua_pcall(lua_state_.get(), 0, LUA_MULTRET, 0);
+	report_errors(status);
+	register_lua_methods();
 }
 
-std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
+void LuaRobot::register_lua_methods() {
 	//register view methods to lua
 	luabind::module(lua_state_.get())
 	[
 		 luabind::class_<Vector3dWrapper>("Vector3d")
 			 .def(luabind::constructor<>())
 			 .def(luabind::constructor<double, double, double>())
+			 .def(luabind::const_self + luabind::other<Vector3dWrapper>())
+			 .def(luabind::const_self * luabind::other<Vector3dWrapper>())
+			 .def(luabind::const_self / double())
+			 .def(luabind::tostring(luabind::self))
 			 .def_readwrite("x", &Vector3dWrapper::x)
 			 .def_readwrite("y", &Vector3dWrapper::y)
 			 .def_readwrite("z", &Vector3dWrapper::z),
@@ -243,21 +314,29 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 		 luabind::def("get_box_depth", &get_box_depth),
 		 luabind::def("get_box_width", &get_box_width),
 		 luabind::def("get_box_height", &get_box_height),
-		 luabind::def("get_sphere_radius", &get_sphere_radius)
+		 luabind::def("get_sphere_radius", &get_sphere_radius),
+		 luabind::def("is_sphere_identifier", &is_sphere_identifier),
+		 luabind::def("is_box_identifier", &is_box_identifier),
+		 luabind::def("add_acceleration_request", &add_acceleration_request),
+		 luabind::def("add_position_request", &add_position_request),
+		 luabind::def("add_velocity_request", &add_velocity_request),
+		 luabind::def("add_type_change_request", &add_type_change_request),
+		 luabind::def("add_marker_request", &add_marker_request)
 	];
+}
 
+std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	if(view = view_.lock()) {
 		robot = this;
 		queried_identifiers.clear();
+		requests.clear();
 
-		int status = lua_pcall(lua_state_.get(), 0, LUA_MULTRET, 0);
-		report_errors(status);
+		luabind::call_function<void>(lua_state_.get(), "main");
 	}
 	else {
-		//TODO: throw some exception
+		throw std::logic_error("Could not lock view. Too old?");
 	}
-	//TODO: somehow gather requests
-	return std::set<boost::shared_ptr<Request> >();
+	return requests;
 }
 
 

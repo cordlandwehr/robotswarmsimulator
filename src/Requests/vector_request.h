@@ -9,6 +9,7 @@
 #define VECTOR_REQUEST_H_
 
 #include "../Utilities/vector_arithmetics.h"
+#include "request.h"
 
 class VectorRequest : public Request {
 public:

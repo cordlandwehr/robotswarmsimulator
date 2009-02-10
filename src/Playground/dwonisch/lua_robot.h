@@ -29,6 +29,7 @@ public:
 	virtual std::set<boost::shared_ptr<Request> > compute();
 private:
 	void report_errors(int status);
+	void register_lua_methods();
 private:
 	boost::shared_ptr<lua_State> lua_state_;
 };
