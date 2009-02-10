@@ -51,6 +51,17 @@ void Parser::init() {
 
 	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_DISCARD_PROB");
 	default_values_of_varialbes.push_back("0");
+
+	variables_with_default_values.push_back("VELOCITY_REQUEST_HANDLER_VECTOR_MODIFIERS");
+	default_values_of_varialbes.push_back("");
+
+	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIERS");
+	default_values_of_varialbes.push_back("");
+
+	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS");
+	default_values_of_varialbes.push_back("");
+
+
 }
 
 bool Parser::is_comment(const string& line) {
@@ -97,7 +108,7 @@ string Parser::get_default_value(const string& var) {
 			}
 		}
 	}
-	return "";
+	return "NO_DEFAULT_VALUE";
 }
 
 string Parser::get_var_value(const string& line, const string& name) {
@@ -108,7 +119,7 @@ string Parser::get_var_value(const string& line, const string& name) {
 	if(pos_of_first_quote_sign == string::npos || pos_of_last_quote_sign == string::npos) {
 		//get default value, if one exists
 		string default_value = get_default_value(name);
-		if(!default_value.empty()) {
+		if(default_value.compare("NO_DEFAULT_VALUE")) {
 			return default_value;
 		}
 		else {
@@ -131,14 +142,14 @@ string Parser::get_string_value_from_map(map<string,string> variables_and_values
 	if(map_iterator == variables_and_values.end()) {
 		//check if var_name has a default value
 		string default_value = get_default_value(var_name);
-		if(!default_value.empty()) {
+		if( default_value.compare("NO_DEFAULT_VALUE") ) {
 			//variable has a default value
 			return default_value;
 		}
 		else {
 			//variable hasn't a default value and hasn't been initialized
 			throw UnsupportedOperationException("Variable according to "+var_name+" has not been initialized and"
-					"no default value for this variable exists.");
+					" no default value for this variable exists.");
 		}
 	} else {
 		//return value of var_name
@@ -232,13 +243,13 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	marker_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_DISCARD_PROB");
 	type_change_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB");
 	velocity_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_DISCARD_PROB");
-	position_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "POSITION_HANDLER_DISCARD_PROB");
-	acceleration_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "ACCELERATION_HANDLER_DISCARD_PROB");
+	position_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_DISCARD_PROB");
+	acceleration_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_DISCARD_PROB");
 
 	//vector modifiers
-	velocity_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "VEOLOCITY_REQUEST_HANDLER_VECTOR_MODIFIER");
-	position_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_VECTOR_MODIFIER");
-	acceleration_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIER");
+	velocity_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_VECTOR_MODIFIERS");
+	position_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS");
+	acceleration_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIERS");
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
