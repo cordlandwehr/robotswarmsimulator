@@ -25,6 +25,7 @@
 
 // forward declaration
 void reshapeFractal(int width, int height);
+void timerCB(int millisec);
 
 // main function
 int main(int argc, char** argv) {
@@ -34,7 +35,8 @@ int main(int argc, char** argv) {
 
 	PgGLUT::init("NYSS - Not Yet a Swarm Simulator", argc, argv);
     PgGLUT::glutDisplayFunc(boost::bind(&SimulationControl::process_simulation, control)); // use boost::bind for class-member callbacks
-	// PgGLUT::glutReshapeFunc(&reshapeFractal);
+    PgGLUT::glutTimerFunc(50, timerCB, 50);
+    // PgGLUT::glutReshapeFunc(&reshapeFractal);
 	//PgGLUT::glutDisplayFunc(boost::bind(&SampleControl::process_simulation, sample_control)); // use boost::bind for class-member callbacks
 
 
@@ -89,4 +91,9 @@ void reshapeFractal(int width, int height) {
     glLoadIdentity();
     glOrtho(-2.5, 2.5, -2.5, 2.5, 1., -1.);
     glMatrixMode(GL_MODELVIEW);
+}
+
+void timerCB(int millisec) {
+	glutTimerFunc(millisec, timerCB, millisec);
+	glutPostRedisplay();
 }

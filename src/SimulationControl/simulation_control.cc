@@ -114,11 +114,6 @@ void SimulationControl::process_simulation() {
 		//std::cout << "end drawing" << std::endl;
 	}
 
-	boost::xtime xt;
-	boost::xtime_get(&xt, boost::TIME_UTC);
-	xt.sec += 1.0;
-	boost::thread::sleep(xt);
-
 }
 
 double SimulationControl::compute_new_processing_time() {

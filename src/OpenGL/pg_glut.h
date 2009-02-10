@@ -69,6 +69,8 @@ namespace PgGLUT {
 	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
 	 */
 	void glutReshapeFunc(boost::function<void (int width, int height)> func);
+
+	void glutTimerFunc(unsigned int msec, boost::function<void (int value)> func, int value);
 };
 
 #endif /* PGGLUT_H_ */

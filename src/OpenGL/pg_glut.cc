@@ -24,11 +24,15 @@ namespace PgGLUT {
 		boost::function<void (unsigned char key, int x, int y)> keyboard_callback_;
 		boost::function<void (int button, int state, int x, int y)> mouse_callback_;
 
+		boost::function<void (int value)> timer_callback_;
+
 		// delegates to be registered as GLUT callbacks
 		void display_callback_delegate() { display_callback_(); }
 		void keyboard_callback_delegate(unsigned char key, int x, int y) { keyboard_callback_(key, x, y); }
 		void mouse_callback_delegate(int button, int state, int x, int y) { mouse_callback_(button, state, x, y); }
 		void reshape_callback_delegate(int width, int height) { reshape_callback_(width, height); }
+
+		void timer_callback_delegate(int value) {timer_callback_(value);}
 	}
 
 	void init(const std::string& window_name, int& argc, char** argv, int width, int height, int x, int y) {
@@ -67,5 +71,10 @@ namespace PgGLUT {
 	void glutReshapeFunc(boost::function<void (int width, int height)> func) {
 		reshape_callback_ = func;
 		::glutReshapeFunc(&reshape_callback_delegate);
+	}
+
+	void glutTimerFunc(unsigned int msec, boost::function<void (int value)> func, int value) {
+		timer_callback_ = func;
+		::glutTimerFunc(msec, &timer_callback_delegate, value);
 	}
 }
