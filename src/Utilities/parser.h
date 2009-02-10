@@ -70,16 +70,39 @@ public:
 	void init();
 
 private:
-	//TODO(martinah) comment variables
+
+	////////////////////////////////////////////////////////
+	// SIMULATION CONFIGURATION
+	////////////////////////////////////////////////////////
+
 	//variables initialized with values in the main project file
-	//on generation of new project files can be set by set-methods
-	int asg_;
+
+	string asg_;
 	string compass_model_;
-	int event_handler_;
 	string obstacle_filename_;
 	string project_name_;
 	string robot_filename_;
 	string statistics_module_;
+	string view_;
+
+	//seeds
+	unsigned int marker_request_handler_seed_;
+	unsigned int type_change_request_handler_seed_;
+	unsigned int velocity_request_handler_seed_;
+	unsigned int position_request_handler_seed_;
+	unsigned int acceleration_request_handler_seed_;
+
+	//discard probabilities
+	double marker_request_handler_discard_prob_;
+	double type_change_request_handler_discard_prob_;
+	double velocity_request_handler_discard_prob_;
+	double position_request_handler_discard_prob_;
+	double acceleration_request_handler_discard_prob_;
+
+	//vector modifiers
+	vector<string> velocity_request_handler_vector_modifier_;
+	vector<string> position_request_handler_vector_modifier_;
+	vector<string> acceleration_request_handler_vector_modifier_;
 
 	//file name of project file
 	string project_filename_;
@@ -210,6 +233,24 @@ private:
 	int get_int_value_from_map(map<string,string> variables_and_values, const string& var_name);
 
 	/**
+	 * This methods returns the (double) value of the variable according to var_name saved in the given map
+	 *
+	 * \param variables_and_values Map that variable names and its values.
+	 * \param var_name Name of the variable whose value shall be returned from the map.
+	 * \return If var_name exists in the map, return (double) value of var_name saved in the map.
+	 */
+	double get_double_value_from_map(map<string,string> variables_and_values, const string& var_name);
+
+	/**
+	 * This methods returns the vector of the variable according to var_name saved in the given map
+	 *
+	 * \param variables_and_values Map that variable names and its values.
+	 * \param var_name Name of the variable whose vector shall be returned from the map.
+	 * \return If var_name exists in the map, return vector of var_name saved in the map.
+	 */
+	std::vector<string> get_vector_from_map(map<string,string> variables_and_values, const string& var_name);
+
+	/**
 	 * Checks whether the given string contains an assignment.
 	 */
 	bool contains_assignment(const string& line);
@@ -321,12 +362,6 @@ private:
 	 * @param compass_model string
 	 */
 	void set_compass_model(const string& compass_model);
-
-	/**
-	 * Set-method for event handler
-	 * @param event_handler int
-	 */
-	void set_event_handler(int event_handler);
 
 	/**
 	 * Set-method for obstacle filename

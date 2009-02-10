@@ -14,13 +14,43 @@ void Parser::init() {
 	default_values_of_varialbes.push_back("FULL_COMPASS");
 
 	variables_with_default_values.push_back("ASG");
-	default_values_of_varialbes.push_back("ASG_SYNCHRON");
+	default_values_of_varialbes.push_back("SYNCHRONOUS");
 
 	variables_with_default_values.push_back("STATISTICS_MODULE");
 	default_values_of_varialbes.push_back("NONE");
 
-	variables_with_default_values.push_back("EVENT_HANDLER");
-	default_values_of_varialbes.push_back("EH_DO_ALL");
+	variables_with_default_values.push_back("VIEW");
+	default_values_of_varialbes.push_back("0");
+
+	variables_with_default_values.push_back("MARKER_REQUEST_HANDLER_SEED");
+	default_values_of_varialbes.push_back("1");
+
+	variables_with_default_values.push_back("MARKER_REQUEST_HANDLER_DISCARD_PROB");
+	default_values_of_varialbes.push_back("0");
+
+	variables_with_default_values.push_back("TYPE_CHANGE_REQUEST_HANDLER_SEED");
+	default_values_of_varialbes.push_back("1");
+
+	variables_with_default_values.push_back("TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB");
+	default_values_of_varialbes.push_back("0");
+
+	variables_with_default_values.push_back("VELOCITY_REQUEST_HANDLER_SEED");
+	default_values_of_varialbes.push_back("1");
+
+	variables_with_default_values.push_back("VELOCITY_REQUEST_HANDLER_DISCARD_PROB");
+	default_values_of_varialbes.push_back("0");
+
+	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_SEED");
+	default_values_of_varialbes.push_back("1");
+
+	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_DISCARD_PROB");
+	default_values_of_varialbes.push_back("0");
+
+	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_SEED");
+	default_values_of_varialbes.push_back("1");
+
+	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_DISCARD_PROB");
+	default_values_of_varialbes.push_back("0");
 }
 
 bool Parser::is_comment(const string& line) {
@@ -130,16 +160,85 @@ int Parser::get_int_value_from_map(map<string,string> variables_and_values,
 	}
 }
 
+double Parser::get_double_value_from_map(map<string,string> variables_and_values,
+													const string& var_name) {
+	//get string value from map
+	string string_value = get_string_value_from_map(variables_and_values, var_name);
+
+	//convert string value to double
+	try {
+		return boost::lexical_cast<double>(string_value);
+
+	} catch(const boost::bad_lexical_cast& ) {
+		throw UnsupportedOperationException("Failed casting string to double.");
+	}
+}
+
+std::vector<string> Parser::get_vector_from_map(map<string,string> variables_and_values,
+													const string& var_name) {
+	//get string value from map
+	string string_value = get_string_value_from_map(variables_and_values, var_name);
+
+	std::vector<string> return_vector;
+
+	//check if there exists a value
+	if(!string_value.empty()) {
+
+		//split string_value
+		string splitted;
+		size_t pos_of_last_colon = -1;
+		size_t pos_of_next_colon = string_value.find_first_of("\"");
+
+		while(pos_of_next_colon != string::npos) {
+			//get substring from last to next colon
+			//TODO check if splitting is correct
+			splitted = string_value.substr(pos_of_last_colon+1, pos_of_next_colon-pos_of_last_colon-1);
+			return_vector.push_back(splitted);
+
+			//reset colon positions
+			pos_of_last_colon = pos_of_next_colon;
+			pos_of_next_colon = string_value.find_first_of("\"");
+		}
+
+		//get last value from string_value (value from last colon to end of string)
+		//TODO check if splitting is correct
+		splitted = string_value.substr(pos_of_last_colon+1, string_value.size()-pos_of_last_colon);
+
+		return_vector.push_back(splitted);
+	}
+
+	return return_vector;
+}
+
 void Parser::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
-	asg_= get_int_value_from_map(variables_and_values, "ASG");
+	asg_= get_string_value_from_map(variables_and_values, "ASG");
 	compass_model_ = get_string_value_from_map(variables_and_values, "COMPASS_MODEL");
-	event_handler_ = get_int_value_from_map(variables_and_values, "EVENT_HANDLER");
 	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
 	project_name_ = get_string_value_from_map(variables_and_values, "PROJECT_NAME");
 	robot_filename_ = get_string_value_from_map(variables_and_values, "ROBOT_FILENAME");
 	statistics_module_ = get_string_value_from_map(variables_and_values, "STATISTICS_MODULE");
+	view_ =get_string_value_from_map(variables_and_values, "VIEW");
+
+	//seeds
+	marker_request_handler_seed_ = get_int_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_SEED");
+	type_change_request_handler_seed_ = get_int_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_SEED");
+	velocity_request_handler_seed_ = get_int_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_SEED");
+	position_request_handler_seed_ = get_int_value_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_SEED");
+	acceleration_request_handler_seed_ = get_int_value_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_SEED");
+
+	//discard probabilities
+	marker_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_DISCARD_PROB");
+	type_change_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB");
+	velocity_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_DISCARD_PROB");
+	position_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "POSITION_HANDLER_DISCARD_PROB");
+	acceleration_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "ACCELERATION_HANDLER_DISCARD_PROB");
+
+	//vector modifiers
+	velocity_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "VEOLOCITY_REQUEST_HANDLER_VECTOR_MODIFIER");
+	position_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_VECTOR_MODIFIER");
+	acceleration_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIER");
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -285,6 +384,9 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 
 	//The order of these initializations is important!
 	// TODO(peter) is there a reason that this variable is read but never used? (see compiler warning)
+	//TODO(martinah) No, there is no real reason for this. I added this value to each robot, cause maybe it will be used
+	//in the future, but right now, it isn't. And I just read this variable to increase the value position_in_line_ correct.
+	//Sure, I could have done this without saving the id.
 	double id = get_next_double_value_in_line(line, line_number, false);
 	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
 	string type = get_next_value_in_line(line, line_number, false);
@@ -416,6 +518,9 @@ void Parser::load_projectfiles(const string& project_filename) {
 
 void Parser::save_main_project_file(const string& project_filename) {
 
+	//TODO(martinah)	We got some additional variables to be added to the main project file.
+	//					I already documented these variables in the input files specification document.
+	//					Thus please adapt your method for saving the main project file.
 	ofstream project_file;
 	project_file.open(project_filename.c_str());
 
@@ -423,7 +528,6 @@ void Parser::save_main_project_file(const string& project_filename) {
 		//write variables
 		project_file << "ASG=\"" << asg_ << "\"" << endl;
 		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
-		project_file << "EVENT_HANDLER=\"" << event_handler_ << "\"" << endl;
 		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
 		project_file << "PROJECT_NAME=\"" << project_name_ << "\"" << endl;
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
@@ -617,10 +721,6 @@ void Parser::set_asg(int asg) {
 
 void Parser::set_compass_model(const string& compass_model) {
 	compass_model_ = compass_model;
-}
-
-void Parser::set_event_handler(int event_handler) {
-	event_handler_ = event_handler;
 }
 
 void Parser::set_obstacle_filename(const string& obstacle_filename) {
