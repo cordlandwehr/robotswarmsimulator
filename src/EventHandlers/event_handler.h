@@ -39,13 +39,13 @@ class History;
  * \brief The event handler determines, according to some user–specified rules,
  * how to apply the different requests to the world.
  *
- * The abstract event handler class provides the following functionality:
+ * The EventHandler class provides the following functionality:
  * 1. handle compute and look event by delegation to RobotControl
- * 2. partly handle HandleRequests events by extrapolating the robot positions and calling the request handlers
+ * 2. partly handle HandleRequests events by extrapolating the robot positions and calling the RequestHandlers
  * 3. registering of simulation listeners and updating them when the world changes
  *
- * In most cases a subclass of EventHandler should only define custom handle_request functions for the
- * possible requests. If it does not provide a custom implementation for a particular handle_*_request method, a warning
+ * EventHandler should be provided with custom RequestHandlers for the
+ * possible requests. If there is no RequestHandler for a particular type of request, a warning
  * message is issued upon the occurrence of such a request.
  */
 class EventHandler {

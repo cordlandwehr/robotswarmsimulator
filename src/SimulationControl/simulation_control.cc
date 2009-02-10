@@ -26,16 +26,6 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	terminate_simulation();
 
 	//set up a new history
-	// TODO:
-	// std::size_t history_length = simulation_kernel->history_length_(); //project parameter?
-	// std::size_t history_length = 123;
-	// craupach: I changed history length to be a parameter to this method.
-	// I don't like it being in the project file for following reasons:
-	// * It does not really influence how the simulation will develop
-	// * We would need to parse it out of the project file ourselves. If its passed a parameter
-	//   the project file needs only be touched in SimKernel
-	// * We may want to rerun the same project with different history lengths for collecting statistics
-	// * We can easily pass it in the UI or as a commandline parameter
 	history_.reset(new History(history_length));
 
 	// create and initialize new kernel. History should be passed here because the init method

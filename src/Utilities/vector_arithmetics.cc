@@ -1,5 +1,5 @@
 /*
- *  vector_arithmetics.cpp
+ *  vector_arithmetics.cc
  *
  *  Created on: Feb 6, 2009
  *      Author: peter
@@ -19,7 +19,7 @@ Matrix3d invert_matrix3d(const Matrix3d& matrix) {
 	double det = det_matrix3d(matrix);
 	if (det == 0.)
 		throw std::invalid_argument("got non-invertible matrix");
-	
+
 	Matrix3d inverse(3, 3);
 	inverse(0,0) =   matrix(1,1)*matrix(2,2) - matrix(2,1)*matrix(1,2);
 	inverse(0,1) = -(matrix(0,1)*matrix(2,2) - matrix(2,1)*matrix(0,2));

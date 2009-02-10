@@ -99,7 +99,7 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 	BOOST_FOREACH(boost::shared_ptr<const Request> request, handle_requests_event->requests()) {
 
 		// Try to cast the pointer to all types of request to see what kind of request it is.
-		// The cast will return NULL if it is the wrong kind of event.
+		// The cast will return NULL if it is the wrong kind of request.
 		// A shared_ptr pointing to NULL converts to FALSE in a condition.
 		if(boost::shared_ptr<const PositionRequest> position_request =
 		   boost::dynamic_pointer_cast<const PositionRequest> (request)) {
@@ -155,7 +155,7 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 	// set the time
 	new_world_information->set_time(time);
 
-	// compute the time difference between old and new world_infrmation
+	// compute the time difference between old and new world_information
 	int time_difference = time - old_world_information.time();
 
 	// extrapolate all robots

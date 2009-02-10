@@ -15,6 +15,8 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/foreach.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <algorithm>
+#include <functional>
 
 #include "../Events/event.h"
 #include "../Events/look_event.h"
@@ -53,6 +55,7 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 	// 2. Select the robots participating in the event. Note that the event may be empty!
 	if(boost::shared_ptr<ComputeEvent> compute_event =
 	   boost::dynamic_pointer_cast<ComputeEvent> (event)) {
+
 		list<boost::shared_ptr<Robot> >::iterator cur_robot = computing_robots_.begin();
 		while(cur_robot != computing_robots_.end()) {
 			if(distribution_generator_->get_value_bernoulli()) {
@@ -66,8 +69,10 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 				cur_robot++;
 			}
 		}
+
 	} else if(boost::shared_ptr<LookEvent> look_event =
 		      boost::dynamic_pointer_cast<LookEvent> (event)) {
+
 		list<boost::shared_ptr<Robot> >::iterator cur_robot = looking_robots_.begin();
 		while(cur_robot != looking_robots_.end()) {
 			if(distribution_generator_->get_value_bernoulli()) {
@@ -81,16 +86,18 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 				cur_robot++;
 			}
 		}
+
 	} else if(boost::shared_ptr<HandleRequestsEvent> handle_requests_event =
 		      boost::dynamic_pointer_cast<HandleRequestsEvent> (event)) {
+
 		list<boost::shared_ptr<Robot> >::iterator cur_robot = handling_robots_.begin();
 		while(cur_robot != handling_robots_.end()) {
 			if(distribution_generator_->get_value_bernoulli()) {
-				// get all requests for this robot
+
+				// get all requests for this robot and add them to the event
 				list<boost::shared_ptr<const Request> >::iterator cur_request = unhandled_request_set_.begin();
 				while(cur_request != unhandled_request_set_.end()) {
 					// if the robot issued this request: add it to the event and delete it.
-					// TODO(craupach) sleep about this and see if this comparison can fail.
 					if(&((*cur_request)->robot().id()) == &(*cur_robot)->id()) {
 						handle_requests_event->add_to_requests(*cur_request);
 						cur_request = unhandled_request_set_.erase(cur_request);
@@ -113,7 +120,7 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 
 void AsynchronousASG::update(const WorldInformation& world_information,
                             boost::shared_ptr<Event> last_event) {
-	// check what kind of event we got.
+	// check what kind of event we got. Only care for compute events since they contain unhandled requests.
 	if(boost::shared_ptr<ComputeEvent> compute_event = boost::dynamic_pointer_cast<ComputeEvent> (last_event)) {
 		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request, compute_event->requests()) {
 			unhandled_request_set_.push_back(cur_request);
@@ -171,7 +178,7 @@ boost::shared_ptr<Event> AsynchronousASG::choose_event_type() {
 			boost::shared_ptr<HandleRequestsEvent> result(new HandleRequestsEvent(time_of_next_event_));
 			return result;
 		} else {
-			// TODO(craupach) should not happen, throw exception
+			throw std::invalid_argument("random number was greater than 2");
 		}
 	}
 }
