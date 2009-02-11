@@ -2,6 +2,12 @@ function main()
 
 	io.write("Running ", _VERSION, "\n")
 	
+	my_int = 0;
+	my_int = 5/my_int;
+	print(my_int);
+	
+	print("Own pos" .. tostring(get_position(get_own_identifier())));
+	
 	print("Robots")
 	result = get_visible_robots()
 	for k, v in ipairs(result) do

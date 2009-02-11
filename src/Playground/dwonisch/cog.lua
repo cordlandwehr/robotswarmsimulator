@@ -1,13 +1,13 @@
 function main() 
 
-	robots = get_visible_robots()
-	center = Vector3d(0,0,0);
+	robots = get_visible_robots();
+	center = get_position(get_own_identifier());
 	
 	for i = 1, #robots do
 		center = center + get_position(robots[i]);
 	end
 	
-	center = center / #robots;
+	center = center / (#robots+1);
 	
 	add_position_request(center);
 

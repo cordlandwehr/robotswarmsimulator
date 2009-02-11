@@ -232,6 +232,10 @@ namespace {
 	void add_type_change_request(unsigned type) {
 		requests.insert(boost::shared_ptr<Request>(new TypeChangeRequest(*robot, static_cast<RobotType>(type))));
 	}
+
+	const unsigned get_own_identifier() {
+		return 0; //own id always at pos 0 in queried_identifiers
+	}
 }
 
 void LuaRobot::report_errors(int status) {
@@ -252,7 +256,7 @@ LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua
 	int status = luaL_loadfile(lua_state_.get(), lua_file_name.c_str());
 	if(status != 0) {
 		report_errors(status);
-		throw std::invalid_argument("Could not load given lua file (" + lua_file_name + ").");
+		throw std::invalid_argument("Error while loading given lua file (" + lua_file_name + ").");
 	}
 	status = lua_pcall(lua_state_.get(), 0, LUA_MULTRET, 0);
 	report_errors(status);
@@ -321,17 +325,25 @@ void LuaRobot::register_lua_methods() {
 		 luabind::def("add_position_request", &add_position_request),
 		 luabind::def("add_velocity_request", &add_velocity_request),
 		 luabind::def("add_type_change_request", &add_type_change_request),
-		 luabind::def("add_marker_request", &add_marker_request)
+		 luabind::def("add_marker_request", &add_marker_request),
+		 luabind::def("get_own_identifier", &get_own_identifier)
 	];
 }
 
 std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	if(view = view_.lock()) {
 		robot = this;
-		queried_identifiers.clear();
 		requests.clear();
+		queried_identifiers.clear();
+		queried_identifiers.push_back(id());
 
-		luabind::call_function<void>(lua_state_.get(), "main");
+		try {
+			luabind::call_function<void>(lua_state_.get(), "main");
+		}
+		catch(luabind::error& e) {
+			luabind::object error_msg(luabind::from_stack(e.state(), -1));
+		    std::cerr << error_msg << std::endl;
+		}
 	}
 	else {
 		throw std::logic_error("Could not lock view. Too old?");
