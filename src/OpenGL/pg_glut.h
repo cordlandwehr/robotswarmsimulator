@@ -25,6 +25,7 @@
  *  - keyboard callback
  *  - mouse callback
  *  - reshape callback
+ *  - timer callback
  *
  * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
  */
@@ -70,6 +71,10 @@ namespace PgGLUT {
 	 */
 	void glutReshapeFunc(boost::function<void (int width, int height)> func);
 
+	/**
+	 * \brief Wrapper around GLUT method (supports class member methods).
+	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
+	 */
 	void glutTimerFunc(unsigned int msec, boost::function<void (int value)> func, int value);
 };
 
