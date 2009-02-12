@@ -111,6 +111,7 @@ private:
 	};
 
 	double compute_new_processing_time();
+	void draw_current_simulation();
 private:
 	//TODO (dwonsich): processing_time_factor_ == \Delta in paper; Maybe should be moved to somewhere else
 	double processing_time_factor_;

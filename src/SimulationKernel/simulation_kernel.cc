@@ -293,7 +293,7 @@ void SimulationKernel::step() {
 	// TODO(craupach): this is a suggestion by me.
 	// handle next event
 	boost::shared_ptr<Event> event = asg_->get_next_event();
-	std::cout << "Stepping for Event at time " << event->time() << std::endl;
+	//std::cout << "Stepping for Event at time " << event->time() << std::endl;
 	event_handler_->handle_event(event);
 }
 
