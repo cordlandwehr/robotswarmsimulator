@@ -7,11 +7,7 @@
 
 /*
  * TODO parser->event_handler_ = 42; not yet implemented for generator
- * TODO velocity uniform
- * TODO velocity normal
- * TODO acceleration uniform
- * TODO acceleeration normal
- * TODO
+ * TODO coord system
  */
 
 #include <boost/unordered_map.hpp>
@@ -21,6 +17,9 @@
 
 #include <vector>
 #include <string>
+
+//TODO delete
+#include <iostream>
 
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
@@ -49,7 +48,6 @@ void szenario_generator::init(int number_robots) {
 	// the world information object contains all information that shall be saved in the robot file
 	generatedWorld_.reset( new WorldInformation());
 	parser_.reset(new Parser());
-
 
 	for (int ctr=0; ctr < number_robots; ctr++) {
 		boost::shared_ptr< RobotIdentifier > tmpIdent;
@@ -111,8 +109,9 @@ void szenario_generator::init(int number_robots) {
 	robotFileName_.reset(new std::string("new_random_robotfile.robots"));
 	obstacleFileName_.reset(new std::string("new_random_obstaclefile.obstacle"));
 	worldFileName_.reset(new std::string("new_random_worldfile.swarm"));
-	asg_.reset(new int(0));
+	asg_.reset(new std::string("SYNCHRONOUS"));
 	compassModel_.reset(new std::string("NO_COMPASS"));
+	statisticsModule_.reset(new std::string("ALL"));	//TODO does ALL exist?
 
 }
 
@@ -174,6 +173,72 @@ void szenario_generator::distribute_robots_normal(Vector3d boundingBox, double m
 }
 
 
+void szenario_generator::distribute_velocity_uniform(Vector3d boundingBox) {
+	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
+
+	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
+		png_->init_uniform(0.0, boundingBox(kXCoord));
+		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform());
+		png_->init_uniform(0.0, boundingBox(kYCoord));
+		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform());
+		png_->init_uniform(0.0, boundingBox(kZCoord));
+		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform());
+
+		(*iter)->set_velocity( newRandomPosition );
+	}
+}
+
+
+void szenario_generator::distribute_velocity_normal(double mean, double sigma) {
+	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
+
+	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
+		png_->init_normal(mean, sigma);		// set up the generator
+
+		newRandomPosition->insert_element(kXCoord,png_->get_value_normal());
+		newRandomPosition->insert_element(kYCoord,png_->get_value_normal());
+		newRandomPosition->insert_element(kZCoord,png_->get_value_normal());
+
+		(*iter)->set_velocity( newRandomPosition );
+	}
+}
+
+
+void szenario_generator::distribute_acceleration_uniform(Vector3d boundingBox) {
+	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
+
+	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
+		png_->init_uniform(0.0, boundingBox(kXCoord));
+		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform());
+		png_->init_uniform(0.0, boundingBox(kYCoord));
+		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform());
+		png_->init_uniform(0.0, boundingBox(kZCoord));
+		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform());
+
+		(*iter)->set_acceleration( newRandomPosition );
+	}
+}
+
+
+void szenario_generator::distribute_acceleration_normal(double mean, double sigma) {
+	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
+
+	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
+		png_->init_normal(mean, sigma);		// set up the generator
+
+		newRandomPosition->insert_element(kXCoord,png_->get_value_normal());
+		newRandomPosition->insert_element(kYCoord,png_->get_value_normal());
+		newRandomPosition->insert_element(kZCoord,png_->get_value_normal());
+
+		(*iter)->set_acceleration( newRandomPosition );
+	}
+}
+
+
 void szenario_generator::set_robotFile(std::string filename) {
 	robotFileName_.reset(new std::string(filename));
 }
@@ -194,8 +259,8 @@ void szenario_generator::set_projectName(string projectName) {
 }
 
 
-void szenario_generator::set_asg(int asg) {
-	asg_.reset(new int(asg));
+void szenario_generator::set_asg(string asg) {
+	asg_.reset(new std::string(asg));
 }
 
 
@@ -225,6 +290,9 @@ void szenario_generator::write_to_file() {
 		generatedWorld_->add_robot_data((*iter));
 
 	// write everything to file
+
+	std::cout << "out"  << std::endl;
+
 	parser_->save_projectfiles(*worldFileName_, *generatedWorld_);
 }
 

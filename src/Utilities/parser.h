@@ -55,7 +55,7 @@ public:
 	 *TODO is there an enum for ASG?
 	 * @param asg int
 	 */
-	void set_asg(int asg);
+	void set_asg(const string& asg);
 
 	/**
 	 * Set-method for compass model

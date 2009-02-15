@@ -50,6 +50,33 @@ public:
 	void distribute_robots_normal(Vector3d boundingBox, double mean, double sigma);
 
 	/**
+	 * Method distributes robots velocities interior of a bounding box uniformly
+	 * @param boundingBox Vector3d the spans the bounding box
+	 */
+	void distribute_velocity_uniform(Vector3d boundingBox);
+
+	/**
+	 * Method distributes robots velocity by normal distribution
+	 * @param mean double value for normal distribution
+	 * @param sigma double value for normal distribution
+	 */
+	void distribute_velocity_normal(double mean, double sigma);
+
+	/**
+	 * Method distributes robots acceleration interior of a bounding box uniformly
+	 * @param boundingBox Vector3d the spans the bounding box
+	 */
+	void distribute_acceleration_uniform(Vector3d boundingBox);
+
+	/**
+	 * Method distributes robots acceleration by normal distribution
+	 * @param mean double value for normal distribution
+	 * @param sigma double value for normal distribution
+	 */
+	void distribute_acceleration_normal(double mean, double sigma);
+
+
+	/**
 	 * Set filename for output
 	 */
 	void set_robotFile(string filename);
@@ -72,7 +99,7 @@ public:
 	/**
 	 * Set ASG
 	 */
-	void set_asg(int asg);
+	void set_asg(string asg);
 
 	/**
 	 * Set compass model
@@ -115,7 +142,7 @@ private:
 	boost::shared_ptr< std::string > worldFileName_;
 	boost::shared_ptr< std::string > compassModel_;
 	boost::shared_ptr< std::string > statisticsModule_;
-	boost::shared_ptr< int > asg_;
+	boost::shared_ptr< std::string > asg_;
 
 };
 

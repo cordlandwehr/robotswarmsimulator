@@ -38,5 +38,7 @@ BOOST_AUTO_TEST_CASE( szenario_generator_test )
 	generator.distribute_robots_uniform(tmpVec);
 	generator.distribute_robots_normal(tmpVec, 0.0, 1.0);
 
+	generator.write_to_file();
+
 	std::cout << "42 robots generated" << std::endl;
 }

@@ -755,7 +755,7 @@ void Parser::save_projectfiles(const string& project_filename, const WorldInform
 	save_obstacle_file(world_info);
 }
 
-void Parser::set_asg(int asg) {
+void Parser::set_asg(const string& asg) {
 	asg_ = asg;
 }
 
