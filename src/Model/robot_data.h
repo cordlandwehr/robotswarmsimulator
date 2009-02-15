@@ -131,6 +131,7 @@ private:
 	/**
 	 * Reference to according robot.
 	 */
+	//TODO (dwonisch): Do we really need this reference?
 	const Robot& robot_;
 	boost::shared_ptr<Vector3d> acceleration_;
 	/**
