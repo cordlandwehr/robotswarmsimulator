@@ -1,7 +1,8 @@
 #include "parser.h"
 
 Parser::Parser() {
-	;
+	//initialize Parser with default values
+	init();
 }
 
 Parser::~Parser() {
@@ -529,20 +530,48 @@ void Parser::load_projectfiles(const string& project_filename) {
 
 void Parser::save_main_project_file(const string& project_filename) {
 
-	//TODO(martinah)	We got some additional variables to be added to the main project file.
-	//					I already documented these variables in the input files specification document.
-	//					Thus please adapt your method for saving the main project file.
 	ofstream project_file;
 	project_file.open(project_filename.c_str());
 
 	if(project_file.is_open()) {
 		//write variables
-		project_file << "ASG=\"" << asg_ << "\"" << endl;
-		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
-		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
 		project_file << "PROJECT_NAME=\"" << project_name_ << "\"" << endl;
+		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
+		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
 		project_file << "STATISTICS_MODULE=\"" << statistics_module_ << "\"" << endl;
+		project_file << "ASG=\"" << asg_ << "\"" << endl;
+		project_file << "VIEW=\"" << view_ << "\"" << endl;
+		project_file << "MARKER_REQUEST_HANDLER_SEED=\"" << marker_request_handler_seed_ << "\"" << endl;
+		project_file << "MARKER_REQUEST_HANDLER_DISCARD_PROB=\"" << marker_request_handler_discard_prob_ << "\"" << endl;
+		project_file << "TYPE_CHANGE_REQUEST_HANDLER_SEED=\"" << type_change_request_handler_seed_ << "\"" << endl;
+		project_file << "TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB=\"" << type_change_request_handler_discard_prob_ << "\"" << endl;
+		project_file << "VELOCITY_REQUEST_HANDLER_SEED=\"" << velocity_request_handler_seed_ << "\"" << endl;
+		project_file << "VELOCITY_REQUEST_HANDLER_DISCARD_PROB=\"" << velocity_request_handler_discard_prob_ << "\"" << endl;
+
+		project_file << "VELOCITY_REQUEST_HANDLER_VECTOR_MODIFIERS=\"";
+		BOOST_FOREACH( string s, velocity_request_handler_vector_modifier_) {
+			project_file << s << ",";
+		}
+		project_file << "\b\"" << endl;
+
+		project_file << "POSITION_REQUEST_HANDLER_SEED=\"" << position_request_handler_seed_ << "\"" << endl;
+		project_file << "POSITION_REQUEST_HANDLER_DISCARD_PROB=\"" << position_request_handler_discard_prob_ << "\"" << endl;
+
+		project_file << "POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS=\"";
+		BOOST_FOREACH ( string s, position_request_handler_vector_modifier_) {
+			project_file << s << ",";
+		}
+		project_file << "\b\"" << endl;
+
+		project_file << "ACCELERATION_REQUEST_HANDLER_SEED=\"" << acceleration_request_handler_seed_ << "\"" << endl;
+		project_file << "ACCELERATION_REQUEST_HANDLER_DISCARD_PROB=\"" << acceleration_request_handler_discard_prob_ << "\"" << endl;
+
+		project_file << "ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIERS=\"";
+		BOOST_FOREACH ( string s, acceleration_request_handler_vector_modifier_) {
+			project_file << s << ",";
+		}
+		project_file << "\b\"" << endl;
 
 		project_file.close();
 	} else {
@@ -651,8 +680,8 @@ void Parser::save_obstacle_file(const WorldInformation& world_info) {
 		obstacle_file << "\"\"" << endl;
 
 		//fetching obstacles from the actual world-information through history-reference
-//		vector<boost::shared_ptr<Obstacle> > obstacles = sim_kernel_->history()->get_newest().obstacles();
 		vector<boost::shared_ptr<Obstacle> > obstacles = world_info.obstacles();
+
 		//iterate over all obstacles to parse them obstacle by obstacle
 		for (vector<boost::shared_ptr<Obstacle> >::iterator it = obstacles.begin(); it!=obstacles.end(); ++it) {
 			obstacle_file << write_obstacle(*it);
@@ -752,4 +781,29 @@ void Parser::set_statistics_module(const string& statistics_module) {
 
 void Parser::set_project_filename(const string& project_filename) {
 	project_filename_ = project_filename;
+}
+
+
+const string& Parser::asg() const {
+	return asg_;
+}
+
+const string& Parser::compass_model() const {
+	return compass_model_;
+}
+
+const string& Parser::project_name() const {
+	return project_name_;
+}
+
+const string& Parser::robot_filename() const {
+	return robot_filename_;
+}
+
+const string& Parser::statistics_module() const {
+	return statistics_module_;
+}
+
+const string& Parser::view() const {
+	return view_;
 }

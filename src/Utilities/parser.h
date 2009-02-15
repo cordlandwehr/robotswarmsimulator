@@ -11,6 +11,7 @@
 #include <vector>
 #include <boost/smart_ptr.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/foreach.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/tuple/tuple.hpp>
 
@@ -111,6 +112,37 @@ public:
 	 * This method sets default variables and values.
 	 */
 	void init();
+
+	/**
+	 * \return constant reference to the string describing the type of the ASG in the parser
+	 */
+	const string& asg() const;
+
+	/**
+	 * \return constant reference to the string describing the type of the Compass Model in the parser
+	 */
+	const string& compass_model() const;
+
+	/**
+	 * \return constant reference to the string describing the Projectname.
+	 */
+	const string& project_name() const;
+
+	/**
+	 * \return constant reference to the string describing the Robot Filename.
+	 */
+	const string& robot_filename() const;
+
+	/**
+	 * \return constant reference to the string describing the type of the Statistics in the parser
+	 */
+	const string& statistics_module() const;
+
+	/**
+	 * \return constant reference to the string describing the type of the used View in the parser
+	 */
+	const string& view() const;
+
 
 private:
 

@@ -24,12 +24,12 @@ BOOST_AUTO_TEST_CASE(load_main_project_file)
 
 	//check variables read from main project file
 	BOOST_CHECK_EQUAL(parser->project_name_, "My Exciting Project");
-	BOOST_CHECK_EQUAL(parser->view_, "0");
+	BOOST_CHECK_EQUAL(parser->view_, "GLOBALVIEW");
 	BOOST_CHECK_EQUAL(parser->compass_model_, "NO_COMPASS");
 	BOOST_CHECK_EQUAL(parser->robot_filename_, "src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->obstacle_filename_, "src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->statistics_module_, "0");
-	BOOST_CHECK_EQUAL(parser->asg_, "ASYNCHRONOUS");
+	BOOST_CHECK_EQUAL(parser->asg_, "SYNCHRONOUS");
 
 	/*
 	//check seeds

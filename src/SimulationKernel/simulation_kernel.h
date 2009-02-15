@@ -59,6 +59,7 @@ public:
 	 *
 	 * TODO(martinah) return History& instead of boost::shared_ptr<History>&
 	 * TODO(craupach) is this method needed?
+	 * REMARK(mmarcus): I changed this the way martinah wanted?
 	 */
 	const boost::shared_ptr<History>& history() const;
 
@@ -86,6 +87,15 @@ public:
 	void quit();
 
 private:
+
+	//TODO(mmarcus) enumerate more
+	enum ASGType { SYNCHRONOUS,
+	               SEMISYNCHRONOUS,
+	               ASYNCHRONOUS };
+
+	//TODO(mmarcus) enumerate more
+	enum ViewType { FULLVIEW,
+	                GLOBALVIEW };
 
 	/**
 	 * Set of robots in the world
@@ -115,6 +125,24 @@ private:
 	 * Statistics-Module
 	 */
 	boost::shared_ptr<StatsControl> stats_;
+
+	/**
+	 * Map for different types of ASG. This map is used to toggle between the
+	 * String defined for the ASG in the projectfile and the right ASG class
+	 */
+	map<string, ASGType> ASG_map_;
+
+	/**
+	 * Map for different types of Views. This map is used to toggle between the
+	 * String defined for the Views in the projectfile and the right View class
+	 */
+	map<string, ViewType> view_map_;
+
+	/**
+	 * Used to create an initial worldinformation from the information of the parser
+	 * \return the worldinformation that the parser extracted from the projectfile
+	 */
+	boost::shared_ptr<WorldInformation> setup_initial_world_information(boost::shared_ptr<Parser>);
 
 };
 
