@@ -4,6 +4,7 @@
  *  Created on: 18.01.2009
  *      Author: kamil
  */
+#define GL_GLEXT_PROTOTYPES 1
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
