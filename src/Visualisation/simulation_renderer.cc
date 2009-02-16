@@ -334,7 +334,7 @@ void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
 	glColor3fv(text_color_);
 
 #if !defined(__linux__) && !defined(__APPLE__)
-	void (*p_glWindowPos2i)(int , int) = reinterpret_cast<void * (int, int)>(wglGetProcAddress("glWindowPos2i"));
+	void (APIENTRY *p_glWindowPos2i)(int , int) = ( void (APIENTRY * )(int,int) )wglGetProcAddress("glWindowPos2i");
 	(*p_glWindowPos2i)(x,y);
 #else
     glWindowPos2i(x , y );
