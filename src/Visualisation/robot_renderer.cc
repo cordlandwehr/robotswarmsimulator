@@ -6,6 +6,7 @@
  */
 
 #include <cmath>
+#include <cstdio>
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
@@ -46,6 +47,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 
 	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position(extrapolate);
 	if(!use_model_){
+		std::printf("drawing robot...%f,%f,%f\n",(*rob_pos)(0), (*rob_pos)(1), (*rob_pos)(2));
 		draw_robot_sphere( rob_pos );
 	}
 }

@@ -69,7 +69,7 @@ public:
      * \param world_info The WorldInformation Object which describes the current world
      * \param extrapolate The value to use for extrapolating.
      */
-	void draw(double extrapolate, boost::shared_ptr<WorldInformation> world_info);
+	void draw(double extrapolate, const boost::shared_ptr<WorldInformation> & world_info);
 
 	/**
 	 * \brief Used to reset the camera.
@@ -144,6 +144,10 @@ public:
 	 */
 	bool render_robot_ids(){
 		return render_robot_ids_;
+	}
+
+	void set_render_cog(bool render){
+		render_cog_ = render;
 	}
 
 private:
@@ -234,6 +238,13 @@ private:
 	 * The value for extrapolating
 	 */
 	double extrapolate_;
+
+	/**
+	 *
+	 */
+	bool render_cog_;
+
+	Vector3d cog_;
 
 	/**
 	 * RobotRenderer

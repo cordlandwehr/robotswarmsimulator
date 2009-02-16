@@ -225,7 +225,6 @@ void Camera::update(const std::vector<boost::shared_ptr<WorldObject> > & marker,
 
 void Camera::look() const{
 
-	// Give openGL our camera position, then camera view, then camera up vector
 
 	gluLookAt(position_(0), position_(1), position_(0),
 			  view_(0),	 view_(1),     view_(2),

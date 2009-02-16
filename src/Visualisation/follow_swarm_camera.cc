@@ -131,6 +131,9 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 		width = max_depth;
 	}
 
+	if(width < 1.0f){
+		width = 1.0f;
+	}
 
 	this->view_(0) = center(0);
 	view_(1) = center(1);
@@ -138,8 +141,8 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 
 	position_(0) = center(0) + width;
-	position_(1) = center(0) + width * 3.25;
-	position_(2) = center(0) + width* 2.25;
+	position_(1) = center(0) + width * 3.00;
+	position_(2) = center(0) + width* 1.25;
 
 
 }

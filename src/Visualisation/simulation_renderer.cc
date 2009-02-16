@@ -27,21 +27,22 @@
 
 const float kObstacleColor[] = {1.0f,0.0f,0.0f,1.0f};
 const float kRobotColor[] = {0.0f,1.0f,0.0f,1.0f};
-const float kTextColor[] = {0.0f,0.0f,1.0f,1.0f};
+const float kTextColor[] = {1.0f,0.0f,1.0f,1.0f};
 const float kMarkerColor[] = {1.0f,1.0f,0.0f,1.0f};
+const float kCogColor[] = {1.0f,1.0f,0.0f,1.0f};
 
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
-const int kDefHeight = 300;
-const int kDefWidth = 300;
+const int kDefHeight = 500;
+const int kDefWidth = 500;
 
 
 const float kMarkerPointSize = 2.0;
 
 
 
-SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : camera_(camera) {
+SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : camera_(camera),render_cog_(false) {
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
 
@@ -91,6 +92,40 @@ void SimulationRenderer::init(int x, int y){
 
 	glPointSize(kMarkerPointSize);
 
+	// Add Lighting
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_COLOR_MATERIAL);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
+	float light_pos [] = {1.0f,0.0f,0.5f,0.0f};
+	float light_properties [] = {0.15f, 0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f, 1.0f};
+
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_properties);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, &light_properties[4]);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, &light_properties[8]);
+
+	glEnable(GL_LIGHT1);
+	float light_pos2 [] = {.0f,0.25f,0.25f,0.0f};
+	float light_properties2 [] = {0.1f, 0.1f, 0.1f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f, 1.0f};
+
+	glLightfv(GL_LIGHT1, GL_POSITION, light_pos2);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_properties2);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, &light_properties2[4]);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, &light_properties2[8]);
+
+	// Set up for text
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+	glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 
 	resize(x,y);
 }
@@ -104,6 +139,7 @@ void SimulationRenderer::resize(int width, int height){
 	screen_height_ = height;
 
 
+
 	float ratio = 1.0* width / height;
 	use_mouse_ = false;
 
@@ -115,7 +151,7 @@ void SimulationRenderer::resize(int width, int height){
 	glViewport(0, 0, width, height);
 
 	// Set the correct perspective.
-	gluPerspective(60,ratio,1,1000);
+	gluPerspective(60,ratio,0.1,1000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -127,12 +163,13 @@ void SimulationRenderer::resize(int width, int height){
 
 }
 
-void SimulationRenderer::draw(double extrapolate, boost::shared_ptr<WorldInformation> world_info){
+void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldInformation> &world_info){
 	this->extrapolate_ = extrapolate;
+
 
 	// We draw the time in the upper left corner
 	char buf[50];
-	std::sprintf(buf,"Time: %f\n",extrapolate);
+	std::sprintf(buf,"Time: %f\n",extrapolate + world_info->time() );
 	std::string time(buf);
 
 
@@ -140,8 +177,14 @@ void SimulationRenderer::draw(double extrapolate, boost::shared_ptr<WorldInforma
 
 	glLoadIdentity();
 
+
 	camera_->update(world_info->markers(), world_info->obstacles(), world_info->robot_data() );
 	camera_->look();
+
+	// Print time
+	draw_text2d(0,0,time);
+
+
 
 	// draw all obstacles
 	std::vector<boost::shared_ptr<Obstacle> >::const_iterator it_obstacle;
@@ -156,15 +199,33 @@ void SimulationRenderer::draw(double extrapolate, boost::shared_ptr<WorldInforma
 		draw_marker(*it_marker);
 	}
 
+	if(render_cog_){
+		cog_ = Vector3d();
+		int num = 0;
+
+		std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
+		for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
+			cog_ = cog_ + (*it_robot)->position();
+			num++;
+		}
+
+		if(num > 0){
+			cog_ = cog_ / num;
+		}
+
+		glBegin(GL_POINT);
+			glColor3fv(kCogColor);
+			glVertex3f( cog_(0), cog_(1), cog_(2) );
+		glEnd();
+	}
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		draw_robot(*it_robot);
 	}
 
-	// Print time
-	draw_text2d(2,2,time);
 
+	glFlush();
 	glutSwapBuffers();
 }
 
@@ -214,22 +275,8 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 	std::size_t	len= str.length();
 
-	GLint swap_bytes, lsb_first, row_length;
-	GLint skip_rows, skip_pixels, alignment;
 
 
-	glGetIntegerv(GL_UNPACK_SWAP_BYTES, &swap_bytes);
-	glGetIntegerv(GL_UNPACK_LSB_FIRST, &lsb_first);
-	glGetIntegerv(GL_UNPACK_ROW_LENGTH, &row_length);
-	glGetIntegerv(GL_UNPACK_SKIP_ROWS, &skip_rows);
-	glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skip_pixels);
-	glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
-	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-	glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	for(std::size_t i=0;i<len;i++) {
 
@@ -252,12 +299,6 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 
 
-	glPixelStorei(GL_UNPACK_SWAP_BYTES, swap_bytes);
-	glPixelStorei(GL_UNPACK_LSB_FIRST, lsb_first);
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, row_length);
-	glPixelStorei(GL_UNPACK_SKIP_ROWS, skip_rows);
-	glPixelStorei(GL_UNPACK_SKIP_PIXELS, skip_pixels);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 
 	return 1;
 
@@ -273,19 +314,25 @@ void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
 
 	// save OpenGL state
 
+
+
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glGetFloatv(GL_CURRENT_COLOR, curcolor);
     glGetBooleanv(GL_TEXTURE_2D, &texturing);
     glGetFloatv(GL_CURRENT_RASTER_POSITION, position);
 
+    glDisable(GL_LIGHTING);
+    glDisable(GL_COLOR_MATERIAL);
 
     // set up the state we need
 
 	glDisable(GL_TEXTURE_2D);
 	//glColor3f(1.0f,1.0f,1.0f);
 
-    glRasterPos2i(x- screen_width_, y - screen_height_);
-	glColor4fv(text_color_);
+
+	glColor3fv(text_color_);
+    glWindowPos2i(x , y );
+
 
 
 	font_bitmap_string(str);
@@ -293,31 +340,46 @@ void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
 
     // restore OpenGL state
 
+
     glPopAttrib();
+    glEnable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
     glColor4fv(curcolor);
     if(texturing == GL_TRUE) {
         glEnable(GL_TEXTURE_2D);
 
     }
-    glRasterPos2i(x ,y);
+
+
+    glWindowPos2i(position[0] ,position[1]);
 
 }
 
 
 void SimulationRenderer::draw_text3d(const Vector3d & vector, const std::string &str ){
 
-	int proj_x = 0;
-	int proj_y = 0;
-	//TODO: Calculate Projection of Point vector onto the screen
+	GLdouble proj_x = 0;
+	GLdouble proj_y = 0;
+	GLdouble  win_z;
+	GLfloat pix;
+	GLint * vp = NULL;
+	GLdouble * pm= NULL;
+	GLdouble * mm= NULL;
 
-	// Is Projection visible?
-	if(proj_x < 0 || proj_y < 0 ||
-			proj_y > camera_->screen_height() || proj_x > camera_->screen_width() ){
 
+	glGetIntegerv(GL_VIEWPORT,vp);
+
+	glGetDoublev(GL_MODELVIEW_MATRIX,mm);
+
+	glGetDoublev(GL_PROJECTION_MATRIX,pm);
+
+
+
+	if (gluProject (vector(0), vector(1), vector(2), mm, pm, vp, &proj_x, &proj_y, &win_z) == GL_FALSE)
 		return;
-	}
 
-	draw_text2d(proj_x, proj_y,str);
+
+	draw_text2d(std::floor(proj_x), std::floor(proj_y),str);
 
 }
 
@@ -409,6 +471,15 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 
 }
 void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
+
+	if(render_cog_){
+
+		glBegin(GL_LINES);
+			glColor3fv(kCogColor);
+			glVertex3f(cog_(0), cog_(1), cog_(2) );
+			glVertex3f(robot->position()(0), robot->position()(1), robot->position()(2) );
+		glEnd();
+	}
 
 
 	robot_renderer_->draw_robot( robot, extrapolate_ );

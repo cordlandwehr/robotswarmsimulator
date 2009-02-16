@@ -38,6 +38,7 @@ namespace PgGLUT {
 	void init(const std::string& window_name, int& argc, char** argv, int width, int height, int x, int y) {
 		if (!initialized) {
 			::glutInit(&argc, argv);
+			::glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 			::glutInitWindowSize(width, height);
 			::glutInitWindowPosition(x, y);
 			::glutCreateWindow(window_name.c_str());
