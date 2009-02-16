@@ -332,8 +332,13 @@ void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
 
 
 	glColor3fv(text_color_);
-    glWindowPos2i(x , y );
 
+#if !defined(__linux__) && !defined(__APPLE__)
+	void (*p_glWindowPos2i)(int , int) = reinterpret_cast<void * (int, int)>(wglGetProcAddress("glWindowPos2i"));
+	(*p_glWindowPos2i)(x,y);
+#else
+    glWindowPos2i(x , y );
+#endif
 
 
 	font_bitmap_string(str);
@@ -351,9 +356,11 @@ void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
 
     }
 
-
+#if !defined(__linux__) && !defined(__APPLE__)
+    (*p_glWindowPos2i)(position[0],position[1]);
+#else
     glWindowPos2i(position[0] ,position[1]);
-
+#endif
 }
 
 
