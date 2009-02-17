@@ -32,7 +32,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 						double extrapolate ){
 
 	// Set new look at and camera position
-	Vector3d center = Vector3d();
+
 	float max_width = 0;
 	float max_height = 0;
 	float max_depth = 0;
@@ -48,7 +48,10 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 	// Sum up all positions to get the center point of all objects
 
-	center = Vector3d();
+	Vector3d center;
+	center.insert_element(kXCoord, 0);
+	center.insert_element(kYCoord, 0);
+	center.insert_element(kZCoord, 0);
 	int num_objects = 0;
 
 	std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;
@@ -75,7 +78,6 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	if(num_objects > 0){
 		center /= num_objects;
 	}
-
 
 
 
@@ -142,11 +144,9 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	view_(1) = center(1);
 	view_(2) = center(2);
 
-
 	position_(0) = center(0) + width;
 	position_(1) = center(1) + width * 3.00;
 	position_(2) = center(2) + width* 1.25;
-
 
 }
 
