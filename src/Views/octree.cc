@@ -83,7 +83,9 @@ void Octree::init_octree() {
 
 	center_ = Vector3d();
 
-
+	center_.insert_element(kXCoord, 0);
+	center_.insert_element(kYCoord, 0);
+	center_.insert_element(kZCoord, 0);
 
 
 }
@@ -113,6 +115,10 @@ void Octree::scene_dimensions(const std::vector< boost::shared_ptr<WorldObject> 
 	// Sum up all positions to get the center point of all objects
 
 	center_ = Vector3d();
+	center_.insert_element(kXCoord, 0);
+	center_.insert_element(kYCoord, 0);
+	center_.insert_element(kZCoord, 0);
+
 	int num_objects = 0;
 
 	std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;

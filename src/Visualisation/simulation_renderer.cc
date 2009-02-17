@@ -206,7 +206,9 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	}
 
 	if(render_cog_){
-		cog_ = Vector3d();
+		cog_.insert_element(kXCoord, 0);
+		cog_.insert_element(kYCoord, 0);
+		cog_.insert_element(kZCoord, 0);
 		int num = 0;
 
 		std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;

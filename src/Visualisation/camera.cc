@@ -72,11 +72,17 @@ Vector3d & Normalize( Vector3d & vector) {
 
 Camera::Camera() {
 
-	position_ = Vector3d();
+	position_.insert_element(kXCoord, 0);
+	position_.insert_element(kYCoord, 0);
+	position_.insert_element(kZCoord, 0);
 
-	view_ = Vector3d();
+	view_.insert_element(kXCoord, 0);
+	view_.insert_element(kYCoord, 0);
+	view_.insert_element(kZCoord, 0);
 
-	up_vector_   = Vector3d();
+	up_vector_.insert_element(kXCoord, 0);
+	up_vector_.insert_element(kYCoord, 0);
+	up_vector_.insert_element(kZCoord, 0);
 
 
 	view_(0) = 0.0;

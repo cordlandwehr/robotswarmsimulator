@@ -18,11 +18,17 @@
 
 MoveableCamera::MoveableCamera(): Camera() {
 
-	position_ = Vector3d();
+	position_.insert_element(kXCoord, 0);
+	position_.insert_element(kYCoord, 0);
+	position_.insert_element(kZCoord, 0);
 
-	view_ = Vector3d();
+	view_.insert_element(kXCoord, 0);
+	view_.insert_element(kYCoord, 0);
+	view_.insert_element(kZCoord, 0);
 
-	up_vector_   = Vector3d();
+	up_vector_.insert_element(kXCoord, 0);
+	up_vector_.insert_element(kYCoord, 0);
+	up_vector_.insert_element(kZCoord, 0);
 
 
 	view_(0) = 0.0;
@@ -111,8 +117,10 @@ void MoveableCamera::set_view_by_mouse(int x, int y) {
 		// Rotate around our perpendicular axis and along the y-axis
 
 		rotate_view(angle_z, axis);
-		Vector3d y_axis = Vector3d();
-		y_axis(1) = 1.0;
+		Vector3d y_axis;
+		y_axis.insert_element(kXCoord, 0);
+		y_axis.insert_element(kYCoord, 1.0);
+		y_axis.insert_element(kZCoord, 0);
 
 		rotate_view(angle_y, y_axis);
 
