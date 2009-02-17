@@ -24,7 +24,9 @@ public:
 	 */
 	virtual void update(const std::vector<boost::shared_ptr<WorldObject> > & marker,
 						const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
-						const std::vector<boost::shared_ptr<RobotData> >& robot_data);
+						const std::vector<boost::shared_ptr<RobotData> >& robot_data,
+						double extrapolate);
+
 
 	/**
 	 * \brief This method lets the maera look at the view point from the position point

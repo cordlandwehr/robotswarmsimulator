@@ -193,7 +193,8 @@ void MoveableCamera::strafe_right(){
 
 void MoveableCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & marker,
 							const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
-							const std::vector<boost::shared_ptr<RobotData> >& robot_data) {
+							const std::vector<boost::shared_ptr<RobotData> >& robot_data,
+							double extrapolate) {
 
 
 
@@ -214,7 +215,7 @@ void MoveableCamera::look() const{
 
 	// Give openGL our camera position, then camera view, then camera up vector
 
-	gluLookAt(position_(0), position_(1), position_(0),
+	gluLookAt(position_(0), position_(1), position_(2),
 			  view_(0),	 view_(1),     view_(2),
 			  up_vector_(0), up_vector_(1), up_vector_(2));
 

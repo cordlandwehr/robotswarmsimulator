@@ -251,6 +251,10 @@ private:
 	 */
 	boost::shared_ptr<RobotRenderer> robot_renderer_;
 
+
+#if !defined(__linux__) && !defined(__APPLE__)
+	void (APIENTRY *p_glWindowPos2i)(int , int) ;
+#endif
 };
 
 

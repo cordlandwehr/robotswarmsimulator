@@ -6,6 +6,7 @@
  */
 
 #include <cmath>
+#include <cstdio>
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
@@ -27,7 +28,8 @@ FollowSwarmCamera::FollowSwarmCamera() : Camera() {
 
 void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & markers,
 						const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
-						const std::vector<boost::shared_ptr<RobotData> >& robot_datas){
+						const std::vector<boost::shared_ptr<RobotData> >& robot_datas,
+						double extrapolate ){
 
 	// Set new look at and camera position
 	Vector3d center = Vector3d();
@@ -61,7 +63,8 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	std::vector< boost::shared_ptr<RobotData> >::const_iterator it_robot_data;
 
 	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
-		center += (*it_robot_data)->position();
+		boost::shared_ptr<Vector3d> pos = (*it_robot_data)->extrapolated_position(extrapolate);
+		center += (*pos);
 		num_objects++;
 	}
 
@@ -141,17 +144,21 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 
 	position_(0) = center(0) + width;
-	position_(1) = center(0) + width * 3.00;
-	position_(2) = center(0) + width* 1.25;
+	position_(1) = center(1) + width * 3.00;
+	position_(2) = center(2) + width* 1.25;
 
 
 }
 
 
 void FollowSwarmCamera::look() const{
-	gluLookAt(position_(0), position_(1), position_(0),
+
+	std::printf("%f, %f, %f \n", position_(0), position_(1), position_(2) );
+	gluLookAt(position_(0), position_(1), position_(2),
 				  view_(0),	 view_(1),     view_(2),
-				  up_vector_(0), up_vector_(1), up_vector_(2));
+				  up_vector_(0), up_vector_(1), up_vector_(2)+0.1);
+
+
 
 };
 

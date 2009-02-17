@@ -70,6 +70,9 @@ SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : cam
 	marker_color_[2] = kMarkerColor[2];
 	marker_color_[3] = kMarkerColor[3];
 
+#if !defined(__linux__) && !defined(__APPLE__)
+	p_glWindowPos2i = ( void (APIENTRY * )(int,int) )wglGetProcAddress("glWindowPos2i");
+#endif
 
 }
 
@@ -144,12 +147,14 @@ void SimulationRenderer::resize(int width, int height){
 	float ratio = 1.0* width / height;
 	use_mouse_ = false;
 
+
+
+
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 	// Set the viewport to be the entire window
-	glViewport(0, 0, width, height);
+		glViewport(0, 0, width, height);
 
 	// Set the correct perspective.
 	gluPerspective(60,ratio,0.1,1000);
@@ -159,8 +164,8 @@ void SimulationRenderer::resize(int width, int height){
 	camera_->set_screen_height(height);
 	camera_->set_screen_width(width);
 
-	camera_->look();
-
+	//camera_->look();
+	std::printf("..\n");
 
 }
 
@@ -179,7 +184,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	glLoadIdentity();
 
 
-	camera_->update(world_info->markers(), world_info->obstacles(), world_info->robot_data() );
+	camera_->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
 	camera_->look();
 
 	// Print time
