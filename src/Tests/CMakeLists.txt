@@ -1,94 +1,43 @@
-################################################################################
-# Sections that have to be edited:                                             #
-#   - configuration                                                            #
-#   - sources/headers                                                          #
-#   - external libraries (if any)                                              #
-#   - executables/libraries                                                    #
-################################################################################
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+project(rsstests)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+# find all source files
+file(GLOB_RECURSE RSSTESTS_SRCS *.cc)
 
-# ------------------------------- configuration --------------------------------
-
-# project name
-PROJECT(rsstests)
-
-# names/flags of executables/libraries
-# (you have to adjust the executables/libraries section at the end of the file)
-SET(PROJECT_EXE1 RSSUnitTests)
-SET(PROJECT_EXE1_FLAGS)
-
-# link with the following libraries build by this cmake configuration
-SET(INTERNAL_LIBRARIES
-	RSS
-)
-
-
-## custom variables
-#...
-
-
-# ----------------------------- standard variables -----------------------------
-
-SET(PROJECT_SRCS_LST ${PROJECT_NAME}_SRCS)
-SET(PROJECT_HDRS_LST ${PROJECT_NAME}_HDRS)
-SET(NON_PROJECT_SRCS_LST non_${PROJECT_NAME}_SRCS)
-SET(NON_PROJECT_HDRS_LST non_${PROJECT_NAME}_HDRS)
-SET(PROJECT_LIBRARIES_LST ${PROJECT_NAME}_LIBRARIES)
-
-
-# ------------------------------ sources/headers -------------------------------
-
-# use these if you're too lazy to maintain the file list (but make sure to
-# rerun cmake after adding any files)
-FILE(GLOB_RECURSE ${PROJECT_SRCS_LST} *.cc)
-#FILE(GLOB_RECURSE ${NON_PROJECT_SRCS_LST} <glob_expression>)
-#LIST(REMOVE_ITEM ${PROJECT_SRCS_LST} ${${NON_PROJECT_SRCS_LST}})
-
-FILE(GLOB_RECURSE ${PROJECT_HDRS_LST} *.h)
-#FILE(GLOB_RECURSE ${NON_PROJECT_HDRS_LST} <glob_expression>)
-#LIST(REMOVE_ITEM ${PROJECT_HDRS_LST} ${${NON_PROJECT_HDRS_LST}})
-
-## prefered way: manage sources/headers manually
-#SET(${PROJECT_SRCS_LST}
-#	<file_list>
-#)
-#
-#SET(${PROJECT_HDRS_LST}
-#	<file_list>
-#)
-
-# more custom sources/headers/resources (e.g. for Qt moc/ui/res files)
-#...
-
-# add source directory to include path
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
-
-# ----------------------------- external libraries -----------------------------
+# find all header files
+file(GLOB_RECURSE RSSTESTS_HDRS *.h)
 
 # find/configure boost
-SET(Boost_ADDITIONAL_VERSIONS 1.37)
-FIND_PACKAGE(Boost 1.37 COMPONENTS unit_test_framework)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-LIST(APPEND ${PROJECT_LIBRARIES_LST} ${Boost_LIBRARIES})
+set(Boost_ADDITIONAL_VERSIONS 1.37)
+find_package(Boost 1.37 REQUIRED thread unit_test_framework)
+include_directories(${Boost_INCLUDE_DIRS})
 
+# generate executable of the above source files and link it
+add_executable(RSSUnitTests ${RSSTESTS_SRCS})
+target_link_libraries(RSSUnitTests
+	RSSimulator
+	${Boost_LIBRARIES}
+)
 
-# ----------------------------- internal libraries -----------------------------
+# provide a custom target for boost style unit test call
+add_custom_target(boost_test RSSUnitTests)
 
-LIST(APPEND ${PROJECT_LIBRARIES_LST} ${INTERNAL_LIBRARIES})
+# filter tests from source files
+# For this to work, any unit test should be in a file '<rel_path>/<test_name>_test.cc'.
+# Furthermore, all testcases inside such files should be enclosed in a test suite called
+# '<rel_path>_<test_name>', where any '/' in '<rel_path>' is substituted by an '_'.
+foreach(SOURCE_FILE ${RSSTESTS_SRCS})
+	file(RELATIVE_PATH SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}" "${SOURCE_FILE}")
+	string(REGEX MATCH ".+_test\\.cc$" TEST_FILE ${SOURCE_FILE})
+	list(APPEND TEST_FILES ${TEST_FILE})
+endforeach(SOURCE_FILE)
+foreach(TEST_FILE ${TEST_FILES})
+	string(REGEX REPLACE "_test\\.cc$" "" TEST_NAME ${TEST_FILE})
+	string(REGEX REPLACE "/" "_" TEST_NAME ${TEST_NAME})
+	list(APPEND TEST_NAMES ${TEST_NAME})
+endforeach(TEST_FILE)
 
-
-# ------------------------------------ IDE -------------------------------------
-
-# gathers all header files in a group for Xcode
-IF(CMAKE_GENERATOR MATCHES "Xcode")
-	SOURCE_GROUP("Header Files" FILES ${${PROJECT_HDRS_LST}})
-ENDIF(CMAKE_GENERATOR MATCHES "Xcode")
-
-
-# --------------------------- executables/libraries ----------------------------
-
-# add/link main executable
-ADD_EXECUTABLE(${PROJECT_EXE1} ${PROJECT_EXE1_FLAGS} ${${PROJECT_SRCS_LST}} ${${PROJECT_HDRS_LST}})
-TARGET_LINK_LIBRARIES(${PROJECT_EXE1} ${${PROJECT_LIBRARIES_LST}})
+# add tests
+foreach(TEST_NAME ${TEST_NAMES})
+	add_test(${TEST_NAME} RSSUnitTests "--run_test=${TEST_NAME}")
+endforeach(TEST_NAME)

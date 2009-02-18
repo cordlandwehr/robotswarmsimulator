@@ -1,0 +1,7 @@
+#!/bin/sh
+
+BUNDLE_DIR="`echo "$0" | sed -e 's#/Contents/MacOS/@CPACK_BUNDLE_NAME@##'`"
+RESOURCES_DIR="$BUNDLE_DIR/Contents/Resources"
+
+#export
+exec "$RESOURCES_DIR/bin/RobotSwarmSimulator"
