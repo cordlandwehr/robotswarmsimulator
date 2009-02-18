@@ -36,7 +36,7 @@ class History;
 
 /**
  *
- * \brief The event handler determines, according to some userÐspecified rules,
+ * \brief The event handler determines, according to some userï¿½specified rules,
  * how to apply the different requests to the world.
  *
  * The EventHandler class provides the following functionality:
@@ -49,6 +49,7 @@ class History;
  * message is issued upon the occurrence of such a request.
  */
 class EventHandler {
+
 public:
 	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
 	                                                                                                 robot_control_(robot_control),

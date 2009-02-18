@@ -431,7 +431,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	initiale_robot_colors_.push_back(color);
 
 	boost::tuple<Vector3d, Vector3d, Vector3d> tmp(x_axis, y_axis, z_axis);
-	initiale_robot_coordinate_sytems_.push_back(tmp);
+	initiale_robot_coordinate_systems_.push_back(tmp);
 }
 
 void Parser::init_obstacle_values_for_line(const string& line, int line_number) {
@@ -763,6 +763,9 @@ void Parser::save_projectfiles(const string& project_filename, const WorldInform
 	save_obstacle_file(world_info);
 }
 
+
+
+/*** SET-methods for main projectfile variables ***/
 void Parser::set_asg(const string& asg) {
 	asg_ = asg;
 }
@@ -796,6 +799,8 @@ void Parser::set_project_filename(const string& project_filename) {
 }
 
 
+
+/*** GET-methods for main projectfile variables ***/
 const string& Parser::asg() const {
 	return asg_;
 }
@@ -822,4 +827,100 @@ const string& Parser::statistics_subsets() const {
 
 const string& Parser::view() const {
 	return view_;
+}
+
+//seeds
+const unsigned int Parser::marker_request_handler_seed() const {
+	return marker_request_handler_seed_;
+}
+const unsigned int Parser::type_change_request_handler_seed() const {
+	return type_change_request_handler_seed_;
+}
+const unsigned int Parser::velocity_request_handler_seed() const {
+	return velocity_request_handler_seed_;
+}
+const unsigned int Parser::position_request_handler_seed() const {
+	return position_request_handler_seed_;
+}
+const unsigned int Parser::acceleration_request_handler_seed() const {
+	return acceleration_request_handler_seed_;
+}
+
+//discard probabilities
+const double Parser::marker_request_handler_discard_prob() const {
+	return marker_request_handler_discard_prob_;
+}
+const double Parser::type_change_request_handler_discard_prob() const {
+	return type_change_request_handler_discard_prob_;
+}
+const double Parser::velocity_request_handler_discard_prob() const {
+	return velocity_request_handler_discard_prob_;
+}
+const double Parser::position_request_handler_discard_prob() const {
+	return position_request_handler_discard_prob_;
+}
+const double Parser::acceleration_request_handler_discard_prob() const {
+	return acceleration_request_handler_discard_prob_;
+}
+
+//vector modifiers
+const vector<string>& Parser::velocity_request_handler_vector_modifier() const {
+	return velocity_request_handler_vector_modifier_;
+}
+const vector<string>& Parser::position_request_handler_vector_modifier() const {
+	return position_request_handler_vector_modifier_;
+}
+const vector<string>& Parser::acceleration_request_handler_vector_modifier() const {
+	return acceleration_request_handler_vector_modifier_;
+}
+
+
+/*** GET-methods for robot data ***/
+vector<Vector3d>& Parser::robot_positions() {
+	return initiale_robot_positions_;
+}
+vector<Vector3d>& Parser::robot_velocities() {
+	return initiale_robot_velocities_;
+}
+
+vector<Vector3d>& Parser::robot_accelerations() {
+	return initiale_robot_accelerations_;
+}
+vector<string>& Parser::robot_types() {
+	return initiale_robot_types_;
+}
+vector<string>& Parser::robot_stati() {
+	return initiale_robot_stati_;
+}
+vector<string>& Parser::robot_marker_information() {
+	return initiale_robot_marker_information_;
+}
+vector<string>& Parser::robot_algorithms() {
+	return initiale_robot_algorithms_;
+}
+vector<string>& Parser::robot_colors() {
+	return initiale_robot_colors_;
+}
+vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& Parser::robot_coordinate_systems() {
+	return initiale_robot_coordinate_systems_;
+
+}
+
+
+
+/*** GET-methods for obstacle data ***/
+vector<string>& Parser::obstacle_types() {
+	return initiale_obstacle_types_;
+}
+vector<Vector3d>& Parser::obstacle_positions() {
+	return initiale_obstacle_positions_;
+}
+vector<string>& Parser::obstacle_marker_information() {
+	return initiale_obstacle_marker_information_;
+}
+vector<double>& Parser::obstacle_radius() {
+	return initiale_obstacle_radius_;
+}
+vector<Vector3d>& Parser::obstacle_size() {
+	return initiale_obstacle_size_;
 }

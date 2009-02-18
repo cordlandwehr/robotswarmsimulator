@@ -17,12 +17,14 @@ using namespace std;
 #include "world_object.h"
 
 //TODO(martinah) set possible stati of a robot
+//REMARK: Wanna have new Stati? You have to modify the robot_status_map_ in simulation_kernel.cc, too!
 /**
  * \enum Status a robot can have.
  */
 enum RobotStatus { SLEEPING, READY };
 
 //TODO(martinah) set possible types of a robot
+//REMARK: Wanna have new Robottypes? You have to modify the robot_type_map_ in simulation_kernel.cc, too!
 /**
  * \enum Type a robot can have.
  */

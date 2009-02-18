@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 	control->set_visualizer(visualizer);
 
 	std::cout << "Creating new Simulation" << std::endl;
-	control->create_new_simulation("src/Tests/TestData/garbled_projectfile_a", 25);
+	control->create_new_simulation("src/Tests/TestData/testfile_2", 25);
 
 	std::cout << "Starting Simulation Thread" << std::endl;
 	control->start_simulation();

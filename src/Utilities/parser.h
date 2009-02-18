@@ -52,7 +52,8 @@ public:
 
 	/**
 	 * Set-method for ASG
-	 *TODO is there an enum for ASG?
+	 * TODO is there an enum for ASG?
+	 * REMARK(mmarcus) I made some dummy-enum in the simulationkernel...
 	 * @param asg int
 	 */
 	void set_asg(const string& asg);
@@ -154,6 +155,140 @@ public:
 	 */
 	const string& view() const;
 
+	/**
+	 * \return Seed of the Marker Request Handler.
+	 */
+	const unsigned int marker_request_handler_seed() const;
+
+	/**
+	 * \return Seed of the Type Change Request Handler.
+	 */
+	const unsigned int type_change_request_handler_seed() const;
+
+	/**
+	 * \return Seed of the Velocity Change Request Handler.
+	 */
+	const unsigned int velocity_request_handler_seed() const;
+
+	/**
+	 * \return Seed of the Position Change Request Handler.
+	 */
+	const unsigned int position_request_handler_seed() const;
+
+	/**
+	 * \return Seed of the Acceleration Change Request Handler.
+	 */
+	const unsigned int acceleration_request_handler_seed() const;
+
+	/**
+	 * \return discard probability of the Marker Request Handler.
+	 */
+	const double marker_request_handler_discard_prob() const;
+
+	/**
+	 * \return discard probability of the Type Change Request Handler.
+	 */
+	const double type_change_request_handler_discard_prob() const;
+
+	/**
+	 * \return discard probability of the Velocity Request Handler.
+	 */
+	const double velocity_request_handler_discard_prob() const;
+
+	/**
+	 * \return discard probability of the Position Request Handler.
+	 */
+	const double position_request_handler_discard_prob() const;
+
+	/**
+	 * \return discard probability of the Acceleration Request Handler.
+	 */
+	const double acceleration_request_handler_discard_prob() const;
+
+	/**
+	 * \return constant reference to vector of modifiers for the Velocity Request Handler.
+	 */
+	const vector<string>& velocity_request_handler_vector_modifier() const;
+
+	/**
+	 * \return constant reference to vector of modifiers for the Position Request Handler.
+	 */
+	const vector<string>& position_request_handler_vector_modifier() const;
+
+	/**
+	 * \return constant reference to vector of modifiers for the Acceleration Request Handler.
+	 */
+	const vector<string>& acceleration_request_handler_vector_modifier() const;
+
+	/**
+	 * \return reference to vector of Robot Positions.
+	 */
+	vector<Vector3d>& robot_positions();
+
+	/**
+	 * \return reference to vector of Robot Velocites.
+	 */
+	vector<Vector3d>& robot_velocities();
+
+	/**
+	 * \return reference to vector of Robot Accelerations.
+	 */
+	vector<Vector3d>& robot_accelerations();
+
+	/**
+	 * \return reference to vector of Robot Types.
+	 */
+	vector<string>& robot_types();
+
+	/**
+	 * \return reference to vector of Robot Stati.
+	 */
+	vector<string>& robot_stati();
+
+	/**
+	 * \return reference to vector of Robot Marker Information.
+	 */
+	vector<string>& robot_marker_information();
+
+	/**
+	 * \return reference to vector of Robot algorithms.
+	 */
+	vector<string>& robot_algorithms();
+
+	/**
+	 * \return reference to vector of Robot color.
+	 */
+	vector<string>& robot_colors();
+
+	/**
+	 * \return reference to 3-tuple of Robot coordinate axis.
+	 */
+	vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& robot_coordinate_systems();
+
+	/**
+	 * \return reference to vector of Obstacle types.
+	 */
+	vector<string>& obstacle_types();
+
+	/**
+	 * \return reference to vector of Obstacle positions.
+	 */
+	vector<Vector3d>& obstacle_positions();
+
+	/**
+	 * \return reference to vector of Obstacle Marker information
+	 */
+	vector<string>& obstacle_marker_information();
+
+	/**
+	 * \return reference to vector of Obstacle radius.
+	 */
+	vector<double>& obstacle_radius();
+
+	/**
+	 * \return reference to vector of Obstacle size.
+	 */
+	vector<Vector3d>& obstacle_size();
 
 private:
 
@@ -213,7 +348,7 @@ private:
 	std::vector<string> initiale_robot_marker_information_;
 	std::vector<string> initiale_robot_algorithms_;
 	std::vector<string> initiale_robot_colors_;
-	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d> > initiale_robot_coordinate_sytems_;
+	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d> > initiale_robot_coordinate_systems_;
 
 	////////////////////////////////////////////////////////
 	// OBSTACLE DATA

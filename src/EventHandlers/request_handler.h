@@ -21,6 +21,7 @@ class WorldInformation;
  * randomly discarding them with the given discard probability.
  */
 class RequestHandler {
+
 public:
 	/**
 	 * constructs the RequestHandler by setting up the distribution generator with the given
@@ -47,7 +48,7 @@ protected:
 private:
 	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
 	                                     boost::shared_ptr<const Request> request) = 0;
-	
+
 	double discard_probability_;
 	boost::shared_ptr<DistributionGenerator> distribution_generator_;
 };

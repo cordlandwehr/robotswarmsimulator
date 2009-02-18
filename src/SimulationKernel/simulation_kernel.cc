@@ -3,7 +3,6 @@
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
 #include "../EventHandlers/type_change_request_handler.h"
-#include "../EventHandlers/vector_request_handler.h"
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
@@ -21,24 +20,39 @@
 
 #include "../RobotImplementations/simple_robot.h"
 
+#include "../Utilities/VectorModifiers/vector_trimmer.h"
+#include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
+#include "../Utilities/VectorModifiers/vector_randomizer.h"
+
 #include <iostream>
 
-/*namespace {
-
-	boost::shared_ptr<WorldInformation> temporary_initial_world_information(vector<boost::shared_ptr<Robot> > &robots) {
-
-	}
-
-}*/
 
 SimulationKernel::SimulationKernel() {
-	// initialize ASG and Viewmap
+	/* REMARK: If you want to add some Values to the maps, make sure to use only
+	 * upper-case letters! All strings read from the projectfiles are converted to upper-case
+	 * by boost::to_upper_copy() so it will simply not work if you use lowercase here.
+	 */
+	// initialize ASG-map
 	  ASG_map_["SYNCHRONOUS"] = SYNCHRONOUS;
 	  ASG_map_["SEMISYNCHRONOUS"] = SEMISYNCHRONOUS;
 	  ASG_map_["ASYNCHRONOUS"] = ASYNCHRONOUS;
 
+	// initialize view-map
 	  view_map_["FULLVIEW"] = FULLVIEW;
 	  view_map_["GLOBALVIEW"] = GLOBALVIEW;
+
+	// initialize Stati-map
+	  robot_status_map_["READY"] = READY;
+	  robot_status_map_["SLEEPING"] = SLEEPING;
+
+	// initialize Stati-map
+	  robot_type_map_["SLAVE"] = SLAVE;
+	  robot_type_map_["MASTER"] = MASTER;
+
+	// initialize Vector modifier-map
+	  vector_modifier_map_["VECTOR_TRIMMER"] = VECTOR_TRIMMER;
+	  vector_modifier_map_["VECTOR_RANDOMIZER"] = VECTOR_RANDOMIZER;
+	  vector_modifier_map_["VECTOR_DIFFERENCE_TRIMMER"] = VECTOR_DIFFERENCE_TRIMMER;
 }
 
 SimulationKernel::~SimulationKernel() {
@@ -53,19 +67,15 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 	return history_;
 }
 
+
 void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history) {
 
 	// set history
 	history_ = history;
 
 	// create Parser and load project file
-	boost::shared_ptr<Parser> parser;
-	parser.reset(new Parser());
-
-	//Workaround: this line would be correct
-//	parser->load_projectfiles(project_filename);
-	//We use this line for testpurposes to have some running configuration
-	parser->load_projectfiles("src/Tests/TestData/testfile_1");
+	boost::shared_ptr<Parser> parser(new Parser());
+	parser->load_projectfiles(project_filename);
 
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
@@ -74,7 +84,8 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// create View
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 
-	switch(view_map_[parser->view()]) {
+	//TODO(mmarcus) add default-case in switch and throw some exception... here and anywhere else
+	switch(view_map_[boost::to_upper_copy(parser->view())]) {
 
 		case GLOBALVIEW:
 			view_factory.reset(new ViewFactory<GlobalView>());
@@ -88,7 +99,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->size(), *initial_world_information));
 
 	// setup of activation sequence generator
-	switch (ASG_map_[parser->asg()]) {
+	switch (ASG_map_[boost::to_upper_copy(parser->asg())]) {
 
 		case SYNCHRONOUS:
 			asg_.reset(new SynchronousASG());
@@ -107,21 +118,54 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	event_handler_.reset(new EventHandler(history, robot_control));
 
 	// setup of request handlers (all requests handled exactly as requested)
-	//TODO(mmarcus) this *history seems a littlebit ugly
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(5, 0.0, *history));
-	event_handler_->set_acceleration_request_handler(request_handler_acc);
+	if (parser->position_request_handler_seed() != 0) {
+		event_handler_->set_position_request_handler(boost::dynamic_pointer_cast<VectorRequestHandler>(
+				setup_request_handler(POSITION_REQUEST_HANDLER, parser->position_request_handler_seed(),
+				parser->position_request_handler_discard_prob(), history, parser->position_request_handler_vector_modifier())
+				));
+	} else {
+		// no Position request handler
+	}
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(5, 0.0, *history));
-	event_handler_->set_velocity_request_handler(request_handler_vel);
+	if (parser->velocity_request_handler_seed() != 0) {
+		event_handler_->set_velocity_request_handler(boost::dynamic_pointer_cast<VectorRequestHandler>(
+				setup_request_handler(VELOCITY_REQUEST_HANDLER, parser->velocity_request_handler_seed(),
+				parser->velocity_request_handler_discard_prob(), history, parser->velocity_request_handler_vector_modifier())
+				));
+	} else {
+		// no Velocity request handler
+	}
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(5, 0.0, *history));
-	event_handler_->set_position_request_handler(request_handler_pos);
+	if (parser->acceleration_request_handler_seed() != 0) {
+		event_handler_->set_acceleration_request_handler(boost::dynamic_pointer_cast<VectorRequestHandler>(
+				setup_request_handler(ACCELERATION_REQUEST_HANDLER, parser->acceleration_request_handler_seed(),
+				parser->acceleration_request_handler_discard_prob(), history, parser->acceleration_request_handler_vector_modifier())
+				));
+	} else {
+		// no Acceleration request handler
+	}
 
-	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(5, 0.0, *history));
-	event_handler_->set_marker_request_handler(request_handler_marker);
+	if (parser->marker_request_handler_seed() != 0) {
+		//TODO(mmarcus) the vector-modifiers here are taken from the position handler, since marker_request handler do
+		//not have vector modifiers but setup_request_handler need them!
+		event_handler_->set_marker_request_handler(boost::dynamic_pointer_cast<MarkerRequestHandler>(
+				setup_request_handler(MARKER_REQUEST_HANDLER, parser->marker_request_handler_seed(),
+				parser->marker_request_handler_discard_prob(), history, parser->position_request_handler_vector_modifier())
+				));
+	} else {
+		// no Marker request handler
+	}
 
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(5, 0.0, *history));
-	event_handler_->set_type_change_request_handler(request_handler_type);
+	if (parser->type_change_request_handler_seed() != 0) {
+		//TODO(mmarcus) the vector-modifiers here are taken from the position handler, since marker_request handler do
+		//not have vector modifiers but setup_request_handler need them!
+		event_handler_->set_type_change_request_handler(boost::dynamic_pointer_cast<TypeChangeRequestHandler>(
+				setup_request_handler(TYPE_CHANGE_REQUEST_HANDLER, parser->type_change_request_handler_seed(),
+				parser->type_change_request_handler_discard_prob(), history, parser->position_request_handler_vector_modifier())
+				));
+	} else {
+		// no Type change request handler
+	}
 
 	// create and initialize statistics module;
 	stats_.reset(new StatsControl());
@@ -134,13 +178,11 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 }
 
+
 void SimulationKernel::step() {
-	// TODO(craupach): this is a suggestion by me.
-	// handle next event
-//	boost::shared_ptr<Event> event = asg_->get_next_event();
-	//std::cout << "Stepping for Event at time " << event->time() << std::endl;
 	event_handler_->handle_event(asg_->get_next_event());
 }
+
 
 void SimulationKernel::multistep(int steps) {
 	for (int i = 0; i < steps; i++) {
@@ -148,183 +190,114 @@ void SimulationKernel::multistep(int steps) {
 	}
 }
 
+
 void SimulationKernel::quit() {
 	stats_->quit();
 }
 
-//big-TODO(mmarcus) write this method! Everything inside here is just the temporary code of Christoph
+
 boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_information(
 		boost::shared_ptr<Parser> parser) {
 
-	// EVERYTHING HERE IS JUST DUMMY-DATA!!! NO DATA IS TAKEN FROM PARSER!!!
+	// taking some Pointers to point to the right information
+	boost::shared_ptr<WorldInformation> initial_world_information(new WorldInformation());
 
-	boost::shared_ptr<WorldInformation> initial_world_information;
+	boost::shared_ptr<RobotData> temp_robot_data;
+	boost::shared_ptr<Robot> temp_robot;
+	boost::shared_ptr<RobotIdentifier> temp_robot_identifier;
 
-	// Robot Datas
-	boost::shared_ptr<RobotData> robot_data_a;
-	boost::shared_ptr<RobotData> robot_data_b;
-	boost::shared_ptr<RobotData> robot_data_c;
+	boost::shared_ptr<Vector3d> temp_robot_position;
+	boost::shared_ptr<Vector3d> temp_robot_velocity;
+	boost::shared_ptr<Vector3d> temp_robot_acceleration;
 
-	// Robots
-	boost::shared_ptr<Robot> robot_a;
-	boost::shared_ptr<Robot> robot_b;
-	boost::shared_ptr<Robot> robot_c;
+	boost::tuple <boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > temp_robot_axes;
 
-	// Robot Identifiers
-	boost::shared_ptr<RobotIdentifier> id_a;
-	boost::shared_ptr<RobotIdentifier> id_b;
-	boost::shared_ptr<RobotIdentifier> id_c;
+	// counting robots by their position vectors
+	vector<Vector3d>::size_type robot_count;
+	robot_count = parser->robot_positions().size();
 
-	initial_world_information.reset(new WorldInformation());
+	// running through all robots in robotfile
+	for (int i = 0; i < robot_count; i++) {
+		//TODO(mmarcus) Identifiers are NOT the identifiers of the project file!
+		//need to work over parser...
+		temp_robot_identifier.reset(new RobotIdentifier(i));
 
-	id_a.reset(new RobotIdentifier(0));
-	id_b.reset(new RobotIdentifier(1));
-	id_c.reset(new RobotIdentifier(2));
+		//TODO(mmarcus) maybe this is the right place to check for the algorithm?
+		//different algorithms = different RobotTypes?
+		temp_robot.reset(new SimpleRobot(temp_robot_identifier));
 
-	robot_a.reset(new SimpleRobot(id_a));
-	robot_b.reset(new SimpleRobot(id_b));
-	robot_c.reset(new SimpleRobot(id_c));
+		temp_robot_position.reset(new Vector3d(parser->robot_positions()[i]));
+		temp_robot_velocity.reset(new Vector3d(parser->robot_velocities()[i]));
+		temp_robot_acceleration.reset(new Vector3d(parser->robot_accelerations()[i]));
 
-	robots_.push_back(robot_a);
-	robots_.push_back(robot_b);
-	robots_.push_back(robot_c);
+		temp_robot_data.reset(new RobotData(temp_robot_identifier, temp_robot_position, *temp_robot));
 
-	// create position for robot a: (0,0,0)
-	boost::shared_ptr<Vector3d> pos_a;
-	pos_a.reset(new Vector3d);
-	pos_a->insert_element(kXCoord,0.0);
-	pos_a->insert_element(kYCoord,0.0);
-	pos_a->insert_element(kZCoord,0.0);
-	robot_data_a.reset(new RobotData(id_a, pos_a, *robot_a));
+		temp_robot_data->set_velocity(temp_robot_velocity);
+		temp_robot_data->set_acceleration(temp_robot_acceleration);
 
-	// create position for robot b: (1,0.5,3)
-	Vector3d * pos_b_ptr = new Vector3d;
-	boost::shared_ptr<Vector3d> pos_b;
-	pos_b.reset(pos_b_ptr);
-	pos_b->insert_element(kXCoord,1.0);
-	pos_b->insert_element(kYCoord,0.5);
-	pos_b->insert_element(kZCoord,3.0);
-	robot_data_b.reset(new RobotData(id_b, pos_b, *robot_b));
+		temp_robot_data->set_type(robot_type_map_[boost::to_upper_copy(parser->robot_types()[i])]);
+		temp_robot_data->set_status(robot_status_map_[boost::to_upper_copy(parser->robot_stati()[i])]);
 
-	// create position for robot c: (1.0, 1.0, 1.0)
-	boost::shared_ptr<Vector3d> pos_c;
-	pos_c.reset(new Vector3d());
-	pos_c->insert_element(kXCoord,1.0);
-	pos_c->insert_element(kYCoord,1.0);
-	pos_c->insert_element(kZCoord,1.0);
-	robot_data_c.reset(new RobotData(id_c, pos_c, *robot_c));
+		boost::get<0>(temp_robot_axes).reset(new Vector3d(boost::get<0>(parser->robot_coordinate_systems()[i])));
+		boost::get<1>(temp_robot_axes).reset(new Vector3d(boost::get<1>(parser->robot_coordinate_systems()[i])));
+		boost::get<2>(temp_robot_axes).reset(new Vector3d(boost::get<2>(parser->robot_coordinate_systems()[i])));
 
-	// create velocity for robot a: (0,0,0)
-	boost::shared_ptr<Vector3d> vel_a(new Vector3d());
-	vel_a->insert_element(kXCoord,0.1);
-	vel_a->insert_element(kYCoord,0.1);
-	vel_a->insert_element(kZCoord,0.0);
-	robot_data_a->set_velocity(vel_a);
+		temp_robot_data->set_coordinate_system_axis(temp_robot_axes);
 
-	// create acceleration for robot a: (0,0,0)
-	boost::shared_ptr<Vector3d> acc_a(new Vector3d());
-	acc_a->insert_element(kXCoord,0.0);
-	acc_a->insert_element(kYCoord,0.0);
-	acc_a->insert_element(kZCoord,0.0);
-	robot_data_a->set_acceleration(acc_a);
-
-	// create  velocity for robot b: (0,0,0)
-	boost::shared_ptr<Vector3d> vel_b(new Vector3d());
-	vel_b->insert_element(kXCoord,0.0);
-	vel_b->insert_element(kYCoord,0.0);
-	vel_b->insert_element(kZCoord,0.0);
-	robot_data_b->set_velocity(vel_b);
-
-	// create acceleration for robot b: (0,0,0)
-	boost::shared_ptr<Vector3d> acc_b(new Vector3d());
-	acc_b->insert_element(kXCoord,0.0);
-	acc_b->insert_element(kYCoord,0.0);
-	acc_b->insert_element(kZCoord,0.0);
-	robot_data_b->set_acceleration(acc_b);
-
-	// create velocity for robot c: (0,0,0)
-	boost::shared_ptr<Vector3d> vel_c(new Vector3d());
-	vel_c->insert_element(kXCoord,0.0);
-	vel_c->insert_element(kYCoord,0.0);
-	vel_c->insert_element(kZCoord,0.0);
-	robot_data_c->set_velocity(vel_c);
-
-	// create acceleration for robot c: (0.0, 0.0, 0.0)
-	boost::shared_ptr<Vector3d> acc_c(new Vector3d());
-	acc_c->insert_element(kXCoord,0.0);
-	acc_c->insert_element(kYCoord,0.0);
-	acc_c->insert_element(kZCoord,0.0);
-	robot_data_c->set_acceleration(acc_c);
-
-	// build a coordinate axes for a robot with unit distance 2 for robot a
-	boost::shared_ptr<Vector3d> x_axis_a(new Vector3d());
-	x_axis_a->insert_element(kXCoord, 2.0);
-	x_axis_a->insert_element(kYCoord, 0.0);
-	x_axis_a->insert_element(kZCoord, 0.0);
-
-	boost::shared_ptr<Vector3d> y_axis_a(new Vector3d());
-	y_axis_a->insert_element(kXCoord, 0.0);
-	y_axis_a->insert_element(kYCoord, 2.0);
-	y_axis_a->insert_element(kZCoord, 0.0);
-
-	boost::shared_ptr<Vector3d> z_axis_a(new Vector3d());
-	z_axis_a->insert_element(kXCoord, 0.0);
-	z_axis_a->insert_element(kYCoord, 0.0);
-	z_axis_a->insert_element(kZCoord, 2.0);
-
-	boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
-	boost::shared_ptr<Vector3d> > axes_a(x_axis_a, y_axis_a, z_axis_a);
-
-	robot_data_a->set_coordinate_system_axis(axes_a);
-
-	// build a coordinate axes for a robot with unit distance 1 for robot b
-	boost::shared_ptr<Vector3d> x_axis_b(new Vector3d());
-	x_axis_b->insert_element(kXCoord, 1.0);
-	x_axis_b->insert_element(kYCoord, 0.0);
-	x_axis_b->insert_element(kZCoord, 0.0);
-
-	boost::shared_ptr<Vector3d> y_axis_b(new Vector3d());
-	y_axis_b->insert_element(kXCoord, 0.0);
-	y_axis_b->insert_element(kYCoord, 1.0);
-	y_axis_b->insert_element(kZCoord, 0.0);
-
-	boost::shared_ptr<Vector3d> z_axis_b(new Vector3d());
-	z_axis_b->insert_element(kXCoord, 0.0);
-	z_axis_b->insert_element(kYCoord, 0.0);
-	z_axis_b->insert_element(kZCoord, 1.0);
-
-	boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
-	boost::shared_ptr<Vector3d> > axes_b(x_axis_b, y_axis_b, z_axis_b);
-
-	robot_data_b->set_coordinate_system_axis(axes_b);
-
-	// build a coordinate axes with wacky axes for robot c
-	boost::shared_ptr<Vector3d> x_axis_c(new Vector3d());
-	x_axis_c->insert_element(kXCoord, 1.5);
-	x_axis_c->insert_element(kYCoord, 1.0);
-	x_axis_c->insert_element(kZCoord, 0.0);
-
-	boost::shared_ptr<Vector3d> y_axis_c(new Vector3d());
-	y_axis_c->insert_element(kXCoord, 0.0);
-	y_axis_c->insert_element(kYCoord, 1.9);
-	y_axis_c->insert_element(kZCoord, 1.0);
-
-	boost::shared_ptr<Vector3d> z_axis_c(new Vector3d());
-	z_axis_c->insert_element(kXCoord, 1.8);
-	z_axis_c->insert_element(kYCoord, 0.0);
-	z_axis_c->insert_element(kZCoord, 1.3);
-
-	boost::tuple <boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
-	boost::shared_ptr<Vector3d> > axes_c(x_axis_c, y_axis_c, z_axis_c);
-
-	robot_data_c->set_coordinate_system_axis(axes_c);
-
-	// add all robots to the world information
-	initial_world_information->add_robot_data(robot_data_a);
-	initial_world_information->add_robot_data(robot_data_b);
-	initial_world_information->add_robot_data(robot_data_c);
+		robots_.push_back(temp_robot);
+		initial_world_information->add_robot_data(temp_robot_data);
+	}
 
 	// set time of inital world information
 	initial_world_information->set_time(0);
 	return initial_world_information;
+}
+
+boost::shared_ptr<RequestHandler> SimulationKernel::setup_request_handler(RequestHandlerType req_type,
+																		  unsigned int seed,
+																		  double discard_prob,
+																		  boost::shared_ptr<History> history,
+																		  vector<string> vector_modifiers) {
+
+	boost::shared_ptr<RequestHandler> request_handler;
+		switch (req_type) {
+			case POSITION_REQUEST_HANDLER:
+			case VELOCITY_REQUEST_HANDLER:
+			case ACCELERATION_REQUEST_HANDLER:
+				request_handler.reset(new VectorRequestHandler(seed, discard_prob, *history));
+				setup_vectormodifier(boost::dynamic_pointer_cast<VectorRequestHandler>(request_handler), vector_modifiers);
+				break;
+			case TYPE_CHANGE_REQUEST_HANDLER:
+				request_handler.reset(new MarkerRequestHandler(seed, discard_prob, *history));
+				break;
+			case MARKER_REQUEST_HANDLER:
+				request_handler.reset(new TypeChangeRequestHandler(seed, discard_prob, *history));
+				break;
+		}
+
+		return request_handler;
+}
+
+void SimulationKernel::setup_vectormodifier(boost::shared_ptr<VectorRequestHandler> request_handler,
+																		 vector<string> vector_modifiers) {
+
+	boost::shared_ptr<VectorModifier> vecmod;
+
+	//TODO(mmarcus) here are a lot of dummy values... need to find solution for parametrized vector modifiers
+	BOOST_FOREACH( string s, vector_modifiers) {
+		switch (vector_modifier_map_[boost::to_upper_copy(s)]) {
+			case VECTOR_TRIMMER:
+				vecmod.reset(new VectorTrimmer(42.0));
+				request_handler->add_vector_modifier(vecmod);
+				break;
+			case VECTOR_DIFFERENCE_TRIMMER:
+				vecmod.reset(new VectorDifferenceTrimmer(42.0));
+				request_handler->add_vector_modifier(vecmod);
+				break;
+			case VECTOR_RANDOMIZER:
+				vecmod.reset(new VectorRandomizer(1, 42.0));
+				request_handler->add_vector_modifier(vecmod);
+				break;
+		}
+	}
 }

@@ -12,7 +12,7 @@
 #include <vector>
 #include <boost/smart_ptr.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <fstream>
@@ -23,8 +23,12 @@
 #include <map>
 
 #include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/unsupported_operation_exception.h"
 #include "../Utilities/parser.h"
+
+#include "../EventHandlers/request_handler.h"
+#include "../EventHandlers/vector_request_handler.h"
 
 #include "../Model/robot.h"
 
@@ -43,6 +47,8 @@ class SimulationKernel {
 	friend class save_robot_file_1;
 	friend class write_obstacle_1;
 	friend class write_robot_1;
+	friend class simkernel_init;
+
 public:
 	SimulationKernel();
 	~SimulationKernel();
@@ -88,14 +94,25 @@ public:
 
 private:
 
-	//TODO(mmarcus) enumerate more
+	/**
+	 * Some enumerations which may be expanded on demand
+	 */
 	enum ASGType { SYNCHRONOUS,
 	               SEMISYNCHRONOUS,
 	               ASYNCHRONOUS };
 
-	//TODO(mmarcus) enumerate more
 	enum ViewType { FULLVIEW,
 	                GLOBALVIEW };
+
+	enum VectorModifierType { VECTOR_TRIMMER,
+							  VECTOR_RANDOMIZER,
+							  VECTOR_DIFFERENCE_TRIMMER	};
+
+	enum RequestHandlerType { POSITION_REQUEST_HANDLER,
+							  VELOCITY_REQUEST_HANDLER,
+							  ACCELERATION_REQUEST_HANDLER,
+							  TYPE_CHANGE_REQUEST_HANDLER,
+							  MARKER_REQUEST_HANDLER };
 
 	/**
 	 * Set of robots in the world
@@ -139,10 +156,40 @@ private:
 	map<string, ViewType> view_map_;
 
 	/**
-	 * Used to create an initial worldinformation from the information of the parser
-	 * \return the worldinformation that the parser extracted from the projectfile
+	 * Map for different stati of Robots. This map is used to toggle between the
+	 * String defined for the Robotstatus in the robotfile and the enum for Robotstati
+	 */
+	map<string, RobotStatus> robot_status_map_;
+
+	/**
+	 * Map for different types of Robots. This map is used to toggle between the
+	 * String defined for the Robotstatus in the robotfile and the enum for Robottypes
+	 */
+	map<string, RobotType> robot_type_map_;
+
+	/**
+	 * Map for different types of Vector Modifiers. This map is used to toggle between the
+	 * String defined for the Vectormodifiers in the projectfile and the Modifiers.
+	 */
+	map<string, VectorModifierType> vector_modifier_map_;
+
+	/**
+	 * This method will do the dirty job in the init-method and construct the 1st world-information.
+	 * \param 	Pointer to the Parser that stores all the information needed
+	 * \return	the 1st world-info which Parser extracted from projectfile
 	 */
 	boost::shared_ptr<WorldInformation> setup_initial_world_information(boost::shared_ptr<Parser>);
+
+	/**
+	 * General method to setup any kind of request handler with all that stuff you need for it.
+	 */
+	boost::shared_ptr<RequestHandler> setup_request_handler(RequestHandlerType,
+			unsigned int, double, boost::shared_ptr<History>, vector<string>);
+
+	/**
+	 * Genereal method to setup modifiers for vector-request-handlers.
+	 */
+	void setup_vectormodifier(boost::shared_ptr<VectorRequestHandler>, vector<string>);
 
 };
 
