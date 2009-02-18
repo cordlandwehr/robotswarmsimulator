@@ -101,6 +101,9 @@ private:
 	               SEMISYNCHRONOUS,
 	               ASYNCHRONOUS };
 
+	//TODO (dwonisch): I dont like this. When writing a new View classes you have to change
+	//				   code in 3 places: Here in header file, in cc file at the view_map_,
+	//				   and in cc file at the switch case.
 	enum ViewType { FULLVIEW,
 	                GLOBALVIEW };
 

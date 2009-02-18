@@ -96,6 +96,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	}
 
 	// create Robot Control
+	//TODO (dwonisch): history_->size() wrong here. Rather something like history_->capacity()
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->size(), *initial_world_information));
 
 	// setup of activation sequence generator
@@ -217,7 +218,7 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 	robot_count = parser->robot_positions().size();
 
 	// running through all robots in robotfile
-	for (int i = 0; i < robot_count; i++) {
+	for (vector<Vector3d>::size_type i = 0; i < robot_count; i++) {
 		//TODO(mmarcus) Identifiers are NOT the identifiers of the project file!
 		//need to work over parser...
 		temp_robot_identifier.reset(new RobotIdentifier(i));
