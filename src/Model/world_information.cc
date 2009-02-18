@@ -31,7 +31,7 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 	this->obstacles_.reserve(rhs.obstacles_.size());
 	BOOST_FOREACH(const boost::shared_ptr<Obstacle>& obstacle, rhs.obstacles_) {
 		if(obstacle) {
-			this->obstacles_.push_back(boost::dynamic_pointer_cast<Obstacle>(obstacle->clone()));
+			this->obstacles_.push_back(boost::static_pointer_cast<Obstacle>(obstacle->clone()));
 		}
 		else {
 			this->obstacles_.push_back(boost::shared_ptr<Obstacle>());
@@ -41,7 +41,7 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 	this->robot_data_.reserve(rhs.robot_data_.size());
 	BOOST_FOREACH(const boost::shared_ptr<RobotData>& robot, rhs.robot_data_) {
 		if(robot) {
-			this->robot_data_.push_back(boost::dynamic_pointer_cast<RobotData>(robot->clone()));
+			this->robot_data_.push_back(boost::static_pointer_cast<RobotData>(robot->clone()));
 		}
 		else {
 			this->robot_data_.push_back(boost::shared_ptr<RobotData>());
