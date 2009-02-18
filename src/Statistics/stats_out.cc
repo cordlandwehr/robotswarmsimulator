@@ -74,7 +74,6 @@ void StatsOut::set_dir(std::string stat_dir) {
 
 void StatsOut::open(std::vector<std::string> stat_designation) {
 //	char Stat_Time [80];
-	int j;
 	char* stat_temp;
 
 //	time_t Stat_Rawtime;
@@ -86,8 +85,6 @@ void StatsOut::open(std::vector<std::string> stat_designation) {
 //	strftime (Stat_Time,80,"%Y_%M%d_%H%M%S",Stat_Timeinfo);
 		//year (four digits), month, (day of the month), Hour (in 24h format), Minute, Second
 		// http://www.cplusplus.com/reference/clibrary/ctime/strftime.html
-
-
 
 	stat_temp = const_cast<char*>(stat_id.c_str());
 /*
@@ -133,7 +130,7 @@ void StatsOut::open(std::vector<std::string> stat_designation) {
 					 << "set ylabel ''" << std::endl
 					 << "plot";
 
-	for (j=1; j < (int) stat_designation.size(); j++) {
+	for (unsigned int j=1; j < stat_designation.size(); j++) {
 		stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
 						 << j+1
 						 << " title \""
@@ -141,12 +138,14 @@ void StatsOut::open(std::vector<std::string> stat_designation) {
 						 << "\" with linespoints,";
 	}
 
-	stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
-					<< stat_designation.size()+1
-					<< " title \""
-					<< stat_designation[stat_designation.size()-1]
-					<< "\" with linespoints"
-					<< std::endl;
+	if (stat_designation.size() > 0) {
+		stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
+						<< stat_designation.size()+1
+						<< " title \""
+						<< stat_designation[stat_designation.size()-1]
+						<< "\" with linespoints"
+						<< std::endl;
+	}
 
 	stat_gnuplotfile.close();
 
@@ -160,7 +159,7 @@ void StatsOut::open(std::vector<std::string> stat_designation) {
 				<< std::setw(stat_output_width)
 				<< "# Time  ";
 
-	for (j=0; j < (int) stat_designation.size(); j++) {
+	for (unsigned int j=0; j < stat_designation.size(); j++) {
 		stat_output << std::setw(stat_output_width)
 					<< stat_designation[j] << "  ";
 	}

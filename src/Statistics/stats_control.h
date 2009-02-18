@@ -22,6 +22,8 @@
 
 class StatsControl : public SimulationListener {
 public:
+	static const bool DEBUG = false;
+
 	StatsControl();
 	virtual ~StatsControl();
 

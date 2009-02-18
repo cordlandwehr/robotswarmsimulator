@@ -136,6 +136,24 @@ public:
 	const bool is_swarm_avg_pos() const;
 
 	/**
+	 * \return whether or not to log the center's xyz-coordinates
+	 * of the miniball around all robots in the current subswarm.
+	 */
+	const bool is_miniball_center() const;
+
+	/**
+	 * \return whether or not to log the radius
+	 * of the miniball around all robots in the current subswarm.
+	 */
+	const bool is_miniball_radius() const;
+
+	/**
+	 * \return whether or not to log the distance between the centerpoints
+	 * of the miniballs around all robots in the current subswarm (normalized to 1 timeunit).
+	 */
+	const bool is_miniball_movedist() const;
+
+	/**
 	 * \return configuration-flags for velocities' NumSetStats
 	 */
 	const int vel_cfg() const;
@@ -148,6 +166,7 @@ private:
 
 	bool num_robots_, num_masters_, num_slaves_;
 	bool swarm_avg_pos_;
+	bool miniball_center_, miniball_radius_, miniball_movedist_;
 	int vel_cfg_;
 
 	/**

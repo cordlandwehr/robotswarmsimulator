@@ -3,7 +3,7 @@
 using namespace std;
 
 void Test::say_hello() {
-	cout << "testing include" << endl; 
+	cout << "testing include" << endl;
 }
 
 int Test::correct_add(int a, int b) {

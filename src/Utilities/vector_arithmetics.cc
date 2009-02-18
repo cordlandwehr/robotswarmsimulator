@@ -7,6 +7,7 @@
 
 #include "vector_arithmetics.h"
 
+#include <cmath>
 
 double det_matrix3d(const Matrix3d& matrix) {
 	double det =   matrix(0,0) * (matrix(1,1)*matrix(2,2) - matrix(2,1)*matrix(1,2))
@@ -34,3 +35,15 @@ Matrix3d invert_matrix3d(const Matrix3d& matrix) {
 	return inverse;
 }
 
+double vector3d_distance(const Vector3d& a, const Vector3d& b) {
+	double dx = a[0]-b[0];
+	double dy = a[1]-b[1];
+	double dz = a[2]-b[2];
+	return sqrt(dx*dx+dy*dy+dz*dz);
+}
+
+void vector3d_set(Vector3d& a, const Vector3d& b) {
+	a[0] = b[0];
+	a[1] = b[1];
+	a[2] = b[2];
+}

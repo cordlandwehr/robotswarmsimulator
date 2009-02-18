@@ -49,4 +49,14 @@ double det_matrix3d(const Matrix3d& matrix);
  */
 Matrix3d invert_matrix3d(const Matrix3d& matrix);
 
+/**
+ * \return euclidean distance between a and b
+ */
+double vector3d_distance(const Vector3d& a, const Vector3d& b);
+
+/**
+ * \return sets xyz of a to the values of b
+ */
+void vector3d_set(Vector3d& a, const Vector3d& b);
+
 #endif /* VECTOR_ARITHMETICS_H */

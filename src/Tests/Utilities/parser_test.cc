@@ -28,7 +28,8 @@ BOOST_AUTO_TEST_CASE(load_main_project_file)
 	BOOST_CHECK_EQUAL(parser->compass_model_, "NO_COMPASS");
 	BOOST_CHECK_EQUAL(parser->robot_filename_, "src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->obstacle_filename_, "src/Tests/TestData/testfile_1");
-	BOOST_CHECK_EQUAL(parser->statistics_module_, "0");
+	BOOST_CHECK_EQUAL(parser->statistics_template_, "ALL");
+	BOOST_CHECK_EQUAL(parser->statistics_subsets_, "{ALL}");
 	BOOST_CHECK_EQUAL(parser->asg_, "SYNCHRONOUS");
 
 	/*
@@ -206,7 +207,8 @@ BOOST_FIXTURE_TEST_CASE(save_main_project_file_1, SimpleWorldFixture)
 	parser->compass_model_ = "NO_COMPASS";
 	parser->obstacle_filename_ = "src/Tests/TestData/obsti.obstacle";
 	parser->robot_filename_ = "src/Tests/TestData/i.robot";
-	parser->statistics_module_ = "MY_STATISTICMODULE";
+	parser->statistics_template_ = "BASIC";
+	parser->statistics_subsets_ = "{ALL}";
 
 	parser->save_projectfiles("src/Tests/TestData/garbled_projectfile_c.swarm", history->get_newest());
 }

@@ -17,8 +17,11 @@ void Parser::init() {
 	variables_with_default_values.push_back("ASG");
 	default_values_of_varialbes.push_back("SYNCHRONOUS");
 
-	variables_with_default_values.push_back("STATISTICS_MODULE");
-	default_values_of_varialbes.push_back("NONE");
+	variables_with_default_values.push_back("STATISTICS_TEMPLATE");
+	default_values_of_varialbes.push_back("ALL");
+
+	variables_with_default_values.push_back("STATISTICS_SUBSETS");
+	default_values_of_varialbes.push_back("{ALL}");
 
 	variables_with_default_values.push_back("VIEW");
 	default_values_of_varialbes.push_back("0");
@@ -230,7 +233,8 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
 	project_name_ = get_string_value_from_map(variables_and_values, "PROJECT_NAME");
 	robot_filename_ = get_string_value_from_map(variables_and_values, "ROBOT_FILENAME");
-	statistics_module_ = get_string_value_from_map(variables_and_values, "STATISTICS_MODULE");
+	statistics_template_ = get_string_value_from_map(variables_and_values, "STATISTICS_TEMPLATE");
+	statistics_subsets_ = get_string_value_from_map(variables_and_values, "STATISTICS_SUBSETS");
 	view_ =get_string_value_from_map(variables_and_values, "VIEW");
 
 	//seeds
@@ -399,6 +403,9 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	//TODO(martinah) No, there is no real reason for this. I added this value to each robot, cause maybe it will be used
 	//in the future, but right now, it isn't. And I just read this variable to increase the value position_in_line_ correct.
 	//Sure, I could have done this without saving the id.
+	//TODO(kurras) funny discussion :) shouldn't we simply remove the "double id = " then ?
+	//...or
+	//...generate more LOC ? ;P
 	double id = get_next_double_value_in_line(line, line_number, false);
 	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
 	string type = get_next_value_in_line(line, line_number, false);
@@ -539,7 +546,8 @@ void Parser::save_main_project_file(const string& project_filename) {
 		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
 		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
-		project_file << "STATISTICS_MODULE=\"" << statistics_module_ << "\"" << endl;
+		project_file << "STATISTICS_TEMPLATE=\"" << statistics_template_ << "\"" << endl;
+		project_file << "STATISTICS_SUBSETS=\"" << statistics_subsets_ << "\"" << endl;
 		project_file << "ASG=\"" << asg_ << "\"" << endl;
 		project_file << "VIEW=\"" << view_ << "\"" << endl;
 		project_file << "MARKER_REQUEST_HANDLER_SEED=\"" << marker_request_handler_seed_ << "\"" << endl;
@@ -775,8 +783,12 @@ void Parser::set_robot_filename(const string& robot_filename) {
 	robot_filename_ = robot_filename;
 }
 
-void Parser::set_statistics_module(const string& statistics_module) {
-	statistics_module_ = statistics_module;
+void Parser::set_statistics_template(const string& statistics_template) {
+	statistics_template_ = statistics_template;
+}
+
+void Parser::set_statistics_subsets(const string& statistics_subsets) {
+	statistics_subsets_ = statistics_subsets;
 }
 
 void Parser::set_project_filename(const string& project_filename) {
@@ -800,8 +812,12 @@ const string& Parser::robot_filename() const {
 	return robot_filename_;
 }
 
-const string& Parser::statistics_module() const {
-	return statistics_module_;
+const string& Parser::statistics_template() const {
+	return statistics_template_;
+}
+
+const string& Parser::statistics_subsets() const {
+	return statistics_subsets_;
 }
 
 const string& Parser::view() const {

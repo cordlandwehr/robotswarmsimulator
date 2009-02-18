@@ -107,9 +107,14 @@ public:
 	void set_compassModel(string compassModel);
 
 	/**
-	 * Set statistics module
+	 * Set statistics template
 	 */
-	void set_statisticsModule(string statisticsModule);
+	void set_statisticsTemplate(string statisticsTemplate);
+
+	/**
+	 * Set statistics subsets
+	 */
+	void set_statisticsSubsets(string statisticsSubsets);
 
 	/**
 	 * Writes everything to files
@@ -141,7 +146,8 @@ private:
 	boost::shared_ptr< std::string > obstacleFileName_;
 	boost::shared_ptr< std::string > worldFileName_;
 	boost::shared_ptr< std::string > compassModel_;
-	boost::shared_ptr< std::string > statisticsModule_;
+	boost::shared_ptr< std::string > statisticsTemplate_;
+	boost::shared_ptr< std::string > statisticsSubsets_;
 	boost::shared_ptr< std::string > asg_;
 
 };

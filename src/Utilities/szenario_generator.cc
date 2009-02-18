@@ -111,7 +111,8 @@ void szenario_generator::init(int number_robots) {
 	worldFileName_.reset(new std::string("new_random_worldfile.swarm"));
 	asg_.reset(new std::string("SYNCHRONOUS"));
 	compassModel_.reset(new std::string("NO_COMPASS"));
-	statisticsModule_.reset(new std::string("ALL"));	//TODO does ALL exist?
+	statisticsTemplate_.reset(new std::string("ALL"));
+	statisticsSubsets_.reset(new std::string("{ALL}"));
 
 }
 
@@ -269,8 +270,12 @@ void szenario_generator::set_compassModel(string compassModel) {
 }
 
 
-void szenario_generator::set_statisticsModule(string statisticsModule) {
-	statisticsModule_.reset(new std::string(statisticsModule));
+void szenario_generator::set_statisticsTemplate(string statisticsTemplate) {
+	statisticsTemplate_.reset(new std::string(statisticsTemplate));
+}
+
+void szenario_generator::set_statisticsSubsets(string statisticsSubsets) {
+	statisticsSubsets_.reset(new std::string(statisticsSubsets));
 }
 
 
@@ -282,7 +287,8 @@ void szenario_generator::write_to_file() {
 	parser_->set_robot_filename(*robotFileName_);
 	parser_->set_asg(*asg_);
 	parser_->set_compass_model(*compassModel_);
-	parser_->set_statistics_module(*statisticsModule_);
+	parser_->set_statistics_template(*statisticsTemplate_);
+	parser_->set_statistics_subsets(*statisticsSubsets_);
 
 	// add all robots to world information
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;

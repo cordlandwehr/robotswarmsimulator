@@ -82,10 +82,16 @@ public:
 	void set_robot_filename(const string& robot_filename);
 
 	/**
-	 * Set-method for statistics_module
-	 * @param statistics module string
+	 * Set-method for statistics_template
+	 * @param statistics template string
 	 */
-	void set_statistics_module(const string& statistics_module);
+	void set_statistics_template(const string& statistics_template);
+
+	/**
+	 * Set-method for statistics_subsets
+	 * @param statistics subsets string
+	 */
+	void set_statistics_subsets(const string& statistics_subsets);
 
 	/**
 	 * Set-method for project filename
@@ -134,9 +140,14 @@ public:
 	const string& robot_filename() const;
 
 	/**
-	 * \return constant reference to the string describing the type of the Statistics in the parser
+	 * \return constant reference to the string describing the statistics' configuration-template
 	 */
-	const string& statistics_module() const;
+	const string& statistics_template() const;
+
+	/**
+	 * \return constant reference to the string describing the statistics' subsets-configuration
+	 */
+	const string& statistics_subsets() const;
 
 	/**
 	 * \return constant reference to the string describing the type of the used View in the parser
@@ -157,7 +168,8 @@ private:
 	string obstacle_filename_;
 	string project_name_;
 	string robot_filename_;
-	string statistics_module_;
+	string statistics_template_;
+	string statistics_subsets_;
 	string view_;
 
 	//seeds

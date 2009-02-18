@@ -8,6 +8,8 @@
 #ifndef STATS_CALC_H_
 #define STATS_CALC_H_
 
+#include <boost/smart_ptr.hpp>
+
 #include "../Model/world_information.h"
 #include "../SimulationKernel/simulation_listener.h"
 
@@ -30,21 +32,31 @@ struct StatsCalcInData {
 	 * At simulation's begin it will hold that "prev_world_info_.get() == NULL"
 	 */
 	boost::shared_ptr<WorldInformation> prev_world_info_;
+
+	boost::shared_ptr<std::vector<Vector3d> > prev_positions;
+	Vector3d prev_miniball_center;
+	double prev_miniball_radius;
 };
 
 class StatsCalc {
 public:
+
+	static const bool DEBUG = false;
+
 	StatsCalc();
 	virtual ~StatsCalc();
 
-	void init(StatsConfig & stats_cfg);
+	void init(StatsConfig* stats_cfg);
 
 	void calculate(StatsCalcInData &data,
 			std::vector<boost::shared_ptr<RobotData> > & subset,
 			boost::shared_ptr<StatsOut> & stats_out);
 
 private:
-	StatsConfig stats_cfg;
+	/**
+	 * pointer to the stats_cfg stored in StatsControl
+	 */
+	StatsConfig* stats_cfg;
 	NumSetStats num_stats;
 	VecSetStats vec_stats;
 };
