@@ -112,18 +112,18 @@ void StatsCalc::calculate(StatsCalcInData & data,
 		data.prev_miniball_radius = mb.radius();
 	}
 
-	if (stats_cfg->vel_cfg() != 0) {
-		// log velocity-information
-		tmp_numstats_vector.clear();
-		for(unsigned int i=0; i<subset.size(); i++) {
-			//"tmp_numstats_vector.push_back((*subset[i])->velocity_len());"
-		}
-
-		num_stats.handle(tmp_numstats_vector, stats_cfg->vel_cfg());
-		num_stats.push_values(values);
-		if (push_names)
-			num_stats.push_names(names, "vel");
-	}
+//	if (stats_cfg->vel_cfg() != 0) {
+//		// log velocity-information
+//		tmp_numstats_vector.clear();
+//		for(unsigned int i=0; i<subset.size(); i++) {
+//			//"tmp_numstats_vector.push_back(subset[i].get()->velocity_len());"
+//		}
+//
+//		num_stats.handle(tmp_numstats_vector, stats_cfg->vel_cfg());
+//		num_stats.push_values(values);
+//		if (push_names)
+//			num_stats.push_names(names, "vel");
+//	}
 
 	// DO ALL THE CALCULATION
 	// ...

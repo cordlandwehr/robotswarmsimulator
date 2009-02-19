@@ -72,7 +72,6 @@ void NumSetStats::handle(const std::vector<double> & data) {
 	if (cfg_ & MEDIAN) {
 		std::vector<double> dataCpy = std::vector<double>(data);
 		std::sort(dataCpy.begin(), dataCpy.end());
-		//TODO (dwonisch): n = 0 at current simulation => crash
 		median_ = dataCpy[(n-1)/2]; // 1,2=>0 | 3,4=>1 | ...
 	}
 }
