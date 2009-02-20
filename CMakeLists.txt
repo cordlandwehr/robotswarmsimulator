@@ -16,10 +16,11 @@ set(ECLIPSE_CDT4_GENERATE_SOURCE_PROJECT true)
 enable_testing()
 
 # descend into subprojects
+add_subdirectory(documentation)
+add_subdirectory(luabind)
 add_subdirectory(src)
 add_subdirectory(src/UserInterfaces)
 add_subdirectory(src/Tests)
-add_subdirectory(documentation)
 
 # packaging
 include(packaging)

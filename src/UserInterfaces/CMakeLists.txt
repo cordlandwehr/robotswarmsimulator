@@ -1,5 +1,5 @@
 project(rssmain)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 # find all source files
 set(RSSMAIN_SRCS

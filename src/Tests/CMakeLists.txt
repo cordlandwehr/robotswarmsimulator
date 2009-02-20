@@ -1,5 +1,5 @@
 project(rsstests)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 # find all source files
 file(GLOB_RECURSE RSSTESTS_SRCS *.cc)
@@ -17,8 +17,8 @@ add_executable(RSSUnitTests ${RSSTESTS_SRCS})
 target_link_libraries(RSSUnitTests
 	RSSimulator
 	${Boost_LIBRARIES}
-	${OPENGL_LIBRARIES}
-	${GLUT_glut_LIBRARY}
+#	${OPENGL_LIBRARIES}
+#	${GLUT_glut_LIBRARY}
 )
 
 # provide a custom target for boost style unit test call
