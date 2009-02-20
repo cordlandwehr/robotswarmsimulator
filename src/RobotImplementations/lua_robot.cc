@@ -7,27 +7,29 @@
 
 #include "lua_robot.h"
 
+#include <algorithm>
+#include <deque>
 #include <iostream>
+
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
+
 #include <luabind/object.hpp>
 #include <luabind/operator.hpp>
-#include <deque>
-#include <algorithm>
 
-#include "../../Model/robot_identifier.h"
-#include "../../Model/marker_identifier.h"
-#include "../../Model/obstacle_identifier.h"
-#include "../../Model/box_identifier.h"
-#include "../../Model/sphere_identifier.h"
-#include "../../Model/marker_information.h"
-#include "../../Requests/acceleration_request.h"
-#include "../../Requests/marker_request.h"
-#include "../../Requests/position_request.h"
-#include "../../Requests/type_change_request.h"
-#include "../../Requests/velocity_request.h"
-#include "../../Views/view.h"
+#include "../Model/robot_identifier.h"
+#include "../Model/marker_identifier.h"
+#include "../Model/obstacle_identifier.h"
+#include "../Model/box_identifier.h"
+#include "../Model/sphere_identifier.h"
+#include "../Model/marker_information.h"
+#include "../Requests/acceleration_request.h"
+#include "../Requests/marker_request.h"
+#include "../Requests/position_request.h"
+#include "../Requests/type_change_request.h"
+#include "../Requests/velocity_request.h"
+#include "../Views/view.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script

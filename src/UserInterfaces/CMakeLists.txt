@@ -19,6 +19,13 @@ include_directories(${OPENGL_INCLUDE_DIR})
 find_package(GLUT)
 include_directories(${GLUT_INCLUDE_DIR})
 
+# find/configure Lua
+find_package(Lua51 REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
+# include directory for Luabind
+include_directories(${luabind_SOURCE_DIR})
+
 # generate executable of the above source files and link it
 add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
 target_link_libraries(RobotSwarmSimulator
@@ -26,6 +33,8 @@ target_link_libraries(RobotSwarmSimulator
 	${Boost_LIBRARIES}
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
+	${LUA_LIBRARIES}
+	luabind
 )
 
 # add executable to install target

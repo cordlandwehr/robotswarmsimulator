@@ -16,6 +16,13 @@ set(Boost_ADDITIONAL_VERSIONS 1.37)
 find_package(Boost 1.37 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
+# find/configure Lua
+find_package(Lua51 REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
+# include directory for Luabind
+include_directories(${luabind_SOURCE_DIR})
+
 # generate library of the above source files
 add_library(RSSimulator ${RSSLIB_SRCS})
 

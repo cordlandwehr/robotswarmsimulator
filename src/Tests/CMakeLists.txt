@@ -12,6 +12,13 @@ set(Boost_ADDITIONAL_VERSIONS 1.37)
 find_package(Boost 1.37 REQUIRED thread unit_test_framework)
 include_directories(${Boost_INCLUDE_DIRS})
 
+# find/configure Lua
+find_package(Lua51 REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
+# include directory for Luabind
+include_directories(${luabind_SOURCE_DIR})
+
 # generate executable of the above source files and link it
 add_executable(RSSUnitTests ${RSSTESTS_SRCS})
 target_link_libraries(RSSUnitTests
@@ -19,6 +26,8 @@ target_link_libraries(RSSUnitTests
 	${Boost_LIBRARIES}
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
+	${LUA_LIBRARIES}
+	luabind
 )
 
 # provide a custom target for boost style unit test call

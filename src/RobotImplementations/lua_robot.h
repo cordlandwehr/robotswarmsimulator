@@ -9,16 +9,15 @@
 #define LUA_ROBOT_H_
 
 #include <string>
+
 extern "C" {
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "lualib.h"
 }
 
 #include <luabind/luabind.hpp>
-#include "luabind/table_policy.hpp"
-#include "../../Model/robot.h"
+#include <luabind/table_policy.hpp>
 
+#include "../Model/robot.h"
 
 
 class LuaRobot: public Robot {
