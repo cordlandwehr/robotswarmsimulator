@@ -17,8 +17,8 @@ add_executable(RSSUnitTests ${RSSTESTS_SRCS})
 target_link_libraries(RSSUnitTests
 	RSSimulator
 	${Boost_LIBRARIES}
-#	${OPENGL_LIBRARIES}
-#	${GLUT_glut_LIBRARY}
+	${OPENGL_LIBRARIES}
+	${GLUT_glut_LIBRARY}
 )
 
 # provide a custom target for boost style unit test call
