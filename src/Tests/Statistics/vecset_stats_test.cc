@@ -41,10 +41,10 @@ BOOST_AUTO_TEST_CASE(vecset_stats_test) {
 	BOOST_CHECK_EQUAL(s.shortest()[0], 1);
 	BOOST_CHECK_EQUAL(s.shortest()[1], 1);
 	BOOST_CHECK_EQUAL(s.shortest()[2], 1);
-	BOOST_CHECK_CLOSE(s.shortestlen(), sqrt(3), 0.00001);
+	BOOST_CHECK_CLOSE(s.shortestlen(), sqrt(3.0), 0.00001);
 	BOOST_CHECK_EQUAL(s.longest()[0], 100);
 	BOOST_CHECK_EQUAL(s.longest()[1], 100);
 	BOOST_CHECK_EQUAL(s.longest()[2], 100);
-	BOOST_CHECK_CLOSE(s.longestlen(), sqrt(30000), 0.00001);
+	BOOST_CHECK_CLOSE(s.longestlen(), sqrt(30000.0), 0.00001);
 	BOOST_CHECK_CLOSE(s.cumullen(), 8746.856578223, 0.00001);
 }

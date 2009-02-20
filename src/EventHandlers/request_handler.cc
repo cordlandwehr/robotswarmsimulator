@@ -9,7 +9,7 @@
 #include "../SimulationControl/history.h"
 #include "../Model/world_information.h"
 #include "../Requests/request.h"
-#include "../Utilities/distribution_generator.h"s
+#include "../Utilities/distribution_generator.h"
 
 #include "request_handler.h"
 
