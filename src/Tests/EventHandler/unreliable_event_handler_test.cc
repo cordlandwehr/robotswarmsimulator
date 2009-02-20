@@ -84,7 +84,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
-	RobotType new_type;
+	RobotType new_type = MASTER;
 	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
@@ -163,7 +163,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
-	RobotType new_type;
+	RobotType new_type = MASTER;
 	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
@@ -242,7 +242,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
-	RobotType new_type;
+	RobotType new_type = MASTER;
 	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
@@ -322,7 +322,7 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 	boost::shared_ptr<PositionRequest> position_request(new PositionRequest(*robot_a, new_position));
 
 	// construction of type change request
-	RobotType new_type;
+	RobotType new_type = MASTER;
 	boost::shared_ptr<TypeChangeRequest> type_change_request(new TypeChangeRequest(*robot_a, new_type));
 
 	// construction of velocity request
