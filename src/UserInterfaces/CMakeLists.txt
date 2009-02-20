@@ -25,7 +25,7 @@ target_link_libraries(RobotSwarmSimulator
 	RSSimulator
 	${Boost_LIBRARIES}
 	${OPENGL_LIBRARIES}
-	${GLUT_LIBRARIES}
+	${GLUT_glut_LIBRARY}
 )
 
 # add executable to install target
