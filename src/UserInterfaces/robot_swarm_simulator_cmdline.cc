@@ -69,11 +69,11 @@ int main(int argc, char** argv) {
 		visualizer->glutMainLoop();
 	}
 	catch(std::exception& e) {
-		std::cout << "Uncaught exception: " << e.what() << std::endl;
+		std::cerr << "Uncaught exception: " << e.what() << std::endl;
 		throw; //rethrow exception
 	}
 	catch(...) {
-		std::cout << "Uncaught, unknown exception.";
+		std::cerr << "Uncaught, unknown exception." << std::endl;
 		throw; //rethrow exception
 	}
 	return 0;
