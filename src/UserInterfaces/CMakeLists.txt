@@ -1,14 +1,18 @@
 project(rssmain)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
+# internal include directories
+include_directories("${rsslib_SOURCE_DIR}")
+
 # find all source files
 set(RSSMAIN_SRCS
-	SampleGUI.cc
+	robot_swarm_simulator_cmdline.cc
+	glut_visualizer.cc
 )
 
 # find/configure boost
 set(Boost_ADDITIONAL_VERSIONS 1.37)
-find_package(Boost 1.37 REQUIRED thread)
+find_package(Boost 1.37 REQUIRED program_options thread)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # find/configure OpenGL

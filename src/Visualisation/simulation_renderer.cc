@@ -43,7 +43,7 @@ const float kMarkerPointSize = 2.0;
 
 
 
-SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> & camera) : camera_(camera),render_cog_(false) {
+SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> camera) : camera_(camera),render_cog_(false) {
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
 

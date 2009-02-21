@@ -33,7 +33,7 @@ class SimulationRenderer : public Visualizer {
 
 public:
 
-	SimulationRenderer(boost::shared_ptr<Camera> & camera);
+	SimulationRenderer(boost::shared_ptr<Camera> camera);
 
 	void init();
 
