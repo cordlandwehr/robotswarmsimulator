@@ -52,20 +52,29 @@ int main(int argc, char** argv) {
 		std::cout << "   or: '" << argv[0] << " --help' for additional options" << std::endl;
 		return 1;
 	}
+	try {
+		// create simulation kernel
+		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
+		sim_control->create_new_simulation(vm["project-file"].as<std::string>(), vm["history-length"].as<unsigned int>());
 
-	// create simulation kernel
-	boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-	sim_control->create_new_simulation(vm["project-file"].as<std::string>(), vm["history-length"].as<unsigned int>());
+		// setup visualzation
+		boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));
+		visualizer->init();
+		sim_control->set_visualizer(visualizer);
 
-	// setup visualzation
-	boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));
-	visualizer->init();
-	sim_control->set_visualizer(visualizer);
+		// start simulation
+		sim_control->start_simulation();
 
-	// start simulation
-	sim_control->start_simulation();
-
-	// enter visualization's main-loop
-	visualizer->glutMainLoop();
+		// enter visualization's main-loop
+		visualizer->glutMainLoop();
+	}
+	catch(std::exception& e) {
+		std::cout << "Uncaught exception: " << e.what() << std::endl;
+		throw; //rethrow exception
+	}
+	catch(...) {
+		std::cout << "Uncaught, unknown exception.";
+		throw; //rethrow exception
+	}
 	return 0;
 }

@@ -44,9 +44,9 @@ void GlutVisualizer::init() {
 		int spf = static_cast<int>(std::floor(1./fps_ + 0.5)); // spf = second per frame ;-)
 
 		// dummy variables for GLUT's init method
-		int argc = 0;
-		char** argv = NULL;
-
+		int argc = 1;
+		char* argv[] = {"dummy"}; //dummy value needed since otherwise glutinit crashes (on windows)
+		
 		// initialize/configure glut
 		PgGLUT::init("Robot Swarm Simulator", argc, argv);
 		PgGLUT::glutDisplayFunc(boost::bind(&SimulationControl::process_simulation, &simulation_control_));
