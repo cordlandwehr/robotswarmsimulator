@@ -96,8 +96,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	}
 
 	// create Robot Control
-	//TODO (dwonisch): history_->size() wrong here. Rather something like history_->capacity()
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->size(), *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->capacity(), *initial_world_information));
 
 	// setup of activation sequence generator
 	switch (ASG_map_[boost::to_upper_copy(parser->asg())]) {
@@ -269,7 +268,7 @@ boost::shared_ptr<RequestHandler> SimulationKernel::setup_request_handler(Reques
 				setup_vectormodifier(boost::dynamic_pointer_cast<VectorRequestHandler>(request_handler), vector_modifiers);
 				break;
 			case TYPE_CHANGE_REQUEST_HANDLER:
-				request_handler.reset(new TypeChangeRequestHandler(seed, discard_prob, *history));				
+				request_handler.reset(new TypeChangeRequestHandler(seed, discard_prob, *history));
 				break;
 			case MARKER_REQUEST_HANDLER:
 				request_handler.reset(new MarkerRequestHandler(seed, discard_prob, *history));

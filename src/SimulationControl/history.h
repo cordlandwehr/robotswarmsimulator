@@ -49,6 +49,7 @@ public:
 
 	// .. other accessors may follow
 	const std::size_t size() {return history_.size();}
+	const std::size_t capacity() {return history_.capacity();}
 private:
 	boost::circular_buffer<boost::shared_ptr<WorldInformation> > history_;
 	std::size_t consumer_position_;
