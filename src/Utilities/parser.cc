@@ -69,7 +69,7 @@ void Parser::init() {
 }
 
 bool Parser::is_comment(const string& line) {
-	return (line.at(0)=='#');
+	return line.empty() || line.at(0)=='#';
 }
 
 bool Parser::contains_assignment(const string& line) {
@@ -161,14 +161,14 @@ string Parser::get_string_value_from_map(map<string,string> variables_and_values
 	}
 }
 
-int Parser::get_int_value_from_map(map<string,string> variables_and_values,
+unsigned int Parser::get_uint_value_from_map(map<string,string> variables_and_values,
 													const string& var_name) {
 	//get string value from map
 	string string_value = get_string_value_from_map(variables_and_values, var_name);
 
 	//convert string value to int
 	try {
-		return boost::lexical_cast<int>(string_value);
+		return boost::lexical_cast<unsigned int>(string_value);
 
 	} catch(const boost::bad_lexical_cast& ) {
 		throw UnsupportedOperationException("Failed casting string to integer.");
@@ -238,11 +238,11 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	view_ =get_string_value_from_map(variables_and_values, "VIEW");
 
 	//seeds
-	marker_request_handler_seed_ = get_int_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_SEED");
-	type_change_request_handler_seed_ = get_int_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_SEED");
-	velocity_request_handler_seed_ = get_int_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_SEED");
-	position_request_handler_seed_ = get_int_value_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_SEED");
-	acceleration_request_handler_seed_ = get_int_value_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_SEED");
+	marker_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_SEED");
+	type_change_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_SEED");
+	velocity_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_SEED");
+	position_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_SEED");
+	acceleration_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_SEED");
 
 	//discard probabilities
 	marker_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_DISCARD_PROB");

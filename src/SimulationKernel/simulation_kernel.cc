@@ -269,10 +269,10 @@ boost::shared_ptr<RequestHandler> SimulationKernel::setup_request_handler(Reques
 				setup_vectormodifier(boost::dynamic_pointer_cast<VectorRequestHandler>(request_handler), vector_modifiers);
 				break;
 			case TYPE_CHANGE_REQUEST_HANDLER:
-				request_handler.reset(new MarkerRequestHandler(seed, discard_prob, *history));
+				request_handler.reset(new TypeChangeRequestHandler(seed, discard_prob, *history));				
 				break;
 			case MARKER_REQUEST_HANDLER:
-				request_handler.reset(new TypeChangeRequestHandler(seed, discard_prob, *history));
+				request_handler.reset(new MarkerRequestHandler(seed, discard_prob, *history));
 				break;
 		}
 

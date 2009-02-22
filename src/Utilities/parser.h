@@ -452,7 +452,7 @@ private:
 	 * \param var_name Name of the variable whose value shall be returned from the map.
 	 * \return If var_name exists in the map, return (int) value of var_name saved in the map.
 	 */
-	int get_int_value_from_map(map<string,string> variables_and_values, const string& var_name);
+	unsigned int get_uint_value_from_map(map<string,string> variables_and_values, const string& var_name);
 
 	/**
 	 * This methods returns the (double) value of the variable according to var_name saved in the given map
