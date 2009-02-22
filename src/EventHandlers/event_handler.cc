@@ -14,6 +14,7 @@
 #include "../Model/box.h"
 #include "../Model/robot_data.h"
 #include "../Model/identifier.h"
+#include "../Model/robot_identifier.h"
 
 #include "../Events/compute_event.h"
 #include "../Events/event.h"
@@ -146,11 +147,11 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 }
 
 boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(int time) {
-	// create new world information
-	boost::shared_ptr<WorldInformation> new_world_information(new WorldInformation());
-
 	// get the old world information to extrapolate from
-	WorldInformation old_world_information = history_->get_newest();
+	const WorldInformation& old_world_information = history_->get_newest();
+
+	// create new world information
+	boost::shared_ptr<WorldInformation> new_world_information(new WorldInformation(old_world_information));
 
 	// set the time
 	new_world_information->set_time(time);
@@ -160,27 +161,10 @@ boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_informat
 
 	// extrapolate all robots
 	BOOST_FOREACH(boost::shared_ptr<RobotData> old_robot, old_world_information.robot_data()) {
-		// TODO(craupach) this unnecessarily copies position and velocity. May be too inefficient.
-		boost::shared_ptr<RobotData> new_robot(new RobotData(*old_robot));
-		new_robot->set_position(old_robot->extrapolated_position(time_difference));
-		new_robot->set_velocity(old_robot->extrapolated_velocity(time_difference));
-
-		// insert new robot
-		// TODO(craupach) test if this preserves the ordering. There should be a way of inserting at a specific
-		// position in the array
-		new_world_information->add_robot_data(new_robot);
-	}
-
-	// copy all obstacles
-	BOOST_FOREACH(boost::shared_ptr<Obstacle> old_obstacle, old_world_information.obstacles()) {
-		boost::shared_ptr<Obstacle> new_obstacle = boost::dynamic_pointer_cast<Obstacle>(old_obstacle->clone());
-		new_world_information->add_obstacle(new_obstacle);
-	}
-
-	// copy all markers
-	BOOST_FOREACH(boost::shared_ptr<WorldObject> old_marker, old_world_information.markers()) {
-		boost::shared_ptr<WorldObject> new_marker(new WorldObject(*old_marker));
-		new_world_information->add_marker(new_marker);
+		RobotData &new_robot =
+		    new_world_information->get_according_robot_data(boost::dynamic_pointer_cast<RobotIdentifier> (old_robot->id()));
+		new_robot.set_position(old_robot->extrapolated_position(time_difference));
+		new_robot.set_velocity(old_robot->extrapolated_velocity(time_difference));
 	}
 
 	return new_world_information;

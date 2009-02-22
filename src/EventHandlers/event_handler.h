@@ -55,8 +55,6 @@ public:
 	                                                                                                 robot_control_(robot_control),
 	                                                                                                 time_of_last_event_(0) {}
 
-	EventHandler() {};
-
 	/**
 	 * handles the given event. By calling appropriate handlers and updating the listeners.
 	 */

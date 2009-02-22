@@ -92,14 +92,12 @@ void SimulationControl::process_simulation() {
 			//proceed processing_time to next_world_information time instead of setting it to new_processing_time
 			//-> pauses processing_time at next_world_information_->time()
 			current_processing_time_ = next_world_information_->time() * processing_time_factor_;
-			std::cout << "try wait failed" << std::endl;
 			draw_current_simulation();
 			return;
 		}
 		else {
 			current_world_information_ = next_world_information_;
 			next_world_information_ = new_world_information;
-			std::cout << "fetched new world information" << std::endl;
 		}
 	}
 	current_processing_time_ = new_processing_time;

@@ -9,7 +9,7 @@
 
 #include "history.h"
 #include "../Model/world_information.h"
-
+#include <iostream>
 
 History::History(std::size_t size) : history_(size), consumer_position_(0), empty_count_(size), fill_count_(0){
 
@@ -34,7 +34,6 @@ boost::shared_ptr<WorldInformation> History::get_oldest_unused(bool block) {
 	else if(!fill_count_.try_wait()) {
 		return boost::shared_ptr<WorldInformation>();
 	}
-
 	boost::mutex::scoped_lock lock(mutex_);
 	--consumer_position_;
 	boost::shared_ptr<WorldInformation> result(new WorldInformation(*history_[consumer_position_]));
