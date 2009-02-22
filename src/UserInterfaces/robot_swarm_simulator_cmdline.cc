@@ -53,9 +53,14 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	try {
+		std::string tmpProjectFile = vm["project-file"].as<std::string>();
+		// deletes ".swarm" from end of file, if used
+		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
+			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
+
 		// create simulation kernel
 		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-		sim_control->create_new_simulation(vm["project-file"].as<std::string>(), vm["history-length"].as<unsigned int>());
+		sim_control->create_new_simulation(tmpProjectFile, vm["history-length"].as<unsigned int>());
 
 		// setup visualzation
 		boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));

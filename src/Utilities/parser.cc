@@ -230,9 +230,17 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
 	asg_= get_string_value_from_map(variables_and_values, "ASG");
 	compass_model_ = get_string_value_from_map(variables_and_values, "COMPASS_MODEL");
-	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
 	project_name_ = get_string_value_from_map(variables_and_values, "PROJECT_NAME");
+
+	// if ".obstacle" exists at end of filename: erase it!
+	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
+	if (obstacle_filename_.rfind(".obstacle")!=string::npos)
+		obstacle_filename_.erase (obstacle_filename_.rfind(".obstacle"),9);
+	// if ".robot" exists at end of filename: erase it!
 	robot_filename_ = get_string_value_from_map(variables_and_values, "ROBOT_FILENAME");
+	if (robot_filename_.rfind(".robot")!=string::npos)
+		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
+
 	statistics_template_ = get_string_value_from_map(variables_and_values, "STATISTICS_TEMPLATE");
 	statistics_subsets_ = get_string_value_from_map(variables_and_values, "STATISTICS_SUBSETS");
 	view_ =get_string_value_from_map(variables_and_values, "VIEW");
