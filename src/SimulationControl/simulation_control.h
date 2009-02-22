@@ -105,7 +105,6 @@ private:
 		 */
 		bool paused_;
 
-		//TODO (dwonisch): Semaphore should do the job, but there might be better solutions.
 		boost::interprocess::interprocess_semaphore unpaused_;
 		boost::shared_ptr<SimulationKernel> simulation_kernel_;
 	};

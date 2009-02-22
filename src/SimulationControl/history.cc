@@ -17,7 +17,7 @@ History::History(std::size_t size) : history_(size), consumer_position_(0), empt
 
 void History::insert(boost::shared_ptr<WorldInformation> world_information) {
 	empty_count_.wait();
-	//TODO (dwonisch): Mutex is needed, since consumer_position_ is altered in both methods.
+	//TOTA (dwonisch): Mutex is needed, since consumer_position_ is altered in both methods.
 	//                 Maybe use a plain array instead of circular_buffer to avoid this.
 	boost::mutex::scoped_lock lock(mutex_);
 	history_.push_front(world_information);

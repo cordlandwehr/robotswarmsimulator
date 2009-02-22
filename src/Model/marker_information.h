@@ -38,7 +38,6 @@ private:
 	/**
 	 * Contains data of this marker. A string (that denotes 'variable name') is used as a key
 	 * and a boost::any as a value for the key (holds custom data)
-	 * TODO(martinah) Use boost::shared_ptr<boost::any> instead of just boost::any?
 	 */
 	map<string, boost::any> data_;
 };

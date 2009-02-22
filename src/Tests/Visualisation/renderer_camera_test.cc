@@ -125,7 +125,6 @@ int main(int argc, char ** argv)
 
 		robot_pos.reset( new Vector3d());
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
-		//TODO: undefined behavior here, since robot is deleted after each forloop run.
 		robot = new MyRobot(id);
 
 

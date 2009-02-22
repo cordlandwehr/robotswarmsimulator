@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <boost/foreach.hpp>
+#include <cassert>
 
 
 WorldInformation::WorldInformation() {
@@ -90,11 +91,11 @@ int WorldInformation::time() const {
 }
 
 const RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) const {
-	//TODO(martinah) maybe check if robot_datas_[id->id()] exists? (should exist!)
+	assert(id->id() < robot_data_.size());
 	return *(robot_data_[id->id()]);
 }
 
 RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) {
-	//TODO(martinah) maybe check if robot_datas_[id->id()] exists? (should exist!)
+	assert(id->id() < robot_data_.size());
 	return *(robot_data_[id->id()]);
 }
