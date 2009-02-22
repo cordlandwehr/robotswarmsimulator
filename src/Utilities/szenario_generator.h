@@ -77,17 +77,17 @@ public:
 
 
 	/**
-	 * Set filename for output
+	 * Set filename for output, without file extension
 	 */
 	void set_robotFile(string filename);
 
 	/**
-	 * Set filename for output
+	 * Set filename for output, without file extension
 	 */
 	void set_obstacleFile(string filename);
 
 	/**
-	 * Set filename for output
+	 * Set filename for output, without file extension
 	 */
 	void set_worldFile(string filename);
 

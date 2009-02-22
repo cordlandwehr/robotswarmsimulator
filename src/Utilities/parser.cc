@@ -538,7 +538,7 @@ void Parser::load_projectfiles(const string& project_filename) {
 void Parser::save_main_project_file(const string& project_filename) {
 
 	ofstream project_file;
-	project_file.open(project_filename.c_str());
+	project_file.open((project_filename+".swarm").c_str());
 
 	if(project_file.is_open()) {
 		//write variables
@@ -590,7 +590,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 void Parser::save_robot_file(const WorldInformation& world_info) {
 
 	ofstream robot_file;
-	robot_file.open(robot_filename_.c_str());
+	robot_file.open((robot_filename_+".robot").c_str());
 
 	if(robot_file.is_open()) {
 		//write robot header
@@ -674,7 +674,7 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 void Parser::save_obstacle_file(const WorldInformation& world_info) {
 
 	ofstream obstacle_file;
-	obstacle_file.open(obstacle_filename_.c_str());
+	obstacle_file.open((obstacle_filename_+".obstacle").c_str());
 
 	if(obstacle_file.is_open()) {
 		//write obstacle header
