@@ -295,10 +295,6 @@ void szenario_generator::write_to_file() {
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ )
 		generatedWorld_->add_robot_data((*iter));
 
-	// write everything to file
-
-	std::cout << "out"  << std::endl;
-
 	parser_->save_projectfiles(*worldFileName_, *generatedWorld_);
 }
 
