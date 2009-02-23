@@ -16,7 +16,6 @@
 #include <OpenGL/pg_glut.h>
 
 
-
 namespace {
 	// GLUT timer callback that tries to achieve the requested framerate
 	void timer_callback(int ms) {
@@ -24,8 +23,6 @@ namespace {
 		glutTimerFunc(ms, &timer_callback, ms);
 	}
 }
-
-
 
 GlutVisualizer::GlutVisualizer(SimulationControl& simulation_control, unsigned int fps)
 : SimulationRenderer(), simulation_control_(simulation_control),
@@ -64,27 +61,30 @@ void GlutVisualizer::init() {
 void GlutVisualizer::keyboard_func(unsigned char key, int x, int y){
 	switch(key){
 		case 'q':
-			simulation_control_.terminate_simulation();
-			exit(0);
+				simulation_control_.terminate_simulation();
+				exit(0);
 			break;
 		case ' ':
-			simulation_control_.pause_processing_time();
+				simulation_control_.pause_processing_time();
 			break;
 		case '+':
-			simulation_control_.increase_processing_time_linearly();
+				simulation_control_.increase_processing_time_linearly();
 			break;
 		case '-':
-			simulation_control_.decrease_processing_time_linearly();
+				simulation_control_.decrease_processing_time_linearly();
 			break;
 		case '*':
-			simulation_control_.increase_processing_time_exp();
+				simulation_control_.increase_processing_time_exp();
 			break;
 		case '/':
-			simulation_control_.decrease_processing_time_exp();
+				simulation_control_.decrease_processing_time_exp();
 			break;
-
+		case 'h':
+				simulation_control_.pause_processing_time();
+				SimulationRenderer::keyboard_func(key,x,y);
+			break;
 		default:
-			SimulationRenderer::keyboard_func(key,x,y);
+				SimulationRenderer::keyboard_func(key,x,y);
 			break;
 	}
 }
@@ -94,8 +94,7 @@ void GlutVisualizer::keyboard_special_func(int key, int x, int y){
 	switch(key){
 
 		default:
-			SimulationRenderer::keyboard_special_func(key,x,y);
-
+				SimulationRenderer::keyboard_special_func(key,x,y);
 			break;
 	}
 
