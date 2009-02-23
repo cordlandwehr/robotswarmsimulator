@@ -34,6 +34,11 @@
 #include "../Utilities/VectorModifiers/vector_trimmer.h"
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
 
+#include "../Model/robot.h"
+#include "../Model/robot_identifier.h"
+#include "../RobotImplementations/lua_robot.h"
+#include "../RobotImplementations/simple_robot.h"
+
 #include <iostream>
 
 void set_up_vector_modifiers(boost::shared_ptr<VectorRequestHandler> handler,
@@ -184,4 +189,18 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 	}
 
 	return view_factory;
+}
+
+boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifier> id, const std::string& algorithm) {
+
+	boost::shared_ptr<Robot> robot;
+
+	// check if the algorithm is a lua file
+	std::string subfix = algorithm.substr(algorithm.size() - 4, 4);
+	if(subfix == ".lua") {
+		robot.reset(new LuaRobot(id, algorithm));
+	} else if(algorithm == "SIMPLEROBOT") {
+		robot.reset(new SimpleRobot(id));
+	}
+	return robot;
 }
