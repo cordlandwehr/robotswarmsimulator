@@ -61,3 +61,15 @@ bool Box::contains_point(boost::shared_ptr<Vector3d> point) const {
 	else
 		return false;
 }
+
+double Box::max_dimension() const{
+	double max = width_;
+	if(height_>max){
+		max = height_;
+	}
+	if(depth_ > max ){
+		max = depth_;
+	}
+
+	return max;
+}

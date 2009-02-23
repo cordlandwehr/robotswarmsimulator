@@ -128,6 +128,15 @@ public:
 	 */
 	const Robot& robot() const;
 
+
+	unsigned short int color(){
+		return color_;
+	}
+
+	void set_color( unsigned short int color){
+		color_ = color;
+	}
+
 	virtual boost::shared_ptr<WorldObject> clone() const;
 private:
 	/**
@@ -146,6 +155,9 @@ private:
 	RobotType type_;
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;
+
+	unsigned short int color_;
+
 };
 
 #endif /* ROBOT_DATA_H_ */

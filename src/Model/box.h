@@ -71,6 +71,8 @@ public:
 
 	virtual boost::shared_ptr<WorldObject> clone() const;
 
+	double max_dimension() const;
+
 private:
 	/**
 	 * \var Depth (in z-direction) of the box.

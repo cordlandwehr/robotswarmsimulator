@@ -29,6 +29,7 @@ public:
 	 */
 	virtual bool contains_point(boost::shared_ptr<Vector3d> point) const = 0;
 	virtual boost::shared_ptr<WorldObject> clone() const = 0;
+	virtual double max_dimension() const = 0;
 };
 
 #endif /* OBSTACLE_H_ */

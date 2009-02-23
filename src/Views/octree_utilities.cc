@@ -27,7 +27,7 @@
 
 
 
-bool OctreeUtilities::compare_to_squared_radius(const boost::shared_ptr<Octree>& octree,const Vector3d& pos, float sq_radius){
+bool OctreeUtilities::compare_to_squared_radius(const boost::shared_ptr<OctreeNode>& octree,const Vector3d& pos, float sq_radius){
 
 	Vector3d center = octree->center();
 	float x = center(0) - pos(0);
@@ -39,7 +39,7 @@ bool OctreeUtilities::compare_to_squared_radius(const boost::shared_ptr<Octree>&
 }
 
 
-float OctreeUtilities::calculate_squared_dist(const boost::shared_ptr<Octree>& octree,const Vector3d& pos){
+float OctreeUtilities::calculate_squared_dist(const boost::shared_ptr<Octree::OctreeNode>& octree,const Vector3d& pos){
 	Vector3d center = octree->center();
 		float x = center(0) - pos(0);
 		float y = center(1) - pos(1);
@@ -57,12 +57,12 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 	std::set<OctreeUtilities::RobotRef > found_robots;
 
 	// do the real work
-	get_visible_robots_by_radius_Rec(octree, found_robots, view_radius*view_radius, pos);
+	get_visible_robots_by_radius_Rec(octree->root(), found_robots, view_radius*view_radius, pos);
 
 	return found_robots;
 }
 
- void OctreeUtilities::get_visible_robots_by_radius_Rec(const boost::shared_ptr<Octree> &octree,
+ void OctreeUtilities::get_visible_robots_by_radius_Rec(const boost::shared_ptr<OctreeNode> &octree,
 														std::set<OctreeUtilities::RobotRef > & robots_found,
 													    float sq_radius,
 													    const Vector3d & pos ) {
@@ -117,13 +117,13 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
  	std::set<OctreeUtilities::MarkerRef > found_markers;
 
- 	get_visible_markers_by_radius_Rec(octree, found_markers, view_radius*view_radius, pos);
+ 	get_visible_markers_by_radius_Rec(octree->root(), found_markers, view_radius*view_radius, pos);
 
  	return found_markers;
  }
 
 
-  void OctreeUtilities::get_visible_markers_by_radius_Rec(const boost::shared_ptr<Octree> &octree,
+  void OctreeUtilities::get_visible_markers_by_radius_Rec(const boost::shared_ptr<OctreeNode> &octree,
 														  std::set<OctreeUtilities::MarkerRef > & markers_found,
  													      float sq_radius,
  													      const Vector3d & pos ) {
@@ -173,13 +173,13 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
   	std::set<OctreeUtilities::ObstacleRef > found_obstacles;
 
-  	get_visible_obstacles_by_radius_Rec(octree, found_obstacles, view_radius, pos);
+  	get_visible_obstacles_by_radius_Rec(octree->root(), found_obstacles, view_radius, pos);
 
   	return found_obstacles;
   }
 
 
- void OctreeUtilities::get_visible_obstacles_by_radius_Rec(const boost::shared_ptr<Octree> &octree,
+ void OctreeUtilities::get_visible_obstacles_by_radius_Rec(const boost::shared_ptr<OctreeNode> &octree,
 														   std::set<OctreeUtilities::ObstacleRef > & obstacles_found,
   													       float radius,
   													       const Vector3d & pos ) {
@@ -196,7 +196,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
   			 float y = rob_pos(1) - pos(1);
   			 float z = rob_pos(2) - pos(2);
 
-  			 float obstacle_width = octree->determine_obstacle_max_size((*it_obstacles));
+  			 float obstacle_width = (*it_obstacles)->max_dimension();
   			 float r = radius + obstacle_width;
   			 r*=r;
 
@@ -235,7 +235,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 	 PriorityQueue<RobotRef>::Type queue;
 
 	 // find nearest robots
-	 get_nearest_robots_Rec(octree, pos,num_nearest, queue, id);
+	 get_nearest_robots_Rec(octree->root(), pos,num_nearest, queue, id);
 
 	 // calculate the set
 	 std::set<RobotRef> found_robots;
@@ -252,7 +252,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
  }
 
-void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<Octree>& octree,
+void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>& octree,
 											 const Vector3d &pos,
 											 std::size_t num_nearest,
 											 PriorityQueue<RobotRef>::Type & queue,
@@ -364,7 +364,7 @@ std::set<OctreeUtilities::MarkerRef> OctreeUtilities::get_nearest_markers(const 
 	 PriorityQueue<MarkerRef>::Type queue;
 
 	 // find nearest robots
-	 get_nearest_markers_Rec(octree, pos,num_nearest, queue);
+	 get_nearest_markers_Rec(octree->root(), pos,num_nearest, queue);
 
 	 // calculate the set
 	 std::set<MarkerRef> found_markers;
@@ -381,7 +381,7 @@ std::set<OctreeUtilities::MarkerRef> OctreeUtilities::get_nearest_markers(const 
 
  }
 
-void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<Octree>& octree,
+void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<OctreeNode>& octree,
 											 const Vector3d &pos,
 											 std::size_t num_nearest,
 											 PriorityQueue<MarkerRef>::Type & queue){
@@ -491,7 +491,7 @@ std::set<OctreeUtilities::ObstacleRef> OctreeUtilities::get_nearest_obstacles(co
 	 PriorityQueue<ObstacleRef>::Type queue;
 
 	 // find nearest robots
-	 get_nearest_obstacles_Rec(octree, pos,num_nearest, queue);
+	 get_nearest_obstacles_Rec(octree->root(), pos,num_nearest, queue);
 
 	 // calculate the set
 	 std::set<ObstacleRef> found_obstacles;
@@ -509,7 +509,7 @@ std::set<OctreeUtilities::ObstacleRef> OctreeUtilities::get_nearest_obstacles(co
  }
 
 
-void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<Octree>& octree,
+void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<OctreeNode>& octree,
 											 const Vector3d &pos,
 											 std::size_t num_nearest,
 											 PriorityQueue<ObstacleRef>::Type & queue){
@@ -538,7 +538,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<Octree>&
 			 float y = pos(1) - robot_pos(1);
 			 float z = pos(2) - robot_pos(2);
 
-			 float width = octree->determine_obstacle_max_size( (*it_obstacles) );
+			 float width =  (*it_obstacles)->max_dimension();
 			 float dist = std::sqrt(x*x + y*y + z*z ) - width;
 
 			 // not enough found, so we have to add it anyway

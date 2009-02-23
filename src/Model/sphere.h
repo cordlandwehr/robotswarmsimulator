@@ -42,6 +42,7 @@ public:
 
 	virtual boost::shared_ptr<WorldObject> clone() const;
 
+	double max_dimension() const{ return radius_; }
 private:
 	double radius_;
 };

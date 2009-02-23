@@ -29,10 +29,11 @@
 #include "../../Utilities/vector_arithmetics.h"
 
 #include "../../Views/octree.h"
+#include "../../Views/octree_utilities.h"
 
 class Request;
 
-class MyRobot : public Robot{
+class MyRobot : public Robot {
 
 public:
 	MyRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
@@ -94,7 +95,7 @@ BOOST_AUTO_TEST_CASE(octree_test) {
 		float start = std::clock();
 
 		boost::shared_ptr<Octree> octree(new Octree(10,radius*2.0));
-		octree->scene_dimensions(markers, obstacles, robots);
+
 
 		octree->create_tree(markers,obstacles,robots);
 
@@ -105,9 +106,25 @@ BOOST_AUTO_TEST_CASE(octree_test) {
 		std::printf("Built time for Octree: %f \n", ticks);
 
 		start = std::clock();
+		std::vector<boost::shared_ptr<RobotData> >::iterator it_robs;
+		for(it_robs = robots.begin(); it_robs != robots.end(); ++it_robs ){
+
+			OctreeUtilities::get_visible_markers_by_radius(octree, (*it_robs)->position(), radius );
+		}
+
+
+		end = std::clock();
+		ticks = (end - start )/ CLOCKS_PER_SEC;
+		std::printf("Search time: %f \n", ticks);
+
+
+
+		start = std::clock();
 
 		std::vector<boost::shared_ptr<RobotData> >::iterator it_robots;
 		std::vector<boost::shared_ptr<RobotData> >::iterator it_robots_comp;
+
+
 
 		for(it_robots = robots.begin(); it_robots != robots.end(); ++it_robots){
 			Vector3d robot_pos = (*it_robots)->position();

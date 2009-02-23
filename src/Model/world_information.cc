@@ -58,6 +58,7 @@ vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() {
 	return markers_;
 }
 
+
 void WorldInformation::add_marker(boost::shared_ptr<WorldObject> new_marker) {
 	markers_.push_back(new_marker);
 }
