@@ -103,7 +103,7 @@ Vector3d DistributionGenerator::get_value_uniform_on_sphere_3d() {
 
 	int currentDimension = 0;
 	for(iter=randomVector.begin(); iter != randomVector.end(); iter++ ) {
-		randomVector3d.insert_element(currentDimension, *iter);
+		randomVector3d.insert_element(currentDimension++, *iter);
 	}
 	return randomVector3d;
 }

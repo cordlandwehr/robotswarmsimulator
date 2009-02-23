@@ -8,6 +8,7 @@
 #include "vector_arithmetics.h"
 
 #include <cmath>
+#include <iostream>
 
 double det_matrix3d(const Matrix3d& matrix) {
 	double det =   matrix(0,0) * (matrix(1,1)*matrix(2,2) - matrix(2,1)*matrix(1,2))
@@ -47,3 +48,14 @@ void vector3d_set(Vector3d& a, const Vector3d& b) {
 	a[1] = b[1];
 	a[2] = b[2];
 }
+
+
+bool vector3d_linear_independent(const Vector3d& a, const Vector3d& b, const Vector3d& c) {
+	// computation by rule of Sarrus
+	double det = a[0]*b[1]*c[2] + a[1]*b[2]*c[0] + a[2]*b[0]*c[1] - a[0]*b[2]*c[1] - a[1]*b[0]*c[2] - a[2]*b[1]*c[0];
+
+	if (det < 0.000000001  &&  det > -0.000000001)	// numerical error
+		return false;
+	return true;
+}
+

@@ -37,6 +37,7 @@ BOOST_AUTO_TEST_CASE( szenario_generator_test )
 	tmpVec.insert_element(kZCoord,20.0);
 	generator.distribute_robots_uniform(tmpVec);
 	generator.distribute_robots_normal(tmpVec, 0.0, 1.0);
+	generator.distribute_coordsys_uniform();
 
 	generator.write_to_file();
 

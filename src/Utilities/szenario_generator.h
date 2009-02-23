@@ -78,10 +78,9 @@ public:
 
 
 	/**
-	 * Method sets default algorithm to be used by default for all generated robots
-	 * @param string with algorithm-name, cf. User's Guide
+	 * Method generates random coordinate system, each axis is distributed uniformly at random on 3-dim sphere
 	 */
-	void set_defaultAlgorithm(std::string algorithm_id);
+	void distribute_coordsys_uniform();
 
 	/**
 	 * Set filename for output, without file extension

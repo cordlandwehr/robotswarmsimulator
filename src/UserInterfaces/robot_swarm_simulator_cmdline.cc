@@ -44,7 +44,8 @@ int main(int argc, char** argv) {
 		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
 		("distr-pos", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-pos]^3")
 		("distr-vel", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-vel]^3")
-		("distr-acc", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-acc]^3");
+		("distr-acc", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-acc]^3")
+		("distr-coord", "distribute robot coordsystems uniformly");
 
 	po::options_description simulation_options("Simulation options");
 	simulation_options.add_options()
@@ -113,6 +114,8 @@ int main(int argc, char** argv) {
 			tmpVec.insert_element(kZCoord,vm["distr-acc"].as<double>());
 			generator.distribute_acceleration_uniform(tmpVec);
 		}
+		if (vm.count("distr-coord"))
+			generator.distribute_coordsys_uniform();
 
 		// write to file
 		generator.write_to_file();

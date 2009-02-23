@@ -5,15 +5,11 @@
  *      Author: phoenixx
  */
 
-/*
- * TODO (cola) parser->event_handler_ = 42; not yet implemented for generator
- * TODO (cola) coord system
- */
-
 #include <boost/unordered_map.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <vector>
 #include <string>
@@ -239,6 +235,29 @@ void szenario_generator::distribute_acceleration_normal(double mean, double sigm
 		newRandomPosition->insert_element(kZCoord,png_->get_value_normal());
 
 		(*iter)->set_acceleration( newRandomPosition );
+	}
+}
+
+void szenario_generator::distribute_coordsys_uniform() {
+	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
+	png_->init_uniform_on_sphere(3);	// 3 dimensional
+
+	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
+					boost::shared_ptr<Vector3d> > newRandomCoordSys;
+//TODO (cola) test iff independent
+		do {
+
+			newRandomCoordSys.get<0>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+			newRandomCoordSys.get<1>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+			newRandomCoordSys.get<2>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+		} while (!vector3d_linear_independent(
+				*(newRandomCoordSys.get<0>()),
+				*(newRandomCoordSys.get<1>()),
+				*(newRandomCoordSys.get<2>())
+				));
+
+		(*iter)->set_coordinate_system_axis(newRandomCoordSys);
 	}
 }
 
