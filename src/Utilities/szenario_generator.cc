@@ -14,9 +14,6 @@
 #include <vector>
 #include <string>
 
-//TODO delete
-#include <iostream>
-
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
 #include "../Model/robot_identifier.h"
@@ -28,7 +25,6 @@
 #include "distribution_generator.h"
 
 
-//TODO is there a better way to create robot-datas?
 class SimpleRobot : public Robot {
 public:
 	SimpleRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
@@ -120,12 +116,12 @@ void szenario_generator::distribute_robots_uniform(Vector3d boundingBox) {
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform(0.0, boundingBox(kXCoord));
-		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform());
-		png_->init_uniform(0.0, boundingBox(kYCoord));
-		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform());
-		png_->init_uniform(0.0, boundingBox(kZCoord));
-		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform());
+		png_->init_uniform_real(0.0, boundingBox(kXCoord));
+		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
+		png_->init_uniform_real(0.0, boundingBox(kYCoord));
+		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
+		png_->init_uniform_real(0.0, boundingBox(kZCoord));
+		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
 
 		(*iter)->set_position( newRandomPosition );
 	}
@@ -178,12 +174,12 @@ void szenario_generator::distribute_velocity_uniform(Vector3d boundingBox) {
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform(0.0, boundingBox(kXCoord));
-		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform());
-		png_->init_uniform(0.0, boundingBox(kYCoord));
-		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform());
-		png_->init_uniform(0.0, boundingBox(kZCoord));
-		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform());
+		png_->init_uniform_real(0.0, boundingBox(kXCoord));
+		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
+		png_->init_uniform_real(0.0, boundingBox(kYCoord));
+		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
+		png_->init_uniform_real(0.0, boundingBox(kZCoord));
+		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
 
 		(*iter)->set_velocity( newRandomPosition );
 	}
@@ -211,12 +207,12 @@ void szenario_generator::distribute_acceleration_uniform(Vector3d boundingBox) {
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform(0.0, boundingBox(kXCoord));
-		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform());
-		png_->init_uniform(0.0, boundingBox(kYCoord));
-		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform());
-		png_->init_uniform(0.0, boundingBox(kZCoord));
-		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform());
+		png_->init_uniform_real(0.0, boundingBox(kXCoord));
+		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
+		png_->init_uniform_real(0.0, boundingBox(kYCoord));
+		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
+		png_->init_uniform_real(0.0, boundingBox(kZCoord));
+		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
 
 		(*iter)->set_acceleration( newRandomPosition );
 	}
@@ -245,9 +241,8 @@ void szenario_generator::distribute_coordsys_uniform() {
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
 		boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
 					boost::shared_ptr<Vector3d> > newRandomCoordSys;
-//TODO (cola) test iff independent
-		do {
 
+		do {
 			newRandomCoordSys.get<0>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
 			newRandomCoordSys.get<1>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
 			newRandomCoordSys.get<2>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
