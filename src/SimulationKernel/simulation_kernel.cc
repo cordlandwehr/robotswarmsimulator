@@ -1,11 +1,14 @@
 #include "simulation_kernel.h"
 
+#include <map>
+#include <string>
+#include <boost/any.hpp>
+
+#include "../ActivationSequenceGenerators/activation_sequence_generator.h"
+
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
 #include "../EventHandlers/type_change_request_handler.h"
-
-#include "../ActivationSequenceGenerators/activation_sequence_generator.h"
-#include "../ActivationSequenceGenerators/synchronous_asg.h"
 
 #include "robot_control.h"
 #include "../Views/abstract_view_factory.h"
@@ -24,6 +27,8 @@
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
 
+#include "factories.h"
+
 #include <iostream>
 
 
@@ -32,10 +37,6 @@ SimulationKernel::SimulationKernel() {
 	 * upper-case letters! All strings read from the projectfiles are converted to upper-case
 	 * by boost::to_upper_copy() so it will simply not work if you use lowercase here.
 	 */
-	// initialize ASG-map
-	  ASG_map_["SYNCHRONOUS"] = SYNCHRONOUS;
-	  ASG_map_["SEMISYNCHRONOUS"] = SEMISYNCHRONOUS;
-	  ASG_map_["ASYNCHRONOUS"] = ASYNCHRONOUS;
 
 	// initialize view-map
 	  view_map_["FULLVIEW"] = FULLVIEW;
@@ -73,13 +74,15 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// set history
 	history_ = history;
 
-	// create Parser and load project file
+	// create Parser, load project file and get map
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
+	std::map<std::string, boost::any> &params = parser->get_parameter_map();
 
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
 	history_->insert(initial_world_information);
+
 
 	// create View
 	boost::shared_ptr<AbstractViewFactory> view_factory;
@@ -98,20 +101,8 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// create Robot Control
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->capacity(), *initial_world_information));
 
-	// setup of activation sequence generator
-	switch (ASG_map_[boost::to_upper_copy(parser->asg())]) {
-
-		case SYNCHRONOUS:
-			asg_.reset(new SynchronousASG());
-			break;
-		case SEMISYNCHRONOUS:
-			//TODO(mmarcus) make something semi-synchrounous here;
-			break;
-		case ASYNCHRONOUS:
-			//TODO(mmarcus) make something asynchrounous here;
-			break;
-	}
-
+	// create ASG
+	asg_ = Factory::asg_factory(params);
 	asg_->initialize(*history_, robots_);
 
 	// create according EventHandler.
