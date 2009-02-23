@@ -199,7 +199,7 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	std::string subfix = algorithm.substr(algorithm.size() - 4, 4);
 	if(subfix == ".lua") {
 		robot.reset(new LuaRobot(id, algorithm));
-	} else if(algorithm == "SIMPLEROBOT") {
+	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
 		robot.reset(new SimpleRobot(id));
 	}
 	return robot;
