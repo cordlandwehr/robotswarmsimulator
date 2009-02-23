@@ -16,10 +16,14 @@
 class EventHandler;
 class ActivationSequenceGenerator;
 class AbstractViewFactory;
+class History;
+class RobotControl;
 
 namespace Factory {
 
-	boost::shared_ptr<EventHandler> event_handler_factory(std::map<std::string, boost::any> &params);
+	boost::shared_ptr<EventHandler> event_handler_factory(std::map<std::string, boost::any> &params,
+	                                                      boost::shared_ptr<History> history,
+														  boost::shared_ptr<RobotControl> robot_control);
 	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(std::map<std::string, boost::any> &params);
 	boost::shared_ptr<AbstractViewFactory> view_factory_factory(std::map<std::string, boost::any> &params);
 }
