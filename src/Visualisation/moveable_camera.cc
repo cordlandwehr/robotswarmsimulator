@@ -240,12 +240,25 @@ void MoveableCamera::update(const std::vector<boost::shared_ptr<WorldObject> > &
 
 
 
-void MoveableCamera::look() const{
+void MoveableCamera::look_rot() const{
 
-	// Give openGL our camera position, then camera view, then camera up vector
+	Vector3d n = position_ - view_;
+	Vector3d u = Cross( up_vector_, n);
+	Vector3d v = Cross(n, u);
+	n = Normalize(n);
+	u = Normalize(u);
+	v = Normalize(v);
+	float mat[16];
+	mat[0] = u(0); mat[4] = u(1) ; mat[8] = u(2); mat[12] = 0;
+	mat[1] = v(0); mat[5] = v(1) ; mat[9] = v(2); mat[13] = 0;
+	mat[2] = n(0); mat[6] = n(1); mat[10] = n(2); mat[14] = 0;
+	mat[3] = 0; mat[7] = 0; mat[11] = 0; mat[15] = 1;
 
-	gluLookAt(position_(0), position_(1), position_(2),
-			  view_(0),	 view_(1),     view_(2),
-			  up_vector_(0), up_vector_(1), up_vector_(2));
+	glLoadMatrixf(mat);
 
+
+}
+
+void MoveableCamera::look_translate() const {
+	glTranslatef(- position_(0), - position_(1), - position_(2) );
 }

@@ -32,7 +32,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 						double extrapolate ){
 
 	// Set new look at and camera position
-
+	extrapolate = extrapolate +0.02;
 	float max_width = 0;
 	float max_height = 0;
 	float max_depth = 0;
@@ -109,6 +109,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 
 
+
 		// Check if the current width value is greater than the max width stored.
 		if(current_width  > max_width)	max_width  = current_width;
 		// Check if the current height value is greater than the max height stored.
@@ -140,25 +141,45 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 		width = 1.0f;
 	}
 
+
 	this->view_(0) = center(0);
 	view_(1) = center(1);
 	view_(2) = center(2);
 
 	position_(0) = center(0) + width;
-	position_(1) = center(1) + width * 3.00;
-	position_(2) = center(2) + width* 1.25;
+	position_(1) = center(1) + width *3.20 ;
+	position_(2) = center(2) + width* 2.25;
 
 }
 
 
-void FollowSwarmCamera::look() const{
+void FollowSwarmCamera::look_rot() const{
 
 	std::printf("%f, %f, %f \n", position_(0), position_(1), position_(2) );
-	gluLookAt(position_(0), position_(1), position_(2),
+/*	gluLookAt(position_(0), position_(1), position_(2),
 				  view_(0),	 view_(1),     view_(2),
-				  up_vector_(0), up_vector_(1), up_vector_(2)+0.1);
+				  up_vector_(0), up_vector_(1), up_vector_(2));
+*/
 
+	Vector3d n = position_ - view_;
+	Vector3d u = Cross( up_vector_, n);
+	Vector3d v = Cross(n, u);
+	n = Normalize(n);
+	u = Normalize(u);
+	v = Normalize(v);
+	float mat[16];
+	mat[0] = u(0); mat[4] = u(1) ; mat[8] = u(2); mat[12] = 0;
+	mat[1] = v(0); mat[5] = v(1) ; mat[9] = v(2); mat[13] = 0;
+	mat[2] = n(0); mat[6] = n(1); mat[10] = n(2); mat[14] = 0;
+	mat[3] = 0; mat[7] = 0; mat[11] = 0; mat[15] = 1;
+
+	glLoadMatrixf(mat);
 
 
 };
+
+
+void FollowSwarmCamera::look_translate() const{
+	glTranslatef(- position_(0), - position_(1), - position_(2) );
+}
 

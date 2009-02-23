@@ -4,6 +4,10 @@
  *  Created on: 18.01.2009
  *      Author: kamil
  */
+
+#include <ctime>
+#include <cstdio>
+
 #define GL_GLEXT_PROTOTYPES 1
 
 #include "../OpenGL/gl_headers.h"
@@ -24,6 +28,7 @@
 #include "robot_renderer.h"
 #include "simulation_renderer.h"
 
+
 // some simple constants
 
 const float kObstacleColor[] = {1.0f,0.0f,0.0f,1.0f};
@@ -33,6 +38,11 @@ const float kMarkerColor[] = {1.0f,1.0f,0.0f,1.0f};
 const float kCogColor[] = {1.0f,1.0f,0.0f,1.0f};
 const float kVelocityColor[] = {1.0f,0.0f,0.0f,1.0f};
 const float kAccelerationColor[] = {0.0f,1.0f,0.0f,1.0f};
+
+const float kCoordXColor[] = {1.0f,0.0f,0.0f,1.0f};
+const float kCoordYColor[] = {0.0f,1.0f,0.0f,1.0f};
+const float kCoordZColor[] = {0.0f,0.0f,1.0f,1.0f};
+const float kCoordLineWidth = 1.0;
 
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
@@ -44,10 +54,18 @@ const int kDefWidth = 500;
 const float kMarkerPointSize = 2.0;
 
 
+const std::string kSkyBoxTexName("data/tex/skybox/");
 
-SimulationRenderer::SimulationRenderer() : render_cog_(false) {
+
+
+SimulationRenderer::SimulationRenderer() :
+									render_cog_(false), render_coord_system_(true), render_acceleration_(false),
+									render_velocity_(true), render_local_coord_system_(true), projection_type_(PROJ_PERSP) {
+
+
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
+
 
 	cameras_[0]=boost::shared_ptr<Camera>(new MoveableCamera());
 	cameras_[1]=boost::shared_ptr<Camera>(new FollowSwarmCamera());
@@ -97,9 +115,14 @@ void SimulationRenderer::init(int x, int y){
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
+	// Antialiasing
 	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_POLYGON_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST );
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST );
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 
 
 	glPointSize(kMarkerPointSize);
@@ -138,6 +161,13 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
+	sky_box_.reset( new SkyBox() );
+
+	sky_box_->init( kSkyBoxTexName);
+	robot_renderer_->init();
+
+	//std::string str("data/tex/skybox/back.bmp");
+	//tex_.load(str);
 
 	resize(x,y);
 }
@@ -150,33 +180,53 @@ void SimulationRenderer::resize(int width, int height){
 	screen_width_ = width;
 	screen_height_ = height;
 
-
-
-	float ratio = 1.0* width / height;
 	use_mouse_ = false;
 
-	// Reset the coordinate system before modifying
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	// Set the viewport to be the entire window
-		glViewport(0, 0, width, height);
 
-	// Set the correct perspective.
-	gluPerspective(60,ratio,0.1,1000);
-	glMatrixMode(GL_MODELVIEW);
+	// Set the viewport to be the entire window
+	glViewport(0, 0, width, height);
+
+	setup_projection();
+
 	glLoadIdentity();
 
 	cameras_[active_camera_index_]->set_screen_height(height);
 	cameras_[active_camera_index_]->set_screen_width(width);
 
-	//cameras_[active_camera_index_]->look();
-	std::printf("..\n");
+}
 
+void SimulationRenderer::setup_projection(){
+
+	// Reset the coordinate system before modifying
+	float ratio = 1.0* screen_width_ / screen_height_;
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+
+	// Set the correct perspective.
+	switch ( projection_type_ ){
+		case PROJ_PERSP:
+				gluPerspective(90,ratio,0.1,1000);
+			break;
+		case PROJ_ORTHO:
+				glOrtho( 0,1,0,1,0.1,1000);
+
+
+			break;
+	}
+
+
+
+	//cameras_[active_camera_index_]->look();
+
+
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldInformation> &world_info){
 	this->extrapolate_ = extrapolate;
-
+	float start_time = std::clock();
 
 	// We draw the time in the upper left corner
 	char buf[50];
@@ -186,14 +236,23 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 
+
 	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
-	cameras_[active_camera_index_]->look();
+	cameras_[active_camera_index_]->look_rot();
+	//sky_box_->draw();
+	cameras_[active_camera_index_]->look_translate();
+
 
 	// Print time
 	draw_text2d(0,0,time);
+
+	if( render_coord_system_ ){
+		draw_coord_system();
+	}
 
 
 
@@ -211,26 +270,11 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	}
 
 	if(render_cog_){
-		cog_.insert_element(kXCoord, 0);
-		cog_.insert_element(kYCoord, 0);
-		cog_.insert_element(kZCoord, 0);
-		int num = 0;
 
-		std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
-		for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
-			cog_ = cog_ + (*(*it_robot)->extrapolated_position(extrapolate));
-			num++;
-		}
-
-		if(num > 0){
-			cog_ = cog_ / num;
-		}
-
-		glBegin(GL_POINT);
-			glColor3fv(kCogColor);
-			glVertex3f( cog_(0), cog_(1), cog_(2) );
-		glEnd();
+		draw_cog(world_info);
 	}
+
+
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
@@ -240,6 +284,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 
 	glFlush();
 	glutSwapBuffers();
+
+	float end_time = std::clock();
+	float ticks = (end_time - start_time) / CLOCKS_PER_SEC;
+	std::printf("Time for rendering: %f \n", ticks);
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
@@ -303,6 +351,29 @@ void SimulationRenderer::keyboard_special_func(int key, int x, int y){
 		case GLUT_KEY_DOWN:
 				cameras_[active_camera_index_]->move_backward();
 			break;
+
+
+
+		case 'G':
+				switch_render_cog();
+			break;
+
+		case 'v':
+				switch_render_velocity();
+			break;
+
+		case 'b':
+				switch_render_acceleration();
+			break;
+
+		case 'k':
+				switch_render_coord_system();
+			break;
+
+		case 'l':
+				switch_render_local_coord_system();
+			break;
+
 
 
 		default:
@@ -530,17 +601,7 @@ void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, const float* co
 
 void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
 
-	if(render_cog_){
-		draw_line(cog_,(*robot->extrapolated_position(extrapolate_)), kCogColor);
-	}
 
-	if(render_velocity_){
-		draw_line((*robot->extrapolated_position(extrapolate_))+(*robot->extrapolated_velocity(extrapolate_)),(*robot->extrapolated_position(extrapolate_)),kVelocityColor);
-	}
-
-	if(render_acceleration_){
-			draw_line((*robot->extrapolated_position(extrapolate_))+(robot->acceleration()),(*robot->extrapolated_position(extrapolate_)),kAccelerationColor);
-		}
 	robot_renderer_->draw_robot( robot, extrapolate_ );
 
 }
@@ -557,6 +618,63 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 					   marker->position()(2) );
 		glEnd();
 
+
+}
+
+void SimulationRenderer::draw_info(){
+	//TODO
+}
+
+void SimulationRenderer::draw_help(){
+	//TODO
+}
+
+void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> world_info ){
+
+	cog_.insert_element(kXCoord, 0);
+	cog_.insert_element(kYCoord, 0);
+	cog_.insert_element(kZCoord, 0);
+
+	int num = 0;
+
+	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
+	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
+		cog_ = cog_ + (*it_robot)->position();
+		num++;
+	}
+
+	if(num > 0){
+		cog_ = cog_ / num;
+	}
+
+	glBegin(GL_POINT);
+		glColor3fv(kCogColor);
+		glVertex3f( cog_(0), cog_(1), cog_(2) );
+	glEnd();
+
+}
+
+
+void SimulationRenderer::draw_coord_system(){
+
+	glLineWidth(kCoordLineWidth);
+
+	glBegin(GL_LINES);
+		glColor3fv(kCoordXColor);
+		glVertex3f(0.0f,0.0f,0.0f);
+		glVertex3f(1.0f,.0f,.0f);
+
+		glColor3fv(kCoordYColor);
+		glVertex3f(0.0f,.0f,.0f);
+		glVertex3f(.0f,1.0f,.0f);
+
+		glColor3fv(kCoordZColor);
+		glVertex3f(.0f,.0f, .0f);
+		glVertex3f(0.0f,.0f,1.0f);
+
+	glEnd();
+
+	glLineWidth(1.0f);
 
 }
 

@@ -20,6 +20,8 @@
 #include "../Visualisation/follow_swarm_camera.h"
 #include "../Visualisation/moveable_camera.h"
 #include "../SimulationControl/visualizer.h"
+#include "texture.h"
+#include "sky_box.h"
 
 class WorldInformation;
 class WorldObject;
@@ -29,6 +31,7 @@ class Sphere;
 class RobotData;
 class Camera;
 class RobotRenderer;
+
 
 
 class SimulationRenderer : public Visualizer {
@@ -150,6 +153,65 @@ public:
 		render_cog_ = render;
 	}
 
+	bool render_cog(){
+		return render_cog_;
+	}
+
+	void switch_render_cog(){
+		render_cog_ = !render_cog_;
+	}
+
+	const Vector3d & cog(){
+		return cog_;
+	}
+
+	void set_render_coord_system(bool render){
+		render_coord_system_ = render;
+	}
+
+	bool render_coord_system(){
+		return render_coord_system_;
+	}
+
+	void switch_render_coord_system(){
+		render_coord_system_ = !render_coord_system_;
+	}
+
+	void set_render_local_coord_system( bool render ){
+		render_local_coord_system_ = render;
+	}
+
+	void switch_render_local_coord_system(){
+		render_local_coord_system_ = !render_local_coord_system_;
+	}
+
+	bool render_local_coord_system(){
+		return render_local_coord_system_ ;
+	}
+
+	void set_render_velocity(bool  render ){
+		render_velocity_ = render;
+	}
+
+	void switch_render_velocity(){
+		render_velocity_ = !render_velocity_;
+	}
+
+	bool render_velocity(){
+		return render_velocity_;
+	}
+
+	void set_render_acceleration( bool render ){
+		render_acceleration_ = render;
+	}
+
+	void switch_render_acceleration(){
+		render_acceleration_ = !render_acceleration_;
+	}
+	bool render_acceleration(){
+		return render_acceleration_;
+	}
+
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, const float* color);
 	/**
@@ -186,6 +248,25 @@ private:
 
 	void draw_text2d(int x, int y, const std::string &str);
 	void draw_text3d(const Vector3d & vector, const std::string &str );
+
+	void draw_help();
+
+	void draw_info();
+
+	void draw_cog(const boost::shared_ptr<WorldInformation> world_info );
+
+	void draw_coord_system();
+
+	void setup_projection();
+
+	enum ProjectionType {
+		PROJ_PERSP,
+		PROJ_ORTHO
+	};
+
+	ProjectionType projection_type_  ;
+
+	boost::scoped_ptr<SkyBox> sky_box_;
 
 	/**
 	 * A helper function to draw text
@@ -247,18 +328,35 @@ private:
 	bool render_cog_;
 
 	/**
-	 *Display a robot's velocity/acceleration as a line
+	 *
+	 */
+	Vector3d cog_;
+
+	/**
+	 *
+	 */
+	bool  render_coord_system_;
+	/**
+	 *
+	 */
+	bool render_local_coord_system_;
+
+	/**
+	 *
 	 */
 	bool render_velocity_;
+
+	/**
+	 *
+	 */
 	bool render_acceleration_;
 
-	Vector3d cog_;
 
 	/**
 	 * RobotRenderer
 	 */
 	boost::shared_ptr<RobotRenderer> robot_renderer_;
-
+	Texture tex_;
 
 #if !defined(__linux__) && !defined(__APPLE__)
 	void (APIENTRY *p_glWindowPos2i)(int , int) ;

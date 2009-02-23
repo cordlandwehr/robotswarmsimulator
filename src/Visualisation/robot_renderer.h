@@ -23,6 +23,7 @@ public:
 		RobotRenderer(SimulationRenderer * renderer );
 		~RobotRenderer();
 
+		void init();
 		void draw_robot(const boost::shared_ptr<RobotData> & robot, double extrapolate ) const;
 		void set_default_color(float r, float g, float b, float alpha);
 
@@ -36,6 +37,8 @@ private:
 	SimulationRenderer * renderer_;
 	float default_color_[4];
 	bool use_model_;
+
+	unsigned int compiled_list_;
 
 };
 

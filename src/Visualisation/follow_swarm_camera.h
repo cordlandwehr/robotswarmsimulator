@@ -31,7 +31,8 @@ public:
 	/**
 	 * \brief This method lets the maera look at the view point from the position point
 	 */
-	void look() const;
+	void look_rot() const;
+	void look_translate() const;
 
 
 };
