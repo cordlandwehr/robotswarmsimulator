@@ -56,7 +56,7 @@ public:
 	 * Exact Types of boost::any objects can be looked up in Specification Document
 	 * TODO(craupach) should be implemented by the Kernel Team as principal interface to the parser
 	 */
-	std::map<std::string, boost::any>& get_parameter_map() {};
+	std::map<std::string, boost::any>& get_parameter_map() {return std::map<std::string, boost::any>();};
 
 	/**
 	 * Set-method for ASG

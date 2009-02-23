@@ -17,8 +17,7 @@ class Request;
 class Robot {
 public:
 
-	explicit Robot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
-		: id_(id), algorithm_id_(algorithm_id) {};
+	explicit Robot(boost::shared_ptr<RobotIdentifier> id) : id_(id) {};
 	virtual ~Robot();
 
 
@@ -28,7 +27,7 @@ public:
 
 	void set_view(const boost::weak_ptr<View>& view);
 
-	const std::string& get_algorithm_id () const;
+	virtual std::string get_algorithm_id () const = 0;
 
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
 protected:
@@ -36,8 +35,7 @@ protected:
 
 
 private:
-	boost::shared_ptr<RobotIdentifier> id_;
-	boost::shared_ptr<std::string> algorithm_id_;
+	boost::shared_ptr<RobotIdentifier> id_;	
 
 };
 

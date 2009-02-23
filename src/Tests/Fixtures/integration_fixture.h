@@ -22,8 +22,8 @@
 
 class SimpleCOGRobot : public Robot {
 public:
-	SimpleCOGRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
-	: Robot(id, algorithm_id) {}
+	SimpleCOGRobot(boost::shared_ptr<RobotIdentifier> id)
+	: Robot(id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
 		boost::shared_ptr<View> view = view_.lock();
 
@@ -44,6 +44,10 @@ public:
 		result_set.insert(request);
 
 		return result_set;
+	}
+
+	virtual std::string get_algorithm_id () const {
+		return "SimpleCOGRobot";
 	}
 };
 
@@ -70,10 +74,9 @@ struct IntegrationFixture {
 		id_b.reset(new RobotIdentifier(1));
 		id_c.reset(new RobotIdentifier(2));
 
-		boost::shared_ptr< std::string > tmp_algorithm(new std::string("NONE"));
-		robot_a.reset(new SimpleCOGRobot(id_a, tmp_algorithm));
-		robot_b.reset(new SimpleCOGRobot(id_b, tmp_algorithm));
-		robot_c.reset(new SimpleCOGRobot(id_c, tmp_algorithm));
+		robot_a.reset(new SimpleCOGRobot(id_a));
+		robot_b.reset(new SimpleCOGRobot(id_b));
+		robot_c.reset(new SimpleCOGRobot(id_c));
 
 		robots.push_back(robot_a);
 		robots.push_back(robot_b);

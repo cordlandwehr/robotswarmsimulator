@@ -9,10 +9,9 @@
  */
 void add_robot(LookEvent& event) {
     boost::shared_ptr<Robot> robot;
-    boost::shared_ptr<std::string> tmp_algorithm(new std::string("NONE"));
     boost::shared_ptr<RobotIdentifier> id;
     id.reset(new RobotIdentifier(0));
-    robot.reset(new SimpleRobot(id, tmp_algorithm));
+    robot.reset(new SimpleRobot(id));
     event.add_to_robot_subset(robot);
 }
 
@@ -25,10 +24,9 @@ BOOST_AUTO_TEST_CASE(look_event_smoke_test)
 
     // create a shared pointer on a robot
     boost::shared_ptr<Robot> robot;
-    boost::shared_ptr<std::string> tmp_algorithm(new std::string("NONE"));
     boost::shared_ptr<RobotIdentifier> id;
     id.reset(new RobotIdentifier(0));
-    robot.reset(new SimpleRobot(id, tmp_algorithm));
+    robot.reset(new SimpleRobot(id));
     event.add_to_robot_subset(robot);
 
     // there should be a robot in the subset now

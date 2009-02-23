@@ -23,14 +23,16 @@ extern "C" {
 class LuaRobot: public Robot {
 public:
 	~LuaRobot();
-	LuaRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> lua_file_name);
+	LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua_file_name);
 
 	virtual std::set<boost::shared_ptr<Request> > compute();
+	virtual std::string get_algorithm_id () const;
 private:
 	void report_errors(int status);
 	void register_lua_methods();
 private:
 	boost::shared_ptr<lua_State> lua_state_;
+	std::string lua_file_name_;
 };
 
 #endif /* LUA_ROBOT_H_ */

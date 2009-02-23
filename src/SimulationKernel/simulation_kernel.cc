@@ -156,7 +156,7 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 		//TODO(mmarcus) maybe this is the right place to check for the algorithm?
 		//different algorithms = different RobotTypes?
 		//TODO(cola) lua-robots need to be included.. simple way: check if file is of type *.lua ?!
-		temp_robot.reset(new SimpleRobot(temp_robot_identifier, temp_robot_algorithm));
+		temp_robot.reset(new SimpleRobot(temp_robot_identifier));
 
 		temp_robot_position.reset(new Vector3d(parser->robot_positions()[i]));
 		temp_robot_velocity.reset(new Vector3d(parser->robot_velocities()[i]));

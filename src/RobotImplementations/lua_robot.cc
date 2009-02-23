@@ -251,19 +251,14 @@ LuaRobot::~LuaRobot() {
 
 }
 
-LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> lua_file_name)
-                   : Robot(id, lua_file_name), lua_state_(lua_open(), lua_close) {
-
-//	boost::shared_ptr<std::string> temp_luafile;
-//	temp_luafile.reset(new std::string(lua_file_name));
-
-
+LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua_file_name)
+                   : Robot(id), lua_file_name_(lua_file_name), lua_state_(lua_open(), lua_close) {
 	luaL_openlibs(lua_state_.get());
 	luabind::open(lua_state_.get());
-	int status = luaL_loadfile(lua_state_.get(), (*lua_file_name).c_str());
+	int status = luaL_loadfile(lua_state_.get(), lua_file_name.c_str());
 	if(status != 0) {
 		report_errors(status);
-		throw std::invalid_argument("Error while loading given lua file (" + *lua_file_name + ").");
+		throw std::invalid_argument("Error while loading given lua file (" + lua_file_name + ").");
 	}
 	status = lua_pcall(lua_state_.get(), 0, LUA_MULTRET, 0);
 	report_errors(status);
@@ -357,5 +352,12 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	}
 	return requests;
 }
+
+
+std::string LuaRobot::get_algorithm_id () const {
+	//TODO (dwonisch): algorithm_id is now either a class name or a lua file.
+	return lua_file_name_;
+}
+
 
 

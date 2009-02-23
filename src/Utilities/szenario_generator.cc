@@ -27,11 +27,15 @@
 
 class SimpleRobot : public Robot {
 public:
-	SimpleRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
-		: Robot(id, algorithm_id) {}
+	SimpleRobot(boost::shared_ptr<RobotIdentifier> id)
+		: Robot(id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
 		std::set<boost::shared_ptr<Request> > empty_set;
 		return empty_set;
+	}
+
+	virtual std::string get_algorithm_id () const {
+		return "SimpleRobot";
 	}
 };
 
@@ -49,8 +53,8 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 
 		tmpIdent.reset(new RobotIdentifier(ctr));
 		tmpAlgorithm_id.reset(new std::string(algorithm_id));
-
-		tmpRobot.reset (new SimpleRobot(tmpIdent, tmpAlgorithm_id));
+		//TODO (dwonisch): create correct robot using robot factory
+		tmpRobot.reset (new SimpleRobot(tmpIdent));
 
 		// create position for new robot: (0,0,0)
 		boost::shared_ptr< Vector3d > tmpPos;

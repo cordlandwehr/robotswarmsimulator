@@ -36,11 +36,15 @@ class MyRobot : public Robot{
 
 public:
 	MyRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
-	: Robot(id, algorithm_id) {}
+	: Robot(id) {}
 	std::set<boost::shared_ptr<Request> > compute(){
 
 		std::set<boost::shared_ptr<Request> > ret;
 		return ret;
+	}
+
+	virtual std::string get_algorithm_id () const {
+		return "MyRobot";
 	}
 
 
