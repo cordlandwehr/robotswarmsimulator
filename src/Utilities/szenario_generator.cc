@@ -7,7 +7,6 @@
 
 /*
  * TODO (cola) parser->event_handler_ = 42; not yet implemented for generator
- * TODO (cola) set robot algorithms
  * TODO (cola) coord system
  */
 
@@ -105,6 +104,7 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 		boost::get<2>(axis)->insert_element(kZCoord, 1.0);
 		tmpRobotData->set_coordinate_system_axis(axis);
 
+		robotList_.push_back(tmpRobot);
 		robotDataList_.push_back(tmpRobotData);
 	}
 
@@ -242,15 +242,6 @@ void szenario_generator::distribute_acceleration_normal(double mean, double sigm
 		(*iter)->set_acceleration( newRandomPosition );
 	}
 }
-
-//TODO delete!
-//void szenario_generator::set_defaultAlgorithm(std::string algorithm_id) {
-//	default_algorithm_.reset(new std::string(algorithm_id));
-//	std::vector< boost::shared_ptr<RobotData> >::const_iterator iter;
-//	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-//		((*iter)->robot()).set_algorithm_id("a");
-//	}
-//}
 
 void szenario_generator::set_robotFile(std::string filename) {
 	robotFileName_.reset(new std::string(filename));

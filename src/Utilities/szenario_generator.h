@@ -143,8 +143,7 @@ private:
 	boost::shared_ptr< Parser > parser_;
 	boost::shared_ptr< WorldInformation > generatedWorld_;
 
-	std::vector< boost::shared_ptr<Robot> > robotList;
-	std::vector< boost::shared_ptr<RobotIdentifier> > robotIdents;
+	std::vector< boost::shared_ptr<Robot> > robotList_;
 	std::vector< boost::shared_ptr<RobotData> > robotDataList_;
 
 	boost::shared_ptr< std::string > projectName_;
