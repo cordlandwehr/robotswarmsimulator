@@ -22,7 +22,8 @@ class Robot;
 class RobotIdentifier;
 
 namespace Factory {
-
+	// TODO(craupach) comments
+	// TODO(craupach) test test test...
 	boost::shared_ptr<EventHandler> event_handler_factory(std::map<std::string, boost::any> &params,
 	                                                      boost::shared_ptr<History> history,
 														  boost::shared_ptr<RobotControl> robot_control);
