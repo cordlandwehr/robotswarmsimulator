@@ -35,7 +35,8 @@ class Request;
 class MyRobot : public Robot{
 
 public:
-	MyRobot(boost::shared_ptr<RobotIdentifier> id): Robot(id) {}
+	MyRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
+	: Robot(id, algorithm_id) {}
 	std::set<boost::shared_ptr<Request> > compute(){
 
 		std::set<boost::shared_ptr<Request> > ret;
@@ -66,7 +67,8 @@ BOOST_AUTO_TEST_CASE(octree_test) {
 			robot_pos.reset( new Vector3d());
 			boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
 			//TODO: undefined behavior here, since robot is deleted after each forloop run.
-			robot = new MyRobot(id);
+			boost::shared_ptr<std::string> tmp_algo(new std::string("NONE"));
+			robot = new MyRobot(id, tmp_algo);
 
 
 			boost::shared_ptr<Vector3d> robot_pos = boost::shared_ptr<Vector3d>(new Vector3d());

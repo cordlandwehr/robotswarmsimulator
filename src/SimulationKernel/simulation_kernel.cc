@@ -205,6 +205,7 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 	boost::shared_ptr<RobotData> temp_robot_data;
 	boost::shared_ptr<Robot> temp_robot;
 	boost::shared_ptr<RobotIdentifier> temp_robot_identifier;
+	boost::shared_ptr<std::string> temp_robot_algorithm;
 
 	boost::shared_ptr<Vector3d> temp_robot_position;
 	boost::shared_ptr<Vector3d> temp_robot_velocity;
@@ -221,10 +222,12 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 		//TODO(mmarcus) Identifiers are NOT the identifiers of the project file!
 		//need to work over parser...
 		temp_robot_identifier.reset(new RobotIdentifier(i));
+		temp_robot_algorithm.reset(new std::string(parser->robot_algorithms()[i]));
 
 		//TODO(mmarcus) maybe this is the right place to check for the algorithm?
 		//different algorithms = different RobotTypes?
-		temp_robot.reset(new SimpleRobot(temp_robot_identifier));
+		//TODO(cola) lua-robots need to be included.. simple way: check if file is of type *.lua ?!
+		temp_robot.reset(new SimpleRobot(temp_robot_identifier, temp_robot_algorithm));
 
 		temp_robot_position.reset(new Vector3d(parser->robot_positions()[i]));
 		temp_robot_velocity.reset(new Vector3d(parser->robot_velocities()[i]));

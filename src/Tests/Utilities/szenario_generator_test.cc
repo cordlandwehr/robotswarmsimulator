@@ -29,7 +29,7 @@
 BOOST_AUTO_TEST_CASE( szenario_generator_test )
 {
 	szenario_generator generator(17);
-	generator.init(1000);
+	generator.init(1000, "NONE");
 
 	Vector3d tmpVec;
 	tmpVec.insert_element(kXCoord,100.0);

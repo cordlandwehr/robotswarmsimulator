@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
 		("generate", "switch to generator mode")
 		("seed", po::value<unsigned int>()->default_value(1), "seed for random number generator")
 		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
+		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
 		("worldfile", po::value<std::string>()->default_value("newrandom"), "world-file for output")
 		("robotfile", po::value<std::string>()->default_value("newrandom"), "robot-file for output")
 		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
@@ -99,7 +100,7 @@ int main(int argc, char** argv) {
 
 		// init
 		szenario_generator generator(vm["seed"].as<unsigned int>());	// set seed
-		generator.init(vm["robots"].as<unsigned int>());				// init number of robots
+		generator.init(vm["robots"].as<unsigned int>(), vm["algorithm"].as<std::string>());				// init number of robots
 
 		// files
 		generator.set_worldFile(vm["worldfile"].as<std::string>());

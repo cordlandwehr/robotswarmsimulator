@@ -4,7 +4,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/shared_ptr.hpp>
 #include <set>
+#include <string>
 
 #include "../../Model/world_information.h"
 #include "../../Model/world_object.h"
@@ -25,7 +27,8 @@
 
 class SimpleRobot : public Robot {
 public:
-	SimpleRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {}
+	SimpleRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
+		: Robot(id, algorithm_id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
 		std::set<boost::shared_ptr<Request> > empty_set;
 		return empty_set;
@@ -60,9 +63,11 @@ struct SimpleWorldFixture {
 		id_c.reset(new RobotIdentifier(2));
 
 		// collect robots to vector robots
-		robot_a.reset(new SimpleRobot(id_a));
-		robot_b.reset(new SimpleRobot(id_b));
-		robot_c.reset(new SimpleRobot(id_c));
+		boost::shared_ptr<std::string> tmp_algo;
+		tmp_algo.reset(new std::string("NONE"));
+		robot_a.reset(new SimpleRobot(id_a, tmp_algo));
+		robot_b.reset(new SimpleRobot(id_b, tmp_algo));
+		robot_c.reset(new SimpleRobot(id_c, tmp_algo));
 
 		robots.push_back(robot_a);
 		robots.push_back(robot_b);

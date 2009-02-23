@@ -27,7 +27,8 @@ BOOST_FIXTURE_TEST_CASE(view_performance_test, SimpleWorldFixture)
 	//create 1000 Robots and RobotDatas
 	for(unsigned i = 3; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
-		boost::shared_ptr<Robot> robot(new SimpleRobot(id));
+		boost::shared_ptr<std::string> tmp_algorithm(new std::string("NONE"));
+		boost::shared_ptr<Robot> robot(new SimpleRobot(id, tmp_algorithm));
 		boost::shared_ptr<Vector3d> pos(new Vector3d());
 		pos->insert_element(kXCoord,std::rand()*1000.0/RAND_MAX);
 		pos->insert_element(kYCoord,std::rand()*1000.0/RAND_MAX);

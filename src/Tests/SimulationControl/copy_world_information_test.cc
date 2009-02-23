@@ -23,7 +23,8 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 	for(unsigned i = 3; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
 		//TODO: undefined behavior here, since robot is deleted after each forloop run.
-		boost::shared_ptr<Robot> robot(new SimpleRobot(id));
+		boost::shared_ptr<std::string> tmp_algorithm(new std::string("NONE"));
+		boost::shared_ptr<Robot> robot(new SimpleRobot(id, tmp_algorithm));
 		boost::shared_ptr<Vector3d> pos(new Vector3d());
 		pos->insert_element(kXCoord,0.0);
 		pos->insert_element(kYCoord,0.0);

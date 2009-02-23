@@ -12,7 +12,8 @@
 
 class SimpleRobot : public Robot {
 public:
-	SimpleRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {}
+	SimpleRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
+			: Robot(id, algorithm_id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
 
 		// don't do stuff

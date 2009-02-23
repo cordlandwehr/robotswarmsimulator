@@ -6,8 +6,9 @@
  */
 
 /*
- * TODO parser->event_handler_ = 42; not yet implemented for generator
- * TODO coord system
+ * TODO (cola) parser->event_handler_ = 42; not yet implemented for generator
+ * TODO (cola) set robot algorithms
+ * TODO (cola) coord system
  */
 
 #include <boost/unordered_map.hpp>
@@ -35,7 +36,8 @@
 //TODO is there a better way to create robot-datas?
 class SimpleRobot : public Robot {
 public:
-	SimpleRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {}
+	SimpleRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> algorithm_id)
+		: Robot(id, algorithm_id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
 		std::set<boost::shared_ptr<Request> > empty_set;
 		return empty_set;
@@ -43,8 +45,7 @@ public:
 };
 
 
-
-void szenario_generator::init(int number_robots) {
+void szenario_generator::init(int number_robots, std::string algorithm_id) {
 	// the world information object contains all information that shall be saved in the robot file
 	generatedWorld_.reset( new WorldInformation());
 	parser_.reset(new Parser());
@@ -53,9 +54,12 @@ void szenario_generator::init(int number_robots) {
 		boost::shared_ptr< RobotIdentifier > tmpIdent;
 		boost::shared_ptr< RobotData > tmpRobotData;
 		boost::shared_ptr< Robot > tmpRobot;
+		boost::shared_ptr< std::string > tmpAlgorithm_id;
 
 		tmpIdent.reset(new RobotIdentifier(ctr));
-		tmpRobot.reset (new SimpleRobot(tmpIdent));
+		tmpAlgorithm_id.reset(new std::string(algorithm_id));
+
+		tmpRobot.reset (new SimpleRobot(tmpIdent, tmpAlgorithm_id));
 
 		// create position for new robot: (0,0,0)
 		boost::shared_ptr< Vector3d > tmpPos;
@@ -239,6 +243,14 @@ void szenario_generator::distribute_acceleration_normal(double mean, double sigm
 	}
 }
 
+//TODO delete!
+//void szenario_generator::set_defaultAlgorithm(std::string algorithm_id) {
+//	default_algorithm_.reset(new std::string(algorithm_id));
+//	std::vector< boost::shared_ptr<RobotData> >::const_iterator iter;
+//	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+//		((*iter)->robot()).set_algorithm_id("a");
+//	}
+//}
 
 void szenario_generator::set_robotFile(std::string filename) {
 	robotFileName_.reset(new std::string(filename));
@@ -273,6 +285,7 @@ void szenario_generator::set_compassModel(string compassModel) {
 void szenario_generator::set_statisticsTemplate(string statisticsTemplate) {
 	statisticsTemplate_.reset(new std::string(statisticsTemplate));
 }
+
 
 void szenario_generator::set_statisticsSubsets(string statisticsSubsets) {
 	statisticsSubsets_.reset(new std::string(statisticsSubsets));

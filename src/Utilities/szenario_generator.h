@@ -30,8 +30,9 @@ public:
 	/**
 	 * Initializes the szenario generator with number_robots
 	 * @param number_robots int
+	 * @param algorithm-name for robot algorithm
 	 */
-	void init(int number_robots);
+	void init(int number_robots, std::string algorithm_id);
 
 	/**
 	 * Method distributes robots interior of a bounding box uniformly
@@ -75,6 +76,12 @@ public:
 	 */
 	void distribute_acceleration_normal(double mean, double sigma);
 
+
+	/**
+	 * Method sets default algorithm to be used by default for all generated robots
+	 * @param string with algorithm-name, cf. User's Guide
+	 */
+	void set_defaultAlgorithm(std::string algorithm_id);
 
 	/**
 	 * Set filename for output, without file extension
@@ -149,6 +156,7 @@ private:
 	boost::shared_ptr< std::string > statisticsTemplate_;
 	boost::shared_ptr< std::string > statisticsSubsets_;
 	boost::shared_ptr< std::string > asg_;
+	boost::shared_ptr< std::string > default_algorithm_;
 
 };
 

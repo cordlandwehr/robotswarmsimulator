@@ -23,7 +23,7 @@ extern "C" {
 class LuaRobot: public Robot {
 public:
 	~LuaRobot();
-	LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua_file_name);
+	LuaRobot(boost::shared_ptr<RobotIdentifier> id, boost::shared_ptr<std::string> lua_file_name);
 
 	virtual std::set<boost::shared_ptr<Request> > compute();
 private:

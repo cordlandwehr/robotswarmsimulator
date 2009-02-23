@@ -656,6 +656,7 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 	//TODO(mmarcus) include marker-information
 	output << "0,";
 	//TODO(mmarcus) include algorithm-information
+	//TODO(cola) is there any internal way to save which algorithms are used?
 	output << "\"FANCY_ALGO\",";
 	//TODO(mmarcus) include color-information
 	output << "0,";
@@ -882,7 +883,6 @@ const vector<string>& Parser::acceleration_request_handler_vector_modifier() con
 	return acceleration_request_handler_vector_modifier_;
 }
 
-
 /*** GET-methods for robot data ***/
 vector<Vector3d>& Parser::robot_positions() {
 	return initiale_robot_positions_;
@@ -911,9 +911,7 @@ vector<string>& Parser::robot_colors() {
 }
 vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& Parser::robot_coordinate_systems() {
 	return initiale_robot_coordinate_systems_;
-
 }
-
 
 
 /*** GET-methods for obstacle data ***/
