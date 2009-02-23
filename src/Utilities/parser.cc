@@ -569,7 +569,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 		BOOST_FOREACH( string s, velocity_request_handler_vector_modifier_) {
 			project_file << s << ",";
 		}
-		project_file << "\b\"" << endl;
+		project_file << "\"" << endl;
 
 		project_file << "POSITION_REQUEST_HANDLER_SEED=\"" << position_request_handler_seed_ << "\"" << endl;
 		project_file << "POSITION_REQUEST_HANDLER_DISCARD_PROB=\"" << position_request_handler_discard_prob_ << "\"" << endl;
@@ -578,7 +578,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 		BOOST_FOREACH ( string s, position_request_handler_vector_modifier_) {
 			project_file << s << ",";
 		}
-		project_file << "\b\"" << endl;
+		project_file << "\"" << endl;
 
 		project_file << "ACCELERATION_REQUEST_HANDLER_SEED=\"" << acceleration_request_handler_seed_ << "\"" << endl;
 		project_file << "ACCELERATION_REQUEST_HANDLER_DISCARD_PROB=\"" << acceleration_request_handler_discard_prob_ << "\"" << endl;
@@ -587,7 +587,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 		BOOST_FOREACH ( string s, acceleration_request_handler_vector_modifier_) {
 			project_file << s << ",";
 		}
-		project_file << "\b\"" << endl;
+		project_file << "\"" << endl;
 
 		project_file.close();
 	} else {

@@ -108,7 +108,7 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 		robotDataList_.push_back(tmpRobotData);
 	}
 
-	// set some dummy values
+	// set some default values
 	projectName_.reset(new std::string("New generated Project"));
 	robotFileName_.reset(new std::string("new_random_robotfile"));
 	obstacleFileName_.reset(new std::string("new_random_obstaclefile"));
@@ -117,7 +117,6 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 	compassModel_.reset(new std::string("NO_COMPASS"));
 	statisticsTemplate_.reset(new std::string("ALL"));
 	statisticsSubsets_.reset(new std::string("{ALL}"));
-
 }
 
 void szenario_generator::distribute_robots_uniform(Vector3d boundingBox) {
