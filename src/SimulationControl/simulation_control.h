@@ -71,16 +71,6 @@ public:
 	 */
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 
-	/**
-	 * alters how fast processing time advances
-	 */
-	double processing_time_delta_;
-
-	/**
-	 * temporary processing time delta value for pausing
-	 */
-	double old_processing_time_delta_;
-
 private:
 	/**
 	 * Thread-Wrapper for the simulation kernel. Allows the simulation kernel thread to be paused and
@@ -146,6 +136,16 @@ private:
 	boost::shared_ptr<SimulationKernelFunctor> simulation_kernel_functor_;
 	boost::thread simulation_thread_;
 	boost::shared_ptr<Visualizer> visualizer_;
+
+	/**
+	 * alters how fast processing time advances
+	 */
+	double processing_time_delta_;
+
+	/**
+	 * temporary processing time delta value for pausing
+	 */
+	double old_processing_time_delta_;
 };
 
 #endif
