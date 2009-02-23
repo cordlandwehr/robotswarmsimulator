@@ -19,25 +19,13 @@
 #include "../Model/robot_identifier.h"
 #include "../Model/world_information.h"
 
+#include "../SimulationKernel/factories.h"
+
 #include "parser.h"
 #include "vector_arithmetics.h"
 #include "szenario_generator.h"
 #include "distribution_generator.h"
 
-
-class SimpleRobot : public Robot {
-public:
-	SimpleRobot(boost::shared_ptr<RobotIdentifier> id)
-		: Robot(id) {}
-	std::set<boost::shared_ptr<Request> > compute() {
-		std::set<boost::shared_ptr<Request> > empty_set;
-		return empty_set;
-	}
-
-	virtual std::string get_algorithm_id () const {
-		return "SimpleRobot";
-	}
-};
 
 
 void szenario_generator::init(int number_robots, std::string algorithm_id) {
@@ -49,12 +37,10 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 		boost::shared_ptr< RobotIdentifier > tmpIdent;
 		boost::shared_ptr< RobotData > tmpRobotData;
 		boost::shared_ptr< Robot > tmpRobot;
-		boost::shared_ptr< std::string > tmpAlgorithm_id;
 
 		tmpIdent.reset(new RobotIdentifier(ctr));
-		tmpAlgorithm_id.reset(new std::string(algorithm_id));
-		//TODO (dwonisch): create correct robot using robot factory
-		tmpRobot.reset (new SimpleRobot(tmpIdent));
+
+		tmpRobot = Factory::robot_factory(tmpIdent, algorithm_id);
 
 		// create position for new robot: (0,0,0)
 		boost::shared_ptr< Vector3d > tmpPos;
