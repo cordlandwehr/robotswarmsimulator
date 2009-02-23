@@ -155,7 +155,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 void FollowSwarmCamera::look_rot() const{
 
-	std::printf("%f, %f, %f \n", position_(0), position_(1), position_(2) );
+
 /*	gluLookAt(position_(0), position_(1), position_(2),
 				  view_(0),	 view_(1),     view_(2),
 				  up_vector_(0), up_vector_(1), up_vector_(2));
