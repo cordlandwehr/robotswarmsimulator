@@ -196,7 +196,9 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	boost::shared_ptr<Robot> robot;
 
 	// check if the algorithm is a lua file
-	std::string subfix = algorithm.substr(algorithm.size() - 4, 4);
+	std::string subfix;
+	if(algorithm.size() >= 4)
+		subfix = algorithm.substr(algorithm.size() - 4, 4);
 	if(subfix == ".lua") {
 		robot.reset(new LuaRobot(id, algorithm));
 	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
