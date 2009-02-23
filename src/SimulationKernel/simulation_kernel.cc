@@ -36,10 +36,6 @@ SimulationKernel::SimulationKernel() {
 	 * by boost::to_upper_copy() so it will simply not work if you use lowercase here.
 	 */
 
-	// initialize view-map
-	  view_map_["FULLVIEW"] = FULLVIEW;
-	  view_map_["GLOBALVIEW"] = GLOBALVIEW;
-
 	// initialize Stati-map
 	  robot_status_map_["READY"] = READY;
 	  robot_status_map_["SLEEPING"] = SLEEPING;
@@ -47,11 +43,6 @@ SimulationKernel::SimulationKernel() {
 	// initialize Stati-map
 	  robot_type_map_["SLAVE"] = SLAVE;
 	  robot_type_map_["MASTER"] = MASTER;
-
-	// initialize Vector modifier-map
-	  vector_modifier_map_["VECTOR_TRIMMER"] = VECTOR_TRIMMER;
-	  vector_modifier_map_["VECTOR_RANDOMIZER"] = VECTOR_RANDOMIZER;
-	  vector_modifier_map_["VECTOR_DIFFERENCE_TRIMMER"] = VECTOR_DIFFERENCE_TRIMMER;
 }
 
 SimulationKernel::~SimulationKernel() {
@@ -76,7 +67,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
 	// TODO(craupach) since this is not implemented yet the simulation segfaults. known problem.
-	std::map<std::string, boost::any> &params = parser->get_parameter_map();
+	std::map<std::string, boost::any> &params = parser->parameter_map();
 
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);

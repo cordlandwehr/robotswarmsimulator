@@ -56,7 +56,8 @@ public:
 	 * Exact Types of boost::any objects can be looked up in Specification Document
 	 * TODO(craupach) should be implemented by the Kernel Team as principal interface to the parser
 	 */
-	std::map<std::string, boost::any>& get_parameter_map() {return std::map<std::string, boost::any>();};
+	std::map<std::string, boost::any>& parameter_map() { return parameter_map_;};
+
 
 	/**
 	 * Set-method for ASG
@@ -305,6 +306,10 @@ private:
 	////////////////////////////////////////////////////////
 
 	//variables initialized with values in the main project file
+
+	// temporary parameter map
+	// TODO(craupach) this is temporary
+	std::map<std::string, boost::any> parameter_map_;
 
 	string asg_;
 	string compass_model_;

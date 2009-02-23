@@ -1,8 +1,11 @@
 #include "parser.h"
 
+#include <boost/tuple/tuple.hpp>
+
 Parser::Parser() {
 	//initialize Parser with default values
 	init();
+
 }
 
 Parser::~Parser() {
@@ -65,6 +68,14 @@ void Parser::init() {
 	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS");
 	default_values_of_varialbes.push_back("");
 
+	// TODO(craupach) temporary code to prevent code from crashing, minimal simulation
+	parameter_map_["ASG"] = std::string("SYNCHRONOUS");
+	parameter_map_["VIEW"] = std::string("NONE");
+	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
 
 }
 

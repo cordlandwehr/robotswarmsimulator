@@ -34,6 +34,8 @@
 #include "../Utilities/VectorModifiers/vector_trimmer.h"
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
 
+#include <iostream>
+
 void set_up_vector_modifiers(boost::shared_ptr<VectorRequestHandler> handler,
                              std::vector<boost::tuple<std::string, std::vector<boost::any> > > & modifiers ) {
 
@@ -140,11 +142,11 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		event_handler->set_acceleration_request_handler(vector_request_handler);
 	}
 
-
 	return event_handler;
 }
 
 boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std::string, boost::any> &params) {
+
 	std::string asg_type = boost::any_cast<std::string> (params["ASG"]);
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
 	// setup of activation sequence generator
@@ -158,10 +160,12 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 			double p = boost::any_cast<double>(params["ASYNC_ASG_TIME_P"]);
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
 	}
+
 	return asg;
 }
 
 boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, boost::any> &params) {
+
 	std::string view_type = boost::any_cast<std::string> (params["VIEW"]);
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 
