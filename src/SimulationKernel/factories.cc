@@ -13,6 +13,10 @@
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
 #include "../ActivationSequenceGenerators/asynchronous_asg.h"
 
+#include "../Views/abstract_view_factory.h"
+#include "../Views/view_factory.h"
+#include "../Views/global_view.h"
+
 boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::string, boost::any> &params) {
 
 }
@@ -32,4 +36,17 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
 	}
 	return asg;
+}
+
+boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, boost::any> &params) {
+	std::string view_type = boost::any_cast<std::string> (params["VIEW"]);
+	boost::shared_ptr<AbstractViewFactory> view_factory;
+
+	if(view_type == "GLOBALVIEW") {
+		view_factory.reset(new ViewFactory<GlobalView>);
+	} else if(view_type == "FULLVIEW") {
+		view_factory.reset(new ViewFactory<FullView>);
+	}
+
+	return view_factory;
 }

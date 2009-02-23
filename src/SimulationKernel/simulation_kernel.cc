@@ -12,8 +12,6 @@
 
 #include "robot_control.h"
 #include "../Views/abstract_view_factory.h"
-#include "../Views/view_factory.h"
-#include "../Views/global_view.h"
 
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
@@ -85,18 +83,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 
 	// create View
-	boost::shared_ptr<AbstractViewFactory> view_factory;
-
-	//TODO(mmarcus) add default-case in switch and throw some exception... here and anywhere else
-	switch(view_map_[boost::to_upper_copy(parser->view())]) {
-
-		case GLOBALVIEW:
-			view_factory.reset(new ViewFactory<GlobalView>());
-			break;
-		case FULLVIEW:
-			view_factory.reset(new ViewFactory<FullView>());
-			break;
-	}
+	boost::shared_ptr<AbstractViewFactory> view_factory = Factory::view_factory_factory(params);
 
 	// create Robot Control
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->capacity(), *initial_world_information));
