@@ -169,7 +169,6 @@ void SimulationControl::SimulationKernelFunctor::unpause() {
 }
 
 void SimulationControl::SimulationKernelFunctor::pause() {
-	std::cout<<"pausing"<<std::endl;
 	if(!paused_) {
 		paused_ = true;
 		//set unpaused to 0
