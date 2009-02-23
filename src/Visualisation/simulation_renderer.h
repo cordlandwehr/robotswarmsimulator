@@ -251,7 +251,7 @@ private:
 
 	void draw_help();
 
-	void draw_info();
+	void draw_about();
 
 	void draw_cog(const boost::shared_ptr<WorldInformation> world_info );
 
@@ -350,7 +350,9 @@ private:
 	 *
 	 */
 	bool render_acceleration_;
+	bool render_help_;
 
+	bool render_about_;
 
 	/**
 	 * RobotRenderer

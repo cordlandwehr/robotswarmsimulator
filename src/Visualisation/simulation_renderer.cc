@@ -24,7 +24,6 @@
 
 
 #include "camera.h"
-#include "font.h"
 #include "robot_renderer.h"
 #include "simulation_renderer.h"
 
@@ -49,7 +48,7 @@ const int kSphereStacks = 30;
 
 const int kDefHeight = 500;
 const int kDefWidth = 500;
-
+const int kTextSpacing=15;
 
 const float kMarkerPointSize = 2.0;
 
@@ -274,7 +273,12 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 		draw_cog(world_info);
 	}
 
-
+	if (render_help_){
+		draw_help();
+	}
+	if (render_about_){
+		draw_about();
+	}
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
@@ -308,9 +312,7 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 					active_camera_index_=0;
 				else active_camera_index_++;
 			break;
-		case 'g':
-				render_cog_=!render_cog_;
-			break;
+
 
 		case 'w':
 				cameras_[active_camera_index_]->move_up();
@@ -319,11 +321,27 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 		case 's':
 				cameras_[active_camera_index_]->move_down();
 			break;
-		case 'b':
-				render_acceleration_=!render_acceleration_;
+
+
+		case 'g':
+				switch_render_cog();
 			break;
+
 		case 'v':
-				render_velocity_=!render_velocity_;
+				switch_render_velocity();
+			break;
+
+		case 'b':
+				switch_render_acceleration();
+			break;
+
+		case 'k':
+				switch_render_coord_system();
+			break;
+case 'h':
+				render_help_=!render_help_;
+		case 'l':
+				switch_render_local_coord_system();
 			break;
 
 		default:
@@ -353,27 +371,9 @@ void SimulationRenderer::keyboard_special_func(int key, int x, int y){
 			break;
 
 
-
-		case 'G':
-				switch_render_cog();
+case GLUT_KEY_F1:
+				render_about_=!render_about_;
 			break;
-
-		case 'v':
-				switch_render_velocity();
-			break;
-
-		case 'b':
-				switch_render_acceleration();
-			break;
-
-		case 'k':
-				switch_render_coord_system();
-			break;
-
-		case 'l':
-				switch_render_local_coord_system();
-			break;
-
 
 
 		default:
@@ -390,27 +390,9 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 
 
-
-	for(std::size_t i=0;i<len;i++) {
-
-		char ch = str[i];
-
-		if(ch==0)	/* end of string */
-			break;
-
-		if(ch < kFONTFIRST)
-			continue;
-
-
-		if(ch > kFONTLAST)
-			continue;
-
-		ch -= kFONTFIRST;
-
-		glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, &bitmap_font[ch][1]);
-
+for(std::size_t i=0;i<len;i++) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
 	}
-
 
 
 
@@ -621,12 +603,43 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 
 }
 
-void SimulationRenderer::draw_info(){
-	//TODO
+void SimulationRenderer::draw_help(){
+boost::array<std::string, 12> helptext;
+	helptext[0]="Arrow keys to navigate";
+	helptext[1]="W and S to go up and down";
+	helptext[2]="M to toggle mouse control (rotate view)";
+	helptext[3]="SPACE to pause the Simulator";
+	helptext[4]="Q to exit";
+	helptext[5]="H to toggle this help screen";
+	helptext[6]="-, +, / and * to de-/increase speed";
+	helptext[7]="C to change camera";
+	helptext[8]="K to display global coordinate axes";
+	helptext[9]="B and V to display robot's acceleration and velocity";
+	helptext[10]="G to display center of gravity";
+	helptext[11]="F1 to display About screen";
+
+	for (int i=0;i<helptext.size();i++){
+		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);
+	}
+
 }
 
-void SimulationRenderer::draw_help(){
-	//TODO
+void SimulationRenderer::draw_about(){
+
+
+
+boost::array<std::string,6> abouttext;
+abouttext[0]="This RobotSwarmSimulator was developed as part of the university";
+abouttext[1]="project group \"Schlaue Schwaerme\" by Alexander Klaas, Andreas Cord-Landwehr,";
+abouttext[2]="Christoph Raupach, Christoph Weddemann, Daniel Warner, Daniel Wonisch,";
+abouttext[3]="Kamil Swierkot, Marcus Märtens, Martina Hüllmann, Peter Kling and Sven Kurras.";
+abouttext[4]="The University of Paderborn, Research group \"Algorithms and Complexity\"";
+abouttext[5]="Contact: der-schwarm@lists.uni-paderborn.de";
+for (int i=0;i<abouttext.size();i++){
+	draw_text2d(10,screen_height_-50-i*kTextSpacing,abouttext[i]);
+}
+
+
 }
 
 void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> world_info ){
