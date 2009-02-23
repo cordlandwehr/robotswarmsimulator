@@ -655,9 +655,7 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	//TODO(mmarcus) include marker-information
 	output << "0,";
-	//TODO(mmarcus) include algorithm-information
-	//TODO(cola) is there any internal way to save which algorithms are used?
-	output << "\"FANCY_ALGO\",";
+	output << "\"" << robot_data->robot().get_algorithm_id() << "\",";
 	//TODO(mmarcus) include color-information
 	output << "0,";
 
