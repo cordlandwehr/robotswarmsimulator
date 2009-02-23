@@ -75,6 +75,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// create Parser, load project file and get map
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
+	// TODO(craupach) since this is not implemented yet the simulation segfaults. known problem.
 	std::map<std::string, boost::any> &params = parser->get_parameter_map();
 
 	// create and add initial world information to history
