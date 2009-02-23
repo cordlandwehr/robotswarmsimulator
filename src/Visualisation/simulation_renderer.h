@@ -17,6 +17,8 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Visualisation/simulation_renderer.h"
 #include "../Visualisation/camera.h"
+#include "../Visualisation/follow_swarm_camera.h"
+#include "../Visualisation/moveable_camera.h"
 #include "../SimulationControl/visualizer.h"
 
 class WorldInformation;
@@ -33,7 +35,7 @@ class SimulationRenderer : public Visualizer {
 
 public:
 
-	SimulationRenderer(boost::shared_ptr<Camera> camera);
+	SimulationRenderer();
 
 	void init();
 
@@ -57,8 +59,13 @@ public:
 	 */
     void resize(int width, int height);
 
+    /**
+     * These functions handle user input
+     * Two functions for keyboard input are necessary as special keys and ASCII character encodings overlap (example: d=100='left')
+     */
     void mouse_func(int button, int state, int x, int y);
     void keyboard_func(unsigned char key, int x, int y);
+    void keyboard_special_func(int key, int x, int y);
 
     /**
      * \brief This Method draws the whole szene.
@@ -72,18 +79,11 @@ public:
 	void draw(double extrapolate, const boost::shared_ptr<WorldInformation> & world_info);
 
 	/**
-	 * \brief Used to reset the camera.
-	 *
-	 * \param new_camera The new Camera Object.
-	 */
-	void set_camera(boost::shared_ptr<Camera> & new_camera);
-
-	/**
 	 * \brief This Method provides access to the camera Object.
 	 *
 	 * \return The used Camera Object.
 	 */
-	const boost::shared_ptr<Camera> & camera(){ return camera_;}
+	const boost::shared_ptr<Camera> & camera(){ return cameras_[active_camera_index_];}
 
 	/**
 	 * \brief Sets the new color of text in RGBA
@@ -151,7 +151,7 @@ public:
 	}
 
 private:
-
+	void draw_line(Vector3d pos1, Vector3d pos2, const float* color);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.
@@ -192,7 +192,9 @@ private:
 	 */
 	int font_bitmap_string(const std::string & str);
 
-	boost::shared_ptr<Camera> camera_;
+	int active_camera_index_;
+
+	boost::array<boost::shared_ptr<Camera>,2> cameras_;
 
 	/**
 	 * The width of the screen
@@ -243,6 +245,12 @@ private:
 	 *
 	 */
 	bool render_cog_;
+
+	/**
+	 *Display a robot's velocity/acceleration as a line
+	 */
+	bool render_velocity_;
+	bool render_acceleration_;
 
 	Vector3d cog_;
 

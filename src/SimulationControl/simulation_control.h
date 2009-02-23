@@ -38,6 +38,15 @@ public:
 	void create_new_simulation(const std::string& configuration_filename, std::size_t history_length);
 
 	/**
+	 * change processing_time_delta (see below)
+	 */
+	void increase_processing_time_linearly();
+	void decrease_processing_time_linearly();
+	void increase_processing_time_exp();
+	void decrease_processing_time_exp();
+	void pause_processing_time();
+
+	/**
 	 * starts the simulation
 	 */
 	void start_simulation();
@@ -62,6 +71,16 @@ public:
 	 */
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 
+	/**
+	 * alters how fast processing time advances
+	 */
+	double processing_time_delta_;
+
+	/**
+	 * temporary processing time delta value for pausing
+	 */
+	double old_processing_time_delta_;
+
 private:
 	/**
 	 * Thread-Wrapper for the simulation kernel. Allows the simulation kernel thread to be paused and
@@ -78,6 +97,8 @@ private:
 		 * unpauses the simulation thread using a semaphor
 		 */
 		void unpause();
+
+
 
 		/**
 		 * pauses the simulation thread using a semaphor
@@ -111,6 +132,8 @@ private:
 
 	double compute_new_processing_time();
 	void draw_current_simulation();
+
+
 private:
 	//TODO (dwonsich): processing_time_factor_ == \Delta in paper; Maybe should be moved to somewhere else
 	double processing_time_factor_;

@@ -204,6 +204,16 @@ void Camera::move_backward(){
 
 }
 
+void Camera::move_up(){
+
+}
+
+
+void Camera::move_down(){
+
+}
+
+
 void Camera::rotate_around_point(Vector3d center, Vector3d rot_vec) {
 }
 

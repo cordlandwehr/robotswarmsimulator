@@ -51,7 +51,7 @@ public:
 	 */
 	 void move_camera(float speed);
 
-
+	 void move_camera_up_down(float speed);
 
 
 	/**
@@ -62,6 +62,10 @@ public:
 	 * This will move the camera backward
 	 */
 	void move_backward();
+
+	void move_up();
+
+	void move_down();
 	/**
 	 * This will strafe the camera to the left
 	 */

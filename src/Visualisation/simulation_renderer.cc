@@ -31,6 +31,8 @@ const float kRobotColor[] = {0.0f,1.0f,0.0f,1.0f};
 const float kTextColor[] = {1.0f,0.0f,1.0f,1.0f};
 const float kMarkerColor[] = {1.0f,1.0f,0.0f,1.0f};
 const float kCogColor[] = {1.0f,1.0f,0.0f,1.0f};
+const float kVelocityColor[] = {1.0f,0.0f,0.0f,1.0f};
+const float kAccelerationColor[] = {0.0f,1.0f,0.0f,1.0f};
 
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
@@ -43,9 +45,15 @@ const float kMarkerPointSize = 2.0;
 
 
 
-SimulationRenderer::SimulationRenderer(boost::shared_ptr<Camera> camera) : camera_(camera),render_cog_(false) {
+SimulationRenderer::SimulationRenderer() : render_cog_(false) {
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
+
+	cameras_[0]=boost::shared_ptr<Camera>(new MoveableCamera());
+	cameras_[1]=boost::shared_ptr<Camera>(new FollowSwarmCamera());
+
+	active_camera_index_=0;
+
 
 
 	text_color_[0] = kTextColor[0];
@@ -147,9 +155,6 @@ void SimulationRenderer::resize(int width, int height){
 	float ratio = 1.0* width / height;
 	use_mouse_ = false;
 
-
-
-
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -161,10 +166,10 @@ void SimulationRenderer::resize(int width, int height){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	camera_->set_screen_height(height);
-	camera_->set_screen_width(width);
+	cameras_[active_camera_index_]->set_screen_height(height);
+	cameras_[active_camera_index_]->set_screen_width(width);
 
-	//camera_->look();
+	//cameras_[active_camera_index_]->look();
 	std::printf("..\n");
 
 }
@@ -184,8 +189,8 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	glLoadIdentity();
 
 
-	camera_->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
-	camera_->look();
+	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
+	cameras_[active_camera_index_]->look();
 
 	// Print time
 	draw_text2d(0,0,time);
@@ -213,7 +218,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 
 		std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 		for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
-			cog_ = cog_ + (*it_robot)->position();
+			cog_ = cog_ + (*(*it_robot)->extrapolated_position(extrapolate));
 			num++;
 		}
 
@@ -238,39 +243,68 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
-
-
 	if(use_mouse_){
-		camera_->set_view_by_mouse(x,y);
+		cameras_[active_camera_index_]->set_view_by_mouse(x,y);
 	}
 
 }
 
 
 void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
+	switch(key){
+		case 'm':
+		    	use_mouse_ = !use_mouse_;
+			break;
+		case 'c':
+				if (active_camera_index_==cameras_.size()-1)
+					active_camera_index_=0;
+				else active_camera_index_++;
+			break;
+		case 'g':
+				render_cog_=!render_cog_;
+			break;
 
+		case 'w':
+				cameras_[active_camera_index_]->move_up();
+			break;
+
+		case 's':
+				cameras_[active_camera_index_]->move_down();
+			break;
+		case 'b':
+				render_acceleration_=!render_acceleration_;
+			break;
+		case 'v':
+				render_velocity_=!render_velocity_;
+			break;
+
+		default:
+			break;
+	}
+}
+
+
+void SimulationRenderer::keyboard_special_func(int key, int x, int y){
 	switch(key){
 		case GLUT_KEY_LEFT:
-				camera_->strafe_left();
+				cameras_[active_camera_index_]->strafe_left();
 
 			break;
 		case GLUT_KEY_RIGHT:
-				camera_->strafe_right();
+				cameras_[active_camera_index_]->strafe_right();
 
 			break;
 
 		case GLUT_KEY_UP:
 
-				camera_->move_forward();
+				cameras_[active_camera_index_]->move_forward();
 			break;
 
 		case GLUT_KEY_DOWN:
-				camera_->move_backward();
+				cameras_[active_camera_index_]->move_backward();
 			break;
 
-		case 'm':
-				use_mouse_ = !use_mouse_;
-			break;
+
 		default:
 
 			break;
@@ -295,6 +329,7 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 		if(ch < kFONTFIRST)
 			continue;
+
 
 		if(ch > kFONTLAST)
 			continue;
@@ -482,21 +517,30 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 		glutSolidSphere(radius, kSphereSlices, kSphereStacks);
 
 	glPopMatrix();
+}
 
+void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, const float* color){
+	glBegin(GL_LINES);
+			glColor3fv(color);
+			glVertex3f(pos1(0),pos1(1),pos1(2));
+			glVertex3f(pos2(0),pos2(1),pos2(2));
+	glEnd();
 
 }
+
 void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
 
 	if(render_cog_){
-
-		glBegin(GL_LINES);
-			glColor3fv(kCogColor);
-			glVertex3f(cog_(0), cog_(1), cog_(2) );
-			glVertex3f(robot->position()(0), robot->position()(1), robot->position()(2) );
-		glEnd();
+		draw_line(cog_,(*robot->extrapolated_position(extrapolate_)), kCogColor);
 	}
 
+	if(render_velocity_){
+		draw_line((*robot->extrapolated_position(extrapolate_))+(*robot->extrapolated_velocity(extrapolate_)),(*robot->extrapolated_position(extrapolate_)),kVelocityColor);
+	}
 
+	if(render_acceleration_){
+			draw_line((*robot->extrapolated_position(extrapolate_))+(robot->acceleration()),(*robot->extrapolated_position(extrapolate_)),kAccelerationColor);
+		}
 	robot_renderer_->draw_robot( robot, extrapolate_ );
 
 }
@@ -552,12 +596,5 @@ void SimulationRenderer::set_marker_color(float r, float g ,float b, float alpha
 
 }
 
-void SimulationRenderer::set_camera(boost::shared_ptr<Camera> & new_camera){
-		camera_.reset((Camera*) 0);
-		camera_ = new_camera;
 
-		camera_->set_screen_height(screen_height_);
-		camera_->set_screen_width(screen_width_);
-
-	}
 

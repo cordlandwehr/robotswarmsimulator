@@ -32,6 +32,10 @@ public:
 	 */
 	static void glutMainLoop();
 
+	void keyboard_func(unsigned char key, int x, int y);
+
+	void keyboard_special_func(int key, int x, int y);
+
 	/**
 	 * \brief Setup of GLUT and call to init method of SimulationRenderer.
 	 *

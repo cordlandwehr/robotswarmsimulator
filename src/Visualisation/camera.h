@@ -101,6 +101,10 @@ public:
 	 * This will move the camera backward
 	 */
 	virtual void move_backward();
+
+	virtual void move_up();
+
+	virtual void move_down();
 	/**
 	 * This will strafe the camera to the left
 	 */

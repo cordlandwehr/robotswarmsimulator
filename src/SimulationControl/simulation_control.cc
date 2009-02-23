@@ -15,7 +15,7 @@ namespace {
 	}
 }
 
-SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0)  {
+SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0), processing_time_delta_(1)  {
 
 }
 
@@ -117,12 +117,47 @@ double SimulationControl::compute_new_processing_time() {
 	boost::posix_time::ptime current_time = boost::posix_time::microsec_clock::local_time();
 	boost::posix_time::time_duration time_elapsed = current_time - last_process_simulation_time_;
 	last_process_simulation_time_ = current_time;
-	return current_processing_time_ + time_elapsed.total_milliseconds();
+	return current_processing_time_ + processing_time_delta_*time_elapsed.total_milliseconds();
 }
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)
                                                 : terminated_(false), paused_(false), unpaused_(1), simulation_kernel_(simulation_kernel) {
 
+}
+
+void SimulationControl::increase_processing_time_exp(){
+	if (processing_time_delta_<100)	{
+		processing_time_delta_=2*processing_time_delta_;
+	}
+}
+
+void SimulationControl::decrease_processing_time_exp(){
+	if (processing_time_delta_>0.2){
+		processing_time_delta_=processing_time_delta_/2;
+	}
+
+}
+
+
+void SimulationControl::pause_processing_time(){
+	if (processing_time_delta_==0){
+		processing_time_delta_=old_processing_time_delta_;
+	}
+	else {
+		old_processing_time_delta_=processing_time_delta_;
+		processing_time_delta_=0;
+	}
+}
+
+void SimulationControl::decrease_processing_time_linearly(){
+	if (processing_time_delta_>1.1){
+		processing_time_delta_--;
+	}
+}
+void SimulationControl::increase_processing_time_linearly(){
+	if (processing_time_delta_<100){
+		processing_time_delta_++;
+	}
 }
 
 void SimulationControl::SimulationKernelFunctor::unpause() {
@@ -134,6 +169,7 @@ void SimulationControl::SimulationKernelFunctor::unpause() {
 }
 
 void SimulationControl::SimulationKernelFunctor::pause() {
+	std::cout<<"pausing"<<std::endl;
 	if(!paused_) {
 		paused_ = true;
 		//set unpaused to 0

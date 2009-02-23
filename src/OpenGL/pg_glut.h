@@ -23,6 +23,7 @@
  * Currently supported callbacks:
  *  - display callback
  *  - keyboard callback
+ *  - special keys callback
  *  - mouse callback
  *  - reshape callback
  *  - timer callback
@@ -57,9 +58,16 @@ namespace PgGLUT {
 	 * \brief Wrapper around GLUT method (supports class member methods).
 	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
 	 */
+	void glutSpecialFunc(boost::function<void (int key, int x, int y)> func);
+	/**
+		 * \brief Wrapper around GLUT method (supports class member methods).
+		 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
+		 */
 	void glutKeyboardFunc(boost::function<void (unsigned char key, int x, int y)> func);
 
-	/**
+
+
+		/**
 	 * \brief Wrapper around GLUT method (supports class member methods).
 	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
 	 */

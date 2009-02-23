@@ -22,6 +22,7 @@ namespace PgGLUT {
 		boost::function<void ()> display_callback_;
 		boost::function<void (int width, int height)> reshape_callback_;
 		boost::function<void (unsigned char key, int x, int y)> keyboard_callback_;
+		boost::function<void (int key, int x, int y)> special_callback_;
 		boost::function<void (int button, int state, int x, int y)> mouse_callback_;
 
 		boost::function<void (int value)> timer_callback_;
@@ -29,6 +30,9 @@ namespace PgGLUT {
 		// delegates to be registered as GLUT callbacks
 		void display_callback_delegate() { display_callback_(); }
 		void keyboard_callback_delegate(unsigned char key, int x, int y) { keyboard_callback_(key, x, y); }
+
+		void special_callback_delegate(int key, int x, int y) { special_callback_(key, x, y); }
+
 		void mouse_callback_delegate(int button, int state, int x, int y) { mouse_callback_(button, state, x, y); }
 		void reshape_callback_delegate(int width, int height) { reshape_callback_(width, height); }
 
@@ -57,6 +61,11 @@ namespace PgGLUT {
 	void glutDisplayFunc(boost::function<void ()> func) {
 		display_callback_ = func;
 		::glutDisplayFunc(&display_callback_delegate);
+	}
+
+	void glutSpecialFunc(boost::function<void (int key, int x, int y)> func) {
+		special_callback_ = func;
+		::glutSpecialFunc(&special_callback_delegate);
 	}
 
 	void glutKeyboardFunc(boost::function<void (unsigned char key, int x, int y)> func) {

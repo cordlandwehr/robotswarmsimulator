@@ -136,9 +136,6 @@ void MoveableCamera::set_view_by_mouse(int x, int y) {
 
 
 void MoveableCamera::strafe_camera(float speed) {
-
-
-
 	// Add the strafe vector to our position
 
 	position_(0) += strafe_(0) * speed;
@@ -156,9 +153,7 @@ void MoveableCamera::strafe_camera(float speed) {
 }
 
 
-
-
-void MoveableCamera::move_camera(float speed) {
+void MoveableCamera::move_camera_up_down(float speed) {
 
 	// Get the current view vector (the direction we are looking)
 
@@ -178,6 +173,26 @@ void MoveableCamera::move_camera(float speed) {
 
 }
 
+void MoveableCamera::move_camera(float speed) {
+
+	// Get the current view vector (the direction we are looking)
+
+	Vector3d vector = view_ - position_;
+
+	vector = Normalize(vector);
+
+
+
+	//position_(0) += vector(0) * speed;		// Add our acceleration to our position's X
+	position_(1) += vector(1) * speed;
+	position_(2) += vector(2) * speed;		// Add our acceleration to our position's Z
+
+	//view_(0) += vector(0) * speed;			// Add our acceleration to our view's X
+	view_(1) += vector(1) * speed;
+	view_(2) += vector(2) * speed;			// Add our acceleration to our view's Z
+
+}
+
 
 
 void MoveableCamera::move_forward(){
@@ -188,6 +203,14 @@ void MoveableCamera::move_backward(){
 	move_camera(-kSpeed);
 }
 
+void MoveableCamera::move_up(){
+	move_camera_up_down(-kSpeed);
+}
+
+void MoveableCamera::move_down(){
+	move_camera_up_down(+kSpeed);
+}
+
 void MoveableCamera::strafe_left(){
 	strafe_camera(-kSpeed);
 }
@@ -195,8 +218,6 @@ void MoveableCamera::strafe_left(){
 void MoveableCamera::strafe_right(){
 	strafe_camera(kSpeed);
 }
-
-
 
 
 void MoveableCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & marker,
