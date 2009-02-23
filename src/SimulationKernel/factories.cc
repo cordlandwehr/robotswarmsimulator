@@ -8,6 +8,9 @@
 #include "factories.h"
 #include <string>
 #include <boost/any.hpp>
+#include <boost/foreach.hpp>
+#include <boost/tuple/tuple.hpp>
+
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
@@ -24,6 +27,42 @@
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
 #include "../EventHandlers/type_change_request_handler.h"
+#include "../EventHandlers/vector_request_handler.h"
+
+#include "../Utilities/VectorModifiers/vector_modifier.h"
+#include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
+#include "../Utilities/VectorModifiers/vector_trimmer.h"
+#include "../Utilities/VectorModifiers/vector_randomizer.h"
+
+void set_up_vector_modifiers(boost::shared_ptr<VectorRequestHandler> handler,
+                             std::vector<boost::tuple<std::string, std::vector<boost::any> > > & modifiers ) {
+
+
+	std::vector<boost::tuple<std::string, std::vector<boost::any> > >::iterator modifier_iter = modifiers.begin();
+	while(modifier_iter != modifiers.end()) {
+		std::string type = (*modifier_iter).get<0>();
+		boost::shared_ptr<VectorModifier> vector_modifier;
+		if(type == "VECTOR_TRIMMER") {
+			double length = boost::any_cast<double>((*modifier_iter).get<1>().at(0));
+			vector_modifier.reset(new VectorTrimmer(length));
+		} else if(type == "VECTOR_DIFFERENCE_TRIMMER") {
+			double length = boost::any_cast<double>((*modifier_iter).get<1>().at(0));
+			vector_modifier.reset(new VectorDifferenceTrimmer(length));
+		} else if(type == "VECTOR_RANDOMIZER") {
+			unsigned int seed = boost::any_cast<unsigned int>((*modifier_iter).get<1>().at(0));
+			double standard_deviation = boost::any_cast<double>((*modifier_iter).get<1>().at(1));
+			vector_modifier.reset(new VectorRandomizer(seed, standard_deviation));
+		} else {
+			//TODO(craupach) throw up
+		}
+		handler->add_vector_modifier(vector_modifier);
+		modifier_iter++;
+	}
+
+}
+
+
+
 
 boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::string, boost::any> &params,
                                                                boost::shared_ptr<History> history,
@@ -48,10 +87,58 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		// build the marker request handler
 		double discard_probability = boost::any_cast<double> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
 		unsigned int seed = boost::any_cast<unsigned int> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_SEED"]);
-		boost::shared_ptr<MarkerRequestHandler> marker_request_handler(new MarkerRequestHandler(seed, discard_probability, *history));
-		event_handler->set_marker_request_handler(marker_request_handler);
+		boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler(new TypeChangeRequestHandler(seed, discard_probability, *history));
+		event_handler->set_type_change_request_handler(type_change_request_handler);
 	}
 
+	// 3. Position Request Handler
+	std::string position_request_handler_type = boost::any_cast<std::string> (params["POSITION_REQUEST_HANDLER_TYPE"]);
+	if(position_request_handler_type == "VECTOR") {
+		// build the marker request handler
+		double discard_probability = boost::any_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::any_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
+		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+
+		// set up vector modifiers
+		std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
+		    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
+		set_up_vector_modifiers(vector_request_handler, modifiers);
+
+		event_handler->set_position_request_handler(vector_request_handler);
+
+	}
+
+	// 4. Velocity Request Handler
+	std::string velocity_request_handler_type = boost::any_cast<std::string> (params["VELOCITY_REQUEST_HANDLER_TYPE"]);
+	if(velocity_request_handler_type == "VECTOR") {
+		// build the marker request handler
+		double discard_probability = boost::any_cast<double> (params["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::any_cast<unsigned int> (params["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]);
+		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+
+		// set up vector modifiers
+		std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
+		    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
+		set_up_vector_modifiers(vector_request_handler, modifiers);
+
+		event_handler->set_velocity_request_handler(vector_request_handler);
+	}
+
+	// 5. Acceleration Request Handler
+	std::string acceleration_request_handler_type = boost::any_cast<std::string> (params["ACCELERATION_REQUEST_HANDLER_TYPE"]);
+	if(acceleration_request_handler_type == "VECTOR") {
+		// build the marker request handler
+		double discard_probability = boost::any_cast<double> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::any_cast<unsigned int> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]);
+		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+
+		// set up vector modifiers
+		std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
+		    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
+		set_up_vector_modifiers(vector_request_handler, modifiers);
+
+		event_handler->set_acceleration_request_handler(vector_request_handler);
+	}
 
 
 	return event_handler;

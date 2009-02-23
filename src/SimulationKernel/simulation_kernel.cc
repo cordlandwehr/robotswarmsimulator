@@ -93,58 +93,8 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	asg_ = Factory::asg_factory(params);
 	asg_->initialize(*history_, robots_);
 
-	// create according EventHandler.
-	event_handler_.reset(new EventHandler(history, robot_control));
-
-	// setup of request handlers (all requests handled exactly as requested)
-	if (parser->position_request_handler_seed() != 0) {
-		event_handler_->set_position_request_handler(boost::dynamic_pointer_cast<VectorRequestHandler>(
-				setup_request_handler(POSITION_REQUEST_HANDLER, parser->position_request_handler_seed(),
-				parser->position_request_handler_discard_prob(), history, parser->position_request_handler_vector_modifier())
-				));
-	} else {
-		// no Position request handler
-	}
-
-	if (parser->velocity_request_handler_seed() != 0) {
-		event_handler_->set_velocity_request_handler(boost::dynamic_pointer_cast<VectorRequestHandler>(
-				setup_request_handler(VELOCITY_REQUEST_HANDLER, parser->velocity_request_handler_seed(),
-				parser->velocity_request_handler_discard_prob(), history, parser->velocity_request_handler_vector_modifier())
-				));
-	} else {
-		// no Velocity request handler
-	}
-
-	if (parser->acceleration_request_handler_seed() != 0) {
-		event_handler_->set_acceleration_request_handler(boost::dynamic_pointer_cast<VectorRequestHandler>(
-				setup_request_handler(ACCELERATION_REQUEST_HANDLER, parser->acceleration_request_handler_seed(),
-				parser->acceleration_request_handler_discard_prob(), history, parser->acceleration_request_handler_vector_modifier())
-				));
-	} else {
-		// no Acceleration request handler
-	}
-
-	if (parser->marker_request_handler_seed() != 0) {
-		//TODO(mmarcus) the vector-modifiers here are taken from the position handler, since marker_request handler do
-		//not have vector modifiers but setup_request_handler need them!
-		event_handler_->set_marker_request_handler(boost::dynamic_pointer_cast<MarkerRequestHandler>(
-				setup_request_handler(MARKER_REQUEST_HANDLER, parser->marker_request_handler_seed(),
-				parser->marker_request_handler_discard_prob(), history, parser->position_request_handler_vector_modifier())
-				));
-	} else {
-		// no Marker request handler
-	}
-
-	if (parser->type_change_request_handler_seed() != 0) {
-		//TODO(mmarcus) the vector-modifiers here are taken from the position handler, since marker_request handler do
-		//not have vector modifiers but setup_request_handler need them!
-		event_handler_->set_type_change_request_handler(boost::dynamic_pointer_cast<TypeChangeRequestHandler>(
-				setup_request_handler(TYPE_CHANGE_REQUEST_HANDLER, parser->type_change_request_handler_seed(),
-				parser->type_change_request_handler_discard_prob(), history, parser->position_request_handler_vector_modifier())
-				));
-	} else {
-		// no Type change request handler
-	}
+	// create EventHandler.
+	event_handler_ = Factory::event_handler_factory(params, history_, robot_control);
 
 	// create and initialize statistics module;
 	stats_.reset(new StatsControl());
