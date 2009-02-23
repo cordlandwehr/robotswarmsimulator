@@ -15,6 +15,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
 
+#include <config.h>
 #include <SimulationControl/simulation_control.h>
 #include <UserInterfaces/glut_visualizer.h>
 #include <Utilities/szenario_generator.h>
@@ -65,31 +66,14 @@ int main(int argc, char** argv) {
 	}
 
 	// check whether to show version information of RSS
-	// TODO(cola) where to get this information?
 	if (vm.count("version")) {
-		std::cout << "Version: " << 1.0 << " / 22.02.2009" << std::endl;
+		std::cout << "Version: " << cfg::version << std::endl;
 		return 1;
 	}
 
 	// check whether to show about information of RSS
 	if (vm.count("about")) {
-
-		std::cout << "  _____       _           _    _____                              _____ _                 _       _             " << std::endl;
-		std::cout << " |  __ \\     | |         | |  / ____|                            / ____(_)               | |     | |            " << std::endl;
-		std::cout << " | |__) |___ | |__   ___ | |_| (_____      ____ _ _ __ _ __ ___ | (___  _ _ __ ___  _   _| | __ _| |_ ___  _ __ " << std::endl;
-		std::cout << " |  _  // _ \\| '_ \\ / _ \\| __|\\___ \\ \\ /\\ / / _` | '__| '_ ` _ \\ \\___ \\| | '_ ` _ \\| | | | |/ _` | __/ _ \\| '__|" << std::endl;
-		std::cout << " | | \\ \\ (_) | |_) | (_) | |_ ____) \\ V  V / (_| | |  | | | | | |____) | | | | | | | |_| | | (_| | |_ (_) | |   " << std::endl;
-		std::cout << " |_|  \\_\\___/|_.__/ \\___/ \\__|_____/ \\_/\\_/ \\__,_|_|  |_| |_| |_|_____/|_|_| |_| |_|\\__,_|_|\\__,_|\\__\\___/|_|   " << std::endl;
-		std::cout << std::endl << std::endl;
-		std::cout << "This RobotSwarmSimulator was developed as part of the university " << std::endl;
-		std::cout << "project group \"Schlaue Schwaerme\" by Alexander Klaas, Andreas Cord-Landwehr, " << std::endl;
-		std::cout << "Christoph Raupach, Christoph Weddemann, Daniel Warner, Daniel Wonisch, " << std::endl;
-		std::cout << "Kamil Swierkot, Marcus Märtens, Martina Hüllmann, Peter Kling und Sven Kurras. " << std::endl << std::endl;
-		std::cout << "The University of Paderborn, Research group \"Algorithms and Complexity\"" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Contact: der-schwarm@lists.uni-paderborn.de" << std::endl;
-		std::cout << std::endl << std::endl;
-
+		std::cout << cfg::about_ascii << std::endl;
 		return 1;
 	}
 
@@ -134,7 +118,7 @@ int main(int argc, char** argv) {
 		generator.write_to_file();
 
 		std::cout << "Robots were generated!" << std::endl;
-		std::cout << "Please see file: "+vm["worldfile"].as<std::string>()+".swarm"<< std::endl << std::endl;
+		std::cout << "Please see file: " + vm["worldfile"].as<std::string>() + ".swarm" << std::endl << std::endl;
 
 		return 1;
 	}
@@ -145,6 +129,7 @@ int main(int argc, char** argv) {
 		std::cout << "   or: '" << argv[0] << " --help' for additional options" << std::endl;
 		return 1;
 	}
+
 	try {
 		std::string tmpProjectFile = vm["project-file"].as<std::string>();
 		// deletes ".swarm" from end of file, if used

@@ -3,6 +3,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 # internal include directories
 include_directories("${rsslib_SOURCE_DIR}")
+include_directories("${rsslib_BINARY_DIR}")
 
 # find all source files
 set(RSSMAIN_SRCS

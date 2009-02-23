@@ -1,6 +1,10 @@
 project(rsslib)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
+# process config header
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
+include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+
 # find all source files
 file(GLOB_RECURSE RSSLIB_SRCS *.cc)
 file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc)
