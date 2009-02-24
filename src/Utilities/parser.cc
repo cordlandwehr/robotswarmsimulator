@@ -2,7 +2,30 @@
 
 #include <boost/tuple/tuple.hpp>
 
-Parser::Parser() {
+
+
+
+
+
+// some default values are set, especially for output
+// please cf. User's Guide
+Parser::Parser() : 	asg_("SYNCHRONOS"),
+					compass_model_("FULL_COMPASS"),
+					project_name_("NEW RSS PROJECT"),
+					robot_filename_("rssfile"),
+					obstacle_filename_("rssfile"),
+					statistics_template_("ALL"),
+					statistics_subsets_(""),
+					marker_request_handler_seed_(static_cast<unsigned int>(1)),
+					type_change_request_handler_seed_(static_cast<unsigned int>(1)),
+					velocity_request_handler_seed_(static_cast<unsigned int>(1)),
+					position_request_handler_seed_(static_cast<unsigned int>(1)),
+					acceleration_request_handler_seed_(static_cast<unsigned int>(1)),
+					marker_request_handler_discard_prob_(0.0),
+					type_change_request_handler_discard_prob_(0.0),
+					velocity_request_handler_discard_prob_(0.0),
+					position_request_handler_discard_prob_(0.0),
+					acceleration_request_handler_discard_prob_(0.0){
 	//initialize Parser with default values
 	init();
 
