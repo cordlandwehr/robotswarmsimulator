@@ -338,8 +338,11 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 		case 'k':
 				switch_render_coord_system();
 			break;
-case 'h':
+
+		case 'h':
 				render_help_=!render_help_;
+			break;
+
 		case 'l':
 				switch_render_local_coord_system();
 			break;
@@ -370,11 +373,9 @@ void SimulationRenderer::keyboard_special_func(int key, int x, int y){
 				cameras_[active_camera_index_]->move_backward();
 			break;
 
-
-case GLUT_KEY_F1:
+		case GLUT_KEY_F1:
 				render_about_=!render_about_;
 			break;
-
 
 		default:
 
@@ -385,33 +386,23 @@ case GLUT_KEY_F1:
 
 
 int SimulationRenderer::font_bitmap_string(const std::string & str) {
-
 	std::size_t	len= str.length();
 
-
-
-for(std::size_t i=0;i<len;i++) {
+	for(std::size_t i=0;i<len;i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
 	}
 
-
-
 	return 1;
-
 }
 
 
 void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
-
 
     GLfloat     curcolor[4], position[4];
     GLboolean   texturing;
 
 
 	// save OpenGL state
-
-
-
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glGetFloatv(GL_CURRENT_COLOR, curcolor);
     glGetBooleanv(GL_TEXTURE_2D, &texturing);
@@ -572,18 +563,7 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 	glPopMatrix();
 }
 
-void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, const float* color){
-	glBegin(GL_LINES);
-			glColor3fv(color);
-			glVertex3f(pos1(0),pos1(1),pos1(2));
-			glVertex3f(pos2(0),pos2(1),pos2(2));
-	glEnd();
-
-}
-
 void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
-
-
 	robot_renderer_->draw_robot( robot, extrapolate_ );
 
 }
@@ -625,21 +605,17 @@ boost::array<std::string, 12> helptext;
 }
 
 void SimulationRenderer::draw_about(){
+	boost::array<std::string,6> abouttext;
 
-
-
-boost::array<std::string,6> abouttext;
-abouttext[0]="This RobotSwarmSimulator was developed as part of the university";
-abouttext[1]="project group \"Schlaue Schwaerme\" by Alexander Klaas, Andreas Cord-Landwehr,";
-abouttext[2]="Christoph Raupach, Christoph Weddemann, Daniel Warner, Daniel Wonisch,";
-abouttext[3]="Kamil Swierkot, Marcus Märtens, Martina Hüllmann, Peter Kling and Sven Kurras.";
-abouttext[4]="The University of Paderborn, Research group \"Algorithms and Complexity\"";
-abouttext[5]="Contact: der-schwarm@lists.uni-paderborn.de";
-for (int i=0;i<abouttext.size();i++){
-	draw_text2d(10,screen_height_-50-i*kTextSpacing,abouttext[i]);
-}
-
-
+	abouttext[0]="This RobotSwarmSimulator was developed as part of the university";
+	abouttext[1]="project group \"Schlaue Schwaerme\" by Alexander Klaas, Andreas Cord-Landwehr,";
+	abouttext[2]="Christoph Raupach, Christoph Weddemann, Daniel Warner, Daniel Wonisch,";
+	abouttext[3]="Kamil Swierkot, Marcus Märtens, Martina Hüllmann, Peter Kling and Sven Kurras.";
+	abouttext[4]="The University of Paderborn, Research group \"Algorithms and Complexity\"";
+	abouttext[5]="Contact: der-schwarm@lists.uni-paderborn.de";
+	for (int i=0;i<abouttext.size();i++){
+		draw_text2d(10,screen_height_-50-i*kTextSpacing,abouttext[i]);
+	}
 }
 
 void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> world_info ){
@@ -687,7 +663,7 @@ void SimulationRenderer::draw_coord_system(){
 
 	glEnd();
 
-	glLineWidth(1.0f);
+	glLineWidth(kCoordLineWidth);
 
 }
 
