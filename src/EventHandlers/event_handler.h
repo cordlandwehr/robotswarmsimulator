@@ -49,6 +49,7 @@ class History;
  * message is issued upon the occurrence of such a request.
  */
 class EventHandler {
+	friend class EventHandlerFactoryTest;
 
 public:
 	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),

@@ -21,7 +21,7 @@ class WorldInformation;
  * randomly discarding them with the given discard probability.
  */
 class RequestHandler {
-
+	friend class EventHandlerFactoryTest;
 public:
 	/**
 	 * constructs the RequestHandler by setting up the distribution generator with the given

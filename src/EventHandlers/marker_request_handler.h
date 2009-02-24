@@ -14,6 +14,7 @@
  * Standard marker request handler. Fullfills every marker request.
  */
 class MarkerRequestHandler : public RequestHandler {
+	friend class EventHandlerFactoryTest;
 public:
 	MarkerRequestHandler(unsigned int seed,
                          double discard_probability,
