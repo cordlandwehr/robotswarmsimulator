@@ -594,7 +594,7 @@ boost::array<std::string, 12> helptext;
 	helptext[5]="H to toggle this help screen";
 	helptext[6]="-, +, / and * to de-/increase speed";
 	helptext[7]="C to change camera";
-	helptext[8]="K to display global coordinate axes";
+	helptext[8]="K/L to display global/local coordinate axes";
 	helptext[9]="B and V to display robot's acceleration and velocity";
 	helptext[10]="G to display center of gravity";
 	helptext[11]="F1 to display About screen";
@@ -646,21 +646,21 @@ void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> worl
 
 
 void SimulationRenderer::draw_coord_system(){
-
+const float length=1000;
 	glLineWidth(kCoordLineWidth);
 
 	glBegin(GL_LINES);
 		glColor3fv(kCoordXColor);
 		glVertex3f(0.0f,0.0f,0.0f);
-		glVertex3f(1.0f,.0f,.0f);
+		glVertex3f(length,.0f,.0f);
 
 		glColor3fv(kCoordYColor);
 		glVertex3f(0.0f,.0f,.0f);
-		glVertex3f(.0f,1.0f,.0f);
+		glVertex3f(.0f,length,.0f);
 
 		glColor3fv(kCoordZColor);
 		glVertex3f(.0f,.0f, .0f);
-		glVertex3f(0.0f,.0f,1.0f);
+		glVertex3f(0.0f,.0f,length);
 
 	glEnd();
 
