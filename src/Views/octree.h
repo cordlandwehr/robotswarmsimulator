@@ -103,6 +103,7 @@ public:
 
 	/**
 	 * This class represents the recursive structure of the octree.
+	 * Robot datas, obstacles and markers are stored in this nodes.
 	 * The only way to create new nodes is to create a new tree.
 	 */
 	class OctreeNode {

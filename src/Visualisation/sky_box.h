@@ -12,17 +12,31 @@
 
 #include "texture.h"
 
+/**
+ * This represents a skybox.
+ * It renders a sky in infinity.
+ */
 class SkyBox{
  public:
 
 	SkyBox();
 	~SkyBox();
 
+	/**
+	 * This method loads all textures.
+	 */
 	bool init( std::string path_to_tex);
+
+	/**
+	 * This draws the sky box.
+	 */
 	void draw();
 
  private:
 
+	 /**
+	  *
+	  */
 	 enum TexNum {
 		 TEX_FRONT,
 		 TEX_BACK,
@@ -31,6 +45,7 @@ class SkyBox{
 		 TEX_RIGHT,
 		 TEX_LEFT
 	 };
+
 
 	 Texture texture_[6];
 	 bool can_use_ ;

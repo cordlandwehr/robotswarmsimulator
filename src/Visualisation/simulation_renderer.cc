@@ -58,8 +58,9 @@ const std::string kSkyBoxTexName("data/tex/skybox/");
 
 
 SimulationRenderer::SimulationRenderer() :
-									render_cog_(false), render_coord_system_(true), render_acceleration_(false),
-									render_velocity_(true), render_local_coord_system_(true), projection_type_(PROJ_PERSP) {
+									render_cog_(false), render_coord_system_(false), render_acceleration_(false),
+									render_velocity_(true), render_local_coord_system_(false), projection_type_(PROJ_PERSP),
+									render_help_(false), render_about_(false){
 
 
 
