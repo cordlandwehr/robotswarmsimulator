@@ -32,7 +32,7 @@
 
 const float kObstacleColor[] = {1.0f,0.0f,0.0f,1.0f};
 const float kRobotColor[] = {0.0f,1.0f,0.0f,1.0f};
-const float kTextColor[] = {1.0f,0.0f,1.0f,1.0f};
+const float kTextColor[] = {1.0f,1.0f,1.0f,1.0f};
 const float kMarkerColor[] = {1.0f,1.0f,0.0f,1.0f};
 const float kCogColor[] = {1.0f,1.0f,0.0f,1.0f};
 const float kVelocityColor[] = {1.0f,0.0f,0.0f,1.0f};
@@ -162,7 +162,7 @@ void SimulationRenderer::init(int x, int y){
 
 	sky_box_.reset( new SkyBox() );
 
-	sky_box_->init( kSkyBoxTexName);
+	//sky_box_->init( kSkyBoxTexName);
 	robot_renderer_->init();
 
 	//std::string str("data/tex/skybox/back.bmp");
@@ -291,7 +291,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 
 	float end_time = std::clock();
 	float ticks = (end_time - start_time) / CLOCKS_PER_SEC;
-	std::printf("Time for rendering: %f \n", ticks);
+	//std::printf("Time for rendering: %f \n", ticks);
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
