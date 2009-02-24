@@ -70,7 +70,7 @@ void Parser::init() {
 
 	// TODO(craupach) temporary code to prevent code from crashing, minimal simulation
 	parameter_map_["ASG"] = std::string("SYNCHRONOUS");
-	parameter_map_["VIEW"] = std::string("NONE");
+	parameter_map_["VIEW"] = std::string("GLOBAL_VIEW");
 	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
 	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
 	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
