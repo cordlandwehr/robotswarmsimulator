@@ -138,10 +138,8 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
 		// set up vector modifiers
-		// std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
-		//    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
-		// set_up_vector_modifiers(vector_request_handler, modifiers);
-
+		create_vector_modifiers_from_string(vector_request_handler,
+		                                    params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
 		event_handler->set_velocity_request_handler(vector_request_handler);
 	}
 
@@ -154,10 +152,8 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
 		// set up vector modifiers
-		// std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
-		//    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
-		// set_up_vector_modifiers(vector_request_handler, modifiers);
-
+		create_vector_modifiers_from_string(vector_request_handler,
+		                                    params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
 		event_handler->set_acceleration_request_handler(vector_request_handler);
 	}
 
