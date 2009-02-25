@@ -14,6 +14,7 @@
 #include "vector_request_handler.h"
 #include "marker_request_handler.h"
 #include "type_change_request_handler.h"
+#include "marker_change_request_handler.h"
 
 // forward declarations
 class Event;
@@ -27,6 +28,7 @@ class MarkerRequest;
 class PositionRequest;
 class TypeChangeRequest;
 class VelocityRequest;
+class MarkerChangeRequest;
 
 class WorldInformation;
 class SimulationListener;
@@ -102,6 +104,10 @@ public:
 		type_change_request_handler_ = type_change_request_handler;
 	}
 
+	void set_marker_change_request_handler(boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler) {
+		marker_change_request_handler_ = marker_change_request_handler;
+	}
+
 private:
 	/**
 	 * handles the given look event by delegating it to RobotControl
@@ -138,6 +144,7 @@ private:
 	boost::shared_ptr<VectorRequestHandler> acceleration_request_handler_;
 	boost::shared_ptr<MarkerRequestHandler> marker_request_handler_;
 	boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler_;
+	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
 
 	vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;

@@ -27,6 +27,7 @@
 #include "../Requests/request.h"
 #include "../Requests/type_change_request.h"
 #include "../Requests/velocity_request.h"
+#include "../Requests/marker_change_request.h"
 
 #include "../SimulationControl/history.h"
 #include "../SimulationKernel/simulation_listener.h"
@@ -136,6 +137,13 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 				velocity_request_handler_->handle_request(new_world_information, velocity_request);
 			} else {
 				std::cerr << "No Velocity Request Handler Set" << std::endl;
+			}
+		} else if(boost::shared_ptr<const MarkerChangeRequest> marker_change_request =
+		          boost::dynamic_pointer_cast<const MarkerChangeRequest> (request)) {
+			if (marker_change_request_handler_) {
+				marker_change_request_handler_->handle_request(new_world_information, marker_change_request);
+			} else {
+				std::cerr << "No Marker Change Request Handler Set" << std::endl;
 			}
 		} else {
 			throw std::invalid_argument("Illegal type of request.");
