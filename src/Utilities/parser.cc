@@ -241,7 +241,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 				var_value = get_var_value(line, var_name);
 
 				//insert variable and value into map
-				parameter_map_.insert(pair<string,string>(var_name,var_value));
+				parameter_map_[var_name] = var_value;
 			}
 		}
 		project_file.close();

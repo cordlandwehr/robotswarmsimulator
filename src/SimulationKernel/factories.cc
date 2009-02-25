@@ -240,8 +240,8 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
 		}
 	} else {
-		std:cerr << "No View specified! Defaulting to standard one!" << std::endl ;
-		view_factory.reset(new ViewFactory<View>);
+		std:cerr << "No View specified! Defaulting to global view!" << std::endl ;
+		view_factory.reset(new ViewFactory<GlobalView>);
 	}
 
 	return view_factory;
