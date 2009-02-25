@@ -31,6 +31,7 @@
 #include "../EventHandlers/marker_request_handler.h"
 #include "../EventHandlers/type_change_request_handler.h"
 #include "../EventHandlers/vector_request_handler.h"
+#include "../EventHandlers/marker_change_request_handler.h"
 
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
@@ -184,6 +185,20 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 			event_handler->set_acceleration_request_handler(vector_request_handler);
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for vector acceleration request handler");
+		}
+	}
+
+	// 6. Marker Change Request Handler
+	std::string marker_change_request_handler_type = boost::any_cast<std::string> (params["MARKER_CHANGE_REQUEST_HANDLER_TYPE"]);
+	if(type_change_request_handler_type == "STANDARD") {
+		try {
+			// build the type change request handler
+			double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_MARKER_CHANGE_REQUEST_HANDLER_SEED"]);
+			boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler(new MarkerChangeRequestHandler(seed, discard_probability, *history));
+			event_handler->set_marker_change_request_handler(marker_change_request_handler);
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
 		}
 	}
 
