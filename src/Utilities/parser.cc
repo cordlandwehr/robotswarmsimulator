@@ -35,6 +35,7 @@ void Parser::init() {
 
 	//define default values
 	//TODO(martinah) review default values
+	//TODO(craupach) needs to be written in the parameter map
 	variables_with_default_values.push_back("COMPASS_MODEL");
 	default_values_of_varialbes.push_back("FULL_COMPASS");
 
@@ -271,179 +272,9 @@ std::vector<string> Parser::split_string_by_string(const string& my_string, cons
 }
 
 
-boost::tuple<string,double,unsigned int,std::vector<boost::tuple<string,std::vector<boost::any> > > >
-Parser::get_request_handler_with_vector_modifiers_from_map(map<string,string> variables_and_values, const string& request_handler) {
-	return get_request_handler_from_map(variables_and_values, request_handler, true);
-}
-
-boost::tuple<string,double,unsigned int,std::vector<boost::tuple<string,std::vector<boost::any> > > >
-Parser::get_request_handler_from_map(map<string,string> variables_and_values, const string& request_handler, bool vector_modifier_exists) {
-
-	//return variables
-	string type;
-	double discard_prob;
-	unsigned int seed;
-	std::vector<boost::tuple<	//list of vector modifiers
-		string,						//type of vector modifier
-		std::vector<boost::any>		//parameters of vector modifiers
-	> > vector_modifier;
-	string type_of_vector_modifier;
-	std::vector<boost::any> vector_parameter;
-
-	//get value saved for request handler
-	//e.g. request_handler_value="("POSITION","0.5","1",(("VECTOR_TRIMMER","1.5"),("VECTOR_RANDOMIZER",5,"2.5")))"
-	string request_handler_value = get_string_value_from_map(variables_and_values, request_handler);
-
-	//split string to get values of tuple that defines the request handler
-	std::vector<string> tuple_values = split_string_by_string(request_handler_value, ",", 4);
-
-	//get values of splitted string
-	string type_string = tuple_values[0];
-	string discard_prob_string = tuple_values[1];
-	string seed_string = tuple_values[2];
-
-	//remove first from type_string
-	//type_string currently looks like ("POSITION"
-	type_string = type_string.erase(0,1);
-
-
-	//if request handler hasn't a vector modifier list, then seed is the last value => remove last bracket from seed
-	if(!vector_modifier_exists) {
-		seed_string = remove_quotes_and_leading_and_trailing_spaces(seed_string);
-		seed_string = seed_string.erase(seed_string.size()-1,1);
-	}
-
-	//cast tuple values
-	try {
-		type = remove_quotes_and_leading_and_trailing_spaces(type_string);
-		discard_prob = boost::lexical_cast<double>(remove_quotes_and_leading_and_trailing_spaces(discard_prob_string));
-		seed = boost::lexical_cast<unsigned int>(remove_quotes_and_leading_and_trailing_spaces(seed_string));
-	} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed casting values of Request Handler.");
-	}
-
-	//check if request handler has a (maybe empty) list of vector modifiers
-	if(vector_modifier_exists) {
-
-		//get vector modifiers (still just a string)
-		string vector_modifier_list_string = tuple_values[3];
-
-		//remove last brackets (according to request handler tuple)
-		//vector_modifer_list_string currently looks like ("VECTOR_RANDOMIZER",5,"2.5")))
-		vector_modifier_list_string.erase(vector_modifier_list_string.size()-2, 2);
-		vector_modifier_list_string.erase(0,1);
-
-		//check if there list of vector modifiers isn't empty (i.e. ())
-		//Remark: this is not the same check as a fiew lines above,
-		//because opening and closing brackets were removed from this string before)
-		if(vector_modifier_list_string.size()>0) {
-
-			//remove first and last brackets of splitted vector modifier list
-			tuple_values = split_string_by_string(vector_modifier_list_string, "),(", vector_modifier_list_string.size());
-			tuple_values[0]=tuple_values[0].erase(0,1);
-			string tmp_val = tuple_values.back();
-			tuple_values.pop_back();
-			tmp_val = tmp_val.erase(tmp_val.size()-1,1);
-			tuple_values.push_back(tmp_val);
-
-			//get vector modifiers (i.e. get type and parameters of vector modifier)
-			for(std::vector<string>::iterator it = tuple_values.begin(); it<tuple_values.end(); it++) {
-
-				//split vector modifier
-				std::vector<string> tuple_values_2 = split_string_by_string(*it, ",", (*it).size());
-
-				//get type (contained in first element)
-				type_of_vector_modifier = remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[0]);
-
-				//get parameter (contained in next elements)
-				//Number and types of parameters depends on type of vector modifier.
-				//In case of VectorTrimmer and VectorDifferenceTrimmer there is 1 parameter,
-				//in case of VectorRandomizer there are 2 paramter.
-				vector_parameter.clear();
-				if(!type_of_vector_modifier.compare("VECTOR_TRIMMER")
-				   || !type_of_vector_modifier.compare("VECTOR_DIFFERENCE_TRIMMER")) {
-
-					//parameter of type double
-					double param1;
-
-					try {
-						param1 = boost::lexical_cast<double>(remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[1]));
-					} catch(const boost::bad_lexical_cast& ) {
-						throw UnsupportedOperationException("Failed casting parameters of vector modifier.");
-					}
-
-					vector_parameter.push_back(param1);
-
-				} else if(!type_of_vector_modifier.compare("VECTOR_RANDOMIZER") ) {
-
-					//First parameter of type unsigned int
-					unsigned int param1;
-
-					//Second parameter of type double
-					double param2;
-
-					try {
-						param1 = boost::lexical_cast<unsigned int>(remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[1]));
-						param2 = boost::lexical_cast<double>(remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[2]));
-					} catch(const boost::bad_lexical_cast& ) {
-						throw UnsupportedOperationException("Failed casting parameters of vector modifier.");
-					}
-
-					vector_parameter.push_back(param1);
-					vector_parameter.push_back(param2);
-				}
-
-				//add tuple (vector modifier type, vector modifier list) to vector containing vector modifiers
-				vector_modifier.push_back(boost::tuple<string,std::vector<boost::any> >(type_of_vector_modifier,vector_parameter));
-			}
-		}
-	}
-
-	//each value of a request handler with vector modifiers is a tuple of the form
-	//(TYPE,DISCARD_PROB,SEED,VECTOR_MODIFIERS)
-	boost::tuple<
-		string,						//type of request handler
-		double,						//discard probability
-		unsigned int,				//seed
-		std::vector<boost::tuple<	//list of vector modifiers
-			string,						//type of vector modifier
-			std::vector<boost::any>		//parameters of vector modifiers
-		> > >
-	return_request_handler(type, discard_prob, seed, vector_modifier);
-
-	return return_request_handler;
-}
-
-boost::tuple<string,double,unsigned int>
-Parser::get_request_handler_without_vector_modifiers_from_map(map<string,string> variables_and_values, const string& request_handler) {
-	//request handler without vector modifier looks like:
-	//("POSITION","0.5","1")
-
-	//get request handler with vector modifier and reject vector modifier (empty vector)
-	//(TYPE,DISCARD_PROB,SEED,VECTOR_MODIFIERS)
-	boost::tuple<
-		string,						//type of request handler
-		double,						//discard probability
-		unsigned int,				//seed
-		std::vector<boost::tuple<	//list of vector modifiers
-			string,						//type of vector modifier
-			std::vector<boost::any>		//parameters of vector modifiers
-		> > >
-	tmp_request_handler = get_request_handler_from_map(variables_and_values, request_handler, false);
-
-	boost::tuple<string,double,unsigned int> return_tuple(
-			boost::get<0>(tmp_request_handler),
-			boost::get<1>(tmp_request_handler),
-			boost::get<2>(tmp_request_handler) );
-
-	return return_tuple;
-
-}
-
 void Parser::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
-	asg_= get_string_value_from_map(variables_and_values, "ASG");
 	compass_model_ = get_string_value_from_map(variables_and_values, "COMPASS_MODEL");
 	project_name_ = get_string_value_from_map(variables_and_values, "PROJECT_NAME");
 
@@ -769,7 +600,7 @@ void Parser::load_projectfiles(const string& project_filename) {
 }
 
 void Parser::save_main_project_file(const string& project_filename) {
-
+	// TODO(craupach) this is broken now. should write values from the map.
 	ofstream project_file;
 	project_file.open((project_filename+".swarm").c_str());
 
@@ -998,10 +829,6 @@ void Parser::save_projectfiles(const string& project_filename, const WorldInform
 
 
 /*** SET-methods for main projectfile variables ***/
-void Parser::set_asg(const string& asg) {
-	asg_ = asg;
-}
-
 void Parser::set_compass_model(const string& compass_model) {
 	compass_model_ = compass_model;
 }
@@ -1033,10 +860,7 @@ void Parser::set_project_filename(const string& project_filename) {
 
 
 /*** GET-methods for main projectfile variables ***/
-const string& Parser::asg() const {
-	return asg_;
-}
-
+// TODO(craupach) delete them all? Watch for side effects with statistics?
 const string& Parser::compass_model() const {
 	return compass_model_;
 }
@@ -1055,10 +879,6 @@ const string& Parser::statistics_template() const {
 
 const string& Parser::statistics_subsets() const {
 	return statistics_subsets_;
-}
-
-const string& Parser::view() const {
-	return view_;
 }
 
 //seeds
