@@ -32,7 +32,7 @@ namespace Factory {
 	 * Returns shared pointer to created event handler
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<EventHandler> event_handler_factory(std::map<std::string, boost::any> &params,
+	boost::shared_ptr<EventHandler> event_handler_factory(std::map<std::string, std::string> &params,
 	                                                      boost::shared_ptr<History> history,
 														  boost::shared_ptr<RobotControl> robot_control);
 
@@ -41,14 +41,14 @@ namespace Factory {
 	 * Returns shared pointer to created activation sequence generator
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(std::map<std::string, boost::any> &params);
+	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(std::map<std::string, std::string> &params);
 
 	/**
 	 * Creates ViewFactory from parameters given in the param map.
 	 * Returns shared pointer to ViewFactory
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<AbstractViewFactory> view_factory_factory(std::map<std::string, boost::any> &params);
+	boost::shared_ptr<AbstractViewFactory> view_factory_factory(std::map<std::string, std::string> &params);
 
 	/**
 	 * Creates robot from given algorithm

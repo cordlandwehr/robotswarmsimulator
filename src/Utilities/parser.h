@@ -38,7 +38,7 @@ using namespace std;
 class Parser {
 
 	//test cases for loading project files
-	friend class load_main_project_file;
+	friend class LoadMainProjectFileTest;
 	friend class load_robot_file_1;
 	friend class load_obstacle_file_1;
 
@@ -56,7 +56,7 @@ public:
 	 * Exact Types of boost::any objects can be looked up in Specification Document
 	 * TODO(craupach) should be implemented by the Kernel Team as principal interface to the parser
 	 */
-	std::map<std::string, boost::any>& parameter_map() { return parameter_map_;};
+	std::map<std::string, std::string>& parameter_map() { return parameter_map_;};
 
 
 	/**
@@ -308,7 +308,7 @@ private:
 	//variables initialized with values in the main project file
 
 	// temporary parameter map
-	std::map<std::string, boost::any> parameter_map_;
+	std::map<std::string, std::string> parameter_map_;
 
 	string asg_;
 	string compass_model_;

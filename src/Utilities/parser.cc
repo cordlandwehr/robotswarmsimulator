@@ -460,13 +460,13 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	statistics_subsets_ = get_string_value_from_map(variables_and_values, "STATISTICS_SUBSETS");
 
 	//get request handler with vector modifiers from map
-	position_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "POSITION_REQUEST_HANDLER");
-	acceleration_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER");
-	velocity_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER");
+	//position_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "POSITION_REQUEST_HANDLER");
+	//acceleration_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER");
+	//velocity_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER");
 
 	//get request handler without vector modifiers from map
-	type_change_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER");
-	marker_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "MARKER_REQUEST_HANDLER");
+	//type_change_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER");
+	//marker_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "MARKER_REQUEST_HANDLER");
 
 
 	//TODO(martinah) save request handler like this in the parameter map?
@@ -486,27 +486,6 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	parameter_map_["STATISTICS_TEMPLATE"] = statistics_template_;
 	parameter_map_["STATISTICS_SUBSETS"] = statistics_subsets_;
 	*/
-
-	//TODO(martinah) temporary, remove and maybe uncomment code above
-	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-
-
-	// TODO(craupach) temporary code to prevent code from crashing, minimal simulation
-	parameter_map_["ASG"] = std::string("SYNCHRONOUS");
-	//TODO(martinah) remove view from this parameter map
-	//@craupach:	do you need this value from the parameter map?
-	//				view variable will be saved for each robot (i.e. in a parameter map to return for robots?)
-	parameter_map_["VIEW"] = std::string("GLOBAL_VIEW");
-	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -514,7 +493,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 	ifstream project_file;
 	project_filename_ = project_filename;
 	string main_project_filename = project_filename_ + ".swarm";
-	map<string, string> variables_and_values;
+
 
 	project_file.open(main_project_filename.c_str());
 	if(project_file.is_open()) {
@@ -533,7 +512,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 				var_value = get_var_value(line, var_name);
 
 				//insert variable and value into map
-				variables_and_values.insert(pair<string,string>(var_name,var_value));
+				parameter_map_.insert(pair<string,string>(var_name,var_value));
 			}
 		}
 		project_file.close();
@@ -542,7 +521,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 		//inserted them into a map
 
 		//initialize variables
-		init_variables(variables_and_values);
+		init_variables(parameter_map_);
 
 	} else {
 		throw UnsupportedOperationException("Unable to open given project file.");

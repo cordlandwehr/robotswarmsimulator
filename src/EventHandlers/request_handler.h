@@ -22,6 +22,7 @@ class WorldInformation;
  */
 class RequestHandler {
 	friend class EventHandlerFactoryTest;
+	friend class LoadMainProjectFileTest;
 public:
 	/**
 	 * constructs the RequestHandler by setting up the distribution generator with the given

@@ -15,6 +15,7 @@
  * \brief Vector modifier that trims the given vector such that it's length does not exceed a specific amount.
  */
 class VectorTrimmer : public VectorModifier {
+	friend class LoadMainProjectFileTest;
 public:
 	/**
 	 * \brief Constructs a vector trimmer that will trim any vector whose length exceeds the specified amount.

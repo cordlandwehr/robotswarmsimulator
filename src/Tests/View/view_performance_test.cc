@@ -18,7 +18,7 @@
 #include "../../Views/parametrized_view_factory.h"
 
 const unsigned kCopyCount = 127;
-
+/*
 BOOST_FIXTURE_TEST_CASE(view_performance_test, SimpleWorldFixture)
 {
 	//Run this test in release mode
@@ -57,3 +57,4 @@ BOOST_FIXTURE_TEST_CASE(view_performance_test, SimpleWorldFixture)
 	std::cout << "Total time: " << time_needed/CLOCKS_PER_SEC << "s." << std::endl;
 	std::cout << "Time per complete visibility check: " << std::setprecision(5) << time_needed*1000.0/kCopyCount/CLOCKS_PER_SEC << "ms." << std::endl;
 }
+*/

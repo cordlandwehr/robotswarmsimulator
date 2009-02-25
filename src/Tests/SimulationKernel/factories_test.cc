@@ -18,13 +18,13 @@ BOOST_FIXTURE_TEST_CASE(EventHandlerFactoryTest, SimpleWorldFixture) {
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
 	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
 
-	std::map<std::string, boost::any> parameter_map;
+	std::map<std::string, std::string> parameter_map;
 
 	// create map with minimal required parameters for event handler which ONLY handles MarkerRequests
 	// (with the standard request handler)
 	parameter_map["MARKER_REQUEST_HANDLER_TYPE"] = std::string("STANDARD");
-	parameter_map["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"] = 1.0;
-	parameter_map["STANDARD_MARKER_REQUEST_HANDLER_SEED"] = static_cast<unsigned int>(42);
+	parameter_map["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"] = std::string("1.0");
+	parameter_map["STANDARD_MARKER_REQUEST_HANDLER_SEED"] = "42";
 
 	// NO other request handlers
 	parameter_map["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");

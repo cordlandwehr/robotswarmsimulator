@@ -66,7 +66,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// create Parser, load project file and get map
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
-	std::map<std::string, boost::any> &params = parser->parameter_map();
+	std::map<std::string, std::string> &params = parser->parameter_map();
 
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);

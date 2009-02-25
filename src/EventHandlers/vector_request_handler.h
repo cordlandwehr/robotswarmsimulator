@@ -33,7 +33,7 @@ class RobotData;
  * the 'handle_request_reliable' method.
  */
 class VectorRequestHandler : public RequestHandler {
-
+	friend class LoadMainProjectFileTest;
 public:
 	VectorRequestHandler(unsigned int seed, double discard_probability, const History& history)
 	: RequestHandler(seed, discard_probability, history) { }

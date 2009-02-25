@@ -15,6 +15,7 @@
  */
 class MarkerRequestHandler : public RequestHandler {
 	friend class EventHandlerFactoryTest;
+	friend class LoadMainProjectFileTest;
 public:
 	MarkerRequestHandler(unsigned int seed,
                          double discard_probability,

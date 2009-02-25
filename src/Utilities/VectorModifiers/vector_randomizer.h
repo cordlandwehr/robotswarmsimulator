@@ -21,6 +21,7 @@
  * N(0, standard_deviation).
  */
 class VectorRandomizer : public VectorModifier {
+	friend class LoadMainProjectFileTest;
 public:
 	VectorRandomizer(unsigned int seed, double standard_deviation)
 	: distribution_generator_(DistributionGenerator(seed)) {

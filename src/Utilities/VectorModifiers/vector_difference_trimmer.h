@@ -19,6 +19,7 @@
  * the length of 'input-reference' matches exactly 'length'.
  */
 class VectorDifferenceTrimmer : public VectorModifier {
+	friend class LoadMainProjectFileTest;
 public:
 	VectorDifferenceTrimmer(double length) : length_(length) { }
 

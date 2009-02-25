@@ -14,12 +14,13 @@
  * Standard type change request handler. Fullfills every type change request.
  */
 class TypeChangeRequestHandler : public RequestHandler {
+	friend class LoadMainProjectFileTest;
 public:
 	TypeChangeRequestHandler(unsigned int seed,
                              double discard_probability,
                              const History& history) : RequestHandler(seed, discard_probability, history) {}
     virtual ~TypeChangeRequestHandler() {}
-	
+
 protected:
 	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                          boost::shared_ptr<const Request> request);

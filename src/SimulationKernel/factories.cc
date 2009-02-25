@@ -10,6 +10,9 @@
 #include <boost/any.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/tokenizer.hpp>
+#include <boost/algorithm/string.hpp>
 
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
@@ -41,37 +44,49 @@
 
 #include <iostream>
 
-void set_up_vector_modifiers(boost::shared_ptr<VectorRequestHandler> handler,
-                             std::vector<boost::tuple<std::string, std::vector<boost::any> > > & modifiers ) {
+/**
+ * creates vector modfiers from the given string and adds them to the handler
+ * TODO(craupach) proper error handling
+ */
+void create_vector_modifiers_from_string(boost::shared_ptr<VectorRequestHandler> handler, const std::string& modifiers ) {
+	// set up boost string tokenizer for ";" (delimeter between vector modifiers)
+	boost::char_separator<char> sep(";");
+	boost::tokenizer<boost::char_separator<char> > tokenizer(modifiers, sep);
 
+	// iterate through all substrings (each represents a single modifier)
+	BOOST_FOREACH(std::string modifier, tokenizer) {
+		// discard leading and trailing '(' ')'
+		boost::trim_if(modifier, boost::is_any_of("()"));
 
-	std::vector<boost::tuple<std::string, std::vector<boost::any> > >::iterator modifier_iter = modifiers.begin();
-	while(modifier_iter != modifiers.end()) {
-		std::string type = (*modifier_iter).get<0>();
-		boost::shared_ptr<VectorModifier> vector_modifier;
+		// split modifier string
+		boost::char_separator<char> inner_sep(",");
+		boost::tokenizer<boost::char_separator<char> > inner_tokenizer(modifier, inner_sep);
+
+		// get first token (type of vector modifier)
+		boost::tokenizer<boost::char_separator<char> >::iterator param_iterator = inner_tokenizer.begin();
+		std::string type = *param_iterator;
+		++param_iterator;
+
+		// switch through types. This is the place init code for new modifiers should be inserted.
+		boost::shared_ptr<VectorModifier> new_vector_modifier;
 		if(type == "VECTOR_TRIMMER") {
-			double length = boost::any_cast<double>((*modifier_iter).get<1>().at(0));
-			vector_modifier.reset(new VectorTrimmer(length));
+			double length = boost::lexical_cast<double>(*param_iterator);
+			new_vector_modifier.reset(new VectorTrimmer(length));
 		} else if(type == "VECTOR_DIFFERENCE_TRIMMER") {
-			double length = boost::any_cast<double>((*modifier_iter).get<1>().at(0));
-			vector_modifier.reset(new VectorDifferenceTrimmer(length));
+			double length = boost::lexical_cast<double>(*param_iterator);
+			new_vector_modifier.reset(new VectorDifferenceTrimmer(length));
 		} else if(type == "VECTOR_RANDOMIZER") {
-			unsigned int seed = boost::any_cast<unsigned int>((*modifier_iter).get<1>().at(0));
-			double standard_deviation = boost::any_cast<double>((*modifier_iter).get<1>().at(1));
-			vector_modifier.reset(new VectorRandomizer(seed, standard_deviation));
-		} else {
-			//TODO(craupach) throw up
+			unsigned int seed = boost::lexical_cast<unsigned int>(*param_iterator);
+			++param_iterator;
+			double standard_deviation = boost::lexical_cast<double>(*param_iterator);
+			new_vector_modifier.reset(new VectorRandomizer(seed, standard_deviation));
 		}
-		handler->add_vector_modifier(vector_modifier);
-		modifier_iter++;
+		handler->add_vector_modifier(new_vector_modifier);
 	}
-
 }
 
 
-
-
-boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::string, boost::any> &params,
+boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::string, std::string> &params,
                                                                boost::shared_ptr<History> history,
                                                                boost::shared_ptr<RobotControl> robot_control) {
 	boost::shared_ptr<EventHandler> event_handler(new EventHandler(history, robot_control));
@@ -79,11 +94,11 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	// create the request handlers from the parameters
 
 	// 1. Marker Request Handler
-	std::string marker_request_handler_type = boost::any_cast<std::string> (params["MARKER_REQUEST_HANDLER_TYPE"]);
+	std::string marker_request_handler_type = params["MARKER_REQUEST_HANDLER_TYPE"];
 	if(marker_request_handler_type == "STANDARD") {
 			// build the marker request handler
-			double discard_probability = boost::any_cast<double> (params["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::any_cast<unsigned int> (params["STANDARD_MARKER_REQUEST_HANDLER_SEED"]);
+			double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_MARKER_REQUEST_HANDLER_SEED"]);
 			boost::shared_ptr<MarkerRequestHandler> marker_request_handler(new MarkerRequestHandler(seed, discard_probability, *history));
 			event_handler->set_marker_request_handler(marker_request_handler);
 	}
@@ -92,8 +107,8 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	std::string type_change_request_handler_type = boost::any_cast<std::string> (params["TYPE_CHANGE_REQUEST_HANDLER_TYPE"]);
 	if(type_change_request_handler_type == "STANDARD") {
 		// build the marker request handler
-		double discard_probability = boost::any_cast<double> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::any_cast<unsigned int> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_SEED"]);
+		double discard_probability = boost::lexical_cast<double> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_SEED"]);
 		boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler(new TypeChangeRequestHandler(seed, discard_probability, *history));
 		event_handler->set_type_change_request_handler(type_change_request_handler);
 	}
@@ -102,14 +117,13 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	std::string position_request_handler_type = boost::any_cast<std::string> (params["POSITION_REQUEST_HANDLER_TYPE"]);
 	if(position_request_handler_type == "VECTOR") {
 		// build the marker request handler
-		double discard_probability = boost::any_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::any_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
+		double discard_probability = boost::lexical_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
 		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
 		// set up vector modifiers
-		std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
-		    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
-		set_up_vector_modifiers(vector_request_handler, modifiers);
+		create_vector_modifiers_from_string(vector_request_handler,
+		                                    params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
 
 		event_handler->set_position_request_handler(vector_request_handler);
 
@@ -119,14 +133,14 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	std::string velocity_request_handler_type = boost::any_cast<std::string> (params["VELOCITY_REQUEST_HANDLER_TYPE"]);
 	if(velocity_request_handler_type == "VECTOR") {
 		// build the marker request handler
-		double discard_probability = boost::any_cast<double> (params["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::any_cast<unsigned int> (params["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]);
+		double discard_probability = boost::lexical_cast<double> (params["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]);
 		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
 		// set up vector modifiers
-		std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
-		    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
-		set_up_vector_modifiers(vector_request_handler, modifiers);
+		// std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
+		//    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
+		// set_up_vector_modifiers(vector_request_handler, modifiers);
 
 		event_handler->set_velocity_request_handler(vector_request_handler);
 	}
@@ -135,14 +149,14 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	std::string acceleration_request_handler_type = boost::any_cast<std::string> (params["ACCELERATION_REQUEST_HANDLER_TYPE"]);
 	if(acceleration_request_handler_type == "VECTOR") {
 		// build the marker request handler
-		double discard_probability = boost::any_cast<double> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::any_cast<unsigned int> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]);
+		double discard_probability = boost::lexical_cast<double> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]);
+		unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]);
 		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
 		// set up vector modifiers
-		std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
-		    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
-		set_up_vector_modifiers(vector_request_handler, modifiers);
+		// std::vector<boost::tuple<std::string, std::vector<boost::any> > > modifiers =
+		//    boost::any_cast< std::vector<boost::tuple<std::string,std::vector<boost::any> > > > (params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
+		// set_up_vector_modifiers(vector_request_handler, modifiers);
 
 		event_handler->set_acceleration_request_handler(vector_request_handler);
 	}
@@ -150,9 +164,9 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	return event_handler;
 }
 
-boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std::string, boost::any> &params) {
+boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std::string, std::string> &params) {
 
-	std::string asg_type = boost::any_cast<std::string> (params["ASG"]);
+	std::string asg_type = params["ASG"];
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
 	// setup of activation sequence generator
 	if(asg_type == "SYNCHRONOUS") {
@@ -160,8 +174,8 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	} else if(asg_type == "SEMISYNCHRONOUS") {
 			//TODO(craupach) make something semi-synchrounous here;
 	} else if(asg_type == "ASYNCHRONOUS") {
-			unsigned int seed = boost::any_cast<unsigned int>(params["ASYNC_ASG_SEED"]);
-			double participation_probability = boost::any_cast<double>(params["ASYNC_ASG_PART_P"]);
+			unsigned int seed = boost::lexical_cast<unsigned int>(params["ASYNC_ASG_SEED"]);
+			double participation_probability = boost::lexical_cast<double>(params["ASYNC_ASG_PART_P"]);
 			double p = boost::any_cast<double>(params["ASYNC_ASG_TIME_P"]);
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
 	}
@@ -169,9 +183,9 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	return asg;
 }
 
-boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, boost::any> &params) {
+boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, std::string> &params) {
 
-	std::string view_type = boost::any_cast<std::string> (params["VIEW"]);
+	std::string view_type = params["VIEW"];
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 
 	if(view_type == "GLOBAL_VIEW") {
@@ -179,10 +193,10 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 	} else if(view_type == "COG_VIEW") {
 		view_factory.reset(new ViewFactory<CogView>);
 	} else if(view_type == "CHAIN_VIEW") {
-		unsigned int number = boost::any_cast<unsigned int>(params["CHAIN_VIEW_NUM_ROBOTS"]);
+		unsigned int number = boost::lexical_cast<unsigned int>(params["CHAIN_VIEW_NUM_ROBOTS"]);
 		view_factory.reset(new ParametrizedViewFactory<ChainView, unsigned int>(number));
 	} else if(view_type == "ONE_POINT_FORMATION_VIEW") {
-		double radius = boost::any_cast<double>(params["ONE_POINT_FORMATION_VIEW_RADIUS"]);
+		double radius = boost::lexical_cast<double>(params["ONE_POINT_FORMATION_VIEW_RADIUS"]);
 		view_factory.reset(new ParametrizedViewFactory<OnePointFormationView, double>(radius));
 	} else if(view_type == "NONE") {
 		view_factory.reset(new ViewFactory<View>);

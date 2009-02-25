@@ -51,7 +51,7 @@ public:
 
 };
 
-
+/*
 BOOST_AUTO_TEST_CASE(octree_test) {
 	std::vector<boost::shared_ptr<RobotData> > robots;
 		std::vector<boost::shared_ptr<WorldObject> > markers;
@@ -151,3 +151,4 @@ BOOST_AUTO_TEST_CASE(octree_test) {
 
 
 }
+*/

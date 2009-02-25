@@ -37,7 +37,7 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 	//copy them
 	//Note: WorldInformations added to array so optimizer hopefully does not remove the copying.
 	boost::array<boost::shared_ptr<WorldInformation>, kCopyCount> array;
-
+/*
 	std::clock_t start_time = clock();
 
 	for(unsigned i = 0; i < kCopyCount; i++) {
@@ -49,7 +49,7 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 	std::cout << "Total time: " << time_needed*1000.0/CLOCKS_PER_SEC << "ms." << std::endl;
 	std::cout << "Time per copy: " << std::setprecision(5) << time_needed*1000.0/kCopyCount/CLOCKS_PER_SEC << "ms." << std::endl;
 
-/*	start_time = clock();
+	start_time = clock();
 	for(unsigned i = 0; i < 1000000; i++) {
 		Vector3d test;
 		test.insert_element(kXCoord,0.0);

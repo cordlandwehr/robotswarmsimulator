@@ -50,6 +50,7 @@ class History;
  */
 class EventHandler {
 	friend class EventHandlerFactoryTest;
+	friend class LoadMainProjectFileTest;
 
 public:
 	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
