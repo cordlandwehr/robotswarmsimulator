@@ -3,10 +3,6 @@
 #include <boost/tuple/tuple.hpp>
 
 
-
-
-
-
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() : 	asg_("SYNCHRONOS"),
@@ -36,7 +32,9 @@ Parser::~Parser() {
 }
 
 void Parser::init() {
+
 	//define default values
+	//TODO(martinah) review default values
 	variables_with_default_values.push_back("COMPASS_MODEL");
 	default_values_of_varialbes.push_back("FULL_COMPASS");
 
@@ -48,9 +46,6 @@ void Parser::init() {
 
 	variables_with_default_values.push_back("STATISTICS_SUBSETS");
 	default_values_of_varialbes.push_back("{ALL}");
-
-	variables_with_default_values.push_back("VIEW");
-	default_values_of_varialbes.push_back("0");
 
 	variables_with_default_values.push_back("MARKER_REQUEST_HANDLER_SEED");
 	default_values_of_varialbes.push_back("1");
@@ -90,15 +85,6 @@ void Parser::init() {
 
 	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS");
 	default_values_of_varialbes.push_back("");
-
-	// TODO(craupach) temporary code to prevent code from crashing, minimal simulation
-	parameter_map_["ASG"] = std::string("SYNCHRONOUS");
-	parameter_map_["VIEW"] = std::string("GLOBAL_VIEW");
-	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map_["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
 
 }
 
@@ -259,6 +245,201 @@ std::vector<string> Parser::get_vector_from_map(map<string,string> variables_and
 	return return_vector;
 }
 
+std::vector<string> Parser::split_string_by_string(const string& my_string, const string& sep, int max_num_pieces) {
+	int pos_of_last_sep = -sep.size();
+	int pos_of_next_sep = my_string.find(sep);
+	int num_of_pieces = 1;
+	string splitted_piece;
+	std::vector<string> splitted_string;
+
+	//TODO(martinah) maybe add exception handling
+	while(pos_of_next_sep != string::npos && num_of_pieces < max_num_pieces) {
+		splitted_piece = my_string.substr(pos_of_last_sep+sep.size(), pos_of_next_sep-(pos_of_last_sep+sep.size()));
+		boost::trim(splitted_piece);
+		splitted_string.push_back(splitted_piece);
+		num_of_pieces++;
+
+		//set new seperator positions
+		pos_of_last_sep = pos_of_next_sep;
+		pos_of_next_sep = my_string.find(sep, pos_of_last_sep+sep.size());
+	}
+	//split last piece
+	splitted_piece = my_string.substr(pos_of_last_sep+sep.size());
+	boost::trim(splitted_piece);
+	splitted_string.push_back(splitted_piece);
+	return splitted_string;
+}
+
+
+boost::tuple<string,double,unsigned int,std::vector<boost::tuple<string,std::vector<boost::any> > > >
+Parser::get_request_handler_with_vector_modifiers_from_map(map<string,string> variables_and_values, const string& request_handler) {
+	return get_request_handler_from_map(variables_and_values, request_handler, true);
+}
+
+boost::tuple<string,double,unsigned int,std::vector<boost::tuple<string,std::vector<boost::any> > > >
+Parser::get_request_handler_from_map(map<string,string> variables_and_values, const string& request_handler, bool vector_modifier_exists) {
+
+	//return variables
+	string type;
+	double discard_prob;
+	unsigned int seed;
+	std::vector<boost::tuple<	//list of vector modifiers
+		string,						//type of vector modifier
+		std::vector<boost::any>		//parameters of vector modifiers
+	> > vector_modifier;
+	string type_of_vector_modifier;
+	std::vector<boost::any> vector_parameter;
+
+	//get value saved for request handler
+	//e.g. request_handler_value="("POSITION","0.5","1",(("VECTOR_TRIMMER","1.5"),("VECTOR_RANDOMIZER",5,"2.5")))"
+	string request_handler_value = get_string_value_from_map(variables_and_values, request_handler);
+
+	//split string to get values of tuple that defines the request handler
+	std::vector<string> tuple_values = split_string_by_string(request_handler_value, ",", 4);
+
+	//get values of splitted string
+	string type_string = tuple_values[0];
+	string discard_prob_string = tuple_values[1];
+	string seed_string = tuple_values[2];
+
+	//remove first from type_string
+	//type_string currently looks like ("POSITION"
+	type_string = type_string.erase(0,1);
+
+
+	//if request handler hasn't a vector modifier list, then seed is the last value => remove last bracket from seed
+	if(!vector_modifier_exists) {
+		seed_string = remove_quotes_and_leading_and_trailing_spaces(seed_string);
+		seed_string = seed_string.erase(seed_string.size()-1,1);
+	}
+
+	//cast tuple values
+	try {
+		type = remove_quotes_and_leading_and_trailing_spaces(type_string);
+		discard_prob = boost::lexical_cast<double>(remove_quotes_and_leading_and_trailing_spaces(discard_prob_string));
+		seed = boost::lexical_cast<unsigned int>(remove_quotes_and_leading_and_trailing_spaces(seed_string));
+	} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed casting values of Request Handler.");
+	}
+
+	//check if request handler has a (maybe empty) list of vector modifiers
+	if(vector_modifier_exists) {
+
+		//get vector modifiers (still just a string)
+		string vector_modifier_list_string = tuple_values[3];
+
+		//remove last brackets (according to request handler tuple)
+		//vector_modifer_list_string currently looks like ("VECTOR_RANDOMIZER",5,"2.5")))
+		vector_modifier_list_string.erase(vector_modifier_list_string.size()-2, 2);
+		vector_modifier_list_string.erase(0,1);
+
+		//check if there list of vector modifiers isn't empty (i.e. ())
+		//Remark: this is not the same check as a fiew lines above,
+		//because opening and closing brackets were removed from this string before)
+		if(vector_modifier_list_string.size()>0) {
+
+			//remove first and last brackets of splitted vector modifier list
+			tuple_values = split_string_by_string(vector_modifier_list_string, "),(", vector_modifier_list_string.size());
+			tuple_values[0]=tuple_values[0].erase(0,1);
+			string tmp_val = tuple_values.back();
+			tuple_values.pop_back();
+			tmp_val = tmp_val.erase(tmp_val.size()-1,1);
+			tuple_values.push_back(tmp_val);
+
+			//get vector modifiers (i.e. get type and parameters of vector modifier)
+			for(std::vector<string>::iterator it = tuple_values.begin(); it<tuple_values.end(); it++) {
+
+				//split vector modifier
+				std::vector<string> tuple_values_2 = split_string_by_string(*it, ",", (*it).size());
+
+				//get type (contained in first element)
+				type_of_vector_modifier = remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[0]);
+
+				//get parameter (contained in next elements)
+				//Number and types of parameters depends on type of vector modifier.
+				//In case of VectorTrimmer and VectorDifferenceTrimmer there is 1 parameter,
+				//in case of VectorRandomizer there are 2 paramter.
+				vector_parameter.clear();
+				if(!type_of_vector_modifier.compare("VECTOR_TRIMMER")
+				   || !type_of_vector_modifier.compare("VECTOR_DIFFERENCE_TRIMMER")) {
+
+					//parameter of type double
+					double param1;
+
+					try {
+						param1 = boost::lexical_cast<double>(remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[1]));
+					} catch(const boost::bad_lexical_cast& ) {
+						throw UnsupportedOperationException("Failed casting parameters of vector modifier.");
+					}
+
+					vector_parameter.push_back(param1);
+
+				} else if(!type_of_vector_modifier.compare("VECTOR_RANDOMIZER") ) {
+
+					//First parameter of type unsigned int
+					unsigned int param1;
+
+					//Second parameter of type double
+					double param2;
+
+					try {
+						param1 = boost::lexical_cast<unsigned int>(remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[1]));
+						param2 = boost::lexical_cast<double>(remove_quotes_and_leading_and_trailing_spaces(tuple_values_2[2]));
+					} catch(const boost::bad_lexical_cast& ) {
+						throw UnsupportedOperationException("Failed casting parameters of vector modifier.");
+					}
+
+					vector_parameter.push_back(param1);
+					vector_parameter.push_back(param2);
+				}
+
+				//add tuple (vector modifier type, vector modifier list) to vector containing vector modifiers
+				vector_modifier.push_back(boost::tuple<string,std::vector<boost::any> >(type_of_vector_modifier,vector_parameter));
+			}
+		}
+	}
+
+	//each value of a request handler with vector modifiers is a tuple of the form
+	//(TYPE,DISCARD_PROB,SEED,VECTOR_MODIFIERS)
+	boost::tuple<
+		string,						//type of request handler
+		double,						//discard probability
+		unsigned int,				//seed
+		std::vector<boost::tuple<	//list of vector modifiers
+			string,						//type of vector modifier
+			std::vector<boost::any>		//parameters of vector modifiers
+		> > >
+	return_request_handler(type, discard_prob, seed, vector_modifier);
+
+	return return_request_handler;
+}
+
+boost::tuple<string,double,unsigned int>
+Parser::get_request_handler_without_vector_modifiers_from_map(map<string,string> variables_and_values, const string& request_handler) {
+	//request handler without vector modifier looks like:
+	//("POSITION","0.5","1")
+
+	//get request handler with vector modifier and reject vector modifier (empty vector)
+	//(TYPE,DISCARD_PROB,SEED,VECTOR_MODIFIERS)
+	boost::tuple<
+		string,						//type of request handler
+		double,						//discard probability
+		unsigned int,				//seed
+		std::vector<boost::tuple<	//list of vector modifiers
+			string,						//type of vector modifier
+			std::vector<boost::any>		//parameters of vector modifiers
+		> > >
+	tmp_request_handler = get_request_handler_from_map(variables_and_values, request_handler, false);
+
+	boost::tuple<string,double,unsigned int> return_tuple(
+			boost::get<0>(tmp_request_handler),
+			boost::get<1>(tmp_request_handler),
+			boost::get<2>(tmp_request_handler) );
+
+	return return_tuple;
+
+}
+
 void Parser::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
@@ -277,26 +458,55 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 
 	statistics_template_ = get_string_value_from_map(variables_and_values, "STATISTICS_TEMPLATE");
 	statistics_subsets_ = get_string_value_from_map(variables_and_values, "STATISTICS_SUBSETS");
-	view_ =get_string_value_from_map(variables_and_values, "VIEW");
 
-	//seeds
-	marker_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_SEED");
-	type_change_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_SEED");
-	velocity_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_SEED");
-	position_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_SEED");
-	acceleration_request_handler_seed_ = get_uint_value_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_SEED");
+	//get request handler with vector modifiers from map
+	position_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "POSITION_REQUEST_HANDLER");
+	acceleration_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER");
+	velocity_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER");
 
-	//discard probabilities
-	marker_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "MARKER_REQUEST_HANDLER_DISCARD_PROB");
-	type_change_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB");
-	velocity_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_DISCARD_PROB");
-	position_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_DISCARD_PROB");
-	acceleration_request_handler_discard_prob_ = get_double_value_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_DISCARD_PROB");
+	//get request handler without vector modifiers from map
+	type_change_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER");
+	marker_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "MARKER_REQUEST_HANDLER");
 
-	//vector modifiers
-	velocity_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER_VECTOR_MODIFIERS");
-	position_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS");
-	acceleration_request_handler_vector_modifier_ = get_vector_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIERS");
+
+	//TODO(martinah) save request handler like this in the parameter map?
+	//I can split this stuff, but IMHO it's nicer like I did it below,
+	//especcially since you may get roughly a Million thounds billion
+	//and so on (or something like this) number of values, i.e. number of entries in the parameter map ;-).
+	//TODO(martinah) Don't forget to remove the upper comment before finishing work on parser.
+	/*
+	parameter_map_["POSITION_REQUEST_HANDLER"] = position_request_handler_;
+	parameter_map_["ACCELERATION_REQUEST_HANDLER"] = acceleration_request_handler_;
+	parameter_map_["VELOCITY_REQUEST_HANDLER"] = velocity_request_handler_;
+	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER"] = velocity_request_handler_;
+	parameter_map_["MARKER_REQUEST_HANDLER"] = marker_request_handler_;
+
+	parameter_map_["ASG"] = asg_;
+	parameter_map_["COMPASS_MODEL"] = compass_model_;
+	parameter_map_["STATISTICS_TEMPLATE"] = statistics_template_;
+	parameter_map_["STATISTICS_SUBSETS"] = statistics_subsets_;
+	*/
+
+	//TODO(martinah) temporary, remove and maybe uncomment code above
+	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+
+
+	// TODO(craupach) temporary code to prevent code from crashing, minimal simulation
+	parameter_map_["ASG"] = std::string("SYNCHRONOUS");
+	//TODO(martinah) remove view from this parameter map
+	//@craupach:	do you need this value from the parameter map?
+	//				view variable will be saved for each robot (i.e. in a parameter map to return for robots?)
+	parameter_map_["VIEW"] = std::string("GLOBAL_VIEW");
+	parameter_map_["MARKER_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map_["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -369,17 +579,16 @@ string Parser::get_next_value_in_line(const string& line, int line_number, bool 
 
 	//Just to be sure: get rid of leading and trailing spaces
 	//(if the input file is correct, then value doesn't contain any leading or trailing spaces)
-	boost::trim(value);
-
-	//remove leading and trailing quotes, if value is quoted
-	value = remove_quotes(value);
+	value = remove_quotes_and_leading_and_trailing_spaces(value);
 
 	return value;
 }
 
-string Parser::remove_quotes(const string& value) {
+string Parser::remove_quotes_and_leading_and_trailing_spaces(const string& value) {
 
+	//get rid of leading and trailing spaces
 	string return_value = value;
+	boost::trim(return_value);
 
 	//get first and last character of given string
 	char first_char = value.at(0);
@@ -389,6 +598,9 @@ string Parser::remove_quotes(const string& value) {
 		//first and last characters are quotes => remove quotes
 		return_value = value.substr(1,value.length()-2);
 	}
+
+	//get rid of leading and trailing spaces
+	boost::trim(return_value);
 
 	return return_value;
 }
