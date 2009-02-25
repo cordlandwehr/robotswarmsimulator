@@ -202,6 +202,8 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for asynchronous asg.");
 		}
+	} else {
+		throw UnsupportedOperationException("No ASG specified!");
 	}
 
 	return asg;
@@ -230,7 +232,8 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
 		}
-	} else if(view_type == "NONE") {
+	} else {
+		std:cerr << "No View specified! Defaulting to standard one!" << std::endl ;
 		view_factory.reset(new ViewFactory<View>);
 	}
 

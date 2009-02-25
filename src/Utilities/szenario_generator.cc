@@ -291,12 +291,12 @@ void szenario_generator::write_to_file() {
 	// setup parser for writing with previously set values.
 	// TODO(craupach) this should be untangled from the parser!
 	parser_->set_obstacle_filename(*obstacleFileName_);
-	// parser_->set_project_name(*projectName_);
+	parser_->parameter_map()["PROJECT_NAME"] = *projectName_;
 	parser_->set_robot_filename(*robotFileName_);
-	//parser_->set_asg(*asg_);
+	parser_->parameter_map()["ASG"] = *asg_;
 	parser_->set_compass_model(*compassModel_);
-	// parser_->set_statistics_template(*statisticsTemplate_);
-	// parser_->set_statistics_subsets(*statisticsSubsets_);
+	parser_->parameter_map()["STATISTICS_TEMPLATE"] = *statisticsTemplate_;
+	parser_->parameter_map()["STATISTICS_SUBSETS"] = *statisticsSubsets_;
 
 	// add all robots to world information
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;

@@ -555,12 +555,15 @@ void Parser::load_projectfiles(const string& project_filename) {
 }
 
 void Parser::save_main_project_file(const string& project_filename) {
-	// TODO(craupach) this is broken now. should write values from the map.
 	ofstream project_file;
 	project_file.open((project_filename+".swarm").c_str());
 	if(project_file.is_open()) {
 		// Save the map. Should contain all variables.
 		// TODO(craupach) test this.
+		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
+		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
+		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
+
 		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
 		while(param_map_iter != parameter_map_.end()) {
 			project_file << (*param_map_iter).first << "=" << "\"" << (*param_map_iter).second << "\"" << std::endl;
