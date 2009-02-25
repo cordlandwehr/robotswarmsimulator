@@ -1,27 +1,16 @@
 #include "parser.h"
 
 #include <boost/tuple/tuple.hpp>
-
+#include <boost/foreach.hpp>
 
 // some default values are set, especially for output
 // please cf. User's Guide
-Parser::Parser() : 	asg_("SYNCHRONOS"),
-					compass_model_("FULL_COMPASS"),
+Parser::Parser() :  compass_model_("FULL_COMPASS"),
 					project_name_("NEW RSS PROJECT"),
 					robot_filename_("rssfile"),
 					obstacle_filename_("rssfile"),
 					statistics_template_("ALL"),
-					statistics_subsets_(""),
-					marker_request_handler_seed_(static_cast<unsigned int>(1)),
-					type_change_request_handler_seed_(static_cast<unsigned int>(1)),
-					velocity_request_handler_seed_(static_cast<unsigned int>(1)),
-					position_request_handler_seed_(static_cast<unsigned int>(1)),
-					acceleration_request_handler_seed_(static_cast<unsigned int>(1)),
-					marker_request_handler_discard_prob_(0.0),
-					type_change_request_handler_discard_prob_(0.0),
-					velocity_request_handler_discard_prob_(0.0),
-					position_request_handler_discard_prob_(0.0),
-					acceleration_request_handler_discard_prob_(0.0){
+					statistics_subsets_("") {
 	//initialize Parser with default values
 	init();
 
@@ -603,48 +592,14 @@ void Parser::save_main_project_file(const string& project_filename) {
 	// TODO(craupach) this is broken now. should write values from the map.
 	ofstream project_file;
 	project_file.open((project_filename+".swarm").c_str());
-
 	if(project_file.is_open()) {
-		//write variables
-		project_file << "PROJECT_NAME=\"" << project_name_ << "\"" << endl;
-		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
-		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
-		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
-		project_file << "STATISTICS_TEMPLATE=\"" << statistics_template_ << "\"" << endl;
-		project_file << "STATISTICS_SUBSETS=\"" << statistics_subsets_ << "\"" << endl;
-		project_file << "ASG=\"" << asg_ << "\"" << endl;
-		project_file << "VIEW=\"" << view_ << "\"" << endl;
-		project_file << "MARKER_REQUEST_HANDLER_SEED=\"" << marker_request_handler_seed_ << "\"" << endl;
-		project_file << "MARKER_REQUEST_HANDLER_DISCARD_PROB=\"" << marker_request_handler_discard_prob_ << "\"" << endl;
-		project_file << "TYPE_CHANGE_REQUEST_HANDLER_SEED=\"" << type_change_request_handler_seed_ << "\"" << endl;
-		project_file << "TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB=\"" << type_change_request_handler_discard_prob_ << "\"" << endl;
-		project_file << "VELOCITY_REQUEST_HANDLER_SEED=\"" << velocity_request_handler_seed_ << "\"" << endl;
-		project_file << "VELOCITY_REQUEST_HANDLER_DISCARD_PROB=\"" << velocity_request_handler_discard_prob_ << "\"" << endl;
-
-		project_file << "VELOCITY_REQUEST_HANDLER_VECTOR_MODIFIERS=\"";
-		BOOST_FOREACH( string s, velocity_request_handler_vector_modifier_) {
-			project_file << s << ",";
+		// Save the map. Should contain all variables.
+		// TODO(craupach) test this.
+		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
+		while(param_map_iter != parameter_map_.end()) {
+			project_file << (*param_map_iter).first << "=" << "\"" << (*param_map_iter).second << "\"" << std::endl;
+			param_map_iter++;
 		}
-		project_file << "\"" << endl;
-
-		project_file << "POSITION_REQUEST_HANDLER_SEED=\"" << position_request_handler_seed_ << "\"" << endl;
-		project_file << "POSITION_REQUEST_HANDLER_DISCARD_PROB=\"" << position_request_handler_discard_prob_ << "\"" << endl;
-
-		project_file << "POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS=\"";
-		BOOST_FOREACH ( string s, position_request_handler_vector_modifier_) {
-			project_file << s << ",";
-		}
-		project_file << "\"" << endl;
-
-		project_file << "ACCELERATION_REQUEST_HANDLER_SEED=\"" << acceleration_request_handler_seed_ << "\"" << endl;
-		project_file << "ACCELERATION_REQUEST_HANDLER_DISCARD_PROB=\"" << acceleration_request_handler_discard_prob_ << "\"" << endl;
-
-		project_file << "ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIERS=\"";
-		BOOST_FOREACH ( string s, acceleration_request_handler_vector_modifier_) {
-			project_file << s << ",";
-		}
-		project_file << "\"" << endl;
-
 		project_file.close();
 	} else {
 		throw UnsupportedOperationException("Unable to open project file" +project_filename+"!");
@@ -879,51 +834,6 @@ const string& Parser::statistics_template() const {
 
 const string& Parser::statistics_subsets() const {
 	return statistics_subsets_;
-}
-
-//seeds
-const unsigned int Parser::marker_request_handler_seed() const {
-	return marker_request_handler_seed_;
-}
-const unsigned int Parser::type_change_request_handler_seed() const {
-	return type_change_request_handler_seed_;
-}
-const unsigned int Parser::velocity_request_handler_seed() const {
-	return velocity_request_handler_seed_;
-}
-const unsigned int Parser::position_request_handler_seed() const {
-	return position_request_handler_seed_;
-}
-const unsigned int Parser::acceleration_request_handler_seed() const {
-	return acceleration_request_handler_seed_;
-}
-
-//discard probabilities
-const double Parser::marker_request_handler_discard_prob() const {
-	return marker_request_handler_discard_prob_;
-}
-const double Parser::type_change_request_handler_discard_prob() const {
-	return type_change_request_handler_discard_prob_;
-}
-const double Parser::velocity_request_handler_discard_prob() const {
-	return velocity_request_handler_discard_prob_;
-}
-const double Parser::position_request_handler_discard_prob() const {
-	return position_request_handler_discard_prob_;
-}
-const double Parser::acceleration_request_handler_discard_prob() const {
-	return acceleration_request_handler_discard_prob_;
-}
-
-//vector modifiers
-const vector<string>& Parser::velocity_request_handler_vector_modifier() const {
-	return velocity_request_handler_vector_modifier_;
-}
-const vector<string>& Parser::position_request_handler_vector_modifier() const {
-	return position_request_handler_vector_modifier_;
-}
-const vector<string>& Parser::acceleration_request_handler_vector_modifier() const {
-	return acceleration_request_handler_vector_modifier_;
 }
 
 /*** GET-methods for robot data ***/

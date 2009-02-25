@@ -58,15 +58,6 @@ public:
 	 */
 	std::map<std::string, std::string>& parameter_map() { return parameter_map_;};
 
-
-	/**
-	 * Set-method for ASG
-	 * TODO is there an enum for ASG?
-	 * REMARK(mmarcus) I made some dummy-enum in the simulationkernel...
-	 * @param asg int
-	 */
-	void set_asg(const string& asg);
-
 	/**
 	 * Set-method for compass model
 	 * @param compass_model string
@@ -130,11 +121,6 @@ public:
 	void init();
 
 	/**
-	 * \return constant reference to the string describing the type of the ASG in the parser
-	 */
-	const string& asg() const;
-
-	/**
 	 * \return constant reference to the string describing the type of the Compass Model in the parser
 	 */
 	const string& compass_model() const;
@@ -158,76 +144,6 @@ public:
 	 * \return constant reference to the string describing the statistics' subsets-configuration
 	 */
 	const string& statistics_subsets() const;
-
-	/**
-	 * \return constant reference to the string describing the type of the used View in the parser
-	 */
-	const string& view() const;
-
-	/**
-	 * \return Seed of the Marker Request Handler.
-	 */
-	const unsigned int marker_request_handler_seed() const;
-
-	/**
-	 * \return Seed of the Type Change Request Handler.
-	 */
-	const unsigned int type_change_request_handler_seed() const;
-
-	/**
-	 * \return Seed of the Velocity Change Request Handler.
-	 */
-	const unsigned int velocity_request_handler_seed() const;
-
-	/**
-	 * \return Seed of the Position Change Request Handler.
-	 */
-	const unsigned int position_request_handler_seed() const;
-
-	/**
-	 * \return Seed of the Acceleration Change Request Handler.
-	 */
-	const unsigned int acceleration_request_handler_seed() const;
-
-	/**
-	 * \return discard probability of the Marker Request Handler.
-	 */
-	const double marker_request_handler_discard_prob() const;
-
-	/**
-	 * \return discard probability of the Type Change Request Handler.
-	 */
-	const double type_change_request_handler_discard_prob() const;
-
-	/**
-	 * \return discard probability of the Velocity Request Handler.
-	 */
-	const double velocity_request_handler_discard_prob() const;
-
-	/**
-	 * \return discard probability of the Position Request Handler.
-	 */
-	const double position_request_handler_discard_prob() const;
-
-	/**
-	 * \return discard probability of the Acceleration Request Handler.
-	 */
-	const double acceleration_request_handler_discard_prob() const;
-
-	/**
-	 * \return constant reference to vector of modifiers for the Velocity Request Handler.
-	 */
-	const vector<string>& velocity_request_handler_vector_modifier() const;
-
-	/**
-	 * \return constant reference to vector of modifiers for the Position Request Handler.
-	 */
-	const vector<string>& position_request_handler_vector_modifier() const;
-
-	/**
-	 * \return constant reference to vector of modifiers for the Acceleration Request Handler.
-	 */
-	const vector<string>& acceleration_request_handler_vector_modifier() const;
 
 	/**
 	 * \return reference to vector of Robot Positions.
@@ -307,69 +223,15 @@ private:
 
 	//variables initialized with values in the main project file
 
-	// temporary parameter map
+	// parameter map
 	std::map<std::string, std::string> parameter_map_;
 
-	string asg_;
 	string compass_model_;
 	string obstacle_filename_;
 	string project_name_;
 	string robot_filename_;
 	string statistics_template_;
 	string statistics_subsets_;
-	string view_;
-
-	//Request Handler without Vector Modifiers
-	//TypeChangeRequestHandler
-	//MarkerRequestHandler
-
-	//Request Handler with Vector Modifiers
-	//PosistionRequestHandler
-	//AccelerationRequestHandler
-	//VelocityRequestHandler
-
-	//A request handler is a tuple of the form
-	//(TYPE,DISCARD_PROB,SEED,[VECTOR_MODIFIERS])
-	//VECTOR_MODIFIERS is a list (resp. vector) with elements that are tuples of the form
-	//(VECTOR_MODIFIER_TYPE,VECTOR_MODIFIER_PARAM_1,VECTOR_MODIFIER_PARAM_2,..).
-	//For further information see users guide.
-
-	boost::tuple<
-		string,						//type of request handler
-		double,						//discard probability
-		unsigned int				//seed
-		>
-	type_change_request_handler_, marker_request_handler_;
-
-	boost::tuple<
-		string,						//type of request handler
-		double,						//discard probability
-		unsigned int,				//seed
-		std::vector<boost::tuple<	//list of vector modifiers
-			string,						//type of vector modifier
-			std::vector<boost::any>		//parameters of vector modifiers
-		> > >
-	position_request_handler_, acceleration_request_handler_, velocity_request_handler_;
-
-	//TODO(martinah) remove (but first modify methods for saving project files)
-	//seeds
-	unsigned int marker_request_handler_seed_;
-	unsigned int type_change_request_handler_seed_;
-	unsigned int velocity_request_handler_seed_;
-	unsigned int position_request_handler_seed_;
-	unsigned int acceleration_request_handler_seed_;
-
-	//discard probabilities
-	double marker_request_handler_discard_prob_;
-	double type_change_request_handler_discard_prob_;
-	double velocity_request_handler_discard_prob_;
-	double position_request_handler_discard_prob_;
-	double acceleration_request_handler_discard_prob_;
-
-	//vector modifiers
-	vector<string> velocity_request_handler_vector_modifier_;
-	vector<string> position_request_handler_vector_modifier_;
-	vector<string> acceleration_request_handler_vector_modifier_;
 
 	//file name of project file
 	string project_filename_;

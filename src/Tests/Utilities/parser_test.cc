@@ -37,6 +37,7 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	parser.reset(new Parser());
 	parser->init();
 	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
+	parser->save_main_project_file("../RobotSwarmSimulator/src/Tests/TestData/saved_testfile_1");
 
 	//check variables read from main project file
 	BOOST_CHECK_EQUAL(parser->project_name_, "My Exciting Project");
