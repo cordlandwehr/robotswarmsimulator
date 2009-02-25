@@ -13,7 +13,7 @@
 
 #include "../../SimulationControl/history.h"
 
-#include "../../SimulationKernel/robot_control.h"
+#include "../../SimulationKernel/uniform_robot_control.h"
 #include "../../Views/abstract_view_factory.h"
 #include "../../Views/global_view.h"
 #include "../../Views/view_factory.h"
@@ -29,7 +29,7 @@
 BOOST_FIXTURE_TEST_CASE(integration_test_1, IntegrationFixture) {
 	// setup of view
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, kHistorySize, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, kHistorySize, *initial_world_information));
 
 	// setup of activation sequence generator
 	boost::shared_ptr<SynchronousASG> asg(new SynchronousASG());

@@ -11,12 +11,12 @@
 #include "../Fixtures/simple_world_fixture.h"
 #include "../../Views/global_view.h"
 #include "../../Views/view_factory.h"
-#include "../../SimulationKernel/robot_control.h"
+#include "../../SimulationKernel/uniform_robot_control.h"
 
 BOOST_FIXTURE_TEST_CASE(EventHandlerFactoryTest, SimpleWorldFixture) {
 	// RobotControl needed for EventHandler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
 
 	std::map<std::string, std::string> parameter_map;
 

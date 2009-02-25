@@ -28,7 +28,7 @@ enum RobotStatus { SLEEPING, READY };
 /**
  * \enum Type a robot can have.
  */
-enum RobotType { MASTER, SLAVE };
+enum RobotType { MASTER, SLAVE, kRobotTypeCount };
 
 class Robot;
 class MarkerInformation;

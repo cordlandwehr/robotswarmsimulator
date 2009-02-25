@@ -22,6 +22,7 @@ void Parser::init() {
 	parameter_map_["ASG"] = "SYNCHRONOUS";
 	parameter_map_["STATISTICS_TEMPLATE"] = "ALL";
 	parameter_map_["STATISTICS_SUBSETS"] = "{ALL}";
+	parameter_map_["ROBOT_CONTROL"] = "UNIFORM_ROBOT_CONTROL";
 
 	// no default request handler. Is this good?
 }
@@ -177,7 +178,7 @@ std::vector<string> Parser::get_vector_from_map(map<string,string> variables_and
 }
 
 std::vector<string> Parser::split_string_by_string(const string& my_string, const string& sep, int max_num_pieces) {
-	int pos_of_last_sep = -sep.size();
+	int pos_of_last_sep = -sep.size(); //TODO (dwonisch): warning C4146: Einem vorzeichenlosen Typ wurde ein unärer Minus-Operator zugewiesen. Das Ergebnis ist weiterhin vorzeichenlos.
 	int pos_of_next_sep = my_string.find(sep);
 	int num_of_pieces = 1;
 	string splitted_piece;

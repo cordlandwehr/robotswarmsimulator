@@ -16,7 +16,7 @@
 #include "../../Utilities/vector_arithmetics.h"
 #include "../../Views/view_factory.h"
 #include "../../Views/view.h"
-#include "../../SimulationKernel/robot_control.h"
+#include "../../SimulationKernel/uniform_robot_control.h"
 #include "test_simulation_listener.h"
 
 #include "../Fixtures/simple_world_fixture.h"
@@ -39,7 +39,7 @@ BOOST_FIXTURE_TEST_CASE(event_handler_test, SimpleWorldFixture)
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
 	EventHandler event_handler(history, robot_control);
 
 
@@ -100,7 +100,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_extrapolation_test, SimpleWorldFi
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
 	EventHandler event_handler(history, robot_control);
 
 
@@ -213,7 +213,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_past_event_test, SimpleWorldFixtu
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
 	EventHandler event_handler(history, robot_control);
 
 
@@ -260,7 +260,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_invalid_event_test, SimpleWorldFi
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 	view_factory.reset(new ViewFactory<View> ());
 
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
 	EventHandler event_handler(history, robot_control);
 
 

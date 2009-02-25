@@ -9,25 +9,20 @@
 #define ROBOT_CONTROL_H_
 
 #include <set>
-#include <cstddef>
 #include <boost/shared_ptr.hpp>
-#include <boost/circular_buffer.hpp>
 #include "simulation_listener.h"
 
-class AbstractViewFactory;
 class Request;
 class Robot;
-class View;
+
 /**
  * \class RobotControl
  *
  * Controls the Robots. Responsible for assigning the View to each Robot and
  * calling the compute method when requested.
  *
- * RobotControl holds a buffer of Views of length history_length. To do this, the
- * RobotControl implements the SimulationListener interface. Whenever update is called
- * together with an HandleRequestsEvent RobotControl creates a new View
- * for the new WorldInfortion.
+ * RobotControl most likely holds a buffer of Views of length history_length. To do this, the
+ * RobotControl provides an update method.
  *
  */
 class RobotControl {
@@ -40,10 +35,10 @@ public:
 	 * @param intial WorldInformation
 	 * @see ModelParameters::HISTORY_LENGTH
 	 */
-	RobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const WorldInformation& initial_world_information);
-	~RobotControl();
+	RobotControl();
+	virtual ~RobotControl();
 
-	void update(const WorldInformation& world_information);
+	virtual void update(const WorldInformation& world_information) = 0;
 
 	/**
 	 * Equivalent to robot.compute().
@@ -56,12 +51,7 @@ public:
 	 * Computes and assigns the newest View to the given robot.
 	 * @param robot
 	 */
-	void compute_view(Robot& robot);
-
-	void set_view_facotry(const boost::shared_ptr<AbstractViewFactory>& view_factory);
-private:
-	boost::shared_ptr<AbstractViewFactory> view_factory_;
-	boost::circular_buffer<boost::shared_ptr<View> > view_buffer_;
+	virtual void compute_view(Robot& robot) = 0;
 };
 
 #endif /* ROBOT_CONTROL_H_ */

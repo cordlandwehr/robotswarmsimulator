@@ -10,6 +10,7 @@
 
 #include <map>
 #include <string>
+#include <cstddef>
 #include <boost/any.hpp>
 #include <boost/smart_ptr.hpp>
 
@@ -20,6 +21,7 @@ class History;
 class RobotControl;
 class Robot;
 class RobotIdentifier;
+class WorldInformation;
 
 /**
  * This namespace provides factory functions for the simulator components.
@@ -48,7 +50,14 @@ namespace Factory {
 	 * Returns shared pointer to ViewFactory
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<AbstractViewFactory> view_factory_factory(std::map<std::string, std::string> &params);
+	boost::shared_ptr<AbstractViewFactory> view_factory_factory(std::map<std::string, std::string> &params, const std::string& prefix = "");
+
+	/**
+	 * Creates RobotControl from parameters given in the param map.
+	 * Returns shared pointer to RobotControl
+	 * See UserGuide for expected parameters
+	 */
+	boost::shared_ptr<RobotControl> robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const WorldInformation& initial_world_information);
 
 	/**
 	 * Creates robot from given algorithm

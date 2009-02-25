@@ -72,12 +72,8 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
 	history_->insert(initial_world_information);
 
-
-	// create View
-	boost::shared_ptr<AbstractViewFactory> view_factory = Factory::view_factory_factory(params);
-
 	// create Robot Control
-	boost::shared_ptr<RobotControl> robot_control(new RobotControl(view_factory, history_->capacity(), *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control = Factory::robot_control_factory(params, history_->capacity(), *initial_world_information);
 
 	// create ASG
 	asg_ = Factory::asg_factory(params);

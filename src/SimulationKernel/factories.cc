@@ -13,7 +13,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
-
+#include <boost/array.hpp>
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
@@ -42,6 +42,12 @@
 #include "../Model/robot_identifier.h"
 #include "../RobotImplementations/lua_robot.h"
 #include "../RobotImplementations/simple_robot.h"
+
+#include "../SimulationKernel/robot_control.h"
+#include "../SimulationKernel/uniform_robot_control.h"
+#include "../SimulationKernel/robot_type_robot_control.h"
+#include "../Model/world_information.h"
+#include "../Model/robot_data.h"
 
 #include <iostream>
 
@@ -209,9 +215,10 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	return asg;
 }
 
-boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, std::string> &params) {
+boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, std::string> &params, const std::string& prefix) {
 
-	std::string view_type = params["VIEW"];
+	std::string view_type = params[prefix + "VIEW"];
+	view_type.erase(0,prefix.length()); //erase prefix
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 
 	if(view_type == "GLOBAL_VIEW") {
@@ -254,4 +261,23 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new SimpleRobot(id));
 	}
 	return robot;
+}
+
+boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const WorldInformation& initial_world_information) {
+	std::string robot_type = params["ROBOT_CONTROL"];
+	boost::shared_ptr<RobotControl> control;
+
+	if(robot_type == "UNIFORM_ROBOT_CONTROL") {
+		control.reset(new UniformRobotControl(view_factory_factory(params), history_length, initial_world_information));
+	} else if(robot_type == "ROBOT_TYPE_ROBOT_CONTROL") {
+		boost::array<boost::shared_ptr<AbstractViewFactory>,kRobotTypeCount> view_factories;
+		view_factories[MASTER] = view_factory_factory(params, "MASTER");
+		view_factories[SLAVE] = view_factory_factory(params, "SLAVE");
+
+		control.reset(new RobotTypeRobotControl(view_factories, history_length, initial_world_information));
+	} else {
+		throw UnsupportedOperationException("No RobotControl specified!");
+	}
+
+	return control;
 }
