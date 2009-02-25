@@ -5,8 +5,7 @@
 
 // some default values are set, especially for output
 // please cf. User's Guide
-Parser::Parser() :  compass_model_("FULL_COMPASS"),
-					robot_filename_("rssfile"),
+Parser::Parser() :  robot_filename_("rssfile"),
 					obstacle_filename_("rssfile") {
 	//initialize Parser with default values
 	init();
@@ -14,65 +13,17 @@ Parser::Parser() :  compass_model_("FULL_COMPASS"),
 }
 
 Parser::~Parser() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void Parser::init() {
-
 	//define default values
-	//TODO(martinah) review default values
-	//TODO(craupach) needs to be written in the parameter map
-	variables_with_default_values.push_back("COMPASS_MODEL");
-	default_values_of_varialbes.push_back("FULL_COMPASS");
+	parameter_map_["COMPASS_MODEL"] = "FULL_COMPASS";
+	parameter_map_["ASG"] = "SYNCHRONOUS";
+	parameter_map_["STATISTICS_TEMPLATE"] = "ALL";
+	parameter_map_["STATISTICS_SUBSETS"] = "{ALL}";
 
-	variables_with_default_values.push_back("ASG");
-	default_values_of_varialbes.push_back("SYNCHRONOUS");
-
-	variables_with_default_values.push_back("STATISTICS_TEMPLATE");
-	default_values_of_varialbes.push_back("ALL");
-
-	variables_with_default_values.push_back("STATISTICS_SUBSETS");
-	default_values_of_varialbes.push_back("{ALL}");
-
-	variables_with_default_values.push_back("MARKER_REQUEST_HANDLER_SEED");
-	default_values_of_varialbes.push_back("1");
-
-	variables_with_default_values.push_back("MARKER_REQUEST_HANDLER_DISCARD_PROB");
-	default_values_of_varialbes.push_back("0");
-
-	variables_with_default_values.push_back("TYPE_CHANGE_REQUEST_HANDLER_SEED");
-	default_values_of_varialbes.push_back("1");
-
-	variables_with_default_values.push_back("TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB");
-	default_values_of_varialbes.push_back("0");
-
-	variables_with_default_values.push_back("VELOCITY_REQUEST_HANDLER_SEED");
-	default_values_of_varialbes.push_back("1");
-
-	variables_with_default_values.push_back("VELOCITY_REQUEST_HANDLER_DISCARD_PROB");
-	default_values_of_varialbes.push_back("0");
-
-	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_SEED");
-	default_values_of_varialbes.push_back("1");
-
-	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_DISCARD_PROB");
-	default_values_of_varialbes.push_back("0");
-
-	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_SEED");
-	default_values_of_varialbes.push_back("1");
-
-	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_DISCARD_PROB");
-	default_values_of_varialbes.push_back("0");
-
-	variables_with_default_values.push_back("VELOCITY_REQUEST_HANDLER_VECTOR_MODIFIERS");
-	default_values_of_varialbes.push_back("");
-
-	variables_with_default_values.push_back("ACCELERATION_REQUEST_HANDLER_VECTOR_MODIFIERS");
-	default_values_of_varialbes.push_back("");
-
-	variables_with_default_values.push_back("POSITION_REQUEST_HANDLER_VECTOR_MODIFIERS");
-	default_values_of_varialbes.push_back("");
-
+	// no default request handler. Is this good?
 }
 
 bool Parser::is_comment(const string& line) {
@@ -102,24 +53,17 @@ string Parser::get_var_name(const string& line) {
 }
 
 string Parser::get_default_value(const string& var) {
-	for(std::size_t i=0; i<variables_with_default_values.size(); i++) {
-		if(!var.compare(variables_with_default_values[i]) ||
-		   !var.compare("ROBOT_FILENAME") ||
-		   !var.compare("OBSTACLE_FILENAME") ) {
 
-			//variable has a default value
-			if(!var.compare("ROBOT_FILENAME")) {
-				return project_filename_;
-			}
-			else if (!var.compare("OBSTACLE_FILENAME")) {
-				return project_filename_;
-			}
-			else {
-				return default_values_of_varialbes[i];
-			}
-		}
+	//variable has a default value
+	if(!var.compare("ROBOT_FILENAME")) {
+		return project_filename_;
 	}
-	return "NO_DEFAULT_VALUE";
+	else if (!var.compare("OBSTACLE_FILENAME")) {
+		return project_filename_;
+	}
+	else {
+		return "NO_DEFAULT_VALUE";
+	}
 }
 
 string Parser::get_var_value(const string& line, const string& name) {
@@ -261,8 +205,6 @@ std::vector<string> Parser::split_string_by_string(const string& my_string, cons
 void Parser::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
-	compass_model_ = get_string_value_from_map(variables_and_values, "COMPASS_MODEL");
-
 	// if ".obstacle" exists at end of filename: erase it!
 	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
 	if (obstacle_filename_.rfind(".obstacle")!=string::npos)
@@ -559,8 +501,6 @@ void Parser::save_main_project_file(const string& project_filename) {
 	project_file.open((project_filename+".swarm").c_str());
 	if(project_file.is_open()) {
 		// Save the map. Should contain all variables.
-		// TODO(craupach) test this.
-		project_file << "COMPASS_MODEL=\"" << compass_model_ << "\"" << endl;
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
 		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
 
@@ -753,10 +693,6 @@ void Parser::save_projectfiles(const string& project_filename, const WorldInform
 
 
 /*** SET-methods for main projectfile variables ***/
-void Parser::set_compass_model(const string& compass_model) {
-	compass_model_ = compass_model;
-}
-
 void Parser::set_obstacle_filename(const string& obstacle_filename) {
 	obstacle_filename_ = obstacle_filename;
 }
@@ -773,11 +709,6 @@ void Parser::set_project_filename(const string& project_filename) {
 
 
 /*** GET-methods for main projectfile variables ***/
-// TODO(craupach) delete them all? Watch for side effects with statistics?
-const string& Parser::compass_model() const {
-	return compass_model_;
-}
-
 const string& Parser::robot_filename() const {
 	return robot_filename_;
 }

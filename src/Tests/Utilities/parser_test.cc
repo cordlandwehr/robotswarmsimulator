@@ -41,7 +41,7 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 
 	//check variables read from main project file
 	BOOST_CHECK_EQUAL(parser->parameter_map_["PROJECT_NAME"], "My Exciting Project");
-	BOOST_CHECK_EQUAL(parser->compass_model_, "NO_COMPASS");
+	BOOST_CHECK_EQUAL(parser->parameter_map_["COMPASS_MODEL"], "NO_COMPASS");
 	BOOST_CHECK_EQUAL(parser->robot_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->obstacle_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->parameter_map_["STATISTICS_TEMPLATE"], "BASIC");

@@ -211,16 +211,11 @@ private:
 	// parameter map
 	std::map<std::string, std::string> parameter_map_;
 
-	string compass_model_;
 	string obstacle_filename_;
 	string robot_filename_;
 
 	//file name of project file
 	string project_filename_;
-
-	//default values (if variable not defined or set in input file)
-	vector<string> variables_with_default_values;
-	vector<string> default_values_of_varialbes;
 
 	//position in line for getting values
 	size_t position_in_line_;

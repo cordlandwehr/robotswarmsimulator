@@ -289,12 +289,12 @@ void szenario_generator::set_statisticsSubsets(string statisticsSubsets) {
 void szenario_generator::write_to_file() {
 
 	// setup parser for writing with previously set values.
-	// TODO(craupach) this should be untangled from the parser!
 	parser_->set_obstacle_filename(*obstacleFileName_);
-	parser_->parameter_map()["PROJECT_NAME"] = *projectName_;
 	parser_->set_robot_filename(*robotFileName_);
+
+	parser_->parameter_map()["PROJECT_NAME"] = *projectName_;
 	parser_->parameter_map()["ASG"] = *asg_;
-	parser_->set_compass_model(*compassModel_);
+	parser_->parameter_map()["COMPASS_MODELL"] = *compassModel_;
 	parser_->parameter_map()["STATISTICS_TEMPLATE"] = *statisticsTemplate_;
 	parser_->parameter_map()["STATISTICS_SUBSETS"] = *statisticsSubsets_;
 
