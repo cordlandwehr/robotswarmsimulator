@@ -271,8 +271,8 @@ boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::str
 		control.reset(new UniformRobotControl(view_factory_factory(params), history_length, initial_world_information));
 	} else if(robot_type == "ROBOT_TYPE_ROBOT_CONTROL") {
 		boost::array<boost::shared_ptr<AbstractViewFactory>,kRobotTypeCount> view_factories;
-		view_factories[MASTER] = view_factory_factory(params, "MASTER");
-		view_factories[SLAVE] = view_factory_factory(params, "SLAVE");
+		view_factories[MASTER] = view_factory_factory(params, "MASTER_");
+		view_factories[SLAVE] = view_factory_factory(params, "SLAVE_");
 
 		control.reset(new RobotTypeRobotControl(view_factories, history_length, initial_world_information));
 	} else {

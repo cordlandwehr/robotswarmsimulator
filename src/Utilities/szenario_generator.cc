@@ -69,6 +69,9 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 		RobotStatus tmpRobotState = READY;
 		tmpRobotData->set_status(tmpRobotState);
 
+		//set type of robot
+		tmpRobotData->set_type(SLAVE);
+
 		boost::shared_ptr<Vector3d> axis_x(new Vector3d());
 		boost::shared_ptr<Vector3d> axis_y(new Vector3d());
 		boost::shared_ptr<Vector3d> axis_z(new Vector3d());
