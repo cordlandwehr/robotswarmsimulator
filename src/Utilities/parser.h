@@ -245,16 +245,6 @@ private:
 	std::vector<Vector3d> initiale_obstacle_size_;
 
 	/**
-	 * This methods splits the string by the given seperator.
-	 *
-	 * \param my_string String to split
-	 * \param seperator Seperator where to split given string
-	 * \param max_num_pieces Number of pieces maximum allowed
-	 * \return vector containing splitted string.
-	 */
-	std::vector<string> split_string_by_string(const string& my_string, const string& sep, int max_num_pieces);
-
-	/**
 	 * This method returns the default value of the given variable, if the given variable has a default value,
 	 * otherwise "" will be returned.
 	 * \param var Variable which default value will be returned.
@@ -338,65 +328,6 @@ private:
 	 * 			If var_name doesn't exist in the map, but var_name has a default value, return this default_value.
 	 */
 	string get_string_value_from_map(map<string,string> variables_and_values, const string& var_name);
-
-	/**
-	 * This methods returns the (int) value of the variable according to var_name saved in the given map
-	 *
-	 * \param variables_and_values Map that contains variable names and its values.
-	 * \param var_name Name of the variable whose value shall be returned from the map.
-	 * \return If var_name exists in the map, return (int) value of var_name saved in the map.
-	 */
-	unsigned int get_uint_value_from_map(map<string,string> variables_and_values, const string& var_name);
-
-	/**
-	 * This methods returns the (double) value of the variable according to var_name saved in the given map
-	 *
-	 * \param variables_and_values Map that contains variable names and its values.
-	 * \param var_name Name of the variable whose value shall be returned from the map.
-	 * \return If var_name exists in the map, return (double) value of var_name saved in the map.
-	 */
-	double get_double_value_from_map(map<string,string> variables_and_values, const string& var_name);
-
-	/**
-	 * This methods returns the vector of the variable according to var_name saved in the given map
-	 *
-	 * \param variables_and_values Map that contains variable names and its values.
-	 * \param var_name Name of the variable whose vector shall be returned from the map.
-	 * \return If var_name exists in the map, return vector of var_name saved in the map.
-	 */
-	std::vector<string> get_vector_from_map(map<string,string> variables_and_values, const string& var_name);
-
-	/**
-	 * This method returns a tuple that defines a request handler.
-	 *
-	 * \param variables_and_values Map that contains variable names and its values.
-	 * \param request_handler Name of request handler to return.
-	 * \param vector_modifier_exists Denotes wheter the request handler to return has a vector modifier list.
-	 * \return Tuple that defines request handler with vector modifier
-	 */
-	boost::tuple<string,double,unsigned int,std::vector<boost::tuple<string,std::vector<boost::any> > > >
-	get_request_handler_from_map(map<string,string> variables_and_values, const string& request_handler, bool vector_modifier_exists);
-
-	/**
-	 * This method returns a tuple that defines a request handler with vector modifiers.
-	 *
-	 * \param variables_and_values Map that contains variable names and its values.
-	 * \param request_handler Name of request handler to return.
-	 * \return Tuple that defines request handler without vector modifier
-	 */
-	boost::tuple<string,double,unsigned int,std::vector<boost::tuple<string,std::vector<boost::any> > > >
-	get_request_handler_with_vector_modifiers_from_map(map<string,string> variables_and_values, const string& request_handler);
-
-
-	/**
-	 * This method returns a tuple that defines a request handler without vector modifiers.
-	 *
-	 * \param variables_and_values Map that contains variable names and its values.
-	 * \param request_handler Name of request handler to return.
-	 * \return Tuple that defines request handler without vector modifier
-	 */
-	boost::tuple<string,double,unsigned int>
-	get_request_handler_without_vector_modifiers_from_map(map<string,string> variables_and_values, const string& request_handler);
 
 	/**
 	 * Checks whether the given string contains an assignment.
