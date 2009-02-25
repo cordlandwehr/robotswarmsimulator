@@ -6,11 +6,8 @@
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() :  compass_model_("FULL_COMPASS"),
-					project_name_("NEW RSS PROJECT"),
 					robot_filename_("rssfile"),
-					obstacle_filename_("rssfile"),
-					statistics_template_("ALL"),
-					statistics_subsets_("") {
+					obstacle_filename_("rssfile") {
 	//initialize Parser with default values
 	init();
 
@@ -265,7 +262,6 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
 	compass_model_ = get_string_value_from_map(variables_and_values, "COMPASS_MODEL");
-	project_name_ = get_string_value_from_map(variables_and_values, "PROJECT_NAME");
 
 	// if ".obstacle" exists at end of filename: erase it!
 	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
@@ -276,36 +272,6 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	if (robot_filename_.rfind(".robot")!=string::npos)
 		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
 
-	statistics_template_ = get_string_value_from_map(variables_and_values, "STATISTICS_TEMPLATE");
-	statistics_subsets_ = get_string_value_from_map(variables_and_values, "STATISTICS_SUBSETS");
-
-	//get request handler with vector modifiers from map
-	//position_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "POSITION_REQUEST_HANDLER");
-	//acceleration_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "ACCELERATION_REQUEST_HANDLER");
-	//velocity_request_handler_ = get_request_handler_with_vector_modifiers_from_map(variables_and_values, "VELOCITY_REQUEST_HANDLER");
-
-	//get request handler without vector modifiers from map
-	//type_change_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "TYPE_CHANGE_REQUEST_HANDLER");
-	//marker_request_handler_ = get_request_handler_without_vector_modifiers_from_map(variables_and_values, "MARKER_REQUEST_HANDLER");
-
-
-	//TODO(martinah) save request handler like this in the parameter map?
-	//I can split this stuff, but IMHO it's nicer like I did it below,
-	//especcially since you may get roughly a Million thounds billion
-	//and so on (or something like this) number of values, i.e. number of entries in the parameter map ;-).
-	//TODO(martinah) Don't forget to remove the upper comment before finishing work on parser.
-	/*
-	parameter_map_["POSITION_REQUEST_HANDLER"] = position_request_handler_;
-	parameter_map_["ACCELERATION_REQUEST_HANDLER"] = acceleration_request_handler_;
-	parameter_map_["VELOCITY_REQUEST_HANDLER"] = velocity_request_handler_;
-	parameter_map_["TYPE_CHANGE_REQUEST_HANDLER"] = velocity_request_handler_;
-	parameter_map_["MARKER_REQUEST_HANDLER"] = marker_request_handler_;
-
-	parameter_map_["ASG"] = asg_;
-	parameter_map_["COMPASS_MODEL"] = compass_model_;
-	parameter_map_["STATISTICS_TEMPLATE"] = statistics_template_;
-	parameter_map_["STATISTICS_SUBSETS"] = statistics_subsets_;
-	*/
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -792,21 +758,10 @@ void Parser::set_obstacle_filename(const string& obstacle_filename) {
 	obstacle_filename_ = obstacle_filename;
 }
 
-void Parser::set_project_name(const string& project_name) {
-	project_name_ = project_name;
-}
-
 void Parser::set_robot_filename(const string& robot_filename) {
 	robot_filename_ = robot_filename;
 }
 
-void Parser::set_statistics_template(const string& statistics_template) {
-	statistics_template_ = statistics_template;
-}
-
-void Parser::set_statistics_subsets(const string& statistics_subsets) {
-	statistics_subsets_ = statistics_subsets;
-}
 
 void Parser::set_project_filename(const string& project_filename) {
 	project_filename_ = project_filename;
@@ -820,20 +775,8 @@ const string& Parser::compass_model() const {
 	return compass_model_;
 }
 
-const string& Parser::project_name() const {
-	return project_name_;
-}
-
 const string& Parser::robot_filename() const {
 	return robot_filename_;
-}
-
-const string& Parser::statistics_template() const {
-	return statistics_template_;
-}
-
-const string& Parser::statistics_subsets() const {
-	return statistics_subsets_;
 }
 
 /*** GET-methods for robot data ***/

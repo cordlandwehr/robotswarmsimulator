@@ -126,24 +126,9 @@ public:
 	const string& compass_model() const;
 
 	/**
-	 * \return constant reference to the string describing the Projectname.
-	 */
-	const string& project_name() const;
-
-	/**
 	 * \return constant reference to the string describing the Robot Filename.
 	 */
 	const string& robot_filename() const;
-
-	/**
-	 * \return constant reference to the string describing the statistics' configuration-template
-	 */
-	const string& statistics_template() const;
-
-	/**
-	 * \return constant reference to the string describing the statistics' subsets-configuration
-	 */
-	const string& statistics_subsets() const;
 
 	/**
 	 * \return reference to vector of Robot Positions.
@@ -228,10 +213,7 @@ private:
 
 	string compass_model_;
 	string obstacle_filename_;
-	string project_name_;
 	string robot_filename_;
-	string statistics_template_;
-	string statistics_subsets_;
 
 	//file name of project file
 	string project_filename_;

@@ -40,12 +40,12 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	parser->save_main_project_file("../RobotSwarmSimulator/src/Tests/TestData/saved_testfile_1");
 
 	//check variables read from main project file
-	BOOST_CHECK_EQUAL(parser->project_name_, "My Exciting Project");
+	BOOST_CHECK_EQUAL(parser->parameter_map_["PROJECT_NAME"], "My Exciting Project");
 	BOOST_CHECK_EQUAL(parser->compass_model_, "NO_COMPASS");
 	BOOST_CHECK_EQUAL(parser->robot_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->obstacle_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
-	BOOST_CHECK_EQUAL(parser->statistics_template_, "BASIC");
-	BOOST_CHECK_EQUAL(parser->statistics_subsets_, "{ALL}");
+	BOOST_CHECK_EQUAL(parser->parameter_map_["STATISTICS_TEMPLATE"], "BASIC");
+	BOOST_CHECK_EQUAL(parser->parameter_map_["STATISTICS_SUBSETS"], "{ALL}");
 
 	//########################################################################
 	//				check request handler stuff
