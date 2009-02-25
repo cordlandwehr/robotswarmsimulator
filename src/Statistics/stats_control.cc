@@ -15,7 +15,7 @@ StatsControl::~StatsControl() {
 	quit();
 }
 
-void StatsControl::init(boost::shared_ptr<Parser> parser) {
+void StatsControl::init(map<std::string, std::string> &params) {
 
 	if (stats_initialized_) {
 		// log error, because no quit was called before this init
@@ -25,7 +25,7 @@ void StatsControl::init(boost::shared_ptr<Parser> parser) {
 	}
 
 	// initialize StatsConfig
-	stats_cfg_.init(parser);
+	stats_cfg_.init(params);
 
 	// abort if nothing to calculate
 	if (!stats_cfg_.is_any_subset())

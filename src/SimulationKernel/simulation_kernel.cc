@@ -88,7 +88,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 	// create and initialize statistics module;
 	stats_.reset(new StatsControl());
-	stats_->init(parser);
+	stats_->init(params);
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	//TODO(Sven) "stats_->update(initialWorldInformation)"

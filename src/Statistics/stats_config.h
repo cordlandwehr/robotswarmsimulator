@@ -31,7 +31,7 @@ public:
 	 * be calculated or how it should be configured.
 	 * \param parser the parser from which to initialize
 	 */
-	void init(boost::shared_ptr<Parser> parser);
+	void init(map<std::string, std::string> &params);
 
 	/*
 	 *

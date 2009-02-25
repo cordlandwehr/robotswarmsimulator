@@ -24,11 +24,11 @@ StatsConfig::~StatsConfig() {
  *
  */
 
-void StatsConfig::init(boost::shared_ptr<Parser> parser) {
+void StatsConfig::init(map<std::string, std::string> &params) {
 
 	// get subsets-configuration from Parser's STATS_SUBSETS = ...
 	// e.g. STATS_SUBSETS = {ALL} {MASTERS} {INACTALL} ...
-	std::string s = parser->statistics_subsets();
+	std::string s = params["STATISTICS_SUBSETS"];
 
 	// initialize subsets-configuration
 	subset_all_          = (s.find("{ALL}", 0) != std::string::npos);
@@ -58,7 +58,7 @@ void StatsConfig::init(boost::shared_ptr<Parser> parser) {
 
 	// get template-configuration from Parser's STATS_TEMPLATE = ...
 	// e.g. STATS_TEMPLATE = DEFAULT
-	s = parser->statistics_template();
+	s = params["STATISTICS_TEMPLATE"];
 
 	// initialize template
 	std::cout << "    statistics-configuration is: ";

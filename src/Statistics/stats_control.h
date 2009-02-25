@@ -33,7 +33,7 @@ public:
 	 * given projectfile.
 	 * \param parser the parser to use for configuration
 	 */
-	void init(boost::shared_ptr<Parser> parser);
+	void init(map<std::string, std::string> &params);
 
 	/**
 	 * Updates the sequence of events. Ensures that the events for each fixed robot are in the right
