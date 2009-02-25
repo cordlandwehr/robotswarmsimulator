@@ -30,6 +30,10 @@ const MarkerInformation& WorldObject::marker_information() const {
 	return *marker_information_;
 }
 
+MarkerInformation& WorldObject::marker_information() {
+	return *marker_information_;
+}
+
 void WorldObject::set_marker_information(boost::shared_ptr<MarkerInformation> new_marker_information) {
 	marker_information_ = new_marker_information;
 }

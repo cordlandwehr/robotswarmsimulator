@@ -1,5 +1,6 @@
 #include "world_information.h"
 #include "identifier.h"
+#include "marker_identifier.h"
 #include "robot_identifier.h"
 #include "world_object.h"
 #include "robot_data.h"
@@ -11,11 +12,9 @@
 
 
 WorldInformation::WorldInformation() {
-	// TODO Auto-generated destructor stub
 }
 
 WorldInformation::~WorldInformation() {
-	// TODO Auto-generated destructor stub
 }
 
 WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time_){
@@ -89,6 +88,16 @@ void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_dat
 
 int WorldInformation::time() const {
 	return time_;
+}
+
+const WorldObject& WorldInformation::get_according_marker(const MarkerIdentifier& id) const {
+	assert(id.id() < markers_.size());
+	return *(markers_[id.id()]);
+}
+
+WorldObject& WorldInformation::get_according_marker(const MarkerIdentifier& id) {
+	assert(id.id() < markers_.size());
+	return *(markers_[id.id()]);
 }
 
 const RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) const {

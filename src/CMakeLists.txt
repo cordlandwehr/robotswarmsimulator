@@ -28,13 +28,4 @@ include_directories(${LUA_INCLUDE_DIR})
 include_directories(${luabind_SOURCE_DIR})
 
 # generate library of the above source files
-add_library(RSSimulator ${RSSLIB_SRCS})
-
-# if we build a shared library add it to the install target
-if(BUILD_SHARED_LIBS)
-	install(TARGETS RSSimulator
-	        COMPONENT mainprogram
-	        LIBRARY DESTINATION lib
-	        RUNTIME DESTINATION bin
-	)
-endif(BUILD_SHARED_LIBS)
+add_library(RSSimulator STATIC ${RSSLIB_SRCS})

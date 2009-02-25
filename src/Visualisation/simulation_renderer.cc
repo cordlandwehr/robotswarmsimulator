@@ -309,7 +309,7 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 		    	use_mouse_ = !use_mouse_;
 			break;
 		case 'c':
-				if (active_camera_index_==cameras_.size()-1)
+				if (active_camera_index_+1 == cameras_.size())
 					active_camera_index_=0;
 				else active_camera_index_++;
 			break;

@@ -28,6 +28,11 @@ public:
 	void add_data(const string& var_name, const boost::any& insert_data);
 
 	/**
+	 * Removes the given data item from this MarkerInformation. Has no effect if no such data item is stored.
+	 */
+	void remove_data(const string& var_name);
+
+	/**
 	 * This method returns data stored in given variable.
 	 * \param 	var_name	Return data of this variable.
 	 * \return	Data stored in data-map for given variable.

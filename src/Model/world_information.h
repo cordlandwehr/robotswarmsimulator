@@ -15,6 +15,7 @@
 using namespace std;
 
 class Identifier;
+class MarkerIdentifier;
 class RobotIdentifier;
 class WorldObject;
 class RobotData;
@@ -105,6 +106,26 @@ public:
 	 * \param the new time
 	 */
 	void set_time(int time) {time_ = time;}
+
+	/**
+	 * \brief Returns a constant reference to marker object with given id.
+	 *
+	 * This method assumes, that the marker object with the given id is saved at position id->id() in the markers
+	 * vector.
+	 *
+	 * \return Constant reference to corresponding marker object.
+	 */
+	const WorldObject& get_according_marker(const MarkerIdentifier& id) const;
+
+	/**
+	 * \brief Returns a constant reference to marker object with given id.
+	 *
+	 * This method assumes, that the marker object with the given id is saved at position id->id() in the markers
+	 * vector.
+	 *
+	 * \return Mutable reference to corresponding marker object.
+	 */
+	WorldObject& get_according_marker(const MarkerIdentifier& id);
 
 	/**
 	 * Return constant reference to according robotData of given robot ID

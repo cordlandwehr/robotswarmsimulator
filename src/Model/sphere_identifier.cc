@@ -8,10 +8,7 @@
 #include "sphere_identifier.h"
 
 SphereIdentifier::SphereIdentifier(std::size_t id) : ObstacleIdentifier(id) {
-	// TODO Auto-generated constructor stub
-
 }
 
 SphereIdentifier::~SphereIdentifier() {
-	// TODO Auto-generated destructor stub
 }

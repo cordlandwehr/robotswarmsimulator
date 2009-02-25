@@ -34,6 +34,12 @@ public:
 	const MarkerInformation& marker_information() const;
 
 	/**
+	 * Returns a reference to the marker information of this object.
+	 * \return Mutable reference to the marker information of this object.
+	 */
+	MarkerInformation& marker_information();
+
+	/**
 	 * Sets the position of this object.
 	 * \param Pointer to new position vector.
 	 */

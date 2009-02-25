@@ -26,5 +26,11 @@ include(InstallRequiredSystemLibraries)
 set(CPACK_COMPONENT_MAINPROGRAM_DISPLAY_NAME "Robot Swarm Simulator")
 set(CPACK_COMPONENT_MAINPROGRAM_DESCRIPTION "The main program (and libraries).")
 
+# installs some needed shared runtime libraries on windows systems
+include(InstallRequiredSystemLibraries)
+
+# enable stripping
+set(CPACK_STRIP_FILES TRUE)
+
 # enable packaging
 include(CPack)

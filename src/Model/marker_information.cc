@@ -13,6 +13,10 @@ void MarkerInformation::add_data(const string& var_name, const boost::any& inser
 	data_[var_name] = insert_data;
 }
 
+void MarkerInformation::remove_data(const string& var_name) {
+	data_.erase(var_name);
+}
+
 const boost::any MarkerInformation::get_data(const string& var_name) {
 	//get iterator to value corresponding to key var_name
 	map<string,boost::any>::const_iterator map_iterator = data_.find(var_name);
