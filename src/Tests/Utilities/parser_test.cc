@@ -11,6 +11,10 @@
 
 #include "../../EventHandlers/event_handler.h"
 
+#include "../ActivationSequenceGenerators/activation_sequence_generator.h"
+#include "../ActivationSequenceGenerators/synchronous_asg.h"
+#include "../ActivationSequenceGenerators/asynchronous_asg.h"
+
 #include "../../Views/global_view.h"
 #include "../../Views/view_factory.h"
 #include "../../SimulationKernel/robot_control.h"
@@ -41,7 +45,6 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	BOOST_CHECK_EQUAL(parser->obstacle_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
 	BOOST_CHECK_EQUAL(parser->statistics_template_, "BASIC");
 	BOOST_CHECK_EQUAL(parser->statistics_subsets_, "{ALL}");
-	BOOST_CHECK_EQUAL(parser->asg_, "ASYNCHRONOUS");
 
 	//########################################################################
 	//				check request handler stuff
@@ -79,6 +82,13 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	// should be a vector randomizer
 	boost::shared_ptr<VectorRandomizer> randomizer;
 	BOOST_REQUIRE(randomizer = boost::dynamic_pointer_cast<VectorRandomizer> (vec));
+
+	//########################################################################
+	//				check asg stuff
+	//########################################################################
+
+	boost::shared_ptr<ActivationSequenceGenerator> asg = Factory::asg_factory(params);
+	BOOST_REQUIRE(boost::dynamic_pointer_cast<AsynchronousASG>(asg));
 
 }
 /*

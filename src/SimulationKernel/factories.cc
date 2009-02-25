@@ -172,7 +172,7 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	} else if(asg_type == "ASYNCHRONOUS") {
 			unsigned int seed = boost::lexical_cast<unsigned int>(params["ASYNC_ASG_SEED"]);
 			double participation_probability = boost::lexical_cast<double>(params["ASYNC_ASG_PART_P"]);
-			double p = boost::any_cast<double>(params["ASYNC_ASG_TIME_P"]);
+			double p = boost::lexical_cast<double>(params["ASYNC_ASG_TIME_P"]);
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
 	}
 
