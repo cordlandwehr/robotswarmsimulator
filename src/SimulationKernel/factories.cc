@@ -36,6 +36,7 @@
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
 #include "../Utilities/VectorModifiers/vector_trimmer.h"
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
+#include "../Utilities/unsupported_operation_exception.h"
 
 #include "../Model/robot.h"
 #include "../Model/robot_identifier.h"
@@ -69,17 +70,21 @@ void create_vector_modifiers_from_string(boost::shared_ptr<VectorRequestHandler>
 
 		// switch through types. This is the place init code for new modifiers should be inserted.
 		boost::shared_ptr<VectorModifier> new_vector_modifier;
-		if(type == "VECTOR_TRIMMER") {
-			double length = boost::lexical_cast<double>(*param_iterator);
-			new_vector_modifier.reset(new VectorTrimmer(length));
-		} else if(type == "VECTOR_DIFFERENCE_TRIMMER") {
-			double length = boost::lexical_cast<double>(*param_iterator);
-			new_vector_modifier.reset(new VectorDifferenceTrimmer(length));
-		} else if(type == "VECTOR_RANDOMIZER") {
-			unsigned int seed = boost::lexical_cast<unsigned int>(*param_iterator);
-			++param_iterator;
-			double standard_deviation = boost::lexical_cast<double>(*param_iterator);
-			new_vector_modifier.reset(new VectorRandomizer(seed, standard_deviation));
+		try {
+			if(type == "VECTOR_TRIMMER") {
+				double length = boost::lexical_cast<double>(*param_iterator);
+				new_vector_modifier.reset(new VectorTrimmer(length));
+			} else if(type == "VECTOR_DIFFERENCE_TRIMMER") {
+				double length = boost::lexical_cast<double>(*param_iterator);
+				new_vector_modifier.reset(new VectorDifferenceTrimmer(length));
+			} else if(type == "VECTOR_RANDOMIZER") {
+				unsigned int seed = boost::lexical_cast<unsigned int>(*param_iterator);
+				++param_iterator;
+				double standard_deviation = boost::lexical_cast<double>(*param_iterator);
+				new_vector_modifier.reset(new VectorRandomizer(seed, standard_deviation));
+			}
+		} catch(const boost::bad_lexical_cast& ) {
+			 throw UnsupportedOperationException("Failed creating proper vector modifiers when parsing " + modifiers);
 		}
 		handler->add_vector_modifier(new_vector_modifier);
 	}
@@ -96,65 +101,84 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	// 1. Marker Request Handler
 	std::string marker_request_handler_type = params["MARKER_REQUEST_HANDLER_TYPE"];
 	if(marker_request_handler_type == "STANDARD") {
-			// build the marker request handler
-			double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_MARKER_REQUEST_HANDLER_SEED"]);
-			boost::shared_ptr<MarkerRequestHandler> marker_request_handler(new MarkerRequestHandler(seed, discard_probability, *history));
-			event_handler->set_marker_request_handler(marker_request_handler);
+			try {
+				// build the marker request handler
+				double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"]);
+				unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_MARKER_REQUEST_HANDLER_SEED"]);
+				boost::shared_ptr<MarkerRequestHandler> marker_request_handler(new MarkerRequestHandler(seed, discard_probability, *history));
+				event_handler->set_marker_request_handler(marker_request_handler);
+			} catch(const boost::bad_lexical_cast& ) {
+				throw UnsupportedOperationException("Failed reading parameters for standard marker request handler");
+			}
 	}
 
 	// 2. Type Change Request Handler
 	std::string type_change_request_handler_type = boost::any_cast<std::string> (params["TYPE_CHANGE_REQUEST_HANDLER_TYPE"]);
 	if(type_change_request_handler_type == "STANDARD") {
-		// build the marker request handler
-		double discard_probability = boost::lexical_cast<double> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_SEED"]);
-		boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler(new TypeChangeRequestHandler(seed, discard_probability, *history));
-		event_handler->set_type_change_request_handler(type_change_request_handler);
+		try {
+			// build the type change request handler
+			double discard_probability = boost::lexical_cast<double> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_SEED"]);
+			boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler(new TypeChangeRequestHandler(seed, discard_probability, *history));
+			event_handler->set_type_change_request_handler(type_change_request_handler);
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for standard type change request handler");
+		}
 	}
 
 	// 3. Position Request Handler
 	std::string position_request_handler_type = boost::any_cast<std::string> (params["POSITION_REQUEST_HANDLER_TYPE"]);
 	if(position_request_handler_type == "VECTOR") {
-		// build the marker request handler
-		double discard_probability = boost::lexical_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
-		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+		try {
+			// build the vector request handler
+			double discard_probability = boost::lexical_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
+			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
-		// set up vector modifiers
-		create_vector_modifiers_from_string(vector_request_handler,
-		                                    params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
+			// set up vector modifiers
+			create_vector_modifiers_from_string(vector_request_handler,
+					                            params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
 
-		event_handler->set_position_request_handler(vector_request_handler);
-
+			event_handler->set_position_request_handler(vector_request_handler);
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for vector position request handler");
+		}
 	}
 
 	// 4. Velocity Request Handler
 	std::string velocity_request_handler_type = boost::any_cast<std::string> (params["VELOCITY_REQUEST_HANDLER_TYPE"]);
 	if(velocity_request_handler_type == "VECTOR") {
-		// build the marker request handler
-		double discard_probability = boost::lexical_cast<double> (params["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]);
-		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+		try {
+			// build the vector request handler
+			double discard_probability = boost::lexical_cast<double> (params["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]);
+			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
-		// set up vector modifiers
-		create_vector_modifiers_from_string(vector_request_handler,
-		                                    params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
-		event_handler->set_velocity_request_handler(vector_request_handler);
+			// set up vector modifiers
+			create_vector_modifiers_from_string(vector_request_handler,
+					                            params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
+			event_handler->set_velocity_request_handler(vector_request_handler);
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for vector velocity request handler");
+		}
 	}
 
 	// 5. Acceleration Request Handler
 	std::string acceleration_request_handler_type = boost::any_cast<std::string> (params["ACCELERATION_REQUEST_HANDLER_TYPE"]);
 	if(acceleration_request_handler_type == "VECTOR") {
-		// build the marker request handler
-		double discard_probability = boost::lexical_cast<double> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]);
-		unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]);
-		boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+		try {
+			// build the vector request handler
+			double discard_probability = boost::lexical_cast<double> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]);
+			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
-		// set up vector modifiers
-		create_vector_modifiers_from_string(vector_request_handler,
-		                                    params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
-		event_handler->set_acceleration_request_handler(vector_request_handler);
+			// set up vector modifiers
+			create_vector_modifiers_from_string(vector_request_handler,
+					                            params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
+			event_handler->set_acceleration_request_handler(vector_request_handler);
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for vector acceleration request handler");
+		}
 	}
 
 	return event_handler;
@@ -170,10 +194,14 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	} else if(asg_type == "SEMISYNCHRONOUS") {
 			//TODO(craupach) make something semi-synchrounous here;
 	} else if(asg_type == "ASYNCHRONOUS") {
+		try {
 			unsigned int seed = boost::lexical_cast<unsigned int>(params["ASYNC_ASG_SEED"]);
 			double participation_probability = boost::lexical_cast<double>(params["ASYNC_ASG_PART_P"]);
 			double p = boost::lexical_cast<double>(params["ASYNC_ASG_TIME_P"]);
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for asynchronous asg.");
+		}
 	}
 
 	return asg;
@@ -189,11 +217,19 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 	} else if(view_type == "COG_VIEW") {
 		view_factory.reset(new ViewFactory<CogView>);
 	} else if(view_type == "CHAIN_VIEW") {
-		unsigned int number = boost::lexical_cast<unsigned int>(params["CHAIN_VIEW_NUM_ROBOTS"]);
-		view_factory.reset(new ParametrizedViewFactory<ChainView, unsigned int>(number));
+		try {
+			unsigned int number = boost::lexical_cast<unsigned int>(params["CHAIN_VIEW_NUM_ROBOTS"]);
+			view_factory.reset(new ParametrizedViewFactory<ChainView, unsigned int>(number));
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for chain view.");
+		}
 	} else if(view_type == "ONE_POINT_FORMATION_VIEW") {
-		double radius = boost::lexical_cast<double>(params["ONE_POINT_FORMATION_VIEW_RADIUS"]);
-		view_factory.reset(new ParametrizedViewFactory<OnePointFormationView, double>(radius));
+		try {
+			double radius = boost::lexical_cast<double>(params["ONE_POINT_FORMATION_VIEW_RADIUS"]);
+			view_factory.reset(new ParametrizedViewFactory<OnePointFormationView, double>(radius));
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
+		}
 	} else if(view_type == "NONE") {
 		view_factory.reset(new ViewFactory<View>);
 	}

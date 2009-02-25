@@ -83,6 +83,14 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	boost::shared_ptr<VectorRandomizer> randomizer;
 	BOOST_REQUIRE(randomizer = boost::dynamic_pointer_cast<VectorRandomizer> (vec));
 
+	// velocity request handler
+	BOOST_REQUIRE(event_handler->velocity_request_handler_);
+	BOOST_CHECK_EQUAL(0.1, event_handler->velocity_request_handler_->discard_probability_);
+
+	// acceleration request handler
+	BOOST_REQUIRE(event_handler->acceleration_request_handler_);
+	BOOST_CHECK_EQUAL(0.1, event_handler->acceleration_request_handler_->discard_probability_);
+
 	//########################################################################
 	//				check asg stuff
 	//########################################################################
