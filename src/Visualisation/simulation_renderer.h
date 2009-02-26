@@ -86,7 +86,7 @@ public:
 	 *
 	 * \return The used Camera Object.
 	 */
-	const boost::shared_ptr<Camera> & camera(){ return cameras_[active_camera_index_];}
+	const boost::shared_ptr<Camera> & camera(){ return cameras_[active_camera_index_]; }
 
 	/**
 	 * \brief Sets the new color of text in RGBA
@@ -273,7 +273,7 @@ private:
 	 */
 	int font_bitmap_string(const std::string & str);
 
-	int active_camera_index_;
+	unsigned int active_camera_index_;
 
 	boost::array<boost::shared_ptr<Camera>,2> cameras_;
 
@@ -344,12 +344,13 @@ private:
 	/**
 	 *
 	 */
-	bool render_velocity_;
-
+	bool render_acceleration_;
+	
 	/**
 	 *
 	 */
-	bool render_acceleration_;
+	bool render_velocity_;
+	
 	bool render_help_;
 
 	bool render_about_;

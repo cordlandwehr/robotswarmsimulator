@@ -460,8 +460,8 @@ private:
 	 */
 	boost::shared_ptr<OctreeNode> root_;
 
-	double min_width_;
 	int max_levels_;
+	double min_width_;
 
 	friend class OctreeUtilities;
 

@@ -27,12 +27,14 @@ public:
 
 	virtual std::set<boost::shared_ptr<Request> > compute();
 	virtual std::string get_algorithm_id () const;
+	
 private:
 	void report_errors(int status);
 	void register_lua_methods();
+	
 private:
-	boost::shared_ptr<lua_State> lua_state_;
 	std::string lua_file_name_;
+	boost::shared_ptr<lua_State> lua_state_;
 };
 
 #endif /* LUA_ROBOT_H_ */

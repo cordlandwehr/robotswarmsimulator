@@ -57,10 +57,9 @@ const std::string kSkyBoxTexName("data/tex/skybox/");
 
 
 
-SimulationRenderer::SimulationRenderer() :
-									render_cog_(false), render_coord_system_(false), render_acceleration_(false),
-									render_velocity_(true), render_local_coord_system_(false), projection_type_(PROJ_PERSP),
-									render_help_(false), render_about_(false){
+SimulationRenderer::SimulationRenderer()
+: projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
+  render_acceleration_(false), render_velocity_(true), render_help_(false), render_about_(false) {
 
 
 
@@ -456,7 +455,7 @@ void SimulationRenderer::draw_text3d(const Vector3d & vector, const std::string 
 	GLdouble proj_x = 0;
 	GLdouble proj_y = 0;
 	GLdouble  win_z;
-	GLfloat pix;
+	GLfloat pix; // <-- not used; is here some todo missing or can this line be deleted?
 	GLint * vp = NULL;
 	GLdouble * pm= NULL;
 	GLdouble * mm= NULL;
@@ -599,7 +598,7 @@ boost::array<std::string, 12> helptext;
 	helptext[10]="G to display center of gravity";
 	helptext[11]="F1 to display About screen";
 
-	for (int i=0;i<helptext.size();i++){
+	for (unsigned int i=0;i<helptext.size();i++){
 		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);
 	}
 
@@ -614,7 +613,7 @@ void SimulationRenderer::draw_about(){
 	abouttext[3]="Kamil Swierkot, Marcus Märtens, Martina Hüllmann, Peter Kling and Sven Kurras.";
 	abouttext[4]="The University of Paderborn, Research group \"Algorithms and Complexity\"";
 	abouttext[5]="Contact: der-schwarm@lists.uni-paderborn.de";
-	for (int i=0;i<abouttext.size();i++){
+	for (unsigned int i=0;i<abouttext.size();i++){
 		draw_text2d(10,screen_height_-50-i*kTextSpacing,abouttext[i]);
 	}
 }

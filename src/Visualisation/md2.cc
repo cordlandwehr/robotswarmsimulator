@@ -41,11 +41,11 @@ bool MD2::load_model(std::string & model_file ){
 	this->frame_size_ = header->frame_size;
 
 
-	for( int i = 0; i < num_frames_; i++ ){
+	for(unsigned int i = 0; i < num_frames_; i++ ){
 		Frame * frame = reinterpret_cast<Frame*>( &buffer[ header->offset_frames + frame_size_ * i ] );
 
 		Vec * vl_ptr = &point_list_[ num_point_ * i ];
-		for(int j = 0; j < num_point_ ; j++ ){
+		for(unsigned int j = 0; j < num_point_ ; j++ ){
 
 			vl_ptr[j].p[0] = frame->scale[0] * frame->fp[j].v[0] + frame->translate[0];
 			vl_ptr[j].p[1] = frame->scale[1] * frame->fp[j].v[1] + frame->translate[1];
@@ -59,7 +59,7 @@ bool MD2::load_model(std::string & model_file ){
 
 
 	STIndex * st_ptr = reinterpret_cast<STIndex* >(&buffer[header->offset_st ] );
-	for( int i  = 0; i < num_st_; i++ ){
+	for(unsigned int i  = 0; i < num_st_; i++ ){
 		st_index_[i].s = 1.0 * st_ptr[i].s / texture_.width();
 		st_index_[i].t = 1.0 * st_ptr[i].t / texture_.height();
 	}
@@ -67,9 +67,9 @@ bool MD2::load_model(std::string & model_file ){
 	triangle_index_.reset( new Mesh[ num_triangles_ ] );
 	Mesh * index_ptr = reinterpret_cast<Mesh*>(&buffer[ header->offset_triangles ] );
 
-	for(int j = 0; j < num_frames_; j++ ){
+	for(unsigned int j = 0; j < num_frames_; j++ ){
 
-		for( int i = 0; i < num_triangles_; i++ ){
+		for(unsigned int i = 0; i < num_triangles_; i++ ){
 
 			triangle_index_[i].vec_index[0] = index_ptr[i].vec_index[0];
 			triangle_index_[i].vec_index[1] = index_ptr[i].vec_index[1];
@@ -118,7 +118,7 @@ void MD2::draw_model_simple(){
 	texture_.bind();
 
 	glBegin( GL_TRIANGLES );
-		for( int i = 0; i < num_triangles_; i++){
+		for(unsigned int i = 0; i < num_triangles_; i++){
 
 			glTexCoord2f(st_index_[ triangle_index_[i].st_index[ 0 ] ].s, st_index_[ triangle_index_[i].st_index[ 0 ] ].t );
 			glVertex3fv( vecs[ triangle_index_[i].vec_index[0] ].p );

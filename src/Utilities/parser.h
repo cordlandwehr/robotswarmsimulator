@@ -210,8 +210,8 @@ private:
 	// parameter map
 	std::map<std::string, std::string> parameter_map_;
 
-	string obstacle_filename_;
 	string robot_filename_;
+	string obstacle_filename_;
 
 	//file name of project file
 	string project_filename_;
