@@ -33,6 +33,10 @@ StatsOut::StatsOut(std::string stat_id, std::string stat_dir) {
 }
 
 StatsOut::~StatsOut() {
+	if (is_open()) {
+		// try to make a clean quit, though this case *should* not occur
+		quit();
+	}
 }
 
 void StatsOut::create_date() {
@@ -72,40 +76,18 @@ void StatsOut::set_dir(std::string stat_dir) {
 };
 
 
-void StatsOut::open(std::vector<std::string> stat_designation) {
-//	char Stat_Time [80];
+void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	char* stat_temp;
 
-//	time_t Stat_Rawtime;
-//	struct tm * Stat_Timeinfo;
-
-//	time ( &Stat_Rawtime );
-//	Stat_Timeinfo = localtime ( &Stat_Rawtime );
-
-//	strftime (Stat_Time,80,"%Y_%M%d_%H%M%S",Stat_Timeinfo);
-		//year (four digits), month, (day of the month), Hour (in 24h format), Minute, Second
-		// http://www.cplusplus.com/reference/clibrary/ctime/strftime.html
-
 	stat_temp = const_cast<char*>(stat_id.c_str());
-/*
-	std::strcpy (Stat_Gnuplot_filename, "gnuplot_");
-	std::strcat (Stat_Gnuplot_filename, Stat_Time);
-	std::strcat (Stat_Gnuplot_filename,"_");
-	std::strcat (Stat_Gnuplot_filename,Stat_Temp);
-	std::strcat (Stat_Gnuplot_filename,".plt");
 
-	std::strcpy (Stat_Output_filname, "Output_");
-	std::strcat (Stat_Output_filname, Stat_Time);
-	std::strcat (Stat_Output_filname,"_");
-	std::strcat (Stat_Output_filname,Stat_Temp);
-	std::strcat (Stat_Output_filname,".plt");
-*/
-
-	std::strcpy (stat_gnuplot_filename, stat_dir.c_str());
-	std::strcat (stat_gnuplot_filename, stat_gnuplot_date);
-	std::strcat (stat_gnuplot_filename,"_");
-	std::strcat (stat_gnuplot_filename,stat_temp);
-	std::strcat (stat_gnuplot_filename,".plt");
+	if (gnuPlot) {
+		std::strcpy (stat_gnuplot_filename, stat_dir.c_str());
+		std::strcat (stat_gnuplot_filename, stat_gnuplot_date);
+		std::strcat (stat_gnuplot_filename,"_");
+		std::strcat (stat_gnuplot_filename,stat_temp);
+		std::strcat (stat_gnuplot_filename,".plt");
+	}
 
 	std::strcpy (stat_output_filename, stat_dir.c_str());
 	std::strcat (stat_output_filename, stat_output_date);
@@ -116,38 +98,40 @@ void StatsOut::open(std::vector<std::string> stat_designation) {
 	/*
 	 *  Building of the Gnuplot-Configuration-File
 	 */
-	std::ofstream stat_gnuplotfile (stat_gnuplot_filename);
+	if (gnuPlot) {
+		std::ofstream stat_gnuplotfile (stat_gnuplot_filename);
 
-	stat_gnuplotfile << "# statistics of the simulation" << std::endl
-					 << "#====================================" << std::endl
-					 << "set title  \" SCHLAUE SCHWÄRME \\n " //ID Datum
-					 << "Modell: ...\" " << std::endl // Modell
-					 << "set xrange []" << std::endl
-					 << "set yrange []" << std::endl
-					 << "set grid" << std::endl
-					 << "set pointsize 0.5" << std::endl
-					 << "set xlabel 'time'" << std::endl
-					 << "set ylabel ''" << std::endl
-					 << "plot";
+		stat_gnuplotfile << "# statistics of the simulation" << std::endl
+						 << "#====================================" << std::endl
+						 << "set title  \" SCHLAUE SCHWÄRME \\n " //ID Datum
+						 << "Modell: ...\" " << std::endl // Modell
+						 << "set xrange []" << std::endl
+						 << "set yrange []" << std::endl
+						 << "set grid" << std::endl
+						 << "set pointsize 0.5" << std::endl
+						 << "set xlabel 'time'" << std::endl
+						 << "set ylabel ''" << std::endl
+						 << "plot";
 
-	for (unsigned int j=1; j < stat_designation.size(); j++) {
-		stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
-						 << j+1
-						 << " title \""
-						 << stat_designation[j-1]
-						 << "\" with linespoints,";
+		for (unsigned int j=1; j < stat_designation.size(); j++) {
+			stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
+							 << j+1
+							 << " title \""
+							 << stat_designation[j-1]
+							 << "\" with linespoints,";
+		}
+
+		if (stat_designation.size() > 0) {
+			stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
+							<< stat_designation.size()+1
+							<< " title \""
+							<< stat_designation[stat_designation.size()-1]
+							<< "\" with linespoints"
+							<< std::endl;
+		}
+
+		stat_gnuplotfile.close();
 	}
-
-	if (stat_designation.size() > 0) {
-		stat_gnuplotfile << " \"" << stat_output_filename << "\" using 1:"
-						<< stat_designation.size()+1
-						<< " title \""
-						<< stat_designation[stat_designation.size()-1]
-						<< "\" with linespoints"
-						<< std::endl;
-	}
-
-	stat_gnuplotfile.close();
 
 	/*
 	 *  Building the skeletal structure of the output-file

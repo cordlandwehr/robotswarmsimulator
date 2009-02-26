@@ -301,6 +301,9 @@ void szenario_generator::write_to_file() {
 	parser_->parameter_map()["STATISTICS_TEMPLATE"] = *statisticsTemplate_;
 	parser_->parameter_map()["STATISTICS_SUBSETS"] = *statisticsSubsets_;
 
+	// add additional volatile parameters to parameter_map
+	parser_->parameter_map()["STATISTICS_DATADUMP"] = "NONE";
+
 	// add all robots to world information
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ )

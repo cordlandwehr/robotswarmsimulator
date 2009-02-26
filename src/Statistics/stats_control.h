@@ -12,6 +12,7 @@
 
 #include <vector>
 
+#include "../Events/event.h"
 #include "../Model/robot_data.h"
 #include "../Model/world_information.h"
 #include "../SimulationKernel/simulation_listener.h"
@@ -51,6 +52,11 @@ public:
 	void quit();
 
 private:
+	/**
+	 * the configuration-instance to use
+	 */
+	boost::shared_ptr<StatsOut> stats_datadump_;
+
 	/**
 	 * the configuration-instance to use
 	 */
@@ -94,6 +100,11 @@ private:
 	 * performs a calculation. That includes any update of the
 	 */
 	void calculate();
+
+	/**
+	 * performs the datadump - if requested.
+	 */
+	void do_datadump(const WorldInformation& world_information, boost::shared_ptr<Event> event);
 
 };
 

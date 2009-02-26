@@ -96,7 +96,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 void SimulationKernel::step() {
 	event_handler_->handle_event(asg_->get_next_event());
-	std::cout << "History Size: " << history_->size() << std::endl;
+	//std::cout << "History Size: " << history_->size() << std::endl;
 }
 
 

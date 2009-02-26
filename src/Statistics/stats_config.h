@@ -19,6 +19,9 @@
 class StatsConfig {
 public:
 
+	static const int DATADUMP_NONE = 0;
+	static const int DATADUMP_FULL = 1;
+
 	explicit StatsConfig();
 	virtual ~StatsConfig();
 
@@ -32,6 +35,13 @@ public:
 	 * \param parser the parser from which to initialize
 	 */
 	void init(map<std::string, std::string> &params);
+
+	/**
+	 * Returns an integer identifying the datadump-level set in projectfile
+	 * by field STATS_DATADUMP.
+	 * \return the respective StatsConfig.DATADUMP_*
+	 */
+	const int datadump_level() const;
 
 	/*
 	 *
@@ -159,15 +169,29 @@ public:
 	const int vel_cfg() const;
 
 private:
+	/**
+	 * the datadumplevel used (one of DATADUMP_*)
+	 */
+	int datadump_level_;
+
 	bool any_subset_;
 	bool subset_all_, subset_actall_, subset_inactall_;
 	bool subset_masters_, subset_actmasters_, subset_inactmasters_;
 	bool subset_slaves_, subset_actslaves_, subset_inactslaves_;
 
+	/*
+	 * BEGIN Configuration-Block
+	 *
+	 * (all values in this block should be initialized
+	 *  by the init_activate_* - functions)
+	 */
 	bool num_robots_, num_masters_, num_slaves_;
 	bool swarm_avg_pos_;
 	bool miniball_center_, miniball_radius_, miniball_movedist_;
 	int vel_cfg_;
+	/*
+	 * END Configuration-Block
+	 */
 
 	/**
 	 * Activates all information for calculation and logging,

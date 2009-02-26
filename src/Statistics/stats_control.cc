@@ -63,6 +63,19 @@ void StatsControl::init(map<std::string, std::string> &params) {
 
 	// initialize StatsCalc
 	stats_calc_.init(&stats_cfg_);
+
+	// create datadump-instance
+	switch(stats_cfg_.datadump_level()) {
+		case StatsConfig::DATADUMP_NONE :
+			break;
+
+		case StatsConfig::DATADUMP_FULL :
+			stats_datadump_ = boost::shared_ptr<StatsOut>(new StatsOut("DATADUMP_FULL", dir));
+			break;
+
+		default :
+			std::cerr << "PROGRAM ERROR in Stats_control.init(...): unspecified datadump_level()==" << stats_cfg_.datadump_level() << std::endl;
+	}
 }
 
 void StatsControl::update(const WorldInformation& world_information, boost::shared_ptr<Event> event) {
@@ -104,6 +117,10 @@ void StatsControl::update(const WorldInformation& world_information, boost::shar
 		std::cerr << "Error in StatsControl::update(...): unhandled case that must not occur." << std::endl;
 	}
 
+	if (stats_cfg_.datadump_level() != StatsConfig::DATADUMP_NONE) {
+		do_datadump(world_information, event);
+	}
+
 	if (DEBUG) {
 		std::cout << "DEBUG:      now world_info_.time()==" << stats_calc_indata_.world_info_.get()->time() << std::endl;
 		if (stats_calc_indata_.prev_world_info_.get() == NULL) {
@@ -114,6 +131,58 @@ void StatsControl::update(const WorldInformation& world_information, boost::shar
 		std::cout << "DEBUG: <<<<" << std::endl;
 	}
 
+}
+
+void StatsControl::do_datadump(const WorldInformation& world_information, boost::shared_ptr<Event> event) {
+	std::vector<std::string> names;
+	std::vector<double> values;
+
+	switch(stats_cfg_.datadump_level()) {
+		case StatsConfig::DATADUMP_FULL :
+			if (!stats_datadump_->is_open()) {
+				// prepare the fieldnames
+				names.push_back("eventtime");
+				names.push_back("num_robots");
+				for (unsigned int i=0; i<world_information.robot_data().size(); i++) {
+					names.push_back("robot_id");
+					names.push_back("robot_type");
+					names.push_back("robot_status");
+					names.push_back("robot_pos_x");
+					names.push_back("robot_pos_y");
+					names.push_back("robot_pos_z");
+					names.push_back("robot_vel_x");
+					names.push_back("robot_vel_y");
+					names.push_back("robot_vel_z");
+					names.push_back("robot_acc_x");
+					names.push_back("robot_acc_y");
+					names.push_back("robot_acc_z");
+				}
+
+				// open outfile and stream the fieldnames
+				stats_datadump_->open(names, false);
+			}
+
+			// stream out values
+			values.push_back(event->time());
+			values.push_back(world_information.robot_data().size());
+			for (unsigned int i=0; i<world_information.robot_data().size(); i++) {
+				RobotData *rb = world_information.robot_data()[i].get();
+				values.push_back(i);
+				values.push_back(rb->type());
+				values.push_back(rb->status());
+				values.push_back(rb->position()[0]);
+				values.push_back(rb->position()[1]);
+				values.push_back(rb->position()[2]);
+				values.push_back(rb->velocity()[0]);
+				values.push_back(rb->velocity()[1]);
+				values.push_back(rb->velocity()[2]);
+				values.push_back(rb->acceleration()[0]);
+				values.push_back(rb->acceleration()[1]);
+				values.push_back(rb->acceleration()[2]);
+			}
+
+			stats_datadump_->update(world_information.time(), values);
+	}
 }
 
 void StatsControl::quit() {
@@ -130,6 +199,9 @@ void StatsControl::quit() {
 
 	// clear the vector of StatsOuts
 	stats_out_.clear();
+
+	// quit the datadump
+	stats_datadump_->quit();
 
 	stats_initialized_ = false;
 

@@ -76,9 +76,21 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 		init_activate_none();
 	}
 
-	// TODO get any additional configuration from Parser
-	// e.g. from "name=value" - pairs in the projectfile.
-	// Needs changes to Parser for accessing any field in projectfile.
+	// get datadump-configuration from Parser's STATS_DATADUMP = ...
+	// e.g. STATS_DATADUMP = FULL
+	s = params["STATISTICS_DATADUMP"];
+	std::cout << "    statistics-datadump is: ";
+	if (s == "FULL") {
+		datadump_level_ = DATADUMP_FULL;
+		std::cout << "FULL" << std::endl;
+	} else {
+		std::cout << "NONE" << std::endl;
+		if (s != "" && s != "NONE")
+			std::cerr << "invalid value for STATS_DATADUMP in projectfile. Using STATS_DATADUMP = NONE" << std::endl;
+
+		datadump_level_ = DATADUMP_NONE;
+	}
+
 }
 
 const void StatsConfig::init_activate_all() {
@@ -86,8 +98,6 @@ const void StatsConfig::init_activate_all() {
 	swarm_avg_pos_ = true;
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = true;
 	vel_cfg_ = VecSetStats::ALL;
-
-	// TODO assign all other values
 }
 
 const void StatsConfig::init_activate_basic() {
@@ -96,8 +106,6 @@ const void StatsConfig::init_activate_basic() {
 	miniball_center_ = false;
 	miniball_radius_ = miniball_movedist_ = true;
 	vel_cfg_ = 0;
-
-	// TODO assign all other values
 }
 
 const void StatsConfig::init_activate_none() {
@@ -105,8 +113,10 @@ const void StatsConfig::init_activate_none() {
 	swarm_avg_pos_ = false;
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = false;
 	vel_cfg_ = 0;
+}
 
-	// TODO assign all other values
+const int StatsConfig::datadump_level() const {
+	return datadump_level_;
 }
 
 /*
