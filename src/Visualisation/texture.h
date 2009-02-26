@@ -16,7 +16,7 @@
 
 
 /**
- * This is a simple texture object. It can load bmp and tga files.
+ * This is a simple texture object. It can load BMP and uncompressed TGA files.
  *
  * To load a texture create an object of this and use the load method. One can check
  * whether the texture could be loaded by using the loaded method.
@@ -27,10 +27,13 @@
 class Texture {
  public:
 	 Texture(){}
-	 ~Texture(){}
+	 ~Texture();
 
 	 /**
 	  * This method is used to load a texture.
+	  *
+	  * The file can be a windows BMP or an uncompressed TGA file.
+	  *
 	  * \param texture_file The name of the texture file.
 	  */
 	 void load(std::string & texture_file );
@@ -38,7 +41,7 @@ class Texture {
 	 /**
 	  * Used to bind the texture to the current opengl context.
 	  */
-	 void bind();
+	 void bind() const;
 
 	 /**
 	  * Returns the width of the loaded texture.
@@ -69,7 +72,8 @@ class Texture {
 	  */
 	 enum FileType {
 		 BMP,
-		 TGA
+		 TGA,
+		 UNKNOWN_FILE_TYPE
 	 };
 
 	 /**

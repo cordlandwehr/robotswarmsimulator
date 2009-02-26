@@ -4,7 +4,7 @@
  *  Created on: 20.02.2009
  *      Author: kamil
  */
-
+#include <cstdlib>
 #include <cstdio>
 
 #include <iostream>
@@ -26,7 +26,7 @@ typedef long LONG, *PLONG, *LPLONG;
 typedef unsigned short WORD, *PWORD, *LPWORD;
 
 // Structs for opening an bitmap
-typedef struct _BITMAPINFOHEADER{
+typedef struct  _BITMAPINFOHEADER{
   DWORD  biSize;
   LONG   biWidth;
   LONG   biHeight;
@@ -41,6 +41,7 @@ typedef struct _BITMAPINFOHEADER{
 } BITMAPINFOHEADER, *PBITMAPINFOHEADER;
 
 typedef struct _BITMAPFILEHEADER {
+
   WORD    bfType;
   DWORD   bfSize;
   WORD    bfReserved1;
@@ -51,7 +52,7 @@ typedef struct _BITMAPFILEHEADER {
 
 
 
-typedef struct _TGA{
+typedef struct   _TGA{
 	unsigned char imageIDLength;
 	unsigned char colorMapType;
 	unsigned char imageTypeCode;
@@ -69,7 +70,7 @@ typedef struct _TGA{
 
 }TGAHEADER, *PTGAHEADER;
 
-typedef struct _TGADATA{
+typedef struct  _TGADATA{
 	unsigned char imageTypeCode;
 	short int imageWidth;
 	short int imageHeight;
@@ -82,11 +83,19 @@ typedef struct _TGADATA{
 };
 
 
-void Texture::bind(){
+Texture::~Texture(){
 
+	if(loaded_){
+		glDeleteTextures(1, &tex_id_ );
+	}
+}
+
+void Texture::bind() const{
+
+	if( loaded_ ){
 		glEnable(GL_TEXTURE_2D );
 		glBindTexture(GL_TEXTURE_2D, tex_id_ );
-
+	}
 
 }
 
@@ -101,6 +110,9 @@ void Texture::load(std::string & texture_file ){
 			break;
 		case TGA:
 				load_tga();
+			break;
+		default:
+				std::cerr << "Can not determine file format." << std::endl;
 			break;
 
 	}
@@ -131,10 +143,103 @@ void Texture::load(std::string & texture_file ){
 }
 
 Texture::FileType Texture::determine_extension(){
-	// TODO
-	return BMP;
+
+	std::size_t length = file_name_.size();
+	if( length < 3 ){
+		return UNKNOWN_FILE_TYPE;
+	}
+
+	if( file_name_[length - 3] == 'b' && file_name_[length - 2 ] == 'm' && file_name_[length - 1] =='p'){
+		return BMP;
+	} else if ( file_name_[ length - 3 ] == 't' && file_name_[ length-2] == 'g' && file_name_[length - 1]== 'a'){
+		return TGA;
+	}
+	return UNKNOWN_FILE_TYPE;
 }
 
+
+void Texture::load_tga(){
+
+
+	unsigned char header[6];
+
+	// Uncompressed TGA Header
+	unsigned char tga_header[12]={0,0,2,0,0,0,0,0,0,0,0,0};
+	unsigned char tga_compare[12];
+
+
+
+	std::FILE * fp = fopen(file_name_.c_str(), "rb");
+
+	if( fp == NULL){
+
+		std::cerr << " Can't find file " << file_name_ << "!"<< std::endl;
+
+		loaded_ = false;
+		return;
+	}
+
+	std::size_t bytes_read = std::fread(tga_compare, 1, sizeof(tga_compare), fp);
+
+	if( bytes_read != 12){
+		std::cerr << " Read to few bytes. "<< std::endl;
+		std::fclose(fp);
+		loaded_  = false;
+
+		 return;
+	}
+
+	if( std::memcmp(tga_header,tga_compare,sizeof(tga_header)) != 0	) {
+
+		std::cerr << "Header missmatch." << std::endl;
+		std::fclose(fp);
+		loaded_ = false;
+
+		return;
+	}
+
+	std::fread(header,1,sizeof(header),fp);
+
+
+
+	width_  = header[1] * 256 + header[0];
+	height_ = header[3] * 256 + header[2];
+
+	if(	width_	<=0	||	height_	<=0	||	(header[4]!= TGA_24 && header[4]!= TGA_32)) {
+		std::fclose(fp);
+		loaded_ =false;
+		return;
+	}
+
+	unsigned char bpp	= header[4];
+
+	std::size_t bytes_per_pixel	= bpp/8;
+	std::size_t image_size		= width_ * height_ * bytes_per_pixel;
+
+	 data_.reset( new unsigned char [image_size] );
+
+	if(	data_.get() ==NULL ) {
+
+		std::fclose(fp);
+		return;
+
+	}
+
+	if (std::fread(data_.get(), 1, image_size, fp)!= image_size){
+
+	}
+
+	for(std::size_t i=0; i< image_size; i+= bytes_per_pixel)
+	{
+		unsigned char temp= data_[i];
+		data_[i] = data_[i + 2];
+		data_[i + 2] = temp;
+	}
+
+	std::fclose(fp);
+	loaded_ = true;
+}
+/*
 void Texture::load_tga(){
 
 	std::FILE* fp = fopen(file_name_.c_str(), "rb");
@@ -189,7 +294,7 @@ void Texture::load_tga(){
 	std::fclose( fp );
 	loaded_ = true;
 
-}
+}*/
 
 void Texture::load_bmp(){
 	std::FILE * fp = std::fopen(file_name_.c_str(), "rb");
@@ -200,7 +305,8 @@ void Texture::load_bmp(){
 	}
 
 	fileheader::BITMAPFILEHEADER bmp_header;
-	std::fread(&bmp_header, sizeof(bmp_header),1, fp);
+	std::fread(&bmp_header, 1, 2, fp);
+	std::fread(&bmp_header.bfSize,1,12,fp );
 
 	if( bmp_header.bfType != BITMAP_ID ){
 		std::fclose(fp);
@@ -208,16 +314,22 @@ void Texture::load_bmp(){
 	}
 
 	fileheader::BITMAPINFOHEADER bmp_info;
-	std::fread( &bmp_info, sizeof( bmp_info ), 1, fp );
+	std::fread( &bmp_info,1, sizeof( fileheader::BITMAPINFOHEADER ), fp );
 
-	width_ = bmp_info.biWidth;
-	height_ = bmp_info.biHeight;
+	width_ = std::abs(bmp_info.biWidth);
+	height_ = std::abs(bmp_info.biHeight);
+
+	if( bmp_info.biSizeImage <= 0){
+		bmp_info.biSizeImage = width_ * height_ * 3;
+	}
 
 
+
+	std::printf("%i %i %i %i\n", bmp_header.bfOffBits, width_, height_, bmp_info.biSizeImage);
 
 	std::fseek(fp, bmp_header.bfOffBits, SEEK_SET );
 
-	boost::scoped_array<unsigned char> bmp_data(  new unsigned char[ bmp_info.biSizeImage ] );
+	boost::scoped_array<unsigned char> bmp_data (  new unsigned char[ bmp_info.biSizeImage ]) ;
 
 	if(bmp_data.get() == NULL ){
 
@@ -225,14 +337,15 @@ void Texture::load_bmp(){
 		return;
 	}
 
-	std::cout << bmp_info.biSizeImage<< " " << bmp_info.biSize<< std::endl;
-	std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
+	std::size_t bytes_read = std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
 
+	std::printf("%i %i\n", bytes_read, bmp_info.biSizeImage );
 
 
 	data_.reset(   new unsigned char[ bmp_info.biSizeImage ] );
 
-	for( unsigned int index = 0; index < bmp_info.biSizeImage  -3; index+= 3){
+	for( unsigned int index = 0; index < bmp_info.biSizeImage -3  ; index+= 3){
+
 
 
 		data_[index] = bmp_data[ index ];
