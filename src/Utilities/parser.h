@@ -54,7 +54,6 @@ public:
 	 * Returns a map which stores all parameters as boost::any.
 	 * Parameter Names exactly as in Specification Document
 	 * Exact Types of boost::any objects can be looked up in Specification Document
-	 * TODO(craupach) should be implemented by the Kernel Team as principal interface to the parser
 	 */
 	std::map<std::string, std::string>& parameter_map() { return parameter_map_;};
 
