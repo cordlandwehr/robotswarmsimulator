@@ -13,7 +13,6 @@ class ObstacleIdentifier : public Identifier {
 public:
 	virtual ~ObstacleIdentifier();
 	virtual boost::shared_ptr<Identifier> clone() const = 0;
-protected:
 	explicit ObstacleIdentifier(std::size_t id);
 };
 

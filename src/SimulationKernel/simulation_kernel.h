@@ -193,6 +193,16 @@ private:
 	 */
 	void setup_vectormodifier(boost::shared_ptr<VectorRequestHandler>, vector<string>);
 
+	/**
+	 * This method creates the robots using the information read from the robot input file.
+	 */
+	void create_robots(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+
+	/**
+	 * This method creates the obstacles using the information read from the obstacles input file.
+	 */
+	void create_obstacles(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+
 };
 
 #endif /* SIMULATION_KERNEL_H_ */

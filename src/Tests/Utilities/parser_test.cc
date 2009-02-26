@@ -208,13 +208,16 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[1])(2), 1);
 
 }
+*/
 
 BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 {
 	boost::shared_ptr<Parser> parser;
 	parser.reset(new Parser());
 	parser->init();
-	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
+	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
+
+	cout << "#################### load obstacle file test begin #################### " << endl;
 
 	// Check data of obstacle 1
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[0], "box");
@@ -240,8 +243,10 @@ BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](0), 3.5);
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](1), 1.4);
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](2), 5.1);
+
+	cout << "#################### load obstacle file test end #################### " << endl;
 }
-*/
+
 /*
 BOOST_FIXTURE_TEST_CASE(save_main_project_file_1, SimpleWorldFixture)
 {
