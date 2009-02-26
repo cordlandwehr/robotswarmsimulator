@@ -109,8 +109,11 @@ public:
 	class OctreeNode {
 
       public:
-		OctreeNode(){
-
+		  //TODO (dwonisch): added some initializations because sim crashes otherwise. Maybe some intializations are unnecessary
+		  OctreeNode() : level_(0), max_levels_(0), min_width_(0), sub_divided_(false), width_(0), object_count_(0) {
+			center_.insert_element(kXCoord, 0.0);
+			center_.insert_element(kYCoord, 0.0);
+			center_.insert_element(kZCoord, 0.0);
 		};
 
 		void init_node();

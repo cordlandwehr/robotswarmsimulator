@@ -76,7 +76,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
 		 for(it_robots = robots.begin(); it_robots != robots.end(); it_robots++ ){
 
-			 Vector3d rob_pos = (*it_robots)->position();
+			 const Vector3d& rob_pos = (*it_robots)->position();
 
 			 float x = rob_pos(0) - pos(0);
 			 float y = rob_pos(1) - pos(1);
@@ -84,9 +84,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
 			 // check whether this robot is near enough
 			 if(x*x + y*y + z*z < sq_radius){
-				 //robots_found.insert( *const_cast<boost::shared_ptr<RobotIdentifier> * >( &((*it_robots)->robot().id()) ) );
-				 //robots_found.insert(reinterpret_cast<boost::shared_ptr<RobotIdentifier> >((*it_robots)->robot().id()) );
-				 robots_found.insert(boost::shared_ptr<RobotIdentifier>((*it_robots)->robot().id()));
+				 robots_found.insert(boost::static_pointer_cast<RobotIdentifier>((*it_robots)->id()));
 			 }
 		 }
 
