@@ -32,7 +32,7 @@ void SphericView::init(const WorldInformation & world_information ){
 
 std::set<View::RobotRef> SphericView::get_visible_robots(const RobotData& robot) const {
 
-	return OctreeUtilities::get_visible_robots_by_radius(octree(),robot.position(), float(view_radius()) );
+	return OctreeUtilities::get_visible_robots_by_radius(octree(),robot.position(), float(view_radius()), robot );
 }
 std::set<View::ObstacleRef> SphericView::get_visible_obstacles(const RobotData& robot) const {
 
