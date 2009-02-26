@@ -61,7 +61,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 	get_visible_robots_by_radius_Rec(octree->root(), found_robots, view_radius*view_radius, pos);
 
 	// remove caller from set
-	found_robots.erase( robot.robot().id() );
+	found_robots.erase( boost::static_pointer_cast<RobotIdentifier>( robot.id() ));
 
 	return found_robots;
 }
