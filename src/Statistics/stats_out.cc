@@ -141,7 +141,7 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 
 	stat_output << std::right
 				<< std::setw(stat_output_width)
-				<< "# Time  ";
+				<< "# time  ";
 
 	for (unsigned int j=0; j < stat_designation.size(); j++) {
 		stat_output << std::setw(stat_output_width)
