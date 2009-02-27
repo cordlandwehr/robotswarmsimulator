@@ -33,17 +33,19 @@ add_subdirectory(src)
 add_subdirectory(src/UserInterfaces)
 add_subdirectory(src/Tests)
 
-# package projectfiles in src/Projectfiles
-install(DIRECTORY src/ProjectFiles/
-        DESTINATION ProjectFiles
-        CONFIGURATIONS Release
-        COMPONENT projectfiles
-        FILES_MATCHING
-        PATTERN *.swarm
-		PATTERN *.robot
-		PATTERN *.obstacle
-		PATTERN .svn EXCLUDE
-)
+# package projectfiles in src/Projectfiles for release builds
+if(CMAKE_BUILD_TYPE MATCHES Release)
+	install(DIRECTORY src/ProjectFiles/
+	        DESTINATION ProjectFiles
+	        CONFIGURATIONS Release
+	        COMPONENT projectfiles
+	        FILES_MATCHING
+	        PATTERN *.swarm
+			PATTERN *.robot
+			PATTERN *.obstacle
+			PATTERN .svn EXCLUDE
+	)
+endif(CMAKE_BUILD_TYPE MATCHES Release)
 
 # packaging
 include(packaging)

@@ -13,10 +13,12 @@ if(DOXYGEN_FOUND)
 	add_custom_target(documentation COMMAND "${DOXYGEN_EXECUTABLE}" "${DOXYGEN_FILE_OUT}")
 endif(DOXYGEN_FOUND)
 
-# package user guide
+# package user guide for release builds
 # TODO: we could add automatic generation of the pdf from the tex file here...
-install(FILES users_guide/users_guide.pdf
-		DESTINATION doc
-		CONFIGURATIONS Release
-		COMPONENT usersguide
-)
+if(CMAKE_BUILD_TYPE MATCHES Release)
+	install(FILES users_guide/users_guide.pdf
+	        DESTINATION doc
+	        CONFIGURATIONS Release
+	        COMPONENT usersguide
+	)
+endif(CMAKE_BUILD_TYPE MATCHES Release)
