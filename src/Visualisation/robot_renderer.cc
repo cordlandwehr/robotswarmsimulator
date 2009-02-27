@@ -87,7 +87,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 	glBegin(GL_LINES);
 	if( renderer_->render_velocity() ){
 
-		Vector3d vel = robot->velocity();
+		Vector3d vel = *robot->extrapolated_velocity(extrapolate);
 		glColor3fv(kVelColor);
 		glVertex3f(0 ,0, 0 );
 		glVertex3f( kScaleVecs * vel(0),
@@ -98,7 +98,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 
 	if( renderer_->render_acceleration() ){
 
-		Vector3d acc = robot->velocity();
+		Vector3d acc = robot->acceleration();
 		glColor3fv(kAccelColor);
 		glVertex3f(0 , 0, 0 );
 		glVertex3f( kScaleVecs * acc(0),
@@ -145,7 +145,8 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 
 
 
-	glColor3fv(&kRobotIdColor[ robot->color() < kRobotIdColorNum ? robot->color() : 0 ][0]);
+	//glColor3fv(&kRobotIdColor[ robot->color() < kRobotIdColorNum ? robot->color() : 0 ][0]);
+	glColor3fv(&kRobotIdColor[0][0]);
 	if(!use_model_){
 
 		draw_robot_sphere( rob_pos );
