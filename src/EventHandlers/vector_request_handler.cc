@@ -8,6 +8,8 @@
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include <iostream>
+
 #include "../Model/world_information.h"
 #include "../Model/robot.h"
 #include "../Model/robot_data.h"
@@ -35,8 +37,7 @@ void VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInform
     const boost::shared_ptr<RobotIdentifier>& robot_id = vector_request->robot().id();
     RobotData& robot_data = world_information->get_according_robot_data(robot_id);
 	Vector3d global_vector = extract_global_vector(*vector_request, robot_data);
-	// const Vector3d global_vector_cpy(global_vector); Wrong for vector difference trimmer!
-	const Vector3d reference_vector = robot_data.position(); // TODO(craupach) should set correct reference vector (not always the position!)
+	const Vector3d& reference_vector = extract_ref_vector(*vector_request, robot_data);
 
     // apply vector modifiers from pipeline
 	BOOST_FOREACH(boost::shared_ptr<VectorModifier>& vector_modifier, vector_modifiers_) {
@@ -55,6 +56,8 @@ void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData
 		robot_data.set_velocity(vector_ptr);
 	else if (typeid(request) == typeid(AccelerationRequest))
 		robot_data.set_acceleration(vector_ptr);
+	else
+		throw std::invalid_argument("VectorRequestHandler: unknown vector request; can not update robot's vector");
 }
 
 Vector3d VectorRequestHandler::extract_global_vector(const VectorRequest& request, const RobotData& robot_data) {
@@ -67,6 +70,17 @@ Vector3d VectorRequestHandler::extract_global_vector(const VectorRequest& reques
 		position = boost::numeric::ublas::zero_vector<double>(3);
 	shared_ptr<Vector3d> global_vector = local_to_global(local_vector, position, robot_data.coordinate_system_axis());
 	return *global_vector;
+}
+
+const Vector3d& VectorRequestHandler::extract_ref_vector(const VectorRequest& request, const RobotData& robot_data) {
+	if (typeid(request) == typeid(PositionRequest))
+		return robot_data.position();
+	else if (typeid(request) == typeid(VelocityRequest))
+		return robot_data.velocity();
+	else if (typeid(request) == typeid(AccelerationRequest))
+		return robot_data.acceleration();
+	else
+		throw std::invalid_argument("VectorRequestHandler: unknown vector request, can not extract reference vector");
 }
 
 void VectorRequestHandler::add_vector_modifier(boost::shared_ptr<VectorModifier> vector_modifier) {

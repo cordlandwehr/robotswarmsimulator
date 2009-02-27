@@ -49,6 +49,11 @@ public:
 protected:
 	/**
 	 * \brief Handles a given vector request by extracting the corresponding vector and applying the modifier pipeline.
+	 *
+	 * For each vector modifier applied, the reference vector is set to the original value of the data the robot
+	 * requested to change.
+	 *
+	 * \see extract_ref_vector
 	 */
 	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                          boost::shared_ptr<const Request> request);
@@ -66,6 +71,14 @@ private:
 	 * coordinate system.
 	 */
 	static Vector3d extract_global_vector(const VectorRequest& request, const RobotData& robot_data);
+
+	/**
+	 * \brief Extracts the reference vector for the given request from the robot data.
+	 *
+	 * The reference vector matches the robot's original value of the data he requests to change. For example, in case
+	 * of a positional request, the robot's current position will be extracted.
+	 */
+	static const Vector3d& extract_ref_vector(const VectorRequest& request, const RobotData& robot_data);
 
 	std::list<boost::shared_ptr<VectorModifier> > vector_modifiers_;
 };

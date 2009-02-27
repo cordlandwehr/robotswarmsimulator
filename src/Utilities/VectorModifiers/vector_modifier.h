@@ -14,19 +14,19 @@
 /**
  * \brief Abstract base class for vector modifiers.
  *
- * It is mainly designed to be used by VectorRequestHandler, but may be usefull in other situations too.
+ * It is mainly designed to be used by VectorRequestHandler, but may be useful in other situations too.
  * \see modify_vector
  */
 class VectorModifier {
 public:
 	VectorModifier() { }
 	virtual ~VectorModifier() { }
-	
+
 	/**
 	 * \brief Modifies the given input vector.
 	 *
 	 * Subclasses overwrite this method such that the given input vector is modified according to the subclass
-	 * specification. The reference_vector is useed to give vector modifiers additional information about the original
+	 * specification. The reference_vector is used to give vector modifiers additional information about the original
 	 * vector (for example to make sure that difference between input and reference vector does not become too large).
 	 * However, subclasses may ignore it.
 	 */
