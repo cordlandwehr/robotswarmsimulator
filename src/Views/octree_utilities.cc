@@ -144,7 +144,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
  			 if(x*x + y*y + z*z < sq_radius){
 
- 				 markers_found.insert( MarkerRef( reinterpret_cast<const MarkerRef &> ((*it_markers)->id() )) );
+ 				 markers_found.insert(boost::static_pointer_cast<MarkerIdentifier>((*it_markers)->id()));
  			 }
  		 }
 
@@ -204,7 +204,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
   			 if(x*x + y*y + z*z < r){
 
-  				 obstacles_found.insert( ObstacleRef(reinterpret_cast<const ObstacleRef &> ( (*it_obstacles)->id() ) ) );
+  				 obstacles_found.insert(boost::static_pointer_cast<ObstacleIdentifier>((*it_obstacles)->id()));
   			 }
   		 }
 
@@ -260,7 +260,6 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>
 											 PriorityQueue<RobotRef>::Type & queue,
 											 const RobotRef & id){
 
-	Identifier::Comp comp;
 	// leaf
 	 if( octree->sub_divided() == false ){
 
@@ -271,7 +270,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>
 
 		 std::size_t num_robots_found = queue.size();
 
-		 double farest_dist = 99999999;
+		 double farest_dist = std::numeric_limits<double>::max();
 
 		 if(num_robots_found > 0){
 			 farest_dist  = queue.top()->dist();
@@ -281,8 +280,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>
 		 for(it_robots = robots.begin(); it_robots != robots.end(); ++it_robots){
 
 			 // don't add the id of the robot we are doing the search for
-			 if(! comp((*it_robots)->robot().id(), id ) &&
-					 ! comp( id, (*it_robots)->robot().id() ) ){
+			 if((*it_robots)->id() == id) {
 				 continue;
 			 }
 
@@ -297,7 +295,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>
 
 				 boost::shared_ptr<QueueEntry<RobotRef> > new_entry =
 										 boost::shared_ptr<QueueEntry<RobotRef> >
-												 (new QueueEntry<RobotRef>((*it_robots)->robot().id(), dist) );
+										 (new QueueEntry<RobotRef>(boost::static_pointer_cast<RobotIdentifier>((*it_robots)->id()), dist) );
 
 				 queue.push( new_entry );
 				 farest_dist = queue.top()->dist();
@@ -306,7 +304,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>
 
 				 boost::shared_ptr<QueueEntry<RobotRef> > new_entry =
 										 boost::shared_ptr<QueueEntry<RobotRef> >
-												 (new QueueEntry<RobotRef>((*it_robots)->robot().id(), dist) );
+												 (new QueueEntry<RobotRef>(boost::static_pointer_cast<RobotIdentifier>((*it_robots)->id()), dist) );
 
 				 queue.pop();
 				 queue.push( new_entry );
@@ -398,7 +396,7 @@ void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<OctreeNode
 
 		 std::size_t num_markers_found = queue.size();
 
-		 double farest_dist = 99999999;
+		 double farest_dist = std::numeric_limits<double>::max();
 
 		 if(num_markers_found > 0){
 			 farest_dist  = queue.top()->dist();
@@ -419,7 +417,7 @@ void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<OctreeNode
 				 boost::shared_ptr<QueueEntry<MarkerRef> > new_entry =
 									boost::shared_ptr<QueueEntry<MarkerRef> >
 											(new QueueEntry<MarkerRef>(
-													reinterpret_cast<const MarkerRef &>((*it_markers)->id())
+													boost::static_pointer_cast<MarkerIdentifier>((*it_markers)->id())
 													, dist) );
 
 				 queue.push(new_entry );
@@ -431,7 +429,7 @@ void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<OctreeNode
 				 boost::shared_ptr<QueueEntry<MarkerRef> > new_entry =
 									boost::shared_ptr<QueueEntry<MarkerRef> >
 													(new QueueEntry<MarkerRef>(
-														 reinterpret_cast<const MarkerRef &>((*it_markers)->id() )
+														 boost::static_pointer_cast<MarkerIdentifier>((*it_markers)->id())
 														, dist) );
 				 queue.pop();
 				 queue.push( new_entry );
@@ -526,7 +524,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<OctreeNo
 
 		 std::size_t num_obstacles_found = queue.size();
 
-		 double farest_dist = 99999999;
+		 double farest_dist = std::numeric_limits<double>::max();
 
 		 if(num_obstacles_found > 0){
 			 farest_dist  = queue.top()->dist();
@@ -549,7 +547,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<OctreeNo
 				 boost::shared_ptr<QueueEntry<ObstacleRef> > new_entry =
 									boost::shared_ptr<QueueEntry<ObstacleRef> >
 											(new QueueEntry<ObstacleRef>(
-													reinterpret_cast<const ObstacleRef &>((*it_obstacles)->id())
+													boost::static_pointer_cast<ObstacleIdentifier>((*it_obstacles)->id())
 													, dist) );
 
 				 queue.push(new_entry );
@@ -561,7 +559,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<OctreeNo
 				 boost::shared_ptr<QueueEntry<ObstacleRef> > new_entry =
 									boost::shared_ptr<QueueEntry<ObstacleRef> >
 													(new QueueEntry<ObstacleRef>(
-														 reinterpret_cast<const ObstacleRef &>((*it_obstacles)->id() )
+														 boost::static_pointer_cast<ObstacleIdentifier>((*it_obstacles)->id())
 														, dist) );
 				 queue.pop();
 				 queue.push( new_entry );

@@ -147,9 +147,9 @@ void Octree::OctreeNode::scene_dimensions(const std::vector< boost::shared_ptr<W
 	// Calculate the distance to the center point for all objects
 	BOOST_FOREACH( boost::shared_ptr<WorldObject> it_markers, markers ){
 	//for(it_markers = markers.begin(); it_markers < markers.end(); it_markers++){
-		double current_width  = fabsf(center_(0) - it_markers->position()(0));
-		double current_height = fabsf(center_(1) - it_markers->position()(1));
-		double current_depth  = fabsf(center_(2) - it_markers->position()(2));
+		double current_width  = fabs(center_(0) - it_markers->position()(0));
+		double current_height = fabs(center_(1) - it_markers->position()(1));
+		double current_depth  = fabs(center_(2) - it_markers->position()(2));
 
 
 
@@ -168,9 +168,9 @@ void Octree::OctreeNode::scene_dimensions(const std::vector< boost::shared_ptr<W
 		// Add the max size of he obstacle to width, height and depth.
 		double obstacle_max_size = it_obstacles->max_dimension();
 
-		double current_width  = fabsf(center_(0) - it_obstacles->position()(0)) + obstacle_max_size;
-		double current_height = fabsf(center_(1) - it_obstacles->position()(1)) + obstacle_max_size;
-		double current_depth  = fabsf(center_(2) - it_obstacles->position()(2)) + obstacle_max_size;
+		double current_width  = fabs(center_(0) - it_obstacles->position()(0)) + obstacle_max_size;
+		double current_height = fabs(center_(1) - it_obstacles->position()(1)) + obstacle_max_size;
+		double current_depth  = fabs(center_(2) - it_obstacles->position()(2)) + obstacle_max_size;
 
 
 
@@ -187,9 +187,9 @@ void Octree::OctreeNode::scene_dimensions(const std::vector< boost::shared_ptr<W
 	// Don't forget the robots
 	BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data, robot_datas ){
 	//for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
-		double current_width  = fabsf(center_(0) - it_robot_data->position()(0));
-		double current_height = fabsf(center_(1) - it_robot_data->position()(1));
-		double current_depth  = fabsf(center_(2) - it_robot_data->position()(2));
+		double current_width  = fabs(center_(0) - it_robot_data->position()(0));
+		double current_height = fabs(center_(1) - it_robot_data->position()(1));
+		double current_depth  = fabs(center_(2) - it_robot_data->position()(2));
 
 
 
