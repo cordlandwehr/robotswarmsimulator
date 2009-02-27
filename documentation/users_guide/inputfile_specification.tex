@@ -182,31 +182,49 @@ The \texttt{RobotControl} variable defines the class which should be used to con
 	\item \texttt{UNIFORM\_ROBOT\_CONTROL}
 	\item \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL}
 \end{enumerate}
-Each class is explained in detail below. Note that each class excepts certain class specific parameters.
+Each class is explained in detail below. Note that each class expects certain class specific parameters.
 
-\paragraph{UniformRobotControl}\label{sec:uniformRobotControl}
-This class assigns each robot the same view type. E.g. each robot should have a global view to the world. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values of \texttt{VIEW} are definied below (see \ref{sec:viewtypes}).
+\paragraph{UniformRobotControl}\label{sec:uniformRobotControl} \ \\
+This class assigns each robot the same view type. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values for this variable (view types) are definied below (see \ref{sec:viewtypes}). E.g. you may to assign each robot global view to the world using \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL="GLOBAL\_VIEW"}.
 
-\paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl}
+\paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl} \ \\
 This class assigns each robottype the same view type. Therefore robots with different robot types may have different view types. Currently there are two robot types:
 \begin{enumerate}
 	\item \texttt{MASTER}
 	\item \texttt{SLAVE}
 \end{enumerate}
-To specify which view type should be used by each robot type, there must be variables of the form
+To specify which view type should be used by each robot type, there must be variables of the form \textit{RobotType}\texttt{\_VIEW}. \\
+The value of each variable has to be a view type (see \ref{sec:viewtypes}). Note that the view type parameters are also distinguished using the \textit{RobotType} prefix. E.g. you may specify 
 \begin{center}
-	\textit{RobotType}\texttt{\_VIEW}
-\end{center}
-The value of each variable has to be a view type (see \ref{sec:viewtypes}). E.g. you may specify \texttt{MASTER\_VIEW = GLOBAL\_VIEW} to set the view for master robots to global view. Note that exactly one view type should be defined for each robot type.
+\texttt{MASTER\_VIEW="CHAIN\_VIEW"} \\
+\texttt{MASTER\_CHAIN\_VIEW\_NUM\_ROBOTS="5"}
+\end{center} to set the view for master robots to a chain view allowing the robots to see five neighbor robots. Note that exactly one view type should be defined for each robot type.
 
-\paragraph{ViewTypes}\label{sec:viewtypes}
+\subsubsection{ViewTypes}\label{sec:viewtypes}
 The view type of a robot defines its vision model. Whenever a view type is expected you may use one of the following values:
 \begin{enumerate}
 	\item \texttt{GLOBAL\_VIEW}
 	\item \texttt{COG\_VIEW}
 	\item \texttt{CHAIN\_VIEW}
 	\item \texttt{ONE\_POINT\_FORMATION\_VIEW}
+	\item \texttt{SELF\_VIEW}
 \end{enumerate}
+Each view type is explained in detail below.
+
+\paragraph{GLOBAL\_VIEW} \ \\
+Allows robots to see literally everything. There are no parameters expected.
+
+\paragraph{COG\_VIEW} \ \\
+View model meant to be used for center of gravity algorithms, i.e. every robot can see every other robots position, velocity and acceleration. The coordinate-system and id of each robot is not visible. There are no parameters expected.
+
+\paragraph{SELF\_VIEW} \ \\
+View model which allows robots to access every self-related information while disallowing to access any other information. There are no parameters expected.
+
+\paragraph{CHAIN\_VIEW} \ \\
+View model meant to be used for robot chain related algorithms, i.e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
+
+\paragraph{ONE\_POINT\_FORMATION\_VIEW} \ \\
+View model meant to be used for one point formation algorithms, i.e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
 
 
 \subsubsection{Example of a main project file}
@@ -223,7 +241,10 @@ A main project file may look like:
 	OBSTACLE_FILENAME="myobstacle"
 	STATISTICS_MODULE="0"
 	ASG="ASYNCHRONOUS"
-	VIEW="0"
+	ROBOT_CONTROL="ROBOT_TYPE_ROBOT_CONTROL"
+	MASTER_VIEW="GLOBAL_VIEW"
+	SLAVE_VIEW="ONE_POINT_FORMATION_VIEW"
+	SLAVE_ONE_POINT_FORMATION_VIEW_RADIUS="5.0"
 	
 	MARKER_REQUEST_HANDLER_TYPE="STANDARD"
 	STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB="0.5"

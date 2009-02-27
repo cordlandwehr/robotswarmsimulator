@@ -246,14 +246,14 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 		view_factory.reset(new ViewFactory<SelfView>);
 	} else if(view_type == "CHAIN_VIEW") {
 		try {
-			unsigned int number = boost::lexical_cast<unsigned int>(params["CHAIN_VIEW_NUM_ROBOTS"]);
+			unsigned int number = boost::lexical_cast<unsigned int>(params[prefix+"CHAIN_VIEW_NUM_ROBOTS"]);
 			view_factory.reset(new ParametrizedViewFactory<ChainView, unsigned int>(number));
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for chain view.");
 		}
 	} else if(view_type == "ONE_POINT_FORMATION_VIEW") {
 		try {
-			double radius = boost::lexical_cast<double>(params["ONE_POINT_FORMATION_VIEW_RADIUS"]);
+			double radius = boost::lexical_cast<double>(params[prefix+"ONE_POINT_FORMATION_VIEW_RADIUS"]);
 			view_factory.reset(new ParametrizedViewFactory<OnePointFormationView, double>(radius));
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
