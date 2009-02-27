@@ -47,3 +47,4 @@ install(TARGETS RobotSwarmSimulator
         RUNTIME DESTINATION bin
                 COMPONENT mainprogram
 )
+

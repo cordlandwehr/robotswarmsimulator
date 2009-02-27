@@ -8,6 +8,9 @@ set(PROJECT_VERSION 0.1)
 # module path
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/resources/CMake/modules)
 
+# our code uses min/max at some point --> this clashes with a macro definition of MSVC
+add_definitions(-DNOMINMAX)
+
 # if we're building an eclipse project, create a dummy 'source project'
 # (this is needed for SVN to work)
 set(ECLIPSE_CDT4_GENERATE_SOURCE_PROJECT true)
@@ -24,3 +27,4 @@ add_subdirectory(src/Tests)
 
 # packaging
 include(packaging)
+
