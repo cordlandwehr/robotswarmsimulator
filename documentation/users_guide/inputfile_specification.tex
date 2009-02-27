@@ -1,0 +1,304 @@
+%%
+% This file is part of the User's Guide to RSS
+% It contains the appendix for inputfile specifications
+%%
+
+\section{Input-file Specifications}
+
+There are exactly four kinds of input files for the \RSS. This includes the project specification files and also the \Lua-script-files that define the robot behaviour.
+\begin{enumerate}
+	\item The main projectfile containing information about the model. The extension of this type of file is "`.swarm"'.
+	\item A file containing robot information. The extension of this file is "`.robot"'.
+	\item A file containing obstacle information. The extension of this file is "`.obstacle"'.
+	\item \Lua\ file that describes the robot behavouir. The extension of this file is "`.lua"'.
+\end{enumerate}
+
+
+\subsection{Main projectfile}
+The following specifications hold only for the main projectfile (with extension "`.swarm"'):
+\begin{itemize}
+	\item A comment begins with a '\#'.
+	\item A line is a comment line (beginning with a '\#'), an empty line or a line containing a variable followed by an equal sign followed by a \emph{quoted} value of this variable. Example:
+	\begin{verbatim}
+		VAR_1="value"
+		VAR_2 = "value"
+		VAR_3= "value"
+		VAR_4 ="value"
+	\end{verbatim}
+	\item a variable name has to be of the following form: \texttt{[A-Z0-9\_]$^+$}
+\end{itemize}
+\subsubsection{Variables}
+	The main project file contains the variables defined in table \ref{tab:mainvars}:\\
+
+\clearpage
+\begin{sidewaystable}
+	\begin{tabular}{|l|p{0.3\textwidth}|p{0.3\textwidth}|p{0.2\textwidth}|}
+		\hline
+		\textbf{Variable name} & \textbf{Possible Values} & \textbf{Description} & \textbf{Default}\\\hline\hline
+		\texttt{PROJECT\_NAME} & String & Name of the project & -- \\\hline
+% 		\texttt{BATTLEBOX\_SIZE} & width, for instance 100 denotes a box of size $100\times 100\times 100$ & Size of bounding box of initial robot positions\\\hline
+		\texttt{COMPASS\_MODEL} & Still needs to be specified by the ASG-Team. For instance \texttt{NO\_COMPASS} & Compass model & FULL\_COMPASS\\\hline
+		\texttt{ROBOT\_FILENAME} & For instance \texttt{robot\_file}. The extension of the file must not be appended in this variable. & Filename of the robotfile & same as project file\\\hline
+		\texttt{OBSTACLE\_FILENAME} & For instance \texttt{obstacle\_file}.  The extension of the file must not be appended in this variable. & Filename of the robotfile & same as project file\\\hline
+		\texttt{STATISTICS\_SUBSETS} & A concatenation of none or more of the following strings: \{ALL\}, \{ACTALL\}, \{INACTALL\}, \{MASTERS\}, \{ACTMASTERS\}, \{INACTMASTERS\},  \{SLAVES\}, \{ACTSLAVES\}, \{INACTSLAVES\} &  Defines the subsets of all robots for which to calculate individual statistical data. E.g. ``\{ALL\} \{MASTERS\}'' will produce statistical information on \textit{all} robots as well as on \textit{masters only} & NONE\\\hline
+		\texttt{STATISTICS\_TEMPLATE} & One of the following: ``ALL'', ``BASIC'' or ``NONE'' & Identifies the set of informations to calculate for each subset. & ALL\\\hline
+		\texttt{STATISTICS\_DATADUMP} & Either ``FULL'' or ``NONE'' & Whether or not detailled information (e.g. all robots positions at each event) should be streamed to a file during simulation. & NONE\\\hline
+		\texttt{ASG} & \texttt{SYNCHRONOUS}, \texttt{ASYNCHRONOUS} or \texttt{SEMISYNCHRONOUS} & Type of ASG & \texttt{SYNCHRONOUS}\\\hline
+		  \texttt{ASYNC\_ASG\_SEED} & unsigned int & Seed for asynchronous ASG, only set if ASG=ASYNCHRONOUS & - \\\hline
+		    \texttt{ASYNC\_ASG\_PART\_P} & double & Participation Probability for asynch ASG, only set if ASG = ASYNCHRONOUS & - \\\hline
+		 \texttt{ASYNC\_ASG\_TIME\_P} & double & parameter governing the timing of asynch ASG, only set if ASG = ASYNCHRNOUS & - \\\hline
+		 
+		 \texttt{MARKER\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithoutVectorModifier} & Marker Request Handler to use & -\\\hline
+		
+		\texttt{MARKER\_CHANGE\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithoutVectorModifier} & Marker Change Request Handler to use & -\\\hline
+		
+		\texttt{TYPE\_CHANGE\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithoutVectorModifier} & Type Change Request Handler to use. & -\\\hline
+		
+		\texttt{POSITION\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithVectorModifier} & Position Request Handler to use & -\\\hline
+
+		\texttt{VELOCITY\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithVectorModifier} & Velocity Request Handler to use & -\\\hline
+
+		\texttt{ACCELERATION\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithVectorModifier} & Acceleration Request Handler to use & -\\\hline
+		
+		\texttt{ROBOT\_CONTROL} &  see section \ref{sec:robotControl} & RobotControl to use & -\\\hline
+				
+	\end{tabular}
+	\caption{Variables in the main project file}\label{tab:mainvars}
+\end{sidewaystable}
+\thispagestyle{empty}
+\clearpage
+	
+Additional restrictions and information:
+\begin{itemize}
+	\item The order of the variables in the main project file isn't important.
+	\item If a variable doesn't appear in the main projectfile, then its default value will be used (if there exists a default value, otherwise an exception will be thrown while loading the main projectfile).
+\end{itemize}
+
+
+
+\subsubsection{Input specification for Request Handler}\label{sec:requestHandler}
+<<<<<<< .mine
+For each kind of request handler you want to use, insert the appropriate variable in the main project file. (For each kind of request for which the type of  request handler is not specified none will be used)
+There are the following request handler kinds: \texttt{MARKER\_REQUEST\_HANDLER\_TYPE, TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE,  POSITION\_REQUEST\_HANDLER\_TYPE, VELOCITY\_REQUEST\_HANDLER\_TYPE, ACCELERATION\_REQUEST\_HANDLER\_TYPE }\\
+
+The possible values of the types are at the moment:
+
+\texttt{MARKER\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{STANDARD, NONE}$\}$\\
+\texttt{ TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{STANDARD, NONE}$\}$\\
+\texttt{ POSITION\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{VECTOR, NONE}$\}$\\
+\texttt{ VELOCITY\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{VECTOR, NONE}$\}$\\
+\texttt{ ACCELERATION\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{VECTOR, NONE}$\}$\\
+
+Depending on the chosen type more variables have to be specified.\\
+
+For \texttt{MARKER\_REQUEST\_HANDLER\_TYPE=STANDARD} \\
+\begin{itemize}
+\item \texttt{STANDARD\_MARKER\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
+\item \texttt{STANDARD\_MARKER\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
+\end{itemize} 
+
+For \texttt{TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE=STANDARD} \\
+\begin{itemize}
+\item \texttt{STANDARD\_TYPE\_CHANGE\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
+\item \texttt{STANDARD\_TYPE\_CHANGE\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
+\end{itemize} 
+
+For \texttt{POSITION\_REQUEST\_HANDLER\_TYPE=VECTOR} \\
+\begin{itemize}
+\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
+\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$\\
+\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_MODIFIER} : Liste von Vector Modifiern (siehe \ref{sec:vectorModifiers})
+\end{itemize} 
+
+For \texttt{VELOCITY\_REQUEST\_HANDLER\_TYPE=VECTOR} \\
+\begin{itemize}
+\item \texttt{VECTOR\_VELOCITY\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
+\item \texttt{VECTOR\_VELOCITY\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
+\item \texttt{VECTOR\_VELOCITY\_REQUEST\_HANDLER\_MODIFIER} : List of vector modifiers (see \ref{sec:vectorModifiers})
+\end{itemize} 
+
+For \texttt{POSITION\_REQUEST\_HANDLER\_TYPE=VECTOR} \\
+\begin{itemize}
+\item \texttt{VECTOR\_ACCELERATION\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
+\item \texttt{VECTOR\_ACCELERATION\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
+\item \texttt{VECTOR\_ACCELERATION\_REQUEST\_HANDLER\_MODIFIER} : list of vector modifiers (see \ref{sec:vectorModifiers})
+\end{itemize} 
+
+For a specification of \texttt{VECOTR\_MODIFIERS} see section \ref{sec:vectorModifiers}.\\
+=======
+\subsubsection{Request Handler without Vector Modifier}\label{sec:requestHandlerWithoutVectorModifier}
+The value of a Request Handler without Vector Modifier is a tuple of the form:
+\begin{center}
+\texttt{(TYPE,DISCARD\_PROB,SEED)}\\
+\end{center}
+with\\
+\texttt{TYPE} $\in$ $\{$\texttt{STANDARD,NONE}$\}$\\
+\texttt{DISCARD\_PROB} $\in$ $[0,1]$\\
+\texttt{SEED} $\in$ $\mathbb{N}$
+
+\subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
+
+\texttt{VECTOR\_MODIFIERS} is a (not necessarily nonempty) list, i.\,e. 
+\begin{center}\scriptsize
+	\texttt{VECTOR\_MODIFIERS=VECTOR\_MODIFIER\_1;VECTOR\_MODIFIER\_2,...}
+\end{center}
+The order of the elements of this list is important.\\
+If there shall be used no Vector Modifier for the corresponding Request Handler, then use \texttt{VECTOR\_MODIFIERS=}''''.\\
+\\
+An element \texttt{VECTOR\_MODIFIER\_k} of the Vector Modifier list is a tuple, defined as follows:
+\begin{center}\scriptsize
+\texttt{VECTOR\_MODIFIER\_k=(VECTOR\_MODIFIER\_TYPE,VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..)}\\
+\end{center}
+The number and types of paramters \texttt{VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..} depends on the corresponding type of the Vector Modifier. Currently there are the following types of Vector Modifiers:
+\begin{itemize}
+	\item VectorDifferenceTrimmer
+	\item VectorTrimmer
+	\item VectorRandomizer
+\end{itemize}
+I.\,e. \texttt{VECTOR\_MODIFIER\_TYPE} $\in$ $\{$\texttt{VECTOR\_DIFFERENCE\_TRIMMER,VECTOR\_TRIMMER,VECTOR\_RANDOMIZER}$\}$\\
+\\
+If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_DIFFERENCE\_TRIMMER}, then the following parameters are expected:
+\begin{enumerate}
+	\item length of type double
+\end{enumerate}
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,5.2)}.\\
+\\
+If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_TRIMMER}, then the following parameters are expected:
+\begin{enumerate}
+	\item length of type double
+\end{enumerate}
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_TRIMMER} may look like: \texttt{(VECTOR\_TRIMMER,10.0)}.\\
+\\
+If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_RANDOMIZER}, then the following parameters are expected:
+\begin{enumerate}
+	\item seed of type unsigned int
+	\item standard derivation of type double
+\end{enumerate}
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,1,0.5)}.\\
+
+\subsubsection{RobotControl}\label{sec:robotControl}
+The \texttt{RobotControl} variable defines the class which should be used to control the robots (and in particular to control the views of the robots). Currently one of the following classes has be chosen:
+\begin{enumerate}
+	\item \texttt{UNIFORM\_ROBOT\_CONTROL}
+	\item \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL}
+\end{enumerate}
+Each class is explained in detail below. Note that each class excepts certain class specific parameters.
+
+\paragraph{UniformRobotControl}\label{sec:uniformRobotControl}
+This class assigns each robot the same view type. E.g. each robot should have a global view to the world. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values of \texttt{VIEW} are definied below (see \ref{sec:viewtypes}).
+
+\paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl}
+This class assigns each robottype the same view type. Therefore robots with different robot types may have different view types. Currently there are two robot types:
+\begin{enumerate}
+	\item \texttt{MASTER}
+	\item \texttt{SLAVE}
+\end{enumerate}
+To specify which view type should be used by each robot type, there must be variables of the form
+\begin{center}
+	\textit{RobotType}\texttt{\_VIEW}
+\end{center}
+The value of each variable has to be a view type (see \ref{sec:viewtypes}). E.g. you may specify \texttt{MASTER\_VIEW = GLOBAL\_VIEW} to set the view for master robots to global view. Note that exactly one view type should be defined for each robot type.
+
+\paragraph{ViewTypes}\label{sec:viewtypes}
+The view type of a robot defines its vision model. Whenever a view type is expected you may use one of the following values:
+\begin{enumerate}
+	\item \texttt{GLOBAL\_VIEW}
+	\item \texttt{COG\_VIEW}
+	\item \texttt{CHAIN\_VIEW}
+	\item \texttt{ONE\_POINT\_FORMATION\_VIEW}
+\end{enumerate}
+
+
+\subsubsection{Example of a main project file}
+A main project file may look like:
+\lstset{language=tcl}
+\begin{lstlisting}
+# 
+# Description about configuration.
+#
+	
+	PROJECT_NAME="My Exciting Project"
+	COMPASS_MODEL="NO_COMPASS"
+	ROBOT_FILENAME="myrobots"
+	OBSTACLE_FILENAME="myobstacle"
+	STATISTICS_MODULE="0"
+	ASG="ASYNCHRONOUS"
+	VIEW="0"
+	
+	MARKER_REQUEST_HANDLER_TYPE="STANDARD"
+	STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB="0.5"
+	STANDARD_MARKER_REQUEST_HANDLER_SEED="1"
+
+	TYPE_CHANGE_REQUEST_HANDLER_TYPE="NONE"
+	# no additional variables needed
+
+	POSITION_REQUEST_HANDLER_TYPE="VECTOR"
+	VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB="0.1"
+	VECTOR_POSITION_REQUEST_HANDLER_SEED="3"
+	VECTOR_POSITION_REQUEST_HANDLER_MODIFIER="(VECTOR_TRIMMER,1.5);(VECTOR_RANDOMIZER,5,2.5)"
+
+	VELOCITY_REQUEST_HANDLER_TYPE="VECTOR"
+	VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB="0.1"
+	VECTOR_VELOCITY_REQUEST_HANDLER_SEED="3"
+	VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER="(VECTOR_TRIMMER,1.5);(VECTOR_RANDOMIZER,5,2.5)"
+
+\end{lstlisting}
+
+
+
+\subsection{Robot file}
+The robotfile uses a csv-compatible format.
+Therefore the information for one robot has to be saved in exactly one line of the file.
+Each line contains the following data. The order of this data is important!
+\begin{itemize}
+	\item ID-number
+	\item initial position ($x,y,z$)
+	\item initial type (for instance master, slave,$\ldots$)
+	\item initial velocity ($x,y,z$)
+	\item initial acceleration ($x,y,z$)
+	\item initial status (maybe sleeping or ready; still has to be specified more precisely)
+	\item initial marker information (still has to be specified)
+	\item algorithm to use (shortcut for an algorithm; still needs to be specified)
+	\item color (using this color a robot is marked for instance for a special treatment during the visualization; this color isn't used anywhere else)
+	\item coordinate system axes (triple $x_1,x_2,x_3,y_1,y_2,y_3,z_1,z_2,z_3$; this field will be left empty, if axes are supposed to be generated uniformly at random)
+\end{itemize}
+The first line always is (column headers):
+\begin{lstlisting}
+	  "ID","x-position","y-position","z-position","type","x-velocity","y-velocity","z-velocity","x-acceleration","y-acceleration","z-acceleration","status","marker-info","algorithm","color","x-axis-1","x-axis-2","x-axis-3","y-axis-1","y-axis-2","y-axis-3","z-axis-1","z-axis-2","z-axis-3"
+\end{lstlisting}
+Each non-number is quoted.
+
+\subsubsection{Example of a robot file}
+\begin{lstlisting}
+	"ID","x-position","y-position","z-position","type","x-velocity","y-velocity","z-velocity","x-acceleration","y-acceleration","z-acceleration","status","marker-info","algorithm","color","x-axis-1","x-axis-2","x-axis-3","y-axis-1","y-axis-2","y-axis-3","z-axis-1","z-axis-2","z-axis-3"
+	0,5.3,9.2,6.4,"master",1.5,2.5,3.5,1.5,2.5,3.5,"sleeping",0,"MASTER_ALGO",0,1,0,0,0,1,0,0,0,1
+	1,2.5,4.2,8.8,"slave",1.5,2.5,3.5,1.5,2.5,3.5,"ready",0,"SLAVE_ALGO",0,1,0,0,0,1,0,0,0,1
+\end{lstlisting}
+\todo{type really "master"/"slave" or rather 0/1? (scenario\_generator generates latter atm)}
+
+\subsection{Obstacle file}
+Like the robot file the obstacle file uses a csv-compatible format. 
+Therefore the information for one robot has to be saved in exactly one line of the file.
+Each line contains the following data. The order of this data is important!
+\begin{itemize}
+	\item type (marker, sphere or box)
+	\item position $(x,y,z)$
+	\item marker information (still needs to be specified)
+	\item $x/y/z$-lengths or radius (depending on type)
+\end{itemize}
+
+The first line always is (column headers):
+\begin{lstlisting}
+"type","x-position","y-position","z-position","marker-info","size-info","",""
+\end{lstlisting}
+Each non-number is quoted.
+
+
+\subsubsection{Example of an obstacle file}
+\begin{lstlisting}
+"type","x-position","y-position","z-position","marker-info","size-info","",""
+"box",2.0,3.0,4.0,0,1.0,2.0,3.0,
+"sphere",3.4,5.2,5.1,0,5.0,"",""
+"marker",3.5,1.4,5.1,0,"","",""
+\end{lstlisting}
+As you can already see in the example, if the type of an obstacle is sphere, then the last two values must be empty, i.\,e. '',''. Analoguos, if the type is marker, the last three values must be empty, i.\,e. '','',''.

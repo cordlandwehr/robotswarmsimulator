@@ -1,0 +1,104 @@
+\documentclass[a4paper,halfparskip,11pt,twoside]{scrartcl}
+\usepackage{schlaue_schwaerme}
+
+\begin{document}
+\init{}
+
+\pgMaketitle{User's Guide}{
+\begin{pgArrowitemize}
+	\item Alexander Klaas
+	\item Andreas Cord-Landwehr
+	\item Christoph Raupach
+	\item Christoph Weddemann
+	\item Daniel Warner
+	\item Daniel Wonisch
+	\item Kamil Swierkot
+	\item Marcus Märtens
+	\item Martina Hüllmann
+	\item Peter Kling
+	\item Sven Kurras
+\end{pgArrowitemize}
+}
+
+\section{Introduction}
+This document shall help you how to use the \RSS. For this purpose here are listed all input-parameters, project-file specifications and GUI-inputs.
+
+\section{Starting Simulator}
+The \RSS\ exists as executable for Linux, MacOS and Windows. By starting from command-line you need to specify the mandatory project configuration file ({\tt *.swarm} or otherwise the {\ttfamily -{}-generate} option an the according parameters. Thus a typical execution of the \RSS\ looks like this:
+\begin{verbatim}
+    ./RobotSwarmSimulator --help
+    ./RobotSwarmSimulator --project-file <path_to_TestData>/testfile_2
+    ./RobotSwarmSimulator --project-file <path_to_TestData>/testfile_2 
+                          --history-length 10
+    ./RobotSwarmSimulator --generate --distr-pos=17.0
+\end{verbatim}
+
+\todo{all parameters from help should be documented here in full length}
+
+All of the parameters listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can bin found in the following sections.
+
+\begin{lstlisting}[caption={RSS Helpline},label=lst:RSS-help]
+General options:
+  --help                shows this help message
+  --version             shows version of RobotSwarmSimulator
+  --about               tells you who developed this awesome piece of software
+
+Generator options:
+  --generate                      switch to generator mode
+  --seed arg (=1)                 seed for random number generator
+  --robots arg (=100)             number of robots
+  --algorithm arg (=NONE)         name of algorithm or lua-file
+  --worldfile arg (=newrandom)    world-file for output
+  --robotfile arg (=newrandom)    robot-file for output
+  --obstaclefile arg (=newrandom) obstacle-file for output
+  --distr-pos arg (=0)            distribute velocity in cube [0;distr-pos]^3
+  --distr-vel arg (=0)            distribute velocity in cube [0;distr-vel]^3
+  --distr-acc arg (=0)            distribute velocity in cube [0;distr-acc]^3
+  --distr-coord                   distribute robot coordsystems uniformly
+
+Simulation options:
+  --project-file arg         Project file to load
+  --history-length arg (=25) history length
+\end{lstlisting}
+
+
+\subsection{General options}
+\begin{description}
+	\item [-{}-help] Lists all possible options
+	\item [-{}-version] Current version of \RSS
+	\item [-{}-about] The developer team
+\end{description}
+
+
+%TODO get all information from --help here...
+%TODO nearly the whole section is missing
+
+
+\section{Using the 3d-Interface}
+During the simulation it is possible to interact with the simulation in different ways. The following hot-keys are supported while simulalization:
+
+\begin{description}
+	\item [Space] Start/Stop
+	\item [q] Quit \RSS\
+	\item [F1] Help
+	\item [g] Show Center of all gravity of Swarm
+	\item [v] Show velocity vectors
+	\item [b] Show acceleration vectors
+	\item [k] Show global coordinates system
+	\item [W,A,S,D] W for up, S for down
+	\item [Arrow-Keys] left, right, before, behind
+	\item [mouse-movement] mouse for spinning
+	\item [+, -] increase/ decrease simulation-speed by constant
+	\item [*,/] double/ half simulation-speed
+	\item [c] Change camera
+\end{description}
+
+\appendix
+
+\input{inputfile_specification}
+
+% Backcover
+\newpage
+\thispagestyle{empty}
+~
+\end{document}
