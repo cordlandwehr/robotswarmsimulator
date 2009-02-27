@@ -9,7 +9,7 @@
 #include <boost/smart_ptr.hpp>
 #include "../../SimulationKernel/factories.h"
 #include "../Fixtures/simple_world_fixture.h"
-#include "../../Views/global_view.h"
+#include "../../ViewModels/global_view.h"
 #include "../../Views/view_factory.h"
 #include "../../SimulationKernel/uniform_robot_control.h"
 

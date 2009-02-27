@@ -8,14 +8,14 @@
 #ifndef SELF_VIEW_H_
 #define SELF_VIEW_H_
 
-#include "own_acceleration_view.h"
-#include "own_coordinate_system_view.h"
-#include "own_id_view.h"
-#include "own_marker_view.h"
-#include "own_position_view.h"
-#include "own_status_view.h"
-#include "own_type_view.h"
-#include "own_velocity_view.h"
+#include "../Views/own_acceleration_view.h"
+#include "../Views/own_coordinate_system_view.h"
+#include "../Views/own_id_view.h"
+#include "../Views/own_marker_view.h"
+#include "../Views/own_position_view.h"
+#include "../Views/own_status_view.h"
+#include "../Views/own_type_view.h"
+#include "../Views/own_velocity_view.h"
 
 /**
  * \class SelfView

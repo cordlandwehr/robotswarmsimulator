@@ -8,10 +8,10 @@
 #ifndef COG_VIEW_H_
 #define COG_VIEW_H_
 
-#include "acceleration_view.h"
-#include "full_view.h"
-#include "position_view.h"
-#include "velocity_view.h"
+#include "../Views/acceleration_view.h"
+#include "../Views/full_view.h"
+#include "../Views/position_view.h"
+#include "../Views/velocity_view.h"
 
 /**
  * \class CogView

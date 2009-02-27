@@ -8,10 +8,10 @@
 #ifndef ONE_POINT_FORMATION_VIEW_H_
 #define ONE_POINT_FORMATION_VIEW_H_
 
-#include "velocity_view.h"
-#include "spheric_view.h"
-#include "acceleration_view.h"
-#include "position_view.h"
+#include "../Views/velocity_view.h"
+#include "../Views/spheric_view.h"
+#include "../Views/acceleration_view.h"
+#include "../Views/position_view.h"
 
 /**
  * \class OnePointFormationView

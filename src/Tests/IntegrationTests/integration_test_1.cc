@@ -15,7 +15,7 @@
 
 #include "../../SimulationKernel/uniform_robot_control.h"
 #include "../../Views/abstract_view_factory.h"
-#include "../../Views/global_view.h"
+#include "../../ViewModels/global_view.h"
 #include "../../Views/view_factory.h"
 
 #include "../Fixtures/integration_fixture.h"

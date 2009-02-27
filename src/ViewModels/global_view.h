@@ -8,18 +8,18 @@
 #ifndef GLOBAL_VIEW_H_
 #define GLOBAL_VIEW_H_
 
-#include "box_view.h"
-#include "acceleration_view.h"
-#include "coordinate_system_view.h"
-#include "full_view.h"
-#include "id_view.h"
-#include "marker_information_view.h"
-#include "point_in_obstacle_view.h"
-#include "position_view.h"
-#include "robot_status_view.h"
-#include "robot_type_view.h"
-#include "sphere_view.h"
-#include "velocity_view.h"
+#include "../Views/box_view.h"
+#include "../Views/acceleration_view.h"
+#include "../Views/coordinate_system_view.h"
+#include "../Views/full_view.h"
+#include "../Views/id_view.h"
+#include "../Views/marker_information_view.h"
+#include "../Views/point_in_obstacle_view.h"
+#include "../Views/position_view.h"
+#include "../Views/robot_status_view.h"
+#include "../Views/robot_type_view.h"
+#include "../Views/sphere_view.h"
+#include "../Views/velocity_view.h"
 
 /**
  * \class GlobalView

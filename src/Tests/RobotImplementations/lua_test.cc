@@ -8,7 +8,7 @@
 
 #include "../../RobotImplementations/lua_robot.h"
 #include "../../Views/abstract_view_factory.h"
-#include "../../Views/global_view.h"
+#include "../../ViewModels/global_view.h"
 #include "../../Views/view_factory.h"
 
 #include "../../Tests/Fixtures/simple_world_fixture.h"

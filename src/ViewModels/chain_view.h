@@ -8,8 +8,8 @@
 #ifndef CHAIN_VIEW_H_
 #define CHAIN_VIEW_H_
 
-#include "position_view.h"
-#include "neighbor_view.h"
+#include "../Views/position_view.h"
+#include "../Views/neighbor_view.h"
 
 /**
  * \class ChainView

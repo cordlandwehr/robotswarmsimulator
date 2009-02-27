@@ -22,10 +22,11 @@
 #include "../Views/abstract_view_factory.h"
 #include "../Views/view_factory.h"
 #include "../Views/parametrized_view_factory.h"
-#include "../Views/global_view.h"
-#include "../Views/cog_view.h"
-#include "../Views/one_point_formation_view.h"
-#include "../Views/chain_view.h"
+#include "../ViewModels/global_view.h"
+#include "../ViewModels/cog_view.h"
+#include "../ViewModels/one_point_formation_view.h"
+#include "../ViewModels/chain_view.h"
+#include "../ViewModels/self_view.h"
 
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
@@ -241,6 +242,8 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 		view_factory.reset(new ViewFactory<GlobalView>);
 	} else if(view_type == "COG_VIEW") {
 		view_factory.reset(new ViewFactory<CogView>);
+	} else if(view_type == "SELF_VIEW") {
+		view_factory.reset(new ViewFactory<SelfView>);
 	} else if(view_type == "CHAIN_VIEW") {
 		try {
 			unsigned int number = boost::lexical_cast<unsigned int>(params["CHAIN_VIEW_NUM_ROBOTS"]);

@@ -15,7 +15,7 @@
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
 #include "../ActivationSequenceGenerators/asynchronous_asg.h"
 
-#include "../../Views/global_view.h"
+#include "../../ViewModels/global_view.h"
 #include "../../Views/view_factory.h"
 #include "../../SimulationKernel/uniform_robot_control.h"
 
