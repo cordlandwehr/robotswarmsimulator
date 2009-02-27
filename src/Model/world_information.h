@@ -50,11 +50,8 @@ public:
 	 */
 	vector<boost::shared_ptr<WorldObject> >& markers();
 
-	//TODO(martinah) 	Remove this method and replace it with set_marker_data.
-	//					I recommend not to use this method, cause it doesn't guarantee
-	//					that a marker is stored in the vector of markers at the position of its ID.
 	/**
-	 * Adds a new marker to the world.
+	 * Adds a new marker to the end of the current marker vector.
 	 * \param Shared pointer to the new marker.
 	 */
 	void add_marker(boost::shared_ptr<WorldObject> new_marker);
@@ -77,11 +74,8 @@ public:
 	 */
 	vector<boost::shared_ptr<Obstacle> >& obstacles();
 
-	//TODO(martinah) 	Remove this method and replace it with set_obstacle_data.
-	//					I recommend not to use this method, cause it doesn't guarantee
-	//					that an obstacle is stored in the vector of obstacles at the position of its ID.
 	/**
-	 * Adds a new obstacle to the world.
+	 * Adds a new obstacle to the end of the current obstacle vector.
 	 * \param Shared pointer to the new obstacle.
 	 */
 	void add_obstacle(boost::shared_ptr<Obstacle> new_obstacle);
@@ -104,12 +98,8 @@ public:
 	 */
 	vector<boost::shared_ptr<RobotData> >& robot_data();
 
-	//TODO(martinah) 	Remove this method and replace it with set_robot_data.
-	//					I recommend not to use this method, cause maybe it doesn't guarantee
-	//					that a robot data is stored in the vector of robot data at the position
-	//					of the robots ID.
 	/**
-	 * Adds a new robot data to the world.
+	 * Adds a new robot data to the end of the current RobotData vector.
 	 * \param Shared pointer to the new robot data.
 	 */
 	void add_robot_data(boost::shared_ptr<RobotData> new_robot_data);

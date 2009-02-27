@@ -190,10 +190,14 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 	std::vector<Vector3d> obstacle_size = parser->obstacle_size();
 
 	//count number of markers
-	int num_of_marker = 0;
+	unsigned num_of_marker = 0;
+	unsigned num_of_obstacles = 0;
+
+	obstacles_vector.reserve(obstacle_types.size());
+	markers_vector.reserve(obstacle_types.size());
 
 	//iterate through all obstacles
-	for(int i=0; i<obstacle_types.size(); i++) {
+	for(unsigned i=0; i<obstacle_types.size(); ++i) {
 
 		//get position
 		tmp_pos.reset(new Vector3d());
@@ -210,7 +214,7 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 		if(!obstacle_types[i].compare("box")) {
 
 			//create according identifier
-			tmp_box_identifier.reset(new BoxIdentifier(i));
+			tmp_box_identifier.reset(new BoxIdentifier(num_of_obstacles++));
 
 			tmp_box.reset(new Box(
 					tmp_box_identifier,
@@ -222,12 +226,12 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 					));
 
 			//add obstacle to vector of obstacles
-			obstacles_vector[i]=tmp_box;
+			obstacles_vector.push_back(tmp_box);
 
 		} else if(!obstacle_types[i].compare("sphere")) {
 
 			//create according identifier
-			tmp_sphere_identifier.reset(new SphereIdentifier(i));
+			tmp_sphere_identifier.reset(new SphereIdentifier(num_of_obstacles++));
 
 			tmp_sphere.reset(new Sphere(
 					tmp_sphere_identifier,
@@ -237,12 +241,12 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 					));
 
 			//add obstacle to vector of obstacles
-			obstacles_vector[i]=tmp_sphere;
+			obstacles_vector.push_back(tmp_sphere);
 
 		} else if(!obstacle_types[i].compare("marker")) {
 
 			//create according identifier
-			tmp_marker_identifier.reset(new MarkerIdentifier(num_of_marker));
+			tmp_marker_identifier.reset(new MarkerIdentifier(num_of_marker++));
 
 			tmp_marker.reset(new WorldObject(
 						tmp_marker_identifier,
@@ -251,7 +255,7 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 						));
 
 			//add marker to vector of markers
-			markers_vector[num_of_marker++] = tmp_marker;
+			markers_vector.push_back(tmp_marker);
 
 
 		}

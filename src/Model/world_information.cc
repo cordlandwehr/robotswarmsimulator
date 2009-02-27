@@ -59,6 +59,7 @@ vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() {
 
 
 void WorldInformation::add_marker(boost::shared_ptr<WorldObject> new_marker) {
+	assert(new_marker->id()->id() == markers_.size());
 	markers_.push_back(new_marker);
 }
 
@@ -75,6 +76,7 @@ vector<boost::shared_ptr<Obstacle> >& WorldInformation::obstacles() {
 }
 
 void WorldInformation::add_obstacle(boost::shared_ptr<Obstacle> new_obstacle) {
+	assert(new_obstacle->id()->id() == obstacles_.size());
 	obstacles_.push_back(new_obstacle);
 }
 
@@ -91,6 +93,7 @@ vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
 }
 
 void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {
+	assert(new_robot_data->id()->id() == robot_data_.size());
 	robot_data_.push_back(new_robot_data);
 }
 
