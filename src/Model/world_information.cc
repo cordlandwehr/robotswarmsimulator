@@ -62,6 +62,10 @@ void WorldInformation::add_marker(boost::shared_ptr<WorldObject> new_marker) {
 	markers_.push_back(new_marker);
 }
 
+void WorldInformation::set_marker_data(std::vector<boost::shared_ptr<WorldObject> > new_markers) {
+	markers_ = new_markers;
+}
+
 const vector<boost::shared_ptr<Obstacle> >& WorldInformation::obstacles() const {
 	return obstacles_;
 }
@@ -74,6 +78,10 @@ void WorldInformation::add_obstacle(boost::shared_ptr<Obstacle> new_obstacle) {
 	obstacles_.push_back(new_obstacle);
 }
 
+void WorldInformation::set_obstacle_data(std::vector<boost::shared_ptr<Obstacle> > new_obstacles) {
+	obstacles_ = new_obstacles;
+}
+
 const vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
 	return robot_data_;
 }
@@ -84,6 +92,10 @@ vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
 
 void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {
 	robot_data_.push_back(new_robot_data);
+}
+
+void WorldInformation::set_robot_data(std::vector<boost::shared_ptr<RobotData> > new_robot_data) {
+	robot_data_ = new_robot_data;
 }
 
 int WorldInformation::time() const {

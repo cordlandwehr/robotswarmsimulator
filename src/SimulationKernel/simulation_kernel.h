@@ -201,7 +201,7 @@ private:
 	/**
 	 * This method creates the obstacles using the information read from the obstacles input file.
 	 */
-	void create_obstacles(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+	void create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
 
 };
 

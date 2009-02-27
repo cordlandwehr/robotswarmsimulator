@@ -108,6 +108,8 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	parser->init();
 	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
 
+	//Please don't remove this test, I will clean it up and uncomment soon.
+
 	//////////////////////////////////////////////////////////
 	// Check data of robot 1
 	//////////////////////////////////////////////////////////
@@ -217,8 +219,6 @@ BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 	parser->init();
 	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
 
-	cout << "#################### load obstacle file test begin #################### " << endl;
-
 	// Check data of obstacle 1
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[0], "box");
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[0], "0");
@@ -244,7 +244,6 @@ BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](1), 1.4);
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](2), 5.1);
 
-	cout << "#################### load obstacle file test end #################### " << endl;
 }
 
 /*

@@ -165,7 +165,7 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 }
 
-void SimulationKernel::create_obstacles(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information) {
+void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information) {
 
 	//some temporary variables
 	boost::shared_ptr<BoxIdentifier> tmp_box_identifier;
@@ -174,12 +174,13 @@ void SimulationKernel::create_obstacles(boost::shared_ptr<Parser> parser, boost:
 
 	boost::shared_ptr<Sphere> tmp_sphere;
 	boost::shared_ptr<Box> tmp_box;
-	//TDOD(martinah) Am I right, that a marker is an instance of class Obstacle?
-	boost::shared_ptr<Obstacle> tmp_marker;
+	boost::shared_ptr<WorldObject> tmp_marker;
 
 	boost::shared_ptr<Vector3d> tmp_pos;
 	boost::shared_ptr<MarkerInformation> tmp_marker_information;
 
+	std::vector<boost::shared_ptr<Obstacle> > obstacles_vector;
+	std::vector<boost::shared_ptr<WorldObject> > markers_vector;
 
 	//get initial obstacle information read from input file
 	std::vector<string> obstacle_types = parser->obstacle_types();
@@ -187,6 +188,9 @@ void SimulationKernel::create_obstacles(boost::shared_ptr<Parser> parser, boost:
 	std::vector<string> obstacle_marker_information = parser->obstacle_marker_information();
 	std::vector<double> obstacle_radius = parser->obstacle_radius();
 	std::vector<Vector3d> obstacle_size = parser->obstacle_size();
+
+	//count number of markers
+	int num_of_marker = 0;
 
 	//iterate through all obstacles
 	for(int i=0; i<obstacle_types.size(); i++) {
@@ -199,12 +203,8 @@ void SimulationKernel::create_obstacles(boost::shared_ptr<Parser> parser, boost:
 
 		//get marker information
 		tmp_marker_information.reset(new MarkerInformation());
-		//TODO(martinah) Which name to use for variable name of marker information read from input file?
+		//TODO(martinah) Maybe adapt variable name "MarkerInfoFromInputFile"
 		tmp_marker_information->add_data("MarkerInfoFromInputFile", obstacle_marker_information[i]);
-
-		//TODO(martinah) 	add obstacles to a vector and add this vector all in one to world info
-		//					instead of adding each obstacle seperately
-
 
 		//get type of obstacle
 		if(!obstacle_types[i].compare("box")) {
@@ -221,8 +221,8 @@ void SimulationKernel::create_obstacles(boost::shared_ptr<Parser> parser, boost:
 					obstacle_size[i](1)		//y-length = height
 					));
 
-			//add obstacle to world information
-			initial_world_information->add_obstacle(tmp_box);
+			//add obstacle to vector of obstacles
+			obstacles_vector[i]=tmp_box;
 
 		} else if(!obstacle_types[i].compare("sphere")) {
 
@@ -236,27 +236,29 @@ void SimulationKernel::create_obstacles(boost::shared_ptr<Parser> parser, boost:
 					obstacle_radius[i]
 					));
 
-			//add obstacle to world information
-			initial_world_information->add_obstacle(tmp_sphere);
+			//add obstacle to vector of obstacles
+			obstacles_vector[i]=tmp_sphere;
 
 		} else if(!obstacle_types[i].compare("marker")) {
 
 			//create according identifier
-			tmp_marker_identifier.reset(new MarkerIdentifier(i));
+			tmp_marker_identifier.reset(new MarkerIdentifier(num_of_marker));
 
-			/*
-			 * TODO(martinah)
-			tmp_marker.reset(new Obstacle(
+			tmp_marker.reset(new WorldObject(
 						tmp_marker_identifier,
 						tmp_pos,
 						tmp_marker_information
-						));*/
+						));
 
-			//add obstacle to world information
-			initial_world_information->add_obstacle(tmp_marker);
+			//add marker to vector of markers
+			markers_vector[num_of_marker++] = tmp_marker;
+
+
 		}
-
 	}
+	//add vector of obstacles to the world information
+	initial_world_information->set_obstacle_data(obstacles_vector);
+	initial_world_information->set_marker_data(markers_vector);
 }
 
 boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_information(
@@ -268,8 +270,8 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 	//create robots and add to initial world information
 	create_robots(parser, initial_world_information);
 
-	//create obstacles and add to initial world information
-	create_obstacles(parser, initial_world_information);
+	//create obstacles and marker and add to initial world information
+	create_obstacles_and_marker(parser, initial_world_information);
 
 	//set time of initial world information
 	initial_world_information->set_time(0);

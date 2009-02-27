@@ -50,12 +50,20 @@ public:
 	 */
 	vector<boost::shared_ptr<WorldObject> >& markers();
 
-	//TODO (martinah) maybe set_marker() instead of (or additionally?) this method
+	//TODO(martinah) 	Remove this method and replace it with set_marker_data.
+	//					I recommend not to use this method, cause it doesn't guarantee
+	//					that a marker is stored in the vector of markers at the position of its ID.
 	/**
 	 * Adds a new marker to the world.
 	 * \param Shared pointer to the new marker.
 	 */
 	void add_marker(boost::shared_ptr<WorldObject> new_marker);
+
+	/**
+	 * Sets the vector of markers in the world.
+	 * \param Vector of markers to add to the world.
+	 */
+	void set_marker_data(std::vector<boost::shared_ptr<WorldObject> > new_markers);
 
 	/**
 	 * Returns a constant reference to the set of the obstacles.
@@ -69,12 +77,20 @@ public:
 	 */
 	vector<boost::shared_ptr<Obstacle> >& obstacles();
 
-	//TODO (martinah) maybe set_obstacle() instead of (or additionally?) this method
+	//TODO(martinah) 	Remove this method and replace it with set_obstacle_data.
+	//					I recommend not to use this method, cause it doesn't guarantee
+	//					that an obstacle is stored in the vector of obstacles at the position of its ID.
 	/**
 	 * Adds a new obstacle to the world.
 	 * \param Shared pointer to the new obstacle.
 	 */
 	void add_obstacle(boost::shared_ptr<Obstacle> new_obstacle);
+
+	/**
+	 * Sets the vector of obstacles in the world.
+	 * \param Vector of obstacles to add to the world.
+	 */
+	void set_obstacle_data(std::vector<boost::shared_ptr<Obstacle> > new_obstacles);
 
 	/**
 	 * Returns a constant reference to the set of the robot data.
@@ -88,12 +104,21 @@ public:
 	 */
 	vector<boost::shared_ptr<RobotData> >& robot_data();
 
-	//TODO (martinah) maybe set_robot_data() instead of (or additionally?) this method
+	//TODO(martinah) 	Remove this method and replace it with set_robot_data.
+	//					I recommend not to use this method, cause maybe it doesn't guarantee
+	//					that a robot data is stored in the vector of robot data at the position
+	//					of the robots ID.
 	/**
 	 * Adds a new robot data to the world.
 	 * \param Shared pointer to the new robot data.
 	 */
 	void add_robot_data(boost::shared_ptr<RobotData> new_robot_data);
+
+	/**
+	 * Sets the vector of robot data in the world.
+	 * \param Vector of robot datas to add to the world.
+	 */
+	void set_robot_data(std::vector<boost::shared_ptr<RobotData> > new_robot_data);
 
 	/**
 	 * Returns the time (measured in steps) when this world info object was created.
