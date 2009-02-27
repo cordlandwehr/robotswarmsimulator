@@ -78,8 +78,6 @@ private:
 	 */
 	boost::shared_ptr<MarkerInformation> marker_information_;
 
-
-
 };
 
 #endif /* WORLD_OBJECT_H_ */
