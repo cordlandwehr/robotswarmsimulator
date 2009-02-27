@@ -1,5 +1,5 @@
-ROBOT_FILENAME="newrandom"
-OBSTACLE_FILENAME="newrandom"
+ROBOT_FILENAME="position_handler_cog"
+OBSTACLE_FILENAME="position_handler_cog"
 ASG="SYNCHRONOUS"
 COMPASS_MODEL="NO_COMPASS"
 PROJECT_NAME="New generated Project"
