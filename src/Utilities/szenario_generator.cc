@@ -297,7 +297,7 @@ void szenario_generator::write_to_file() {
 
 	parser_->parameter_map()["PROJECT_NAME"] = *projectName_;
 	parser_->parameter_map()["ASG"] = *asg_;
-	parser_->parameter_map()["COMPASS_MODELL"] = *compassModel_;
+	parser_->parameter_map()["COMPASS_MODEL"] = *compassModel_;
 	parser_->parameter_map()["STATISTICS_TEMPLATE"] = *statisticsTemplate_;
 	parser_->parameter_map()["STATISTICS_SUBSETS"] = *statisticsSubsets_;
 

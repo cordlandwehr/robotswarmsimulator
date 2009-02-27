@@ -43,6 +43,7 @@
 #include "../Model/robot_identifier.h"
 #include "../RobotImplementations/lua_robot.h"
 #include "../RobotImplementations/simple_robot.h"
+#include "../RobotImplementations/cog_robot.h"
 
 #include "../SimulationKernel/robot_control.h"
 #include "../SimulationKernel/uniform_robot_control.h"
@@ -274,6 +275,10 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new LuaRobot(id, algorithm));
 	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
 		robot.reset(new SimpleRobot(id));
+	} else if(algorithm == "COGRobot") {
+		robot.reset(new COGRobot(id));
+	} else {
+		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
 	}
 	return robot;
 }

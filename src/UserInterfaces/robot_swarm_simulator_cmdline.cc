@@ -42,9 +42,9 @@ int main(int argc, char** argv) {
 		("worldfile", po::value<std::string>()->default_value("newrandom"), "world-file for output")
 		("robotfile", po::value<std::string>()->default_value("newrandom"), "robot-file for output")
 		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
-		("distr-pos", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-pos]^3")
+		("distr-pos", po::value<double>()->default_value(0), "distribute position in cube [0;distr-pos]^3")
 		("distr-vel", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-vel]^3")
-		("distr-acc", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-acc]^3")
+		("distr-acc", po::value<double>()->default_value(0), "distribute acceleration in cube [0;distr-acc]^3")
 		("distr-coord", "distribute robot coordsystems uniformly");
 
 	po::options_description simulation_options("Simulation options");

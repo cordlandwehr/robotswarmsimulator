@@ -35,11 +35,12 @@ void VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInform
     const boost::shared_ptr<RobotIdentifier>& robot_id = vector_request->robot().id();
     RobotData& robot_data = world_information->get_according_robot_data(robot_id);
 	Vector3d global_vector = extract_global_vector(*vector_request, robot_data);
-	const Vector3d global_vector_cpy(global_vector);
+	// const Vector3d global_vector_cpy(global_vector); Wrong for vector difference trimmer!
+	const Vector3d reference_vector = robot_data.position(); // TODO(craupach) should set correct reference vector (not always the position!)
 
     // apply vector modifiers from pipeline
 	BOOST_FOREACH(boost::shared_ptr<VectorModifier>& vector_modifier, vector_modifiers_) {
-		vector_modifier->modify_vector(global_vector, global_vector_cpy);
+		vector_modifier->modify_vector(global_vector,reference_vector);
 	}
 
 	// update corresponding robot property
