@@ -41,7 +41,10 @@ set(CPACK_COMPONENT_USERSGUIDE_DESCRIPTION
 include(InstallRequiredSystemLibraries)
 
 # enable stripping
-set(CPACK_STRIP_FILES TRUE)
+# note: disabled on Mac OS X, where standard stripping causes an "Bus Error"
+if(NOT APPLE)
+	set(CPACK_STRIP_FILES TRUE)
+endif(NOT APPLE)
 
 # enable packaging
 include(CPack)
