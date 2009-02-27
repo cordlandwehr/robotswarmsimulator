@@ -144,7 +144,8 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 	glEnd();
 
 
-
+	//disabled robot's color for now as it seemingly randomly did not work
+	//TODO(kamil) fix this
 	//glColor3fv(&kRobotIdColor[ robot->color() < kRobotIdColorNum ? robot->color() : 0 ][0]);
 	glColor3fv(&kRobotIdColor[0][0]);
 	if(!use_model_){
