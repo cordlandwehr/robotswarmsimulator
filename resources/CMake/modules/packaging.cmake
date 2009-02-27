@@ -25,6 +25,17 @@ include(InstallRequiredSystemLibraries)
 # component informations
 set(CPACK_COMPONENT_MAINPROGRAM_DISPLAY_NAME "Robot Swarm Simulator")
 set(CPACK_COMPONENT_MAINPROGRAM_DESCRIPTION "The main program (and libraries).")
+set(CPACK_COMPONENT_GLUTLIBRARIES_DISPLAY_NAME "GLUT Libraries")
+set(CPACK_COMPONENT_GLUTLIBRARIES_DESCRIPTION
+    "OpenGL Utility Toolkit (dynamic libraries).")
+set(CPACK_COMPONENT_LUALIBRARIES_DISPLAY_NAME "Lua Libraries")
+set(CPACK_COMPONENT_LUALIBRARIES_DESCRIPTION "Dynamic libraries for Lua.")
+set(CPACK_COMPONENT_PROJECTFILES_DISPLAY_NAME "Project Files")
+set(CPACK_COMPONENT_PROJECTFILES_DESCRIPTION
+    "Some example project files that can be loaded into the simulator.")
+set(CPACK_COMPONENT_USERSGUIDE_DISPLAY_NAME "Users Guide")
+set(CPACK_COMPONENT_USERSGUIDE_DESCRIPTION
+    "Manual of the simulator. Read this to get started.")
 
 # installs some needed shared runtime libraries on windows systems
 include(InstallRequiredSystemLibraries)

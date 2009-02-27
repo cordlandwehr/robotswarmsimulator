@@ -33,6 +33,18 @@ add_subdirectory(src)
 add_subdirectory(src/UserInterfaces)
 add_subdirectory(src/Tests)
 
+# package projectfiles in src/Projectfiles
+install(DIRECTORY src/ProjectFiles/
+        DESTINATION ProjectFiles
+        CONFIGURATIONS Release
+        COMPONENT projectfiles
+        FILES_MATCHING
+        PATTERN *.swarm
+		PATTERN *.robot
+		PATTERN *.obstacle
+		PATTERN .svn EXCLUDE
+)
+
 # packaging
 include(packaging)
 
