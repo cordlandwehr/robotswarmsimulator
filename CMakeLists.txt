@@ -18,6 +18,14 @@ set(ECLIPSE_CDT4_GENERATE_SOURCE_PROJECT true)
 # enable testing
 enable_testing()
 
+# the following macro allows easy switching of link preferences (shared or static)
+# for release builds. Initially, shared libraries are prefered by CMake.
+macro(reverse_link_preference_in_release)
+	if(CMAKE_BUILD_TYPE MATCHES Release)
+		list(REVERSE CMAKE_FIND_LIBRARY_SUFFIXES)
+	endif(CMAKE_BUILD_TYPE MATCHES Release)
+endmacro(reverse_link_preference_in_release)
+
 # descend into subprojects
 add_subdirectory(documentation)
 add_subdirectory(luabind)

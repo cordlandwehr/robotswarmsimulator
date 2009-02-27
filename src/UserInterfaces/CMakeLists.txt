@@ -11,7 +11,10 @@ set(RSSMAIN_SRCS
 	glut_visualizer.cc
 )
 
-# find/configure boost
+# find/configure boost (statically linked for release builds)
+if(CMAKE_BUILD_TYPE MATCHES Release)
+	set(Boost_USE_STATIC_LIBS TRUE)
+endif(CMAKE_BUILD_TYPE MATCHES Release)
 set(Boost_ADDITIONAL_VERSIONS 1.37)
 find_package(Boost 1.37 REQUIRED program_options thread)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -24,8 +27,10 @@ include_directories(${OPENGL_INCLUDE_DIR})
 find_package(GLUT)
 include_directories(${GLUT_INCLUDE_DIR})
 
-# find/configure Lua
+# find/configure Lua (statically linked for release builds)
+reverse_link_preference_in_release()
 find_package(Lua51 REQUIRED)
+reverse_link_preference_in_release()
 include_directories(${LUA_INCLUDE_DIR})
 
 # include directory for Luabind
