@@ -28,7 +28,7 @@
 \section{Introduction}
 This document shall help you to use the \RSS\ to simulate robot swarms and to get useful information by the visualization and statistics modules.
 
-For this purpose the document is divided in several sections. It will be usefull if you just start this the '`Getting Started!"' section play a little bit with the simulator and continue with reading the more detailed information on input parameters, input-file specifications, generating simulations and getting statistics. 
+For this purpose the document is divided in several sections. It will be usefull if you just start this the ``Getting Started!'' section play a little bit with the simulator and continue with reading the more detailed information on input parameters, input-file specifications, generating simulations and getting statistics. 
 
 
 \section{Getting Started}
@@ -85,7 +85,6 @@ Generator options:
 Simulation options:
   --project-file arg         Project file to load
   --history-length arg (=25) history length
-
 \end{lstlisting}
 
 
@@ -159,16 +158,16 @@ function main()
 end
 \end{lstlisting}
 
-\section{Statistics}%TODO language!
-Durch die berechneten Statistiken werden zwei Dateien ausgegeben:
+\section{Statistics}
+A simulation run results in three output files of statistics:
 
 \begin{itemize}
-\item \texttt{gnuplot\_20091224\_184129\_ALL.plt} (GNUPlot-Konfigurationsdatei)
-\item \texttt{output\_20091224\_184129\_ALL.plt} (zugehörige statistische Daten)
-\item \texttt{output\_20091224\_184129\_DATADUMP\_FULL.plt} (vollständiger Datendump)
+\item \texttt{gnuplot\_20091224\_184129\_ALL.plt} (GNUPlot-configuration file)
+\item \texttt{output\_20091224\_184129\_ALL.plt} (according statistic data)
+\item \texttt{output\_20091224\_184129\_DATADUMP\_FULL.plt} (complete data dump)
 \end{itemize}
 
-Die Dateinamen ergeben sich aus dem aktuellen Datum (Jahr, Monat, Tag), sowie der Zeit (Stunden, Minuten, Sekunden), gefolgt von einer Bezeichnung der betrachteten Objektmenge (z.B. ALL, MASTERS,\dots für jeden Eintrag in STATISTICS\_SUBSETS wird ein eigenes solches Dateienpaar angelegt).
+The file-names results from current date (year, month, day), the current time (hour, minute, second), followed by description of screened object subset (e.\.g. \texttt{ALL, MASTERS,}\dots). For each entry in STATISTICS\_SUBSETS there will be created one such data pair.
 
 \newpage
 \appendix

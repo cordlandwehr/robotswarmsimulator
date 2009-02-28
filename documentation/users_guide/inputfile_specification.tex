@@ -15,7 +15,7 @@ There are exactly four kinds of input files for the \RSS. This includes the proj
 
 
 \subsection{Main projectfile}
-The following specifications hold only for the main projectfile (with extension "`.swarm"'):
+The following specifications hold only for the main projectfile (with extension \texttt{.swarm}):
 \begin{itemize}
 	\item A comment begins with a '\#'.
 	\item A line is a comment line (beginning with a '\#'), an empty line or a line containing a variable followed by an equal sign followed by a \emph{quoted} value of this variable. Example:
@@ -27,8 +27,16 @@ The following specifications hold only for the main projectfile (with extension 
 	\end{verbatim}
 	\item a variable name has to be of the following form: \texttt{[A-Z0-9\_]$^+$}
 \end{itemize}
+
+
 \subsubsection{Variables}
-	The main project file contains the variables defined in table \ref{tab:mainvars} and \ref{tab:mainvars2}:\\
+The main project file contains the variables defined in Tables \ref{tab:mainvars} and \ref{tab:mainvars2}.
+	
+Also the following should be considered:
+\begin{itemize}
+	\item The order of the variables in the main project file is not important.
+	\item If a variable does not appear in the main projectfile, then its default value will be used if such a default value does exist (otherwise an exception will be thrown while loading the main project-file).
+\end{itemize}
 
 \clearpage
 \begin{sidewaystable}
@@ -109,12 +117,7 @@ The following specifications hold only for the main projectfile (with extension 
 \enlargethispage*{2cm}
 \thispagestyle{empty}
 \clearpage
-	
-Additional restrictions and information:
-\begin{itemize}
-	\item The order of the variables in the main project file is not important.
-	\item If a variable does not appear in the main projectfile, then its default value will be used if such a default value does exist (otherwise an exception will be thrown while loading the main project-file).
-\end{itemize}
+
 
 
 \subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
@@ -129,27 +132,27 @@ An element \texttt{VECTOR\_MODIFIER\_k} of the Vector Modifier list is a tuple, 
 \begin{center}\scriptsize
 	\texttt{VECTOR\_MODIFIER\_k=(VECTOR\_MODIFIER\_TYPE,VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..)}
 \end{center}
-The number and types of paramters \texttt{VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..} depends on the corresponding type of the Vector Modifier. Currently there are the following types of Vector Modifiers:
+The number and types of paramters like \texttt{VECTOR\_MODIFIER\_PARAM\_1,\newline VECTOR\_MODIFIER\_PARAM\_2,\dots} depends on the corresponding type of the Vector Modifier. Currently there are the following types of Vector Modifiers:
 \begin{itemize}
 	\item VectorDifferenceTrimmer
 	\item VectorTrimmer
 	\item VectorRandomizer
 \end{itemize}
-I.\,e. \texttt{VECTOR\_MODIFIER\_TYPE} $\in$ $\{$\texttt{VECTOR\_DIFFERENCE\_TRIMMER,VECTOR\_TRIMMER,VECTOR\_RANDOMIZER}$\}$
+I.\,e. the value of \texttt{VECTOR\_MODIFIER\_TYPE} needs to be \texttt{VECTOR\_DIFFERENCE\_TRIMMER, VECTOR\_TRIMMER} or \texttt{VECTOR\_RANDOMIZER}.
 
-If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_DIFFERENCE\_TRIMMER}, then the following parameters are expected:
+\paragraph{VectorDifferenceTrimmmer} If \texttt{VECTOR\_MODIFIER\_TYPE} is equal to\newline \texttt{VECTOR\_DIFFERENCE\_TRIMMER}, then the following parameters are expected:
 \begin{enumerate}
 	\item length of type double
 \end{enumerate}
 I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,5.2)}.
 
-If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_TRIMMER}, then the following parameters are expected:
+\paragraph{VectorTrimmer} If vector modifier type equals \texttt{VECTOR\_TRIMMER}, then the following parameters are expected:
 \begin{enumerate}
 	\item length of type double
 \end{enumerate}
 I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_TRIMMER} may look like: \texttt{(VECTOR\_TRIMMER,10.0)}.
 
-If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_RANDOMIZER}, then the following parameters are expected:
+\paragraph{VectorRandomizer} If vector modifier type equals \texttt{VECTOR\_RANDOMIZER}, then the following parameters are expected:
 \begin{enumerate}
 	\item seed of type unsigned int
 	\item standard derivation of type double
