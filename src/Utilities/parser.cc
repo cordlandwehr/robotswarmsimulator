@@ -25,11 +25,10 @@ void Parser::init() {
 	parameter_map_["ROBOT_CONTROL"] = "UNIFORM_ROBOT_CONTROL";
 
 	//maybe use other default values
-	// TODO(craupach) this is equivalent to not setting a request handler at all. Do you want that?
-	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = "";
+	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = "NONE";
 	parameter_map_["POSITION_REQUEST_HANDLER_DISCARD_PROB"] = "0.0";
 	parameter_map_["POSITION_REQUEST_HANDLER_SEED"] = "1";
-	parameter_map_["POSITION_REQUEST_HANDLER_MODIFIER"] = "()";
+	parameter_map_["POSITION_REQUEST_HANDLER_MODIFIER"] = "";
 
 }
 

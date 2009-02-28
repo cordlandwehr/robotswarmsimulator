@@ -28,7 +28,7 @@ The following specifications hold only for the main projectfile (with extension 
 	\item a variable name has to be of the following form: \texttt{[A-Z0-9\_]$^+$}
 \end{itemize}
 \subsubsection{Variables}
-	The main project file contains the variables defined in table \ref{tab:mainvars}:\\
+	The main project file contains the variables defined in table \ref{tab:mainvars} and \ref{tab:mainvars2}:\\
 
 \clearpage
 \begin{sidewaystable}
@@ -48,23 +48,61 @@ The following specifications hold only for the main projectfile (with extension 
 		    \texttt{ASYNC\_ASG\_PART\_P} & double & Participation Probability for asynch ASG, only set if ASG = ASYNCHRONOUS & - \\\hline
 		 \texttt{ASYNC\_ASG\_TIME\_P} & double & parameter governing the timing of asynch ASG, only set if ASG = ASYNCHRNOUS & - \\\hline
 		 
-		 \texttt{MARKER\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithoutVectorModifier} & Marker Request Handler to use & -\\\hline
-		
-		\texttt{MARKER\_CHANGE\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithoutVectorModifier} & Marker Change Request Handler to use & -\\\hline
-		
-		\texttt{TYPE\_CHANGE\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithoutVectorModifier} & Type Change Request Handler to use. & -\\\hline
-		
-		\texttt{POSITION\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithVectorModifier} & Position Request Handler to use & -\\\hline
-
-		\texttt{VELOCITY\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithVectorModifier} & Velocity Request Handler to use & -\\\hline
-
-		\texttt{ACCELERATION\_REQUEST\_HANDLER} &  see section \ref{sec:requestHandlerWithVectorModifier} & Acceleration Request Handler to use & -\\\hline
-		
 		\texttt{ROBOT\_CONTROL} &  see section \ref{sec:robotControl} & RobotControl to use & -\\\hline
-				
+		 
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars}
 \end{sidewaystable}
+\clearpage
+\begin{sidewaystable}
+	\begin{tabular}{|l|p{0.2\textwidth}|p{0.3\textwidth}|p{0.1\textwidth}|}
+		\hline
+		\textbf{Variable name} & \textbf{Possible Values} & \textbf{Description} & \textbf{Default}\\\hline\hline
+
+		 \texttt{MARKER\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{STANDARD,NONE}$\}$ & Type of Marker Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
+		 
+		\texttt{TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{STANDARD,NONE}$\}$ & Type of Type Change Request Handler to use. & $\{$\texttt{NONE}$\}$\\\hline
+		
+		\texttt{POSITION\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Position Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
+
+		\texttt{VELOCITY\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Velocity Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
+
+		\texttt{ACCELERATION\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Acceleration Request Handler to use & v\\\hline
+		
+		 \texttt{MARKER\_REQUEST\_HANDLER\_SEED} &  integer & Seed for Marker Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
+		 
+		\texttt{TYPE\_CHANGE\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Type Change Request Handler to use. & -\\\hline
+		
+		\texttt{POSITION\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Position Request Handler to use & -\\\hline
+
+		\texttt{VELOCITY\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Velocity Request Handler to use & -\\\hline
+
+		\texttt{ACCELERATION\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Acceleration Request Handler to use & -\\\hline
+		
+		
+		
+		 \texttt{MARKER\_REQUEST\_HANDLER\_DISCARD\_PROB} &  element from interval $[0,1]$ & Discard probability for Marker Request Handler to use & -\\\hline
+		 
+		\texttt{TYPE\_CHANGE\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Type Change Request Handler to use. & -\\\hline
+		
+		\texttt{POSITION\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Position Request Handler to use & -\\\hline
+
+		\texttt{VELOCITY\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Velocity Request Handler to use & -\\\hline
+
+		\texttt{ACCELERATION\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Acceleration Request Handler to use & -\\\hline
+		
+		
+		\texttt{POSITION\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Position Request Handler to use & -\\\hline
+
+		\texttt{VELOCITY\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Velocity Request Handler to use & -\\\hline
+
+		\texttt{ACCELERATION\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Acceleration Request Handler to use & -\\\hline		
+				
+	\end{tabular}
+	\caption{Variables in the main project file}\label{tab:mainvars2}
+\end{sidewaystable}
+
+
 \thispagestyle{empty}
 \clearpage
 	
@@ -76,71 +114,11 @@ Additional restrictions and information:
 
 
 
-\subsubsection{Input specification for Request Handler}\label{sec:requestHandler}
-<<<<<<< .mine
-For each kind of request handler you want to use, insert the appropriate variable in the main project file. (For each kind of request for which the type of  request handler is not specified none will be used)
-There are the following request handler kinds: \texttt{MARKER\_REQUEST\_HANDLER\_TYPE, TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE,  POSITION\_REQUEST\_HANDLER\_TYPE, VELOCITY\_REQUEST\_HANDLER\_TYPE, ACCELERATION\_REQUEST\_HANDLER\_TYPE }\\
-
-The possible values of the types are at the moment:
-
-\texttt{MARKER\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{STANDARD, NONE}$\}$\\
-\texttt{ TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{STANDARD, NONE}$\}$\\
-\texttt{ POSITION\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{VECTOR, NONE}$\}$\\
-\texttt{ VELOCITY\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{VECTOR, NONE}$\}$\\
-\texttt{ ACCELERATION\_REQUEST\_HANDLER\_TYPE} $\in$ $\{$\texttt{VECTOR, NONE}$\}$\\
-
-Depending on the chosen type more variables have to be specified.\\
-
-For \texttt{MARKER\_REQUEST\_HANDLER\_TYPE=STANDARD} \\
-\begin{itemize}
-\item \texttt{STANDARD\_MARKER\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
-\item \texttt{STANDARD\_MARKER\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
-\end{itemize} 
-
-For \texttt{TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE=STANDARD} \\
-\begin{itemize}
-\item \texttt{STANDARD\_TYPE\_CHANGE\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
-\item \texttt{STANDARD\_TYPE\_CHANGE\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
-\end{itemize} 
-
-For \texttt{POSITION\_REQUEST\_HANDLER\_TYPE=VECTOR} \\
-\begin{itemize}
-\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
-\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$\\
-\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_MODIFIER} : Liste von Vector Modifiern (siehe \ref{sec:vectorModifiers})
-\end{itemize} 
-
-For \texttt{VELOCITY\_REQUEST\_HANDLER\_TYPE=VECTOR} \\
-\begin{itemize}
-\item \texttt{VECTOR\_VELOCITY\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
-\item \texttt{VECTOR\_VELOCITY\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
-\item \texttt{VECTOR\_VELOCITY\_REQUEST\_HANDLER\_MODIFIER} : List of vector modifiers (see \ref{sec:vectorModifiers})
-\end{itemize} 
-
-For \texttt{POSITION\_REQUEST\_HANDLER\_TYPE=VECTOR} \\
-\begin{itemize}
-\item \texttt{VECTOR\_ACCELERATION\_REQUEST\_HANDLER\_SEED} $\in$ $\mathbb{N}$
-\item \texttt{VECTOR\_ACCELERATION\_REQUEST\_HANDLER\_DISCARD\_PROB} $\in$ $[0,1]$
-\item \texttt{VECTOR\_ACCELERATION\_REQUEST\_HANDLER\_MODIFIER} : list of vector modifiers (see \ref{sec:vectorModifiers})
-\end{itemize} 
-
-For a specification of \texttt{VECOTR\_MODIFIERS} see section \ref{sec:vectorModifiers}.\\
-=======
-\subsubsection{Request Handler without Vector Modifier}\label{sec:requestHandlerWithoutVectorModifier}
-The value of a Request Handler without Vector Modifier is a tuple of the form:
-\begin{center}
-\texttt{(TYPE,DISCARD\_PROB,SEED)}\\
-\end{center}
-with\\
-\texttt{TYPE} $\in$ $\{$\texttt{STANDARD,NONE}$\}$\\
-\texttt{DISCARD\_PROB} $\in$ $[0,1]$\\
-\texttt{SEED} $\in$ $\mathbb{N}$
-
 \subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
 
-\texttt{VECTOR\_MODIFIERS} is a (not necessarily nonempty) list, i.\,e. 
+The list of vector modifiers is a (not necessarily nonempty) list, i.\,e. 
 \begin{center}\scriptsize
-	\texttt{VECTOR\_MODIFIERS=VECTOR\_MODIFIER\_1;VECTOR\_MODIFIER\_2,...}
+	\texttt{(VECTOR\_MODIFIER\_1);(VECTOR\_MODIFIER\_2);...}
 \end{center}
 The order of the elements of this list is important.\\
 If there shall be used no Vector Modifier for the corresponding Request Handler, then use \texttt{VECTOR\_MODIFIERS=}''''.\\
