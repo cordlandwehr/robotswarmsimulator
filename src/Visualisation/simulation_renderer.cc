@@ -608,32 +608,24 @@ boost::array<std::string, 12> helptext;
 }
 
 void SimulationRenderer::draw_about(){
-
-	// LEFT
+	//render logo as textured quad
 	glDisable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
-
 	tex_.bind();
-
-
-
-			glPushMatrix();
-			glLoadIdentity();
-
+	glPushMatrix();
+	glLoadIdentity();
 	glBegin(GL_QUADS);
-	glColor3f(1,1,1);
-
+	       glColor3f(1,1,1);
 		   glTexCoord2f(0, 1); glVertex3f(-1, 0.44f,-1.1f);
 		   glTexCoord2f(1, 1); glVertex3f(1, 0.44f,-1.1f);
 		   glTexCoord2f(1, 0); glVertex3f(1, -0.44f,-1.1f);
 		   glTexCoord2f(0, 0); glVertex3f(-1,-0.44f,-1.1f);
-		  glEnd();
-	    glPopMatrix();
+	glEnd();
+	glPopMatrix();
+    glDisable(GL_TEXTURE_2D );
+	glEnable( GL_LIGHTING );
 
-
-		  glDisable(GL_TEXTURE_2D );
-		  glEnable( GL_LIGHTING );
-
+	//render text as bitmap font
 	boost::array<std::string,6> abouttext;
 
 	abouttext[0]="This RobotSwarmSimulator was developed as part of the university";
