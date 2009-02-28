@@ -356,10 +356,11 @@ void Parser::load_obstacle_file() {
 void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 	string line;
 	ifstream project_file;
-	string filename = "";
 
-	// todo(peter) It seems that these file names are absolute. But they should be relative to the directory of the main
-	//             projectfile (.swarm), because they're referenced there.
+	//get path to file
+	int pos_of_last_slash = project_filename_.find_last_of("/");
+	string filename = project_filename_.substr(0, pos_of_last_slash+1);
+
 	//depending on which file to load, specify file extension
 	if(load_robot_file)
 		filename += robot_filename_ + ".robot";
