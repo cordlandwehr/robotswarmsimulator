@@ -16,16 +16,24 @@
 
 #define kSpeed	0.1f
 
-
+/**
+ * The MoveableCamera is a first person camera. It allows to navigate in the world freely
+ * using the mouse and the keyboard.
+ *
+ * The important method for navigation are:
+ * 	  By mouse:
+ * 		set_view_by_mouse to rotate the view by the mouse
+ *
+ * 	   By keyboard:
+ * 		strafe_left, strafe_right, move_up, move_down
+ *
+ */
 class MoveableCamera : public  Camera {
 
 public:
 
 
 	MoveableCamera();
-
-
-
 
 
 	/**

@@ -36,22 +36,46 @@ class MD2 {
 	  *
 	  * \return True when the model could be loaded.
 	  */
-	 bool load_model(std::string & model_file );
+	 bool load_model(const std::string & model_file );
 
 	 /**
 	  * \brief Draws the model in the origin
 	  */
-	 void draw_model();
+	 void draw_model() const;
 
  private:
 
-	 void draw_model_simple();
-	 void draw_model_vbo();
-	 void draw_model_lists();
+	 /**
+	  * Draws the model using a simple loop and simple OpenGL functions
+	  */
+	 void draw_model_simple() const;
+	 /**
+	  * Draws the model using Vertex Buffer Objects
+	  */
+	 void draw_model_vbo() const;
 
+	 /**
+	  * Draws the Model using ArrayLists
+	  */
+	 void draw_model_lists() const;
 
+	 /**
+	  * This loads the model from a given file.
+	  */
+	 bool load_model_file(const std::string & model_file );
+
+	 void calculate_normals();
+
+	 /**
+	  * this set ups the lists for drawing with lists and vertex buffer objects
+	  */
 	 void setup_lists();
+
+	 /**
+	  * Checks whether the Vertex Buffer Object extensions are available.
+	  */
 	 void try_setup_vbo();
+
 
 	 /**
 	  * \enum DrawType
@@ -79,6 +103,7 @@ class MD2 {
 	 	int num_triangles;
 	 	int num_gl_cmds;
 	 	int num_frames;
+	 	int offset_skins;
 	 	int offset_st;
 	 	int offset_triangles;
 	 	int offset_frames;
@@ -100,8 +125,8 @@ class MD2 {
 	  * This one is used during loading the mesh.
 	  */
 	 struct STIndex{
-		 short s;
-		 short t;
+		 short int s;
+		 short int t;
 	 };
 
 	 /**
@@ -131,6 +156,10 @@ class MD2 {
 		 float p[3];
 	 };
 
+
+	 Vec calculate_normal(Vec & v1,Vec & v2) const;
+	 Vec vec_sub(Vec & v1 , Vec & v2) const;
+
 	 /**
 	  * A simple entry in the mesh. This represents a triangle given by the points
 	  * with indices in vec_index and texture coordinates stored in the st list with
@@ -150,19 +179,40 @@ class MD2 {
 	 std::size_t frame_index_; // currently unused
 	 std::size_t next_frame_; // currently unused
 
-	 float interpolate_;
 	 /**
-	  *
+	  * This value is used for interpolating bewteen key frames
+	  */
+	 float interpolate_;
+
+	 /**
+	  * Triangles of the Model defined by a Mesh.
 	  */
 	 boost::scoped_array<Mesh>  triangle_index_;
+
+	 /**
+	  * The Texture coordinates as floats.
+	  */
 	 boost::scoped_array<Texcoord> st_index_;
+
+	 /**
+	  * The Vertex of the Model
+	  */
 	 boost::scoped_array<Vec> point_list_;
 
+	 /**
+	  * The normals of each Vertex
+	  */
 	 boost::scoped_array<Vec> normal_list_;
 
+	 /**
+	  * The texture used for this model
+	  */
 	 Texture texture_;
 
 
+	 /**
+	  * How to draw the model
+	  */
 	 DrawType  draw_type;
 
 	 /**

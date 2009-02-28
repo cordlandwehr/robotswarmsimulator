@@ -240,62 +240,8 @@ void Texture::load_tga(){
 	std::fclose(fp);
 	loaded_ = true;
 }
-/*
-void Texture::load_tga(){
 
-	std::FILE* fp = fopen(file_name_.c_str(), "rb");
 
-	if(fp == NULL){
-		return;
-	}
-
-	unsigned char ignore = 0;
-	std::fread( &ignore, sizeof( ignore ), 1, fp );
-	std::fread( &ignore, sizeof( ignore ), 1, fp );
-
-	fileheader::TGAHEADER tga_header;
-
-	std::fread( &tga_header.imageTypeCode, sizeof( unsigned char), 1, fp);
-
-	if( tga_header.imageTypeCode != 2 && tga_header.imageTypeCode != 3 ){
-		std::fclose( fp );
-		return;
-	}
-
-	// ignore next 13 byte
-	std::fseek(fp , SEEK_CUR , 13);
-
-	// image size
-	std::fread(&tga_header.imageWidth, sizeof(short int), 1, fp );
-	std::fread(&tga_header.imageHeight, sizeof(short int),1, fp );
-
-	// image depth
-
-	std::fread(&tga_header.bitCount, sizeof( unsigned char),1, fp);
-	std::fread(&ignore, sizeof( ignore ), 1, fp );
-
-	unsigned int color_mode = tga_header.bitCount / 8;
-	unsigned int image_size = tga_header.imageHeight * tga_header.imageWidth * color_mode;
-
-	boost::scoped_array<unsigned char> tga_data( new unsigned char [ image_size ] );
-
-	std::fread(tga_data.get(), sizeof(unsigned char) , image_size, fp );
-
-	int index_rgb  = 0;
-	data_.reset( new unsigned char [ image_size / color_mode ] );
-	for(unsigned int index = 0; index < image_size; index+= color_mode ){
-
-		data_[index_rgb] =  tga_data[index + 2];
-		data_[index_rgb +1 ] =  tga_data[index + 1];
-		data_[index_rgb + 2] =  tga_data[index];
-
-		index_rgb+=3;
-	}
-
-	std::fclose( fp );
-	loaded_ = true;
-
-}*/
 
 void Texture::load_bmp(){
 	std::FILE * fp = std::fopen(file_name_.c_str(), "rb");
@@ -324,10 +270,6 @@ void Texture::load_bmp(){
 		bmp_info.biSizeImage = width_ * height_ * 3;
 	}
 
-
-
-	std::printf("%i %i %i %i\n", bmp_header.bfOffBits, width_, height_, bmp_info.biSizeImage);
-
 	std::fseek(fp, bmp_header.bfOffBits, SEEK_SET );
 
 	boost::scoped_array<unsigned char> bmp_data (  new unsigned char[ bmp_info.biSizeImage ]) ;
@@ -339,8 +281,6 @@ void Texture::load_bmp(){
 	}
 
 	std::size_t bytes_read = std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
-
-	std::printf("%i %i\n", bytes_read, bmp_info.biSizeImage );
 
 
 	data_.reset(   new unsigned char[ bmp_info.biSizeImage ] );

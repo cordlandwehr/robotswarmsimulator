@@ -38,6 +38,8 @@ const float kCoordZColor[] = {0.0f,0.0f,1.0f,1.0f};
 const float kScaleVecs = 4.0;
 const float kScaleCoordVecsRev = 2.0;
 
+const std::string kModelName = "data/model/tris.MD2";
+
 RobotRenderer::RobotRenderer(SimulationRenderer * renderer ){
 
 
@@ -62,6 +64,10 @@ void RobotRenderer::init(){
 		glutSolidSphere(kRobotRadius, kRobotSlices, kRobotStacks);
 
 	glEndList();
+
+	// load model..
+	//use_model_ = model_.load_model( kModelName );
+	use_model_ = false;
 
 }
 
@@ -144,11 +150,13 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 	glEnd();
 
 
-	//disabled robot's color for now as it seemingly randomly did not work
-	//TODO(kamil) fix this
-	//glColor3fv(&kRobotIdColor[ robot->color() < kRobotIdColorNum ? robot->color() : 0 ][0]);
-	glColor3fv(&kRobotIdColor[0][0]);
-	if(!use_model_){
+
+	if(use_model_){
+	//	model_.draw_model();
+	}else {
+		unsigned int rob_color =  robot->color() < kRobotIdColorNum ? robot->color() : 0 ;
+
+		glColor3fv(&kRobotIdColor[rob_color][0]);
 
 		draw_robot_sphere( rob_pos );
 	}
@@ -168,7 +176,7 @@ void RobotRenderer::set_default_color(float r, float g, float b, float alpha){
 
 void RobotRenderer::load_model(std::string & filename ){
 
-	//TODO(kamil) implement this...
+	//model_.load_model( filename );
 
 }
 

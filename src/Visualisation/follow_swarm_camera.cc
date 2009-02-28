@@ -8,6 +8,8 @@
 #include <cmath>
 #include <cstdio>
 
+#include <boost/foreach.hpp>
+
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
 #include "../OpenGL/glut_headers.h"
@@ -146,9 +148,9 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	view_(1) = center(1);
 	view_(2) = center(2);
 
-	position_(0) = center(0) + width;
-	position_(1) = center(1) + width *3.20 ;
-	position_(2) = center(2) + width* 2.25;
+	position_(0) = center(0)  + width * 0.7;
+	position_(1) = center(1) + width *1.40 ;
+	position_(2) = center(2) + width* 1.25;
 
 }
 
@@ -156,10 +158,6 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 void FollowSwarmCamera::look_rot() const{
 
 
-/*	gluLookAt(position_(0), position_(1), position_(2),
-				  view_(0),	 view_(1),     view_(2),
-				  up_vector_(0), up_vector_(1), up_vector_(2));
-*/
 
 	Vector3d n = position_ - view_;
 	Vector3d u = Cross( up_vector_, n);

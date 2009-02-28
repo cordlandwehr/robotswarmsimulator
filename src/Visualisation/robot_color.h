@@ -10,6 +10,9 @@
 
 const unsigned int kRobotIdColorNum = 19;
 
+/**
+ * A list of colors to map color numbers to RGB triples
+ */
 const float kRobotIdColor [][3] = {
 	{ 0.0f,1.0f,0.0f },
 	{ 0.0f,1.0f,0.2f },

@@ -66,8 +66,8 @@ SimulationRenderer::SimulationRenderer()
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
 
 
-	cameras_[0]=boost::shared_ptr<Camera>(new MoveableCamera());
-	cameras_[1]=boost::shared_ptr<Camera>(new FollowSwarmCamera());
+	cameras_[1]=boost::shared_ptr<Camera>(new MoveableCamera());
+	cameras_[0]=boost::shared_ptr<Camera>(new FollowSwarmCamera());
 
 	active_camera_index_=0;
 
@@ -165,8 +165,7 @@ void SimulationRenderer::init(int x, int y){
 	//sky_box_->init( kSkyBoxTexName);
 	robot_renderer_->init();
 
-	//std::string str("data/tex/skybox/back.bmp");
-	//tex_.load(str);
+
 
 	resize(x,y);
 }
@@ -214,10 +213,6 @@ void SimulationRenderer::setup_projection(){
 
 			break;
 	}
-
-
-
-	//cameras_[active_camera_index_]->look();
 
 
 	glMatrixMode(GL_MODELVIEW);

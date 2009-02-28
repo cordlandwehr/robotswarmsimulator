@@ -15,6 +15,8 @@
 /**
  * This represents a skybox.
  * It renders a sky in infinity.
+ *
+ *
  */
 class SkyBox{
  public:
@@ -46,9 +48,19 @@ class SkyBox{
 		 TEX_LEFT
 	 };
 
-
+	 /**
+	  * Saves the textures needed by the skybox
+	  */
 	 Texture texture_[6];
+
+	 /**
+	  * Indicates whether the sky box can be used.
+	  */
 	 bool can_use_ ;
+
+	 /**
+	  * Index for the compiled list
+	  */
 	 unsigned int compiled_list_;
 
 };

@@ -22,6 +22,15 @@ class Obstacle;
 class RobotData;
 
 
+/**
+ * This is the base class for all cameras.
+ *
+ * Usage:
+ * 		Call update and look at the beginning of each frame.
+ *
+ * 		The look method can be split into rotation and translation for some effects, like a skybox.
+ *
+ */
 class Camera {
 
 public:
@@ -114,8 +123,21 @@ public:
 	 */
 	virtual void strafe_right();
 
-	void set_screen_width(int width){ screen_width_ = width; }
-	void set_screen_height(int height){ screen_height_ = height; }
+	/**
+	 * Sets the information about the width of the screen.
+	 * It should be updated when ever the window size changes.
+	 */
+	void set_screen_width(int width){
+		screen_width_ = width;
+	}
+
+	/**
+	 * Sets the information about the height of the screen.
+	 * It should be updated when ever the window size changes.
+	 */
+	void set_screen_height(int height){
+		screen_height_ = height;
+		}
 
 	/**
 	 * This updates the camera's view and other data.
@@ -127,26 +149,60 @@ public:
 
 
 	/**
-	 * \brief This method lets the maera look at the view point from the position point
+	 * \brief Does the rotating of the camera.
 	 */
 	virtual void look_rot() const;
 
+	/**
+	 * \brief does the translating of the camera
+	 */
 	virtual void look_translate() const;
 
+	/**
+	 * \brief This method lets the maera look at the view point from the position point
+	 */
 	virtual void look() const;
 
 
+	/**
+	 * Returns the position of the camera.
+	 */
+	Vector3d & position() {
+		return position_;
+	}
 
-		Vector3d & position() {	return position_;		}
+	/**
+	 * Returns the view point of the camera.
+	 */
+	Vector3d & view()	{
+		return view_;
+	}
 
-		Vector3d & view()		{	return view_;			}
+	/**
+	 * Returns the vector which defines where "up" is in the world.
+	 */
+	Vector3d & up_vector() {	return up_vector_;		}
 
-		Vector3d & up_vector() {	return up_vector_;		}
+	/**
+	 * The strafe vector. It is the right of the viewer.
+	 */
+	Vector3d & strafe()	{
+		return strafe_;
+	}
 
-		Vector3d & strafe()	{	return strafe_;		}
+	/**
+	 * Returns the saved window height.
+	 */
+	int screen_height(){
+		return screen_height_;
+	}
 
-		int screen_height(){ return screen_height_;}
-		int screen_width(){return screen_width_; }
+	/**
+	 * Returns the saved window width.
+	 */
+	int screen_width(){
+		return screen_width_;
+	}
 
 
 protected:

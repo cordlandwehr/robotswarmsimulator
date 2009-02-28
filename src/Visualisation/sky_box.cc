@@ -13,6 +13,9 @@
 #include "texture.h"
 #include "sky_box.h"
 
+
+float kSkyBoxSize = 80.0f;
+
 namespace texnames {
 
 	std::string tex_names[6] = {"front.bmp", "back.bmp", "up.bmp", "down.bmp", "right.bmp", "left.bmp" };
@@ -57,60 +60,60 @@ bool SkyBox::init( std::string path_to_tex){
 	glDisable( GL_LIGHTING );
 	glEnable( GL_TEXTURE_2D );
 
-	//glColor3f(1.0f,1.0f,1.0f);
+	glColor3f(1.0f,1.0f,1.0f);
 	 // Front
 	texture_[TEX_FRONT].bind();
 	glBegin(GL_QUADS);
-	  glTexCoord2f(1, 0); glVertex3f(-5.0f, -5.0f, 5.0f);
-	  glTexCoord2f(1, 1); glVertex3f(-5.0f, 5.0f, 5.0f);
-	  glTexCoord2f(0, 1); glVertex3f(5.0f, 5.0f, 5.0f);
-	  glTexCoord2f(0, 0); glVertex3f(5.0f, -5.0f, 5.0f);
+	  glTexCoord2f(1, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(1, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(0, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(0, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
 	 glEnd();
 
 	// BACK
 	texture_[TEX_BACK].bind();
 	 glBegin(GL_QUADS);
-	  glTexCoord2f(0, 0); glVertex3f(-5.0f, -5.0f, -5.0f);
-	  glTexCoord2f(0, 1); glVertex3f(-5.0f, 5.0f, -5.0f);
-	  glTexCoord2f(1, 1); glVertex3f(5.0f, 5.0f, -5.0f);
-	  glTexCoord2f(1, 0); glVertex3f(5.0f, -5.0f, -5.0f);
+	  glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(1, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
 	 glEnd();
 
 	// UP
 	texture_[TEX_UP].bind();
 	 glBegin(GL_QUADS);
-	  glTexCoord2f(0, 0); glVertex3f(-5.0f, 5.0f, -5.0f);
-	  glTexCoord2f(0, 1); glVertex3f(-5.0f, 5.0f, 5.0f);
-	  glTexCoord2f(1, 1); glVertex3f(5.0f, 5.0f, 5.0f);
-	  glTexCoord2f(1, 0); glVertex3f(5.0f, 5.0f, -5.0f);
+	  glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(1, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
 	 glEnd();
 
 
 	// DOWN
 	texture_[TEX_DOWN].bind();
 	 glBegin(GL_QUADS);
-	  glTexCoord2f(1, 1); glVertex3f(5.0f, -5.0f, -5.0f);
-	  glTexCoord2f(1, 0); glVertex3f(5.0f, -5.0f, 5.0f);
-	  glTexCoord2f(0, 0); glVertex3f(-5.0f, -5.0f, 5.0f);
-	  glTexCoord2f(0, 1); glVertex3f(-5.0f, -5.0f, -5.0f);
+	  glTexCoord2f(1, 1); glVertex3f(kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
 	 glEnd();
 
 	// RIGHT
 	texture_[TEX_RIGHT].bind();
 	 glBegin(GL_QUADS);
-	  glTexCoord2f(0, 0); glVertex3f(5.0f, -5.0f, -5.0f);
-	  glTexCoord2f(1, 0); glVertex3f(5.0f, -5.0f, 5.0f);
-	  glTexCoord2f(1, 1); glVertex3f(5.0f, 5.0f, 5.0f);
-	  glTexCoord2f(0, 1); glVertex3f(5.0f, 5.0f, -5.0f);
+	  glTexCoord2f(0, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(1, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(0, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
 	 glEnd();
 
 	// LEFT
 	 texture_[TEX_LEFT].bind();
 	  glBegin(GL_QUADS);
-	   glTexCoord2f(1, 0); glVertex3f(-5.0f, -5.0f, -5.0f);
-	   glTexCoord2f(0, 0); glVertex3f(-5.0f, -5.0f, 5.0f);
-	   glTexCoord2f(0, 1); glVertex3f(-5.0f, 5.0f, 5.0f);
-	   glTexCoord2f(1, 1); glVertex3f(-5.0f, 5.0f, -5.0f);
+	   glTexCoord2f(1, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
+	   glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
+	   glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
+	   glTexCoord2f(1, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
 	  glEnd();
 
 	  glDisable(GL_TEXTURE_2D );

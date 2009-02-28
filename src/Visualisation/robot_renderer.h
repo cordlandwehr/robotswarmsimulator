@@ -13,10 +13,10 @@
 
 #include "../Utilities/vector_arithmetics.h"
 
+#include "md2.h"
 
 class SimulationRenderer;
 class RobotData;
-
 
 /**
  * This class renders robots and their properties like velocity, acceleration. etc.
@@ -83,6 +83,10 @@ private:
 	 */
 	unsigned int compiled_list_;
 
+	/**
+	 * The MD2 model.
+	 */
+	MD2 model_;
 };
 
 
