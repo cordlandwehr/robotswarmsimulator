@@ -23,7 +23,7 @@ double SphericView::view_radius() const {
 
 void SphericView::init(const WorldInformation & world_information ){
 	View::init(world_information);
-	octree_.reset(new Octree(int(std::ceil(std::log(world_information.robot_data().size() ))),view_radius_ * 2.0));
+	octree_.reset(new Octree(int(std::ceil(std::log((double)world_information.robot_data().size() ))),view_radius_ * 2.0));
 	octree_->create_tree(world_information.markers(),
 						 world_information.obstacles(),
 	 					 world_information.robot_data() );

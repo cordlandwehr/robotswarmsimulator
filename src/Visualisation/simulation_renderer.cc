@@ -108,7 +108,7 @@ void SimulationRenderer::init(){
 }
 
 void SimulationRenderer::init(int x, int y){
-	std::string str("logo.bmp");
+	std::string str("resources/Textures/logo.bmp");
 		tex_.load(str);
 
 

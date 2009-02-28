@@ -44,7 +44,7 @@ bool MD2::load_model(const std::string & model_file ){
 		std::cerr << "Can't load model file " << model_file << "!" << std::endl;
 	}
 
-
+	return true;
 
 }
 
