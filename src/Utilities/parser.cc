@@ -23,13 +23,6 @@ void Parser::init() {
 	parameter_map_["STATISTICS_TEMPLATE"] = "ALL";
 	parameter_map_["STATISTICS_SUBSETS"] = "{ALL}";
 	parameter_map_["ROBOT_CONTROL"] = "UNIFORM_ROBOT_CONTROL";
-
-	//maybe use other default values
-	parameter_map_["POSITION_REQUEST_HANDLER_TYPE"] = "NONE";
-	parameter_map_["POSITION_REQUEST_HANDLER_DISCARD_PROB"] = "0.0";
-	parameter_map_["POSITION_REQUEST_HANDLER_SEED"] = "1";
-	parameter_map_["POSITION_REQUEST_HANDLER_MODIFIER"] = "";
-
 }
 
 bool Parser::is_comment(const string& line) {
