@@ -57,15 +57,21 @@ install(TARGETS RobotSwarmSimulator
 if(WIN32)
 	string(REGEX REPLACE "\\.lib$" ".dll" LUA_LIBRARIES_DLL ${LUA_LIBRARIES})
 	string(REGEX REPLACE "\\.lib$" ".dll" GLUT_LIBRARY_DLL ${GLUT_glut_LIBRARY})
-	install(FILES ${LUA_LIBRARIES_DLL}
-	        DESTINATION bin
-	        CONFIGURATIONS Release
-	        COMPONENT lualibraries
-	)
-	install(FILES ${GLUT_LIBRARY_DLL}
-	        DESTINATION bin
-	        CONFIGURATIONS Release
-	        COMPONENT glutlibraries
-	)
+	
+	if(NOT LUA_LIBRARIES_DLL MATCHES ".*.a$")
+		install(FILES ${LUA_LIBRARIES_DLL}
+		        DESTINATION bin
+		        CONFIGURATIONS Release
+		        COMPONENT lualibraries
+		)
+	endif(NOT LUA_LIBRARIES_DLL MATCHES ".*.a$")
+	
+	if(NOT GLUT_LIBRARY_DLL MATCHES ".*.a$")
+		install(FILES ${GLUT_LIBRARY_DLL}
+		        DESTINATION bin
+		        CONFIGURATIONS Release
+		        COMPONENT glutlibraries
+		)
+	endif(NOT GLUT_LIBRARY_DLL MATCHES ".*.a$")
 endif(WIN32)
 

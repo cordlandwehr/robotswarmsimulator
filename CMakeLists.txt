@@ -41,12 +41,20 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	        COMPONENT projectfiles
 	        FILES_MATCHING
 	        PATTERN *.swarm
-			PATTERN *.robot
-			PATTERN *.obstacle
-			PATTERN .svn EXCLUDE
+	        PATTERN *.robot
+	        PATTERN *.obstacle
+	        PATTERN .svn EXCLUDE
+	)
+endif(CMAKE_BUILD_TYPE MATCHES Release)
+
+# package logo
+if(CMAKE_BUILD_TYPE MATCHES Release)
+	install(FILES resources/Textures/logo.bmp
+	        DESTINATION bin/resources/Textures
+	        CONFIGURATIONS Release
+	        COMPONENT mainprogram
 	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 
 # packaging
 include(packaging)
-
