@@ -1,6 +1,11 @@
 \documentclass[a4paper,halfparskip,11pt,twoside]{scrartcl}
 \usepackage{schlaue_schwaerme}
 
+\usepackage{url}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cupdot}{\ensuremath{\mathaccent\cdot\cup}} % disjuncted union
+
 \begin{document}
 \init{}
 
@@ -21,21 +26,42 @@
 }
 
 \section{Introduction}
-This document shall help you how to use the \RSS. For this purpose here are listed all input-parameters, project-file specifications and GUI-inputs.
+This document shall help you to use the \RSS\ to simulate robot swarms and to get useful information by the visualization and statistics modules.
 
-\section{Starting Simulator}
-The \RSS\ exists as executable for Linux, MacOS and Windows. By starting from command-line you need to specify the mandatory project configuration file ({\tt *.swarm} or otherwise the {\ttfamily -{}-generate} option an the according parameters. Thus a typical execution of the \RSS\ looks like this:
+For this purpose the document is divided in several sections. It will be usefull if you just start this the '`Getting Started!"' section play a little bit with the simulator and continue with reading the more detailed information on input parameters, input-file specifications, generating simulations and getting statistics. 
+
+
+\section{Getting Started}
+For trial use of \RSS\ you can simply run generation mode, load one of our default algorithms an see how the robots are moving in the space. All example files can be found in subdirectory {\tt ProjectFiles}. Here we will present a short example how to simulate the behavior of the {\sc CenterOfGravity} algorithm (COG).
+
+\begin{enumerate}
+	\item Create a new directory ``mytest'' to keep all avoid unwanted output files everywhere in your system.
+	\item Copy file {\tt cog.lua} to this directory.
+	\item Run {\tt <path to RSS>/RobotSwarmSimulator --generate --distr-pos=20\newline --algorithm=cog.lua} and the the following files are being generated:
+	\begin{itemize}
+		\item {\tt newrandom.swarm} -- here you can edit all global information
+		\item {\tt newrandom.robot} -- here you can edit the robots
+		\item {\tt newrandom.obstacle} -- here you can add obstacles
+	\end{itemize}
+	\item Run {\tt <path to RSS>/RobotSwarmSimulator --project-file=newrandom} and see the simulation works. You can stop the simulation by pressing \fbox{\tt Q}.
+	\item A new statistics file called \todo{which name?} has been generated in your working directory. You can run gnuplot to get charts.
+\end{enumerate}
+This simple test can be used as base for further tests. Please look at the following chapters to get specifications of the input-files and the user's inferface.
+%TODO (cola) check if everything works in release 
+
+\section{Running the \RSS\ with Parameters}
+\todo{describe the package structure}
+
+The \RSS\ exists as executable for Linux, MacOS and Windows in the corresponding directories. Each execution of the \RSS\ needs specific parameters that are mandatory. By running the \RSS\ you have to specify at least, which kind of execution do you want. By adding the parameter {\tt -{}-generate} the generation mode is started to create new input-files. On the other side by adding the parameter {\tt -{}-project-file=<your input>} the common simulation mode is started. Also a run with special parameters like {\tt-{}-help} or {\tt-{}-about} is possible. Thus a typical runs look like:
 \begin{verbatim}
     ./RobotSwarmSimulator --help
-    ./RobotSwarmSimulator --project-file <path_to_TestData>/testfile_2
-    ./RobotSwarmSimulator --project-file <path_to_TestData>/testfile_2 
+    ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2
+    ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2 
                           --history-length 10
     ./RobotSwarmSimulator --generate --distr-pos=17.0
 \end{verbatim}
 
-\todo{all parameters from help should be documented here in full length}
-
-All of the parameters listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can bin found in the following sections.
+All of the options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can bin found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
 
 \begin{lstlisting}[caption={RSS Helpline},label=lst:RSS-help]
 General options:
@@ -51,50 +77,103 @@ Generator options:
   --worldfile arg (=newrandom)    world-file for output
   --robotfile arg (=newrandom)    robot-file for output
   --obstaclefile arg (=newrandom) obstacle-file for output
-  --distr-pos arg (=0)            distribute velocity in cube [0;distr-pos]^3
+  --distr-pos arg (=0)            distribute position in cube [0;distr-pos]^3
   --distr-vel arg (=0)            distribute velocity in cube [0;distr-vel]^3
-  --distr-acc arg (=0)            distribute velocity in cube [0;distr-acc]^3
+  --distr-acc arg (=0)            distribute acceleration in cube [0;distr-acc]^3
   --distr-coord                   distribute robot coordsystems uniformly
 
 Simulation options:
   --project-file arg         Project file to load
   --history-length arg (=25) history length
+
 \end{lstlisting}
 
 
 \subsection{General options}
 \begin{description}
-	\item [-{}-help] Lists all possible options
-	\item [-{}-version] Current version of \RSS
-	\item [-{}-about] The developer team
+	\item [-{}-help] Lists all possible options.
+	\item [-{}-version] This option shows the version information of your \RSS.
+	\item [-{}-about] Get information about the developer team, contact information and more.
+\end{description}
+
+\subsection{Generator options}
+\begin{description}
+	\item [-{}-generate] Switch to generator mode. This is necessary for the further options of this section.
+	\item [-{}-seed=arg] Sets the seed for the random number generator for robot generation. If not set the seed is {\tt 1}, but you really should set this value. An unsigned integer value is expected.
+	\item [-{}-robots=arg] The number of robots to be generated. The default number is 100. An unsigned integer value is expected.
+	\item [-{}-algorithm=arg] The name of the algorithm the robots should use. If not set the algorithm {\tt SimpleRobot} is used. This is only a stub without any functionality. Also the name of a lua-file can be given. Extensionsion {\tt .lua} is mandatory for lua-files.
+	\item [-{}-worldfile=arg] The name of the worldfile that shall be generated. Default is {\tt newrandom}. File-name without extension is expected.
+	\item [-{}robotfile=arg] The name of the robotfile that shall be generated. Default is {\tt newrandom}. File-name without extension is expected.
+	\item [-{}-obstaclefile=arg] The name of the obstaclefile that shall be generated. Default is {\tt newrandom}. File-name without extension is expected.
+	\item [-{}-distr-pos=arg] Distributes the position of robots uniformly at random in box of size {\tt arg $\times$ arg $\times$ arg}.
+ If not set, all robots are at position zero.
+	\item [-{}-distr-vel=arg] Distributes the velocity of robots uniformly at random by vectors in box of size {\tt arg $\times$ arg $\times$ arg}.
+ If not set, all velocities are zero.
+	\item [-{}-distr-acc=arg] Distributes the acceleration of robots uniformly at random by vectors in box of size {\tt arg $\times$ arg $\times$ arg}.
+ If not set, all velocities are zero.
+\end{description}
+%TODO what do i distribute?! max oder start?
+
+\subsection{General options}
+\begin{description}
+	\item [-{}-project-file] Specifies the project file use. Do not add extension {\tt .swarm}. Mandatory for simulation.
+	\item [-{}-history-length=arg] Sets the history length i.e. the length of the ringbuffer to store world-objects until they get visualized. Standard is 25. An unsigned integer is expected.
 \end{description}
 
 
-%TODO get all information from --help here...
-%TODO nearly the whole section is missing
-
-
-\section{Using the 3d-Interface}
-During the simulation it is possible to interact with the simulation in different ways. The following hot-keys are supported while simulalization:
+\section{Using the Simulator-Interface}
+During the simulation it is possible to interact with the simulation in different ways. The following hot-keys are supported while simulation:
 
 \begin{description}
-	\item [Space] Start/Stop
-	\item [q] Quit \RSS\
-	\item [F1] Help
-	\item [g] Show Center of all gravity of Swarm
-	\item [v] Show velocity vectors
-	\item [b] Show acceleration vectors
-	\item [k] Show global coordinates system
-	\item [W,A,S,D] W for up, S for down
+	\item [\fbox{\tt Space}] Start/Stop
+	\item [\fbox{\tt Q}] the Quit \RSS\
+	\item [\fbox{\tt F1}] Help
+	\item [\fbox{\tt G}] Show Center of all gravity of Swarm
+	\item [\fbox{\tt V}] Show velocity vectors
+	\item [\fbox{\tt B}] Show acceleration vectors
+	\item [\fbox{\tt K}] Show global coordinates system
+	\item [\fbox{\tt W},\fbox{\tt A},\fbox{\tt S},\fbox{\tt D}] In the corresponding camera mode use \fbox{\tt W} for up  and \fbox{\tt S} for down %TODO what about a,d?
 	\item [Arrow-Keys] left, right, before, behind
-	\item [mouse-movement] mouse for spinning
-	\item [+, -] increase/ decrease simulation-speed by constant
-	\item [*,/] double/ half simulation-speed
-	\item [c] Change camera
+	\item [Mouse] Mouse for spinning
+	\item [\fbox{\tt +}, \fbox{\tt -}] increase/ decrease simulation-speed by constant
+	\item [\fbox{\tt *},\fbox{\tt /}] double/ half simulation-speed
+	\item [\fbox{\tt C}] Change camera
 \end{description}
+%TODO(cola) compare with final version
 
+\section{Robot Definitions by LUA-files}
+There are two ways to define a new robot. One way is hardcoded in the \RSS\, the other way is to define the robots by scripting their behavior in the {\sffamily Lua} scripting language. For example Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in Lua.
+
+\todo{yeah, how can I do this?}
+
+\lstset{language=c}
+\begin{lstlisting}[caption={COG algorithm in Lua},label=lst:cog-lua]
+function main() 
+    robots = get_visible_robots();
+    center = get_position(get_own_identifier());
+    for i = 1, #robots do
+        center = center + get_position(robots[i]);
+    end
+    center = center / (#robots+1);
+    add_position_request(center);
+end
+\end{lstlisting}
+
+\section{Statistics}%TODO language!
+Durch die berechneten Statistiken werden zwei Dateien ausgegeben:
+
+\begin{itemize}
+\item \texttt{gnuplot\_20091224\_184129\_ALL.plt} (GNUPlot-Konfigurationsdatei)
+\item \texttt{output\_20091224\_184129\_ALL.plt} (zugehörige statistische Daten)
+\item \texttt{output\_20091224\_184129\_DATADUMP\_FULL.plt} (vollständiger Datendump)
+\end{itemize}
+
+Die Dateinamen ergeben sich aus dem aktuellen Datum (Jahr, Monat, Tag), sowie der Zeit (Stunden, Minuten, Sekunden), gefolgt von einer Bezeichnung der betrachteten Objektmenge (z.B. ALL, MASTERS,\dots für jeden Eintrag in STATISTICS\_SUBSETS wird ein eigenes solches Dateienpaar angelegt).
+
+\newpage
 \appendix
-
+\input{gnuplot}
+	\newpage
 \input{inputfile_specification}
 
 % Backcover

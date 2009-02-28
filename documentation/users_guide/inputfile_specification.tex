@@ -32,6 +32,7 @@ The following specifications hold only for the main projectfile (with extension 
 
 \clearpage
 \begin{sidewaystable}
+\scriptsize
 	\begin{tabular}{|l|p{0.3\textwidth}|p{0.3\textwidth}|p{0.2\textwidth}|}
 		\hline
 		\textbf{Variable name} & \textbf{Possible Values} & \textbf{Description} & \textbf{Default}\\\hline\hline
@@ -53,9 +54,13 @@ The following specifications hold only for the main projectfile (with extension 
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars}
 \end{sidewaystable}
+\thispagestyle{empty}
+\clearpage
+
 \clearpage
 \begin{sidewaystable}
-	\begin{tabular}{|l|p{0.2\textwidth}|p{0.3\textwidth}|p{0.1\textwidth}|}
+\scriptsize
+	\begin{tabular}{|l|p{0.3\textwidth}|p{0.3\textwidth}|p{0.1\textwidth}|}
 		\hline
 		\textbf{Variable name} & \textbf{Possible Values} & \textbf{Description} & \textbf{Default}\\\hline\hline
 
@@ -101,17 +106,15 @@ The following specifications hold only for the main projectfile (with extension 
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars2}
 \end{sidewaystable}
-
-
+\enlargethispage*{2cm}
 \thispagestyle{empty}
 \clearpage
 	
 Additional restrictions and information:
 \begin{itemize}
-	\item The order of the variables in the main project file isn't important.
-	\item If a variable doesn't appear in the main projectfile, then its default value will be used (if there exists a default value, otherwise an exception will be thrown while loading the main projectfile).
+	\item The order of the variables in the main project file is not important.
+	\item If a variable does not appear in the main projectfile, then its default value will be used if such a default value does exist (otherwise an exception will be thrown while loading the main project-file).
 \end{itemize}
-
 
 
 \subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
@@ -120,12 +123,11 @@ The list of vector modifiers is a (not necessarily nonempty) list, i.\,e.
 \begin{center}\scriptsize
 	\texttt{(VECTOR\_MODIFIER\_1);(VECTOR\_MODIFIER\_2);...}
 \end{center}
-The order of the elements of this list is important.\\
-If there shall be used no Vector Modifier for the corresponding Request Handler, then use \texttt{VECTOR\_MODIFIERS=}''''.\\
-\\
+The order of the elements of this list is important. If no Vector Modifier shall be used for the corresponding Request Handler, then use \texttt{VECTOR\_MODIFIERS=}''''.
+
 An element \texttt{VECTOR\_MODIFIER\_k} of the Vector Modifier list is a tuple, defined as follows:
 \begin{center}\scriptsize
-\texttt{VECTOR\_MODIFIER\_k=(VECTOR\_MODIFIER\_TYPE,VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..)}\\
+	\texttt{VECTOR\_MODIFIER\_k=(VECTOR\_MODIFIER\_TYPE,VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..)}
 \end{center}
 The number and types of paramters \texttt{VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..} depends on the corresponding type of the Vector Modifier. Currently there are the following types of Vector Modifiers:
 \begin{itemize}
@@ -133,26 +135,26 @@ The number and types of paramters \texttt{VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MOD
 	\item VectorTrimmer
 	\item VectorRandomizer
 \end{itemize}
-I.\,e. \texttt{VECTOR\_MODIFIER\_TYPE} $\in$ $\{$\texttt{VECTOR\_DIFFERENCE\_TRIMMER,VECTOR\_TRIMMER,VECTOR\_RANDOMIZER}$\}$\\
-\\
+I.\,e. \texttt{VECTOR\_MODIFIER\_TYPE} $\in$ $\{$\texttt{VECTOR\_DIFFERENCE\_TRIMMER,VECTOR\_TRIMMER,VECTOR\_RANDOMIZER}$\}$
+
 If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_DIFFERENCE\_TRIMMER}, then the following parameters are expected:
 \begin{enumerate}
 	\item length of type double
 \end{enumerate}
-I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,5.2)}.\\
-\\
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,5.2)}.
+
 If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_TRIMMER}, then the following parameters are expected:
 \begin{enumerate}
 	\item length of type double
 \end{enumerate}
-I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_TRIMMER} may look like: \texttt{(VECTOR\_TRIMMER,10.0)}.\\
-\\
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_TRIMMER} may look like: \texttt{(VECTOR\_TRIMMER,10.0)}.
+
 If \texttt{VECTOR\_MODIFIER\_TYPE}=\texttt{VECTOR\_RANDOMIZER}, then the following parameters are expected:
 \begin{enumerate}
 	\item seed of type unsigned int
 	\item standard derivation of type double
 \end{enumerate}
-I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,1,0.5)}.\\
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,1,0.5)}.
 
 \subsubsection{RobotControl}\label{sec:robotControl}
 The \texttt{RobotControl} variable defines the class which should be used to control the robots (and in particular to control the views of the robots). Currently one of the following classes has be chosen:
@@ -162,11 +164,9 @@ The \texttt{RobotControl} variable defines the class which should be used to con
 \end{enumerate}
 Each class is explained in detail below. Note that each class expects certain class specific parameters.
 
-\paragraph{UniformRobotControl}\label{sec:uniformRobotControl} \ \\
-This class assigns each robot the same view type. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values for this variable (view types) are definied below (see \ref{sec:viewtypes}). E.g. you may to assign each robot global view to the world using \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL="GLOBAL\_VIEW"}.
+\paragraph{UniformRobotControl}\label{sec:uniformRobotControl} This class assigns each robot the same view type. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values for this variable (view types) are definied below (see \ref{sec:viewtypes}). E.g. you may to assign each robot global view to the world using \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL="GLOBAL\_VIEW"}.
 
-\paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl} \ \\
-This class assigns each robottype the same view type. Therefore robots with different robot types may have different view types. Currently there are two robot types:
+\paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl} This class assigns each robottype the same view type. Therefore robots with different robot types may have different view types. Currently there are two robot types:
 \begin{enumerate}
 	\item \texttt{MASTER}
 	\item \texttt{SLAVE}
@@ -189,20 +189,15 @@ The view type of a robot defines its vision model. Whenever a view type is expec
 \end{enumerate}
 Each view type is explained in detail below.
 
-\paragraph{GLOBAL\_VIEW} \ \\
-Allows robots to see literally everything. There are no parameters expected.
+\paragraph{GLOBAL\_VIEW} Allows robots to see literally everything. There are no parameters expected.
 
-\paragraph{COG\_VIEW} \ \\
-View model meant to be used for center of gravity algorithms, i.e. every robot can see every other robots position, velocity and acceleration. The coordinate-system and id of each robot is not visible. There are no parameters expected.
+\paragraph{COG\_VIEW} View model meant to be used for center of gravity algorithms, i.e. every robot can see every other robots position, velocity and acceleration. The coordinate-system and id of each robot is not visible. There are no parameters expected.
 
-\paragraph{SELF\_VIEW} \ \\
-View model which allows robots to access every self-related information while disallowing to access any other information. There are no parameters expected.
+\paragraph{SELF\_VIEW} View model which allows robots to access every self-related information while disallowing to access any other information. There are no parameters expected.
 
-\paragraph{CHAIN\_VIEW} \ \\
-View model meant to be used for robot chain related algorithms, i.e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
+\paragraph{CHAIN\_VIEW} View model meant to be used for robot chain related algorithms, i.e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
 
-\paragraph{ONE\_POINT\_FORMATION\_VIEW} \ \\
-View model meant to be used for one point formation algorithms, i.e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
+\paragraph{ONE\_POINT\_FORMATION\_VIEW} View model meant to be used for one point formation algorithms, i.e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
 
 
 \subsubsection{Example of a main project file}
@@ -240,9 +235,7 @@ A main project file may look like:
 	VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB="0.1"
 	VECTOR_VELOCITY_REQUEST_HANDLER_SEED="3"
 	VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER="(VECTOR_TRIMMER,1.5);(VECTOR_RANDOMIZER,5,2.5)"
-
 \end{lstlisting}
-
 
 
 \subsection{Robot file}
