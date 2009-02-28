@@ -108,6 +108,9 @@ void SimulationRenderer::init(){
 }
 
 void SimulationRenderer::init(int x, int y){
+	std::string str("logo.bmp");
+		tex_.load(str);
+
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 
@@ -239,6 +242,12 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	cameras_[active_camera_index_]->look_rot();
 	//sky_box_->draw();
 	cameras_[active_camera_index_]->look_translate();
+	if (render_about_){
+							draw_about();
+						  }
+
+
+
 
 
 	// Print time
@@ -247,6 +256,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	if( render_coord_system_ ){
 		draw_coord_system();
 	}
+
 
 
 
@@ -271,9 +281,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	if (render_help_){
 		draw_help();
 	}
-	if (render_about_){
-		draw_about();
-	}
+
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
@@ -600,6 +608,32 @@ boost::array<std::string, 12> helptext;
 }
 
 void SimulationRenderer::draw_about(){
+
+	// LEFT
+	glDisable(GL_LIGHTING);
+	glEnable(GL_TEXTURE_2D);
+
+	tex_.bind();
+
+
+
+			glPushMatrix();
+			glLoadIdentity();
+
+	glBegin(GL_QUADS);
+	glColor3f(1,1,1);
+
+		   glTexCoord2f(0, 1); glVertex3f(-1, 0.44f,-1.1f);
+		   glTexCoord2f(1, 1); glVertex3f(1, 0.44f,-1.1f);
+		   glTexCoord2f(1, 0); glVertex3f(1, -0.44f,-1.1f);
+		   glTexCoord2f(0, 0); glVertex3f(-1,-0.44f,-1.1f);
+		  glEnd();
+	    glPopMatrix();
+
+
+		  glDisable(GL_TEXTURE_2D );
+		  glEnable( GL_LIGHTING );
+
 	boost::array<std::string,6> abouttext;
 
 	abouttext[0]="This RobotSwarmSimulator was developed as part of the university";

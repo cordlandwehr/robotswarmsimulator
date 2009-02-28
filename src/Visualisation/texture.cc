@@ -289,9 +289,9 @@ void Texture::load_bmp(){
 
 
 
-		data_[index] = bmp_data[ index ];
-		data_[index+1] = bmp_data[ index + 2];
-		data_[index+2] = bmp_data[ index + 1];
+		data_[index] = bmp_data[ index +2];
+		data_[index+1] = bmp_data[ index + 1];
+		data_[index+2] = bmp_data[ index ];
 
 	}
 
