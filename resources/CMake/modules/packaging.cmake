@@ -33,9 +33,9 @@ set(CPACK_COMPONENT_LUALIBRARIES_DESCRIPTION "Dynamic libraries for Lua.")
 set(CPACK_COMPONENT_PROJECTFILES_DISPLAY_NAME "Project Files")
 set(CPACK_COMPONENT_PROJECTFILES_DESCRIPTION
     "Some example project files that can be loaded into the simulator.")
-set(CPACK_COMPONENT_USERSGUIDE_DISPLAY_NAME "Users Guide")
-set(CPACK_COMPONENT_USERSGUIDE_DESCRIPTION
-    "Manual of the simulator. Read this to get started.")
+set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "Documentation")
+set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION
+    "Manual and API for the simulator. You should have a look at the manual to get started.")
 
 # installs some needed shared runtime libraries on windows systems
 include(InstallRequiredSystemLibraries)

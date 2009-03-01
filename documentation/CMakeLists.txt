@@ -11,6 +11,18 @@ if(DOXYGEN_FOUND)
 	
 	# create target 'documentation'
 	add_custom_target(documentation COMMAND "${DOXYGEN_EXECUTABLE}" "${DOXYGEN_FILE_OUT}")
+
+	# package API for release builds
+	if(CMAKE_BUILD_TYPE MATCHES Release)
+		# add dependency to RobotSwarmSimulator --> build documentation for packaging
+		# (would be better to let documentation depend on packaging, but this does not work :-/
+		add_dependencies(RobotSwarmSimulator documentation)
+		install(DIRECTORY html/
+		        DESTINATION doc/API
+			CONFIGURATIONS Release
+			COMPONENT documentation
+		)
+	endif(CMAKE_BUILD_TYPE MATCHES Release)
 endif(DOXYGEN_FOUND)
 
 # package user guide for release builds
@@ -19,6 +31,6 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	install(FILES users_guide/users_guide.pdf
 	        DESTINATION doc
 	        CONFIGURATIONS Release
-	        COMPONENT usersguide
+	        COMPONENT documentation
 	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
