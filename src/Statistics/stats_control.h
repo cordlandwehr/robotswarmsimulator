@@ -35,8 +35,11 @@
 #define STATS_CONTROL_H_
 
 #include <boost/smart_ptr.hpp>
+#include <boost/filesystem.hpp>
 
+#include <iostream>
 #include <vector>
+#include <string>
 
 #include "../Events/event.h"
 #include "../Model/robot_data.h"
@@ -59,8 +62,9 @@ public:
 	 * initializes all subcomponents configured by the
 	 * given projectfile.
 	 * \param parser the parser to use for configuration
+	 * \param output_dir the directory for all output files, created iff does not exists
 	 */
-	void init(map<std::string, std::string> &params);
+	void init(map<std::string, std::string> &params, std::string output_dir);
 
 	/**
 	 * implemented from SimulationListener.

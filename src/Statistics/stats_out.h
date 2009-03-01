@@ -35,7 +35,8 @@
 
 #include <string>
 #include <vector>
-#include <fstream>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem.hpp>
 
 class StatsOut {
 public:
@@ -85,7 +86,7 @@ public:
 	/**
 	 * filestream to output-log-file
 	 */
-	std::ofstream stat_output;
+	boost::filesystem::ofstream stat_output_;
 
 	/**
 	 * the id - must be unique under all instances with the same timestamp
@@ -95,7 +96,7 @@ public:
 	/**
 	 * the directory for the outputfiles incl. trailing pathseperator
 	 */
-	std::string stat_dir;
+	boost::filesystem::path stat_dir_;
 
 	/**
 	 * true between the calls of open(...) and quit()

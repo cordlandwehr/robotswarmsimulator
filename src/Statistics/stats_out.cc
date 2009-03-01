@@ -13,6 +13,8 @@
 #include <iomanip>
 #include <ctime>
 
+#include <boost/filesystem/fstream.hpp>
+
 #include "stats_out.h"
 
 int StatsOut::stat_output_width = 20;
@@ -29,7 +31,7 @@ StatsOut::StatsOut(std::string stat_id) {
 
 StatsOut::StatsOut(std::string stat_id, std::string stat_dir) {
 	this->stat_id = stat_id;
-	this->stat_dir = stat_dir;
+	this->stat_dir_ = boost::filesystem::path(stat_dir);
 }
 
 StatsOut::~StatsOut() {
@@ -57,7 +59,7 @@ void StatsOut::create_date() {
 
 	std::strcpy (stat_output_date, "output_");
 	std::strcat (stat_output_date, stat_time);
-};
+}
 
 void StatsOut::set_id(std::string stat_id) {
 	if (this->stat_id.length() != 0) {
@@ -65,15 +67,11 @@ void StatsOut::set_id(std::string stat_id) {
 	} else {
 		this->stat_id = stat_id;
 	}
-};
+}
 
 void StatsOut::set_dir(std::string stat_dir) {
-	if (this->stat_dir.length() != 0) {
-		std::cerr << "stat_dir already set to " << this->stat_dir << std::endl;
-	} else {
-		this->stat_dir = stat_dir;
-	}
-};
+	stat_dir_ = boost::filesystem::path(stat_dir);
+}
 
 
 void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
@@ -82,14 +80,14 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	stat_temp = const_cast<char*>(stat_id.c_str());
 
 	if (gnuPlot) {
-		std::strcpy (stat_gnuplot_filename, stat_dir.c_str());
+		//std::strcpy (stat_gnuplot_filename, stat_dir.c_str()); TODO del
 		std::strcat (stat_gnuplot_filename, stat_gnuplot_date);
 		std::strcat (stat_gnuplot_filename,"_");
 		std::strcat (stat_gnuplot_filename,stat_temp);
 		std::strcat (stat_gnuplot_filename,".plt");
 	}
 
-	std::strcpy (stat_output_filename, stat_dir.c_str());
+	//std::strcpy (stat_output_filename, stat_dir.c_str()); TODO del
 	std::strcat (stat_output_filename, stat_output_date);
 	std::strcat (stat_output_filename,"_");
 	std::strcat (stat_output_filename,stat_temp);
@@ -98,8 +96,9 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	/*
 	 *  Building of the Gnuplot-Configuration-File
 	 */
+
 	if (gnuPlot) {
-		std::ofstream stat_gnuplotfile (stat_gnuplot_filename);
+		boost::filesystem::ofstream stat_gnuplotfile (stat_dir_ / stat_gnuplot_filename);
 
 		stat_gnuplotfile << "# statistics of the simulation" << std::endl
 						 << "#====================================" << std::endl
@@ -137,18 +136,18 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	 *  Building the skeletal structure of the output-file
 	 */
 
-	stat_output.open(stat_output_filename, std::ios::app);
+	stat_output_.open(stat_dir_ / stat_output_filename, std::ios::app);
 
-	stat_output << std::right
+	stat_output_ << std::right
 				<< std::setw(stat_output_width)
 				<< "# time  ";
 
 	for (unsigned int j=0; j < stat_designation.size(); j++) {
-		stat_output << std::setw(stat_output_width)
+		stat_output_ << std::setw(stat_output_width)
 					<< stat_designation[j] << "  ";
 	}
 
-	stat_output << std::endl;
+	stat_output_ << std::endl;
 
 	is_open_ = true;
 };
@@ -161,15 +160,15 @@ void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
 
 	int j;
 
-	stat_output << std::right
+	stat_output_ << std::right
 				<< std::setw(stat_output_width) << stat_timestep
 				<< "  ";
 
 	for (j=0; j < (int) stat_data.size(); j++) {
-		stat_output << std::setw(stat_output_width) << stat_data[j] << "  ";
+		stat_output_ << std::setw(stat_output_width) << stat_data[j] << "  ";
 	}
 
-	stat_output << std::endl;
+	stat_output_ << std::endl;
 };
 
 const bool StatsOut::is_open() const {
@@ -178,9 +177,9 @@ const bool StatsOut::is_open() const {
 
 void StatsOut::quit() {
 
-	stat_output << "# simulation quit" << std::endl;
+	stat_output_ << "# simulation quit" << std::endl;
 
-	stat_output.close();
+	stat_output_.close();
 
 	is_open_ = false;
 };

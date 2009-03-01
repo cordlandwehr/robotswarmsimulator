@@ -62,7 +62,7 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 }
 
 
-void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history) {
+void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history, std::string output_dir) {
 
 	// set history
 	history_ = history;
@@ -88,7 +88,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 	// create and initialize statistics module;
 	stats_.reset(new StatsControl());
-	stats_->init(params);
+	stats_->init(params, output_dir);
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	event_handler_->register_listener(asg_);

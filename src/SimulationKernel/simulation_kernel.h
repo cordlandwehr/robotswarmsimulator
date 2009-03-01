@@ -71,7 +71,7 @@ public:
 	/**
 	 * This method initializes the simulation kernel
 	 */
-	void init(const string& project_filename, boost::shared_ptr<History> history);
+	void init(const string& project_filename, boost::shared_ptr<History> history, std::string output_dir);
 
 	/**
 	 * Method for performing one event-based step of the simulation

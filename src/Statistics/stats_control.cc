@@ -11,7 +11,7 @@ StatsControl::~StatsControl() {
 	}
 }
 
-void StatsControl::init(map<std::string, std::string> &params) {
+void StatsControl::init(map<std::string, std::string> &params, std::string output_dir) {
 
 	if (stats_initialized_) {
 		// log warning, because no quit was called before this init
@@ -27,29 +27,34 @@ void StatsControl::init(map<std::string, std::string> &params) {
 	if (!stats_cfg_.is_any_subset())
 		return;
 
-	string dir = "";
+	//TODO (cola) test what happens if does not exist
+	// sets and creates output dir
+	if (output_dir.compare("")!=0 && !boost::filesystem::exists(output_dir)) {
+		boost::filesystem::create_directory( output_dir );
+		std::cout << "(statistics-info) directory " << output_dir << " created " << std::endl;
+	}
 
 	// create a StatsOut-instance for each subset
 	if (stats_cfg_.is_subset_all())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ALL", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ALL", output_dir)));
 	if (stats_cfg_.is_subset_actall())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTALL", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTALL", output_dir)));
 	if (stats_cfg_.is_subset_inactall())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTALL", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTALL", output_dir)));
 	if (stats_cfg_.is_subset_masters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTERS", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTERS", output_dir)));
 	if (stats_cfg_.is_subset_actmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTERS", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTERS", output_dir)));
 	if (stats_cfg_.is_subset_inactmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTERS", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTERS", output_dir)));
 	if (stats_cfg_.is_subset_slaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVES", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVES", output_dir)));
 	if (stats_cfg_.is_subset_actslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVES", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVES", output_dir)));
 	if (stats_cfg_.is_subset_inactslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVES", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVES", output_dir)));
 
-	// create data-praefix for all StatsOut-instances
+	// create data-prefix for all StatsOut-instances
 	// by calling the respective static function
 	StatsOut::create_date();
 
@@ -75,7 +80,7 @@ void StatsControl::init(map<std::string, std::string> &params) {
 			break;
 
 		case StatsConfig::DATADUMP_FULL :
-			stats_datadump_ = boost::shared_ptr<StatsOut>(new StatsOut("DATADUMP_FULL", dir));
+			stats_datadump_ = boost::shared_ptr<StatsOut>(new StatsOut("DATADUMP_FULL", output_dir));
 			break;
 
 		default :

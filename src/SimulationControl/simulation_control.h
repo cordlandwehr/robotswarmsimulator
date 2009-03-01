@@ -23,9 +23,9 @@ class History;
 
 /**
  * The class SimulationControl provides code to set up a new simulation (and cleanup
- * any old one) as well as start/pause/terminate the SimulationÐThread. Furthermore it
+ * any old one) as well as start/pause/terminate the Simulationï¿½Thread. Furthermore it
  * provides a method called process simulation that is responsible for consuming the
- * historyÕs elements according to the ProcessingÐTime.
+ * historyï¿½s elements according to the Processingï¿½Time.
  */
 class SimulationControl {
 public:
@@ -35,7 +35,7 @@ public:
 	/**
 	 * cleans up the old simulation and creates a new one without starting it.
 	 */
-	void create_new_simulation(const std::string& configuration_filename, std::size_t history_length);
+	void create_new_simulation(const std::string& configuration_filename, std::size_t history_length, std::string ouput_dir);
 
 	/**
 	 * change processing_time_delta (see below)

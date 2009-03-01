@@ -145,18 +145,15 @@ int main(int argc, char** argv) {
 	try {
 		std::string tmpProjectFile = vm["project-file"].as<std::string>();
 
-		//TODO(cola)
-		if ((vm["output"].as<std::string>()).compare(""))
-			; // TODO set statistics module for this output-dir, check for '/' at end ...
-
-
 		// deletes ".swarm" from end of file, if used
 		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
 		// create simulation kernel
 		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-		sim_control->create_new_simulation(tmpProjectFile, vm["history-length"].as<unsigned int>());
+		sim_control->create_new_simulation(tmpProjectFile,
+				                           vm["history-length"].as<unsigned int>(),
+				                           vm["output"].as<std::string>());
 
 		// setup visualzation
 		boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));

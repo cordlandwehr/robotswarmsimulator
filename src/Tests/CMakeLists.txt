@@ -9,7 +9,7 @@ file(GLOB_RECURSE RSSTESTS_HDRS *.h)
 
 # find/configure boost
 set(Boost_ADDITIONAL_VERSIONS 1.37)
-find_package(Boost 1.37 REQUIRED thread unit_test_framework)
+find_package(Boost 1.37 REQUIRED filesystem thread unit_test_framework)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # find/configure Lua (statically linked for release builds)
