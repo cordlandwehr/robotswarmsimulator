@@ -169,10 +169,65 @@ During the simulation it is possible to interact with the simulation in differen
 \end{description}
 %TODO(cola) compare with final version
 
-\section{Robot Definitions by LUA-files}
-There are two ways to define a new robot. One way is hardcoded in the \RSS\, the other way is to define the robots by scripting their behavior in the {\sffamily Lua} scripting language. For example Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in Lua.
+\section{Create Robot Algorithms for the \RSS}
+There are two ways to define a new robot. One way is to write a subclass of \texttt{Robot} and add a new condition in the corresponding \texttt{factories.cc}. The other way is to define the robot algorithm by the {\sffamily Lua} scripting language and loading the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for small numbers of robots. I.\,e. for robot swarms of sizes greater than 500 robots you will (on standard computers) recognize a massive lack of performance.
 
-\todo{yeah, how can I do this?}
+\subsection{Create Robot Algorithms by Lua Scripts}
+For information how to write \Lua scripts please visit \url{http://www.lua.org} and use the documentation presented there. For interacting the environment \Lua scripts may access the following functions and constants (if allowed by current VIEW and if according request handler are set):
+
+\paragraph{\Lua Functions}
+\begin{description}
+	\item [\texttt{get\_visible\_robots()}] Returns array of robots.
+	\item [\texttt{get\_visible\_obstacles()}] Returns array of obstacles.
+	\item [\texttt{get\_visible\_markers()}] Returns array of markers.
+	\item [\texttt{get\_position(<robot>)}] Returns Vector3d.
+	\item [\texttt{get\_marker\_information(<robot>)}] Returns MarkerInformation.
+	\item [\texttt{get\_id(<robot>)}] Returns integer.
+	\item [\texttt{get\_robot\_acceleration(<robot>)}] Returns Vector3d.
+	\item [\texttt{get\_robot\_coordinate\_system\_axis(<robot>)}] Returns CoordinateSystem.
+	\item [\texttt{get\_robot\_type(<robot>)}] Returns RobotType.
+	\item [\texttt{get\_robot\_status(<robot>)}] Returns RobotStatus.
+	\item [\texttt{is\_point\_in\_obstacle(<obstacle>)}] Returns boolean.
+	\item [\texttt{get\_box\_depth(<box>)}] Returns double.
+	\item [\texttt{get\_box\_width(<box>)}] Returns double.
+	\item [\texttt{get\_box\_height(<box>)}] Returns double.
+	\item [\texttt{get\_sphere\_radius(<sphere>)}] Returns double.
+	\item [\texttt{is\_box\_identifier(<identifier>)}] Returns boolean
+	\item [\texttt{is\_sphere\_identifier(<identifier>)}] Returns boolean.
+	\item [\texttt{add\_acceleration\_request(<Vector3d>)}]
+	\item [\texttt{add\_position\_request(<Vector3d>)}]
+	\item [\texttt{add\_velocity\_request(<Vector3d>)}]
+	\item [\texttt{add\_marker\_request(<marker>)}]
+	\item [\texttt{add\_type\_change\_request(<type>)}]
+	\item [\texttt{get\_own\_identifier()}]
+\end{description}
+
+\paragraph{\Lua Constants}
+\begin{description}
+	\item [\texttt{RobotType}] \texttt{SLAVE, MASTER}
+	\item [\texttt{RobotStatus}] \texttt{SLEEPING, READY}
+\end{description}
+
+\paragraph{Special Variable Types}
+\begin{description}
+	\item [\texttt{Vector3d}] This type is the \Lua equivalent to Vector3d in \RSS
+	\begin{itemize}
+		\item Operators: \texttt{+, *, /}
+		\item Dimensions: \texttt{x, y, z}
+	\end{itemize}
+	\item [\texttt{MarkerInformation}] This is the data type for marker information. The information can be accessed by the according operators:
+	\begin{itemize}
+		\item Operators: \texttt{add\_data, get\_data}
+	\end{itemize}
+	\item [\texttt{CoordinateSystem}] This type consists of the Vector3d objects. The axes can be accessed by the following methods:
+	\begin{itemize}
+		\item Operators: \texttt{x\_axis, y\_axis, z\_axis}
+	\end{itemize}
+
+\end{description}
+
+\subsubsection{Example Algorithm}
+For example Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in Lua.
 
 \lstset{language=c}
 \begin{lstlisting}[caption={COG algorithm in Lua},label=lst:cog-lua]
@@ -186,6 +241,18 @@ function main()
     add_position_request(center);
 end
 \end{lstlisting}
+
+\subsection{Create Robot Algorithms by C++}
+By creating a new robot algorithm inside the simulator you need to do the following steps:
+\begin{enumerate}
+	\item Create a subclass of \texttt{Robot}.
+	\item Put the algorithm into \texttt{src/RobotImplementations/}.
+	\item Write the method \texttt{compute()}.
+	\item Write the method \texttt{get\_algorithm\_id()}.
+	\item Add the algorithm identifier as option in file \texttt{src/SimulationKernel/factories.cc} in method \texttt{robot\_factory(\dots)}.
+\end{enumerate}
+
+
 
 \section{Statistics}
 A simulation run results in three output files of statistics:
@@ -201,7 +268,8 @@ The file-names results from current date (year, month, day), the current time (h
 \newpage
 \appendix
 \input{gnuplot}
-	\newpage
+
+\newpage
 \input{inputfile_specification}
 
 % Backcover
