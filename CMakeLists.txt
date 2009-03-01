@@ -49,10 +49,11 @@ endif(CMAKE_BUILD_TYPE MATCHES Release)
 
 # package logo
 if(CMAKE_BUILD_TYPE MATCHES Release)
-	install(FILES resources/Textures/logo.bmp
+	install(DIRECTORY resources/Textures/
 	        DESTINATION bin/resources/Textures
 	        CONFIGURATIONS Release
 	        COMPONENT mainprogram
+	        PATTERN .svn EXCLUDE
 	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 
