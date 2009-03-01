@@ -27,11 +27,11 @@ macro(reverse_link_preference_in_release)
 endmacro(reverse_link_preference_in_release)
 
 # descend into subprojects
-add_subdirectory(documentation)
 add_subdirectory(luabind)
 add_subdirectory(src)
 add_subdirectory(src/UserInterfaces)
 add_subdirectory(src/Tests)
+add_subdirectory(documentation)
 
 # package projectfiles in src/Projectfiles for release builds
 if(CMAKE_BUILD_TYPE MATCHES Release)
