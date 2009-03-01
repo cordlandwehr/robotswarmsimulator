@@ -233,8 +233,6 @@ double Parser::get_next_double_value_in_line(const string& line, int line_number
 
 Vector3d Parser::get_next_vector3d_in_line(const string& line, int line_number, bool last_value) {
 
-	//TODO(martinah) maybe use arrays here
-
 	//get next three values (as string) from given line
 	string value_1 = get_next_value_in_line(line, line_number, false);
 	string value_2 = get_next_value_in_line(line, line_number, false);

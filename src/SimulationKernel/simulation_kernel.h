@@ -63,8 +63,6 @@ public:
 	 * Returns a constant reference to History of WorldInformations.
 	 * \return Constant reference to History of WorldInformations.
 	 *
-	 * TODO(martinah) return History& instead of boost::shared_ptr<History>&
-	 * REMARK(mmarcus): I changed this the way martinah wanted?
 	 */
 	const boost::shared_ptr<History>& history() const;
 
