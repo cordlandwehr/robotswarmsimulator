@@ -97,7 +97,7 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 	projectName_.reset(new std::string("New generated Project"));
 	robotFileName_.reset(new std::string("new_random_robotfile"));
 	obstacleFileName_.reset(new std::string("new_random_obstaclefile"));
-	worldFileName_.reset(new std::string("new_random_worldfile"));
+	worldFileName_.reset(new std::string("new_random_swarmfile"));
 	asg_.reset(new std::string("SYNCHRONOUS"));
 	compassModel_.reset(new std::string("NO_COMPASS"));
 	statisticsTemplate_.reset(new std::string("ALL"));

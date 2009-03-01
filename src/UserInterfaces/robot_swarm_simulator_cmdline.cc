@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
 		generator.init(vm["robots"].as<unsigned int>(), vm["algorithm"].as<std::string>());				// init number of robots
 
 		// files
-		generator.set_worldFile(vm["worldfile"].as<std::string>());
+		generator.set_worldFile(vm["swarmfile"].as<std::string>());
 		generator.set_robotFile(vm["robotfile"].as<std::string>());
 		generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
 
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
 		generator.write_to_file();
 
 		std::cout << "Robots were generated!" << std::endl;
-		std::cout << "Please see file: " + vm["worldfile"].as<std::string>() + ".swarm" << std::endl << std::endl;
+		std::cout << "Please see file: " + vm["swarmfile"].as<std::string>() + ".swarm" << std::endl << std::endl;
 
 		return 1;
 	}
