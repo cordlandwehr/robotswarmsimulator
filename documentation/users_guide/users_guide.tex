@@ -160,14 +160,13 @@ During the simulation it is possible to interact with the simulation in differen
 	\item [\fbox{\tt V}] Show velocity vectors
 	\item [\fbox{\tt B}] Show acceleration vectors
 	\item [\fbox{\tt K}] Show global coordinates system
-	\item [\fbox{\tt W},\fbox{\tt A},\fbox{\tt S},\fbox{\tt D}] In the corresponding camera mode use \fbox{\tt W} for up  and \fbox{\tt S} for down %TODO what about a,d?
+	\item [\fbox{\tt W},\fbox{\tt S}] In the corresponding camera mode use \fbox{\tt W} for up  and \fbox{\tt S} for down%TODO what about a,d?
 	\item [Arrow-Keys] left, right, before, behind
 	\item [Mouse] Mouse for spinning
 	\item [\fbox{\tt +}, \fbox{\tt -}] increase/ decrease simulation-speed by constant
 	\item [\fbox{\tt *},\fbox{\tt /}] double/ half simulation-speed
 	\item [\fbox{\tt C}] Change camera
 \end{description}
-%TODO(cola) compare with final version
 
 \section{Create Robot Algorithms for the \RSS}
 There are two ways to define a new robot. One way is to write a subclass of \texttt{Robot} and add a new condition in the corresponding \texttt{factories.cc}. The other way is to define the robot algorithm by the {\sffamily Lua} scripting language and loading the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for small numbers of robots. I.\,e. for robot swarms of sizes greater than 500 robots you will (on standard computers) recognize a massive lack of performance.
