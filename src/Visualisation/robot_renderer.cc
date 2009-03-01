@@ -152,7 +152,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 
 
 	if(use_model_){
-	//	model_.draw_model();
+		model_.draw_model();
 	}else {
 		unsigned int rob_color =  robot->color() < kRobotIdColorNum ? robot->color() : 0 ;
 

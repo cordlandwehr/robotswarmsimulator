@@ -345,16 +345,17 @@ private:
 	 *
 	 */
 	bool render_acceleration_;
-	
+
 	/**
 	 *
 	 */
 	bool render_velocity_;
-	
+
 	bool render_help_;
 
 	bool render_about_;
 
+	bool render_sky_box_;
 	/**
 	 * RobotRenderer
 	 */

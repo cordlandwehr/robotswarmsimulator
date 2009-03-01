@@ -53,13 +53,13 @@ const int kTextSpacing=15;
 const float kMarkerPointSize = 2.0;
 
 
-const std::string kSkyBoxTexName("data/tex/skybox/");
+const std::string kSkyBoxTexName("resources/Textures/");
 
 
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(true), render_help_(false), render_about_(false) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
 
 
 
@@ -109,7 +109,7 @@ void SimulationRenderer::init(){
 
 void SimulationRenderer::init(int x, int y){
 	std::string str("resources/Textures/logo.bmp");
-		tex_.load(str);
+	tex_.load(str);
 
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -163,9 +163,10 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
+	//Set up skybox and Robot renderer
 	sky_box_.reset( new SkyBox() );
 
-	//sky_box_->init( kSkyBoxTexName);
+	sky_box_->init( kSkyBoxTexName);
 	robot_renderer_->init();
 
 
@@ -240,7 +241,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 
 	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
 	cameras_[active_camera_index_]->look_rot();
-	//sky_box_->draw();
+
+	if(render_sky_box_)
+		sky_box_->draw();
+
 	cameras_[active_camera_index_]->look_translate();
 	if (render_about_){
 							draw_about();

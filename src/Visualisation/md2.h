@@ -205,6 +205,11 @@ class MD2 {
 	 boost::scoped_array<Vec> normal_list_;
 
 	 /**
+	  * Indices used for drawing.
+	  */
+	 boost::scoped_array<unsigned short> indices_list_;
+
+	 /**
 	  * The texture used for this model
 	  */
 	 Texture texture_;

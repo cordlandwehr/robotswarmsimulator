@@ -14,6 +14,7 @@
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
 #include "../OpenGL/glut_headers.h"
+#include "../OpenGL/glext_headers.h"
 
 #include "md2.h"
 #include "texture.h"
@@ -40,6 +41,8 @@ bool MD2::load_model(const std::string & model_file ){
 
 	bool model_loaded = load_model_file( model_file );
 
+
+
 	if( !model_loaded ){
 		std::cerr << "Can't load model file " << model_file << "!" << std::endl;
 	}
@@ -50,7 +53,9 @@ bool MD2::load_model(const std::string & model_file ){
 
 void MD2::try_setup_vbo(){
 
-	draw_type = DRAW_SIMPLE;
+	draw_type = DRAW_LISTS;
+
+	int extension_available = glutExtensionSupported("GL_ARB_vertex_buffer_object");
 }
 
 
@@ -119,8 +124,9 @@ bool MD2::load_model_file(const std::string & model_file ){
 
 	STIndex * st_ptr = reinterpret_cast<STIndex* >( buffer.get() );
 	for(unsigned int i  = 0; i < num_st_; i++ ){
-		st_index_[i].s = 1.0 * st_ptr[i].s / texture_.width();
-		st_index_[i].t = 1.0 * st_ptr[i].t / texture_.height();
+		std::printf("s: %i   t: %i\n");
+		st_index_[i].s = 1.0 * st_ptr[i].s / header->skin_width;
+		st_index_[i].t = 1.0 - 1.0 * st_ptr[i].t / header->skin_height;
 	}
 
 	triangle_index_.reset( new Mesh[ num_triangles_ ] );
@@ -151,7 +157,7 @@ bool MD2::load_model_file(const std::string & model_file ){
 	std::fclose( fp );
 
 	calculate_normals();
-
+	setup_lists();
 	try_setup_vbo();
 
 	return true;
@@ -215,7 +221,7 @@ void MD2::draw_model_simple() const{
 	Vec * vecs = &point_list_[ num_point_ * frame ];
 	Vec * normals = &normal_list_[ num_point_ * frame ];
 
-	glDisable( GL_TEXTURE_2D );
+	glEnable( GL_TEXTURE_2D );
 	glDisable( GL_LIGHTING );
 	glColor3f(1.0f, 1.0f, 1.0f);
 	texture_.bind();
@@ -243,11 +249,50 @@ void MD2::draw_model_simple() const{
 }
 
 void MD2::setup_lists(){
- //TODO
+
+
+
+
+	indices_list_.reset( new unsigned short [  num_triangles_ *3 +3] );
+		unsigned short offset = 0 ;
+		for(unsigned int i = 0; i < num_triangles_; i++){
+
+			indices_list_[offset] =  triangle_index_[i].vec_index[0];
+			indices_list_[offset +1 ] = triangle_index_[i].vec_index[2];
+			indices_list_[offset + 2] = triangle_index_[i].vec_index[1];
+
+			offset += 3;
+		}
+
+
+
 }
 
 void MD2::draw_model_lists() const{
- //TODO
+ //TODO:TEST
+	glDisable(GL_LIGHTING );
+	glEnable( GL_TEXTURE_2D );
+	glColor3f(1.0f,1.0f,1.0f);
+	texture_.bind();
+	unsigned int frame = 1;
+
+
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState( GL_VERTEX_ARRAY );
+	glEnableClientState(GL_NORMAL_ARRAY );
+
+	glNormalPointer(GL_FLOAT, 0, normal_list_.get() );
+	glVertexPointer(3, GL_FLOAT, 0, &point_list_[ frame * num_point_ ] );
+	glTexCoordPointer(2,GL_FLOAT,0, st_index_.get() );
+
+	glDrawElements(GL_TRIANGLES, num_triangles_ *3 , GL_UNSIGNED_SHORT, indices_list_.get() );
+
+	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+	glDisableClientState( GL_VERTEX_ARRAY );
+	glDisableClientState( GL_NORMAL_ARRAY );
+
+	glDisable( GL_TEXTURE_2D );
+	glEnable(GL_LIGHTING );
 }
 
 void MD2::draw_model_vbo() const{
