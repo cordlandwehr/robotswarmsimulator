@@ -49,9 +49,9 @@ Also the following should be considered:
 		\texttt{COMPASS\_MODEL} & Still needs to be specified by the ASG-Team. For instance \texttt{NO\_COMPASS} & Compass model & FULL\_COMPASS\\\hline
 		\texttt{ROBOT\_FILENAME} & For instance \texttt{robot\_file}. The extension of the file must not be appended in this variable. & Filename of the robotfile & same as project file\\\hline
 		\texttt{OBSTACLE\_FILENAME} & For instance \texttt{obstacle\_file}.  The extension of the file must not be appended in this variable. & Filename of the robotfile & same as project file\\\hline
-		\texttt{STATISTICS\_SUBSETS} & A concatenation of none or more of the following strings: \{ALL\}, \{ACTALL\}, \{INACTALL\}, \{MASTERS\}, \{ACTMASTERS\}, \{INACTMASTERS\},  \{SLAVES\}, \{ACTSLAVES\}, \{INACTSLAVES\} &  Defines the subsets of all robots for which to calculate individual statistical data. E.g. ``\{ALL\} \{MASTERS\}'' will produce statistical information on \textit{all} robots as well as on \textit{masters only} & NONE\\\hline
+		\texttt{STATISTICS\_SUBSETS} & A concatenation of none or more of the following strings: \{ALL\}, \{ACTALL\}, \{INACTALL\}, \{MASTERS\}, \{ACTMASTERS\}, \{INACTMASTERS\},  \{SLAVES\}, \{ACTSLAVES\}, \{INACTSLAVES\} &  Defines the subsets of all robots for which to calculate individual statistical data. E.\,g. ``\{ALL\} \{MASTERS\}'' will produce statistical information on \textit{all} robots as well as on \textit{masters only} & NONE\\\hline
 		\texttt{STATISTICS\_TEMPLATE} & One of the following: ``ALL'', ``BASIC'' or ``NONE'' & Identifies the set of informations to calculate for each subset. & ALL\\\hline
-		\texttt{STATISTICS\_DATADUMP} & Either ``FULL'' or ``NONE'' & Whether or not detailled information (e.g. all robots positions at each event) should be streamed to a file during simulation. & NONE\\\hline
+		\texttt{STATISTICS\_DATADUMP} & Either ``FULL'' or ``NONE'' & Whether or not detailled information (E.\,g. all robots positions at each event) should be streamed to a file during simulation. & NONE\\\hline
 		\texttt{ASG} & \texttt{SYNCHRONOUS}, \texttt{ASYNCHRONOUS} or \texttt{SEMISYNCHRONOUS} & Type of ASG & \texttt{SYNCHRONOUS}\\\hline
 		  \texttt{ASYNC\_ASG\_SEED} & unsigned int & Seed for asynchronous ASG, only set if ASG=ASYNCHRONOUS & - \\\hline
 		    \texttt{ASYNC\_ASG\_PART\_P} & double & Participation Probability for asynch ASG, only set if ASG = ASYNCHRONOUS & - \\\hline
@@ -177,7 +177,7 @@ The \texttt{RobotControl} variable defines the class which should be used to con
 \end{enumerate}
 Each class is explained in detail below. Note that each class expects certain class specific parameters.
 
-\paragraph{UniformRobotControl}\label{sec:uniformRobotControl} This class assigns each robot the same view type. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values for this variable (view types) are definied below (see \ref{sec:viewtypes}). E.g. you may to assign each robot global view to the world using \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL="GLOBAL\_VIEW"}.
+\paragraph{UniformRobotControl}\label{sec:uniformRobotControl} This class assigns each robot the same view type. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values for this variable (view types) are definied below (see \ref{sec:viewtypes}). E.\,g. you may to assign each robot global view to the world using \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL="GLOBAL\_VIEW"}.
 
 \paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl} This class assigns each robottype the same view type. Therefore robots with different robot types may have different view types. Currently there are two robot types:
 \begin{enumerate}
@@ -185,7 +185,7 @@ Each class is explained in detail below. Note that each class expects certain cl
 	\item \texttt{SLAVE}
 \end{enumerate}
 To specify which view type should be used by each robot type, there must be variables of the form \textit{RobotType}\texttt{\_VIEW}. \\
-The value of each variable has to be a view type (see \ref{sec:viewtypes}). Note that the view type parameters are also distinguished using the \textit{RobotType} prefix. E.g. you may specify 
+The value of each variable has to be a view type (see \ref{sec:viewtypes}). Note that the view type parameters are also distinguished using the \textit{RobotType} prefix. E.\,g. you may specify 
 \begin{center}
 \texttt{MASTER\_VIEW="CHAIN\_VIEW"} \\
 \texttt{MASTER\_CHAIN\_VIEW\_NUM\_ROBOTS="5"}
@@ -204,13 +204,13 @@ Each view type is explained in detail below.
 
 \paragraph{GLOBAL\_VIEW} Allows robots to see literally everything. There are no parameters expected.
 
-\paragraph{COG\_VIEW} View model meant to be used for center of gravity algorithms, i.e. every robot can see every other robots position, velocity and acceleration. The coordinate-system and id of each robot is not visible. There are no parameters expected.
+\paragraph{COG\_VIEW} View model meant to be used for center of gravity algorithms, i.\,e. every robot can see every other robots position, velocity and acceleration. The coordinate-system and id of each robot is not visible. There are no parameters expected.
 
 \paragraph{SELF\_VIEW} View model which allows robots to access every self-related information while disallowing to access any other information. There are no parameters expected.
 
-\paragraph{CHAIN\_VIEW} View model meant to be used for robot chain related algorithms, i.e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
+\paragraph{CHAIN\_VIEW} View model meant to be used for robot chain related algorithms, i.\,e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
 
-\paragraph{ONE\_POINT\_FORMATION\_VIEW} View model meant to be used for one point formation algorithms, i.e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
+\paragraph{ONE\_POINT\_FORMATION\_VIEW} View model meant to be used for one point formation algorithms, i.\,e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
 
 
 \subsubsection{Example of a main project file}
