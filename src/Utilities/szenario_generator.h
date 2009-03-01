@@ -125,6 +125,24 @@ public:
 	void set_statisticsSubsets(string statisticsSubsets);
 
 	/**
+	 * Sets position request handler for project file.
+	 * This is only a pre-configured standard handler that should be further configured in created swarm-file.
+	 */
+	void add_play_pos_request_handler();
+
+	/**
+	 * Sets velocity request handler for project file.
+	 * This is only a pre-configured standard handler that should be further configured in created swarm-file.
+	 */
+	void add_play_vel_request_handler();
+
+	/**
+	 * Sets acceleration request handler for project file.
+	 * This is only a pre-configured standard handler that should be further configured in created swarm-file.
+	 */
+	void add_play_acc_request_handler();
+
+	/**
 	 * Writes everything to files
 	 */
 	void write_to_file();

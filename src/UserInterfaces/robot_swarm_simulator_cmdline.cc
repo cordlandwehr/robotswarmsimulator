@@ -42,6 +42,9 @@ int main(int argc, char** argv) {
 		("worldfile", po::value<std::string>()->default_value("newrandom"), "world-file for output")
 		("robotfile", po::value<std::string>()->default_value("newrandom"), "robot-file for output")
 		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
+		("add-pos-handler", "add position request handler for testing")
+		("add-vel-handler", "add velocity request handler for testing")
+		("add-acc-handler", "add acceleration request handler for testing")
 		("distr-pos", po::value<double>()->default_value(0), "distribute position in cube [0;distr-pos]^3")
 		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with radius min-vel")
 		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with max-vel")
@@ -52,6 +55,7 @@ int main(int argc, char** argv) {
 	po::options_description simulation_options("Simulation options");
 	simulation_options.add_options()
 		("project-file", po::value<std::string>(), "Project file to load")
+		("output", po::value<std::string>()->default_value(""), "Path to directory for output")
 		("history-length", po::value<unsigned int>()->default_value(25), "history length");
 
 	po::options_description options;
@@ -103,6 +107,14 @@ int main(int argc, char** argv) {
 			generator.distribute_robots_uniform(tmpVec);
 		}
 
+		// sets request handler if requested
+		if (vm.count("add-pos-handler"))
+			generator.add_play_pos_request_handler();
+		if (vm.count("add-vel-handler"))
+			generator.add_play_vel_request_handler();
+		if (vm.count("add-acc-handler"))
+			generator.add_play_acc_request_handler();
+
 		// distribute initial velocities
 		if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
 			generator.distribute_velocity_uniform(vm["min-vel"].as<double>(),vm["max-vel"].as<double>());
@@ -132,6 +144,12 @@ int main(int argc, char** argv) {
 
 	try {
 		std::string tmpProjectFile = vm["project-file"].as<std::string>();
+
+		//TODO(cola)
+		if ((vm["output"].as<std::string>()).compare(""))
+			; // TODO set statistics module for this output-dir, check for '/' at end ...
+
+
 		// deletes ".swarm" from end of file, if used
 		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);

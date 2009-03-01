@@ -295,6 +295,30 @@ void szenario_generator::set_statisticsSubsets(string statisticsSubsets) {
 }
 
 
+void szenario_generator::add_play_pos_request_handler() {
+	parser_->parameter_map()["POSITION_REQUEST_HANDLER_TYPE"]="VECTOR";
+	parser_->parameter_map()["VECTOR_POSITION_REQUEST_HANDLER_SEED"]="1";
+	parser_->parameter_map()["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]="(VECTOR_DIFFERENCE_TRIMMER,4.0)";
+	parser_->parameter_map()["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]="0.0";
+}
+
+
+void szenario_generator::add_play_vel_request_handler() {
+	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_TYPE"]="VECTOR";
+	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]="1";
+	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]="(VECTOR_TRIMMER,0.4)";
+	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]="0.0";
+}
+
+
+void szenario_generator::add_play_acc_request_handler() {
+	parser_->parameter_map()["ACCELERATION_REQUEST_HANDLER_TYPE"]="VECTOR";
+	parser_->parameter_map()["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]="1";
+	parser_->parameter_map()["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]="(VECTOR_TRIMMER,0.2)";
+	parser_->parameter_map()["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]="0.0";
+}
+
+
 void szenario_generator::write_to_file() {
 
 	// setup parser for writing with previously set values.
