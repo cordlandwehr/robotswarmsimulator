@@ -14,7 +14,7 @@
 #include "sky_box.h"
 
 
-float kSkyBoxSize = 80.0f;
+float kSkyBoxSize = 2.0f;
 
 namespace texnames {
 

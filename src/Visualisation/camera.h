@@ -9,6 +9,7 @@
 #define CAMERA_H_
 
 #include <vector>
+#include <string>
 
 #include <boost/smart_ptr.hpp>
 
@@ -204,6 +205,10 @@ public:
 		return screen_width_;
 	}
 
+	/**
+	 * Returns the name of the camera type.
+	 */
+	virtual std::string get_name();
 
 protected:
 

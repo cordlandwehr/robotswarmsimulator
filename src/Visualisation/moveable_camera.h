@@ -100,6 +100,11 @@ public:
 
 	void look_translate() const;
 
+	/**
+	 * Returns the name of the camera type.
+	 */
+	virtual std::string get_name();
+
 };
 
 

@@ -60,7 +60,7 @@ const std::string kSkyBoxTexName("resources/Textures/");
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(false) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
 
 
 
@@ -193,8 +193,10 @@ void SimulationRenderer::resize(int width, int height){
 
 	glLoadIdentity();
 
-	cameras_[active_camera_index_]->set_screen_height(height);
-	cameras_[active_camera_index_]->set_screen_width(width);
+	for(unsigned int cam_index = 0; cam_index < cameras_.size(); cam_index++){
+		cameras_[cam_index]->set_screen_height(height);
+		cameras_[cam_index]->set_screen_width(width);
+	}
 
 }
 
@@ -228,8 +230,9 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	float start_time = std::clock();
 
 	// We draw the time in the upper left corner
-	char buf[50];
-	std::sprintf(buf,"Time: %f\n",extrapolate + world_info->time() );
+	char buf[100];
+
+	std::sprintf(buf,"Time: %f   Camera: %s\n",extrapolate + world_info->time(), cameras_[active_camera_index_]->get_name().c_str()  );
 	std::string time(buf);
 
 
@@ -301,7 +304,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
-	std::printf("mose_func...\n");
+
 	if(use_mouse_){
 		cameras_[active_camera_index_]->set_view_by_mouse(x,y);
 	}
@@ -309,7 +312,7 @@ void SimulationRenderer::mouse_func(int button, int state, int x, int y){
 }
 
 void SimulationRenderer::mouse_motion_func( int x, int y){
-	mouse_func(0,0,x,y);
+	mouse_func(1,1,x,y);
 }
 
 void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
@@ -593,19 +596,20 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 }
 
 void SimulationRenderer::draw_help(){
-boost::array<std::string, 12> helptext;
+boost::array<std::string, 13> helptext;
 	helptext[0]="Arrow keys to navigate";
 	helptext[1]="W and S to go up and down";
 	helptext[2]="M to toggle mouse control (rotate view) (Works only in the free camera)";
-	helptext[3]="SPACE to pause the Simulator";
-	helptext[4]="Q to exit";
-	helptext[5]="H to toggle this help screen";
-	helptext[6]="-, +, / and * to de-/increase speed";
-	helptext[7]="C to change camera";
-	helptext[8]="K/L to display global/local coordinate axes";
-	helptext[9]="B and V to display robot's acceleration and velocity";
-	helptext[10]="G to display center of gravity";
-	helptext[11]="F1 to display About screen";
+	helptext[3]="      Press mouse button and move mouse to rotate view.";
+	helptext[4]="SPACE to pause the Simulator";
+	helptext[5]="Q to exit";
+	helptext[6]="H to toggle this help screen";
+	helptext[7]="-, +, / and * to de-/increase speed";
+	helptext[8]="C to change camera";
+	helptext[9]="K/L to display global/local coordinate axes";
+	helptext[10]="B and V to display robot's acceleration and velocity";
+	helptext[11]="G to display center of gravity";
+	helptext[12]="F1 to display About screen";
 
 	for (unsigned int i=0;i<helptext.size();i++){
 		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);

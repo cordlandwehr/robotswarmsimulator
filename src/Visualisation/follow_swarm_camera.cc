@@ -181,3 +181,7 @@ void FollowSwarmCamera::look_translate() const{
 	glTranslatef(- position_(0), - position_(1), - position_(2) );
 }
 
+std::string FollowSwarmCamera::get_name(){
+
+	return "Follow Swarm Camera";
+}

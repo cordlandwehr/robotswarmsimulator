@@ -221,3 +221,8 @@ void MoveableCamera::look_rot() const{
 void MoveableCamera::look_translate() const {
 	glTranslatef(- position_(0), - position_(1), - position_(2) );
 }
+
+std::string MoveableCamera::get_name(){
+
+	return "Free Camera";
+}
