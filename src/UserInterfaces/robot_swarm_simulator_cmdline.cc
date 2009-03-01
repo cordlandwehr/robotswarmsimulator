@@ -46,10 +46,10 @@ int main(int argc, char** argv) {
 		("add-vel-handler", "add velocity request handler for testing")
 		("add-acc-handler", "add acceleration request handler for testing")
 		("distr-pos", po::value<double>()->default_value(0), "distribute position in cube [0;distr-pos]^3")
-		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with minimal absolute value of min-vel")
-		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value of max-vel")
-		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value of min-acc")
-		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with maximal absolute value of max-acc")
+		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with minimal absolute value min-vel")
+		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value max-vel")
+		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value min-acc")
+		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with maximal absolute value max-acc")
 		("distr-coord", "distribute robot coordinate-systems uniformly");
 
 	po::options_description simulation_options("Simulation options");
