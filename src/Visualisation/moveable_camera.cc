@@ -62,15 +62,12 @@ void MoveableCamera::set_view_by_mouse(int x, int y) {
 	glutWarpPointer(middle_x, middle_y);
 
 
-
 	// Get the direction the mouse moved in, but bring the number down to a reasonable amount
 
 	angle_y = (float)( (middle_x - x ) ) / 1000.0f;
 	angle_z = (float)( (middle_y - y ) ) / 1000.0f;
 
-
 	current_rot_x -= angle_z;
-
 
 
 	// If the current rotation (in radians) is greater than 1.0, we want to cap it.

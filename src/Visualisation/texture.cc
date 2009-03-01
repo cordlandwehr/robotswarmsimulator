@@ -96,11 +96,22 @@ void Texture::bind() const{
 	if( loaded_ ){
 		glEnable(GL_TEXTURE_2D );
 		glBindTexture(GL_TEXTURE_2D, tex_id_ );
+	} else  {
+		glDisable( GL_TEXTURE_2D );
 	}
 
 }
 
 void Texture::load(std::string & texture_file ){
+
+	if( loaded_ ){
+		// make clean...
+		glDeleteTextures(1, &tex_id_ );
+		tex_id_ = 0;
+	}
+
+	loaded_ = false;
+
 	file_name_ = texture_file;
 
 	FileType file_type = determine_extension();

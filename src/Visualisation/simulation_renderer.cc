@@ -28,6 +28,7 @@
 #include "simulation_renderer.h"
 
 
+namespace {
 // some simple constants
 
 const float kObstacleColor[] = {1.0f,0.0f,0.0f,1.0f};
@@ -54,7 +55,7 @@ const float kMarkerPointSize = 2.0;
 
 
 const std::string kSkyBoxTexName("resources/Textures/");
-
+}
 
 
 SimulationRenderer::SimulationRenderer()
@@ -109,7 +110,7 @@ void SimulationRenderer::init(){
 
 void SimulationRenderer::init(int x, int y){
 	std::string str("resources/Textures/logo.bmp");
-	// tex_.load(str);
+	tex_.load(str);
 
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -164,9 +165,9 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	//sky_box_.reset( new SkyBox() );
+	sky_box_.reset( new SkyBox() );
 
-	//sky_box_->init( kSkyBoxTexName);
+	sky_box_->init( kSkyBoxTexName);
 	robot_renderer_->init();
 
 
@@ -246,12 +247,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 		sky_box_->draw();
 
 	cameras_[active_camera_index_]->look_translate();
+
 	if (render_about_){
-							draw_about();
-						  }
-
-
-
+			draw_about();
+	}
 
 
 	// Print time
@@ -302,12 +301,16 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
+	std::printf("mose_func...\n");
 	if(use_mouse_){
 		cameras_[active_camera_index_]->set_view_by_mouse(x,y);
 	}
 
 }
 
+void SimulationRenderer::mouse_motion_func( int x, int y){
+	mouse_func(0,0,x,y);
+}
 
 void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 	switch(key){
@@ -462,7 +465,6 @@ void SimulationRenderer::draw_text3d(const Vector3d & vector, const std::string 
 	GLdouble proj_x = 0;
 	GLdouble proj_y = 0;
 	GLdouble  win_z;
-	GLfloat pix; // <-- not used; is here some todo missing or can this line be deleted?
 	GLint * vp = NULL;
 	GLdouble * pm= NULL;
 	GLdouble * mm= NULL;
@@ -594,7 +596,7 @@ void SimulationRenderer::draw_help(){
 boost::array<std::string, 12> helptext;
 	helptext[0]="Arrow keys to navigate";
 	helptext[1]="W and S to go up and down";
-	helptext[2]="M to toggle mouse control (rotate view)";
+	helptext[2]="M to toggle mouse control (rotate view) (Works only in the free camera)";
 	helptext[3]="SPACE to pause the Simulator";
 	helptext[4]="Q to exit";
 	helptext[5]="H to toggle this help screen";
@@ -613,22 +615,25 @@ boost::array<std::string, 12> helptext;
 
 void SimulationRenderer::draw_about(){
 	//render logo as textured quad
-	glDisable(GL_LIGHTING);
-	glEnable(GL_TEXTURE_2D);
-	tex_.bind();
-	glPushMatrix();
-	glLoadIdentity();
-	glBegin(GL_QUADS);
-	       glColor3f(1,1,1);
-		   glTexCoord2f(0, 1); glVertex3f(-1, 0.44f,-1.1f);
-		   glTexCoord2f(1, 1); glVertex3f(1, 0.44f,-1.1f);
-		   glTexCoord2f(1, 0); glVertex3f(1, -0.44f,-1.1f);
-		   glTexCoord2f(0, 0); glVertex3f(-1,-0.44f,-1.1f);
-	glEnd();
-	glPopMatrix();
-    glDisable(GL_TEXTURE_2D );
-	glEnable( GL_LIGHTING );
+	if( tex_.loaded() ){
+		glDisable(GL_LIGHTING);
 
+		glEnable(GL_TEXTURE_2D);
+		tex_.bind();
+		glPushMatrix();
+		glLoadIdentity();
+		glBegin(GL_QUADS);
+			   glColor3f(1,1,1);
+			   glTexCoord2f(0, 1); glVertex3f(-1, 0.44f,-1.1f);
+			   glTexCoord2f(1, 1); glVertex3f(1, 0.44f,-1.1f);
+			   glTexCoord2f(1, 0); glVertex3f(1, -0.44f,-1.1f);
+			   glTexCoord2f(0, 0); glVertex3f(-1,-0.44f,-1.1f);
+		glEnd();
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D );
+
+		glEnable( GL_LIGHTING );
+	}
 	//render text as bitmap font
 	boost::array<std::string,6> abouttext;
 

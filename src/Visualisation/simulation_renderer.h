@@ -67,6 +67,7 @@ public:
      * Two functions for keyboard input are necessary as special keys and ASCII character encodings overlap (example: d=100='left')
      */
     void mouse_func(int button, int state, int x, int y);
+    void mouse_motion_func( int x, int y);
     void keyboard_func(unsigned char key, int x, int y);
     void keyboard_special_func(int key, int x, int y);
 
@@ -149,65 +150,115 @@ public:
 		return render_robot_ids_;
 	}
 
+	/**
+	 * Sets the status of rendering the cog
+	 */
 	void set_render_cog(bool render){
 		render_cog_ = render;
 	}
 
+	/**
+	 * \return the status of rendering the Center of gravity
+	 */
 	bool render_cog(){
 		return render_cog_;
 	}
 
+	/**
+	 * Switch the status of rendering the Center of Gravity
+	 */
 	void switch_render_cog(){
 		render_cog_ = !render_cog_;
 	}
 
+	/**
+	 * Returns the Center of Gravity. It only has a meaningful value
+	 * when the render_cog_ flag is set to true.
+	 */
 	const Vector3d & cog(){
 		return cog_;
 	}
 
+	/**
+	 * Sets whether to draw the global coordinate system
+	 */
 	void set_render_coord_system(bool render){
 		render_coord_system_ = render;
 	}
 
+	/**
+	 * \return Whether the global coordinate system should be drawn.
+	 */
 	bool render_coord_system(){
 		return render_coord_system_;
 	}
 
+	/**
+	 * Switches the render status of the global coordinate system.
+	 */
 	void switch_render_coord_system(){
 		render_coord_system_ = !render_coord_system_;
 	}
 
+	/**
+	 * Sets whether the the local coordinate system of each robot.
+	 */
 	void set_render_local_coord_system( bool render ){
 		render_local_coord_system_ = render;
 	}
 
+	/**
+	 * Switches the render status of the local coordinate system of each robot.
+	 */
 	void switch_render_local_coord_system(){
 		render_local_coord_system_ = !render_local_coord_system_;
 	}
 
+	/**
+	 * Returns whether the local coordinate system of each robot should be drawn.
+	 */
 	bool render_local_coord_system(){
 		return render_local_coord_system_ ;
 	}
 
+	/**
+	 * Sets whether the velocity of each robot should be drawn.
+	 */
 	void set_render_velocity(bool  render ){
 		render_velocity_ = render;
 	}
 
+	/**
+	 * Switches whether the velocity should be drawn.
+	 */
 	void switch_render_velocity(){
 		render_velocity_ = !render_velocity_;
 	}
 
+	/**
+	 * Returns whether the velocity should be drawn
+	 */
 	bool render_velocity(){
 		return render_velocity_;
 	}
 
+	/**
+	 * Sets whether the acceleration should be drawn.
+	 */
 	void set_render_acceleration( bool render ){
 		render_acceleration_ = render;
 	}
 
+	/**
+	 * Switches whether the acceleration of each robot should be drawn.
+	 */
 	void switch_render_acceleration(){
 		render_acceleration_ = !render_acceleration_;
 	}
+
+	/**
+	 * Returns whether the acceleration should be drawn.
+	 */
 	bool render_acceleration(){
 		return render_acceleration_;
 	}
@@ -249,13 +300,26 @@ private:
 	void draw_text2d(int x, int y, const std::string &str);
 	void draw_text3d(const Vector3d & vector, const std::string &str );
 
+	/**
+	 * Draws the help screen
+	 */
 	void draw_help();
 
+	/**
+	 * Draws the abbout screen
+	 */
 	void draw_about();
 
+	/**
+	 * Calculates the Center of Gravity
+	 */
 	void draw_cog(const boost::shared_ptr<WorldInformation> world_info );
 
+	/**
+	 * Drawsthe global coord system
+	 */
 	void draw_coord_system();
+
 
 	void setup_projection();
 
@@ -323,41 +387,54 @@ private:
 	double extrapolate_;
 
 	/**
-	 *
+	 * Specifies whether to draw the Center of gravity and lines from each robot
+	 * to the center
 	 */
 	bool render_cog_;
 
 	/**
-	 *
+	 * This is the Center of gravity. It will only be computed when the render_cog_ flag is
+	 * set to true.
 	 */
 	Vector3d cog_;
 
 	/**
-	 *
+	 * Specifies whether the global coordinate system should be drawn.
 	 */
 	bool  render_coord_system_;
+
 	/**
-	 *
+	 * Specifies whether the local coordinate system of each robot should be drawn.
 	 */
 	bool render_local_coord_system_;
 
 	/**
-	 *
+	 * Specifies whether the acceleration should be drawn.
 	 */
 	bool render_acceleration_;
 
 	/**
-	 *
+	 * Specifies whether the velocity should be drawn.
 	 */
 	bool render_velocity_;
 
+	/**
+	 * Specifies whether the help screen should be drawn.
+	 */
 	bool render_help_;
 
+	/**
+	 * Specifies whether the about screem should be drawn.
+	 */
 	bool render_about_;
 
-	bool render_sky_box_;
 	/**
-	 * RobotRenderer
+	 * Specifies whether the skybox should be drawn.
+	 */
+	bool render_sky_box_;
+
+	/**
+	 * The Robot Renderer used for drawing the Robots
 	 */
 	boost::shared_ptr<RobotRenderer> robot_renderer_;
 	Texture tex_;

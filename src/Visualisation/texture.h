@@ -26,7 +26,7 @@
  */
 class Texture {
  public:
-	 Texture(){}
+	 Texture(): loaded_(false){}
 	 ~Texture();
 
 	 /**

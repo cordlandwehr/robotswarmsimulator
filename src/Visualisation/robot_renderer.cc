@@ -21,6 +21,7 @@
 #include "robot_renderer.h"
 #include "robot_color.h"
 
+namespace {
 const float kRobotRadius = 0.15;
 const int kRobotSlices = 30;
 const int kRobotStacks = 30;
@@ -39,6 +40,8 @@ const float kScaleVecs = 4.0;
 const float kScaleCoordVecsRev = 2.0;
 
 const std::string kModelName = "data/model/tris.MD2";
+
+}
 
 RobotRenderer::RobotRenderer(SimulationRenderer * renderer ){
 
@@ -176,7 +179,7 @@ void RobotRenderer::set_default_color(float r, float g, float b, float alpha){
 
 void RobotRenderer::load_model(std::string & filename ){
 
-	//model_.load_model( filename );
+	model_.load_model( filename );
 
 }
 
