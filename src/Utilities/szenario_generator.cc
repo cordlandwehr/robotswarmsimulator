@@ -109,11 +109,11 @@ void szenario_generator::distribute_robots_uniform(Vector3d boundingBox) {
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform_real(0.0, boundingBox(kXCoord));
+		png_->init_uniform_real(-boundingBox(kXCoord)/2, boundingBox(kXCoord)/2);
 		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(0.0, boundingBox(kYCoord));
+		png_->init_uniform_real(-boundingBox(kYCoord)/2, boundingBox(kYCoord)/2);
 		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(0.0, boundingBox(kZCoord));
+		png_->init_uniform_real(-boundingBox(kZCoord)/2, boundingBox(kZCoord)/2);
 		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
 
 		(*iter)->set_position( newRandomPosition );
