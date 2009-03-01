@@ -51,26 +51,28 @@ public:
 	void distribute_robots_normal(Vector3d boundingBox, double mean, double sigma);
 
 	/**
-	 * Method distributes robots velocities interior of a bounding box uniformly
-	 * @param boundingBox Vector3d the spans the bounding box
+	 * Method distributes robot initial velocities interior of sphere with max-radius, but outside sphere with min-radius
+	 * @param minVelocity double sets minimum velocity
+	 * @param maxVelocity double sets maximum velocity
 	 */
-	void distribute_velocity_uniform(Vector3d boundingBox);
+	void distribute_velocity_uniform(double minVelocity, double maxVelocity);
 
 	/**
-	 * Method distributes robots velocity by normal distribution
+	 * Method distributes robot initial velocities by normal distribution
 	 * @param mean double value for normal distribution
 	 * @param sigma double value for normal distribution
 	 */
 	void distribute_velocity_normal(double mean, double sigma);
 
 	/**
-	 * Method distributes robots acceleration interior of a bounding box uniformly
-	 * @param boundingBox Vector3d the spans the bounding box
+	 * Method distributes robot initial accelerations interior of sphere with max-radius, but outside sphere with min-radius
+	 * @param minAcc double sets minimum acceleration
+	 * @param maxAcc double sets maximum acceleration
 	 */
-	void distribute_acceleration_uniform(Vector3d boundingBox);
+	void distribute_acceleration_uniform(double minAcc, double maxAcc);
 
 	/**
-	 * Method distributes robots acceleration by normal distribution
+	 * Method distributes robot initial accelerations by normal distribution
 	 * @param mean double value for normal distribution
 	 * @param sigma double value for normal distribution
 	 */

@@ -43,9 +43,11 @@ int main(int argc, char** argv) {
 		("robotfile", po::value<std::string>()->default_value("newrandom"), "robot-file for output")
 		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
 		("distr-pos", po::value<double>()->default_value(0), "distribute position in cube [0;distr-pos]^3")
-		("distr-vel", po::value<double>()->default_value(0), "distribute velocity in cube [0;distr-vel]^3")
-		("distr-acc", po::value<double>()->default_value(0), "distribute acceleration in cube [0;distr-acc]^3")
-		("distr-coord", "distribute robot coordsystems uniformly");
+		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with radius min-vel")
+		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with max-vel")
+		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with radius min-acc")
+		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with radius max-acc")
+		("distr-coord", "distribute robot coordinate-systems uniformly");
 
 	po::options_description simulation_options("Simulation options");
 	simulation_options.add_options()
@@ -100,19 +102,14 @@ int main(int argc, char** argv) {
 			tmpVec.insert_element(kZCoord,vm["distr-pos"].as<double>());
 			generator.distribute_robots_uniform(tmpVec);
 		}
-		if (vm["distr-vel"].as<double>()!=0.0) {
-			Vector3d tmpVec;
-			tmpVec.insert_element(kXCoord,vm["distr-vel"].as<double>());
-			tmpVec.insert_element(kYCoord,vm["distr-vel"].as<double>());
-			tmpVec.insert_element(kZCoord,vm["distr-vel"].as<double>());
-			generator.distribute_velocity_uniform(tmpVec);
+
+		// distribute initial velocities
+		if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
+			generator.distribute_velocity_uniform(vm["min-vel"].as<double>(),vm["max-vel"].as<double>());
 		}
-		if (vm["distr-acc"].as<double>()!=0.0) {
-			Vector3d tmpVec;
-			tmpVec.insert_element(kXCoord,vm["distr-acc"].as<double>());
-			tmpVec.insert_element(kYCoord,vm["distr-acc"].as<double>());
-			tmpVec.insert_element(kZCoord,vm["distr-acc"].as<double>());
-			generator.distribute_acceleration_uniform(tmpVec);
+
+		if (vm["min-acc"].as<double>()!=0.0 || vm["max-acc"].as<double>()!=0.0) {
+			generator.distribute_acceleration_uniform(vm["min-acc"].as<double>(),vm["max-acc"].as<double>());
 		}
 		if (vm.count("distr-coord"))
 			generator.distribute_coordsys_uniform();

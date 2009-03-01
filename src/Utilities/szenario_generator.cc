@@ -162,17 +162,20 @@ void szenario_generator::distribute_robots_normal(Vector3d boundingBox, double m
 }
 
 
-void szenario_generator::distribute_velocity_uniform(Vector3d boundingBox) {
+void szenario_generator::distribute_velocity_uniform(double minVelocity, double maxVelocity) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform_real(0.0, boundingBox(kXCoord));
-		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(0.0, boundingBox(kYCoord));
-		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(0.0, boundingBox(kZCoord));
-		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
+		// get vector uniform on unit sphere
+		png_->init_uniform_on_sphere(3);
+		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+
+		// get vector length uniform in range [minVelocity,maxVelocity]
+		png_->init_uniform_real(minVelocity, maxVelocity);
+		double vecLength = png_->get_value_uniform_real();
+		newRandomPosition->insert_element(kXCoord,vecLength * (*newRandomPosition)(kXCoord));
+		newRandomPosition->insert_element(kYCoord,vecLength * (*newRandomPosition)(kYCoord));
+		newRandomPosition->insert_element(kZCoord,vecLength * (*newRandomPosition)(kZCoord));
 
 		(*iter)->set_velocity( newRandomPosition );
 	}
@@ -195,17 +198,20 @@ void szenario_generator::distribute_velocity_normal(double mean, double sigma) {
 }
 
 
-void szenario_generator::distribute_acceleration_uniform(Vector3d boundingBox) {
+void szenario_generator::distribute_acceleration_uniform(double minAcc, double maxAcc) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform_real(0.0, boundingBox(kXCoord));
-		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(0.0, boundingBox(kYCoord));
-		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(0.0, boundingBox(kZCoord));
-		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
+		// get vector uniform on unit sphere
+		png_->init_uniform_on_sphere(3);
+		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+
+		// get vector length uniform in range [minAcc,maxAcc]
+		png_->init_uniform_real(minAcc, maxAcc);
+		double vecLength = png_->get_value_uniform_real();
+		newRandomPosition->insert_element(kXCoord,vecLength * (*newRandomPosition)(kXCoord));
+		newRandomPosition->insert_element(kYCoord,vecLength * (*newRandomPosition)(kYCoord));
+		newRandomPosition->insert_element(kZCoord,vecLength * (*newRandomPosition)(kZCoord));
 
 		(*iter)->set_acceleration( newRandomPosition );
 	}
