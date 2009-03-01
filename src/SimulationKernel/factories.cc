@@ -47,6 +47,7 @@
 #include "../RobotImplementations/cog_robot.h"
 #include "../RobotImplementations/velocity_cog_robot.h"
 #include "../RobotImplementations/acceleration_cog_robot.h"
+#include "../RobotImplementations/miniball_robot.h"
 
 #include "../SimulationKernel/robot_control.h"
 #include "../SimulationKernel/uniform_robot_control.h"
@@ -286,7 +287,9 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new VelocityCOGRobot(id));
 	} else if(algorithm == "AccelerationCOGRobot") {
 	    robot.reset(new AccelerationCOGRobot(id));
-	} else {
+	} else if(algorithm == "MiniballRobot") {
+	    robot.reset(new MiniballRobot(id));
+	}else {
 		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
 	}
 	return robot;

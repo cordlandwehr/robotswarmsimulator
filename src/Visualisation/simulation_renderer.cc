@@ -59,7 +59,7 @@ const std::string kSkyBoxTexName("resources/Textures/");
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(false) {
 
 
 
@@ -164,9 +164,9 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	sky_box_.reset( new SkyBox() );
+	//sky_box_.reset( new SkyBox() );
 
-	sky_box_->init( kSkyBoxTexName);
+	//sky_box_->init( kSkyBoxTexName);
 	robot_renderer_->init();
 
 
