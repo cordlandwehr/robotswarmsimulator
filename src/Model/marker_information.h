@@ -1,7 +1,9 @@
-/**
- * \brief	TODO insert description here
+/*
+ * marker_information.h
+ *
+ *  Created on: Jan 7, 2009
+ *      Author: martinah
  */
-
 #ifndef MARKER_INFORMATION_H_
 #define MARKER_INFORMATION_H_
 
@@ -12,7 +14,13 @@
 
 using namespace std;
 
-// TODO(peter) comment class
+
+/**
+ * \brief This class represents abstract information types that may be appended to any WorldObject.
+ *
+ * The class provides a map-like interface to store any (variable_name, value) pair. To achieve this, the to
+ * be saved data has to be wrapped inside a boost::any object.
+ */
 class MarkerInformation {
 public:
 	MarkerInformation();
@@ -38,6 +46,7 @@ public:
 	 * \return	Data stored in data-map for given variable.
 	 */
 	const boost::any get_data(const string& var_name);
+
 
 private:
 	/**
