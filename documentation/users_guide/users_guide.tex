@@ -28,7 +28,7 @@
 \section{Introduction}
 This document shall help you to use the \RSS\ to simulate robot swarms and to get useful information by the visualization and statistics modules.
 
-For this purpose the document is divided in several sections. It will be usefull if you just start this the ``Getting Started!'' section play a little bit with the simulator and continue with reading the more detailed information on input parameters, input-file specifications, generating simulations and getting statistics. 
+For this purpose the document is divided in several sections. It will be usefull if you just start with the ``Getting Started!'' section and play a little bit with the simulator and continue with reading the more detailed information on input parameters, input-file specifications, generating simulations and getting statistics.
 
 
 \section{Getting Started}
@@ -37,7 +37,7 @@ For trial use of \RSS\ you can simply run generation mode, load one of our defau
 \begin{enumerate}
 	\item Create a new directory ``mytest'' to keep all avoid unwanted output files everywhere in your system.
 	\item Copy file {\tt cog.lua} to this directory.
-	\item Run {\tt <path to RSS>/RobotSwarmSimulator --generate --distr-pos=20\newline --algorithm=cog.lua} and the the following files are being generated:
+	\item Run {\tt <path to RSS>/RobotSwarmSimulator -{}-generate -{}-distr-pos=20\newline -{}-algorithm=cog.lua} and the the following files are being generated:
 	\begin{itemize}
 		\item {\tt newrandom.swarm} -- here you can edit all global information
 		\item {\tt newrandom.robot} -- here you can edit the robots
@@ -52,7 +52,7 @@ This simple test can be used as base for further tests. Please look at the follo
 \section{Running the \RSS\ with Parameters}
 \todo{describe the package structure}
 
-The \RSS\ exists as executable for Linux, MacOS and Windows in the corresponding directories. Each execution of the \RSS\ needs specific parameters that are mandatory. By running the \RSS\ you have to specify at least, which kind of execution do you want. By adding the parameter {\tt -{}-generate} the generation mode is started to create new input-files. On the other side by adding the parameter {\tt -{}-project-file=<your input>} the common simulation mode is started. Also a run with special parameters like {\tt-{}-help} or {\tt-{}-about} is possible. Thus a typical runs look like:
+The \RSS\ exists as executable for Linux, MacOS and Windows in the corresponding directories. Each execution of the \RSS\ needs specific parameters that are mandatory. By running the \RSS\ you have to specify at least, which kind of execution do you want. By adding the parameter {\tt -{}-generate} the generation mode is started to create new input-files. On the other side by adding the parameter {\tt -{}-project-file=<your input>} the common simulation mode is started. Also a run with special parameters like {\tt-{}-help} or {\tt-{}-about} is possible. Thus a typical run look like:
 \begin{verbatim}
     ./RobotSwarmSimulator --help
     ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2
@@ -61,7 +61,7 @@ The \RSS\ exists as executable for Linux, MacOS and Windows in the corresponding
     ./RobotSwarmSimulator --generate --distr-pos=17.0
 \end{verbatim}
 
-All of the options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can bin found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
+All of the options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can be found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
 
 \begin{lstlisting}[caption={RSS Helpline},label=lst:RSS-help]
 General options:
