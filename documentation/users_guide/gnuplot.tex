@@ -1,12 +1,12 @@
 
 \section{Visualization with GNUPlot}
 
-\paragraph{Anzeige mit GNUPlot}
-Zur Anzeige der Statistiken eines abgeschlossenen Simulationsdurchlaufes muss die entsprechende GNUPlot-Konfigurationsdatei mit GNUPlot geöffnet werden: Unter Unix-System kann man hierfür nach Aufruf von \texttt{\$ gnuplot} die interaktive GNUPlot-Shell verwenden (\texttt{> load ``gnuplotfile.plt``}). Weitere Befehle mit \texttt{> help}. Alternativ kann man sich die Ausgabe direkt anzeigen lassen mittels Shellkommando \texttt{\$ gnuplot -persist ''gnuplotfile.plt``}, wobei das \texttt{-persist} bewirkt, dass das Anzeigefenster auch nach Erstellen der Ausgabe geöffnet bleibt. Weitere Flags siehe \texttt{\$ man gnuplot}.
+\paragraph{Display with GNUPlot}
+To display statistical information about a finished simulation run the correct GNUPlot configuration file needs to be opened with GNUPlot. On Unix systems (with installed gnuplot) the interactive GNUPlot shell can be used ( (\texttt{> load ``gnuplotfile.plt``}). More commands can be displayed using \texttt{> help}. Also it is possible to directly display the file with \texttt{\$ gnuplot -persist ''gnuplotfile.plt``}. The additional option \texttt{-persist} causes the window to stay open after the file has been opened. For more informaion on gnuplot read the manual page \texttt{\$ man gnuplot}.
 
 
-\paragraph{Konfiguration der Anzeige}
-Der Inhalt der Datei \texttt{output\_20091224\_184129\_ALL.plt} könnte auszugsweise so aussehen:
+\paragraph{Display configuration}
+A file  \texttt{output\_20091224\_184129\_ALL.plt} might look like this:
 
 \begin{center}
 \texttt{\begin{tabular}{rrrl}
@@ -19,9 +19,10 @@ Der Inhalt der Datei \texttt{output\_20091224\_184129\_ALL.plt} könnte auszugsw
 \end{tabular}}
 \end{center}
 
-Jede Zeile enthält die statistischen Daten zu einem bestimmten Zeitpunkt. Der Beginn einer neuen Spalte wird hierbei durch (mindestens) ein Leerzeichen gekennzeichnet. '\#' leitet eine Kommentarzeile ein.
+Each line contains extremly valuable statistical data for a certain time. The start of a new column is marked by one (or more) whitespaces.
+comment lines are started with a '\#' sign.
 
-In der Datei \texttt{gnuplot\_20091224\_184129\_ALL.plt} findet nun die Formatierung der Daten für die Anzeige statt und kann beliebig geändert werden:
+The file  \texttt{gnuplot\_20091224\_184129\_ALL.plt} also contains the formatting of the extremly valuable statistical data. The formatting can be changed if so desired. 
 
 \begin{verbatim}
 # statistics of the simulation
@@ -37,29 +38,29 @@ plot 'output_(...)_ALL.plt' using 1:2 title 'avg_spd' with linespoints, \
      'output_(...)_ALL.plt' using 1:3 title 'minball_x' with linespoints
 \end{verbatim}
 
-Die Angaben haben folgende Bedeutung:
+The lines have the following meaning:
 \begin{itemize}
-\item \texttt{set title '\textit{Titel}'} erzeugt einen zentrierten Titel am oberen Teil der grafischen Darstellung.
-\item \texttt{set xrange [\textit{min}:\textit{max}]} begrenzt den horizontal sichtbaren Bereich zwischen den Werten \texttt{\textit{min}} und \texttt{\textit{max}}, \texttt{set xrange []} führt diese Skalierung auf Grundlage der vorliegenden Daten automatisch durch.
-\item \texttt{set grid} blendet ein Gitternetz ein.
-\item \texttt{set pointsize \textit{multiplikator}} skaliert die Größe der Punkte (falls eine Darstellung gewählt wird, welche Punkte beinhaltet) gemäß \texttt{\textit{multiplikator}}.
-\item \texttt{xlabel '\textit{Label}'} beschriftet die X-Achse.
+\item \texttt{set title '\textit{Titel}'} generates a title within the upper part of the graphical display.
+\item \texttt{set xrange [\textit{min}:\textit{max}]} limits the visible area (horizontal) to the area between \texttt{\textit{min}} ans \texttt{\textit{max}}, \texttt{set xrange []} scales the extremly valuable statistical data based on the datapoints
+\item \texttt{set grid} displays a beautiful grid.
+\item \texttt{set pointsize \textit{multiplikator}} scales the size of the points (if there are any) according to \texttt{\textit{multiplikator}}.
+\item \texttt{xlabel '\textit{Label}'} labels the x-axis with useful information.
 \end{itemize}
-Diese Angaben beinhalten also \textit{nur} grafische grafische Aspekte, die z.B. für die Verwendung in Dokumentationen angepasst werden können. Die Einstellungen der anzuzeigenden Daten finden erst daraufhin statt:
+These choices only concern the graphical display. The configuration of the displayed data is done later.
 
 \begin{itemize}
- \item \texttt{plot '\textit{Dateiname.plt}'} leitet den tatsächlichen Vorgang der Darstellung ein. Hierbei werden die Daten aus der angegebenen Datei gelesen. Durch \texttt{using 1:2} werden die erste und die zweite Spalte gegeneinander dargestellt, wobei der erstgenannte Spaltenindex, also \texttt{time}, die X-Koordinate und folglich \texttt{avg\_spd} die Y-Koordinate definiert. \texttt{title `avg\_speed'} fügt für die definierte Funktion einen Legendeneintrag mit dem Titel \texttt{avg\_speed} hinzu. Der Zusatz \texttt{with linespoints} beschreibt die Darstellung durch mit Linien verbundene Zeichen an den Datenpunkten. \texttt{linespoints} kann auch ersetzt werden durch:
+ \item \texttt{plot '\textit{Dateiname.plt}'} starts the display process. Data is read from the input file. The parameter \texttt{using 1:2} uses the first column as x-axis and the second column as y-axis. \texttt{title `avg\_speed'} adds a title for the function defined by this. The addition \texttt{with linespoints} causes the data points to be displayed with lines between them. \texttt{linespoints} can be replaced by:
 \begin{itemize}
-\item \texttt{lines} verbindet jeden Datenpunkt mit einer Linie
-\item \texttt{dots} zeigt einzelne Punkte an (sinnvoll bei vielen Datenpunkten)
-\item \texttt{points} fügt ein Zeichen an der Position des Datenpunktes ein. Die Größe kann durch den Befehl \texttt{set pointsize} geändert werden
-\item \texttt{linespoints} erstellt gleichzeitig \textit{points} und \textit{lines}
-\item \texttt{impulses} erzeugt eine vertikale Linie ausgehend von der X-Achse zum Datenpunkt
-\end{itemize}
-Zum Plotten einer weiteren Funktion in derselben Darstellung wird die gleiche Struktur durch ein Komma getrennt angehangen (auch aus verschiedenen Quelldateien). Dies ermöglicht auf einfache Art, dass die Darstellung der Statistiken unterschiedlicher Simulationsdurchläufe in einer Grafik dargestellt werden können.
+\item \texttt{lines} connects each data point with a line
+\item \texttt{dots}displays datapoints as dots (for many datapoints)
+\item \texttt{points} displays datapoints as points
+\item \texttt{linespoints} displays a combination of \textit{points} and \textit{lines}
+\item \texttt{impulses} displays a vertical line for each data point
 \end{itemize}
 
-\paragraph{Ergebnis}~\\
+\end{itemize}
+
+\paragraph{Result}~\\
 
 \begin{figure}
 	\includegraphics[width=0.9\textwidth]{stats-howto-gnuplot.png}
@@ -67,9 +68,9 @@ Zum Plotten einer weiteren Funktion in derselben Darstellung wird die gleiche St
 \end{figure}
 
 
-\paragraph{Weitere Informationen zu GNUPlot}~\\
+\paragraph{More about GNUPlot}~\\
 
 \begin{tabular}{l}
- $[1]$ offizielle Homepage: \url{http://www.gnuplot.info/} \\
- $[2]$ Grundkurs: \url{http://userpage.fu-berlin.de/~voelker/gnuplotkurs/gnuplotkurs.html}
+ $[1]$ Homepage: \url{http://www.gnuplot.info/} \\
+ $[2]$ Introductory course: \url{http://userpage.fu-berlin.de/~voelker/gnuplotkurs/gnuplotkurs.html}
 \end{tabular}
