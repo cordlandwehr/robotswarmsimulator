@@ -49,10 +49,7 @@ class MD2 {
 	  * Draws the model using a simple loop and simple OpenGL functions
 	  */
 	 void draw_model_simple() const;
-	 /**
-	  * Draws the model using Vertex Buffer Objects
-	  */
-	 void draw_model_vbo() const;
+
 
 	 /**
 	  * Draws the Model using ArrayLists
@@ -84,8 +81,7 @@ class MD2 {
 	  */
 	 enum DrawType {
 		 DRAW_SIMPLE,
-		 DRAW_LISTS,
-		 DRAW_VBO
+		 DRAW_LISTS
 	 };
 
 	 /**

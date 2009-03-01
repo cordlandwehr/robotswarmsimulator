@@ -46,7 +46,7 @@ public:
 		 * \param extrapolate The value for the extrapolating.
 		 *
 		 */
-		void draw_robot(const boost::shared_ptr<RobotData> & robot, double extrapolate ) const;
+		void draw_robot(const boost::shared_ptr<RobotData> & robot ) const;
 
 		/**
 		 * Sets the default color of the drawn robots.
@@ -58,6 +58,9 @@ public:
 		 */
 		void load_model(std::string & filename );
 
+		void set_extrapolate( double ext){
+			extrapolate = ext;
+		}
 
 private:
 
@@ -87,6 +90,11 @@ private:
 	 * The MD2 model.
 	 */
 	MD2 model_;
+
+	/**
+	 *
+	 */
+	double extrapolate;
 };
 
 

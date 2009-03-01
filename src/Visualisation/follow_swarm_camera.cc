@@ -69,6 +69,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
 		boost::shared_ptr<Vector3d> pos = (*it_robot_data)->extrapolated_position(extrapolate);
+
 		center += (*pos);
 		num_objects++;
 	}
@@ -121,36 +122,25 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	}
 
 
+	if( max_width < 1.0)
+		max_width = 1.0;
 
-	// Check if the width is the highest value and assign that for the cube dimension
+	if( max_height < 1.0 )
+		max_height = 1.0;
 
-	if(max_width > max_height && max_width > max_depth){
-
-		width = max_width;
-
-	// Check if the height is the heighest value and assign that for the cube dimension
-	}else if(max_height > max_width && max_height > max_depth) {
-
-		width = max_height;
-
-	// Else it must be the depth or it's the same value as some of the other ones
-	} else {
-
-		width = max_depth;
+	if(max_depth < 1.0 ){
+		max_depth = 1.0;
 	}
 
-	if(width < 1.0f){
-		width = 1.0f;
-	}
 
 
 	this->view_(0) = center(0);
 	view_(1) = center(1);
 	view_(2) = center(2);
 
-	position_(0) = center(0)  + width * 0.7;
-	position_(1) = center(1) + width *1.40 ;
-	position_(2) = center(2) + width* 1.25;
+	position_(0) = center(0)  + max_width * 1.3;
+	position_(1) = center(1) + max_height *1.4 ;
+	position_(2) = center(2) + max_depth* 1.4;
 
 }
 

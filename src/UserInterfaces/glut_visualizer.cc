@@ -49,6 +49,7 @@ void GlutVisualizer::init() {
 		PgGLUT::glutMouseFunc(boost::bind(&SimulationRenderer::mouse_func, this, _1, _2, _3, _4));
 		PgGLUT::glutReshapeFunc(boost::bind(&SimulationRenderer::resize, this, _1, _2));
 		PgGLUT::glutTimerFunc(spf, &timer_callback, 0);
+		PgGLUT::glutMotionFunc( boost::bind(&SimulationRenderer::mouse_motion_func, this, _1, _2));
 
 		SimulationRenderer::init();
 		initialized_ = true;

@@ -22,10 +22,15 @@
 #include "robot_color.h"
 
 namespace {
-const float kRobotRadius = 0.15;
-const int kRobotSlices = 30;
-const int kRobotStacks = 30;
 
+// constants for robot drawing
+
+// values for spheres
+const float kRobotRadius = 0.13;
+const int kRobotSlices = 13;
+const int kRobotStacks = 13;
+
+// colors
 const float kRobotColor[] = {0.0f,1.0f,0.0f,1.0f};
 const float kVelColor[] = {1.0f,0.5f,0.0f,1.0f};
 const float kAccelColor[] = {0.0f,0.5f,1.0f,1.0f};
@@ -36,10 +41,11 @@ const float kCoordXColor[] = {1.0f,0.0f,0.0f,1.0f};
 const float kCoordYColor[] = {0.0f,1.0f,0.0f,1.0f};
 const float kCoordZColor[] = {0.0f,0.0f,1.0f,1.0f};
 
-const float kScaleVecs = 4.0;
+// scale factors
+const float kScaleVecs = 2.0;
 const float kScaleCoordVecsRev = 2.0;
 
-const std::string kModelName = "data/model/tris.MD2";
+const std::string kModelName = "resources/model/tris.MD2";
 
 }
 
@@ -74,7 +80,7 @@ void RobotRenderer::init(){
 
 }
 
-void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, double extrapolate ) const{
+void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) const{
 
 	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position(extrapolate);
 
@@ -125,27 +131,24 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot, doubl
 		boost::shared_ptr<Vector3d> y_coord = local_coord.get<1>();
 		boost::shared_ptr<Vector3d> z_coord = local_coord.get<2>();
 
-		float length_x_coord = Magnitude( *x_coord ) * kScaleCoordVecsRev;
-		float length_y_coord = Magnitude( *y_coord ) * kScaleCoordVecsRev;
-		float length_z_coord = Magnitude( *z_coord ) * kScaleCoordVecsRev;
 
 		glColor3fv(kCoordXColor);
 		glVertex3f(0, 0, 0);
-		glVertex3f( (*x_coord)(0) / length_x_coord,
-					(*x_coord)(1) / length_x_coord,
-					(*x_coord)(2) / length_x_coord );
+		glVertex3f( (*x_coord)(0) ,
+					(*x_coord)(1) ,
+					(*x_coord)(2)  );
 
 		glColor3fv(kCoordYColor);
 		glVertex3f(0, 0,0 );
-		glVertex3f((*y_coord)(0) / length_y_coord,
-				   (*y_coord)(1) / length_y_coord,
-				   (*y_coord)(2) / length_y_coord );
+		glVertex3f((*y_coord)(0) ,
+				   (*y_coord)(1) ,
+				   (*y_coord)(2)  );
 
 		glColor3fv(kCoordZColor);
 		glVertex3f(0, 0, 0 );
-		glVertex3f( (*z_coord)(0) / length_z_coord,
-					(*z_coord)(1) / length_z_coord,
-					(*z_coord)(2) / length_z_coord);
+		glVertex3f( (*z_coord)(0) ,
+					(*z_coord)(1) ,
+					(*z_coord)(2) );
 
 
 	}
@@ -185,7 +188,7 @@ void RobotRenderer::load_model(std::string & filename ){
 
 
 
-void RobotRenderer::draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const{
+inline void RobotRenderer::draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const{
 
 		glCallList( compiled_list_ );
 

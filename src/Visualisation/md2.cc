@@ -204,11 +204,7 @@ void MD2::draw_model() const{
 
 		draw_model_simple();
 
-	} else if ( draw_type == DRAW_VBO) {
-
-		draw_model_vbo();
-
-	} else if ( draw_type == DRAW_LISTS ){
+	}  else if ( draw_type == DRAW_LISTS ){
 		draw_model_lists();
 	}
 
@@ -269,7 +265,7 @@ void MD2::setup_lists(){
 }
 
 void MD2::draw_model_lists() const{
- //TODO:TEST
+
 	glDisable(GL_LIGHTING );
 	glEnable( GL_TEXTURE_2D );
 	glColor3f(1.0f,1.0f,1.0f);
@@ -295,10 +291,7 @@ void MD2::draw_model_lists() const{
 	glEnable(GL_LIGHTING );
 }
 
-void MD2::draw_model_vbo() const{
- //TODO
 
-}
 
 
 MD2::Vec MD2::calculate_normal(Vec &v1,Vec &v2) const{

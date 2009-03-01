@@ -288,19 +288,24 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 		draw_help();
 	}
 
+	float start_time2 = std::clock();
+
+	robot_renderer_->set_extrapolate( extrapolate_ );
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
-		draw_robot(*it_robot);
+		robot_renderer_->draw_robot( *it_robot );
 	}
-
+	float end_time2 = std::clock();
+	float ticks2 = (end_time2 - start_time2) / CLOCKS_PER_SEC;
+	std::printf("Time for robot rendering: %f \n", ticks2);
 
 	glFlush();
 	glutSwapBuffers();
 
 	float end_time = std::clock();
 	float ticks = (end_time - start_time) / CLOCKS_PER_SEC;
-	//std::printf("Time for rendering: %f \n", ticks);
+	std::printf("Time for rendering: %f \n", ticks);
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
@@ -575,8 +580,8 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 	glPopMatrix();
 }
 
-void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
-	robot_renderer_->draw_robot( robot, extrapolate_ );
+inline void SimulationRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot){
+
 
 }
 

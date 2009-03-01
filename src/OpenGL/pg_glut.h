@@ -74,6 +74,11 @@ namespace PgGLUT {
 	void glutMouseFunc(boost::function<void (int button, int state, int x, int y)> func);
 
 	/**
+	 * \brief Wrapper arround GLUT method (supports class member methods)
+	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
+	 */
+	void glutMotionFunc ( boost::function<void (int x, int y)> func);
+	/**
 	 * \brief Wrapper around GLUT method (supports class member methods).
 	 * \see http://www.opengl.org/resources/libraries/glut/spec3/spec3.html
 	 */

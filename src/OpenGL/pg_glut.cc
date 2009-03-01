@@ -24,6 +24,7 @@ namespace PgGLUT {
 		boost::function<void (unsigned char key, int x, int y)> keyboard_callback_;
 		boost::function<void (int key, int x, int y)> special_callback_;
 		boost::function<void (int button, int state, int x, int y)> mouse_callback_;
+		boost::function<void (int x, int y)> mouse_motion_callback_;
 
 		boost::function<void (int value)> timer_callback_;
 
@@ -34,6 +35,7 @@ namespace PgGLUT {
 		void special_callback_delegate(int key, int x, int y) { special_callback_(key, x, y); }
 
 		void mouse_callback_delegate(int button, int state, int x, int y) { mouse_callback_(button, state, x, y); }
+		void mouse_motion_callback_delegate( int x, int y){ mouse_motion_callback_(x, y ); }
 		void reshape_callback_delegate(int width, int height) { reshape_callback_(width, height); }
 
 		void timer_callback_delegate(int value) {timer_callback_(value);}
@@ -86,5 +88,10 @@ namespace PgGLUT {
 	void glutTimerFunc(unsigned int msec, boost::function<void (int value)> func, int value) {
 		timer_callback_ = func;
 		::glutTimerFunc(msec, &timer_callback_delegate, value);
+	}
+
+	void glutMotionFunc ( boost::function<void (int x, int y)> func){
+		mouse_motion_callback_ = func;
+		::glutMotionFunc(&mouse_motion_callback_delegate);
 	}
 }
