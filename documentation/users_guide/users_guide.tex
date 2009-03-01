@@ -6,6 +6,15 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\cupdot}{\ensuremath{\mathaccent\cdot\cup}} % disjuncted union
 
+\lstdefinelanguage{lua}
+{morekeywords={and, break, do, else, elseif, end, false, for, function, if, in, local, nil, not, or, repeat, return, then, true, until, while, print},
+sensitive=false,
+morecomment=[l]{--},
+morestring=[bd]",
+morestring=[bd]',
+morestring=[s]{[[}{]]},
+}
+
 \begin{document}
 \init{}
 
@@ -228,7 +237,7 @@ For information how to write \Lua scripts please visit \url{http://www.lua.org} 
 \subsubsection{Example Algorithm}
 For example Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in Lua.
 
-\lstset{language=c}
+\lstset{language=lua}
 \begin{lstlisting}[caption={COG algorithm in Lua},label=lst:cog-lua]
 function main() 
     robots = get_visible_robots();
