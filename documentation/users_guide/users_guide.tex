@@ -68,10 +68,10 @@ The \RSS\ exists as executable for Linux, Mac OS X and Windows. Each execution o
 There other command line options that may be used to show help or about messages and to customize the generation or simulation mode. Start the \RSS with the parameter {\tt -{}-help} to get an overview. A typical session may look like this:
 
 \begin{verbatim}
-    ./RobotSwarmSimulator --help
-    ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2 \\
-                          --output <path_to_output_files> \\
-                          --history-length 10
+   ./RobotSwarmSimulator --help
+   ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2 \\
+                         --output <path_to_output_files> \\
+                         --history-length 10
 \end{verbatim}
 
 All of the options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can be found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
@@ -248,7 +248,7 @@ By creating a new robot algorithm inside the simulator you need to do the follow
 	\item Put the algorithm into \texttt{src/RobotImplementations/}.
 	\item Write the method \texttt{compute()}.
 	\item Write the method \texttt{get\_algorithm\_id()}.
-	\item Add the algorithm identifier as option in file \texttt{src/SimulationKernel/factories.cc} in method \texttt{robot\_factory(\dots)}.
+	\item Add the algorithm identifier as option in file\newline \texttt{src/SimulationKernel/factories.cc} in method \texttt{robot\_factory(\dots)}.
 \end{enumerate}
 
 
@@ -262,7 +262,7 @@ A simulation run results in three output files of statistics:
 \item \texttt{output\_20091224\_184129\_DATADUMP\_FULL.plt} (complete data dump)
 \end{itemize}
 
-The file-names results from current date (year, month, day), the current time (hour, minute, second), followed by description of screened object subset (e.\.g. \texttt{ALL, MASTERS,}\dots). For each entry in STATISTICS\_SUBSETS there will be created one such data pair.
+The file-names results from current date (year, month, day), the current time (hour, minute, second), followed by description of screened object subset (e.\,g. \texttt{ALL}, \linebreak \texttt{MASTERS,}\dots). For each entry in STATISTICS\_SUBSETS there will be created one such data pair.
 
 \newpage
 \appendix
