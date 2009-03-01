@@ -16,7 +16,7 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	set(Boost_USE_STATIC_LIBS TRUE)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 set(Boost_ADDITIONAL_VERSIONS 1.37)
-find_package(Boost 1.37 REQUIRED filesystem program_options thread)
+find_package(Boost 1.37 REQUIRED filesystem program_options system thread)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # find/configure OpenGL
