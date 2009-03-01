@@ -204,13 +204,14 @@ void StatsControl::quit() {
 
 	// quit all StatsOut
 	for (unsigned int i=0; i<stats_out_.size(); i++)
-		(*stats_out_[i]).quit();
+		stats_out_[i]->quit();
 
 	// clear the vector of StatsOuts
 	stats_out_.clear();
 
-	// quit the datadump
-	stats_datadump_->quit();
+	// quit the datadump - if any
+	if (stats_datadump_.get() != NULL)
+		stats_datadump_->quit();
 
 	stats_initialized_ = false;
 
