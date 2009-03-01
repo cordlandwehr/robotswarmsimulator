@@ -1,11 +1,17 @@
 \documentclass[a4paper,halfparskip,11pt,twoside]{scrartcl}
 \usepackage{schlaue_schwaerme}
-
 \usepackage{url}
+
+\pdfinfo{
+	/Title   (RobotSwarmSimulator User's Guide)
+	/Subject (User's Guide)
+	/Author  (A. Klaas, A. Cord-Landwehr, C. Raupach, C. Weddemann, D. Warner, D. Wonisch, K. Swierkot, M. Märtens, M. Hüllmann, P. Kling, S. Kurras)
+	/Keywords (Robot, Swarm, Simulator, Paderborn, University)
+}
+
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\cupdot}{\ensuremath{\mathaccent\cdot\cup}} % disjuncted union
-
 %TODO(cola) move to swarm-package
 \newcommand{\gnuplot}{ {\sffamily gnuplot}\xspace}
 
@@ -15,7 +21,7 @@ sensitive=false,
 morecomment=[l]{--},
 morestring=[bd]",
 morestring=[bd]',
-morestring=[s]{[[}{]]},
+%morestring=[s]{[[}{]]},
 }
 
 \begin{document}
@@ -242,9 +248,8 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 \subsubsection{Example Algorithm}
 Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in \Lua.
 
-%\lstset{language=lua} %TODO(cola) this throws errors on my tex-live...
-\lstset{language=c}
-\begin{lstlisting}[caption={COG algorithm in Lua},label=lst:cog-lua]
+\lstset{language=lua}
+\begin{lstlisting}[caption={COG algorithm in \Lua},label=lst:cog-lua]
 function main() 
     robots = get_visible_robots();
     center = get_position(get_own_identifier());
