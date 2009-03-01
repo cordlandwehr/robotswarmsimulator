@@ -80,15 +80,13 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	stat_temp = const_cast<char*>(stat_id.c_str());
 
 	if (gnuPlot) {
-		//std::strcpy (stat_gnuplot_filename, stat_dir.c_str()); TODO del
-		std::strcat (stat_gnuplot_filename, stat_gnuplot_date);
+		std::strcpy (stat_gnuplot_filename, stat_gnuplot_date);
 		std::strcat (stat_gnuplot_filename,"_");
 		std::strcat (stat_gnuplot_filename,stat_temp);
 		std::strcat (stat_gnuplot_filename,".plt");
 	}
 
-	//std::strcpy (stat_output_filename, stat_dir.c_str()); TODO del
-	std::strcat (stat_output_filename, stat_output_date);
+	std::strcpy (stat_output_filename, stat_output_date);
 	std::strcat (stat_output_filename,"_");
 	std::strcat (stat_output_filename,stat_temp);
 	std::strcat (stat_output_filename,".plt");
