@@ -36,7 +36,7 @@ RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_
 }
 
 RobotData::~RobotData() {
-	// TODO Auto-generated destructor stub
+
 }
 
 const Vector3d & RobotData::acceleration() const {

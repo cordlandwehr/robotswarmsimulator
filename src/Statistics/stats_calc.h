@@ -1,8 +1,28 @@
-/*
- * stats_calc.h
+/**
+ * \class	StatsCalc
+ * \author	Sven Kurras
+ * \brief	performs all the statistical calculations
  *
- *  Created on: 02.02.2009
- *      Author: sven
+ * The calculation-overhead is implemented in StatsControl.
+ * The StatsCalc-class implements the pure calculation for a given
+ * subset and worldinformation.
+ * Therefore it receives from StatsControl an updated
+ * struct StatsCalcInData with all information needed.
+ */
+
+// BEGIN STRUCT-DEFINTION
+
+/**
+ * StatsCalcInData
+ * \author	Sven Kurras
+ * \brief	holds information on current and last worldinformation
+ *
+ * This struct is filled by the StatsControl with the latest worldinformation
+ * for a given point in time. Then it is sent to StatsCalc as input for performing
+ * all calculations. Some of them might need to access the previous worldinformation,
+ * so the previous one is saved here, too. Additionally the StatsCalc might perform
+ * some time-consuming operations whose result shouldn't be recalculated when
+ * accessing the previous worldinformation, so these results are also saved here.
  */
 
 #ifndef STATS_CALC_H_
@@ -33,10 +53,26 @@ struct StatsCalcInData {
 	 */
 	boost::shared_ptr<WorldInformation> prev_world_info_;
 
-	boost::shared_ptr<std::vector<Vector3d> > prev_positions;
-	Vector3d prev_miniball_center;
-	double prev_miniball_radius;
+	// SAVED PRECALCULATED VALUES
+	// for all subsets in one vector.
+
+	/**
+	 * the positions-vector of each subset
+	 */
+	std::vector<boost::shared_ptr<std::vector<Vector3d> > > prev_positions;
+
+	/**
+	 * the miniball's center of each subset
+	 */
+	std::vector<boost::shared_ptr<Vector3d> > prev_miniball_center;
+
+	/**
+	 * the miniball's radius of each subset
+	 */
+	std::vector<double> prev_miniball_radius;
 };
+
+// END STRUCT-DEFINTION
 
 class StatsCalc {
 public:
@@ -46,18 +82,33 @@ public:
 	StatsCalc();
 	virtual ~StatsCalc();
 
+	/**
+	 * \brief initializes from the given configuration
+	 */
 	void init(StatsConfig* stats_cfg);
 
+	/**
+	 * \brief performs all calculations for the given data and subset
+	 */
 	void calculate(StatsCalcInData &data,
 			std::vector<boost::shared_ptr<RobotData> > & subset,
-			boost::shared_ptr<StatsOut> & stats_out);
+			boost::shared_ptr<StatsOut> & stats_out,
+			unsigned int subset_id);
 
 private:
 	/**
 	 * pointer to the stats_cfg stored in StatsControl
 	 */
 	StatsConfig* stats_cfg;
+
+	/**
+	 * instance of NumSetStats used for some calculations
+	 */
 	NumSetStats num_stats;
+
+	/**
+	 * instance of VecSetStats used for some calculations
+	 */
 	VecSetStats vec_stats;
 };
 

@@ -1,10 +1,3 @@
-/*
- * stats_control.cpp
- *
- *  Created on: 02.02.2009
- *      Author: sven
- */
-
 #include "stats_control.h"
 
 StatsControl::StatsControl() {
@@ -12,15 +5,18 @@ StatsControl::StatsControl() {
 }
 
 StatsControl::~StatsControl() {
-	quit();
+	if (stats_initialized_) {
+		std::cerr << "(statistics-warning) no explicit quit() called - now calling from deconstructor" << std::endl;
+		quit();
+	}
 }
 
 void StatsControl::init(map<std::string, std::string> &params) {
 
 	if (stats_initialized_) {
-		// log error, because no quit was called before this init
-		std::cerr << "StatsControl::init(...) called without any previous StatsControl::quit(...)" << std::endl;
-		// manually quit current statistic-calculation
+		// log warning, because no quit was called before this init
+		std::cerr << "(statistics-warning) StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting..." << std::endl;
+		// quit current statistic-calculation
 		quit();
 	}
 
@@ -41,17 +37,17 @@ void StatsControl::init(map<std::string, std::string> &params) {
 	if (stats_cfg_.is_subset_inactall())
 		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTALL", dir)));
 	if (stats_cfg_.is_subset_masters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTER", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTERS", dir)));
 	if (stats_cfg_.is_subset_actmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTER", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTERS", dir)));
 	if (stats_cfg_.is_subset_inactmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTER", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTERS", dir)));
 	if (stats_cfg_.is_subset_slaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVE", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVES", dir)));
 	if (stats_cfg_.is_subset_actslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVE", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVES", dir)));
 	if (stats_cfg_.is_subset_inactslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVE", dir)));
+		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVES", dir)));
 
 	// create data-praefix for all StatsOut-instances
 	// by calling the respective static function
@@ -60,6 +56,15 @@ void StatsControl::init(map<std::string, std::string> &params) {
 	// initialize stats_calc_indata_
 	stats_calc_indata_.prev_world_info_.reset();
 	stats_calc_indata_.world_info_.reset();
+	for (int i=0; i<stats_out_.size(); i++) {
+		boost::shared_ptr<std::vector<Vector3d> > foo = boost::shared_ptr<std::vector<Vector3d> >(new std::vector<Vector3d>());
+		stats_calc_indata_.prev_positions.push_back(foo);
+
+		boost::shared_ptr<Vector3d> fooVec = boost::shared_ptr<Vector3d>(new Vector3d());
+		stats_calc_indata_.prev_miniball_center.push_back(fooVec);
+
+		stats_calc_indata_.prev_miniball_radius.push_back(-1);
+	}
 
 	// initialize StatsCalc
 	stats_calc_.init(&stats_cfg_);
@@ -163,7 +168,11 @@ void StatsControl::do_datadump(const WorldInformation& world_information, boost:
 			}
 
 			// stream out values
-			values.push_back(event->time());
+			if (event.get() != NULL)
+				values.push_back(event->time());
+			else
+				values.push_back(-1);
+
 			values.push_back(world_information.robot_data().size());
 			for (unsigned int i=0; i<world_information.robot_data().size(); i++) {
 				RobotData *rb = world_information.robot_data()[i].get();
@@ -205,7 +214,7 @@ void StatsControl::quit() {
 
 	stats_initialized_ = false;
 
-	std::cout << "Statistics-module quit." << std::endl;
+	std::cout << "(statistics-info) quit" << std::endl;
 }
 
 void StatsControl::calculate() {
@@ -235,7 +244,7 @@ void StatsControl::calculate() {
 	// with the respective StatsOut-instance.
 	// asserts that stats_calc_indata_ contains valid information
 	for(unsigned int i=0; i<cur_subsets_.size(); i++)
-		stats_calc_.calculate(stats_calc_indata_, cur_subsets_[i], stats_out_[i]);
+		stats_calc_.calculate(stats_calc_indata_, cur_subsets_[i], stats_out_[i], i);
 
 	if (DEBUG)
 		std::cout << "DEBUG: <<<<<<<<" << std::endl;

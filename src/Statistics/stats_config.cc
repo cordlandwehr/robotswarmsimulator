@@ -45,23 +45,23 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 				|| subset_masters_ || subset_actmasters_ || subset_inactmasters_
 				|| subset_slaves_ || subset_actslaves_ || subset_inactslaves_;
 
-	std::cout << "    statistics-subsets are: "
-			  << (subset_all_ ? "ALL " : "")
-			  << (subset_actall_ ? "ACTALL " : "")
-			  << (subset_inactall_ ? "INACTALL " : "")
-			  << (subset_masters_ ? "MASTERS " : "")
-			  << (subset_actmasters_ ? "ACTMASTERS " : "")
-			  << (subset_inactmasters_ ? "INACTMASTERS " : "")
-			  << (subset_slaves_ ? "SLAVES " : "")
-			  << (subset_actslaves_ ? "ACTSLAVES " : "")
-			  << (subset_inactslaves_ ? "INACTSLAVES " : "") << std::endl;
+	std::cout << "(statistics-info) subsets are: "
+			  << (subset_all_ ? "{ALL} " : "")
+			  << (subset_actall_ ? "{ACTALL} " : "")
+			  << (subset_inactall_ ? "{INACTALL} " : "")
+			  << (subset_masters_ ? "{MASTERS} " : "")
+			  << (subset_actmasters_ ? "{ACTMASTERS} " : "")
+			  << (subset_inactmasters_ ? "{INACTMASTERS} " : "")
+			  << (subset_slaves_ ? "{SLAVES} " : "")
+			  << (subset_actslaves_ ? "{ACTSLAVES} " : "")
+			  << (subset_inactslaves_ ? "{INACTSLAVES} " : "") << std::endl;
 
 	// get template-configuration from Parser's STATS_TEMPLATE = ...
 	// e.g. STATS_TEMPLATE = DEFAULT
 	s = params["STATISTICS_TEMPLATE"];
 
 	// initialize template
-	std::cout << "    statistics-configuration is: ";
+	std::cout << "(statistics-info) configuration is: ";
 	if (s.find("ALL", 0) != std::string::npos) {
 		init_activate_all();
 		std::cout << "ALL" << std::endl;
@@ -79,7 +79,7 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 	// get datadump-configuration from Parser's STATS_DATADUMP = ...
 	// e.g. STATS_DATADUMP = FULL
 	s = params["STATISTICS_DATADUMP"];
-	std::cout << "    statistics-datadump is: ";
+	std::cout << "(statistics-info) datadump is: ";
 	if (s == "FULL") {
 		datadump_level_ = DATADUMP_FULL;
 		std::cout << "FULL" << std::endl;

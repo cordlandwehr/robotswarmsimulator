@@ -13,12 +13,11 @@
 #include "../Utilities/vector_arithmetics.h"
 
 StatsCalc::StatsCalc() {
-	// TODO Auto-generated constructor stub
 
 }
 
 StatsCalc::~StatsCalc() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void StatsCalc::init(StatsConfig* stats_cfg) {
@@ -27,7 +26,8 @@ void StatsCalc::init(StatsConfig* stats_cfg) {
 
 void StatsCalc::calculate(StatsCalcInData & data,
 		std::vector<boost::shared_ptr<RobotData> > & subset,
-		boost::shared_ptr<StatsOut> & stats_out) {
+		boost::shared_ptr<StatsOut> & stats_out,
+		unsigned int subset_id) {
 
 	if (DEBUG)
 		std::cout << "DEBUG: >>>> StatsCalc::calculate(...) with " << subset.size() << " robots." << std::endl;
@@ -101,15 +101,15 @@ void StatsCalc::calculate(StatsCalcInData & data,
 		if (stats_cfg->is_miniball_movedist()) {
 			double miniball_movedist=0.0;
 			if (data.prev_world_info_.get() != NULL) {
-				miniball_movedist = mb.center().dist(data.prev_miniball_center);
+				miniball_movedist = mb.center().dist(*data.prev_miniball_center[subset_id]);
 			}
 			values.push_back(miniball_movedist);
 			if (push_names)
 				names.push_back("miniball_movedist");
 		}
 
-		mb.center().set_other(data.prev_miniball_center);
-		data.prev_miniball_radius = mb.radius();
+		mb.center().set_other(*data.prev_miniball_center[subset_id]);
+		data.prev_miniball_radius[subset_id] = mb.radius();
 	}
 
 //	if (stats_cfg->vel_cfg() != 0) {
@@ -128,12 +128,7 @@ void StatsCalc::calculate(StatsCalcInData & data,
 	// DO ALL THE CALCULATION
 	// ...
 
-	data.prev_positions = positions;
-
-//	if (data.prev_positions.get() == NULL)
-//		data.prev_positions = boost::shared_ptr<std::vector<Vector3d> >(&positions);
-//	else
-//		data.prev_positions.reset(&positions);
+	data.prev_positions[subset_id] = positions;
 
 	if (DEBUG && push_names)
 		std::cout << "DEBUG:      opening StatsOut with " << names.size() << " names." << std::endl;

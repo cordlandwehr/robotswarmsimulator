@@ -8,10 +8,9 @@
 #include "cog_view.h"
 
 CogView::CogView() {
-	// TODO Auto-generated constructor stub
 
 }
 
 CogView::~CogView() {
-	// TODO Auto-generated destructor stub
+
 }

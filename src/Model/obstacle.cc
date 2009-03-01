@@ -18,5 +18,5 @@ Obstacle::Obstacle(boost::shared_ptr<Identifier> id,
 }
 
 Obstacle::~Obstacle() {
-	// TODO Auto-generated destructor stub
+
 }

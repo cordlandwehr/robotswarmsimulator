@@ -269,14 +269,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	position_in_line_ = 0;
 
 	//The order of these initializations is important!
-	// TODO(peter) is there a reason that this variable is read but never used? (see compiler warning)
-	//TODO(martinah) No, there is no real reason for this. I added this value to each robot, cause maybe it will be used
-	//in the future, but right now, it isn't. And I just read this variable to increase the value position_in_line_ correct.
-	//Sure, I could have done this without saving the id.
-	//TODO(kurras) funny discussion :) shouldn't we simply remove the "double id = " then ?
-	//...or
-	//...generate more LOC ? ;P
-	double id = get_next_double_value_in_line(line, line_number, false);
+	get_next_double_value_in_line(line, line_number, false); // value not needed atm
 	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
 	string type = get_next_value_in_line(line, line_number, false);
 	Vector3d velocity = get_next_vector3d_in_line(line, line_number, false);

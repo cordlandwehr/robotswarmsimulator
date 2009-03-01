@@ -3,7 +3,7 @@
  * \author	Sven Kurras
  * \brief	holds the configuration for all statistics
  *
- * This class initializes itself from a given Parser-instance
+ * This class initializes itself from a given parser's parametermap
  * and sets all configuration-parameters that are latter accessed
  * from anywhere in the statistics-module to calculate and log
  * only the information requested by the user.
@@ -26,13 +26,12 @@ public:
 	virtual ~StatsConfig();
 
 	/**
-	 * initializes from the given parser (defines the subsets for
+	 * Initializes from the given parameter-map (defines the subsets for
 	 * which to perform the calculations and all the configuration
 	 * for it). So any latter invocations to any other functions
 	 * of StatsConfig *after* the initialization will return
 	 * whether or not the respective information should
 	 * be calculated or how it should be configured.
-	 * \param parser the parser from which to initialize
 	 */
 	void init(map<std::string, std::string> &params);
 
@@ -115,7 +114,7 @@ public:
 	/*
 	 *
 	 *
-	 * Calculation-parameter following...
+	 * Calculation-parameters following...
 	 *
 	 *
 	 */

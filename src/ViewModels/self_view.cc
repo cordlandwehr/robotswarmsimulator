@@ -8,10 +8,9 @@
 #include "self_view.h"
 
 SelfView::SelfView() {
-	// TODO Auto-generated constructor stub
 
 }
 
 SelfView::~SelfView() {
-	// TODO Auto-generated destructor stub
+
 }

@@ -50,7 +50,7 @@ SimulationKernel::SimulationKernel() {
 }
 
 SimulationKernel::~SimulationKernel() {
-	// TODO Auto-generated destructor stub
+
 }
 
 const vector<boost::shared_ptr<Robot> >& SimulationKernel::robots() const {
@@ -91,9 +91,12 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	stats_->init(params);
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
-	//TODO(Sven) "stats_->update(initialWorldInformation)"
 	event_handler_->register_listener(asg_);
 	event_handler_->register_listener(stats_);
+
+	// send initial worldinformation to statistics
+	boost::shared_ptr<Event> foo = boost::shared_ptr<Event>();
+	stats_->update(*(initial_world_information.get()), foo);
 
 }
 

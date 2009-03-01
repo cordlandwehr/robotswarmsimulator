@@ -117,5 +117,5 @@ DistributionGenerator::DistributionGenerator(unsigned int seed) {
 }
 
 DistributionGenerator::~DistributionGenerator() {
-	// TODO Auto-generated destructor stub
+
 }

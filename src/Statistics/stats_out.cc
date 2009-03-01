@@ -153,10 +153,6 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	is_open_ = true;
 };
 
-const bool StatsOut::is_open() const {
-	return is_open_;
-}
-
 void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
 	if (!is_open_) {
 		std::cerr << "logfile for stats not opened" << std::endl;
@@ -175,6 +171,10 @@ void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
 
 	stat_output << std::endl;
 };
+
+const bool StatsOut::is_open() const {
+	return is_open_;
+}
 
 void StatsOut::quit() {
 
