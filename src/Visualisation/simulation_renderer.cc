@@ -109,7 +109,7 @@ void SimulationRenderer::init(){
 
 void SimulationRenderer::init(int x, int y){
 	std::string str("resources/Textures/logo.bmp");
-	tex_.load(str);
+	// tex_.load(str);
 
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
