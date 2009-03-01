@@ -39,17 +39,17 @@ int main(int argc, char** argv) {
 		("seed", po::value<unsigned int>()->default_value(1), "seed for random number generator")
 		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
 		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
-		("worldfile", po::value<std::string>()->default_value("newrandom"), "world-file for output")
+		("swarmfile", po::value<std::string>()->default_value("newrandom"), "swarm-file for output")
 		("robotfile", po::value<std::string>()->default_value("newrandom"), "robot-file for output")
 		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
 		("add-pos-handler", "add position request handler for testing")
 		("add-vel-handler", "add velocity request handler for testing")
 		("add-acc-handler", "add acceleration request handler for testing")
 		("distr-pos", po::value<double>()->default_value(0), "distribute position in cube [0;distr-pos]^3")
-		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with radius min-vel")
-		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with max-vel")
-		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with radius min-acc")
-		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with radius max-acc")
+		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with minimal absolute value of min-vel")
+		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value of max-vel")
+		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value of min-acc")
+		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with maximal absolute value of max-acc")
 		("distr-coord", "distribute robot coordinate-systems uniformly");
 
 	po::options_description simulation_options("Simulation options");
