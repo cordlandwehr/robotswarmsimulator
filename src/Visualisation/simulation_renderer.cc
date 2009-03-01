@@ -227,7 +227,6 @@ void SimulationRenderer::setup_projection(){
 
 void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldInformation> &world_info){
 	this->extrapolate_ = extrapolate;
-	float start_time = std::clock();
 
 	// We draw the time in the upper left corner
 	char buf[100];
@@ -288,7 +287,6 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 		draw_help();
 	}
 
-	float start_time2 = std::clock();
 
 	robot_renderer_->set_extrapolate( extrapolate_ );
 	// draw all robots
@@ -296,16 +294,11 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
 	}
-	float end_time2 = std::clock();
-	float ticks2 = (end_time2 - start_time2) / CLOCKS_PER_SEC;
-	std::printf("Time for robot rendering: %f \n", ticks2);
 
 	glFlush();
 	glutSwapBuffers();
 
-	float end_time = std::clock();
-	float ticks = (end_time - start_time) / CLOCKS_PER_SEC;
-	std::printf("Time for rendering: %f \n", ticks);
+
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
