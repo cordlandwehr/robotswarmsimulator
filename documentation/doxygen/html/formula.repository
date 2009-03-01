@@ -1,2 +1,0 @@
-\form#0:\[ p(x) = 1/sqrt(2*pi*sigma) * exp(- (x-mean)^2 / (2*sigma^2) ) \]
-\form#1:\[ p(x) = lambda * exp(-lambda * x) \]
