@@ -135,8 +135,8 @@ Simulation options:
  If not set, all robots are at position zero.
 	\item [-{}-min-vel arg] The robots will be generated with a velocity distributed uniformly between the given minimum and maximum velocity (see {\tt -{}---max-vel}). This parameter defaults to 0.
 	\item [-{}-max-vel arg] The robots will be generated with a velocity distributed uniformly between the given minimum and maximum velocity (see {\tt -{}---min-vel}). This parameter defaults to 0.
-	\item [-{}-min-acc arg] The robots will be generated with a acceleration distributed uniformly between the given minimum and maximum velocity (see {\tt -{}---max-acc}). This parameter defaults to 0.
-	\item [-{}-max-acc arg] The robots will be generated with a acceleration distributed uniformly between the given minimum and maximum velocity (see {\tt -{}---min-acc}). This parameter defaults to 0.
+	\item [-{}-min-acc arg] The robots will be generated with a acceleration distributed uniformly between the given minimum and maximum velocity (see {\tt -{}-max-acc}). This parameter defaults to 0.
+	\item [-{}-max-acc arg] The robots will be generated with a acceleration distributed uniformly between the given minimum and maximum velocity (see {\tt -{}-min-acc}). This parameter defaults to 0.
 	\item [-{}-distr-coord arg] Generates uniformly distributed coordinate--systems for the robots. If this option is not given, all robots will have the same global coordinate system (defined by a unit matrix).
  If not set, all velocities are zero.
 \end{description}
@@ -160,7 +160,7 @@ During the simulation it is possible to interact with the simulation in differen
 	\item [\fbox{\tt V}] Show velocity vectors
 	\item [\fbox{\tt B}] Show acceleration vectors
 	\item [\fbox{\tt K}] Show global coordinates system
-	\item [\fbox{\tt W},\fbox{\tt S}] In the corresponding camera mode use \fbox{\tt W} for up  and \fbox{\tt S} for down%TODO what about a,d?
+	\item [\fbox{\tt W},\fbox{\tt S}] In the corresponding camera mode use \fbox{\tt W} for up  and \fbox{\tt S} for down
 	\item [Arrow-Keys] left, right, before, behind
 	\item [Mouse] Mouse for spinning
 	\item [\fbox{\tt +}, \fbox{\tt -}] increase/ decrease simulation-speed by constant
