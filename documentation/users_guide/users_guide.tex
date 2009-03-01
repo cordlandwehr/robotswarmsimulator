@@ -242,7 +242,8 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 \subsubsection{Example Algorithm}
 Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in \Lua.
 
-\lstset{language=lua}
+%\lstset{language=lua} %TODO(cola) this throws errors on my tex-live...
+\lstset{language=c}
 \begin{lstlisting}[caption={COG algorithm in Lua},label=lst:cog-lua]
 function main() 
     robots = get_visible_robots();
