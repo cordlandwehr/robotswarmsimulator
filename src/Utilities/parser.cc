@@ -405,6 +405,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 	if(project_file.is_open()) {
 		// Save the map. Should contain all variables.
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
+		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
 
 		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
 		while(param_map_iter != parameter_map_.end()) {
