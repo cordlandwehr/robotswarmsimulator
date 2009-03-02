@@ -304,7 +304,7 @@ void szenario_generator::add_play_pos_request_handler() {
 
 
 void szenario_generator::add_play_vel_request_handler() {
-	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_TYPE"]="VECTOR";
+	parser_->parameter_map()["VELOCITY_REQUEST_HANDLER_TYPE"]="VECTOR";
 	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]="1";
 	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]="(VECTOR_TRIMMER,0.4)";
 	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]="0.0";
