@@ -26,6 +26,7 @@
 #include "camera.h"
 #include "robot_renderer.h"
 #include "simulation_renderer.h"
+#include "cog_camera.h"
 
 
 namespace {
@@ -69,6 +70,7 @@ SimulationRenderer::SimulationRenderer()
 
 	cameras_[1]=boost::shared_ptr<Camera>(new MoveableCamera());
 	cameras_[0]=boost::shared_ptr<Camera>(new FollowSwarmCamera());
+	cameras_[2] = boost::shared_ptr<Camera>( new CogCamera() );
 
 	active_camera_index_=0;
 

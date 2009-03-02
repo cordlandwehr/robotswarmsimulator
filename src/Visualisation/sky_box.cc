@@ -14,7 +14,7 @@
 #include "sky_box.h"
 
 
-float kSkyBoxSize = 2.0f;
+float kSkyBoxSize = 6.0f;
 
 namespace texnames {
 
@@ -64,10 +64,10 @@ bool SkyBox::init( std::string path_to_tex){
 	 // Front
 	texture_[TEX_FRONT].bind();
 	glBegin(GL_QUADS);
-	  glTexCoord2f(1, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
-	  glTexCoord2f(1, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
-	  glTexCoord2f(0, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
-	  glTexCoord2f(0, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
+	  glTexCoord2f(1, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize );
+	  glTexCoord2f(1, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize );
+	  glTexCoord2f(0, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, kSkyBoxSize );
+	  glTexCoord2f(0, 0); glVertex3f(kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize );
 	 glEnd();
 
 	// BACK
@@ -82,10 +82,10 @@ bool SkyBox::init( std::string path_to_tex){
 	// UP
 	texture_[TEX_UP].bind();
 	 glBegin(GL_QUADS);
-	  glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
-	  glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
-	  glTexCoord2f(1, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
-	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
+	  glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, kSkyBoxSize , -kSkyBoxSize);
+	  glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize , kSkyBoxSize);
+	  glTexCoord2f(1, 1); glVertex3f(kSkyBoxSize, kSkyBoxSize , kSkyBoxSize);
+	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, kSkyBoxSize , -kSkyBoxSize);
 	 glEnd();
 
 
@@ -110,10 +110,10 @@ bool SkyBox::init( std::string path_to_tex){
 	// LEFT
 	 texture_[TEX_LEFT].bind();
 	  glBegin(GL_QUADS);
-	   glTexCoord2f(1, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, -kSkyBoxSize);
-	   glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize, -kSkyBoxSize, kSkyBoxSize);
-	   glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, kSkyBoxSize);
-	   glTexCoord2f(1, 1); glVertex3f(-kSkyBoxSize, kSkyBoxSize, -kSkyBoxSize);
+	   glTexCoord2f(1, 0); glVertex3f(-kSkyBoxSize , -kSkyBoxSize, -kSkyBoxSize);
+	   glTexCoord2f(0, 0); glVertex3f(-kSkyBoxSize , -kSkyBoxSize, kSkyBoxSize);
+	   glTexCoord2f(0, 1); glVertex3f(-kSkyBoxSize , kSkyBoxSize, kSkyBoxSize);
+	   glTexCoord2f(1, 1); glVertex3f(-kSkyBoxSize , kSkyBoxSize, -kSkyBoxSize);
 	  glEnd();
 
 	  glDisable(GL_TEXTURE_2D );

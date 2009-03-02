@@ -339,7 +339,7 @@ private:
 
 	unsigned int active_camera_index_;
 
-	boost::array<boost::shared_ptr<Camera>,2> cameras_;
+	boost::array<boost::shared_ptr<Camera>,3> cameras_;
 
 	/**
 	 * The width of the screen

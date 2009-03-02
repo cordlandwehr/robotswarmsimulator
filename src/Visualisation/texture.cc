@@ -139,8 +139,10 @@ void Texture::load(std::string & texture_file ){
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+
+
 
 		//glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width_, height_,0, GL_RGB, GL_UNSIGNED_BYTE, data_.get() );
 
@@ -218,8 +220,10 @@ void Texture::load_tga(){
 	height_ = header[3] * 256 + header[2];
 
 	if(	width_	<=0	||	height_	<=0	||	(header[4]!= TGA_24 && header[4]!= TGA_32)) {
+
 		std::fclose(fp);
 		loaded_ =false;
+
 		return;
 	}
 

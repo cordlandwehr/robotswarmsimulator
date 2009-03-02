@@ -123,16 +123,20 @@ void MoveableCamera::move_camera_up_down(float speed) {
 
 	// Get the current view vector (the direction we are looking)
 
-	Vector3d vector = view_ - position_;
-	vector = Normalize(vector);
+	Vector3d n = position_ - view_;
+	Vector3d u = Cross( up_vector_, n);
+	Vector3d v = Cross(n, u);
+	n = Normalize(n);
+	u = Normalize(u);
+	v = Normalize(v);
 
+	position_(0) -= v(0) * speed;
+	position_(1) -= v(1) * speed,
+	position_(2) -= v(2) * speed;
 
-
-	position_(0) += vector(0) * speed;
-	position_(2) += vector(2) * speed;
-
-	view_(0) += vector(0) * speed;
-	view_(2) += vector(2) * speed;
+	view_(0) -= v(0) * speed;
+	view_(1) -= v(1) * speed;
+	view_(2) -= v(2) * speed;
 
 }
 
