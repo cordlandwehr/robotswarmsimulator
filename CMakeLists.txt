@@ -47,6 +47,15 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 
+# package Lua algorithms in src/LuaAlgorithms for release builds
+if(CMAKE_BUILD_TYPE MATCHES Release)
+	install(DIRECTORY src/LuaAlgorithms/
+	        DESTINATION LuaAlgorithms
+	        Configurations Release
+	        COMPONENT projectfiles
+	        PATTERN .svn EXCLUDE
+endif(CMAKE_BUILD_TYPE MATCHES Release)
+
 # package logo
 if(CMAKE_BUILD_TYPE MATCHES Release)
 	install(DIRECTORY resources/Textures/
