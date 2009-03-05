@@ -54,6 +54,7 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	        Configurations Release
 	        COMPONENT projectfiles
 	        PATTERN .svn EXCLUDE
+	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 
 # package logo
