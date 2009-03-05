@@ -19,6 +19,8 @@
 #define BI_RGB 0x0000
 #define TGA_24 0x00
 #define TGA_32 0x08
+#define GL_CLAMP_TO_EDGE 0x812F
+
 
 namespace fileheader {
 

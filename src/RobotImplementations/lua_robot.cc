@@ -37,6 +37,10 @@ namespace {
 	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
 	std::set<boost::shared_ptr<Request> > requests;
 
+	/**
+	 * Wrapper for Vector3d. Allows lua scripts to work with Vector3d objects.
+	 * @see Vector3d
+	 */
 	struct Vector3dWrapper {
 		Vector3dWrapper() : x(0), y(0), z(0) {;}
 		Vector3dWrapper(double x, double y, double z) : x(x), y(y), z(z) {;}
@@ -64,6 +68,11 @@ namespace {
 		double z;
 
 	};
+
+	/**
+	 * Wrapper for MarkerInformation. Allows lua scripts to work with MarkerInformation objects.
+	 * @see MarkerInformation
+	 */
 
 	class MarkerInformationWrapper {
 	public:
@@ -93,9 +102,19 @@ namespace {
 		Vector3dWrapper z_axis;
 	};
 
+	/**
+	 * Wrapper for RobotType. Allows lua scripts to work with RobotType constants (access using e.g. RobotType.MASTER).
+	 * @see RobotType
+	 */
+
 	struct RobotTypeWrapper {
 
 	};
+
+	/**
+	 * Wrapper for RobotStatus. Allows lua scripts to work with RobotType constants (access using e.g. RobotStatus.READY).
+	 * @see RobotStatus
+	 */
 
 	struct RobotStatusWrapper {
 
@@ -143,97 +162,230 @@ namespace {
 		return marker.marker_information();
 	}
 
+	/**
+	 * @see View.get_visible_robots()
+	 * @return Array of identifiers
+	 */
+
 	const std::vector<std::size_t> get_visible_robots() {
 		return transform(view->get_visible_robots(*robot));
 	}
+
+	/**
+	 * @see View.get_visible_obstacles()
+	 * @return Array of identifiers
+	 */
 
 	const std::vector<std::size_t> get_visible_obstacles() {
 		return transform(view->get_visible_obstacles(*robot));
 	}
 
+	/**
+	 * @see View.get_visible_markers()
+	 * @return Array of identifiers
+	 */
 	const std::vector<std::size_t> get_visible_markers() {
 		return transform(view->get_visible_markers(*robot));
 	}
+
+	/**
+	 * @param Identifier
+	 * @return Position of the object identified by the given identifier.
+	 * @see View.get_position()
+	 */
 
 	const Vector3dWrapper get_position(std::size_t index) {
 		return transform(view->get_position(*robot, resolve<Identifier>(index)));
 	}
 
+	/**
+	 * @param Identifier
+	 * @return MarkerInformation of the object identified by the given identifier.
+	 * @see View.get_marker_information()
+	 */
+
 	const MarkerInformationWrapper get_marker_information(std::size_t index) {
 		return transform(view->get_marker_information(*robot, resolve<Identifier>(index)));
 	}
+
+	/**
+	 * @param Identifier
+	 * @return Id of the object identified by the given identifier.
+	 * @see View.get_id()
+	 */
 
 	const std::size_t get_id(std::size_t index) {
 		return view->get_id(*robot, resolve<Identifier>(index));
 	}
 
+	/**
+	 * @param (Robot-)Identifier
+	 * @return Acceleration of the robot identified by the given identifier.
+	 * @see View.get_robot_acceleration()
+	 */
+
 	const Vector3dWrapper get_robot_acceleration(std::size_t index) {
 		return transform(view->get_robot_acceleration(*robot, resolve<RobotIdentifier>(index)));
 	}
+
+	/**
+	 * @param (Robot-)Identifier
+	 * @return CoordinateSystem of the robot identified by the given identifier.
+	 * @see View.get_robot_coordinate_system_axis()
+	 */
 
 	const CoordinateSystemWrapper get_robot_coordinate_system_axis(std::size_t index) {
 		return transform(view->get_robot_coordinate_system_axis(*robot, resolve<RobotIdentifier>(index)));
 	}
 
+	/**
+	 * @param (Robot-)Identifier
+	 * @return RobotType of the robot identified by the given identifier.
+	 * @see View.get_robot_type()
+	 */
+
 	const unsigned get_robot_type(std::size_t index) {
 		return view->get_robot_type(*robot, resolve<RobotIdentifier>(index));
 	}
+
+	/**
+	 * @param (Robot-)Identifier
+	 * @return RobotStatus of the robot identified by the given identifier.
+	 * @see View.get_robot_status()
+	 */
 
 	const unsigned get_robot_status(std::size_t index) {
 		return view->get_robot_status(*robot, resolve<RobotIdentifier>(index));
 	}
 
+	/**
+	 * @param (Obstacle-)Identifier
+	 * @return true if point is in given obstacle; false otherwise
+	 * @see View.is_point_in_obstacle()
+	 */
+
 	const bool is_point_in_obstacle(std::size_t index, Vector3dWrapper point) {
 		return view->is_point_in_obstacle(resolve<ObstacleIdentifier>(index), transform(point));
 	}
+
+	/**
+	 * @param (Box-)Identifier
+	 * @return Depth of the Box identified by the given identifier.
+	 * @see View.get_box_depth()
+	 */
 
 	const double get_box_depth(std::size_t index) {
 		return view->get_box_depth(resolve<BoxIdentifier>(index));
 	}
 
+	/**
+	 * @param (Box-)Identifier
+	 * @return Width of the Box identified by the given identifier.
+	 * @see View.get_box_width()
+	 */
+
 	const double get_box_width(std::size_t index) {
 		return view->get_box_width(resolve<BoxIdentifier>(index));
 	}
+
+	/**
+	 * @param (Box-)Identifier
+	 * @return Height of the Box identified by the given identifier.
+	 * @see View.get_box_height()
+	 */
 
 	const double get_box_height(std::size_t index) {
 		return view->get_box_height(resolve<BoxIdentifier>(index));
 	}
 
+	/**
+	 * @param (Sphere-)Identifier
+	 * @return Radius of the Sphere identified by the given identifier.
+	 * @see View.get_sphere_radius()
+	 */
+
 	const double get_sphere_radius(std::size_t index) {
 		return view->get_sphere_radius(resolve<SphereIdentifier>(index));
 	}
+
+	/**
+	 * Checks if the given Identifier is a SphereIdentifier
+	 * @param Identifier
+	 * @return true if given Identifier is a SphereIdentifier; false otherwise
+	 */
 
 	const bool is_sphere_identifier(std::size_t index) {
 		return boost::dynamic_pointer_cast<SphereIdentifier>(resolve<Identifier>(index));
 	}
 
+	/**
+	 * Checks if the given Identifier is a BoxIdentifier
+	 * @param Identifier
+	 * @return true if given Identifier is a BoxIdentifier; false otherwise
+	 */
+
 	const bool is_box_identifier(std::size_t index) {
 		return boost::dynamic_pointer_cast<BoxIdentifier>(resolve<Identifier>(index));
 	}
+
+	/**
+	 * Adds a AccelerationRequest which is send to the simulation as return value of
+	 * the compute method.
+	 * @param Requested acceleration vector
+	 */
 
 	void add_acceleration_request(Vector3dWrapper requested_vector) {
 		boost::shared_ptr<Vector3d> new_acc(new Vector3d(transform(requested_vector)));
 		requests.insert(boost::shared_ptr<Request>(new AccelerationRequest(*robot, new_acc)));
 	}
 
+	/**
+	 * Adds a PositionRequest which is send to the simulation as return value of
+	 * the compute method.
+	 * @param Requested position vector
+	 */
+
 	void add_position_request(Vector3dWrapper requested_vector) {
 		boost::shared_ptr<Vector3d> new_pos(new Vector3d(transform(requested_vector)));
 		requests.insert(boost::shared_ptr<Request>(new PositionRequest(*robot, new_pos)));
 	}
+
+	/**
+	 * Adds a VelocityRequest which is send to the simulation as return value of
+	 * the compute method.
+	 * @param Requested velocity vector
+	 */
 
 	void add_velocity_request(Vector3dWrapper requested_vector) {
 		boost::shared_ptr<Vector3d> new_vel(new Vector3d(transform(requested_vector)));
 		requests.insert(boost::shared_ptr<Request>(new VelocityRequest(*robot, new_vel)));
 	}
 
+	/**
+	 * Adds a MarkerRequest which is send to the simulation as return value of
+	 * the compute method.
+	 * @param Requested MarkerInformation
+	 */
+
 	void add_marker_request(MarkerInformationWrapper marker) {
 		boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(transform(marker)));
 		requests.insert(boost::shared_ptr<Request>(new MarkerRequest(*robot, new_marker)));
 	}
 
+	/**
+	 * Adds a TypeChangeRequest which is send to the simulation as return value of
+	 * the compute method.
+	 * @param Requested RobotType
+	 */
+
 	void add_type_change_request(unsigned type) {
 		requests.insert(boost::shared_ptr<Request>(new TypeChangeRequest(*robot, static_cast<RobotType>(type))));
 	}
+
+	/**
+	 * Returns the identifier of this robot.
+	 * @return Identifier
+	 */
 
 	const unsigned get_own_identifier() {
 		return 0; //own id always at pos 0 in queried_identifiers
@@ -355,7 +507,6 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 
 
 std::string LuaRobot::get_algorithm_id () const {
-	//TODO (dwonisch): algorithm_id is now either a class name or a lua file.
 	return lua_file_name_;
 }
 

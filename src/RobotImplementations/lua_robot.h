@@ -19,6 +19,12 @@ extern "C" {
 
 #include "../Model/robot.h"
 
+/**
+ * \brief RobotImplementation which uses a user defined lua script to perform compute steps.
+ *
+ * The lua script which should be used for the compute step can be defined in the constructor.
+ * Note that the lua script must have a "main" method.
+ */
 
 class LuaRobot: public Robot {
 public:
@@ -27,11 +33,11 @@ public:
 
 	virtual std::set<boost::shared_ptr<Request> > compute();
 	virtual std::string get_algorithm_id () const;
-	
+
 private:
 	void report_errors(int status);
 	void register_lua_methods();
-	
+
 private:
 	std::string lua_file_name_;
 	boost::shared_ptr<lua_State> lua_state_;
