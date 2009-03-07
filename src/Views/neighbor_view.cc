@@ -23,7 +23,7 @@ unsigned NeighborView::seen_objects_count() const {
 
 std::set<View::RobotRef> NeighborView::get_visible_robots(const RobotData& robot) const {
 
-	return OctreeUtilities::get_nearest_robots( octree(), robot.position(), robot.robot().id(), std::size_t(seen_objects_count() ) );
+	return OctreeUtilities::get_nearest_robots( octree(), robot.position(), boost::static_pointer_cast<RobotIdentifier>(robot.id()), std::size_t(seen_objects_count() ) );
 }
 std::set<View::ObstacleRef> NeighborView::get_visible_obstacles(const RobotData& robot) const {
 

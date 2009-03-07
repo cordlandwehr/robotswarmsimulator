@@ -248,7 +248,6 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
 	 }
 
-
 	 return found_robots;
 
 
@@ -299,6 +298,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<OctreeNode>
 
 				 queue.push( new_entry );
 				 farest_dist = queue.top()->dist();
+				 num_robots_found++;
 
 			 }else if(dist < farest_dist){
 
@@ -422,7 +422,7 @@ void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<OctreeNode
 
 				 queue.push(new_entry );
 				 farest_dist = queue.top()->dist();
-
+				 num_markers_found++;
 
 			 }else if(dist < farest_dist){
 
@@ -552,7 +552,7 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<OctreeNo
 
 				 queue.push(new_entry );
 				 farest_dist = queue.top()->dist();
-
+				 num_obstacles_found++;
 				 //nearer than already found ?
 			 }else if(dist < farest_dist){
 
