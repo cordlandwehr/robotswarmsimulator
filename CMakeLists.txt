@@ -51,7 +51,7 @@ endif(CMAKE_BUILD_TYPE MATCHES Release)
 if(CMAKE_BUILD_TYPE MATCHES Release)
 	install(DIRECTORY src/LuaAlgorithms/
 	        DESTINATION LuaAlgorithms
-	        Configurations Release
+	        CONFIGURATIONS Release
 	        COMPONENT projectfiles
 	        PATTERN .svn EXCLUDE
 	)
