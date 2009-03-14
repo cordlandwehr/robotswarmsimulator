@@ -58,8 +58,8 @@ Also the following should be considered:
 		 \texttt{ASYNC\_ASG\_TIME\_P} & double & parameter governing the timing of asynch ASG, only set if ASG = ASYNCHRNOUS. The lower this is the more often events happen. & - \\\hline
 		 
 		\texttt{ROBOT\_CONTROL} &  see section \ref{sec:robotControl} & RobotControl to use & -\\\hline
-		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position & -\\\hline
-		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction & -\\\hline
+		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position & \texttt{0,0,0}\\\hline
+		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction & \texttt{1,0,0}\\\hline
 
 
 		 
@@ -236,8 +236,8 @@ A main project file may look like:
 	SLAVE_VIEW="ONE_POINT_FORMATION_VIEW"
 	SLAVE_ONE_POINT_FORMATION_VIEW_RADIUS="5.0"
 	
-	CAMERA_POSITION=0,0,0
-	CAMERA_DIRECTION=1.5,0,0.5
+	CAMERA_POSITION="0,0,0"
+	CAMERA_DIRECTION="1.5,0,0.5"
 	
 	MARKER_REQUEST_HANDLER_TYPE="STANDARD"
 	STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB="0.5"
