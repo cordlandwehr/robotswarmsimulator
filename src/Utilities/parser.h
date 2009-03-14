@@ -222,7 +222,6 @@ private:
 	////////////////////////////////////////////////////////
 	// ROBOT DATA
 	////////////////////////////////////////////////////////
-	//TODO(martinah) maybe adapt types of some variables
 	std::vector<Vector3d> initiale_robot_positions_;
 	std::vector<Vector3d> initiale_robot_velocities_;
 	std::vector<Vector3d> initiale_robot_accelerations_;
@@ -236,7 +235,6 @@ private:
 	////////////////////////////////////////////////////////
 	// OBSTACLE DATA
 	////////////////////////////////////////////////////////
-	//TODO(martinah) maybe adapt types of some variables
 	std::vector<string> initiale_obstacle_types_;
 	std::vector<Vector3d> initiale_obstacle_positions_;
 	std::vector<string> initiale_obstacle_marker_information_;

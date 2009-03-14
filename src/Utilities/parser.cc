@@ -131,7 +131,6 @@ void Parser::load_main_project_file(const string& project_filename) {
 	project_filename_ = project_filename;
 	string main_project_filename = project_filename_ + ".swarm";
 
-
 	project_file.open(main_project_filename.c_str());
 	if(project_file.is_open()) {
 		string var_name;
@@ -161,7 +160,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 		init_variables(parameter_map_);
 
 	} else {
-		throw UnsupportedOperationException("Unable to open given project file.");
+		throw UnsupportedOperationException("Unable to open project file "+main_project_filename);
 	}
 }
 
@@ -218,6 +217,13 @@ string Parser::remove_quotes_and_leading_and_trailing_spaces(const string& value
 	//get rid of leading and trailing spaces
 	boost::trim(return_value);
 
+	//remove line breaks in string (if there are any)
+	string::size_type pos = 0;
+	while ( (pos = return_value.find("\r\n",pos)) != string::npos )
+	{
+		return_value.erase( pos, 2 );
+	}
+
 	return return_value;
 }
 
@@ -253,8 +259,9 @@ Vector3d Parser::get_next_vector3d_in_line(const string& line, int line_number, 
 }
 
 double Parser::string_to_double(const string& my_string) {
-	//cast given string value to double
+
 	try {
+		//cast given string value to double
 		return boost::lexical_cast<double>(my_string);
 	} catch(const boost::bad_lexical_cast& ) {
 		throw UnsupportedOperationException("Failed casting string "+my_string+" to double.");
@@ -347,14 +354,15 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 	ifstream project_file;
 
 	//get path to file
-	int pos_of_last_slash = project_filename_.find_last_of("/");
-	string filename = project_filename_.substr(0, pos_of_last_slash+1);
+	//int pos_of_last_slash = project_filename_.find_last_of("/");
+	//string path = project_filename_.substr(0, pos_of_last_slash+1);
 
 	//depending on which file to load, specify file extension
+	string filename;
 	if(load_robot_file)
-		filename += robot_filename_ + ".robot";
+		filename = robot_filename_ + ".robot";
 	else
-		filename += obstacle_filename_ + ".obstacle";
+		filename = obstacle_filename_ + ".obstacle";
 
 	int line_number = 0;
 

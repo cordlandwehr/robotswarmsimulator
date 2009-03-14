@@ -100,15 +100,13 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	BOOST_REQUIRE(boost::dynamic_pointer_cast<AsynchronousASG>(asg));
 
 }
-/*
+
 BOOST_AUTO_TEST_CASE(load_robot_file_1)
 {
 	boost::shared_ptr<Parser> parser;
 	parser.reset(new Parser());
 	parser->init();
-	parser->load_projectfiles("src/Tests/TestData/garbled_projectfile_a");
-
-	//Please don't remove this test, I will clean it up and uncomment soon.
+	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/garbled_projectfile_a");
 
 	//////////////////////////////////////////////////////////
 	// Check data of robot 1
@@ -145,19 +143,19 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_colors_[0], "0");
 
 	//x-axis
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[0])(0), 1);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[0])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[0])(2), 0);
+	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[0])(0), 1);
+	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[0])(1), 0);
+	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[0])(2), 0);
 
 	//y-axis
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_sytems_[0])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_sytems_[0])(1), 1);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_sytems_[0])(2), 0);
+	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[0])(0), 0);
+	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[0])(1), 1);
+	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[0])(2), 0);
 
 	//z-axis
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[0])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[0])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[0])(2), 1);
+	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[0])(0), 0);
+	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[0])(1), 0);
+	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[0])(2), 1);
 
 
 	//////////////////////////////////////////////////////////
@@ -195,22 +193,22 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_colors_[1], "0");
 
 	//x-axis
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[1])(0), 1);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[1])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_sytems_[1])(2), 0);
+	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[1])(0), 1);
+	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[1])(1), 0);
+	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[1])(2), 0);
 
 	//y-axis
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_sytems_[1])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_sytems_[1])(1), 1);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_sytems_[1])(2), 0);
+	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[1])(0), 0);
+	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[1])(1), 1);
+	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[1])(2), 0);
 
 	//z-axis
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[1])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[1])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_sytems_[1])(2), 1);
+	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[1])(0), 0);
+	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[1])(1), 0);
+	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[1])(2), 1);
 
 }
-*/
+
 
 BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 {
