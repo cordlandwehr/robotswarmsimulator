@@ -58,6 +58,10 @@ Also the following should be considered:
 		 \texttt{ASYNC\_ASG\_TIME\_P} & double & parameter governing the timing of asynch ASG, only set if ASG = ASYNCHRNOUS. The lower this is the more often events happen. & - \\\hline
 		 
 		\texttt{ROBOT\_CONTROL} &  see section \ref{sec:robotControl} & RobotControl to use & -\\\hline
+		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position & -\\\hline
+		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction & -\\\hline
+
+
 		 
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars}
@@ -232,6 +236,9 @@ A main project file may look like:
 	SLAVE_VIEW="ONE_POINT_FORMATION_VIEW"
 	SLAVE_ONE_POINT_FORMATION_VIEW_RADIUS="5.0"
 	
+	CAMERA_POSITION=0,0,0
+	CAMERA_DIRECTION=1.5,0,0.5
+	
 	MARKER_REQUEST_HANDLER_TYPE="STANDARD"
 	STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB="0.5"
 	STANDARD_MARKER_REQUEST_HANDLER_SEED="1"
@@ -271,13 +278,13 @@ The first line always is (column headers):
 \begin{lstlisting}
 	  "ID","x-position","y-position","z-position","type","x-velocity","y-velocity","z-velocity","x-acceleration","y-acceleration","z-acceleration","status","marker-info","algorithm","color","x-axis-1","x-axis-2","x-axis-3","y-axis-1","y-axis-2","y-axis-3","z-axis-1","z-axis-2","z-axis-3"
 \end{lstlisting}
-Each non-number is quoted.
+Each non-number is quoted and each number may be quoted.
 
 \subsubsection{Example of a robot file}
 \begin{lstlisting}
 	"ID","x-position","y-position","z-position","type","x-velocity","y-velocity","z-velocity","x-acceleration","y-acceleration","z-acceleration","status","marker-info","algorithm","color","x-axis-1","x-axis-2","x-axis-3","y-axis-1","y-axis-2","y-axis-3","z-axis-1","z-axis-2","z-axis-3"
 	0,5.3,9.2,6.4,"master",1.5,2.5,3.5,1.5,2.5,3.5,"sleeping",0,0,0,1,0,0,0,1,0,0,0,1
-	1,2.5,4.2,8.8,"slave",1.5,2.5,3.5,1.5,2.5,3.5,"ready",0,1,0,1,0,0,0,1,0,0,0,1
+	1,"2.5","4.2","8.8","slave",1.5,2.5,3.5,1.5,2.5,3.5,"ready",0,1,0,1,0,0,0,1,0,0,0,1
 \end{lstlisting}
 
 \subsection{Obstacle file}
