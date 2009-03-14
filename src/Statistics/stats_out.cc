@@ -27,11 +27,13 @@ StatsOut::StatsOut() {
 
 StatsOut::StatsOut(std::string stat_id) {
 	this->stat_id = stat_id;
+	is_open_ = false;
 }
 
 StatsOut::StatsOut(std::string stat_id, std::string stat_dir) {
 	this->stat_id = stat_id;
 	this->stat_dir_ = boost::filesystem::path(stat_dir);
+	is_open_ = false;
 }
 
 StatsOut::~StatsOut() {

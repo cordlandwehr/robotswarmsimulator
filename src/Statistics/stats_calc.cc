@@ -40,7 +40,11 @@ void StatsCalc::calculate(StatsCalcInData & data,
 	for (unsigned int i=0; i<subset.size(); i++)
 		vector3d_set((*positions.get())[i], subset[i]->position());
 
-	bool push_names = !stats_out->is_open();
+	bool push_names = !(stats_out->is_open());
+
+	if (DEBUG)
+		std::cout << "DEBUG: >>>> pushing " << push_names << std::endl ;
+
 
 	if (stats_cfg->is_num_robots()) {
 		// log number of robots
