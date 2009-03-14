@@ -64,8 +64,19 @@ int main(int argc, char** argv) {
 
 	// create variable map and parse options from command line
 	po::variables_map vm;
-	po::store(po::parse_command_line(argc, argv, options), vm);
-	po::notify(vm);
+	try {
+		po::store(po::parse_command_line(argc, argv, options), vm);
+		po::notify(vm);
+	}
+	catch (std::exception& e) {
+		std::cout << "Uncaught exception: " << e.what() << std::endl;
+		throw;
+	}
+	catch(...) {
+		std::cerr << "Uncaught, unknown exception." << std::endl;
+		throw; //rethrow exception
+	}
+
 
 	// check whether to show help message and exit
 	if (vm.count("help")) {
@@ -89,49 +100,58 @@ int main(int argc, char** argv) {
 	 * Generate a new szenario
 	 */
 	if (vm.count("generate")) {
+		try {
+			// init
+			szenario_generator generator(vm["seed"].as<unsigned int>());	// set seed
+			generator.init(vm["robots"].as<unsigned int>(), vm["algorithm"].as<std::string>());				// init number of robots
 
-		// init
-		szenario_generator generator(vm["seed"].as<unsigned int>());	// set seed
-		generator.init(vm["robots"].as<unsigned int>(), vm["algorithm"].as<std::string>());				// init number of robots
+			// files
+			generator.set_worldFile(vm["swarmfile"].as<std::string>());
+			generator.set_robotFile(vm["robotfile"].as<std::string>());
+			generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
 
-		// files
-		generator.set_worldFile(vm["swarmfile"].as<std::string>());
-		generator.set_robotFile(vm["robotfile"].as<std::string>());
-		generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
+			// distribute everything
+			if (vm["distr-pos"].as<double>()!=0.0) {
+				Vector3d tmpVec;
+				tmpVec.insert_element(kXCoord,vm["distr-pos"].as<double>());
+				tmpVec.insert_element(kYCoord,vm["distr-pos"].as<double>());
+				tmpVec.insert_element(kZCoord,vm["distr-pos"].as<double>());
+				generator.distribute_robots_uniform(tmpVec);
+			}
 
-		// distribute everything
-		if (vm["distr-pos"].as<double>()!=0.0) {
-			Vector3d tmpVec;
-			tmpVec.insert_element(kXCoord,vm["distr-pos"].as<double>());
-			tmpVec.insert_element(kYCoord,vm["distr-pos"].as<double>());
-			tmpVec.insert_element(kZCoord,vm["distr-pos"].as<double>());
-			generator.distribute_robots_uniform(tmpVec);
+			// sets request handler if requested
+			if (vm.count("add-pos-handler"))
+				generator.add_play_pos_request_handler();
+			if (vm.count("add-vel-handler"))
+				generator.add_play_vel_request_handler();
+			if (vm.count("add-acc-handler"))
+				generator.add_play_acc_request_handler();
+
+			// distribute initial velocities
+			if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
+				generator.distribute_velocity_uniform(vm["min-vel"].as<double>(),vm["max-vel"].as<double>());
+			}
+
+			if (vm["min-acc"].as<double>()!=0.0 || vm["max-acc"].as<double>()!=0.0) {
+				generator.distribute_acceleration_uniform(vm["min-acc"].as<double>(),vm["max-acc"].as<double>());
+			}
+			if (vm.count("distr-coord"))
+				generator.distribute_coordsys_uniform();
+
+			// write to file
+			generator.write_to_file();
+
+			std::cout << "Robots were generated!" << std::endl;
+			std::cout << "Please see file: " + vm["swarmfile"].as<std::string>() + ".swarm" << std::endl << std::endl;
 		}
-
-		// sets request handler if requested
-		if (vm.count("add-pos-handler"))
-			generator.add_play_pos_request_handler();
-		if (vm.count("add-vel-handler"))
-			generator.add_play_vel_request_handler();
-		if (vm.count("add-acc-handler"))
-			generator.add_play_acc_request_handler();
-
-		// distribute initial velocities
-		if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
-			generator.distribute_velocity_uniform(vm["min-vel"].as<double>(),vm["max-vel"].as<double>());
+		catch (std::exception& e) {
+			std::cout << "Uncaught exception: " << e.what() << std::endl;
+			throw;
 		}
-
-		if (vm["min-acc"].as<double>()!=0.0 || vm["max-acc"].as<double>()!=0.0) {
-			generator.distribute_acceleration_uniform(vm["min-acc"].as<double>(),vm["max-acc"].as<double>());
+		catch(...) {
+			std::cerr << "Uncaught, unknown exception." << std::endl;
+			throw; //rethrow exception
 		}
-		if (vm.count("distr-coord"))
-			generator.distribute_coordsys_uniform();
-
-		// write to file
-		generator.write_to_file();
-
-		std::cout << "Robots were generated!" << std::endl;
-		std::cout << "Please see file: " + vm["swarmfile"].as<std::string>() + ".swarm" << std::endl << std::endl;
 
 		return 1;
 	}
