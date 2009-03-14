@@ -56,7 +56,8 @@ int main(int argc, char** argv) {
 	simulation_options.add_options()
 		("project-file", po::value<std::string>(), "Project file to load")
 		("output", po::value<std::string>()->default_value(""), "Path to directory for output")
-		("history-length", po::value<unsigned int>()->default_value(25), "history length");
+		("history-length", po::value<unsigned int>()->default_value(25), "history length")
+		("dry", "disables statistic output");
 
 	po::options_description options;
 	options.add(general_options).add(generation_options).add(simulation_options);
@@ -149,11 +150,15 @@ int main(int argc, char** argv) {
 		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
+		// checks iff statistics shall be created
+		bool create_statistics = !vm.count("dry");
+
 		// create simulation kernel
 		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
 		sim_control->create_new_simulation(tmpProjectFile,
 				                           vm["history-length"].as<unsigned int>(),
-				                           vm["output"].as<std::string>());
+				                           vm["output"].as<std::string>(),
+				                           create_statistics);
 
 		// setup visualzation
 		boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));

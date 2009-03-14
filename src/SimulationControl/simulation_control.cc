@@ -23,7 +23,10 @@ SimulationControl::~SimulationControl() {
 
 }
 
-void SimulationControl::create_new_simulation(const std::string& configuration_filename, std::size_t history_length, std::string output_dir="") {
+void SimulationControl::create_new_simulation(const std::string& configuration_filename,
+		                                      std::size_t history_length,
+		                                      std::string output_dir="",
+		                                      bool create_statistics=true) {
 	// terminate the old simulation including the old simulation thread.
 	terminate_simulation();
 
@@ -33,7 +36,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	// create and initialize new kernel. History should be passed here because the init method
 	// of the SimulationKernel will need it to construct EventHandler, ASG, StatisticKernel.
 	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
-	simulation_kernel->init(configuration_filename, history_, output_dir);
+	simulation_kernel->init(configuration_filename, history_, output_dir, create_statistics);
 
 	simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
 

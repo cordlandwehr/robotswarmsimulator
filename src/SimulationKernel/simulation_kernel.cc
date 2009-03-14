@@ -62,7 +62,7 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 }
 
 
-void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history, std::string output_dir) {
+void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history, std::string output_dir, bool create_statistics) {
 
 	// set history
 	history_ = history;
@@ -87,16 +87,21 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	event_handler_ = Factory::event_handler_factory(params, history_, robot_control);
 
 	// create and initialize statistics module;
-	stats_.reset(new StatsControl());
-	stats_->init(params, output_dir);
+	if (create_statistics==true) {
+		stats_.reset(new StatsControl());
+		stats_->init(params, output_dir);
+	}
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	event_handler_->register_listener(asg_);
-	event_handler_->register_listener(stats_);
+	if (create_statistics==true)
+		event_handler_->register_listener(stats_);
 
 	// send initial worldinformation to statistics
-	boost::shared_ptr<Event> foo = boost::shared_ptr<Event>();
-	stats_->update(*(initial_world_information.get()), foo);
+	if (create_statistics==true) {
+		boost::shared_ptr<Event> foo = boost::shared_ptr<Event>();
+		stats_->update(*(initial_world_information.get()), foo);
+	}
 
 }
 
@@ -115,7 +120,8 @@ void SimulationKernel::multistep(int steps) {
 
 
 void SimulationKernel::quit() {
-	stats_->quit();
+	if (stats_!=NULL)
+		stats_->quit();
 }
 
 void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information) {

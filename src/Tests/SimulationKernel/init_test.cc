@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(simkernel_init) {
 	boost::shared_ptr<SimulationKernel> simkernel(new SimulationKernel());
 	boost::shared_ptr<History> history(new History(42));
 	//TODO(craupach) fails horribly for me atm.
-	simkernel->init("src/Tests/TestData/testfile_2", history, "");
+	simkernel->init("src/Tests/TestData/testfile_2", history, "", true);
 
 	// get World-Information
 	boost::shared_ptr<WorldInformation> world_info(new WorldInformation(history->get_newest()));
