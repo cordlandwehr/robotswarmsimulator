@@ -221,9 +221,10 @@ string Parser::remove_quotes_and_leading_and_trailing_spaces(const string& value
 
 	//remove line breaks in string (if there are any)
 	string::size_type pos = 0;
-	while ( (pos = return_value.find("\r\n",pos)) != string::npos )
-	{
-		return_value.erase( pos, 2 );
+	for(int i=0; i<return_value.length(); i++) {
+		if(return_value.at(i)=='\r') {
+			cout << "Carriage return found" << endl;
+		}
 	}
 
 	return return_value;
@@ -262,11 +263,13 @@ Vector3d Parser::get_next_vector3d_in_line(const string& line, int line_number, 
 
 double Parser::string_to_double(const string& my_string) {
 
+	string return_string = remove_quotes_and_leading_and_trailing_spaces(my_string);
+
 	try {
 		//cast given string value to double
-		return boost::lexical_cast<double>(my_string);
+		return boost::lexical_cast<double>(return_string);
 	} catch(const boost::bad_lexical_cast& ) {
-		throw UnsupportedOperationException("Failed casting string "+my_string+" to double.");
+		throw UnsupportedOperationException("Failed casting string "+return_string+" to double.");
 	}
 }
 
