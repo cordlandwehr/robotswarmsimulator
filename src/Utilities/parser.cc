@@ -219,14 +219,6 @@ string Parser::remove_quotes_and_leading_and_trailing_spaces(const string& value
 	//get rid of leading and trailing spaces
 	boost::trim(return_value);
 
-	//remove line breaks in string (if there are any)
-	string::size_type pos = 0;
-	for(int i=0; i<return_value.length(); i++) {
-		if(return_value.at(i)=='\r') {
-			cout << "Carriage return found" << endl;
-		}
-	}
-
 	return return_value;
 }
 
