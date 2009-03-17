@@ -195,7 +195,7 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 
 	// 6. Marker Change Request Handler
 	std::string marker_change_request_handler_type = boost::any_cast<std::string> (params["MARKER_CHANGE_REQUEST_HANDLER_TYPE"]);
-	if(type_change_request_handler_type == "STANDARD") {
+	if(marker_change_request_handler_type == "STANDARD") {
 		try {
 			// build the type change request handler
 			double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
