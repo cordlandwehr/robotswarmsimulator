@@ -50,12 +50,20 @@ namespace {
 			return Vector3dWrapper(x + rhs.x, y + rhs.y, z + rhs.z);
 		}
 
+		const Vector3dWrapper operator-(const Vector3dWrapper& rhs) const {
+			return Vector3dWrapper(x - rhs.x, y - rhs.y, z - rhs.z);
+		}
+
 		const Vector3dWrapper operator*(const Vector3dWrapper& rhs) const {
 			return Vector3dWrapper(x * rhs.x, y * rhs.y, z * rhs.z);
 		}
 
 		const Vector3dWrapper operator/(double div) const {
 			return Vector3dWrapper(x / div, y / div, z / div);
+		}
+
+		const Vector3dWrapper operator*(double skalar) const {
+			return Vector3dWrapper(x * skalar, y * skalar, z * skalar);
 		}
 
 		friend std::ostream& operator<<(std::ostream& os, const Vector3dWrapper& rhs) {
@@ -435,7 +443,9 @@ void LuaRobot::register_lua_methods() {
 			 .def(luabind::constructor<>())
 			 .def(luabind::constructor<double, double, double>())
 			 .def(luabind::const_self + luabind::other<Vector3dWrapper>())
+			 .def(luabind::const_self - luabind::other<Vector3dWrapper>())
 			 .def(luabind::const_self * luabind::other<Vector3dWrapper>())
+			 .def(luabind::const_self * double())
 			 .def(luabind::const_self / double())
 			 .def(luabind::tostring(luabind::self))
 			 .def_readwrite("x", &Vector3dWrapper::x)
@@ -491,7 +501,7 @@ void LuaRobot::register_lua_methods() {
 		 luabind::def("add_type_change_request", &add_type_change_request),
 		 luabind::def("add_marker_request", &add_marker_request),
 		 luabind::def("get_own_identifier", &get_own_identifier),
-		 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox)		 
+		 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox)
 	];
 }
 
