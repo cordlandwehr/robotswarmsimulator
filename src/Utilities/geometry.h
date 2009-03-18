@@ -9,11 +9,12 @@
  * inside of of a polygon/polyhedron, computes convex hull ...
  */
 
-#include <boost/unordered_map.hpp>
-#include <vector>
-
 #ifndef GEOMETRY_H_
 #define GEOMETRY_H_
+
+#include <boost/unordered_map.hpp>
+#include <vector>
+#include "vector_arithmetics.h"
 
 class Geometry {
 public:
@@ -55,7 +56,7 @@ public:
 	virtual ~Geometry();
 
 private:
-	static const double kEpsilon=0.000000001;	// accurancy value
+	static const double kEpsilon;	// accurancy value
 };
 
 #endif /* GEOMETRY_H_ */

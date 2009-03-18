@@ -7,26 +7,26 @@
 
 #include "geometry.h"
 #include <vector>
-#include <math>
+#include <cmath>
 #include <algorithm>
 
+const double Geometry::kEpsilon = 0.000000001;
+
+
 bool Geometry::compare_vectors_by_axis (const Vector3d& vec_a, const Vector3d& vec_b, int axis) {
-	if (vec_a.get(axis) <= vec_b.get(axis))
-		return true;
-	else
-		return false;
+	return vec_a(axis) <= vec_b(axis));
 }
 
 bool Geometry::compare_vectors_by_axis_x (const Vector3d& vec_a, const Vector3d& vec_b) {
-	return compare_vectors_by_axes (vec_a, vec_b, 0);
+	return compare_vectors_by_axis (vec_a, vec_b, 0);
 }
 
 bool Geometry::compare_vectors_by_axis_y (const Vector3d& vec_a, const Vector3d& vec_b) {
-	return compare_vectors_by_axes (vec_a, vec_b, 0);
+	return compare_vectors_by_axis (vec_a, vec_b, 0);
 }
 
 bool Geometry::compare_vectors_by_axis_z (const Vector3d& vec_a, const Vector3d& vec_b) {
-	return compare_vectors_by_axes (vec_a, vec_b, 0);
+	return compare_vectors_by_axis (vec_a, vec_b, 0);
 }
 
 bool Geometry::are_points_on_plane(std::vector<Vector3d> point_list) {
@@ -36,16 +36,17 @@ bool Geometry::are_points_on_plane(std::vector<Vector3d> point_list) {
 
 	// else compute Hesse-Form and test distances
 	// this is the normal vector by cross product
-	Vector3d normal = Vector3d(point_list.at(0).get(1)*point_list.at(1).get(2)-point_list.at(0).get(2)*point_list.at(1).get(1),
-			point_list.at(0).get(2)*point_list.at(1).get(0)-point_list.at(0).get(0)*point_list.at(1).get(2),
-			point_list.at(0).get(0)*point_list.at(1).get(1)-point_list.at(0).get(1)*point_list.at(1).get(0));
+	Vector3d normal;
+	normal(0) = point_list.at(0)(1)*point_list.at(1)(2)-point_list.at(0)(2)*point_list.at(1)(1);
+	normal(1) =	point_list.at(0)(2)*point_list.at(1)(0)-point_list.at(0)(0)*point_list.at(1)(2);
+	normal(2) = point_list.at(0)(0)*point_list.at(1)(1)-point_list.at(0)(1)*point_list.at(1)(0);
 
 	// distance: layer to origin
-	double distance =  normal.get(0)*point_list.at(2).get(0) + normal.get(1)*point_list.at(2).get(1) + normal.get(2)*point_list.at(2).get(2);
+	double distance =  normal(0)*point_list.at(2)(0) + normal(1)*point_list.at(2)(1) + normal(2)*point_list.at(2)(2);
 
 	// checks if all points are on layer
-	for (int i=3; i < point_list.size(); i++) {
-		if (math::fabs( normal.get(0)*point_list.at(i).get(0) + normal.get(1)*point_list.at(i).get(1) + normal.get(2)*point_list.at(i).get(2) - distance)
+	for (unsigned i=3; i < point_list.size(); i++) {
+		if (std::fabs( normal(0)*point_list.at(i)(0) + normal(1)*point_list.at(i)(1) + normal(2)*point_list.at(i)(2) - distance)
 				> Geometry::kEpsilon)
 			return false;
 	}
@@ -55,18 +56,18 @@ bool Geometry::are_points_on_plane(std::vector<Vector3d> point_list) {
 }
 
 bool Geometry::is_point_in_smalles_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint) {
-	vector<Vector3d>::iterator iter;
+	std::vector<Vector3d>::iterator iter;
 
 	std::sort (point_list.begin(), point_list.end(), Geometry::compare_vectors_by_axis_x);
-	if (testpoint.get(0) < point_list.begin().get(0) || testpoint.get(0) > point_list.end().get(0))
+	if (testpoint(0) < (*point_list.begin())(0) || testpoint(0) > (*point_list.end())(0))
 		return false;
 
 	std::sort (point_list.begin(), point_list.end(), Geometry::compare_vectors_by_axis_y);
-	if (testpoint.get(1) < point_list.begin().get(1) || testpoint.get(1) > point_list.end().get(1))
+	if (testpoint(1) < (*point_list.begin())(1) || testpoint(1) > (*point_list.end())(1))
 		return false;
 
 	std::sort (point_list.begin(), point_list.end(), Geometry::compare_vectors_by_axis_z);
-	if (testpoint.get(2) < point_list.begin().get(2) || testpoint.get(2) > point_list.end().get(2))
+	if (testpoint(2) < (*point_list.begin())(2) || testpoint(2) > (*point_list.end())(2))
 		return false;
 
 	return true;
