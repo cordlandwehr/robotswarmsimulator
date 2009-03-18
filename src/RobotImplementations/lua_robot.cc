@@ -391,6 +391,15 @@ namespace {
 	const unsigned get_own_identifier() {
 		return 0; //own id always at pos 0 in queried_identifiers
 	}
+
+	/**
+	 * Returns the identifier of this robot.
+	 * @return Identifier
+	 */
+
+	const bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3dWrapper& testpoint) {
+		return Geometry::is_point_in_smalles_bbox(point_list, transform(testpoint));
+	}
 }
 
 void LuaRobot::report_errors(int status) {
@@ -481,7 +490,8 @@ void LuaRobot::register_lua_methods() {
 		 luabind::def("add_velocity_request", &add_velocity_request),
 		 luabind::def("add_type_change_request", &add_type_change_request),
 		 luabind::def("add_marker_request", &add_marker_request),
-		 luabind::def("get_own_identifier", &get_own_identifier)
+		 luabind::def("get_own_identifier", &get_own_identifier),
+		 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox)		 
 	];
 }
 

@@ -14,7 +14,7 @@ const double Geometry::kEpsilon = 0.000000001;
 
 
 bool Geometry::compare_vectors_by_axis (const Vector3d& vec_a, const Vector3d& vec_b, int axis) {
-	return vec_a(axis) <= vec_b(axis));
+	return vec_a(axis) <= vec_b(axis);
 }
 
 bool Geometry::compare_vectors_by_axis_x (const Vector3d& vec_a, const Vector3d& vec_b) {
