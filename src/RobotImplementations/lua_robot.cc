@@ -30,6 +30,7 @@
 #include "../Requests/type_change_request.h"
 #include "../Requests/velocity_request.h"
 #include "../Views/view.h"
+#include "../Utilities/geometry.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
