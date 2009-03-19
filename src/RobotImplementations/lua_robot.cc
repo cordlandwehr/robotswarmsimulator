@@ -58,6 +58,10 @@ namespace {
 			return Vector3dWrapper(x * rhs.x, y * rhs.y, z * rhs.z);
 		}
 
+		friend const Vector3dWrapper operator*(double scalar, const Vector3dWrapper& vec) {
+			return vec*scalar;
+		}
+
 		const Vector3dWrapper operator/(double div) const {
 			return Vector3dWrapper(x / div, y / div, z / div);
 		}
@@ -446,6 +450,7 @@ void LuaRobot::register_lua_methods() {
 			 .def(luabind::const_self - luabind::other<Vector3dWrapper>())
 			 .def(luabind::const_self * luabind::other<Vector3dWrapper>())
 			 .def(luabind::const_self * double())
+			 .def(double() * luabind::const_self)
 			 .def(luabind::const_self / double())
 			 .def(luabind::tostring(luabind::self))
 			 .def_readwrite("x", &Vector3dWrapper::x)
