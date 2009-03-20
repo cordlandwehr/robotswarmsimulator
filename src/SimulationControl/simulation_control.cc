@@ -129,13 +129,13 @@ SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::share
 }
 
 void SimulationControl::increase_processing_time_exp(){
-	if (processing_time_delta_<100)	{
+	if (processing_time_delta_<1000)	{
 		processing_time_delta_=2*processing_time_delta_;
 	}
 }
 
 void SimulationControl::decrease_processing_time_exp(){
-	if (processing_time_delta_>0.2){
+	if (processing_time_delta_>0.002){
 		processing_time_delta_=processing_time_delta_/2;
 	}
 
@@ -158,7 +158,7 @@ void SimulationControl::decrease_processing_time_linearly(){
 	}
 }
 void SimulationControl::increase_processing_time_linearly(){
-	if (processing_time_delta_<100){
+	if (processing_time_delta_<1000){
 		processing_time_delta_++;
 	}
 }
