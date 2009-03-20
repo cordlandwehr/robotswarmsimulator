@@ -15,8 +15,6 @@
 #include "../Utilities/vector_arithmetics.h"
 
 
-#define kSpeed	0.1f
-
 class WorldObject;
 class Obstacle;
 class RobotData;

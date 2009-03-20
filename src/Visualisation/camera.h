@@ -14,10 +14,7 @@
 #include <boost/smart_ptr.hpp>
 
 #include "../Utilities/vector_arithmetics.h"
-
-
-#define kSpeed	0.1f
-
+#define kSpeed	0.5f
 class WorldObject;
 class Obstacle;
 class RobotData;
@@ -76,6 +73,7 @@ public:
 	virtual void set_view_by_mouse(int x, int y);
 
 
+	virtual void set_button_press_mouse(int x, int y);
 
 	/**
 	 * \brief This rotates the camera around a point
@@ -237,6 +235,7 @@ protected:
 Vector3d  Cross(const Vector3d & vector1 ,const  Vector3d & vector2);
 float Magnitude(const Vector3d & vec);
 Vector3d & Normalize(Vector3d & vector) ;
+
 
 
 #endif /* CAMERA_H_ */

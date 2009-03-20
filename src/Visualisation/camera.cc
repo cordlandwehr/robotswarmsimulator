@@ -110,7 +110,11 @@ void Camera::set_view_by_mouse(int x, int y) {
 
 }
 
+void Camera::set_button_press_mouse(int x, int y) {
 
+	// No Operation
+
+}
 
 
 
@@ -119,12 +123,12 @@ void Camera::set_view_by_mouse(int x, int y) {
 void Camera::rotate_view(float angle, const Vector3d & rot_vec) {
 
 	Vector3d new_view;
-
+	Vector3d view;
 
 
 	// Get the view vector (The direction we are facing)
 
-	new_view = view_ - position_;
+	view = view_ - position_;
 
 
 	// Calculate the sine and cosine of the angle once
@@ -132,32 +136,32 @@ void Camera::rotate_view(float angle, const Vector3d & rot_vec) {
 	float cosTheta = (float)std::cos(angle);
 	float sinTheta = (float)std::sin(angle);
 
+
 	// Find the new x position for the new rotated point
 
-	new_view(0)  = (cosTheta + (1 - cosTheta) * rot_vec(0) * rot_vec(0) )* view_(0);
-	new_view(0) += ((1 - cosTheta) * rot_vec(0) * rot_vec(1) - rot_vec(2) * sinTheta)	* view_(1);
-	new_view(0) += ((1 - cosTheta) * rot_vec(0) * rot_vec(2) + rot_vec(1) * sinTheta)	* view_(2);
+	new_view(0)  = (cosTheta + (1 - cosTheta)*rot_vec(0)*rot_vec(0) )               * view(0);
+	new_view(0) += ((1 - cosTheta) * rot_vec(0) * rot_vec(1) - rot_vec(2) * sinTheta)	* view(1);
+	new_view(0) += ((1 - cosTheta) * rot_vec(0) * rot_vec(2) + rot_vec(1) * sinTheta)	* view(2);
 
 
 
 	// Find the new y position for the new rotated point
 
-	new_view(1)  = ((1 - cosTheta) * rot_vec(0) * rot_vec(1) + rot_vec(2) * sinTheta)	* view_(0);
-	new_view(1) += (cosTheta + (1 - cosTheta) * rot_vec(1) * rot_vec(1) )		* view_(1);
-	new_view(1) += ((1 - cosTheta) * rot_vec(1) * rot_vec(2) - rot_vec(0) * sinTheta)	* view_(2);
+	new_view(1)  = ((1 - cosTheta) * rot_vec(0) * rot_vec(1) + rot_vec(2) * sinTheta)	* view(0);
+	new_view(1) += (cosTheta + (1 - cosTheta) * rot_vec(1) * rot_vec(1) )               * view(1);
+	new_view(1) += ((1 - cosTheta) * rot_vec(1) * rot_vec(2) - rot_vec(0) * sinTheta)	* view(2);
 
 	// Find the new z position for the new rotated point
 
-	new_view(2)  = ((1 - cosTheta) * rot_vec(0) * rot_vec(2) - rot_vec(1) * sinTheta)	* view_(0);
-	new_view(2) += ((1 - cosTheta) * rot_vec(1) * rot_vec(2) + rot_vec(0) * sinTheta)	* view_(1);
-	new_view(2) += (cosTheta + (1 - cosTheta) * rot_vec(2) * rot_vec(2) )		* view_(2);
+	new_view(2)  = ((1 - cosTheta) * rot_vec(0) * rot_vec(2) - rot_vec(1) * sinTheta)	* view(0);
+	new_view(2) += ((1 - cosTheta) * rot_vec(1) * rot_vec(2) + rot_vec(0) * sinTheta)	* view(1);
+	new_view(2) += (cosTheta + (1 - cosTheta) * rot_vec(2) * rot_vec(2) )		        * view(2);
 
 	// Now we just add the newly rotated vector to our position to set
 	// our new rotated view of our camera.
 
 	view_ = position_ + new_view;
-
-}
+	}
 
 
 

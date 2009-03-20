@@ -14,7 +14,7 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "camera.h"
 
-#define kSpeed	0.1f
+
 
 /**
  * The MoveableCamera is a first person camera. It allows to navigate in the world freely
@@ -44,6 +44,7 @@ public:
 	 */
 	void set_view_by_mouse(int x, int y);
 
+	void set_button_press_mouse(int x, int y);
 
 	/**
 	 * \brief This strafes the camera left or right depending on the speed (+/-)
@@ -104,6 +105,10 @@ public:
 	 * Returns the name of the camera type.
 	 */
 	virtual std::string get_name();
+
+private:
+	int down_x_;
+	int down_y_;
 
 };
 

@@ -39,58 +39,34 @@ MoveableCamera::MoveableCamera(): Camera() {
 
 }
 
+void MoveableCamera::set_button_press_mouse(int x, int y) {
+	down_x_=x;
+	down_y_=y;
 
+}
 
 void MoveableCamera::set_view_by_mouse(int x, int y) {
 
-
-	int middle_x = screen_width_  >> 1;
-
-	int middle_y = screen_height_ >> 1;
 
 	float angle_y = 0.0f;
 
 	float angle_z = 0.0f;
 
-	static float current_rot_x = 0.0f;
 
-
-	if( (x == middle_x) && (y == middle_y) ) return;
-
-
-	// Using a glut method to set the mouse pointer to the center of the window
-	glutWarpPointer(middle_x, middle_y);
+	if( (x == down_x_) && (y == down_y_) ) return;
 
 
 	// Get the direction the mouse moved in, but bring the number down to a reasonable amount
 
-	angle_y = (float)( (middle_x - x ) ) / 1000.0f;
-	angle_z = (float)( (middle_y - y ) ) / 1000.0f;
-
-	current_rot_x -= angle_z;
-
-
-	// If the current rotation (in radians) is greater than 1.0, we want to cap it.
-
-	if(current_rot_x > 1.0f){
-
-		current_rot_x = 1.0f;
-
-	// Check if the rotation is below -1.0, if so we want to make sure it doesn't continue
-
-	} else if(current_rot_x < -1.0f) {
-
-		current_rot_x = -1.0f;
-
-	// Otherwise, we can rotate the view around our position
-
-	} else {
+	angle_y = (float)( (down_x_ - x ) ) / 200.0f;
+	angle_z = (float)( (down_y_ - y ) ) / 200.0f;
 
 
 		Vector3d axis = Cross(view_ - position_, up_vector_);
 		axis = Normalize(axis);
 
 		// Rotate around our perpendicular axis and along the y-axis
+
 
 		rotate_view(angle_z, axis);
 		Vector3d y_axis;
@@ -100,7 +76,8 @@ void MoveableCamera::set_view_by_mouse(int x, int y) {
 
 		rotate_view(angle_y, y_axis);
 
-	}
+		down_x_=x;
+		down_y_=y;
 
 }
 

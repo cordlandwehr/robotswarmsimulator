@@ -185,7 +185,7 @@ void SimulationRenderer::resize(int width, int height){
 	screen_width_ = width;
 	screen_height_ = height;
 
-	use_mouse_ = false;
+	use_mouse_ = true;
 
 
 	// Set the viewport to be the entire window
@@ -304,15 +304,17 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
-
 	if(use_mouse_){
-		cameras_[active_camera_index_]->set_view_by_mouse(x,y);
-	}
+				cameras_[active_camera_index_]->set_button_press_mouse(x,y);
+			}
 
 }
 
 void SimulationRenderer::mouse_motion_func( int x, int y){
-	mouse_func(1,1,x,y);
+	if(use_mouse_){
+			cameras_[active_camera_index_]->set_view_by_mouse(x,y);
+		}
+
 }
 
 void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
