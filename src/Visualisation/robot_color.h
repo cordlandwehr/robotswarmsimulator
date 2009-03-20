@@ -8,7 +8,7 @@
 #ifndef ROBOT_COLOR_H_
 #define ROBOT_COLOR_H_
 
-const unsigned int kRobotIdColorNum = 19;
+const unsigned int kRobotIdColorNum = 10;
 
 /**
  * A list of colors to map color numbers to RGB triples
