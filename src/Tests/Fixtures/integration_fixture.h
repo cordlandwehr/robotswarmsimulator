@@ -25,7 +25,7 @@ public:
 	SimpleCOGRobot(boost::shared_ptr<RobotIdentifier> id)
 	: Robot(id) {}
 	std::set<boost::shared_ptr<Request> > compute() {
-		boost::shared_ptr<View> view = view_.lock();
+		boost::shared_ptr<View> view = view_;
 
 		// compute the center of gravity of all robots
 		std::set<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(*this);

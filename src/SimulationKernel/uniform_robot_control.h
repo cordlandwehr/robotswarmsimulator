@@ -32,10 +32,10 @@ public:
 	 * @param intial WorldInformation
 	 * @see ModelParameters::HISTORY_LENGTH
 	 */
-	UniformRobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const WorldInformation& initial_world_information);
+	UniformRobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information);
 	virtual ~UniformRobotControl();
 
-	virtual void update(const WorldInformation& world_information);
+	virtual void update(const boost::shared_ptr<WorldInformation>& world_information);
 	virtual void compute_view(Robot& robot);
 
 	void set_view_factory(const boost::shared_ptr<AbstractViewFactory>& view_factory);

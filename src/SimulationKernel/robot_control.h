@@ -38,7 +38,7 @@ public:
 	RobotControl();
 	virtual ~RobotControl();
 
-	virtual void update(const WorldInformation& world_information) = 0;
+	virtual void update(const boost::shared_ptr<WorldInformation>& world_information) = 0;
 
 	/**
 	 * Equivalent to robot.compute().

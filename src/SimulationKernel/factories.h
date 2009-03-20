@@ -57,7 +57,7 @@ namespace Factory {
 	 * Returns shared pointer to RobotControl
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<RobotControl> robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const WorldInformation& initial_world_information);
+	boost::shared_ptr<RobotControl> robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information);
 
 	/**
 	 * Creates robot from given algorithm

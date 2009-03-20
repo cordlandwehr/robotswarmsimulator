@@ -40,7 +40,7 @@ namespace {
 
 
 std::set<boost::shared_ptr<Request> > MiniballRobot::compute() {
-		boost::shared_ptr<View> view = view_.lock();
+		boost::shared_ptr<View> view = view_;
 		Miniball<3> miniball;
 		miniball.check_in(vector3d_to_point(view->get_position(*this, id())));
 		// compute the miniball of all visible robots

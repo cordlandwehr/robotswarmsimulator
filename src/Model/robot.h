@@ -25,13 +25,13 @@ public:
 		return id_;
 	}
 
-	void set_view(const boost::weak_ptr<View>& view);
+	void set_view(const boost::shared_ptr<View>& view);
 
 	virtual std::string get_algorithm_id () const = 0;
 
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
 protected:
-	boost::weak_ptr<View> view_;
+	boost::shared_ptr<View> view_;
 
 
 private:

@@ -29,7 +29,7 @@
 BOOST_FIXTURE_TEST_CASE(integration_test_1, IntegrationFixture) {
 	// setup of view
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, kHistorySize, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, kHistorySize, initial_world_information));
 
 	// setup of activation sequence generator
 	boost::shared_ptr<SynchronousASG> asg(new SynchronousASG());

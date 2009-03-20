@@ -25,7 +25,7 @@ public:
 	ParametrizedViewFactory(const P& argument) : argument_(argument) {;}
 	virtual ~ParametrizedViewFactory() {;}
 
-	virtual boost::shared_ptr<View> create_new_view_instance(const WorldInformation& world_information) const {
+	virtual boost::shared_ptr<View> create_new_view_instance(const boost::shared_ptr<WorldInformation>& world_information) const {
 		boost::shared_ptr<View> result(new T(argument_));
 		result->init(world_information);
 		return result;

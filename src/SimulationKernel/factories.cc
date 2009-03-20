@@ -295,7 +295,7 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	return robot;
 }
 
-boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const WorldInformation& initial_world_information) {
+boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {
 	std::string robot_type = params["ROBOT_CONTROL"];
 	boost::shared_ptr<RobotControl> control;
 

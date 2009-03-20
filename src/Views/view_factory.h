@@ -22,7 +22,7 @@ public:
 	ViewFactory() {;}
 	virtual ~ViewFactory() {;}
 
-	virtual boost::shared_ptr<View> create_new_view_instance(const WorldInformation& world_information) const {
+	virtual boost::shared_ptr<View> create_new_view_instance(const boost::shared_ptr<WorldInformation>& world_information) const {
 		boost::shared_ptr<View> result(new T);
 		result->init(world_information);
 		return result;

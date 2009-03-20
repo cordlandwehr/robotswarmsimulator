@@ -46,7 +46,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler
@@ -121,7 +121,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler
@@ -194,7 +194,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 	// TODO(peter) 'new RobotControl(view_factory, history->size)' would be better ==> add size() method to History
 
 	// create event handler

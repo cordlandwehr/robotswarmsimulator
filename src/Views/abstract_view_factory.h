@@ -30,7 +30,7 @@ public:
 	* @param const ref to WorldInformation
 	* @return Newly constructed View object
 	*/
-	virtual boost::shared_ptr<View> create_new_view_instance(const WorldInformation& world_information) const = 0;
+	virtual boost::shared_ptr<View> create_new_view_instance(const boost::shared_ptr<WorldInformation>& world_information) const = 0;
 };
 
 #endif /* ABSTRACT_VIEW_FACTORY_H_ */

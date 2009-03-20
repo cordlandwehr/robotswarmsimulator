@@ -28,7 +28,7 @@ public:
 	OctreeView();
 	virtual ~OctreeView() = 0;
 
-	virtual void init(const WorldInformation& world_information);
+	virtual void init(const boost::shared_ptr<WorldInformation>& world_information);
 
 protected:
 	const boost::shared_ptr<Octree>& octree() const;

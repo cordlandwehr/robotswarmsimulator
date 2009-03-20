@@ -53,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 
 	// RobotControl needed for EventHandler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, *initial_world_information));
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 
 
 	map<std::string, std::string> &params = parser->parameter_map();

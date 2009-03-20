@@ -65,7 +65,7 @@ public:
 	 * Call this method before using any other method of View.
 	 * @param WorldInformation
 	 */
-	virtual void init(const WorldInformation& world_information);
+	virtual void init(const boost::shared_ptr<WorldInformation>& world_information);
 
 	/**
 	 * Returns the set of robots visible for the calling Robot.
@@ -328,7 +328,7 @@ private:
 	                    const Robot& caller, RobotRef robot) const;
 
 private:
-	const WorldInformation* world_information_;
+	boost::shared_ptr<WorldInformation> world_information_;
 
 };
 

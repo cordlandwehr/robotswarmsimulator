@@ -44,7 +44,7 @@ BOOST_FIXTURE_TEST_CASE(lua_test, SimpleWorldFixture) {
 	initial_world_information->add_robot_data(robot_data);
 
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<View> view(view_factory->create_new_view_instance(*initial_world_information));
+	boost::shared_ptr<View> view(view_factory->create_new_view_instance(initial_world_information));
 	robot->set_view(view);
 	robot->compute();
 	robot->compute();

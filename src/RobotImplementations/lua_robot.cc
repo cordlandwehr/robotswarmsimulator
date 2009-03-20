@@ -511,23 +511,20 @@ void LuaRobot::register_lua_methods() {
 }
 
 std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
-	if(view = view_.lock()) {
-		robot = this;
-		requests.clear();
-		queried_identifiers.clear();
-		queried_identifiers.push_back(id());
+	view = view_;
+	robot = this;
+	requests.clear();
+	queried_identifiers.clear();
+	queried_identifiers.push_back(id());
 
-		try {
-			luabind::call_function<void>(lua_state_.get(), "main");
-		}
-		catch(luabind::error& e) {
-			luabind::object error_msg(luabind::from_stack(e.state(), -1));
-		    std::cerr << error_msg << std::endl;
-		}
+	try {
+		luabind::call_function<void>(lua_state_.get(), "main");
 	}
-	else {
-		throw std::logic_error("Could not lock view. Too old?");
-	}
+	catch(luabind::error& e) {
+		luabind::object error_msg(luabind::from_stack(e.state(), -1));
+	    std::cerr << error_msg << std::endl;
+	}	
+
 	return requests;
 }
 

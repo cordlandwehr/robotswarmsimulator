@@ -5,6 +5,6 @@ Robot::~Robot() {
 
 }
 
-void Robot::set_view(const boost::weak_ptr<View>& view) {
+void Robot::set_view(const boost::shared_ptr<View>& view) {
 	view_ = view;
 }

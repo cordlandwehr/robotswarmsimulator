@@ -115,8 +115,8 @@ const Sphere& View::resolve_sphere_ref_safe(SphereRef sphere) const {
 	return result;
 }
 
-void View::init(const WorldInformation& world_information) {
-	world_information_ = &world_information;
+void View::init(const boost::shared_ptr<WorldInformation>& world_information) {
+	world_information_ = world_information;
 }
 
 

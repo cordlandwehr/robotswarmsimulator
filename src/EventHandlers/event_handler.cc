@@ -73,7 +73,7 @@ void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
 	history_->insert(new_world_information);
 
 	// update robot control with the extrapolated world information
-	robot_control_->update(*new_world_information);
+	robot_control_->update(new_world_information);
 
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, look_event->robot_subset()) {
 		robot_control_->compute_view(*robot);

@@ -26,7 +26,7 @@ class SphericView : public virtual OctreeView {
 public:
 	SphericView(double view_radius);
 	virtual ~SphericView();
-	void init(const WorldInformation & world_information );
+	void init(const boost::shared_ptr<WorldInformation>& world_information );
 
 protected:
 	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
