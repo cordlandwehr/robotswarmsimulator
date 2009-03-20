@@ -107,6 +107,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 
 void SimulationKernel::step() {
+
 	event_handler_->handle_event(asg_->get_next_event());
 	//std::cout << "History Size: " << history_->size() << std::endl;
 }
@@ -135,6 +136,7 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 	boost::shared_ptr<Vector3d> temp_robot_velocity;
 	boost::shared_ptr<Vector3d> temp_robot_acceleration;
 
+
 	boost::tuple <boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > temp_robot_axes;
 
 	// counting robots by their position vectors
@@ -161,6 +163,8 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 		temp_robot_data->set_type(robot_type_map_[boost::to_upper_copy(parser->robot_types()[i])]);
 		temp_robot_data->set_status(robot_status_map_[boost::to_upper_copy(parser->robot_stati()[i])]);
+
+		temp_robot_data->set_color(boost::lexical_cast<int>(parser->robot_colors()[i]));
 
 		boost::get<0>(temp_robot_axes).reset(new Vector3d(boost::get<0>(parser->robot_coordinate_systems()[i])));
 		boost::get<1>(temp_robot_axes).reset(new Vector3d(boost::get<1>(parser->robot_coordinate_systems()[i])));
