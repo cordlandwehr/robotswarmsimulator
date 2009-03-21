@@ -114,7 +114,7 @@ function main()
 		
 		--forsign of distance given by HNF decides whether robot[i] is left or right from the line through x1 and therefore rotation direction
 		if spr( normx1, get_position(robots[i])) < 0 then
-			angle = angle + math.pi;
+			angle = 2 * math.pi - angle;
 		end
 		
 		if (angle > (1/4 * math.pi)) and (angle <= (3/4 * math.pi)) and (x2 == nil) then
