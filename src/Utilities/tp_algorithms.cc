@@ -7,50 +7,50 @@
 
 #include "tp_algorithms.h"
 
-Vector3d TP_Algorithms::compute_COG(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_COG(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_CMinBall(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_CMinBall(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_CMinRect(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_CMinRect(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_MaxLine(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_MaxLine(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_CCH(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_CCH(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_RCH(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_RCH(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_RMinRect(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_RMinRect(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_ACH(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_ACH(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_MidFar(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_MidFar(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_MED(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_MED(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_FW(boost::shared_ptr<std::vector<Vector3d> > positions) {
-	return NULL;
+Vector3d TP_Algorithms::compute_FW(const std::vector<Vector3d>& positions) {
+	return Vector3d();
 }
 
-Vector3d TP_Algorithms::compute_kMin(boost::shared_ptr<std::vector<Vector3d> > positions, int k) {
-	return NULL;
+Vector3d TP_Algorithms::compute_kMin(const std::vector<Vector3d>& positions, int k) {
+	return Vector3d();
 }
