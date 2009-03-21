@@ -50,7 +50,7 @@ public:
 	 * @param point the shall be tested to be inside of this box
 	 * @return true or false
 	 */
-	static bool is_point_in_smalles_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint);
+	static bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint);
 
 	Geometry();
 	virtual ~Geometry();

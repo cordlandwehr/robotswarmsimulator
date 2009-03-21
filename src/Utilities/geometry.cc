@@ -55,7 +55,7 @@ bool Geometry::are_points_on_plane(std::vector<Vector3d> point_list) {
 	return true;
 }
 
-bool Geometry::is_point_in_smalles_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint) {
+bool Geometry::is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint) {
 	std::vector<Vector3d>::iterator iter;
 
 	std::sort (point_list.begin(), point_list.end(), Geometry::compare_vectors_by_axis_x);

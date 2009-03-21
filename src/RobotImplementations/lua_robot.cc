@@ -410,7 +410,7 @@ namespace {
 	 */
 
 	const bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3dWrapper& testpoint) {
-		return Geometry::is_point_in_smalles_bbox(point_list, transform(testpoint));
+		return Geometry::is_point_in_smallest_bbox(point_list, transform(testpoint));
 	}
 }
 
@@ -523,7 +523,7 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	catch(luabind::error& e) {
 		luabind::object error_msg(luabind::from_stack(e.state(), -1));
 	    std::cerr << error_msg << std::endl;
-	}	
+	}
 
 	return requests;
 }
