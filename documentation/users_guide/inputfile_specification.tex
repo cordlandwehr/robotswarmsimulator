@@ -136,6 +136,10 @@ To use the asynchronous ASG one needs to set \texttt{ASG}=\texttt{ASYNCHRONOUS}.
 
 \subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
 
+Vector modifiers are objects that change a given vector in a specific way. In addition to the to be modified vector, they may be given a so called \emph{reference vector}. How exactly this reference vector influences the modification of the given vector is due to the respective implementation.
+
+Such vector modifiers are used by vector request handlers (e.g. position request handler). Requests to these handlers consist of a three dimensional vector (e.g. position the robot wants to be “beamed“ to). To model different aspects like inaccuracy or certain restrictions, vector request handlers may be given a list of vector modifiers. Before granting a request, every vector modifier in this list will be applied to the requested vector (e.g. the new position a robot requested) using the current value of the corresponding robot attribute (e.g. the robot's current position) as the reference vector.
+
 The list of vector modifiers is a (not necessarily nonempty) list, i.\,e. 
 \begin{center}\scriptsize
 	\texttt{(VECTOR\_MODIFIER\_1);(VECTOR\_MODIFIER\_2);...}
@@ -156,20 +160,20 @@ I.\,e. the value of \texttt{VECTOR\_MODIFIER\_TYPE} needs to be \texttt{VECTOR\_
 
 \paragraph{VectorDifferenceTrimmmer} If \texttt{VECTOR\_MODIFIER\_TYPE} is equal to\newline \texttt{VECTOR\_DIFFERENCE\_TRIMMER}, then the following parameters are expected:
 \begin{enumerate}
-	\item length of type double
+	\item \texttt{length} of type double: Vector request handlers that use vector difference trimmers will ensure that the robot's request does not differ too much from the current value of the robot's corresponding attribute. If the difference is larger than \texttt{length}, the robot's request is changed such that the difference's norm matches exactly \texttt{length} afterwards. For example, a position request handler using a vector difference trimmer with parameter $\texttt{length}=1$ will ensure that the robot can move only inside the unit sphere around it's current position. If the robot requested a position outside of this unit sphere, it would be moved on the intersection of the unit sphere's boundary and the line from the robot's current position to the requested position.
 \end{enumerate}
 I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,5.2)}.
 
 \paragraph{VectorTrimmer} If vector modifier type equals \texttt{VECTOR\_TRIMMER}, then the following parameters are expected:
 \begin{enumerate}
-	\item length of type double
+	\item \texttt{length} of type double: Every vector this vector modifier is applied to will be scaled such that it has length at most \texttt{length}. May be used for example by position request handlers to ensure that robots can not move out of the sphere of radius \texttt{length} around the origin of the global coordinate system.
 \end{enumerate}
 I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_TRIMMER} may look like: \texttt{(VECTOR\_TRIMMER,10.0)}.
 
 \paragraph{VectorRandomizer} If vector modifier type equals \texttt{VECTOR\_RANDOMIZER}, then the following parameters are expected:
 \begin{enumerate}
-	\item seed of type unsigned int
-	\item standard derivation of type double
+	\item \texttt{seed} of type unsigned int: Seed used by randomization.
+	\item \texttt{standard derivation} of type double: Derivation used by the vector randomizer. Applying this vector modifier to a vector will add a random vector distributed according to the multidimensional normal distribution with derivation \texttt{standard derivation} (i.e. every coordinate of the random vector is distributed according to N(0,\texttt{standard derivation})).
 \end{enumerate}
 I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,1,0.5)}.
 
