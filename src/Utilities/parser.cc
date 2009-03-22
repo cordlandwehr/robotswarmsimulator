@@ -162,7 +162,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 		init_variables(parameter_map_);
 
 	} else {
-		throw UnsupportedOperationException("Unable to open project file "+main_project_filename);
+		throw UnsupportedOperationException("Unable to open project file: "+main_project_filename);
 	}
 }
 
@@ -392,7 +392,7 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 		project_file.close();
 
 	} else {
-		throw UnsupportedOperationException("Unable to open file "+filename+".");
+		throw UnsupportedOperationException("Unable to open file: "+filename);
 	}
 }
 
@@ -417,7 +417,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 		}
 		project_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open project file" +project_filename+"!");
+		throw UnsupportedOperationException("Unable to open project file: " +project_filename);
 	}
 }
 
@@ -453,7 +453,7 @@ void Parser::save_robot_file(const WorldInformation& world_info) {
 
 		robot_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open robot file" +robot_filename_+"!");
+		throw UnsupportedOperationException("Unable to open robot file: " +robot_filename_+"!");
 	}
 }
 
@@ -538,7 +538,7 @@ void Parser::save_obstacle_file(const WorldInformation& world_info) {
 
 		obstacle_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open obstacle file" +obstacle_filename_+"!");
+		throw UnsupportedOperationException("Unable to open obstacle file: " +obstacle_filename_);
 	}
 }
 

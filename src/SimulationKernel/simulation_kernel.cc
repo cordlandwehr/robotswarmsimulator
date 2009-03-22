@@ -30,6 +30,7 @@
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
 
 #include "factories.h"
+#include <Utilities/console_output.h>
 
 #include <iostream>
 
@@ -71,7 +72,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
 	std::map<std::string, std::string> &params = parser->parameter_map();
-	std::cout << "Generated Map" << std::endl;
+	ConsoleOutput::out_info ("Generated parameter map");
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
 	history_->insert(initial_world_information);

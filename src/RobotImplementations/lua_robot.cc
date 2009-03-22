@@ -66,8 +66,8 @@ namespace {
 			return Vector3dWrapper(x / div, y / div, z / div);
 		}
 
-		const Vector3dWrapper operator*(double skalar) const {
-			return Vector3dWrapper(x * skalar, y * skalar, z * skalar);
+		const Vector3dWrapper operator*(double scalar) const {
+			return Vector3dWrapper(x * scalar, y * scalar, z * scalar);
 		}
 
 		friend std::ostream& operator<<(std::ostream& os, const Vector3dWrapper& rhs) {

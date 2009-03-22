@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include "console_output.h"
 
 class UnsupportedOperationException : public std::runtime_error {
 public:

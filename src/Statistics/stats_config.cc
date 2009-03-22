@@ -45,48 +45,49 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 				|| subset_masters_ || subset_actmasters_ || subset_inactmasters_
 				|| subset_slaves_ || subset_actslaves_ || subset_inactslaves_;
 
-	std::cout << "(statistics-info) subsets are: "
-			  << (subset_all_ ? "{ALL} " : "")
-			  << (subset_actall_ ? "{ACTALL} " : "")
-			  << (subset_inactall_ ? "{INACTALL} " : "")
-			  << (subset_masters_ ? "{MASTERS} " : "")
-			  << (subset_actmasters_ ? "{ACTMASTERS} " : "")
-			  << (subset_inactmasters_ ? "{INACTMASTERS} " : "")
-			  << (subset_slaves_ ? "{SLAVES} " : "")
-			  << (subset_actslaves_ ? "{ACTSLAVES} " : "")
-			  << (subset_inactslaves_ ? "{INACTSLAVES} " : "") << std::endl;
+	std::string subsetString = "[STATISTICS] Subsets are: ";
+	subset_all_ ? subsetString += "{ALL} " : "";
+	subset_actall_ ? subsetString += "{ACTALL} " : "";
+	subset_inactall_ ? subsetString += "{INACTALL} " : "";
+	subset_masters_ ? subsetString += "{MASTERS} " : "";
+	subset_actmasters_ ? subsetString += "{ACTMASTERS} " : "";
+	subset_inactmasters_ ? subsetString += "{INACTMASTERS} " : "";
+	subset_slaves_ ? subsetString += "{SLAVES} " : "";
+	subset_actslaves_ ? subsetString += "{ACTSLAVES} " : "";
+	subset_inactslaves_ ? subsetString += "{INACTSLAVES} " : "";
+
+	ConsoleOutput::out_info(subsetString);
 
 	// get template-configuration from Parser's STATS_TEMPLATE = ...
 	// e.g. STATS_TEMPLATE = DEFAULT
 	s = params["STATISTICS_TEMPLATE"];
 
 	// initialize template
-	std::cout << "(statistics-info) configuration is: ";
+
 	if (s.find("ALL", 0) != std::string::npos) {
 		init_activate_all();
-		std::cout << "ALL" << std::endl;
+		ConsoleOutput::out_info( "[STATISTICS] Configuration is: ALL");
 	} else if (s.find("BASIC", 0) != std::string::npos) {
 		init_activate_basic();
-		std::cout << "BASIC" << std::endl;
+		ConsoleOutput::out_info( "[STATISTICS] Configuration is: BASIC");
 	} else if (s.find("NONE", 0) != std::string::npos) {
 		init_activate_none();
-		std::cout << "NONE" << std::endl;
+		ConsoleOutput::out_info( "[STATISTICS] Configuration is: NONE");
 	} else {
-		std::cerr << "invalid value for STATS_TEMPLATE in projectfile. Using STATS_TEMPLATE = NONE" << std::endl;
+		ConsoleOutput::out_error( "[STATISTICS] Invalid value for STATS_TEMPLATE in projectfile. Using STATS_TEMPLATE = NONE");
 		init_activate_none();
 	}
 
 	// get datadump-configuration from Parser's STATS_DATADUMP = ...
 	// e.g. STATS_DATADUMP = FULL
 	s = params["STATISTICS_DATADUMP"];
-	std::cout << "(statistics-info) datadump is: ";
 	if (s == "FULL") {
 		datadump_level_ = DATADUMP_FULL;
-		std::cout << "FULL" << std::endl;
+		ConsoleOutput::out_info( "[STATISTICS] Datadump is: FULL");
 	} else {
-		std::cout << "NONE" << std::endl;
+		ConsoleOutput::out_info( "[STATISTICS] Datadump is: NONE");
 		if (s != "" && s != "NONE")
-			std::cerr << "invalid value for STATS_DATADUMP in projectfile. Using STATS_DATADUMP = NONE" << std::endl;
+			ConsoleOutput::out_error( "[STATISTICS] Invalid value for STATS_DATADUMP in projectfile. Using STATS_DATADUMP = NONE");
 
 		datadump_level_ = DATADUMP_NONE;
 	}

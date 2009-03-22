@@ -1,4 +1,5 @@
 #include "stats_control.h"
+#include <Utilities/console_output.h>
 
 StatsControl::StatsControl() {
 	stats_initialized_ = false;
@@ -6,7 +7,7 @@ StatsControl::StatsControl() {
 
 StatsControl::~StatsControl() {
 	if (stats_initialized_) {
-		std::cerr << "(statistics-warning) no explicit quit() called - now calling from deconstructor" << std::endl;
+		ConsoleOutput::out_warning( "[STATISTICS] No explicit quit called - now terminated by deconstructor");
 		quit();
 	}
 }
@@ -15,7 +16,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 
 	if (stats_initialized_) {
 		// log warning, because no quit was called before this init
-		std::cerr << "(statistics-warning) StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting..." << std::endl;
+		ConsoleOutput::out_warning( "[STATISTICS] StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting...");
 		// quit current statistic-calculation
 		quit();
 	}
@@ -31,7 +32,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 	// sets and creates output dir
 	if (output_dir.compare("")!=0 && !boost::filesystem::exists(output_dir)) {
 		boost::filesystem::create_directory( output_dir );
-		std::cout << "(statistics-info) directory " << output_dir << " created " << std::endl;
+		ConsoleOutput::out_info( "[STATISTICS] Directory " + output_dir +" was created.");
 	}
 
 	// create a StatsOut-instance for each subset
@@ -84,7 +85,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 			break;
 
 		default :
-			std::cerr << "PROGRAM ERROR in Stats_control.init(...): unspecified datadump_level()==" << stats_cfg_.datadump_level() << std::endl;
+			ConsoleOutput::out_error( "[STATISTICS] in Stats_control.init(...): unspecified datadump_level()==" + stats_cfg_.datadump_level() );
 	}
 }
 
@@ -124,7 +125,7 @@ void StatsControl::update(const WorldInformation& world_information, boost::shar
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
 
 	} else {
-		std::cerr << "Error in StatsControl::update(...): unhandled case that must not occur." << std::endl;
+		ConsoleOutput::out_error( "[STATISTICS] Error in StatsControl::update(...): unhandled case that must not occur.");
 	}
 
 	if (stats_cfg_.datadump_level() != StatsConfig::DATADUMP_NONE) {
@@ -220,7 +221,7 @@ void StatsControl::quit() {
 
 	stats_initialized_ = false;
 
-	std::cout << "(statistics-info) quit" << std::endl;
+	ConsoleOutput::out_info( "[STATISTICS] Quit." );
 }
 
 void StatsControl::calculate() {
@@ -229,7 +230,7 @@ void StatsControl::calculate() {
 
 	if (stats_initialized_) {
 		// log error, because not initialized - but continue
-		std::cerr << "StatsControl::calculate(...) called without any previous StatsControl::init(...)" << std::endl;
+		ConsoleOutput::out_error( "[STATISTICS] StatsControl::calculate(...) called without any previous StatsControl::init(...)");
 	}
 
 	if (!stats_cfg_.is_any_subset())

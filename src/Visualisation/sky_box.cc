@@ -12,6 +12,7 @@
 
 #include "texture.h"
 #include "sky_box.h"
+#include <Utilities/console_output.h>
 
 
 float kSkyBoxSize = 6.0f;
@@ -39,11 +40,11 @@ bool SkyBox::init( std::string path_to_tex){
 	for( int i = 0; i < 6 ; i++){
 		std::string file = path_to_tex;
 		file = file.append( texnames::tex_names[i] );
-		std::cout << "SkyBox: Loading texture " << file << std::endl;
+		ConsoleOutput::out_warning( "[VISUALIZATION] Cannot load skybox texture: " + file );
 
 		texture_[i].load(file);
 		if( texture_[i].loaded() == false){
-			std::cerr << "SkyBox: Can't load texture " << file << std::endl;
+			ConsoleOutput::out_warning( "[VISUALIZATION] Cannot load skybox texture: " + file );
 			can_use_ = false;
 			return false;
 		}

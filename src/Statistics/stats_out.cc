@@ -16,6 +16,7 @@
 #include <boost/filesystem/fstream.hpp>
 
 #include "stats_out.h"
+#include <Utilities/console_output.h>
 
 int StatsOut::stat_output_width = 20;
 char StatsOut::stat_gnuplot_date [80];
@@ -65,7 +66,7 @@ void StatsOut::create_date() {
 
 void StatsOut::set_id(std::string stat_id) {
 	if (this->stat_id.length() != 0) {
-		std::cerr << "stat_id already set to " << this->stat_id << std::endl;
+		ConsoleOutput::out_error("stat_id already set to "+this->stat_id);
 	} else {
 		this->stat_id = stat_id;
 	}
@@ -154,7 +155,7 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 
 void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
 	if (!is_open_) {
-		std::cerr << "logfile for stats not opened" << std::endl;
+		ConsoleOutput::out_warning("Logfile for stats not opened");
 		return;
 	}
 

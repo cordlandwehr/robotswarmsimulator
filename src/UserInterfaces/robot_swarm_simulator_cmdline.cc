@@ -19,7 +19,7 @@
 #include <SimulationControl/simulation_control.h>
 #include <UserInterfaces/glut_visualizer.h>
 #include <Utilities/szenario_generator.h>
-
+#include <Utilities/console_output.h>
 
 int main(int argc, char** argv) {
 	namespace po = boost::program_options;
@@ -69,11 +69,11 @@ int main(int argc, char** argv) {
 		po::notify(vm);
 	}
 	catch (std::exception& e) {
-		std::cout << "Uncaught exception: " << e.what() << std::endl;
+		ConsoleOutput::out_error( e.what() );
 		throw;
 	}
 	catch(...) {
-		std::cerr << "Uncaught, unknown exception." << std::endl;
+		ConsoleOutput::out_error( "Uncaught unknown exception." );
 		throw; //rethrow exception
 	}
 
@@ -141,15 +141,15 @@ int main(int argc, char** argv) {
 			// write to file
 			generator.write_to_file();
 
-			std::cout << "Robots were generated!" << std::endl;
-			std::cout << "Please see file: " + vm["swarmfile"].as<std::string>() + ".swarm" << std::endl << std::endl;
+			ConsoleOutput::out_info( "Robots were generated!" );
+			ConsoleOutput::out_info( "Please see file: " + vm["swarmfile"].as<std::string>() + ".swarm" );
 		}
 		catch (std::exception& e) {
-			std::cout << "Uncaught exception: " << e.what() << std::endl;
+			ConsoleOutput::out_error( e.what() );
 			throw;
 		}
 		catch(...) {
-			std::cerr << "Uncaught, unknown exception." << std::endl;
+			ConsoleOutput::out_error( "Uncaught unknown exception." );
 			throw; //rethrow exception
 		}
 
@@ -192,11 +192,11 @@ int main(int argc, char** argv) {
 		visualizer->glutMainLoop();
 	}
 	catch(std::exception& e) {
-		std::cerr << "Uncaught exception: " << e.what() << std::endl;
+		ConsoleOutput::out_error( e.what() );
 		throw; //rethrow exception
 	}
 	catch(...) {
-		std::cerr << "Uncaught, unknown exception." << std::endl;
+		ConsoleOutput::out_error( "Uncaught unknown exception." );
 		throw; //rethrow exception
 	}
 	return 0;
