@@ -2,6 +2,8 @@
 #include "robot.h"
 #include <math.h>
 
+class View;
+
 RobotData::RobotData(boost::shared_ptr<Identifier> id,
                      boost::shared_ptr<Vector3d> position, const Robot& robot)
                      : WorldObject(id, position), robot_(robot), color_(0)
@@ -32,6 +34,9 @@ RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_
 	}
 	if(rhs.velocity_) {
 		this->velocity_.reset(new Vector3d(*rhs.velocity_));
+	}
+	if (rhs.view_){
+		this->view_=rhs.view_;
 	}
 }
 
@@ -65,6 +70,10 @@ const Vector3d & RobotData::velocity() const {
 	return *velocity_;
 }
 
+boost::shared_ptr<View> RobotData::view()  {
+	return view_;
+}
+
 void RobotData::set_velocity(boost::shared_ptr<Vector3d> new_velocity) {
 	velocity_ = new_velocity;
 }
@@ -95,6 +104,12 @@ RobotStatus RobotData::status() const {
 
 void RobotData::set_status(RobotStatus new_status) {
 	status_ = new_status;
+}
+
+void RobotData::set_view(boost::shared_ptr<View> view) {
+
+	view_ = view;
+
 }
 
 const Robot& RobotData::robot() const {

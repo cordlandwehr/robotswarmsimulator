@@ -12,7 +12,7 @@
 #include <string>
 
 #include <boost/smart_ptr.hpp>
-
+#include <boost/foreach.hpp>
 
 #include "../Utilities/vector_arithmetics.h"
 #include "../Visualisation/simulation_renderer.h"
@@ -22,6 +22,7 @@
 #include "../SimulationControl/visualizer.h"
 #include "texture.h"
 #include "sky_box.h"
+#include "../Views/view.h"
 
 class WorldInformation;
 class WorldObject;
@@ -264,7 +265,7 @@ public:
 	}
 
 private:
-	void draw_line(Vector3d pos1, Vector3d pos2, const float* color);
+	void draw_line(Vector3d pos1, Vector3d pos2);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.
@@ -320,6 +321,11 @@ private:
 	 */
 	void draw_coord_system();
 
+	/**
+	 * draw visibility graph (which robots can see others)
+	 */
+
+	void draw_visibility_graph(const boost::shared_ptr<WorldInformation> world_info);
 
 	void setup_projection();
 
@@ -427,6 +433,8 @@ private:
 	 * Specifies whether the about screem should be drawn.
 	 */
 	bool render_about_;
+
+	bool render_visibility_graph_;
 
 	/**
 	 * Specifies whether the skybox should be drawn.

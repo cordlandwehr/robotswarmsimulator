@@ -27,7 +27,7 @@
 #include "robot_renderer.h"
 #include "simulation_renderer.h"
 #include "cog_camera.h"
-
+#include "../Model/robot_identifier.h"
 
 namespace {
 // some simple constants
@@ -61,7 +61,7 @@ const std::string kSkyBoxTexName("resources/Textures/");
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true), render_visibility_graph_(false) {
 
 
 
@@ -285,6 +285,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 		draw_cog(world_info);
 	}
 
+	if (render_visibility_graph_){
+	draw_visibility_graph(world_info);
+	}
+
 	if (render_help_){
 		draw_help();
 	}
@@ -362,6 +366,9 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 				switch_render_local_coord_system();
 			break;
 
+		case 'z':
+				render_visibility_graph_=!render_visibility_graph_;
+			break;
 		default:
 			break;
 	}
@@ -408,6 +415,35 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 	}
 
 	return 1;
+}
+
+void SimulationRenderer::draw_visibility_graph(const boost::shared_ptr<WorldInformation> world_info){
+	std::set<boost::shared_ptr<RobotIdentifier> > visible_robots;
+	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
+
+	//for all robots, get all visible robots and draw line between them
+	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
+		boost::shared_ptr<View> view=(*it_robot)->view();
+		//get visible robots from view, get global positions from world info
+		if (view){
+				 visible_robots=view->get_visible_robots((*it_robot)->robot());
+
+				 BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
+					 draw_line(*(*it_robot)->extrapolated_position(extrapolate_),*(world_info->get_according_robot_data(cur_id)).extrapolated_position(extrapolate_));
+				 }
+		}
+
+	}
+}
+
+void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2){
+	glBegin(GL_LINES);
+
+				glVertex3f(pos1(0),pos1(1), pos1(2) );
+				glVertex3f(pos2(0), pos2(1), pos2(2) );
+			glEnd();
+
+
 }
 
 

@@ -12,6 +12,7 @@
 #include <boost/tuple/tuple.hpp>
 #include "../Utilities/vector_arithmetics.h"
 
+
 using namespace std;
 
 #include "world_object.h"
@@ -32,7 +33,7 @@ enum RobotType { MASTER, SLAVE, kRobotTypeCount };
 
 class Robot;
 class MarkerInformation;
-
+class View;
 class RobotData : public WorldObject{
 public:
 	RobotData(boost::shared_ptr<Identifier> id,
@@ -78,6 +79,8 @@ public:
 	 */
 	const RobotType type() const;
 
+
+
 	/**
 	 * Sets the type of the robot.
 	 * \param new type
@@ -89,6 +92,8 @@ public:
 	 * \return constant reference Velocity vector of the robot.
 	 */
 	const Vector3d & velocity() const;
+
+	boost::shared_ptr<View> view();
 
 	/**
 	 * Sets velocity of the robot.
@@ -133,11 +138,16 @@ public:
 		return color_;
 	}
 
+	void set_view(boost::shared_ptr<View> view);
+
 	void set_color( unsigned short int color){
 		color_ = color;
 	}
 
 	virtual boost::shared_ptr<WorldObject> clone() const;
+protected:
+	boost::shared_ptr<View> view_;
+
 private:
 	/**
 	 * Reference to according robot.
@@ -155,6 +165,7 @@ private:
 	RobotType type_;
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;
+
 
 	unsigned short int color_;
 

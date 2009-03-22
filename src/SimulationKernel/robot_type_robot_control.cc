@@ -21,7 +21,7 @@ RobotTypeRobotControl::RobotTypeRobotControl(const boost::array<boost::shared_pt
 }
 
 RobotTypeRobotControl::~RobotTypeRobotControl() {
-	
+
 }
 
 boost::shared_ptr<boost::array<boost::shared_ptr<View>,kRobotTypeCount> > RobotTypeRobotControl::create_views(const boost::shared_ptr<WorldInformation>& world_information) {
@@ -40,4 +40,6 @@ void RobotTypeRobotControl::update(const boost::shared_ptr<WorldInformation>& wo
 void RobotTypeRobotControl::compute_view(Robot& robot) {
 	std::size_t index = static_cast<std::size_t>(last_world_information_->get_according_robot_data(robot.id()).type());
 	robot.set_view((*view_buffer_.back())[index]);
+	last_world_information_->get_according_robot_data(robot.id()).set_view((*view_buffer_.back())[index]);
+
 }

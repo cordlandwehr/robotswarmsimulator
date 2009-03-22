@@ -42,6 +42,7 @@ public:
 private:
 	boost::shared_ptr<AbstractViewFactory> view_factory_;
 	boost::circular_buffer<boost::shared_ptr<View> > view_buffer_;
+	boost::shared_ptr<WorldInformation> last_world_information_;
 };
 
 #endif /* UNIFORM_ROBOT_CONTROL_H_ */
