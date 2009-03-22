@@ -262,6 +262,9 @@ A main project file may look like:
 The robotfile uses a csv-compatible format.
 Therefore the information for one robot has to be saved in exactly one line of the file.
 Each line contains the following data. The order of this data is important!
+
+You can declare specific lines as comments by setting \# as the first sign of
+the corresponding line.
 \begin{itemize}
 	\item ID-number
 	\item initial position ($x,y,z$)
@@ -291,6 +294,9 @@ Each non-number is quoted and each number may be quoted.
 Like the robot file the obstacle file uses a csv-compatible format. 
 Therefore the information for one robot has to be saved in exactly one line of the file.
 Each line contains the following data. The order of this data is important!
+
+You can declare specific lines as comments by setting \# as the first sign of
+the corresponding line.
 \begin{itemize}
 	\item type (marker, sphere or box)
 	\item position $(x,y,z)$
