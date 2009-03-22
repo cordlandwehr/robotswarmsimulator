@@ -2,6 +2,8 @@
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/foreach.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 // some default values are set, especially for output
 // please cf. User's Guide
@@ -129,7 +131,7 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 
 void Parser::load_main_project_file(const string& project_filename) {
 	string line;
-	ifstream project_file;
+	std::ifstream project_file;
 	project_filename_ = project_filename;
 	string main_project_filename = project_filename_ + ".swarm";
 
@@ -348,22 +350,22 @@ void Parser::load_obstacle_file() {
 
 void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 	string line;
-	ifstream project_file;
-
-	//get path to file
-	//int pos_of_last_slash = project_filename_.find_last_of("/");
-	//string path = project_filename_.substr(0, pos_of_last_slash+1);
+	boost::filesystem::ifstream project_file;
 
 	//depending on which file to load, specify file extension
-	string filename;
+	string file_extension;
 	if(load_robot_file)
-		filename = robot_filename_ + ".robot";
+		file_extension = ".robot";
 	else
-		filename = obstacle_filename_ + ".obstacle";
+		file_extension = ".obstacle";
+	
+	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
+	using boost::filesystem::path;
+	path file = path(project_filename_).parent_path() / (robot_filename_ + file_extension);
 
 	int line_number = 0;
 
-	project_file.open(filename.c_str());
+	project_file.open(file);
 	if(project_file.is_open()) {
 
 		//read first line of file (only contains header not used here)
@@ -392,7 +394,7 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 		project_file.close();
 
 	} else {
-		throw UnsupportedOperationException("Unable to open file: "+filename);
+		throw UnsupportedOperationException("Unable to open file: " + file.file_string() + ".");
 	}
 }
 
@@ -422,9 +424,12 @@ void Parser::save_main_project_file(const string& project_filename) {
 }
 
 void Parser::save_robot_file(const WorldInformation& world_info) {
+	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
+	using boost::filesystem::path;
+	path file = path(project_filename_).parent_path() / (robot_filename_ + ".robot");
 
-	ofstream robot_file;
-	robot_file.open((robot_filename_+".robot").c_str());
+	boost::filesystem::ofstream robot_file;
+	robot_file.open(file);
 
 	if(robot_file.is_open()) {
 		//write robot header
@@ -453,7 +458,7 @@ void Parser::save_robot_file(const WorldInformation& world_info) {
 
 		robot_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open robot file: " +robot_filename_+"!");
+		throw UnsupportedOperationException("Unable to open robot file: " + file.file_string() + "!");
 	}
 }
 
@@ -505,9 +510,12 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 	}
 
 void Parser::save_obstacle_file(const WorldInformation& world_info) {
-
-	ofstream obstacle_file;
-	obstacle_file.open((obstacle_filename_+".obstacle").c_str());
+	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
+	using boost::filesystem::path;
+	path file = path(project_filename_).parent_path() / (obstacle_filename_ + ".obstacle");
+	
+	boost::filesystem::ofstream obstacle_file;
+	obstacle_file.open(file);
 
 	if(obstacle_file.is_open()) {
 		//write obstacle header
@@ -538,7 +546,7 @@ void Parser::save_obstacle_file(const WorldInformation& world_info) {
 
 		obstacle_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open obstacle file: " +obstacle_filename_);
+		throw UnsupportedOperationException("Unable to open obstacle file: " + file.file_string() + "!");
 	}
 }
 

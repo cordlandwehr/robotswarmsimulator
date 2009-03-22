@@ -62,7 +62,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 	// initialize stats_calc_indata_
 	stats_calc_indata_.prev_world_info_.reset();
 	stats_calc_indata_.world_info_.reset();
-	for (int i=0; i<stats_out_.size(); i++) {
+	for (unsigned int i=0; i<stats_out_.size(); i++) {
 		boost::shared_ptr<std::vector<Vector3d> > foo = boost::shared_ptr<std::vector<Vector3d> >(new std::vector<Vector3d>());
 		stats_calc_indata_.prev_positions.push_back(foo);
 
