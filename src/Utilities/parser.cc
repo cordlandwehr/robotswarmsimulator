@@ -292,7 +292,6 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 		// robot file is located relatively to main project file
 		path robot_file = path(project_filename_).parent_path() / robot_filename_;
 		algorithm = (robot_file.parent_path() / algorithm).file_string();
-		std::cout << algorithm << std::endl;
 	}
 	
 	//if no exception is thrown up to this point, values read correctly
