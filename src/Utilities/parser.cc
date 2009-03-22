@@ -269,6 +269,10 @@ double Parser::string_to_double(const string& my_string) {
 
 void Parser::init_robot_values_for_line(const string& line, int line_number) {
 
+	//continue with next line if this is a comment-line, eg. begins with '#'
+	if (line.substr(0,1).compare("#")==0)
+		return;
+
 	//begin at beginning of line
 	position_in_line_ = 0;
 
@@ -293,7 +297,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 		path robot_file = path(project_filename_).parent_path() / robot_filename_;
 		algorithm = (robot_file.parent_path() / algorithm).file_string();
 	}
-	
+
 	//if no exception is thrown up to this point, values read correctly
 	//=> add values to global variables
 	initiale_robot_positions_.push_back(position);
@@ -310,6 +314,10 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 }
 
 void Parser::init_obstacle_values_for_line(const string& line, int line_number) {
+
+	//continue with next line if this is a comment-line, eg. begins with '#'
+	if (line.substr(0,1).compare("#")==0)
+		return;
 
 	//begin at beginning of line
 	position_in_line_ = 0;
@@ -366,7 +374,7 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 		filename = robot_filename_ + ".robot";
 	else
 		filename = obstacle_filename_ + ".obstacle";
-	
+
 	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
 	using boost::filesystem::path;
 	path file = path(project_filename_).parent_path() / filename;
@@ -521,7 +529,7 @@ void Parser::save_obstacle_file(const WorldInformation& world_info) {
 	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
 	using boost::filesystem::path;
 	path file = path(project_filename_).parent_path() / (obstacle_filename_ + ".obstacle");
-	
+
 	boost::filesystem::ofstream obstacle_file;
 	obstacle_file.open(file);
 
