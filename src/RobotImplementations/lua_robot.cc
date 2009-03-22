@@ -243,6 +243,16 @@ namespace {
 
 	/**
 	 * @param (Robot-)Identifier
+	 * @return Coordinate system origin of the robot identified by the given identifier.
+	 * @see View.get_robot_coordinate_system_origin()
+	 */
+
+	const Vector3dWrapper get_robot_coordinate_system_origin(std::size_t index) {
+		return transform(view->get_robot_coordinate_system_origin(*robot, resolve<RobotIdentifier>(index)));
+	}
+
+	/**
+	 * @param (Robot-)Identifier
 	 * @return CoordinateSystem of the robot identified by the given identifier.
 	 * @see View.get_robot_coordinate_system_axis()
 	 */
@@ -319,6 +329,15 @@ namespace {
 
 	const double get_sphere_radius(std::size_t index) {
 		return view->get_sphere_radius(resolve<SphereIdentifier>(index));
+	}
+
+	/**
+	 * @return time of view
+	 * @see View.get_time()
+	 */
+
+	const int get_time() {
+		return view->get_time();
 	}
 
 	/**
@@ -404,14 +423,12 @@ namespace {
 		return 0; //own id always at pos 0 in queried_identifiers
 	}
 
-	/**
-	 * Returns the identifier of this robot.
-	 * @return Identifier
-	 */
-
+	//TODO: doxy
 	const bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3dWrapper& testpoint) {
 		return Geometry::is_point_in_smallest_bbox(point_list, transform(testpoint));
 	}
+
+
 }
 
 void LuaRobot::report_errors(int status) {
@@ -490,6 +507,7 @@ void LuaRobot::register_lua_methods() {
 		 luabind::def("get_marker_information", &get_marker_information),
 		 luabind::def("get_id", &get_id),
 		 luabind::def("get_robot_acceleration", &get_robot_acceleration),
+		 luabind::def("get_robot_coordinate_system_origin", &get_robot_coordinate_system_origin),
 		 luabind::def("get_robot_coordinate_system_axis", &get_robot_coordinate_system_axis),
 		 luabind::def("get_robot_type", &get_robot_type),
 		 luabind::def("get_robot_status", &get_robot_status),
@@ -498,6 +516,7 @@ void LuaRobot::register_lua_methods() {
 		 luabind::def("get_box_width", &get_box_width),
 		 luabind::def("get_box_height", &get_box_height),
 		 luabind::def("get_sphere_radius", &get_sphere_radius),
+		 luabind::def("get_time", &get_time),
 		 luabind::def("is_sphere_identifier", &is_sphere_identifier),
 		 luabind::def("is_box_identifier", &is_box_identifier),
 		 luabind::def("add_acceleration_request", &add_acceleration_request),

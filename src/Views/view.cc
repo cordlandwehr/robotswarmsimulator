@@ -162,6 +162,10 @@ const Vector3d View::get_robot_acceleration(const Robot& caller, RobotRef robot)
 	return delegate_function<Vector3d>(&View::get_own_acceleration, &View::get_others_acceleration, caller, robot);
 }
 
+const Vector3d View::get_robot_coordinate_system_origin(const Robot& caller, RobotRef robot) const {
+	return delegate_function<Vector3d>(&View::get_own_coordinate_system_origin, &View::get_others_coordinate_system_origin, caller, robot);
+}
+
 const boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > View::get_robot_coordinate_system_axis(
 		const Robot& caller, RobotRef robot) const {
 	return delegate_function<boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > > (
@@ -268,6 +272,14 @@ Vector3d View::get_others_acceleration(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_robot_acceleration"));
 }
 
+Vector3d View::get_own_coordinate_system_origin(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_own_coordinate_system_origin"));
+}
+
+Vector3d View::get_others_coordinate_system_origin(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_others_coordinate_system_origin"));
+}
+
 boost::tuple<boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > View::get_own_coordinate_system_axis(
 		const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_own_coordinate_system_axis"));
@@ -328,4 +340,8 @@ const WorldInformation& View::world_information() const {
 
 const std::size_t View::get_id(boost::shared_ptr<Identifier> identifier) const {
 	return identifier->id();
+}
+
+const int View::get_time() const {
+	throw UnsupportedOperationException(get_error_message("get_time"));
 }

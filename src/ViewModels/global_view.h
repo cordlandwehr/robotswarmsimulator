@@ -20,6 +20,8 @@
 #include "../Views/robot_type_view.h"
 #include "../Views/sphere_view.h"
 #include "../Views/velocity_view.h"
+#include "../Views/origin_view.h"
+#include "../Views/time_view.h"
 
 /**
  * \class GlobalView
@@ -40,6 +42,8 @@ class GlobalView: public virtual BoxView,
 		public virtual RobotStatusView,
 		public virtual RobotTypeView,
 		public virtual SphereView,
+		public virtual OriginView,
+		public virtual TimeView,
 		public virtual VelocityView {
 public:
 	GlobalView();

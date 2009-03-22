@@ -10,7 +10,7 @@
 
 #include "view.h"
 
-class OwnPositionView: public virtual View {
+class OwnPositionView : public virtual View {
 public:
 	OwnPositionView();
 	virtual ~OwnPositionView();

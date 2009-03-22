@@ -101,6 +101,7 @@ public:
 	 * @see WorldObject::position()
 	 */
 	const Vector3d get_position(const Robot& caller, WorldObjectRef world_object) const;
+	
 	/**
 	 * Queries for the marker information of a WorldObject identified by an given Identifier.
 	 * @param The Robot which is asking..
@@ -134,6 +135,14 @@ public:
 	 * @see RobotData::coordinate_system_axis()
 	 */
 	const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> > get_robot_coordinate_system_axis(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries for the coordinate system origin (i.e. global position) of a Robot identified by an given RobotIdentifier.
+	 * @param The Robot which is asking..
+	 * @param RobotIdentifier
+	 * @return Vector3d
+	 * @see RobotData::position()
+	 */
+	const Vector3d get_robot_coordinate_system_origin(const Robot& caller, RobotRef robot) const;
 	/**
 	 * Queries for the robot type of a Robot identified by an given RobotIdentifier.
 	 * @param The Robot which is asking..
@@ -201,6 +210,14 @@ public:
 	 */
 	const double get_sphere_radius(SphereRef sphere) const;
 
+	//-- WorldInformation --
+	/**
+	 * Queries the time of the WorldInformation this object provides view to.
+	 * @return time
+	 * @see WorldInformation::time()
+	 */
+	virtual const int get_time() const;
+
 
 
 protected:
@@ -241,6 +258,11 @@ protected:
 	//calling Robot then get_own_acceleration is called, otherwise get_others_acceleration.
 	virtual Vector3d get_own_acceleration(const RobotData& robot) const;
 	virtual Vector3d get_others_acceleration(const RobotData& robot) const;
+
+	//Pretty much the same concept as in View::get_own_acceleration besides this methods are called by
+	//View::get_robot_coordinate_system_origin.
+	virtual Vector3d get_own_coordinate_system_origin(const RobotData& robot) const;
+	virtual Vector3d get_others_coordinate_system_origin(const RobotData& robot) const;
 
 	//Pretty much the same concept as in View::get_own_acceleration besides this methods are called by
 	//View::get_robot_coordinate_system_axis.
