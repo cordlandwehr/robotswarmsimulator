@@ -286,6 +286,15 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	Vector3d y_axis = get_next_vector3d_in_line(line, line_number, false);
 	Vector3d z_axis = get_next_vector3d_in_line(line, line_number, true);
 
+	// if algorithm has suffix '.lua', it is a filename that is to be interpreted relatively to the robot project file
+	using boost::filesystem::path;
+	if (algorithm.rfind(".lua") == algorithm.size()-4) {
+		// robot file is located relatively to main project file
+		path robot_file = path(project_filename_).parent_path() / robot_filename_;
+		algorithm = (robot_file.parent_path() / algorithm).file_string();
+		std::cout << algorithm << std::endl;
+	}
+	
 	//if no exception is thrown up to this point, values read correctly
 	//=> add values to global variables
 	initiale_robot_positions_.push_back(position);
@@ -353,15 +362,15 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 	boost::filesystem::ifstream project_file;
 
 	//depending on which file to load, specify file extension
-	string file_extension;
+	string filename;
 	if(load_robot_file)
-		file_extension = ".robot";
+		filename = robot_filename_ + ".robot";
 	else
-		file_extension = ".obstacle";
+		filename = obstacle_filename_ + ".obstacle";
 	
 	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
 	using boost::filesystem::path;
-	path file = path(project_filename_).parent_path() / (robot_filename_ + file_extension);
+	path file = path(project_filename_).parent_path() / filename;
 
 	int line_number = 0;
 
