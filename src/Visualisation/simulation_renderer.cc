@@ -634,7 +634,7 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 }
 
 void SimulationRenderer::draw_help(){
-boost::array<std::string, 13> helptext;
+boost::array<std::string, 14> helptext;
 	helptext[0]="Arrow keys to navigate";
 	helptext[1]="W and S to go up and down";
 	helptext[2]="M to toggle mouse control (rotate view) (Works only in the free camera)";
@@ -647,7 +647,8 @@ boost::array<std::string, 13> helptext;
 	helptext[9]="K/L to display global/local coordinate axes";
 	helptext[10]="B and V to display robot's acceleration and velocity";
 	helptext[11]="G to display center of gravity";
-	helptext[12]="F1 to display About screen";
+	helptext[12]="Z to display visibility graph";
+	helptext[13]="F1 to display About screen";
 
 	for (unsigned int i=0;i<helptext.size();i++){
 		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);
