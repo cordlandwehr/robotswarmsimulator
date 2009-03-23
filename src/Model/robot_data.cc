@@ -35,6 +35,9 @@ RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_
 	if(rhs.velocity_) {
 		this->velocity_.reset(new Vector3d(*rhs.velocity_));
 	}
+	//TODO (dwonsich): I dont like this. When copying a WorldInformation like this the Views of the RobotDatas point to original WorldInformation rather than to copy. 
+	//				   Therefore the Visualisiation accesses the WorldInformation in the SimulationThread (which can may be still used by some Robots).
+	//				   Furthermore it allows Visualisation to access the same shared_ptr resulting to undefined behaviour (see thread safety section of boost::shared_ptr).
 	if (rhs.view_){
 		this->view_=rhs.view_;
 	}

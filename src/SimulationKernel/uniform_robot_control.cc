@@ -13,7 +13,7 @@
 #include "../Model/world_information.h"
 
 UniformRobotControl::UniformRobotControl(boost::shared_ptr<AbstractViewFactory> view_factory, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information)
-                           : view_factory_(view_factory), view_buffer_(history_length) {
+                           : view_factory_(view_factory), view_buffer_(history_length), last_world_information_(initial_world_information) {
 	boost::shared_ptr<View> view(view_factory_->create_new_view_instance(initial_world_information));
 	view_buffer_.push_back(view);
 }
