@@ -115,7 +115,7 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 
 	// 3. Choose the time of the next event
 	time_of_next_event_ = time_of_next_event_ + 1 + distribution_generator_->get_value_geometric();
-	std::cout << "time: " << time_of_next_event_ << std::endl;
+//	std::cout << "time: " << time_of_next_event_ << std::endl;	//TODO (cola) commented this out, because it was not useful for simulations to get all time steps
 	return event;
 }
 
