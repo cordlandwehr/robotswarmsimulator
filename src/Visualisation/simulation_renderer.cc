@@ -176,7 +176,7 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	for(int i = 0; i < 1;i++){
+	for(int i = 0; i < 4;i++){
 		sky_box_[i].reset( new SkyBox() );
 		sky_box_[i]->init( kSkyBoxTexName[i]);
 	}
