@@ -23,8 +23,8 @@
 Octree::Octree() {
 
 
-	max_levels_ = 5;
-	min_width_ = 2.0;
+	max_levels_ = 3;
+	min_width_ = 8.0;
 
 
 
@@ -32,12 +32,12 @@ Octree::Octree() {
 
 }
 
-Octree::Octree(int max_levels): max_levels_(max_levels), min_width_(1.0) {
+Octree::Octree(int max_levels): max_levels_(max_levels), min_width_(8.0) {
 
 	init_octree();
 }
 
-Octree::Octree(double min_width): max_levels_(5), min_width_(min_width) {
+Octree::Octree(double min_width): max_levels_(3), min_width_(min_width) {
 
 	init_octree();
 }
@@ -108,8 +108,7 @@ void Octree::OctreeNode::scene_dimensions(const std::vector< boost::shared_ptr<W
 
 	int num_objects = 0;
 	BOOST_FOREACH( boost::shared_ptr<WorldObject>  it_markers, markers){
-	//std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;
-	//for(it_markers = markers.begin(); it_markers != markers.end(); it_markers++){
+
 		center_+= it_markers->position();
 		num_objects++;
 
@@ -117,15 +116,11 @@ void Octree::OctreeNode::scene_dimensions(const std::vector< boost::shared_ptr<W
 
 
 	BOOST_FOREACH( boost::shared_ptr<Obstacle> it_obstacles, obstacles){
-	//std::vector< boost::shared_ptr<Obstacle> >::const_iterator it_obstacles;
-	//for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); it_obstacles++){
 		center_ +=  it_obstacles->position();
 		num_objects++;
 	}
 
-	//std::vector< boost::shared_ptr<RobotData> >::const_iterator it_robot_data;
 	BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data , robot_datas){
-	//for(it_robot_data = robot_datas.begin(); it_robot_data != robot_datas.end(); it_robot_data++){
 		center_ += it_robot_data->position();
 		num_objects++;
 	}
@@ -186,7 +181,7 @@ void Octree::OctreeNode::scene_dimensions(const std::vector< boost::shared_ptr<W
 
 	// Don't forget the robots
 	BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data, robot_datas ){
-	//for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
+
 		double current_width  = fabs(center_(0) - it_robot_data->position()(0));
 		double current_height = fabs(center_(1) - it_robot_data->position()(1));
 		double current_depth  = fabs(center_(2) - it_robot_data->position()(2));
@@ -392,8 +387,6 @@ void Octree::OctreeNode::setup_node(const std::vector< boost::shared_ptr<WorldOb
 
 		//Check to which sub node each object belongs and add them to the corresponding vector.
 		BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data, robot_datas){
-		//std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot_data;
-		//for(it_robot_data = robot_datas.begin(); it_robot_data != robot_datas.end(); ++it_robot_data){
 			Vector3d pos = it_robot_data->position();
 
 			int child_num = this->point_in_node( pos );
@@ -403,9 +396,7 @@ void Octree::OctreeNode::setup_node(const std::vector< boost::shared_ptr<WorldOb
 		}
 
 		// The same for markers
-		//std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;
 		BOOST_FOREACH(boost::shared_ptr<WorldObject> it_markers, markers ){
-		//for(it_markers = markers.begin(); it_markers != markers.end(); ++it_markers){
 			Vector3d pos = it_markers->position();
 
 			int child_num = point_in_node( pos );
@@ -421,9 +412,7 @@ void Octree::OctreeNode::setup_node(const std::vector< boost::shared_ptr<WorldOb
 			centers[i] = new_node_center(center_,width_, i );
 		}
 
-		//std::vector<boost::shared_ptr<Obstacle> >::const_iterator it_obstacles;
 		BOOST_FOREACH( boost::shared_ptr<Obstacle> it_obstacles, obstacles ){
-		//for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); ++it_obstacles){
 			Vector3d pos = it_obstacles->position();
 
 			double max_size = it_obstacles->max_dimension();

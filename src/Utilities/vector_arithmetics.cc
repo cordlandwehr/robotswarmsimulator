@@ -9,6 +9,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 double det_matrix3d(const Matrix3d& matrix) {
 	double det =   matrix(0,0) * (matrix(1,1)*matrix(2,2) - matrix(2,1)*matrix(1,2))
@@ -59,3 +60,11 @@ bool vector3d_linear_independent(const Vector3d& a, const Vector3d& b, const Vec
 	return true;
 }
 
+Vector3d string_to_vec(std::string  str ){
+	Vector3d vec;
+	char c;
+
+	std::istringstream string_stream( str );
+	string_stream >> vec(0) >> c >> vec(1) >> c >> vec(2);
+	return vec;
+}

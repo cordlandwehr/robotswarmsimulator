@@ -264,6 +264,11 @@ public:
 		return render_acceleration_;
 	}
 
+	/**
+	 *
+	 */
+	void set_free_cam_para(Vector3d & pos, Vector3d & at);
+
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2);
 	/**
@@ -336,7 +341,7 @@ private:
 
 	ProjectionType projection_type_  ;
 
-	boost::scoped_ptr<SkyBox> sky_box_;
+	boost::array<boost::shared_ptr<SkyBox>,4 > sky_box_;
 
 	/**
 	 * A helper function to draw text
@@ -440,6 +445,11 @@ private:
 	 * Specifies whether the skybox should be drawn.
 	 */
 	bool render_sky_box_;
+
+	/*
+	 *
+	 */
+	int actuall_skybox_;
 
 	/**
 	 * The Robot Renderer used for drawing the Robots

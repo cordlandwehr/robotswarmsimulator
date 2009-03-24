@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 
 #include "../Model/obstacle.h"
@@ -27,6 +28,7 @@
 
 
 
+
 bool OctreeUtilities::compare_to_squared_radius(const boost::shared_ptr<OctreeNode>& octree,const Vector3d& pos, double sq_radius){
 
 	Vector3d center = octree->center();
@@ -34,7 +36,7 @@ bool OctreeUtilities::compare_to_squared_radius(const boost::shared_ptr<OctreeNo
 	double y = center(1) - pos(1);
 	double z = center(2) - pos(2);
 
-	return x*x + y*y + z*z < sq_radius ;
+	return (x*x + y*y + z*z)*(1 - 2*octree->width()) + octree->width() *octree->width()/2.0 <  sq_radius ;
 
 }
 
@@ -57,6 +59,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 
 	std::set<OctreeUtilities::RobotRef > found_robots;
 
+
 	// do the real work
 	get_visible_robots_by_radius_Rec(octree->root(), found_robots, view_radius*view_radius, pos);
 
@@ -70,6 +73,7 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 														std::set<OctreeUtilities::RobotRef > & robots_found,
 													    double sq_radius,
 													    const Vector3d & pos ) {
+
 
 	 // check all robots in this node
 	 if(octree->robot_datas().size() > 0){
@@ -87,7 +91,8 @@ std::set<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radi
 			 double z = rob_pos(2) - pos(2);
 
 			 // check whether this robot is near enough
-			 if(x*x + y*y + z*z < sq_radius){
+			 if(x*x + y*y + z*z <= sq_radius){
+
 				 robots_found.insert(boost::static_pointer_cast<RobotIdentifier>((*it_robots)->id()));
 			 }
 		 }

@@ -38,6 +38,9 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
 	simulation_kernel->init(configuration_filename, history_, output_dir, create_statistics);
 
+	camera_position_ = simulation_kernel->camera_position();
+	camera_direction_ = simulation_kernel->camera_direction();
+
 	simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
 
 	current_processing_time_ = 0;
@@ -196,4 +199,6 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 
 void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer) {
 	visualizer_ = visualizer;
+
+
 }

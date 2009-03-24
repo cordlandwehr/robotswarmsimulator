@@ -89,6 +89,9 @@ public:
 	 */
 	void quit();
 
+	std::string camera_position(){ return camera_position_; }
+	std::string camera_direction(){ return camera_direction_;}
+
 private:
 
 	/**
@@ -200,6 +203,9 @@ private:
 	 * This method creates the obstacles using the information read from the obstacles input file.
 	 */
 	void create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+
+	std::string camera_position_;
+	std::string camera_direction_;
 
 };
 

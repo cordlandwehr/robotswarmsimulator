@@ -104,6 +104,8 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 		stats_->update(*(initial_world_information.get()), foo);
 	}
 
+	camera_position_ = params["CAMERA_POSITION"];
+	camera_direction_ = params["CAMERA_DIRECTION"];
 }
 
 

@@ -11,9 +11,11 @@
  */
 
 #include <string>
+#include <cstdio>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
+#include <boost/cast.hpp>
 
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
@@ -170,8 +172,10 @@ int main(int argc, char** argv) {
 		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
+
 		// checks iff statistics shall be created
 		bool create_statistics = !vm.count("dry");
+
 
 		// create simulation kernel
 		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
@@ -184,6 +188,9 @@ int main(int argc, char** argv) {
 		boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));
 		visualizer->init();
 		sim_control->set_visualizer(visualizer);
+		Vector3d cam_pos = string_to_vec( sim_control->camera_position() );
+		Vector3d cam_dir = string_to_vec( sim_control->camera_direction() );
+		visualizer->set_free_cam_para( cam_pos, cam_dir );
 
 		// start simulation
 		sim_control->start_simulation();

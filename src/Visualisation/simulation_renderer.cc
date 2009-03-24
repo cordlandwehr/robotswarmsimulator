@@ -55,9 +55,18 @@ const int kTextSpacing=15;
 const float kMarkerPointSize = 2.0;
 
 
-const std::string kSkyBoxTexName("resources/Textures/");
+const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/"};
 }
 
+
+void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
+	Vector3d up;
+	up(0) = 0.0;
+	up(1) = 1.0f;
+	up(2) = 0.0f;
+
+	cameras_[1]->position_camera(pos,at,up);
+}
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
@@ -167,9 +176,11 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	sky_box_.reset( new SkyBox() );
-
-	sky_box_->init( kSkyBoxTexName);
+	for(int i = 0; i < 1;i++){
+		sky_box_[i].reset( new SkyBox() );
+		sky_box_[i]->init( kSkyBoxTexName[i]);
+	}
+	actuall_skybox_ = 0;
 	robot_renderer_->init();
 
 
@@ -248,7 +259,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 	cameras_[active_camera_index_]->look_rot();
 
 	if(render_sky_box_)
-		sky_box_->draw();
+		sky_box_[actuall_skybox_]->draw();
 
 	cameras_[active_camera_index_]->look_translate();
 
@@ -312,6 +323,8 @@ void SimulationRenderer::mouse_func(int button, int state, int x, int y){
 				cameras_[active_camera_index_]->set_button_press_mouse(x,y);
 			}
 
+
+
 }
 
 void SimulationRenderer::mouse_motion_func( int x, int y){
@@ -364,6 +377,9 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 
 		case 'l':
 				switch_render_local_coord_system();
+			break;
+		case 't':
+				actuall_skybox_ = (actuall_skybox_ +1 ) % sky_box_.size();
 			break;
 
 		case 'z':
@@ -634,7 +650,7 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 }
 
 void SimulationRenderer::draw_help(){
-boost::array<std::string, 14> helptext;
+boost::array<std::string, 15> helptext;
 	helptext[0]="Arrow keys to navigate";
 	helptext[1]="W and S to go up and down";
 	helptext[2]="M to toggle mouse control (rotate view) (Works only in the free camera)";
@@ -649,6 +665,7 @@ boost::array<std::string, 14> helptext;
 	helptext[11]="G to display center of gravity";
 	helptext[12]="Z to display visibility graph";
 	helptext[13]="F1 to display About screen";
+	helptext[14] = "t to switch skybox";
 
 	for (unsigned int i=0;i<helptext.size();i++){
 		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);
@@ -719,20 +736,33 @@ void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> worl
 
 void SimulationRenderer::draw_coord_system(){
 const float length=1000;
+const int step=2;
 	glLineWidth(kCoordLineWidth);
 
 	glBegin(GL_LINES);
 		glColor3fv(kCoordXColor);
 		glVertex3f(0.0f,0.0f,0.0f);
 		glVertex3f(length,.0f,.0f);
+		for(int i=0; i < length; i+=step ){
+			glVertex3f(i,-0.5,0);
+			glVertex3f(i,0.5,0);
+		}
 
 		glColor3fv(kCoordYColor);
 		glVertex3f(0.0f,.0f,.0f);
 		glVertex3f(.0f,length,.0f);
+		for(int i=0; i < length ; i+= step){
+			glVertex3f(-0.5,i,0);
+			glVertex3f(0.5,i,0);
+		}
 
 		glColor3fv(kCoordZColor);
 		glVertex3f(.0f,.0f, .0f);
 		glVertex3f(0.0f,.0f,length);
+		for(int i=0; i < length; i+= step ){
+			glVertex3f(0.0,-0.5f,i);
+			glVertex3f(0.0,0.5,i);
+		}
 
 	glEnd();
 

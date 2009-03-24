@@ -14,7 +14,7 @@
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <cstddef>
-
+#include <string>
 
 class SimulationKernel;
 class Visualizer;
@@ -70,6 +70,9 @@ public:
 	 * supplies the control with a new visualizer.
 	 */
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
+
+	std::string camera_position(){return camera_position_; }
+	std::string camera_direction(){ return camera_direction_;}
 
 private:
 	/**
@@ -146,6 +149,9 @@ private:
 	 * temporary processing time delta value for pausing
 	 */
 	double old_processing_time_delta_;
+
+	std::string camera_position_;
+	std::string camera_direction_;
 };
 
 #endif

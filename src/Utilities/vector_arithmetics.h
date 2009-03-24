@@ -8,6 +8,8 @@
 #ifndef VECTOR_ARITHMETICS_H
 #define VECTOR_ARITHMETICS_H
 
+#include <string>
+
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
@@ -64,5 +66,7 @@ void vector3d_set(Vector3d& a, const Vector3d& b);
  * \return "true" if the given vectors are linear independent
  */
 bool vector3d_linear_independent(const Vector3d& a, const Vector3d& b, const Vector3d& c);
+
+Vector3d string_to_vec(std::string  str);
 
 #endif /* VECTOR_ARITHMETICS_H */
