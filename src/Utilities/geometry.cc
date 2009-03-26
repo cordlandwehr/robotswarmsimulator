@@ -73,6 +73,29 @@ bool Geometry::is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const
 	return true;
 }
 
+Vector3d Geometry::compute_COG(std::vector<Vector3d> point_list) {
+	Vector3d cog;
+	cog(0) = 0;
+	cog(1) = 0;
+	cog(2) = 0;
+
+	std::vector<Vector3d>::iterator iter;
+
+	for (iter=point_list.begin(); iter!=point_list.end(); iter++) {
+		cog(0) += (*iter)(0);
+		cog(1) += (*iter)(1);
+		cog(2) += (*iter)(2);
+	}
+	cog(0) = cog(0)/point_list.size();
+	cog(1) = cog(1)/point_list.size();
+	cog(2) = cog(2)/point_list.size();
+
+	return cog;
+}
+
+std::vector<Vector3d> Geometry::sort_robots_by_distance(std::vector<Vector3d> point_list) {
+//TODO
+}
 
 
 Geometry::Geometry() {

@@ -52,6 +52,18 @@ public:
 	 */
 	static bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint);
 
+	/**
+	 * Computes the center of a given point list.
+	 * @param point_list as vector of Vector3ds
+	 * @return center of gravity as Vector3d
+	 */
+	static Vector3d compute_COG(std::vector<Vector3d> point_list);
+
+	/**
+	 * Returns a vector of Vector3ds sorted by euclidean distance from origin
+	 */
+	static std::vector<Vector3d> sort_robots_by_distance(std::vector<Vector3d> point_list);
+
 	Geometry();
 	virtual ~Geometry();
 
