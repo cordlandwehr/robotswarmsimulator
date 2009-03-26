@@ -58,6 +58,11 @@ Matrix3d invert_matrix3d(const Matrix3d& matrix);
 double vector3d_distance(const Vector3d& a, const Vector3d& b);
 
 /**
+ * \return p-norm distance between a and b
+ */
+double vector3d_distance(const Vector3d& a, const Vector3d& b, int p);
+
+/**
  * \return sets xyz of a to the values of b
  */
 void vector3d_set(Vector3d& a, const Vector3d& b);
@@ -68,5 +73,10 @@ void vector3d_set(Vector3d& a, const Vector3d& b);
 bool vector3d_linear_independent(const Vector3d& a, const Vector3d& b, const Vector3d& c);
 
 Vector3d string_to_vec(std::string  str);
+
+/**
+ * \return p-norm of vector
+ */
+double vector3d_get_length(Vector3d vec, int p);
 
 #endif /* VECTOR_ARITHMETICS_H */

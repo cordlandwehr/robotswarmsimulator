@@ -37,12 +37,19 @@ Matrix3d invert_matrix3d(const Matrix3d& matrix) {
 	return inverse;
 }
 
-double vector3d_distance(const Vector3d& a, const Vector3d& b) {
+
+double vector3d_distance(const Vector3d& a, const Vector3d& b, int p) {
 	double dx = a[0]-b[0];
 	double dy = a[1]-b[1];
 	double dz = a[2]-b[2];
-	return sqrt(dx*dx+dy*dy+dz*dz);
+	return pow( pow(dx,p) + pow(dy,p) + pow(dz,p) , 1.0/p);
 }
+
+
+double vector3d_distance(const Vector3d& a, const Vector3d& b) {
+	return vector3d_distance(a,b,2);
+}
+
 
 void vector3d_set(Vector3d& a, const Vector3d& b) {
 	a[0] = b[0];
@@ -60,11 +67,17 @@ bool vector3d_linear_independent(const Vector3d& a, const Vector3d& b, const Vec
 	return true;
 }
 
-Vector3d string_to_vec(std::string  str ){
+
+Vector3d string_to_vec(std::string str ){
 	Vector3d vec;
 	char c;
 
 	std::istringstream string_stream( str );
 	string_stream >> vec(0) >> c >> vec(1) >> c >> vec(2);
 	return vec;
+}
+
+
+double vector3d_get_length(Vector3d vec, int p) {
+	return pow( pow(vec(0),p) + pow(vec(1),p) + pow(vec(2),p) , 1.0/p);
 }

@@ -69,6 +69,10 @@ public:
 
 private:
 	static const double kEpsilon;	// accurancy value
+
+	// compares two vectors by there p-norm
+	static bool comperator(Vector3d a, Vector3d b);
+
 };
 
 #endif /* GEOMETRY_H_ */

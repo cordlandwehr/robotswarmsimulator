@@ -439,6 +439,17 @@ namespace {
 	}
 
 	/**
+	 * Computes distance between two Vectors by p-norm
+	 * @param v is the first vector
+	 * @param w is the second vector
+	 * @param p is value of norm
+	 * @return distance
+	 */
+	const double compute_distance_pnorm(const Vector3dWrapper& v, const Vector3dWrapper& w, int p) {
+		return vector3d_distance(transform(v), transform(w), p);
+	}
+
+	/**
 	 * Computes center of given points.
 	 * @param point_list is vector of points
 	 * @return the center of gravity
@@ -447,6 +458,13 @@ namespace {
 		return transform(Geometry::compute_COG(point_list));
 	}
 
+	/**
+	 * Sorts vectors by euclidean norm, distance to zero
+	 * @return sorted point_list
+	 */
+	const std::vector<Vector3d> sort_robots_by_distance(std::vector<Vector3d> point_list) {
+		return Geometry::sort_robots_by_distance(point_list);
+	}
 }
 
 void LuaRobot::report_errors(int status) {
@@ -553,7 +571,8 @@ void LuaRobot::register_lua_methods() {
 		 [
 			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox),
 			 luabind::def("compute_distance", &compute_distance),
-			 luabind::def("compute_cog", &compute_COG)
+			 luabind::def("compute_cog", &compute_COG),
+			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance)
 		 ]
 
 	];
