@@ -190,6 +190,12 @@ During the simulation it is possible to interact with the simulation in differen
 	\item [\fbox{\tt c}] Change camera mode.
 \end{description}
 
+\subsection{Information from Vizualisation}
+%TODO (cola) at this point ther should be an diagram with size relationships of the different objects, axis, robots etc)
+At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K}} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
+
+
+
 \section{Create Robot Algorithms for the \RSS}
 There are two ways to define a new robot. One way is to write a subclass of \texttt{Robot} and add a new condition in \texttt{factories.cc}. The other way is to define the robot algorithm by the {\sffamily Lua} scripting language and to load the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for small numbers of robots. Thus, for robot swarms of sizes greater than 500 robots you will (on standard computers) recognize a lack of performance.
 
@@ -197,6 +203,7 @@ There are two ways to define a new robot. One way is to write a subclass of \tex
 For information on how to write \Lua scripts please visit \url{http://www.lua.org} and use the documentation presented there. For interacting the environment \Lua scripts may access the following functions and constants (if allowed by the current view and if the according request handlers are set):
 
 \paragraph{Lua Functions}
+%TODO(cola) document ALL of these functions
 \begin{description}
 	\item [\texttt{get\_visible\_robots()}] Returns the array of visible robots.
 	\item [\texttt{get\_visible\_obstacles()}] Returns the array of visible obstacles.
@@ -221,6 +228,9 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 	\item [\texttt{add\_marker\_request(<marker>)}]
 	\item [\texttt{add\_type\_change\_request(<type>)}]
 	\item [\texttt{get\_own\_identifier()}]
+	\item [\texttt{is\_in\_smallest\_bbox(<vector of Vector3d>,<Vector3d>)}]
+	\item [\texttt{compute\_distance(<Vector3d, Vector3d>)}]
+	\item [\texttt{compute\_cog(<vector of Vector3d>)}]
 \end{description}
 
 \paragraph{\Lua Constants}
