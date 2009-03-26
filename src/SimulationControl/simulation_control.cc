@@ -5,6 +5,7 @@
 #include "../Model/world_information.h"
 #include "visualizer.h"
 #include "history.h"
+#include <Utilities/console_output.h>
 
 #include <iostream>
 
@@ -16,11 +17,11 @@ namespace {
 }
 
 SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0), processing_time_delta_(1)  {
-	
+
 }
 
 SimulationControl::~SimulationControl() {
-	
+
 }
 
 void SimulationControl::create_new_simulation(const std::string& configuration_filename,
@@ -29,10 +30,10 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 		                                      bool create_statistics=true) {
 	// terminate the old simulation including the old simulation thread.
 	terminate_simulation();
-	
+
 	//set up a new history
 	history_.reset(new History(history_length));
-	
+
 	// create and initialize new kernel. History should be passed here because the init method
 	// of the SimulationKernel will need it to construct EventHandler, ASG, StatisticKernel.
 	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
@@ -42,7 +43,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	camera_direction_ = simulation_kernel->camera_direction();
 
 	simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
-	
+
 	current_processing_time_ = 0;
 }
 
@@ -50,11 +51,11 @@ void SimulationControl::start_simulation() {
 	if(!is_thread_started(simulation_thread_)) {
 		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::loop, simulation_kernel_functor_));
 		simulation_thread_.swap(simulation_thread);
-		
+
 		//fetch first two WorldInformations
 		current_world_information_ = history_->get_oldest_unused(true);
 		next_world_information_ = history_->get_oldest_unused(true);
-		
+
 		//some initialization
 		current_processing_time_ = current_world_information_->time() * processing_time_factor_;
 		last_process_simulation_time_ = boost::posix_time::microsec_clock::local_time();
@@ -75,10 +76,10 @@ void SimulationControl::terminate_simulation() {
 		simulation_kernel_functor_->terminate();
 		//note: terminate above will have no effect if the thread is blocked, so unblock it
 		history_->get_oldest_unused();
-		
+
 		// simulation thread has up to three seconds to shut down; if it does not, issue a warning
 		if (!simulation_thread_.timed_join(boost::posix_time::seconds(3)))
-			ConsoleOutput::out_warning("[SIMCONTROL] Simulation thread seems to have deadlocked, terminating anyway");
+			ConsoleOutput::out_warning("Simulation thread seems to have deadlocked, terminating anyway",ConsoleOutput::Control);
 		simulation_thread_ = boost::thread();
 		simulation_kernel_functor_ = boost::shared_ptr<SimulationKernelFunctor>();
 	}
@@ -131,7 +132,7 @@ double SimulationControl::compute_new_processing_time() {
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)
 : terminated_(false), paused_(false), unpaused_(1), simulation_kernel_(simulation_kernel) {
-	
+
 }
 
 void SimulationControl::increase_processing_time_exp(){
@@ -144,7 +145,7 @@ void SimulationControl::decrease_processing_time_exp(){
 	if (processing_time_delta_>0.002){
 		processing_time_delta_=processing_time_delta_/2;
 	}
-	
+
 }
 
 

@@ -72,7 +72,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
 	std::map<std::string, std::string> &params = parser->parameter_map();
-	ConsoleOutput::out_info ("Generated parameter map");
+	ConsoleOutput::out_info ("Generated parameter map",ConsoleOutput::Kernel);
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
 	history_->insert(initial_world_information);
@@ -336,7 +336,6 @@ void SimulationKernel::setup_vectormodifier(boost::shared_ptr<VectorRequestHandl
 				vecmod.reset(new VectorTrimmer(42.0));
 				request_handler->add_vector_modifier(vecmod);
 				break;
-			case VECTOR_DIFFERENCE_TRIMMER:
 				vecmod.reset(new VectorDifferenceTrimmer(42.0));
 				request_handler->add_vector_modifier(vecmod);
 				break;

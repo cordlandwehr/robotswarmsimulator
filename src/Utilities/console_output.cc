@@ -9,16 +9,44 @@
 #include <string>
 #include <iostream>
 
+void ConsoleOutput::out_warning(std::string outstring, Module talking_module) {
+
+
+	std::cout << "(WW) "<< get_prefix(talking_module) << wrap_line(outstring) << std::endl;
+}
+
+void ConsoleOutput::out_info(std::string outstring, Module talking_module) {
+	std::cout << "(II) " << get_prefix(talking_module) << wrap_line(outstring) << std::endl;
+}
+
+void ConsoleOutput::out_error(std::string outstring, Module talking_module) {
+	std::cerr << "(EE) " << get_prefix(talking_module) << outstring << std::endl;
+}
+
 void ConsoleOutput::out_warning(std::string outstring) {
-	std::cout << " (WW) " << wrap_line(outstring) << std::endl;
+	out_warning(outstring, None);
 }
 
 void ConsoleOutput::out_info(std::string outstring) {
-	std::cout << " (II) " << wrap_line(outstring) << std::endl;
+	out_info(outstring, None);
 }
 
 void ConsoleOutput::out_error(std::string outstring) {
-	std::cerr << " (EE) " << outstring << std::endl;
+	out_error(outstring, None);
+}
+
+std::string ConsoleOutput::get_prefix(Module talking_module) {
+	std::string prefix = "";
+	switch (talking_module) {
+	case Visualization: prefix = "[VISUALIZATION] "; break;
+	case Control: prefix = "[SIMCONTROL] "; break;
+	case Statistics: prefix = "[STATISTICS] "; break;
+	case Parser: prefix = "[PARSER] "; break;
+	case Kernel: prefix = "[KERNEL] "; break;
+	case View: prefix = "[VIEW] "; break;
+	default : prefix = ""; break;
+	}
+	return prefix;
 }
 
 std::string ConsoleOutput::wrap_line(std::string outstring) {

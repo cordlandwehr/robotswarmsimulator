@@ -39,6 +39,7 @@
 #include "../Utilities/VectorModifiers/vector_trimmer.h"
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
 #include "../Utilities/unsupported_operation_exception.h"
+#include "../Utilities/console_output.h"
 
 #include "../Model/robot.h"
 #include "../Model/robot_identifier.h"
@@ -262,7 +263,7 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
 		}
 	} else {
-		std::cerr << "No View specified! Defaulting to global view!" << std::endl;
+		ConsoleOutput::out_info( "No View specified! Defaulting to global view.", ConsoleOutput::Parser);
 		view_factory.reset(new ViewFactory<GlobalView>);
 	}
 
