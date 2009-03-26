@@ -40,11 +40,10 @@ bool SkyBox::init( std::string path_to_tex){
 	for( int i = 0; i < 6 ; i++){
 		std::string file = path_to_tex;
 		file = file.append( texnames::tex_names[i] );
-		ConsoleOutput::out_warning( "[VISUALIZATION] Cannot load skybox texture: " + file );
 
 		texture_[i].load(file);
 		if( texture_[i].loaded() == false){
-			ConsoleOutput::out_warning( "[VISUALIZATION] Cannot load skybox texture: " + file );
+			ConsoleOutput::out_warning( "Cannot load skybox texture: " + file, ConsoleOutput::Visualization );
 			can_use_ = false;
 			return false;
 		}
