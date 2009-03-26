@@ -92,6 +92,8 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 		stats_.reset(new StatsControl());
 		stats_->init(params, output_dir);
 	}
+	else
+		ConsoleOutput::out_info( "Output disabled.", ConsoleOutput::Statistics );
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	event_handler_->register_listener(asg_);

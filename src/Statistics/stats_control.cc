@@ -7,7 +7,7 @@ StatsControl::StatsControl() {
 
 StatsControl::~StatsControl() {
 	if (stats_initialized_) {
-		ConsoleOutput::out_warning( "[STATISTICS] No explicit quit called - now terminated by deconstructor");
+		ConsoleOutput::out_warning( "No explicit quit called - now terminated by deconstructor", ConsoleOutput::Statistics);
 		quit();
 	}
 }
@@ -16,7 +16,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 
 	if (stats_initialized_) {
 		// log warning, because no quit was called before this init
-		ConsoleOutput::out_warning( "[STATISTICS] StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting...");
+		ConsoleOutput::out_warning( "StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting...", ConsoleOutput::Statistics);
 		// quit current statistic-calculation
 		quit();
 	}
@@ -32,7 +32,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 	// sets and creates output dir
 	if (output_dir.compare("")!=0 && !boost::filesystem::exists(output_dir)) {
 		boost::filesystem::create_directory( output_dir );
-		ConsoleOutput::out_info( "[STATISTICS] Directory " + output_dir +" was created.");
+		ConsoleOutput::out_info( "Directory " + output_dir +" was created.", ConsoleOutput::Statistics);
 	}
 
 	// create a StatsOut-instance for each subset
@@ -85,7 +85,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 			break;
 
 		default :
-			ConsoleOutput::out_error( "[STATISTICS] in Stats_control.init(...): unspecified datadump_level()==" + stats_cfg_.datadump_level() );
+			ConsoleOutput::out_error( "In Stats_control.init(...): unspecified datadump_level()==" + stats_cfg_.datadump_level(), ConsoleOutput::Statistics );
 	}
 }
 
@@ -125,7 +125,7 @@ void StatsControl::update(const WorldInformation& world_information, boost::shar
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
 
 	} else {
-		ConsoleOutput::out_error( "[STATISTICS] Error in StatsControl::update(...): unhandled case that must not occur.");
+		ConsoleOutput::out_error( "Error in StatsControl::update(...): unhandled case that must not occur.", ConsoleOutput::Statistics);
 	}
 
 	if (stats_cfg_.datadump_level() != StatsConfig::DATADUMP_NONE) {
@@ -221,7 +221,7 @@ void StatsControl::quit() {
 
 	stats_initialized_ = false;
 
-	ConsoleOutput::out_info( "[STATISTICS] Quit." );
+	ConsoleOutput::out_info( "Output closed." , ConsoleOutput::Statistics);
 }
 
 void StatsControl::calculate() {
@@ -230,7 +230,7 @@ void StatsControl::calculate() {
 
 	if (stats_initialized_) {
 		// log error, because not initialized - but continue
-		ConsoleOutput::out_error( "[STATISTICS] StatsControl::calculate(...) called without any previous StatsControl::init(...)");
+		ConsoleOutput::out_error( "StatsControl::calculate(...) called without any previous StatsControl::init(...)", ConsoleOutput::Statistics);
 	}
 
 	if (!stats_cfg_.is_any_subset())
