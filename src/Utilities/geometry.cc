@@ -95,6 +95,7 @@ Vector3d Geometry::compute_COG(std::vector<Vector3d> point_list) {
 
 std::vector<Vector3d> Geometry::sort_robots_by_distance(std::vector<Vector3d> point_list) {
 	sort (point_list.begin(), point_list.end(), comperator);
+	return point_list;
 }
 
 bool Geometry::comperator(Vector3d a, Vector3d b) {

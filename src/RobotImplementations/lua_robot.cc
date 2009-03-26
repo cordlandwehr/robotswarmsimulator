@@ -155,6 +155,13 @@ namespace {
 		return Vector3dWrapper(vec(0), vec(1), vec(2));
 	}
 
+	const std::vector<Vector3dWrapper> transform(const std::vector<Vector3d>& vec) {
+		std::vector<Vector3dWrapper> result;
+		result.resize(vec.size());
+		std::transform(vec.begin(), vec.end(), result.begin(), boost::bind(static_cast<const Vector3dWrapper(*)(const Vector3d&)>(&transform),_1));
+		return result;
+	}
+
 	const MarkerInformationWrapper transform(const MarkerInformation& marker) {
 		return MarkerInformationWrapper(marker);
 	}
@@ -168,6 +175,13 @@ namespace {
 		result.insert_element(kXCoord, vec.x);
 		result.insert_element(kYCoord, vec.y);
 		result.insert_element(kZCoord, vec.z);
+		return result;
+	}
+
+	const std::vector<Vector3d> transform(const std::vector<Vector3dWrapper>& vec) {
+		std::vector<Vector3d> result;
+		result.resize(vec.size());
+		std::transform(vec.begin(), vec.end(), result.begin(), boost::bind(static_cast<const Vector3d(*)(const Vector3dWrapper&)>(&transform),_1));
 		return result;
 	}
 
@@ -424,8 +438,8 @@ namespace {
 	}
 
 	//TODO: doxy
-	const bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3dWrapper& testpoint) {
-		return Geometry::is_point_in_smallest_bbox(point_list, transform(testpoint));
+	const bool is_point_in_smallest_bbox(std::vector<Vector3dWrapper> point_list, const Vector3dWrapper& testpoint) {
+		return Geometry::is_point_in_smallest_bbox(transform(point_list), transform(testpoint));
 	}
 
 	/**
@@ -454,16 +468,16 @@ namespace {
 	 * @param point_list is vector of points
 	 * @return the center of gravity
 	 */
-	const Vector3dWrapper compute_COG(std::vector<Vector3d> point_list) {
-		return transform(Geometry::compute_COG(point_list));
+	const Vector3dWrapper compute_COG(std::vector<Vector3dWrapper> point_list) {
+		return transform(Geometry::compute_COG(transform(point_list)));
 	}
 
 	/**
 	 * Sorts vectors by euclidean norm, distance to zero
 	 * @return sorted point_list
 	 */
-	const std::vector<Vector3d> sort_robots_by_distance(std::vector<Vector3d> point_list) {
-		return Geometry::sort_robots_by_distance(point_list);
+	const std::vector<Vector3dWrapper> sort_robots_by_distance(std::vector<Vector3dWrapper> point_list) {
+		return transform(Geometry::sort_robots_by_distance(transform(point_list)));
 	}
 }
 
@@ -569,10 +583,10 @@ void LuaRobot::register_lua_methods() {
 
 	    luabind::namespace_("Geometry")
 		 [
-			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox),
+			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox, luabind::copy_table(_1)),
 			 luabind::def("compute_distance", &compute_distance),
-			 luabind::def("compute_cog", &compute_COG),
-			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance)
+			 luabind::def("compute_cog", &compute_COG, luabind::copy_table(_1)),
+			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
 		 ]
 
 	];
