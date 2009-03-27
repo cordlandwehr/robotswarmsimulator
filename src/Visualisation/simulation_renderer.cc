@@ -700,7 +700,7 @@ void SimulationRenderer::draw_about(){
 	abouttext[0]="This RobotSwarmSimulator was developed as part of the university";
 	abouttext[1]="project group \"Schlaue Schwaerme\" by Alexander Klaas, Andreas Cord-Landwehr,";
 	abouttext[2]="Christoph Raupach, Christoph Weddemann, Daniel Warner, Daniel Wonisch,";
-	abouttext[3]="Kamil Swierkot, Marcus Märtens, Martina Hüllmann, Peter Kling and Sven Kurras.";
+	abouttext[3]="Kamil Swierkot, Marcus Maertens, Martina Huellmann, Peter Kling and Sven Kurras.";
 	abouttext[4]="The University of Paderborn, Research group \"Algorithms and Complexity\"";
 	abouttext[5]="Contact: der-schwarm@lists.uni-paderborn.de";
 	for (unsigned int i=0;i<abouttext.size();i++){
