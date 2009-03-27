@@ -59,7 +59,9 @@ int main(int argc, char** argv) {
 		("project-file", po::value<std::string>(), "Project file to load")
 		("output", po::value<std::string>()->default_value(""), "Path to directory for output")
 		("history-length", po::value<unsigned int>()->default_value(25), "history length")
-		("dry", "disables statistic output");
+		("dry", "disables statistic output")
+		("steps", po::value<unsigned int>(), "number of steps for blind mode")
+		("blind", "disables visualization");
 
 	po::options_description options;
 	options.add(general_options).add(generation_options).add(simulation_options);
@@ -176,27 +178,75 @@ int main(int argc, char** argv) {
 		// checks iff statistics shall be created
 		bool create_statistics = !vm.count("dry");
 
+		// checks iff visualization should be created and checks if steps is set
+		bool create_visualization = !vm.count("blind");
+		if(!create_visualization) {
+			std::cout << "running in blind mode" << std::endl;
+
+			if(!vm.count("steps")) {
+				std::cout << "If --blind is set, --steps need to be set to prevent infinite loop" << std::endl;
+				return 1;
+			}
+
+			if(!create_statistics) {
+				std::cout << "Warning: No Statistics and No Visualisation set" << std::endl;
+				std::cout << "If a man speaks in the forest and there is no woman there to hear it, is he still wrong?" << std::endl;
+			}
+		}
 
 		// create simulation kernel
 		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-		sim_control->create_new_simulation(tmpProjectFile,
-				                           vm["history-length"].as<unsigned int>(),
-				                           vm["output"].as<std::string>(),
-				                           create_statistics);
+		if(!vm.count("steps")) {
+			std::cout <<  "creating simulation without limited steps" << std::endl;
+			sim_control->create_new_simulation(tmpProjectFile,
+					                           vm["history-length"].as<unsigned int>(),
+					                           vm["output"].as<std::string>(),
+					                           create_statistics,
+					                           false,
+					                           0);
+		} else {
+			std::cout <<  "creating simulation with limited steps" << std::endl;
+			sim_control->create_new_simulation(tmpProjectFile,
+			                                   vm["history-length"].as<unsigned int>(),
+			                                   vm["output"].as<std::string>(),
+			                                   create_statistics,
+			                                   true,
+			                                   vm["steps"].as<unsigned int>());
+		}
 
-		// setup visualzation
-		boost::shared_ptr<GlutVisualizer> visualizer(new GlutVisualizer(*sim_control));
-		visualizer->init();
-		sim_control->set_visualizer(visualizer);
-		Vector3d cam_pos = string_to_vec( sim_control->camera_position() );
-		Vector3d cam_dir = string_to_vec( sim_control->camera_direction() );
-		visualizer->set_free_cam_para( cam_pos, cam_dir );
+		boost::shared_ptr<GlutVisualizer> visualizer;
+		if(create_visualization) {
+			visualizer.reset(new GlutVisualizer(*sim_control));
+			visualizer->init();
+			sim_control->set_visualizer(visualizer);
+			Vector3d cam_pos = string_to_vec( sim_control->camera_position() );
+			Vector3d cam_dir = string_to_vec( sim_control->camera_direction() );
+			visualizer->set_free_cam_para( cam_pos, cam_dir );
 
-		// start simulation
-		sim_control->start_simulation();
+			sim_control->start_simulation();
 
-		// enter visualization's main-loop
-		visualizer->glutMainLoop();
+			// enter visualization's main-loop
+			visualizer->glutMainLoop();
+		} else {
+			// start the simulation thread
+			sim_control->start_simulation();
+			// simulations should be consumed as fast as possible
+			sim_control->set_processing_time_delta(10000);
+			unsigned int history_length = vm["history-length"].as<unsigned int>();
+			while(!sim_control->is_simulation_finished()) {
+				// clean out history
+				for(int i = 0; i < history_length; i++) {
+					sim_control->process_simulation();
+				}
+
+				// wait for the simulation thread to refill history
+				sleep(1);
+			}
+			std::cout << "Terminating simulation.." << std::endl;
+			sim_control->terminate_simulation();
+			std::cout << "Simulation finished. Have a good day." << std::endl;
+		}
+
 	}
 	catch(std::exception& e) {
 		ConsoleOutput::out_error( e.what() );

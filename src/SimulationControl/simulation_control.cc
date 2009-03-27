@@ -27,7 +27,9 @@ SimulationControl::~SimulationControl() {
 void SimulationControl::create_new_simulation(const std::string& configuration_filename,
 		                                      std::size_t history_length,
 		                                      std::string output_dir="",
-		                                      bool create_statistics=true) {
+		                                      bool create_statistics=true,
+		                                      bool limited_steps=false,
+		                                      int number_of_steps=0) {
 	// terminate the old simulation including the old simulation thread.
 	terminate_simulation();
 
@@ -42,8 +44,11 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	camera_position_ = simulation_kernel->camera_position();
 	camera_direction_ = simulation_kernel->camera_direction();
 
-	simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
-
+	if(!limited_steps) {
+		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
+	} else {
+		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel, number_of_steps));
+	}
 	current_processing_time_ = 0;
 }
 
@@ -83,6 +88,10 @@ void SimulationControl::terminate_simulation() {
 		simulation_thread_ = boost::thread();
 		simulation_kernel_functor_ = boost::shared_ptr<SimulationKernelFunctor>();
 	}
+}
+
+bool SimulationControl::is_simulation_finished() {
+	return simulation_kernel_functor_->is_terminated();
 }
 
 void SimulationControl::process_simulation() {
@@ -131,7 +140,13 @@ double SimulationControl::compute_new_processing_time() {
 }
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)
-: terminated_(false), paused_(false), unpaused_(1), simulation_kernel_(simulation_kernel) {
+: terminated_(false), paused_(false), unpaused_(1), limited_steps_(false), number_of_steps_(0), simulation_kernel_(simulation_kernel) {
+
+}
+
+SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
+                                                                    int number_of_steps)
+: terminated_(false), paused_(false), unpaused_(1), limited_steps_(true), number_of_steps_(number_of_steps), simulation_kernel_(simulation_kernel) {
 
 }
 
@@ -191,12 +206,21 @@ void SimulationControl::SimulationKernelFunctor::terminate() {
 }
 
 void SimulationControl::SimulationKernelFunctor::loop() {
+	int steps = 0;
 	while(!terminated_) {
 		//wait if unpaused == 0
 		unpaused_.wait();
 		unpaused_.post();
 
 		simulation_kernel_->step();
+
+		if(limited_steps_) {
+			std::cout << "completed step " << steps << "/" << number_of_steps_ << std::endl;
+			steps++;
+			if( steps > number_of_steps_) {
+				terminate();
+			}
+		}
 	}
 	simulation_kernel_->quit();
 }

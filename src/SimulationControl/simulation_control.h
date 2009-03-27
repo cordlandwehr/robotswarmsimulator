@@ -35,11 +35,17 @@ public:
 	/**
 	 * cleans up the old simulation and creates a new one without starting it.
 	 */
-	void create_new_simulation(const std::string& configuration_filename, std::size_t history_length, std::string ouput_dir, bool create_statistics);
+	void create_new_simulation(const std::string& configuration_filename,
+	                           std::size_t history_length,
+	                           std::string ouput_dir,
+	                           bool create_statistics,
+	                           bool limited_steps,
+	                           int number_of_steps);
 
 	/**
 	 * change processing_time_delta (see below)
 	 */
+	void set_processing_time_delta(double processing_time_delta) {processing_time_delta_ = processing_time_delta;}
 	void increase_processing_time_linearly();
 	void decrease_processing_time_linearly();
 	void increase_processing_time_exp();
@@ -60,6 +66,11 @@ public:
 	 * terminates simulation and cleans up the simulation thread
 	 */
 	void terminate_simulation();
+
+	/**
+	 * returns true if the functor of the simulation is terminated
+	 */
+	bool is_simulation_finished();
 
 	/**
 	 * process the simulation: advances the processing time and calls the visualizer if there is one.
@@ -87,6 +98,13 @@ private:
 		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel);
 
 		/**
+		 * constructs a new functor with the given simulation kernel thread and
+		 * limits the number of steps to be simulated
+		 */
+		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
+		                        int number_of_steps);
+
+		/**
 		 * unpauses the simulation thread using a semaphor
 		 */
 		void unpause();
@@ -108,6 +126,11 @@ private:
 		 */
 		void loop();
 
+		/**
+		 * returns true iff the functor is terminated
+		 */
+		bool is_terminated() {return terminated_;};
+
 	private:
 		/**
 		 * true iff the endless loop belonging to this functor should exit / is already exited.
@@ -118,6 +141,13 @@ private:
 		 * true iff the thread should pause / is already pausing.
 		 */
 		bool paused_;
+
+		/**
+		 * true iff the thread should automatically terminate after a fixed number of steps
+		 */
+		bool limited_steps_;
+		int number_of_steps_;
+
 
 		boost::interprocess::interprocess_semaphore unpaused_;
 		boost::shared_ptr<SimulationKernel> simulation_kernel_;
