@@ -194,7 +194,7 @@ During the simulation it is possible to interact with the simulation in differen
 
 \subsection{Information from Vizualisation}
 %TODO (cola) at this point ther should be an diagram with size relationships of the different objects, axis, robots etc)
-At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K}} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
+At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
 
 
 
@@ -230,10 +230,16 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 	\item [\texttt{add\_marker\_request(<marker>)}]
 	\item [\texttt{add\_type\_change\_request(<type>)}]
 	\item [\texttt{get\_own\_identifier()}]
+\end{description}
+
+\paragraph{Geometry Package}
+\begin{description}
 	\item [\texttt{is\_in\_smallest\_bbox(<vector of Vector3d>,<Vector3d>)}]
 	\item [\texttt{compute\_distance(<Vector3d, Vector3d>)}]
 	\item [\texttt{compute\_cog(<vector of Vector3d>)}]
+	\item [\texttt{sort\_vectors\_by\_length(<vector of Vector3d>)}] Sorts Vector3d points by distance to origin
 \end{description}
+
 
 \paragraph{\Lua Constants}
 \begin{description}
