@@ -14,7 +14,7 @@ struct table_convert {
 		ContainerT result;
 
 		for (luabind::iterator itr(tbl), end; itr != end; ++itr) {
-			boost::optional<typename ContainerT::value_type> v = object_cast_nothrow<ContainerT::value_type> (*itr);
+			boost::optional<typename ContainerT::value_type> v = object_cast_nothrow<typename ContainerT::value_type> (*itr);
 
 			if (v) {
 				result.push_back(*v);
