@@ -16,6 +16,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
 #include <boost/cast.hpp>
+#include <boost/thread/thread.hpp>
 
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
@@ -238,9 +239,11 @@ int main(int argc, char** argv) {
 				for(int i = 0; i < history_length; i++) {
 					sim_control->process_simulation();
 				}
-
 				// wait for the simulation thread to refill history
-				sleep(1);
+				 boost::xtime xt;
+				 boost::xtime_get(&xt, boost::TIME_UTC);
+				 xt.sec += 1; // change xt to next second
+				 boost::thread::sleep(xt);
 			}
 			std::cout << "Terminating simulation.." << std::endl;
 			sim_control->terminate_simulation();
