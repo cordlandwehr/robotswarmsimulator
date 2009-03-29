@@ -67,7 +67,7 @@ function intersectlines(p1, p2, p3, p4)
 			local m1 = (p2.y - p1.y) / (p2.x - p1.x);
 			local n1 = p1.y - (m1 * p1.x);
 			intersection.y = m1 * p3.x + n1;
-		else
+		else			
 			local m2 = (p4.y - p3.y) / (p4.x - p3.x);
 			local n2 = p3.y - (m2 * p3.x);
 			local m1 = (p2.y - p1.y) / (p2.x - p1.x);
@@ -99,14 +99,14 @@ function compute_nearby_robots(robots, vector, view_radius)
 	j = 1;
 	for i =1, #robots do 
 		local new_pos = View.get_position(robots[i]) - vector; --pos relative to given vector
-		if(dist(new_pos) <= view_radius) then
+		if(dist(new_pos) > eps and dist(new_pos) <= view_radius) then
 			robot_pos[j] = new_pos;
 			j = j + 1;
 		end
 	end
 	if(vector.x ~= 0 or vector.y ~= 0 or vector.z ~= 0) then
 		local new_pos = (-1) * vector; --pos relative to given vector
-		if(dist(new_pos) <= view_radius) then
+		if(dist(new_pos) > eps and dist(new_pos) <= view_radius) then
 			robot_pos[j] = new_pos;
 			j = j + 1;
 		end
@@ -199,7 +199,7 @@ function is_nearer(pos, refpos, line)
 	local zero = Vector3d(0,0,0);
 	local dist1 = get_distance_to_line(zero, pos, line);
 	local dist2 = get_distance_to_line(zero, refpos, line);
-	if(dist1 <= dist2) then
+	if(dist1 <= dist2+0.01) then
 		return pos;
 	else
 		return nil;
@@ -217,7 +217,7 @@ function on_line(pos1, pos2, line)
 		return true;
 	end
 	if(line.x == 0) then
-		return pos1.x == pos2.x;
+		return math.abs(pos1.x - pos2.x) < 0.01;
 	end
 	local alpha = (pos2.x - pos1.x) / line.x;
 	local spos2 = pos1.y + alpha * line.y;
@@ -251,6 +251,9 @@ function compute_new_position(robots, gap_pos)
 	if(pos1 ~= nil) then
 		count = count + 1;
 		if(may_jump_to_nearby_gap(robots, pos1)) then
+			if(own_id == 51) then
+				print("pos1 may jump");
+			end
 			jump_count = jump_count + 1;
 		end
 	end
@@ -298,7 +301,23 @@ end
 
 function may_jump_to_nearby_gap(robots, robot_pos) 
 	local pos1,pos2,pos3,pos4,nearest = compute_nearby_robots(robots, robot_pos, 5.0);
-	
+	if(own_id == 51) then
+		print("INNNERINNER");
+		print("RobotPos");
+		print(robot_pos);
+		print("Pos1: ");
+		print(pos1);
+		print("Pos2: ");
+		print(pos2);
+		print("Pos3: ");
+		print(pos3);
+		print("Pos4: ");
+		print(pos4);
+		print("Nearest: ");
+		print(nearest);		
+		print("Normal: ");
+		print(normal);		
+	end
 	if(pos1 == nil and pos2 ~= nil and pos3 ~= nil and pos4 ~= nil)  then
 		return true;
 	elseif (pos2 == nil and pos1 ~= nil and pos3 ~= nil and pos4 ~= nil)  then
@@ -321,6 +340,7 @@ function main()
 	local pos1,pos2,pos3,pos4,nearest = compute_nearby_robots(robots, zero, 5.0);
 	
 	if(nearest == nil) then
+		View.add_position_request(zero);
 		return;
 	end
 	
@@ -330,6 +350,9 @@ function main()
 	own_id = View.get_id(View.get_own_identifier());
 	
 	if(own_id == 51) then
+		print("------------------");
+		print("---- time: " .. View.get_time());
+		print("------------------");
 		print("Own_id: " .. own_id);
 		print("Pos1: ");
 		print(pos1);
@@ -367,7 +390,8 @@ function main()
 		new_position = compute_new_position(robots, pos4);
 	end
 	
-	if(own_id == 27) then
+	if(own_id == 51) then
+		print("New position");
 		print(new_position);
 		print();
 	end
