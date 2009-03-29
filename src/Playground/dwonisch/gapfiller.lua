@@ -114,13 +114,21 @@ function compute_nearby_robots(robots, vector, view_radius)
 	robot_pos = Geometry.sort_robots_by_distance(robot_pos);
 	
 	--setting initial nearest neighbours in each sector
+	--  1  5  2
+	--  8  o  6
+	--  4  7  3
+	
 	local pos1 = nil;
 	local pos2 = nil;
 	local pos3 = nil;
 	local pos4 = nil;
+	local pos5 = robot_pos[1];
+	local pos6 = nil;
+	local pos7 = nil;
+	local pos8 = nil;
 
 	--iterate over all robots in order to find nearest neighbours in each sector
-	for i = 2, #robot_pos do 
+	for i = 1, #robot_pos do 
 		local angle = get_angle(robot_pos[1], robot_pos[i]);
 		
 		--calculating normal to check whether angle is a reflex angle (>180°)
@@ -139,22 +147,57 @@ function compute_nearby_robots(robots, vector, view_radius)
 			pos4 = robot_pos[i];
 		elseif (angle > (3/2 * math.pi) + eps) and (angle < (2 * math.pi)- eps) and (pos1 == nil) then
 			pos1 = robot_pos[i];
+		elseif (angle >= (1/2 * math.pi) - eps) and (angle <= (1/2 * math.pi) + eps) and (pos6 == nil) then
+			pos6 = robot_pos[i];
+		elseif (angle >= math.pi - eps) and (angle <= math.pi + eps) and (pos7 == nil) then
+			pos7 = robot_pos[i];
+		elseif (angle >= (3/2 * math.pi) - eps) and (angle <= (3/2 * math.pi) + eps) and (pos8 == nil) then
+			pos8 = robot_pos[i];
 		end
 
-		if(pos1 ~= nil and pos2 ~= nil and pos3 ~= nil and pos4 ~= nil) then
+		if(pos1 ~= nil and pos2 ~= nil and pos3 ~= nil and pos4 ~= nil and pos5 ~= nil and pos6 ~= nil and pos7 ~= nil and pos8 ~= nil) then
 			break;
 		end
 	end
 	
 	if(#robot_pos == 0) then
-		return nil,nil,nil,nil,nil;
+		return nil,nil,nil,nil,nil,nil,nil,nil;
 	end
 	
-	local normal = get_normal(robot_pos[1]);
-	pos1 = validate_pos(pos1, pos2, normal, pos4, robot_pos[1]);
-	pos2 = validate_pos(pos2, pos1, normal, pos3, robot_pos[1]);
-	pos3 = validate_pos(pos3, pos4, normal, pos2, robot_pos[1]);
-	pos4 = validate_pos(pos4, pos3, normal, pos1, robot_pos[1]);
+	local right = get_normal(robot_pos[1]);
+	local up = robot_pos[1];
+	
+	pos1 = validate_pos(pos1, pos2, right);
+	pos1 = validate_pos(pos1, pos5, right);
+	pos1 = validate_pos(pos1, pos4, up);
+	pos1 = validate_pos(pos1, pos8, up);
+	
+	pos2 = validate_pos(pos2, pos1, right);
+	pos2 = validate_pos(pos2, pos5, right);
+	pos2 = validate_pos(pos2, pos3, up);
+	pos2 = validate_pos(pos2, pos6, up);
+	
+	pos3 = validate_pos(pos3, pos4, right);
+	pos3 = validate_pos(pos3, pos7, right);
+	pos3 = validate_pos(pos3, pos2, up);
+	pos3 = validate_pos(pos3, pos6, up);
+	
+	pos4 = validate_pos(pos4, pos3, right);
+	pos4 = validate_pos(pos4, pos7, right);
+	pos4 = validate_pos(pos4, pos1, up);
+	pos4 = validate_pos(pos4, pos8, up);
+	
+	pos5 = validate_pos(pos5, pos1, right);
+	pos5 = validate_pos(pos5, pos2, right);
+	
+	pos6 = validate_pos(pos6, pos2, up);
+	pos6 = validate_pos(pos6, pos3, up);
+	
+	pos7 = validate_pos(pos7, pos3, right);
+	pos7 = validate_pos(pos7, pos4, right);	
+	
+	pos8 = validate_pos(pos8, pos4, right);
+	pos8 = validate_pos(pos8, pos1, right);	
 	
 	if(pos1 ~= nil) then
 		pos1 = pos1 + vector;
@@ -168,31 +211,31 @@ function compute_nearby_robots(robots, vector, view_radius)
 	if(pos4 ~= nil) then
 		pos4 = pos4 + vector;
 	end	
+	if(pos5 ~= nil) then
+		pos5 = pos5 + vector;
+	end	
+	if(pos6 ~= nil) then
+		pos6 = pos6 + vector;
+	end	
+	if(pos7 ~= nil) then
+		pos7 = pos7 + vector;
+	end	
+	if(pos8 ~= nil) then
+		pos8 = pos8 + vector;
+	end	
 
-	return pos1,pos2,pos3,pos4,(robot_pos[1]+vector);
+	return pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8;
 end
 
-function validate_pos(pos, ref1, refdir, ref2, ref2dir) 
+function validate_pos(pos, ref, refdir) 
 	if(pos == nil) then
 		return nil;
 	end
-	if(on_line(pos, ref1, refdir)) then
-		if(on_line(pos, ref2, ref2dir)) then
-			return pos;
-		else
-			return is_nearer(pos, ref2, ref2dir);
-		end
-	else 
-		local newpos = is_nearer(pos, ref1, refdir);
-		if(newpos == nil) then
-			return nil;
-		end
-		if(on_line(pos, ref2, ref2dir)) then
-			return pos;
-		else
-			return is_nearer(pos, ref2, ref2dir);
-		end			
-	end
+	if(on_line(pos, ref, refdir)) then
+		return pos;
+	else
+		return is_nearer(pos, ref, refdir);
+	end	
 end
 
 function is_nearer(pos, refpos, line) 
@@ -283,11 +326,6 @@ function compute_new_position(robots, gap_pos)
 		print(jump_count);
 	end
 	
-	if(count == 1) then
-		-- edge robot, dont move!
-		return Vector3d(0,0,0);
-	end
-	
 	if(jump_count > 1) then
 		-- other robots may also want to jump to this gap, so dont move
 		-- Note: this creates "deadlocks" and leaves small gaps.
@@ -300,7 +338,7 @@ function compute_new_position(robots, gap_pos)
 end
 
 function may_jump_to_nearby_gap(robots, robot_pos) 
-	local pos1,pos2,pos3,pos4,nearest = compute_nearby_robots(robots, robot_pos, 5.0);
+	local pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8 = compute_nearby_robots(robots, robot_pos, 5.0);
 	if(own_id == 51) then
 		print("INNNERINNER");
 		print("RobotPos");
@@ -326,6 +364,12 @@ function may_jump_to_nearby_gap(robots, robot_pos)
 		return true;
 	elseif (pos4 == nil and pos1 ~= nil and pos2 ~= nil and pos3 ~= nil)  then
 		return true;
+	elseif (pos1 == nil and pos2 == nil and pos3 == nil and pos4 == nil) then
+		if(pos6 ~= nil and pos7 == nil and pos8 == nil) then
+			return true;
+		elseif(pos8 ~= nil and pos6 == nil and pos7 == nil) then
+			return true;
+		end				
 	end
 	
 	return false;
@@ -337,7 +381,8 @@ function main()
 	--setting nullvector
 	local zero = Vector3d(0.0,0.0,0.0);
 	local robots = View.get_visible_robots();
-	local pos1,pos2,pos3,pos4,nearest = compute_nearby_robots(robots, zero, 5.0);
+	local pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8 = compute_nearby_robots(robots, zero, 5.0);
+	local nearest = pos5;
 	
 	if(nearest == nil) then
 		View.add_position_request(zero);
@@ -354,16 +399,23 @@ function main()
 		print("---- time: " .. View.get_time());
 		print("------------------");
 		print("Own_id: " .. own_id);
+		local p1,p2,p3,p4,p5,p6,p7,p8 = compute_nearby_robots(robots, zero, 5.0);
 		print("Pos1: ");
-		print(pos1);
+		print(p1);
 		print("Pos2: ");
-		print(pos2);
+		print(p2);
 		print("Pos3: ");
-		print(pos3);
+		print(p3);
 		print("Pos4: ");
-		print(pos4);
-		print("Nearest: ");
-		print(nearest);		
+		print(p4);
+		print("Pos5: ");
+		print(p5);
+		print("Pos6: ");
+		print(p6);
+		print("Pos7: ");
+		print(p7);
+		print("Pos8: ");
+		print(p8);
 		print("Normal: ");
 		print(normal);		
 	end
@@ -371,7 +423,6 @@ function main()
 		
 	
 	-- only possibly change pos if exactly one gap is found
-	-- TODO: also surely (!) change pos (to the right gap (should be "easily" computeable)) if exactly four gaps are found -> corner of lattice ->
 	if(pos1 == nil and pos2 ~= nil and pos3 ~= nil and pos4 ~= nil) then
 		pos1 = intersectlines(pos2, pos2 + normal, pos4, pos4 + nearest);
 		new_position = compute_new_position(robots, pos1);
@@ -388,6 +439,15 @@ function main()
 	elseif (pos4 == nil and pos1 ~= nil and pos2 ~= nil and pos3 ~= nil)  then
 		pos4 = intersectlines(pos3, pos3 + normal, pos1, pos1 + nearest);
 		new_position = compute_new_position(robots, pos4);
+	end
+	
+	if(pos1 == nil and pos2 == nil and pos3 == nil and pos4 == nil) then
+		--TODO: avoid jumping to same pos
+		if(pos6 ~= nil and pos7 == nil and pos8 == nil) then
+			new_position = pos5 + pos6;
+		elseif(pos8 ~= nil and pos6 == nil and pos7 == nil) then
+			new_position = pos5 + pos8;
+		end		
 	end
 	
 	if(own_id == 51) then
