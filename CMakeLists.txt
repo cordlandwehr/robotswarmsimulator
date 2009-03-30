@@ -26,6 +26,10 @@ macro(reverse_link_preference_in_release)
 	endif(CMAKE_BUILD_TYPE MATCHES Release)
 endmacro(reverse_link_preference_in_release)
 
+
+# needed for Linux
+include_directories(/usr/include/c++/4.3) 
+
 # descend into subprojects
 add_subdirectory(luabind)
 add_subdirectory(src)
