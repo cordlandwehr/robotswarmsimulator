@@ -459,7 +459,7 @@ namespace {
 	 * @param p is value of norm
 	 * @return distance
 	 */
-	const double compute_distance_pnorm(const Vector3dWrapper& v, const Vector3dWrapper& w, int p) {
+	const double compute_distance(const Vector3dWrapper& v, const Vector3dWrapper& w, int p) {
 		return vector3d_distance(transform(v), transform(w), p);
 	}
 
@@ -473,12 +473,30 @@ namespace {
 	}
 
 	/**
+	 * Sort vectors by euclidean norm, distance to zero
+	 * @return sorted point_list
+	 */
+	const std::vector<Vector3dWrapper> sort_points_by_distance(std::vector<Vector3dWrapper> point_list) {
+		return transform(Geometry::sort_points_by_distance(transform(point_list)));
+	}
+
+	/**
 	 * Sorts vectors by euclidean norm, distance to zero
 	 * @return sorted point_list
 	 */
-	const std::vector<Vector3dWrapper> sort_robots_by_distance(std::vector<Vector3dWrapper> point_list) {
-		return transform(Geometry::sort_robots_by_distance(transform(point_list)));
-	}
+//	const std::vector<std::size_t> sort_robots_by_distance(std::vector<std::size_t> index_list) {
+//		// iterator for robots
+//		std::vector<std::size_t>::iterator iter;
+//		std::vector< std::pair<Vector3d, unsigned int> > point_list;
+//
+//		// create list of robot positions
+//		int counter=0;
+//		for (iter = index_list.begin(); iter != index_list.end(); iter++) {
+//			pair<Vector3d,int> mypair = pair<Vector3d,unsigned int>(view->get_position(*robot, resolve<Identifier>(*iter)),counter++);
+//			point_list.push_back(mypair);
+//		}
+//		return Geometry::sort_pointslist_by_distance(point_list);
+//	}
 }
 
 void LuaRobot::report_errors(int status) {
@@ -584,9 +602,10 @@ void LuaRobot::register_lua_methods() {
 	    luabind::namespace_("Geometry")
 		 [
 			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox, luabind::copy_table(_1)),
-			 luabind::def("compute_distance", &compute_distance),
+			 luabind::def("compute_distance", (const double (*) (const Vector3dWrapper&, const Vector3dWrapper&))&compute_distance),
+			 luabind::def("compute_distance", (const double (*) (const Vector3dWrapper&, const Vector3dWrapper&, int))&compute_distance),
 			 luabind::def("compute_cog", &compute_COG, luabind::copy_table(_1)),
-			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
+			 luabind::def("sort_vectors_by_length", &sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
 		 ]
 
 	];

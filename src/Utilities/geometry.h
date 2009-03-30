@@ -14,6 +14,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <vector>
+#include <utility>
 #include "vector_arithmetics.h"
 
 class Geometry {
@@ -33,8 +34,6 @@ public:
 	static bool compare_vectors_by_axis_y (const Vector3d& vec_a, const Vector3d& vec_b);
 
 	static bool compare_vectors_by_axis_z (const Vector3d& vec_a, const Vector3d& vec_b);
-
-
 
 	/**
 	 * Tests if all points are on exactly one plane.
@@ -60,9 +59,18 @@ public:
 	static Vector3d compute_COG(std::vector<Vector3d> point_list);
 
 	/**
-	 * Returns a vector of Vector3ds sorted by euclidean distance from origin
+	 * \return a vector of Vector3ds sorted by euclidean distance from origin
 	 */
-	static std::vector<Vector3d> sort_robots_by_distance(std::vector<Vector3d> point_list);
+	static std::vector<Vector3d> sort_points_by_distance(std::vector<Vector3d> point_list);
+
+	/**
+	 * \return a vector of indices for Vector3ds sorted by euclidean distance from origin
+	 */
+	static std::vector<int> sort_pointslist_by_distance(std::vector< std::pair<Vector3d,unsigned int> > point_list);
+
+	static bool comperator_vector3d(Vector3d a, Vector3d b);
+
+	static bool comperator_pairs(std::pair<Vector3d,unsigned int> a, std::pair<Vector3d,unsigned int> b);
 
 	Geometry();
 	virtual ~Geometry();
