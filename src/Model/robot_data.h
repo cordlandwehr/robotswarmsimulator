@@ -93,8 +93,6 @@ public:
 	 */
 	const Vector3d & velocity() const;
 
-	boost::shared_ptr<View> view();
-
 	/**
 	 * Sets velocity of the robot.
 	 * \param Pointer to new velocity vector.
@@ -138,15 +136,22 @@ public:
 		return color_;
 	}
 
+	/**
+	 * sets the view of this robot_data
+	 */
 	void set_view(boost::shared_ptr<View> view);
+
+	/**
+	 * accessor for the view of this robot data
+	 */
+	boost::shared_ptr<const View> view();
 
 	void set_color( unsigned short int color){
 		color_ = color;
 	}
 
 	virtual boost::shared_ptr<WorldObject> clone() const;
-protected:
-	boost::shared_ptr<View> view_;
+
 
 private:
 	/**
@@ -166,7 +171,7 @@ private:
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;
 
-
+	boost::shared_ptr<View> view_;
 	unsigned short int color_;
 
 };

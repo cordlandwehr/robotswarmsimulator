@@ -240,10 +240,10 @@ int main(int argc, char** argv) {
 					sim_control->process_simulation();
 				}
 				// wait for the simulation thread to refill history
-				 boost::xtime xt;
-				 boost::xtime_get(&xt, boost::TIME_UTC);
-				 xt.sec += 1; // change xt to next second
-				 boost::thread::sleep(xt);
+				boost::xtime xt;
+				boost::xtime_get(&xt, boost::TIME_UTC);
+				xt.sec += 1; // change xt to next second
+				boost::thread::sleep(xt);
 			}
 			std::cout << "Terminating simulation.." << std::endl;
 			sim_control->terminate_simulation();

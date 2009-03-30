@@ -439,7 +439,7 @@ void SimulationRenderer::draw_visibility_graph(const boost::shared_ptr<WorldInfo
 
 	//for all robots, get all visible robots and draw line between them
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
-		boost::shared_ptr<View> view=(*it_robot)->view();
+		boost::shared_ptr<const View> view=(*it_robot)->view();
 		//get visible robots from view, get global positions from world info
 		if (view){
 				 visible_robots=view->get_visible_robots((*it_robot)->robot());
