@@ -10,6 +10,8 @@
 #include <cmath>
 #include <algorithm>
 #include <utility>
+#include <boost/lambda/lambda.hpp>
+#include <boost/bind.hpp>
 
 const double Geometry::kEpsilon = 0.000000001;
 
@@ -94,28 +96,12 @@ Vector3d Geometry::compute_COG(std::vector<Vector3d> point_list) {
 	return cog;
 }
 
-std::vector<Vector3d> Geometry::sort_points_by_distance(std::vector<Vector3d> point_list) {
-	sort (point_list.begin(), point_list.end(), Geometry::comperator_vector3d);
-	return point_list;
+void Geometry::sort_points_by_distance(std::vector<Vector3d>& point_list, int p) {
+	sort (point_list.begin(), point_list.end(), (boost::bind(vector3d_get_length, _1, p) < boost::bind(vector3d_get_length, _2, p)));
 }
 
-std::vector<unsigned int> sort_pointslist_by_distance(std::vector< std::pair<Vector3d,unsigned int> > point_list) {
-	sort (point_list.begin(), point_list.end(), Geometry::comperator_pairs);
-
-	std::vector<unsigned int> indices;
-	std::vector< std::pair<Vector3d,unsigned int> >::iterator iter;
-	for (iter = point_list.begin(); iter!= point_list.end(); iter++)
-		indices.push_back((*iter).second);
-
-	return indices;
-}
-
-bool Geometry::comperator_vector3d(Vector3d a, Vector3d b) {
-	return (vector3d_get_length(a,2) < vector3d_get_length(b,2));
-}
-
-bool Geometry::comperator_pairs(std::pair<Vector3d,unsigned int> a, std::pair<Vector3d,unsigned int> b) {
-	return (vector3d_get_length(a.first,2) < vector3d_get_length(b.first,2));
+void Geometry::sort_pointslist_by_distance(std::vector< std::pair<Vector3d,std::size_t> >& point_list, int p) {
+	sort (point_list.begin(), point_list.end(), (boost::bind(vector3d_get_length, boost::bind(&std::pair<Vector3d,std::size_t>::first,_1), p) < boost::bind(vector3d_get_length, boost::bind(&std::pair<Vector3d,std::size_t>::first,_2), p)));	
 }
 
 Geometry::Geometry() {

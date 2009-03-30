@@ -477,26 +477,30 @@ namespace {
 	 * @return sorted point_list
 	 */
 	const std::vector<Vector3dWrapper> sort_points_by_distance(std::vector<Vector3dWrapper> point_list) {
-		return transform(Geometry::sort_points_by_distance(transform(point_list)));
+		std::vector<Vector3d> vec = transform(point_list);
+		Geometry::sort_points_by_distance(vec, 2);
+		return transform(vec);
 	}
 
 	/**
 	 * Sorts vectors by euclidean norm, distance to zero
 	 * @return sorted point_list
 	 */
-//	const std::vector<std::size_t> sort_robots_by_distance(std::vector<std::size_t> index_list) {
-//		// iterator for robots
-//		std::vector<std::size_t>::iterator iter;
-//		std::vector< std::pair<Vector3d, unsigned int> > point_list;
-//
-//		// create list of robot positions
-//		int counter=0;
-//		for (iter = index_list.begin(); iter != index_list.end(); iter++) {
-//			pair<Vector3d,int> mypair = pair<Vector3d,unsigned int>(view->get_position(*robot, resolve<Identifier>(*iter)),counter++);
-//			point_list.push_back(mypair);
-//		}
-//		return Geometry::sort_pointslist_by_distance(point_list);
-//	}
+	const std::vector<std::size_t> sort_robots_by_distance(std::vector<std::size_t> index_list) {
+		using boost::bind;
+
+		std::vector< std::pair<Vector3d,std::size_t> > point_list;
+		point_list.resize(index_list.size());
+		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(std::make_pair<Vector3d, std::size_t>, bind(static_cast<const Vector3d(*)(const Vector3dWrapper&)>(&transform), bind(get_position, 1)), _1));
+
+		Geometry::sort_pointslist_by_distance(point_list, 2);
+
+		std::vector<std::size_t> result;
+		result.resize(point_list.size());
+		std::transform(point_list.begin(), point_list.end(), result.begin(), bind(&std::pair<Vector3d,std::size_t>::second,_1));
+
+		return result;
+	}
 }
 
 void LuaRobot::report_errors(int status) {
@@ -570,8 +574,8 @@ void LuaRobot::register_lua_methods() {
 
 		// now our view-functions
 		// TODO (cola) still commented out, cause this will cause trouble on the next upstream ;)
-//		luabind::namespace_("View")
-//		[
+		luabind::namespace_("View")
+		[
 			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
 			 luabind::def("get_visible_obstacles", &get_visible_obstacles, luabind::copy_table(luabind::result)),
 			 luabind::def("get_visible_markers", &get_visible_markers, luabind::copy_table(luabind::result)),
@@ -596,8 +600,8 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("add_velocity_request", &add_velocity_request),
 			 luabind::def("add_type_change_request", &add_type_change_request),
 			 luabind::def("add_marker_request", &add_marker_request),
-			 luabind::def("get_own_identifier", &get_own_identifier),
-//	    ],
+			 luabind::def("get_own_identifier", &get_own_identifier)
+	    ],
 
 	    luabind::namespace_("Geometry")
 		 [
@@ -605,7 +609,8 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("compute_distance", (const double (*) (const Vector3dWrapper&, const Vector3dWrapper&))&compute_distance),
 			 luabind::def("compute_distance", (const double (*) (const Vector3dWrapper&, const Vector3dWrapper&, int))&compute_distance),
 			 luabind::def("compute_cog", &compute_COG, luabind::copy_table(_1)),
-			 luabind::def("sort_vectors_by_length", &sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
+			 luabind::def("sort_vectors_by_length", &sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
+			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
 		 ]
 
 	];
