@@ -154,7 +154,7 @@ void Texture::load(std::string & texture_file ){
 		glDisable( GL_TEXTURE_2D );
 
 	} else {
-		ConsoleOutput::out_warning( "Cannot load Texture from file: " + texture_file );
+		ConsoleOutput::out_warning( "Cannot load Texture from file: " + texture_file, ConsoleOutput::Visualization );
 	}
 
 }
