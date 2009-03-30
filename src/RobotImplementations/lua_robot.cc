@@ -574,8 +574,8 @@ void LuaRobot::register_lua_methods() {
 
 		// now our view-functions
 		// TODO (cola) still commented out, cause this will cause trouble on the next upstream ;)
-		luabind::namespace_("View")
-		[
+		//luabind::namespace_("View")
+		//[
 			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
 			 luabind::def("get_visible_obstacles", &get_visible_obstacles, luabind::copy_table(luabind::result)),
 			 luabind::def("get_visible_markers", &get_visible_markers, luabind::copy_table(luabind::result)),
@@ -600,8 +600,8 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("add_velocity_request", &add_velocity_request),
 			 luabind::def("add_type_change_request", &add_type_change_request),
 			 luabind::def("add_marker_request", &add_marker_request),
-			 luabind::def("get_own_identifier", &get_own_identifier)
-	    ],
+			 luabind::def("get_own_identifier", &get_own_identifier),
+	    //],
 
 	    luabind::namespace_("Geometry")
 		 [
