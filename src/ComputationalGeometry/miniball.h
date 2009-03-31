@@ -38,7 +38,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
-#include "vector_arithmetics.h"
+#include "../Utilities/vector_arithmetics.h"
 
 // Functions
 // =========

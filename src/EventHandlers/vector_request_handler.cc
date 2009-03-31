@@ -21,7 +21,7 @@
 #include "../Requests/velocity_request.h"
 #include "../Requests/acceleration_request.h"
 
-#include "../Utilities/coord_converter.h"
+#include "../ComputationalGeometry/coord_converter.h"
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 

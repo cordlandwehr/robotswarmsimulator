@@ -25,7 +25,7 @@
 
 #include "../../SimulationKernel/uniform_robot_control.h"
 
-#include "../../Utilities/coord_converter.h"
+#include "../../ComputationalGeometry/coord_converter.h"
 #include "../../Utilities/vector_arithmetics.h"
 #include "../../Utilities/VectorModifiers/vector_randomizer.h"
 

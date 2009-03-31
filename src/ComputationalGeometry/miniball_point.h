@@ -31,7 +31,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "vector_arithmetics.h"
+#include "../Utilities/vector_arithmetics.h"
 
 // Point (inline)
 // -------------

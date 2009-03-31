@@ -15,10 +15,10 @@
 #include "../Requests/position_request.h"
 #include "../Views/view.h"
 #include "../Utilities/vector_arithmetics.h"
-#include "../Utilities/miniball.h"
-#include "../Utilities/miniball.cc"
-#include "../Utilities/miniball_b.h"
-#include "../Utilities/miniball_b.cc"
+#include "../ComputationalGeometry/miniball.h"
+#include "../ComputationalGeometry/miniball.cc"
+#include "../ComputationalGeometry/miniball_b.h"
+#include "../ComputationalGeometry/miniball_b.cc"
 
 namespace {
 	Point<3> vector3d_to_point(Vector3d vector) {

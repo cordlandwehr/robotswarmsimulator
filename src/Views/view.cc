@@ -16,7 +16,7 @@
 #include "../Model/sphere.h"
 #include "../Model/world_information.h"
 #include "../Utilities/unsupported_operation_exception.h"
-#include "../Utilities/coord_converter.h"
+#include "../ComputationalGeometry/coord_converter.h"
 
 View::View() {
 }

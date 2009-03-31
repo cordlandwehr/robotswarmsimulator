@@ -15,7 +15,7 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 #include <utility>
-#include "vector_arithmetics.h"
+#include "../Utilities/vector_arithmetics.h"
 
 class Geometry {
 public:
@@ -67,7 +67,7 @@ public:
 	 * \return sorts given vector of indices for Vector3ds by euclidean distance from origin
 	 */
 	static void sort_pointslist_by_distance(std::vector< std::pair<Vector3d,std::size_t> >& point_list, int p);
-	
+
 
 	Geometry();
 	virtual ~Geometry();

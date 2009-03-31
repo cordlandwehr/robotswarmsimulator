@@ -2,9 +2,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
 
-#include "../../Utilities/miniball.h"
-#include "../../Utilities/miniball.cc"
-#include "../../Utilities/miniball_b.cc"
+#include "../../ComputationalGeometry/miniball.h"
+#include "../../ComputationalGeometry/miniball.cc"
+#include "../../ComputationalGeometry/miniball_b.cc"
 
 #include "../../Utilities/vector_arithmetics.h"
 

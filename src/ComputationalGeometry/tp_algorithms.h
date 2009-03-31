@@ -12,7 +12,7 @@
 #ifndef TP_ALGORITHMS_H_
 #define TP_ALGORITHMS_H_
 
-#include "vector_arithmetics.h"
+#include "../Utilities/vector_arithmetics.h"
 
 class TP_Algorithms {
 public:
