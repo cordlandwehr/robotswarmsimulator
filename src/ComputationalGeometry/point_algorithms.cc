@@ -6,6 +6,10 @@
  */
 
 #include "point_algorithms.h"
+#include "miniball.h"
+#include "miniball.cc"
+#include "miniball_b.h"
+#include "miniball_b.cc"
 
 Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 	Vector3d cog;
@@ -20,16 +24,25 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 		cog(1) += (*iter)(1);
 		cog(2) += (*iter)(2);
 	}
-	// cog(0) = cog(0)/point_list.size();
-	// cog(1) = cog(1)/point_list.size();
-	// cog(2) = cog(2)/point_list.size();
+
 	cog /= positions.size();
 
 	return cog;
 }
 
 Vector3d PointAlgorithms::compute_CMinBall(const std::vector<Vector3d>& positions) {
-	return Vector3d();
+	Miniball<3> miniball;
+	miniball.check_in(positions);
+	miniball.build();
+	Point<3> point = miniball.center();
+
+	// build a vector3d to return
+	Vector3d result;
+	result(0) = point[0];
+	result(1) = point[1];
+	result(2) = point[2];
+
+	return result;
 }
 
 Vector3d PointAlgorithms::compute_CMinRect(const std::vector<Vector3d>& positions) {
