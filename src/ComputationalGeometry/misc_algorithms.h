@@ -17,7 +17,7 @@
 #include <utility>
 #include "../Utilities/vector_arithmetics.h"
 
-class Geometry {
+class MiscAlgorithms {
 public:
 
 	/**
@@ -62,10 +62,10 @@ public:
 	static void sort_pointslist_by_distance(std::vector< std::pair<Vector3d,std::size_t> >& point_list, int p);
 
 
-	Geometry();
-	virtual ~Geometry();
-
 private:
+	MiscAlgorithms();
+	virtual ~MiscAlgorithms();
+
 	static const double kEpsilon;	// accuracy value
 
 	// compares two vectors by there p-norm

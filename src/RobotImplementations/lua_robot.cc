@@ -30,7 +30,7 @@
 #include "../Requests/type_change_request.h"
 #include "../Requests/velocity_request.h"
 #include "../Views/view.h"
-#include "../ComputationalGeometry/geometry.h"
+#include "../ComputationalGeometry/misc_algorithms.h"
 #include "../ComputationalGeometry/point_algorithms.h"
 
 namespace {
@@ -440,7 +440,7 @@ namespace {
 
 	//TODO: doxy
 	const bool is_point_in_smallest_bbox(std::vector<Vector3dWrapper> point_list, const Vector3dWrapper& testpoint) {
-		return Geometry::is_point_in_smallest_bbox(transform(point_list), transform(testpoint));
+		return MiscAlgorithms::is_point_in_smallest_bbox(transform(point_list), transform(testpoint));
 	}
 
 	/**
@@ -479,7 +479,7 @@ namespace {
 	 */
 	const std::vector<Vector3dWrapper> sort_points_by_distance(std::vector<Vector3dWrapper> point_list) {
 		std::vector<Vector3d> vec = transform(point_list);
-		Geometry::sort_points_by_distance(vec, 2);
+		MiscAlgorithms::sort_points_by_distance(vec, 2);
 		return transform(vec);
 	}
 
@@ -494,7 +494,7 @@ namespace {
 		point_list.resize(index_list.size());
 		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(std::make_pair<Vector3d, std::size_t>, bind(static_cast<const Vector3d(*)(const Vector3dWrapper&)>(&transform), bind(get_position, 1)), _1));
 
-		Geometry::sort_pointslist_by_distance(point_list, 2);
+		MiscAlgorithms::sort_pointslist_by_distance(point_list, 2);
 
 		std::vector<std::size_t> result;
 		result.resize(point_list.size());
