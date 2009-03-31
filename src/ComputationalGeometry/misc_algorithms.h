@@ -1,5 +1,5 @@
 /*
- * Geometry.h
+ * misc_algorithms.h
  *
  *  Created on: Mar 18, 2009
  *      Author: phoenixx

@@ -1,5 +1,5 @@
 /*
- * tp_algorithms.h
+ * point_algorithms.h
  *
  *  Created on: 21.03.2009
  *      Author: sven

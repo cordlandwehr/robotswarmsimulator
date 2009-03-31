@@ -20,9 +20,7 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 	std::vector<Vector3d>::const_iterator iter;
 
 	for (iter = positions.begin(); iter != positions.end(); iter++) {
-		cog(0) += (*iter)(0);
-		cog(1) += (*iter)(1);
-		cog(2) += (*iter)(2);
+		cog += *iter;
 	}
 
 	cog /= positions.size();
