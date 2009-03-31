@@ -14,7 +14,7 @@
 
 #include "../Utilities/vector_arithmetics.h"
 
-class TP_Algorithms {
+class PointAlgorithms {
 public:
 
 	/**

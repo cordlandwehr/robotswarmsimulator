@@ -76,32 +76,12 @@ bool Geometry::is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const
 	return true;
 }
 
-Vector3d Geometry::compute_COG(std::vector<Vector3d> point_list) {
-	Vector3d cog;
-	cog(0) = 0;
-	cog(1) = 0;
-	cog(2) = 0;
-
-	std::vector<Vector3d>::iterator iter;
-
-	for (iter=point_list.begin(); iter!=point_list.end(); iter++) {
-		cog(0) += (*iter)(0);
-		cog(1) += (*iter)(1);
-		cog(2) += (*iter)(2);
-	}
-	cog(0) = cog(0)/point_list.size();
-	cog(1) = cog(1)/point_list.size();
-	cog(2) = cog(2)/point_list.size();
-
-	return cog;
-}
-
 void Geometry::sort_points_by_distance(std::vector<Vector3d>& point_list, int p) {
 	sort (point_list.begin(), point_list.end(), (boost::bind(vector3d_get_length, _1, p) < boost::bind(vector3d_get_length, _2, p)));
 }
 
 void Geometry::sort_pointslist_by_distance(std::vector< std::pair<Vector3d,std::size_t> >& point_list, int p) {
-	sort (point_list.begin(), point_list.end(), (boost::bind(vector3d_get_length, boost::bind(&std::pair<Vector3d,std::size_t>::first,_1), p) < boost::bind(vector3d_get_length, boost::bind(&std::pair<Vector3d,std::size_t>::first,_2), p)));	
+	sort (point_list.begin(), point_list.end(), (boost::bind(vector3d_get_length, boost::bind(&std::pair<Vector3d,std::size_t>::first,_1), p) < boost::bind(vector3d_get_length, boost::bind(&std::pair<Vector3d,std::size_t>::first,_2), p)));
 }
 
 Geometry::Geometry() {

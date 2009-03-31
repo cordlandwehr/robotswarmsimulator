@@ -52,13 +52,6 @@ public:
 	static bool is_point_in_smallest_bbox(std::vector<Vector3d> point_list, const Vector3d& testpoint);
 
 	/**
-	 * Computes the center of a given point list.
-	 * @param point_list as vector of Vector3ds
-	 * @return center of gravity as Vector3d
-	 */
-	static Vector3d compute_COG(std::vector<Vector3d> point_list);
-
-	/**
 	 * \return sorts given vector of Vector3ds by euclidean distance from origin
 	 */
 	static void sort_points_by_distance(std::vector<Vector3d>& point_list, int p);
@@ -73,7 +66,7 @@ public:
 	virtual ~Geometry();
 
 private:
-	static const double kEpsilon;	// accurancy value
+	static const double kEpsilon;	// accuracy value
 
 	// compares two vectors by there p-norm
 	static bool comperator(Vector3d a, Vector3d b);

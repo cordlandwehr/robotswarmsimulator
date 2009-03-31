@@ -31,6 +31,7 @@
 #include "../Requests/velocity_request.h"
 #include "../Views/view.h"
 #include "../ComputationalGeometry/geometry.h"
+#include "../ComputationalGeometry/point_algorithms.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
@@ -469,7 +470,7 @@ namespace {
 	 * @return the center of gravity
 	 */
 	const Vector3dWrapper compute_COG(std::vector<Vector3dWrapper> point_list) {
-		return transform(Geometry::compute_COG(transform(point_list)));
+		return transform(PointAlgorithms::compute_COG(transform(point_list)));
 	}
 
 	/**
