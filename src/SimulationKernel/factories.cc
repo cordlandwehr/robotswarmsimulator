@@ -33,6 +33,7 @@
 #include "../EventHandlers/type_change_request_handler.h"
 #include "../EventHandlers/vector_request_handler.h"
 #include "../EventHandlers/marker_change_request_handler.h"
+#include "../EventHandlers/collision_position_request_handler.h"
 
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
@@ -155,6 +156,37 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 			event_handler->set_position_request_handler(vector_request_handler);
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for vector position request handler");
+		}
+	} else if (position_request_handler_type == "COLLISION") {
+		try {
+			// get parameters for the collision position request handler
+			std::string collision_strategy = params["COLLISION_POSITION_REQUEST_HANDLER_STRATEGY"];
+			CollisionPositionRequestHandler::CollisionStrategy strategy;
+			if (collision_strategy == "STOP")
+				strategy = CollisionPositionRequestHandler::STOP;
+			else if (collision_strategy == "TOUCH")
+				strategy = CollisionPositionRequestHandler::TOUCH;
+			else {
+				strategy = CollisionPositionRequestHandler::STOP;
+				ConsoleOutput::out_warning("Unknown collision strategy, falling back to STOP strategy.");
+			}
+			
+			double clearance = boost::lexical_cast<double>(params["COLLISION_POSITION_REQUEST_HANDLER_CLEARANCE"]);
+			double discard_probability = boost::lexical_cast<double> (params["COLLISION_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = boost::lexical_cast<unsigned int> (params["COLLISION_POSITION_REQUEST_HANDLER_SEED"]);
+			
+			// build the collision position request handler			
+			boost::shared_ptr<CollisionPositionRequestHandler> collisionpos_request_handler(
+				new CollisionPositionRequestHandler(strategy, clearance, seed, discard_probability, *history)
+			);
+			
+			// set up vector modifiers
+			create_vector_modifiers_from_string(collisionpos_request_handler,
+					                            params["COLLISION_POSITION_REQUEST_HANDLER_MODIFIER"]);
+			
+			event_handler->set_position_request_handler(collisionpos_request_handler);
+		} catch (const boost::bad_lexical_cast&) {
+			throw UnsupportedOperationException("Failed reading parameters for collision position request handler");
 		}
 	}
 
