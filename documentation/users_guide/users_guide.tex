@@ -1,6 +1,9 @@
 \documentclass[a4paper,halfparskip,11pt,twoside]{scrbook}
 \usepackage{schlaue_schwaerme}
 \usepackage{url}
+\usepackage{makeidx}
+
+\makeindex
 
 \pdfinfo{
 	/Title   (RobotSwarmSimulator User's Guide)
@@ -44,7 +47,7 @@ morestring=[bd]',
 \chapter{Beginning}
 \input{beginning}
 
-\chapter{Setting up Simulations}
+\chapter{Setting up a Simulation}
 \input{create_simulation}
 
 \chapter{Utilize the output files}
@@ -59,6 +62,8 @@ morestring=[bd]',
 
 \chapter{Scaling Tests}
 \input{scaling_tests}
+
+\printindex
 
 % Backcover
 \newpage

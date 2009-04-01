@@ -2,10 +2,10 @@
 % This file is part of the User's Guide to RSS
 % It contains the appendix for inputfile specifications
 %%
-
+\label{cp:inputfile}
 \section{Input-file Specifications}
 
-There are exactly four kinds of input files for the \RSS. This includes the project specification files and also the \Lua-script-files that define the robot behaviour.
+There are exactly four kinds of input files for the \RSS. This includes the project specification files and also the \Lua-script-files that define the robot behavior.
 \begin{enumerate}
 	\item The main projectfile containing information about the model. The extension of this type of file is "`.swarm"'.
 	\item A file containing robot information. The extension of this file is "`.robot"'.
@@ -60,13 +60,11 @@ Also the following should be considered:
 		\texttt{ROBOT\_CONTROL} &  see section \ref{sec:robotControl} & RobotControl to use & -\\\hline
 		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position & \texttt{0,0,0}\\\hline
 		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction & \texttt{1,0,0}\\\hline
-
-
-		 
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars}
 \end{sidewaystable}
 \thispagestyle{empty}
+\index{ASG}\index{View}
 \clearpage
 
 \clearpage
@@ -123,7 +121,7 @@ Also the following should be considered:
 \clearpage
 
 
-\subsubsection{Example of a main project file}
+\subsubsection{Example of a main project file}\index{project file!example}
 A main project file may look like:
 \lstset{language=tcl}
 \begin{lstlisting}
@@ -164,7 +162,7 @@ A main project file may look like:
 \end{lstlisting}
 
 
-\subsection{Robot file}
+\subsection{Robot file}\index{robot file}
 The robotfile uses a csv-compatible format.
 Therefore the information for one robot has to be saved in exactly one line of the file.
 Each line contains the following data. The order of this data is important!
@@ -196,7 +194,7 @@ Each non-number is quoted and each number may be quoted.
 	1,"2.5","4.2","8.8","slave",1.5,2.5,3.5,1.5,2.5,3.5,"ready",0,1,0,1,0,0,0,1,0,0,0,1
 \end{lstlisting}
 
-\subsection{Obstacle file}
+\subsection{Obstacle file}\index{obstacle file}
 Like the robot file the obstacle file uses a csv-compatible format. 
 Therefore the information for one robot has to be saved in exactly one line of the file.
 Each line contains the following data. The order of this data is important!
