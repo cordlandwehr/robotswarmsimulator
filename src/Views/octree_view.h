@@ -31,7 +31,7 @@ public:
 	virtual void init(const boost::shared_ptr<WorldInformation>& world_information);
 
 protected:
-	const boost::shared_ptr<Octree>& octree() const;
+	const boost::shared_ptr<const Octree>& octree() const;
 	boost::shared_ptr<Octree> octree_;
 private:
 

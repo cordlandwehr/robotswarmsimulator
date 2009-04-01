@@ -575,7 +575,7 @@ double Octree::OctreeNode::calculate_dist_to_node(const Vector3d &pos) const {
 
 
 
-int Octree::OctreeNode::point_in_node(const Vector3d & pos){
+int Octree::OctreeNode::point_in_node(const Vector3d & pos) const{
 	if( (pos(0) <= center_(0)) && (pos(1) >= center_(1)) && (pos(2) >= center_(2)) ){
 			return TOP_LEFT_FRONT;
 	}

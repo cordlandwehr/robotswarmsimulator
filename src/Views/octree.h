@@ -133,7 +133,7 @@ public:
 		 * \param pos The position of the point
 		 *
 		 */
-		int point_in_node(const Vector3d & pos);
+		int point_in_node(const Vector3d & pos) const;
 
 
 		/**
@@ -182,21 +182,21 @@ public:
 		 * Returns the marker stored in this node.
 		 *
 		 */
-		std::vector< boost::shared_ptr<WorldObject> > & marker_information(){
+		const std::vector< boost::shared_ptr<WorldObject> > & marker_information() const {
 			return markers_;
 		}
 
 		/**
 		 * Returns the obstacles stored in this node.
 		 */
-		std::vector< boost::shared_ptr<Obstacle> > & obstacles() {
+		const std::vector< boost::shared_ptr<Obstacle> > & obstacles() const {
 			return obstacles_;
 		}
 
 		/**
 		 * Returns the robot datas stored in this node.
 		 */
-		std::vector< boost::shared_ptr<RobotData> > & robot_datas(){
+		const std::vector< boost::shared_ptr<RobotData> > & robot_datas() const {
 			return robot_datas_;
 		}
 
@@ -214,14 +214,14 @@ public:
 		 * This is node a boost::shared_ptr
 		 * because the child nodes get destroyed before their parent.
 		 */
-		OctreeNode & parent(){
+		const OctreeNode & parent() const {
 			return *parent_;
 		}
 
 		/**
 		 * Returns the depth of this node in the octree
 		 */
-		int level(){
+		int level() const {
 			return level_;
 		}
 
@@ -279,7 +279,7 @@ public:
 		 *
 		 * \param child_id The number of the child. Values in between 0 and 7 are legal numbers
 		 */
-		const boost::shared_ptr<OctreeNode> & child(int child_id ) {
+		const boost::shared_ptr<OctreeNode> & child(int child_id ) const {
 			return octree_nodes_[child_id];
 		}
 	protected:
@@ -446,7 +446,7 @@ public:
 	/**
 	 * Returns the root of the octree
 	 */
-	const boost::shared_ptr< OctreeNode > root(){
+	const boost::shared_ptr<const OctreeNode > root() const {
 			return root_;
 	}
 

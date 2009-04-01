@@ -54,7 +54,7 @@ public:
 	 *
 	 * \return A set of Roboter Identifiers
 	 */
-	static std::set<RobotRef> get_nearest_robots( const boost::shared_ptr<Octree> &octree,
+	static std::set<RobotRef> get_nearest_robots( const boost::shared_ptr<const Octree> &octree,
 												  const Vector3d &pos,
 												  const RobotRef & id,
 												  std::size_t num_nearest);
@@ -69,7 +69,7 @@ public:
 	 *
 	 * \return A set of Roboter Identifiers
 	 */
-	static std::set<MarkerRef> get_nearest_markers( const boost::shared_ptr<Octree> &octree,
+	static std::set<MarkerRef> get_nearest_markers( const boost::shared_ptr<const Octree> &octree,
 													const Vector3d &pos,
 													std::size_t num_nearest );
 
@@ -84,7 +84,7 @@ public:
 	 *
 	 * \return A set of Obstacle Identifiers
 	 */
-	static std::set<ObstacleRef> get_nearest_obstacles( const boost::shared_ptr<Octree> &octree,
+	static std::set<ObstacleRef> get_nearest_obstacles( const boost::shared_ptr<const Octree> &octree,
 														const Vector3d &pos,
 														std::size_t num_nearest );
 
@@ -102,7 +102,7 @@ public:
 	 * \return A set of Robot Identifiers.
 	 *
 	 */
-	static std::set<RobotRef> get_visible_robots_by_radius( const boost::shared_ptr<Octree> &octree,
+	static std::set<RobotRef> get_visible_robots_by_radius( const boost::shared_ptr<const Octree> &octree,
 															const Vector3d & pos,
 															double view_radius,
 															const RobotData & robot);
@@ -118,7 +118,7 @@ public:
 	 * \return A set of Marker Identifiers.
 	 *
 	 */
-	static std::set<MarkerRef> get_visible_markers_by_radius(   const boost::shared_ptr<Octree> &octree,
+	static std::set<MarkerRef> get_visible_markers_by_radius(   const boost::shared_ptr<const Octree> &octree,
 																const Vector3d & pos,
 																double view_radius);
 
@@ -133,7 +133,7 @@ public:
 	 * \return A set of Obstacle Identifiers.
 	 *
 	 */
-	static std::set<ObstacleRef> get_visible_obstacles_by_radius(const boost::shared_ptr<Octree> &octree, const Vector3d &pos, double view_radius);
+	static std::set<ObstacleRef> get_visible_obstacles_by_radius(const boost::shared_ptr<const Octree> &octree, const Vector3d &pos, double view_radius);
 
 private:
 
@@ -219,7 +219,7 @@ private:
 	 * \param queue A Max Heap with the already found robots. New Robots will be added to this Heap.
 	 * \param id the id of the Robot, so we can distinguish the robot from the other
 	 */
-	static void get_nearest_robots_Rec( const boost::shared_ptr<Octree::OctreeNode> &octree,
+	static void get_nearest_robots_Rec( const boost::shared_ptr<const Octree::OctreeNode> &octree,
 										const Vector3d &pos,
 									    std::size_t num_nearest,
 									    PriorityQueue<RobotRef>::Type & queue,
@@ -233,7 +233,7 @@ private:
 	 * \param num_nearest The number of markers to find.
 	 * \param queue A Max Heap with the already found markers. New markers will be added to this Heap.
 	 */
-	static void get_nearest_markers_Rec(const boost::shared_ptr<OctreeNode> &octree,
+	static void get_nearest_markers_Rec(const boost::shared_ptr<const OctreeNode> &octree,
 										const Vector3d &pos,
 									    std::size_t num_nearest,
 									    PriorityQueue<MarkerRef>::Type & queue);
@@ -247,7 +247,7 @@ private:
 	 * \param num_nearest The number of obstacles to find.
 	 * \param queue A Max Heap with the already found obstacles. New obstacles will be added to this Heap.
 	 */
-	static void get_nearest_obstacles_Rec(  const boost::shared_ptr<OctreeNode> &octree,
+	static void get_nearest_obstacles_Rec(  const boost::shared_ptr<const OctreeNode> &octree,
 											const Vector3d &pos,
 											std::size_t num_nearest,
 											PriorityQueue<ObstacleRef>::Type & queue);
@@ -264,7 +264,7 @@ private:
 	 *
 	 *
 	 */
-	static void get_visible_robots_by_radius_Rec( const boost::shared_ptr<Octree::OctreeNode>&octree,
+	static void get_visible_robots_by_radius_Rec( const boost::shared_ptr<const Octree::OctreeNode>&octree,
 												  std::set<RobotRef > & robots_found,
 												  double sq_radius,
 												  const Vector3d & pos );
@@ -280,7 +280,7 @@ private:
 	 *
 	 *
 	 */
-	static void get_visible_markers_by_radius_Rec( const boost::shared_ptr<OctreeNode>&octree,
+	static void get_visible_markers_by_radius_Rec( const boost::shared_ptr<const OctreeNode>&octree,
 												   std::set<MarkerRef > & markers_found,
 												   double sq_radius,
 												   const Vector3d & pos);
@@ -296,7 +296,7 @@ private:
 	 *
 	 *
 	 */
-	static void get_visible_obstacles_by_radius_Rec( const boost::shared_ptr<Octree::OctreeNode>&octree,
+	static void get_visible_obstacles_by_radius_Rec( const boost::shared_ptr<const Octree::OctreeNode>&octree,
 													 std::set<ObstacleRef > & obstacles_found,
 													 double radius,
 													 const Vector3d & pos );
@@ -306,14 +306,14 @@ private:
 	/**
 	 * Helper function to get rid of roots.
 	 */
-	static bool compare_to_squared_radius(const boost::shared_ptr<Octree::OctreeNode>& octree,
+	static bool compare_to_squared_radius(const boost::shared_ptr<const Octree::OctreeNode>& octree,
 											const Vector3d& pos,
 											double sq_radius);
 
 	/**
 	 * Helper function to get rid of roots.
 	 */
-	static double calculate_squared_dist(const boost::shared_ptr<Octree::OctreeNode>& octree,
+	static double calculate_squared_dist(const boost::shared_ptr<const Octree::OctreeNode>& octree,
 										const Vector3d& pos);
 
 

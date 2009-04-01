@@ -28,6 +28,6 @@ void OctreeView::init(const boost::shared_ptr<WorldInformation>& world_informati
 						world_information->robot_data() );
 }
 
-const boost::shared_ptr<Octree>& OctreeView::octree() const {
+const boost::shared_ptr<const Octree>& OctreeView::octree() const {
 	return octree_;
 }
