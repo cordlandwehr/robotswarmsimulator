@@ -1,4 +1,4 @@
-\documentclass[a4paper,halfparskip,11pt,twoside]{scrartcl}
+\documentclass[a4paper,halfparskip,11pt,twoside]{scrbook}
 \usepackage{schlaue_schwaerme}
 \usepackage{url}
 
@@ -9,11 +9,9 @@
 	/Keywords (Robot, Swarm, Simulator, Paderborn, University)
 }
 
-
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\cupdot}{\ensuremath{\mathaccent\cdot\cup}} % disjuncted union
-%TODO(cola) move to swarm-package
-\newcommand{\gnuplot}{ {\sffamily gnuplot}\xspace}
+
 
 \lstdefinelanguage{lua}
 {morekeywords={and, break, do, else, elseif, end, false, for, function, if, in, local, nil, not, or, repeat, return, then, true, until, while, print},
@@ -43,275 +41,23 @@ morestring=[bd]',
 \end{pgArrowitemize}
 }
 
-\section{Introduction}
-This document shall help you to use the \RSS\ to simulate robot swarms and to get useful information by the visualization and statistics modules.
+\chapter{Beginning}
+\input{beginning}
 
-For this purpose the document is divided in several sections. It will be useful if you just start with the ``Getting Started'' section and play a little bit with the simulator and continue by reading the more detailed information on input parameters, input file specifications, generating simulations and getting statistics.
+\chapter{Setting up Simulations}
+\input{create_simulation}
 
+\chapter{Utilize the output files}
+\input{statistics}
 
-\section{Getting Started}
-For a first test of \RSS you can simply run it in generation mode, and use the generated scenario with one of our default algorithms. All example files can be found in subdirectory {\tt ProjectFiles} of the install directory. Here we will present a short example on how to simulate the behavior of the {\sffamily Center of Gravity} algorithm (COG).
-
-\begin{enumerate}
-	\item Change to the directory that contains the \RSS binary.
-	\item Run the following command:
-
-		\texttt{RobotSwarmSimulator -{}-generate -{}-distr-pos 20 -{}-add-pos-handler \textbackslash\textbackslash
-			\linebreak -{}-robots 1001 -{}-algorithm COGRobot}
-
-		This will generate a simulation specification in form of the following files:
-		\begin{itemize}
-			\item {\tt newrandom.swarm} -- contains information about the simulation process
-			\item {\tt newrandom.robot} -- contains information about the robots
-			\item {\tt newrandom.obstacle} -- contains information about the obstacles
-		\end{itemize}
-		The last two files are referenced in the {\tt .swarm} file. Thus, to load the simulation, you only need to load the {\tt .swarm} file. Note that all these files
-are simple text files that can be edited by hand.
-	\item Run the command:
-
-		\centerline{\tt RobotSwarmSimulator -{}-project-file newrandom -{}-output mylogs}
-
-		This will start the simulation process. There are various keyboard shortcuts that can be used to control the simulation. Press \fbox{\tt h} for an overview. You can quit the simulation by pressing \fbox{\tt q}.
-	\item The previous step will generate various output files in the subdirectory {\tt mylogs}, mainly produced by the statistics module of the \RSS. You may directly use \gnuplot to analyze these files.
-\end{enumerate}
-This simple example can be used as a base for further test runs. Please look at the following sections to get specifications of the input files and the user inferface.
-
-\section{Running the \RSS\ with Parameters}
-Each execution of the \RSS needs specific parameters that are mandatory. By running the \RSS\ you have to specify at least, which kind of execution you want. There are two main options:
-
-\begin{itemize}
-	\item By adding the parameter {\tt -{}-generate} the generation mode is started to create new input files. This will generate three different files having the suffixes {\tt .swarm}, {\tt .robot} and {\tt .obstacle}. The most important of these is the {\tt .swarm} file, which references the other two files.
-	\item Using the parameter {\tt -{}-project-file $\langle$your\_input\_file$\rangle$}, the simulation mode is started. In this case, \texttt{<your\_input\_file>} should be the name of a file having the suffix {\tt .swarm} (e.\,g. generated with generation mode).
-\end{itemize}
-
-There are other command line options that may be used to show help or about messages and to customize the generation or simulation mode. Start the \RSS with the parameter {\tt -{}-help} to get an overview. A typical session may look like this:
-
-\begin{verbatim}
-   ./RobotSwarmSimulator --help
-   ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2 \\
-                         --output <path_to_output_files> \\
-                         --history-length 10
-\end{verbatim}
-
-All options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can be found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
-
-\begin{lstlisting}[caption={\RSS Helpline},label=lst:RSS-help]
-localhost:~$ ./RobotSwarmSimulator --help
-
-General options:
- --help                shows this help message
- --version             shows version of RobotSwarmSimulator
- --about               tells you who developed this awesome piece of software
-
-Generator options:
- --generate                      switch to generator mode
- --seed arg (=1)                 seed for random number generator
- --robots arg (=100)             number of robots
- --algorithm arg (=NONE)         name of algorithm or lua-file
- --swarmfile arg (=newrandom)    swarm-file for output
- --robotfile arg (=newrandom)    robot-file for output
- --obstaclefile arg (=newrandom) obstacle-file for output
- --add-pos-handler               add position request handler for testing
- --add-vel-handler               add velocity request handler for testing
- --add-acc-handler               add acceleration request handler for testing
- --distr-pos arg (=0)            distribute position in cube [0;distr-pos]^3
- --min-vel arg (=0)              distribute velocity in sphere with minimal  
-                                 absolut value min-vel
- --max-vel arg (=0)              distribute velocity in sphere with maximal
-                                 absolute value max-vel
- --min-acc arg (=0)              distribute acceleration in sphere with minimal  
-                                 absolut value min-acc
- --max-acc arg (=0)              distribute acceleration in sphere with maximal
-                                 absolute value max-acc
- --distr-coord                   distribute robot coordinate-systems uniformly
-
-Simulation options:
- --project-file arg         Project file to load
- --output arg               Path to directory for output
- --history-length arg (=25) history length
- --dry                      disables statistics output
- --blind                    disables visual output
- --steps                   if set this terminates the simulation after a given amount of steps
-\end{lstlisting}
-
-
-\subsection{General options}
-\begin{description}
-	\item [-{}-help] Lists all possible options including a short description.
-	\item [-{}-version] This option shows the version information of your \RSS.
-	\item [-{}-about] Get information about the developer team, contact information and more.
-\end{description}
-
-\subsection{Generator options}
-\begin{description}
-	\item [-{}-generate] Switch to generator mode. This is necessary for the further options of this section.
-	\item [-{}-seed arg] Sets the seed for the random number generator for robot generation. If not set the seed is {\tt 1}. An unsigned integer value is expected.
-	\item [-{}-robots arg] The number of robots to be generated. The default number is 100. An unsigned integer value is expected.
-	\item [-{}-algorithm arg] The name of the algorithm the robots should use. If not set the algorithm {\tt SimpleRobot} is used. This is only a stub without any functionality. Also the name of a \Lua-file can be given. The extension {\tt .lua} is mandatory for lua-files.
-	\item [-{}-swarmfile arg] The name of the swarmfile that shall be generated. Default is {\tt newrandom}. Filename without extension is expected.
-	\item [-{}-robotfile arg] The name of the robotfile that shall be generated. Default is {\tt newrandom}. Filename without extension is expected.
-	\item [-{}-obstaclefile arg] The name of the obstaclefile that shall be generated. Default is {\tt newrandom}. Filename without extension is expected.
-	\item [-{}-add-pos-handler] Causes the generated files to contain a position request handler with reasonable default values. If you need a more sophisticated position request handler, you have to edit the generated {\tt .swarm} file yourself.
-	\item [-{}-add-vel-handler] Causes the generated files to contain a velocity request handler with reasonable default values. If you need a more sophisticated velocity request handler, you have to edit the generated {\tt .swarm} file yourself.
-	\item [-{}-add-acc-handler] Causes the generated files to contain a acceleration request handler with reasonable default values. If you need a more acceleration request handler, you have to edit the generated {\tt .swarm} file yourself.
-	\item [-{}-distr-pos arg] Distributes the position of robots uniformly at random in the cube $[-arg/2,+arg/2]^3$
- If not set, all robots are at position zero.
-	\item [-{}-min-vel arg] The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}---max-vel}). This parameter defaults to 0.
-	\item [-{}-max-vel arg] The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}---min-vel}). This parameter defaults to 0.
-	\item [-{}-min-acc arg] The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}-max-acc}). This parameter defaults to 0.
-	\item [-{}-max-acc arg] The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}-min-acc}). This parameter defaults to 0.
-	\item [-{}-distr-coord arg] Generates uniformly distributed coordinate--systems for the robots. If this option is not given, all robots will have the same global coordinate system (defined by a unit matrix).
- If not set, all velocities are zero.
-\end{description}
-
-\subsection{Simulation options}
-\begin{description}
-	\item [-{}-project-file arg] Specifies the project file use. Use this parameter to load a simulation specified by a {\tt .swarm} file. Not that you may ommit the file extension {\tt .swarm}. Mandatory for simulation.
-	\item [-{}-output arg] Specifies a directory to be used for files generated by the simulation (e.\,g. statistics files for \gnuplot). The given name is interpreted relative to the current directory and will create the directory if necessary. If ommitted, all generated files will be stored in the current directory.
-	\item [-{}-history-length arg] Sets the history length, i.\,e. the length of the ringbuffer that stores past simulation states. Standard is 25 (which should be a good choice in most cases). An unsigned integer is expected.
-	\item [-{}-dry] No statistic files are beeing generated.
-\end{description}
-
-
-\section{Using the Simulator-Interface}
-During the simulation it is possible to interact with the simulation in different ways. The following hot-keys are supported while simulating:
-
-\begin{description}
-	\item [\fbox{\tt Space}] Start/ Stop.
-	\item [\fbox{\tt q}] Quit the \RSS.
-	\item [\fbox{\tt F1}] Help!
-	\item [\fbox{\tt g}] Show the center of gravity of the swarm.
-	\item [\fbox{\tt v}] Show velocity vectors.
-	\item [\fbox{\tt b}] Show acceleration vectors.
-	\item [\fbox{\tt k}] Show global coordinates system.
-	\item [\fbox{\tt w},\fbox{\tt s}] In the corresponding camera mode use \fbox{\tt w} for up  and \fbox{\tt s} for down.
-	\item [Arrow-Keys] Moves the view: left, right, before, behind.
-	\item [\fbox{\tt m}] Use \fbox{\tt m} to switch to mouse spinning mode and use your mouse to rotate the view. Note that this is not supported in every camera mode.
-	\item [\fbox{\tt +}, \fbox{\tt -}] Increase/ decrease simulation-speed by constant.
-	\item [\fbox{\tt *},\fbox{\tt /}] Double/ half simulation-speed.
-	\item [\fbox{\tt c}] Change camera mode.
-\end{description}
-
-\subsection{Information from Vizualisation}
-%TODO (cola) at this point ther should be an diagram with size relationships of the different objects, axis, robots etc)
-At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
-
-
-
-\section{Create Robot Algorithms for the \RSS}
-There are two ways to define a new robot. One way is to write a subclass of \texttt{Robot} and add a new condition in \texttt{factories.cc}. The other way is to define the robot algorithm by the {\sffamily Lua} scripting language and to load the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for small numbers of robots. Thus, for robot swarms of sizes greater than 500 robots you will (on standard computers) recognize a lack of performance.
-
-\subsection{Create Robot Algorithms by Lua Scripts}
-For information on how to write \Lua scripts please visit \url{http://www.lua.org} and use the documentation presented there. For interacting the environment \Lua scripts may access the following functions and constants (if allowed by the current view and if the according request handlers are set):
-
-\paragraph{Lua Functions}
-%TODO(cola) document ALL of these functions
-\begin{description}
-	\item [\texttt{get\_visible\_robots()}] Returns the array of visible robots.
-	\item [\texttt{get\_visible\_obstacles()}] Returns the array of visible obstacles.
-	\item [\texttt{get\_visible\_markers()}] Returns the array of visible markers.
-	\item [\texttt{get\_position(<robot>)}] Returns the position of the calling robot as a Vector3d.
-	\item [\texttt{get\_marker\_information(<robot>)}] Returns the MarkerInformation of the calling\linebreak robot.
-	\item [\texttt{get\_id(<robot>)}] Returns the identifier of the calling robot.
-	\item [\texttt{get\_robot\_acceleration(<robot>)}] Returns the acceleration of the calling robot as Vector3d.
-	\item [\texttt{get\_robot\_coordinate\_system\_axis(<robot>)}] Returns the coordinate system of the calling robot as a CoordinateSystem.
-	\item [\texttt{get\_robot\_type(<robot>)}] Returns the type of the calling robot as a RobotType.
-	\item [\texttt{get\_robot\_status(<robot>)}] Returns the status of the calling robot as a RobotStatus.
-	\item [\texttt{is\_point\_in\_obstacle(<obstacle>, <point>)}] Returns true iff the given point of\linebreak type Vector3d is within the given obstacle.
-	\item [\texttt{get\_box\_depth(<box>)}] Returns the depth of the given box as a double.
-	\item [\texttt{get\_box\_width(<box>)}] Returns the width of the given box as a double.
-	\item [\texttt{get\_box\_height(<box>)}] Returns the height of the given box as a double.
-	\item [\texttt{get\_sphere\_radius(<sphere>)}] Returns the radius of the given sphere as a double.
-	\item [\texttt{is\_box\_identifier(<identifier>)}] Returns true iff the given identifier is an identifier of a box.
-	\item [\texttt{is\_sphere\_identifier(<identifier>)}] Returns true iff the given identifier is an identifier of a sphere.
-	\item [\texttt{add\_acceleration\_request(<Vector3d>)}] 
-	\item [\texttt{add\_position\_request(<Vector3d>)}]
-	\item [\texttt{add\_velocity\_request(<Vector3d>)}]
-	\item [\texttt{add\_marker\_request(<marker>)}]
-	\item [\texttt{add\_type\_change\_request(<type>)}]
-	\item [\texttt{get\_own\_identifier()}]
-\end{description}
-
-\paragraph{Geometry Package}
-\begin{description}
-	\item [\texttt{is\_in\_smallest\_bbox(<vector of Vector3d>,<Vector3d>)}]
-	\item [\texttt{compute\_distance(<Vector3d, Vector3d>)}]
-	\item [\texttt{compute\_cog(<vector of Vector3d>)}]
-	\item [\texttt{sort\_vectors\_by\_length(<vector of Vector3d>)}] Sorts Vector3d points by distance to origin
-\end{description}
-
-
-\paragraph{\Lua Constants}
-\begin{description}
-	\item [\texttt{RobotType}] \texttt{SLAVE, MASTER}
-	\item [\texttt{RobotStatus}] \texttt{SLEEPING, READY}
-\end{description}
-
-\paragraph{Special Variable Types}
-\begin{description}
-	\item [\texttt{Vector3d}] This type is the \Lua equivalent to Vector3d in \RSS
-	\begin{itemize}
-		\item Operators: \texttt{+, *, /}
-		\item Dimensions: \texttt{x, y, z}
-	\end{itemize}
-	\item [\texttt{MarkerInformation}] This is the data type for marker information. The information can be accessed by the according operators:
-	\begin{itemize}
-		\item Operators: \texttt{add\_data, get\_data}
-	\end{itemize}
-	\item [\texttt{CoordinateSystem}] This type consists of three Vector3d objects. The axes can be accessed by the following methods:
-	\begin{itemize}
-		\item Operators: \texttt{x\_axis, y\_axis, z\_axis}
-	\end{itemize}
-
-\end{description}
-
-\subsubsection{Example Algorithm}
-Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in \Lua.
-
-\lstset{language=lua}
-\begin{lstlisting}[caption={COG algorithm in \Lua},label=lst:cog-lua]
-function main() 
-    robots = get_visible_robots();
-    center = get_position(get_own_identifier());
-    for i = 1, #robots do
-        center = center + get_position(robots[i]);
-    end
-    center = center / (#robots+1);
-    add_position_request(center);
-end
-\end{lstlisting}
-
-\subsection{Create Robot Algorithms in C++}
-For creating a new robot algorithm inside the simulator you need to do the following steps:
-\begin{enumerate}
-	\item Create a subclass of \texttt{Robot}.
-	\item Put the algorithm into \texttt{src/RobotImplementations/}.
-	\item Write the method \texttt{compute()}.
-	\item Write the method \texttt{get\_algorithm\_id()}.
-	\item Add the algorithm identifier as option in file\newline \texttt{src/SimulationKernel/factories.cc} in method \texttt{robot\_factory(\dots)}.
-\end{enumerate}
-
-
-
-\section{Statistics}
-A simulation run results in three output files of statistic data:
-
-\begin{itemize}
-\item \texttt{gnuplot\_20091224\_184129\_ALL.plt} (GNUPlot-configuration file)
-\item \texttt{output\_20091224\_184129\_ALL.plt} (according statistic data)
-\item \texttt{output\_20091224\_184129\_DATADUMP\_FULL.plt} (complete data dump)
-\end{itemize}
-
-The filenames results from current date (year, month, day), the current time (hour, minute, second), followed by description of observed object subset (e.\,g. \texttt{ALL}, \linebreak \texttt{MASTERS,}\dots).
-
-\newpage
 \appendix
+\chapter{gnuplot}
 \input{gnuplot}
 
-\newpage 
+\chapter{Input-file Specification}
 \input{inputfile_specification}
 
-\newpage
+\chapter{Scaling Tests}
 \input{scaling_tests}
 
 % Backcover

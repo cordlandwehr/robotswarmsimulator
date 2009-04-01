@@ -1,0 +1,315 @@
+
+\section{Create Simulation environments}
+\subsubsection{Activation Sequence Generators}
+
+There are two Activation Sequence Generators (ASGs). A synchronous ASG and an asynchronous ASG.
+
+To use the synchronous ASG one only needs to set the variable \texttt{ASG}=\texttt{SYNCHRONOUS}. No further variables need to be set.
+To use the asynchronous ASG one needs to set \texttt{ASG}=\texttt{ASYNCHRONOUS}. Furthermore one needs to set the following variables:
+\begin{itemize}
+\item \texttt{ASYNC\_ASG\_SEED}: Seed for the ASG
+\item \texttt{ASYNC\_ASG\_PART\_P}: The higher this is, the more robots are activated for each event. Goes from 0.0 to 1.0.
+\item \texttt{ASYNC\_ASG\_TIME\_P}: The lower this is the smaller is the time difference between events. Be careful with very high values as buffer overflows might happen. Goes from 0.0 to 1.0.
+\end{itemize}
+
+\subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
+
+Vector modifiers are objects that change a given vector in a specific way. In addition to the to be modified vector, they may be given a so called \emph{reference vector}. How exactly this reference vector influences the modification of the given vector is due to the respective implementation.
+
+Such vector modifiers are used by vector request handlers (e.g. position request handler). Requests to these handlers consist of a three dimensional vector (e.g. position the robot wants to be “beamed“ to). To model different aspects like inaccuracy or certain restrictions, vector request handlers may be given a list of vector modifiers. Before granting a request, every vector modifier in this list will be applied to the requested vector (e.g. the new position a robot requested) using the current value of the corresponding robot attribute (e.g. the robot's current position) as the reference vector.
+
+The list of vector modifiers is a (not necessarily nonempty) list, i.\,e. 
+\begin{center}\scriptsize
+	\texttt{(VECTOR\_MODIFIER\_1);(VECTOR\_MODIFIER\_2);...}
+\end{center}
+The order of the elements of this list is important. If no Vector Modifier shall be used for the corresponding Request Handler, then use \texttt{VECTOR\_MODIFIERS=}''''.
+
+An element \texttt{VECTOR\_MODIFIER\_k} of the Vector Modifier list is a tuple, defined as follows:
+\begin{center}\scriptsize
+	\texttt{VECTOR\_MODIFIER\_k=(VECTOR\_MODIFIER\_TYPE,VECTOR\_MODIFIER\_PARAM\_1,VECTOR\_MODIFIER\_PARAM\_2,..)}
+\end{center}
+The number and types of paramters like \texttt{VECTOR\_MODIFIER\_PARAM\_1,\newline VECTOR\_MODIFIER\_PARAM\_2,\dots} depends on the corresponding type of the Vector Modifier. Currently there are the following types of Vector Modifiers:
+\begin{itemize}
+	\item VectorDifferenceTrimmer
+	\item VectorTrimmer
+	\item VectorRandomizer
+\end{itemize}
+I.\,e. the value of \texttt{VECTOR\_MODIFIER\_TYPE} needs to be \texttt{VECTOR\_DIFFERENCE\_TRIMMER, VECTOR\_TRIMMER} or \texttt{VECTOR\_RANDOMIZER}.
+
+\paragraph{VectorDifferenceTrimmmer} If \texttt{VECTOR\_MODIFIER\_TYPE} is equal to\newline \texttt{VECTOR\_DIFFERENCE\_TRIMMER}, then the following parameters are expected:
+\begin{enumerate}
+	\item \texttt{length} of type double: Vector request handlers that use vector difference trimmers will ensure that the robot's request does not differ too much from the current value of the robot's corresponding attribute. If the difference is larger than \texttt{length}, the robot's request is changed such that the difference's norm matches exactly \texttt{length} afterwards. For example, a position request handler using a vector difference trimmer with parameter $\texttt{length}=1$ will ensure that the robot can move only inside the unit sphere around it's current position. If the robot requested a position outside of this unit sphere, it would be moved on the intersection of the unit sphere's boundary and the line from the robot's current position to the requested position.
+\end{enumerate}
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,5.2)}.
+
+\paragraph{VectorTrimmer} If vector modifier type equals \texttt{VECTOR\_TRIMMER}, then the following parameters are expected:
+\begin{enumerate}
+	\item \texttt{length} of type double: Every vector this vector modifier is applied to will be scaled such that it has length at most \texttt{length}. May be used for example by position request handlers to ensure that robots can not move out of the sphere of radius \texttt{length} around the origin of the global coordinate system.
+\end{enumerate}
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_TRIMMER} may look like: \texttt{(VECTOR\_TRIMMER,10.0)}.
+
+\paragraph{VectorRandomizer} If vector modifier type equals \texttt{VECTOR\_RANDOMIZER}, then the following parameters are expected:
+\begin{enumerate}
+	\item \texttt{seed} of type unsigned int: Seed used by randomization.
+	\item \texttt{standard derivation} of type double: Derivation used by the vector randomizer. Applying this vector modifier to a vector will add a random vector distributed according to the multidimensional normal distribution with derivation \texttt{standard derivation} (i.e. every coordinate of the random vector is distributed according to N(0,\texttt{standard derivation})).
+\end{enumerate}
+I.\,e. an element of the \texttt{VECTOR\_MODIFIERS}-list of type \texttt{VECTOR\_DIFFERENCE\_TRIMMER} may look like: \texttt{(VECTOR\_DIFFERENCE\_TRIMMER,1,0.5)}.
+
+\subsubsection{RobotControl}\label{sec:robotControl}
+The \texttt{RobotControl} variable defines the class which should be used to control the robots (and in particular to control the views of the robots). Currently one of the following classes has be chosen:
+\begin{enumerate}
+	\item \texttt{UNIFORM\_ROBOT\_CONTROL}
+	\item \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL}
+\end{enumerate}
+Each class is explained in detail below. Note that each class expects certain class specific parameters.
+
+\paragraph{UniformRobotControl}\label{sec:uniformRobotControl} This class assigns each robot the same view type. The concrete view type needs to be defined using a \texttt{VIEW} variable. The possible values for this variable (view types) are definied below (see \ref{sec:viewtypes}). E.\,g. you may to assign each robot global view to the world using \texttt{ROBOT\_TYPE\_ROBOT\_CONTROL="GLOBAL\_VIEW"}.
+
+\paragraph{RobotTypeRobotControl}\label{sec:robotTypeRobotControl} This class assigns each robottype the same view type. Therefore robots with different robot types may have different view types. Currently there are two robot types:
+\begin{enumerate}
+	\item \texttt{MASTER}
+	\item \texttt{SLAVE}
+\end{enumerate}
+To specify which view type should be used by each robot type, there must be variables of the form \textit{RobotType}\texttt{\_VIEW}. \\
+The value of each variable has to be a view type (see \ref{sec:viewtypes}). Note that the view type parameters are also distinguished using the \textit{RobotType} prefix. E.\,g. you may specify 
+\begin{center}
+\texttt{MASTER\_VIEW="CHAIN\_VIEW"} \\
+\texttt{MASTER\_CHAIN\_VIEW\_NUM\_ROBOTS="5"}
+\end{center} to set the view for master robots to a chain view allowing the robots to see five neighbor robots. Note that exactly one view type should be defined for each robot type.
+
+\subsubsection{ViewTypes}\label{sec:viewtypes}
+The view type of a robot defines its vision model. Whenever a view type is expected you may use one of the following values:
+\begin{enumerate}
+	\item \texttt{GLOBAL\_VIEW}
+	\item \texttt{COG\_VIEW}
+	\item \texttt{CHAIN\_VIEW}
+	\item \texttt{ONE\_POINT\_FORMATION\_VIEW}
+	\item \texttt{SELF\_VIEW}
+\end{enumerate}
+Each view type is explained in detail below.
+
+\paragraph{GLOBAL\_VIEW} Allows robots to see literally everything. There are no parameters expected.
+
+\paragraph{COG\_VIEW} View model meant to be used for center of gravity algorithms, i.\,e. every robot can see every other robots position, velocity and acceleration. The coordinate-system and id of each robot is not visible. There are no parameters expected.
+
+\paragraph{SELF\_VIEW} View model which allows robots to access every self-related information while disallowing to access any other information. There are no parameters expected.
+
+\paragraph{CHAIN\_VIEW} View model meant to be used for robot chain related algorithms, i.\,e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
+
+\paragraph{ONE\_POINT\_FORMATION\_VIEW} View model meant to be used for one point formation algorithms, i.\,e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
+
+
+\section{Running the \RSS\ with Parameters}
+Each execution of the \RSS needs specific parameters that are mandatory. By running the \RSS\ you have to specify at least, which kind of execution you want. There are two main options:
+
+\begin{itemize}
+	\item By adding the parameter {\tt -{}-generate} the generation mode is started to create new input files. This will generate three different files having the suffixes {\tt .swarm}, {\tt .robot} and {\tt .obstacle}. The most important of these is the {\tt .swarm} file, which references the other two files.
+	\item Using the parameter {\tt -{}-project-file $\langle$your\_input\_file$\rangle$}, the simulation mode is started. In this case, \texttt{<your\_input\_file>} should be the name of a file having the suffix {\tt .swarm} (e.\,g. generated with generation mode).
+\end{itemize}
+
+There are other command line options that may be used to show help or about messages and to customize the generation or simulation mode. Start the \RSS with the parameter {\tt -{}-help} to get an overview. A typical session may look like this:
+
+\begin{verbatim}
+   ./RobotSwarmSimulator --help
+   ./RobotSwarmSimulator --project-file <path_to_testdata>/testfile_2 \\
+                         --output <path_to_output_files> \\
+                         --history-length 10
+\end{verbatim}
+
+All options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can be found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
+
+\begin{lstlisting}[caption={\RSS Helpline},label=lst:RSS-help]
+localhost:~$ ./RobotSwarmSimulator --help
+
+General options:
+ --help                shows this help message
+ --version             shows version of RobotSwarmSimulator
+ --about               tells you who developed this awesome piece of software
+
+Generator options:
+ --generate                      switch to generator mode
+ --seed arg (=1)                 seed for random number generator
+ --robots arg (=100)             number of robots
+ --algorithm arg (=NONE)         name of algorithm or lua-file
+ --swarmfile arg (=newrandom)    swarm-file for output
+ --robotfile arg (=newrandom)    robot-file for output
+ --obstaclefile arg (=newrandom) obstacle-file for output
+ --add-pos-handler               add position request handler for testing
+ --add-vel-handler               add velocity request handler for testing
+ --add-acc-handler               add acceleration request handler for testing
+ --distr-pos arg (=0)            distribute position in cube [0;distr-pos]^3
+ --min-vel arg (=0)              distribute velocity in sphere with minimal  
+                                 absolut value min-vel
+ --max-vel arg (=0)              distribute velocity in sphere with maximal
+                                 absolute value max-vel
+ --min-acc arg (=0)              distribute acceleration in sphere with minimal  
+                                 absolut value min-acc
+ --max-acc arg (=0)              distribute acceleration in sphere with maximal
+                                 absolute value max-acc
+ --distr-coord                   distribute robot coordinate-systems uniformly
+
+Simulation options:
+ --project-file arg         Project file to load
+ --output arg               Path to directory for output
+ --history-length arg (=25) history length
+ --dry                      disables statistics output
+ --blind                    disables visual output
+ --steps                   if set this terminates the simulation after a given amount of steps
+\end{lstlisting}
+
+
+\subsection{General options}
+\begin{description}
+	\item [-{}-help] Lists all possible options including a short description.
+	\item [-{}-version] This option shows the version information of your \RSS.
+	\item [-{}-about] Get information about the developer team, contact information and more.
+\end{description}
+
+\subsection{Generator options}
+\begin{description}
+	\item [-{}-generate] Switch to generator mode. This is necessary for the further options of this section.
+	\item [-{}-seed arg] Sets the seed for the random number generator for robot generation. If not set the seed is {\tt 1}. An unsigned integer value is expected.
+	\item [-{}-robots arg] The number of robots to be generated. The default number is 100. An unsigned integer value is expected.
+	\item [-{}-algorithm arg] The name of the algorithm the robots should use. If not set the algorithm {\tt SimpleRobot} is used. This is only a stub without any functionality. Also the name of a \Lua-file can be given. The extension {\tt .lua} is mandatory for lua-files.
+	\item [-{}-swarmfile arg] The name of the swarmfile that shall be generated. Default is {\tt newrandom}. Filename without extension is expected.
+	\item [-{}-robotfile arg] The name of the robotfile that shall be generated. Default is {\tt newrandom}. Filename without extension is expected.
+	\item [-{}-obstaclefile arg] The name of the obstaclefile that shall be generated. Default is {\tt newrandom}. Filename without extension is expected.
+	\item [-{}-add-pos-handler] Causes the generated files to contain a position request handler with reasonable default values. If you need a more sophisticated position request handler, you have to edit the generated {\tt .swarm} file yourself.
+	\item [-{}-add-vel-handler] Causes the generated files to contain a velocity request handler with reasonable default values. If you need a more sophisticated velocity request handler, you have to edit the generated {\tt .swarm} file yourself.
+	\item [-{}-add-acc-handler] Causes the generated files to contain a acceleration request handler with reasonable default values. If you need a more acceleration request handler, you have to edit the generated {\tt .swarm} file yourself.
+	\item [-{}-distr-pos arg] Distributes the position of robots uniformly at random in the cube $[-arg/2,+arg/2]^3$
+ If not set, all robots are at position zero.
+	\item [-{}-min-vel arg] The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}---max-vel}). This parameter defaults to 0.
+	\item [-{}-max-vel arg] The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}---min-vel}). This parameter defaults to 0.
+	\item [-{}-min-acc arg] The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}-max-acc}). This parameter defaults to 0.
+	\item [-{}-max-acc arg] The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}-min-acc}). This parameter defaults to 0.
+	\item [-{}-distr-coord arg] Generates uniformly distributed coordinate--systems for the robots. If this option is not given, all robots will have the same global coordinate system (defined by a unit matrix).
+ If not set, all velocities are zero.
+\end{description}
+
+\subsection{Simulation options}
+\begin{description}
+	\item [-{}-project-file arg] Specifies the project file use. Use this parameter to load a simulation specified by a {\tt .swarm} file. Not that you may ommit the file extension {\tt .swarm}. Mandatory for simulation.
+	\item [-{}-output arg] Specifies a directory to be used for files generated by the simulation (e.\,g. statistics files for \gnuplot). The given name is interpreted relative to the current directory and will create the directory if necessary. If ommitted, all generated files will be stored in the current directory.
+	\item [-{}-history-length arg] Sets the history length, i.\,e. the length of the ringbuffer that stores past simulation states. Standard is 25 (which should be a good choice in most cases). An unsigned integer is expected.
+	\item [-{}-dry] No statistic files are beeing generated.
+\end{description}
+
+
+\section{Using the Simulator-Interface}
+During the simulation it is possible to interact with the simulation in different ways. The following hot-keys are supported while simulating:
+
+\begin{description}
+	\item [\fbox{\tt Space}] Start/ Stop.
+	\item [\fbox{\tt q}] Quit the \RSS.
+	\item [\fbox{\tt F1}] Help!
+	\item [\fbox{\tt g}] Show the center of gravity of the swarm.
+	\item [\fbox{\tt v}] Show velocity vectors.
+	\item [\fbox{\tt b}] Show acceleration vectors.
+	\item [\fbox{\tt k}] Show global coordinates system.
+	\item [\fbox{\tt w},\fbox{\tt s}] In the corresponding camera mode use \fbox{\tt w} for up  and \fbox{\tt s} for down.
+	\item [Arrow-Keys] Moves the view: left, right, before, behind.
+	\item [\fbox{\tt m}] Use \fbox{\tt m} to switch to mouse spinning mode and use your mouse to rotate the view. Note that this is not supported in every camera mode.
+	\item [\fbox{\tt +}, \fbox{\tt -}] Increase/ decrease simulation-speed by constant.
+	\item [\fbox{\tt *},\fbox{\tt /}] Double/ half simulation-speed.
+	\item [\fbox{\tt c}] Change camera mode.
+\end{description}
+
+\subsection{Information from Vizualisation}
+%TODO (cola) at this point ther should be an diagram with size relationships of the different objects, axis, robots etc)
+At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
+
+\section{Create Robot Algorithms for the \RSS}
+There are two ways to define a new robot. One way is to write a subclass of \texttt{Robot} and add a new condition in \texttt{factories.cc}. The other way is to define the robot algorithm by the {\sffamily Lua} scripting language and to load the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for small numbers of robots. Thus, for robot swarms of sizes greater than 500 robots you will (on standard computers) recognize a lack of performance.
+
+\subsection{Create Robot Algorithms by Lua Scripts}
+For information on how to write \Lua scripts please visit \url{http://www.lua.org} and use the documentation presented there. For interacting the environment \Lua scripts may access the following functions and constants (if allowed by the current view and if the according request handlers are set):
+
+\paragraph{Lua Functions}
+%TODO(cola) document ALL of these functions :/
+
+\begin{description}
+	\item [\texttt{get\_visible\_robots()}] Returns the array of visible robots.
+	\item [\texttt{get\_visible\_obstacles()}] Returns the array of visible obstacles.
+	\item [\texttt{get\_visible\_markers()}] Returns the array of visible markers.
+	\item [\texttt{get\_position(<robot>)}] Returns the position of the calling robot as a Vector3d.
+	\item [\texttt{get\_marker\_information(<robot>)}] Returns the MarkerInformation of the calling\linebreak robot.
+	\item [\texttt{get\_id(<robot>)}] Returns the identifier of the calling robot.
+	\item [\texttt{get\_robot\_acceleration(<robot>)}] Returns the acceleration of the calling robot as Vector3d.
+	\item [\texttt{get\_robot\_coordinate\_system\_axis(<robot>)}] Returns the coordinate system of the calling robot as a CoordinateSystem.
+	\item [\texttt{get\_robot\_type(<robot>)}] Returns the type of the calling robot as a RobotType.
+	\item [\texttt{get\_robot\_status(<robot>)}] Returns the status of the calling robot as a RobotStatus.
+	\item [\texttt{is\_point\_in\_obstacle(<obstacle>, <point>)}] Returns true iff the given point of\linebreak type Vector3d is within the given obstacle.
+	\item [\texttt{get\_box\_depth(<box>)}] Returns the depth of the given box as a double.
+	\item [\texttt{get\_box\_width(<box>)}] Returns the width of the given box as a double.
+	\item [\texttt{get\_box\_height(<box>)}] Returns the height of the given box as a double.
+	\item [\texttt{get\_sphere\_radius(<sphere>)}] Returns the radius of the given sphere as a double.
+	\item [\texttt{is\_box\_identifier(<identifier>)}] Returns true iff the given identifier is an identifier of a box.
+	\item [\texttt{is\_sphere\_identifier(<identifier>)}] Returns true iff the given identifier is an identifier of a sphere.
+	\item [\texttt{add\_acceleration\_request(<Vector3d>)}] 
+	\item [\texttt{add\_position\_request(<Vector3d>)}]
+	\item [\texttt{add\_velocity\_request(<Vector3d>)}]
+	\item [\texttt{add\_marker\_request(<marker>)}]
+	\item [\texttt{add\_type\_change\_request(<type>)}]
+	\item [\texttt{get\_own\_identifier()}]
+\end{description}
+
+\paragraph{Geometry Package}
+\begin{description}
+	\item [\texttt{is\_in\_smallest\_bbox(<vector of Vector3d>,<Vector3d>)}]
+	\item [\texttt{compute\_distance(<Vector3d, Vector3d>)}]
+	\item [\texttt{compute\_cog(<vector of Vector3d>)}]
+	\item [\texttt{sort\_vectors\_by\_length(<vector of Vector3d>)}] Sorts Vector3d points by distance to origin
+\end{description}
+
+
+\paragraph{\Lua Constants}
+\begin{description}
+	\item [\texttt{RobotType}] \texttt{SLAVE, MASTER}
+	\item [\texttt{RobotStatus}] \texttt{SLEEPING, READY}
+\end{description}
+
+\paragraph{Special Variable Types}
+\begin{description}
+	\item [\texttt{Vector3d}] This type is the \Lua equivalent to Vector3d in \RSS
+	\begin{itemize}
+		\item Operators: \texttt{+, *, /}
+		\item Dimensions: \texttt{x, y, z}
+	\end{itemize}
+	\item [\texttt{MarkerInformation}] This is the data type for marker information. The information can be accessed by the according operators:
+	\begin{itemize}
+		\item Operators: \texttt{add\_data, get\_data}
+	\end{itemize}
+	\item [\texttt{CoordinateSystem}] This type consists of three Vector3d objects. The axes can be accessed by the following methods:
+	\begin{itemize}
+		\item Operators: \texttt{x\_axis, y\_axis, z\_axis}
+	\end{itemize}
+
+\end{description}
+
+\subsubsection{Example Algorithm}
+Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in \Lua.
+
+\lstset{language=lua}
+\begin{lstlisting}[caption={COG algorithm in \Lua},label=lst:cog-lua]
+function main() 
+    robots = get_visible_robots();
+    center = get_position(get_own_identifier());
+    for i = 1, #robots do
+        center = center + get_position(robots[i]);
+    end
+    center = center / (#robots+1);
+    add_position_request(center);
+end
+\end{lstlisting}
+
+\subsection{Create Robot Algorithms in C++}
+For creating a new robot algorithm inside the simulator you need to do the following steps:
+\begin{enumerate}
+	\item Create a subclass of \texttt{Robot}.
+	\item Put the algorithm into \texttt{src/RobotImplementations/}.
+	\item Write the method \texttt{compute()}.
+	\item Write the method \texttt{get\_algorithm\_id()}.
+	\item Add the algorithm identifier as option in file\newline \texttt{src/SimulationKernel/factories.cc} in method \texttt{robot\_factory(\dots)}.
+\end{enumerate}
+
