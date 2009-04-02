@@ -21,15 +21,15 @@ unsigned NeighborView::seen_objects_count() const {
 	return seen_objects_count_;
 }
 
-std::set<View::RobotRef> NeighborView::get_visible_robots(const RobotData& robot) const {
+std::vector<View::RobotRef> NeighborView::get_visible_robots(const RobotData& robot) const {
 
 	return OctreeUtilities::get_nearest_robots( octree(), robot.position(), boost::static_pointer_cast<RobotIdentifier>(robot.id()), std::size_t(seen_objects_count() ) );
 }
-std::set<View::ObstacleRef> NeighborView::get_visible_obstacles(const RobotData& robot) const {
+std::vector<View::ObstacleRef> NeighborView::get_visible_obstacles(const RobotData& robot) const {
 
 	return OctreeUtilities::get_nearest_obstacles(octree(), robot.position(), std::size_t(seen_objects_count() ) );
 }
-std::set<View::MarkerRef> NeighborView::get_visible_markers(const RobotData& robot) const {
+std::vector<View::MarkerRef> NeighborView::get_visible_markers(const RobotData& robot) const {
 
 	return OctreeUtilities::get_nearest_markers( octree(), robot.position(), std::size_t(seen_objects_count() ) );
 }

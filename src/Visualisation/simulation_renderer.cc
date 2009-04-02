@@ -434,7 +434,7 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 }
 
 void SimulationRenderer::draw_visibility_graph(const boost::shared_ptr<WorldInformation> world_info){
-	std::set<boost::shared_ptr<RobotIdentifier> > visible_robots;
+	std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots;
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 
 	//for all robots, get all visible robots and draw line between them

@@ -26,9 +26,9 @@ public:
 	virtual ~NeighborView();
 
 protected:
-	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
-	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
-	virtual std::set<MarkerRef> get_visible_markers(const RobotData& robot) const;
+	virtual std::vector<RobotRef> get_visible_robots(const RobotData& robot) const;
+	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
+	virtual std::vector<MarkerRef> get_visible_markers(const RobotData& robot) const;
 
 	unsigned seen_objects_count() const;
 

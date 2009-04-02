@@ -28,7 +28,7 @@ public:
 		boost::shared_ptr<View> view = view_;
 
 		// compute the center of gravity of all robots
-		std::set<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(*this);
+		std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(*this);
 		Vector3d result = view->get_position(*this, id());
 		BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
 			result += view->get_position(*this, cur_id);

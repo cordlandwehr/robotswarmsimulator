@@ -28,6 +28,7 @@ class Obstacle;
 class Box;
 class Sphere;
 class WorldInformation;
+class DistributionGenerator;
 
 /**
  * \class View
@@ -59,6 +60,12 @@ public:
 	virtual ~View();
 
 	/**
+	* @param DistributionGenerator used for random_shuffle calls in get_visible_* methods.
+	*/
+
+	static void set_distribution_generator(boost::shared_ptr<DistributionGenerator> generator);
+
+	/**
 	 * Although init is trivial, it is nice to have a default constructor in virtual
 	 * inherited classes. Otherwise every arbitrary deep sub class has
 	 * to call the non-default constructor.
@@ -74,14 +81,14 @@ public:
 	 * @return set of robots visible
 	 */
 
-	const std::set<RobotRef> get_visible_robots(const Robot& caller) const;
+	const std::vector<RobotRef> get_visible_robots(const Robot& caller) const;
 	/**
 	* Returns the set of obstacles visible for the calling Robot.
 	* @param Robot that should take a look-around
 	* @return set of obstacles visible
 	*/
 
-	const std::set<ObstacleRef> get_visible_obstacles(const Robot& caller) const;
+	const std::vector<ObstacleRef> get_visible_obstacles(const Robot& caller) const;
 
 	/**
 	* Returns the set of markers visible for the calling Robot.
@@ -89,7 +96,7 @@ public:
 	* @return set of markers visible
 	*/
 
-	const std::set<MarkerRef> get_visible_markers(const Robot& caller) const;
+	const std::vector<MarkerRef> get_visible_markers(const Robot& caller) const;
 
 
 	//-- WorldObject--
@@ -223,9 +230,9 @@ public:
 protected:
 	//Helper methods for non virtual methods.
 
-	virtual std::set<RobotRef> get_visible_robots(const RobotData& robot) const;
-	virtual std::set<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
-	virtual std::set<MarkerRef> get_visible_markers(const RobotData& robot) const;
+	virtual std::vector<RobotRef> get_visible_robots(const RobotData& robot) const;
+	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
+	virtual std::vector<MarkerRef> get_visible_markers(const RobotData& robot) const;
 
 
 	//Following methods are called by the non virtual method get_position. Which of the four methods
@@ -351,6 +358,7 @@ private:
 
 private:
 	boost::shared_ptr<WorldInformation> world_information_;
+	static boost::shared_ptr<DistributionGenerator> generator_;
 
 };
 

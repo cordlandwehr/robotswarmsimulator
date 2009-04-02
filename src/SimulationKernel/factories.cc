@@ -41,6 +41,7 @@
 #include "../Utilities/VectorModifiers/vector_randomizer.h"
 #include "../Utilities/unsupported_operation_exception.h"
 #include "../Utilities/console_output.h"
+#include "../Utilities/distribution_generator.h"
 
 #include "../Model/robot.h"
 #include "../Model/robot_identifier.h"
@@ -329,6 +330,22 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 }
 
 boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {
+	//init View
+	unsigned int seed;
+	if(params.find("VIEW_SEED") != params.end()) {
+		try {
+			seed = boost::lexical_cast<unsigned int> (params["VIEW_SEED"]);
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading seed for view.");
+		}
+	} else {
+		seed = 123;
+	}
+
+	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(seed));
+	View::set_distribution_generator(generator);
+
+
 	std::string robot_type = params["ROBOT_CONTROL"];
 	boost::shared_ptr<RobotControl> control;
 

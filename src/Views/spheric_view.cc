@@ -30,15 +30,15 @@ void SphericView::init(const boost::shared_ptr<WorldInformation>& world_informat
 
 }
 
-std::set<View::RobotRef> SphericView::get_visible_robots(const RobotData& robot) const {
+std::vector<View::RobotRef> SphericView::get_visible_robots(const RobotData& robot) const {
 
 	return OctreeUtilities::get_visible_robots_by_radius(octree(),robot.position(), view_radius(), robot );
 }
-std::set<View::ObstacleRef> SphericView::get_visible_obstacles(const RobotData& robot) const {
+std::vector<View::ObstacleRef> SphericView::get_visible_obstacles(const RobotData& robot) const {
 
 	return OctreeUtilities::get_visible_obstacles_by_radius(octree(), robot.position(), view_radius() );
 }
-std::set<View::MarkerRef> SphericView::get_visible_markers(const RobotData& robot) const {
+std::vector<View::MarkerRef> SphericView::get_visible_markers(const RobotData& robot) const {
 
 	return OctreeUtilities::get_visible_markers_by_radius(octree(),robot.position() , view_radius() );
 }

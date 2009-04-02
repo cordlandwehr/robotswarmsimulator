@@ -1,6 +1,7 @@
 #include "view.h"
 
 
+#include <boost/lambda/lambda.hpp>
 
 #include "../Model/identifier.h"
 #include "../Model/robot_identifier.h"
@@ -16,7 +17,15 @@
 #include "../Model/sphere.h"
 #include "../Model/world_information.h"
 #include "../Utilities/unsupported_operation_exception.h"
+#include "../Utilities/distribution_generator.h"
 #include "../ComputationalGeometry/coord_converter.h"
+
+boost::shared_ptr<DistributionGenerator> View::generator_ = boost::shared_ptr<DistributionGenerator>();
+
+void View::set_distribution_generator(boost::shared_ptr<DistributionGenerator> generator) {
+	generator_ = generator;
+	generator_->init_uniform(0, std::numeric_limits<int>::max());
+}
 
 View::View() {
 }
@@ -120,21 +129,24 @@ void View::init(const boost::shared_ptr<WorldInformation>& world_information) {
 }
 
 
-const std::set<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
-
-	return get_visible_robots(resolve_robot_ref(caller.id()));
+const std::vector<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
+	std::vector<View::RobotRef> result(get_visible_robots(resolve_robot_ref(caller.id())));
+	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	return result;
 }
 
 
-const std::set<View::ObstacleRef> View::get_visible_obstacles(const Robot& caller) const {
-
-	return get_visible_obstacles(resolve_robot_ref(caller.id()));
+const std::vector<View::ObstacleRef> View::get_visible_obstacles(const Robot& caller) const {
+	std::vector<View::ObstacleRef> result(get_visible_obstacles(resolve_robot_ref(caller.id())));
+	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	return result;
 }
 
 
-const std::set<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
-
-	return get_visible_markers(resolve_robot_ref(caller.id()));
+const std::vector<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
+	std::vector<View::MarkerRef> result(get_visible_markers(resolve_robot_ref(caller.id())));
+	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	return result;
 }
 
 const Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
@@ -204,15 +216,15 @@ const double View::get_sphere_radius(SphereRef sphere) const {
 	return get_sphere_radius(resolve_sphere_ref_safe(sphere));
 }
 
-std::set<View::RobotRef> View::get_visible_robots(const RobotData& robot) const {
+std::vector<View::RobotRef> View::get_visible_robots(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_visible_robots"));
 }
 
-std::set<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robot) const {
+std::vector<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_visible_obstacles"));
 }
 
-std::set<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
+std::vector<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_visible_markers"));
 }
 

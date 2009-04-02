@@ -48,7 +48,7 @@ BOOST_FIXTURE_TEST_CASE(view_performance_test, SimpleWorldFixture)
 		boost::shared_ptr<View> view = factory.create_new_view_instance(initial_world_information);
 
 		BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
-			std::set<boost::shared_ptr<RobotIdentifier> > set(view->get_visible_robots(*robot));
+			std::vector<boost::shared_ptr<RobotIdentifier> > set(view->get_visible_robots(*robot));
 			counter += set.size();
 		}
 		std::cout << "Robots found " << counter << std::endl;

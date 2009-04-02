@@ -44,7 +44,7 @@ std::set<boost::shared_ptr<Request> > MiniballRobot::compute() {
 		Miniball<3> miniball;
 		miniball.check_in(vector3d_to_point(view->get_position(*this, id())));
 		// compute the miniball of all visible robots
-		std::set<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(*this);
+		std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(*this);
 		BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
 			miniball.check_in(vector3d_to_point(view->get_position(*this, cur_id)));
 		}
