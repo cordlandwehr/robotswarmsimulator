@@ -18,6 +18,7 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 	if(positions.size() == 0) {
 		// do some error handling.
 		ConsoleOutput::out_error("Computing COG with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+		return Vector3d();
 	}
 
 	Vector3d cog;
@@ -40,6 +41,7 @@ Vector3d PointAlgorithms::compute_CMinBall(const std::vector<Vector3d>& position
 	if(positions.size() == 0) {
 		// do some error handling
 		ConsoleOutput::out_error("Computing CMinBall with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+		return Vector3d();
 	}
 
 	Miniball<3> miniball;
@@ -60,14 +62,42 @@ Vector3d PointAlgorithms::compute_CMinBox(const std::vector<Vector3d>& positions
 	if(positions.size() == 0) {
 		// do some error handling
 		ConsoleOutput::out_error("Computing CMinBox with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+		return Vector3d();
 	}
-	Vector3d first = positions[0];
+	Vector3d first = positions.at(0);
+	double min_x = first(kXCoord);
+	double max_x = first(kXCoord);
+	double min_y = first(kYCoord);
+	double max_y = first(kYCoord);
+	double min_z = first(kZCoord);
+	double max_z = first(kZCoord);
 
 	BOOST_FOREACH(Vector3d position, positions) {
+		if(position(kXCoord) < min_x) {
+			min_x = position(kXCoord);
+		} else if(position(kXCoord) > max_x) {
+			max_x = position(kXCoord);
+		}
 
+		if(position(kYCoord) < min_y) {
+			min_y = position(kYCoord);
+		} else if(position(kYCoord) > max_y) {
+			max_y = position(kYCoord);
+		}
+
+		if(position(kZCoord) < min_x) {
+			min_z = position(kZCoord);
+		} else if(position(kZCoord) > max_x) {
+			max_z = position(kZCoord);
+		}
 	}
 
-	return Vector3d();
+	Vector3d CMinBox;
+	CMinBox(kXCoord) = (min_x + max_x) / 2;
+	CMinBox(kYCoord) = (min_y + max_y) / 2;
+	CMinBox(kZCoord) = (min_z + max_z) / 2;
+
+	return CMinBox;
 }
 
 Vector3d PointAlgorithms::compute_MaxLine(const std::vector<Vector3d>& positions) {
