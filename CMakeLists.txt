@@ -3,7 +3,7 @@ set(CMAKE_VERBOSE_MAKEFILE false)
 
 # project name and version
 project("Robot Swarm Simulator")
-set(PROJECT_VERSION 0.55)
+set(PROJECT_VERSION 0.6)
 
 # module path
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/resources/CMake/modules)
