@@ -23,6 +23,29 @@ To use the asynchronous ASG one needs to set \texttt{ASG}=\texttt{ASYNCHRONOUS}.
 \item \texttt{ASYNC\_ASG\_TIME\_P}: The lower this is the smaller is the time difference between events. Be careful with very high values as buffer overflows might happen. Goes from 0.0 to 1.0.
 \end{itemize}
 
+
+\subsubsection{Event Handler}\label{sec:eventHandlers}
+\index{Event Handler|textbf}
+
+The event handler is responsible for applying actual changes to the simulated world. In fact, this is the \emph{only} place where the world may be changed. An event handler is mainly specified by so called \emph{Request Handlers} that specify how the different requests robots can issue are handled. For example, to always apply position requests from the robots in exactly the way they were issued, you would set \texttt{POSITION\_REQUEST\_HANDLER\_TYPE}=\texttt{VECTOR} and additionally set the following configuration variables:
+\begin{itemize}
+	\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_DISCARD\_PROB="0.0"}: No event will be discarded.
+	\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_SEED="42"}: Seed for random number generator.
+	\item \texttt{VECTOR\_POSITION\_REQUEST\_HANDLER\_MODIFIER=""}: We don't need any vector modifiers in this example
+\end{itemize}
+
+The following list provides a short overview over more advanced and non--standard request handlers. For further explanation of all possible values see section~\ref{sec:vectorModifiers} and Appendix~\ref{cp:inputfile}.
+
+\begin{itemize}
+\item \textbf{Collision Position Request Handler}
+	This is a special position request handler that provides simple collision handling functionallity. To use it, you have to set \texttt{POSITION\_REQUEST\_HANDLER\_TYPE}=\texttt{COLLISION}. The possible options are listed in Appendix~\ref{cp:inputfile}. The two most important (new) configuration options include:
+	\begin{itemize}
+		\item \texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_STRATEGY} You may choose between the values \texttt{STOP} and \texttt{TOUCH}. While the strategy \texttt{STOP} will cause the position request to be discarded if it would cause a collision, the latter strategy \texttt{TOUCH} will move the robot from the requested position (where a collision occured) backwards towards it's original position until the collision is resolved (i.e., the robot will be touching at least one other robot after the collision was handled).
+		\item \texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_CLEARANCE} Use this value to choose the distance from that on two robots will be considered colliding. For example, if you have spheric robots of radius $r$, choosing a clearance of $2r$ will consider two robots colliding as soon as their spheres intersect.
+	\end{itemize}
+\end{itemize}
+
+
 \subsubsection{Vector Modifiers}\label{sec:vectorModifiers}
 \index{Vector Modifier|textbf}
 

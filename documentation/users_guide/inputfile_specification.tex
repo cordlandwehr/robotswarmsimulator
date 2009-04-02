@@ -78,7 +78,7 @@ Also the following should be considered:
 		 
 		\texttt{TYPE\_CHANGE\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{STANDARD,NONE}$\}$ & Type of Type Change Request Handler to use. & $\{$\texttt{NONE}$\}$\\\hline
 		
-		\texttt{POSITION\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Position Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
+		\texttt{POSITION\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,COLLISION,NONE}$\}$ & Type of Position Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
 
 		\texttt{VELOCITY\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Velocity Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
 
@@ -89,6 +89,8 @@ Also the following should be considered:
 		\texttt{STANDARD\_TYPE\_CHANGE\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Type Change Request Handler to use. & -\\\hline
 		
 		\texttt{POSITION\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Position Request Handler to use & -\\\hline
+		
+		\texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Position Request Handler (of type COLLISION) to use & -\\\hline
 
 		\texttt{VELOCITY\_REQUEST\_HANDLER\_SEED} &   integer & Seed for Velocity Request Handler to use & -\\\hline
 
@@ -101,6 +103,8 @@ Also the following should be considered:
 		\texttt{STANDARD\_TYPE\_CHANGE\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Type Change Request Handler to use. & -\\\hline
 		
 		\texttt{POSITION\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Position Request Handler to use & -\\\hline
+		
+		\texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Position Request Handler (of type COLLISION) to use & -\\\hline
 
 		\texttt{VELOCITY\_REQUEST\_HANDLER\_DISCARD\_PROB} & element from interval $[0,1]$ & Discard probability  for Velocity Request Handler to use & -\\\hline
 
@@ -108,10 +112,16 @@ Also the following should be considered:
 		
 		
 		\texttt{POSITION\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Position Request Handler to use & -\\\hline
+		
+		\texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Position Request Handler (of type COLLISION) to use & -\\\hline
 
 		\texttt{VELOCITY\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Velocity Request Handler to use & -\\\hline
 
-		\texttt{ACCELERATION\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Acceleration Request Handler to use & -\\\hline		
+		\texttt{ACCELERATION\_REQUEST\_HANDLER\_MODIFIER} & list of vector modifiers (see \ref{sec:vectorModifiers}) & List of vector modifiers for Acceleration Request Handler to use & -\\\hline
+		
+		\texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_STRATEGY} & element from $\{$\texttt{STOP,TOUCH}$\}$ & Type of strategy to use for collision handling (see \ref{sec:eventHandlers}) & -\\\hline
+		
+		\texttt{COLLISION\_POSITION\_REQUEST\_HANDLER\_CLEARANCE} & positive floating point value & Two objects with distance less than this value will be considered colliding & -\\\hline
 				
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars2}
