@@ -43,9 +43,13 @@ function main()
 	pos_ul = false
 	pos_u = false;
 	pos_ur = false;
+	pos_same = false;
 
-
-	for i = 1, #robots do
+	-- start with second robot, because #1 is me :)
+	for i = 2, #robots do
+		if (get_position(robots[i]).x==0 and get_position(robots[i]).y==0) then
+			pos_same = true;
+		end
 		if (get_position(robots[i]).x==1 and get_position(robots[i]).y==0) then
 			pos_r = true;
 		end
@@ -92,6 +96,27 @@ function main()
 		end
 	end
 
+
+
+	-- if I am not alone at my point: go away
+	if (pos_same) then
+		if (pos_u==false and (pos_ur or pos_ul)) then
+			add_position_request(Vector3d(0,-1,0));
+			return;
+		end
+		if (pos_l==false and (pos_ul or pos_ol)) then
+			add_position_request(Vector3d(-1,0,0));
+			return;
+		end
+		if (pos_o==false and (pos_or or pos_ol)) then
+			add_position_request(Vector3d(0,1,0));
+			return;
+		end
+		if (pos_r==false and (pos_or or pos_ur)) then
+			add_position_request(Vector3d(1,0,0));
+			return;
+		end
+	end
 
 	-- do not move if you see nothing right and below
 --	if (pos_or==false and pos_r==false and pos_ur==false and pos_u==false and pos_ul==false and pos_ol and pos_o and pos_l) then
