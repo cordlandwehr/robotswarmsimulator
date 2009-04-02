@@ -23,7 +23,7 @@ public:
 
 	static Vector3d compute_COG(const std::vector<Vector3d>& positions);
 	static Vector3d compute_CMinBall(const std::vector<Vector3d>& positions);
-	static Vector3d compute_CMinRect(const std::vector<Vector3d>& positions);
+	static Vector3d compute_CMinBox(const std::vector<Vector3d>& positions);
 	static Vector3d compute_MaxLine(const std::vector<Vector3d>& positions);
 	static Vector3d compute_CCH(const std::vector<Vector3d>& positions);
 	static Vector3d compute_RCH(const std::vector<Vector3d>& positions);

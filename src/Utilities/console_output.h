@@ -22,7 +22,8 @@ public:
 		Statistics,
 		Parser,
 		Kernel,
-		View
+		View,
+		ComputationalGeometry
 	};
 
 	/**

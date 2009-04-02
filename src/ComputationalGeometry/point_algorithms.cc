@@ -10,8 +10,16 @@
 #include "miniball.cc"
 #include "miniball_b.h"
 #include "miniball_b.cc"
+#include "../Utilities/console_output.h"
+
+#include <boost/foreach.hpp>
 
 Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
+	if(positions.size() == 0) {
+		// do some error handling.
+		ConsoleOutput::out_error("Computing COG with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+	}
+
 	Vector3d cog;
 	cog(0) = 0;
 	cog(1) = 0;
@@ -19,8 +27,8 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 
 	std::vector<Vector3d>::const_iterator iter;
 
-	for (iter = positions.begin(); iter != positions.end(); iter++) {
-		cog += *iter;
+	BOOST_FOREACH(Vector3d position, positions) {
+		cog += position;
 	}
 
 	cog /= positions.size();
@@ -29,6 +37,11 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 }
 
 Vector3d PointAlgorithms::compute_CMinBall(const std::vector<Vector3d>& positions) {
+	if(positions.size() == 0) {
+		// do some error handling
+		ConsoleOutput::out_error("Computing CMinBall with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+	}
+
 	Miniball<3> miniball;
 	miniball.check_in(positions);
 	miniball.build();
@@ -43,7 +56,17 @@ Vector3d PointAlgorithms::compute_CMinBall(const std::vector<Vector3d>& position
 	return result;
 }
 
-Vector3d PointAlgorithms::compute_CMinRect(const std::vector<Vector3d>& positions) {
+Vector3d PointAlgorithms::compute_CMinBox(const std::vector<Vector3d>& positions) {
+	if(positions.size() == 0) {
+		// do some error handling
+		ConsoleOutput::out_error("Computing CMinBox with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+	}
+	Vector3d first = positions[0];
+
+	BOOST_FOREACH(Vector3d position, positions) {
+
+	}
+
 	return Vector3d();
 }
 
