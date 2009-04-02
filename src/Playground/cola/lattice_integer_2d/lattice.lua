@@ -1,6 +1,6 @@
 -- LUA File for lattice alignment
 --   by Andreas Cord-Landwehr, 
---   last update at Su, 22th of March
+--   last update \today ;) To heavy work to update each time :)
 --
 --  This algorithm is intended to align a set of robots 
 --    on a 2d layer
@@ -124,13 +124,31 @@ function main()
 		-- do nothing
 		return;
 	end
+	-- next is: robot is corner of a box, this should not be destroyed in most cases, but to get local swarm, mayby sometimes...
 	if ((pos_r and pos_ur and pos_u) or (pos_l and pos_ul and pos_u) or (pos_l and pos_ol and pos_o) or (pos_o and pos_or and pos_r)) then
-		-- do nothing
+		-- bottom
+		if (pos_r and pos_ur and pos_u and pos_ul==false and pos_l==false and pos_ol==false and pos_o==false and pos_or==false and second_l) then
+			add_position_request(Vector3d(-1,0,0));
+			return;
+		end
+		if (pos_l and pos_ul and pos_u and pos_ur==false and pos_r==false and pos_or==false and pos_o==false and pos_ol==false and second_o) then
+			add_position_request(Vector3d(0,1,0));
+			return;
+		end
+		if (pos_l and pos_ol and pos_o and pos_or==false and pos_r==false and pos_ur==false and pos_u==false and pos_ul==false and second_r) then
+			add_position_request(Vector3d(1,0,0));
+			return;
+		end
+		if (pos_o and pos_or and pos_r and pos_ur==false and pos_u==false and pos_ul==false and pos_l==false and pos_ol==false and second_u) then
+			add_position_request(Vector3d(0,-1,0));
+			return;
+		end
+		-- else: do nothing
 		return;
 	end
 
 	
-	-- create L.s
+	-- create L formations
 	if (pos_l and pos_r and pos_o==false and pos_u==false) then
 		if (second_l and pos_ul==false) then
 			add_position_request(Vector3d(-1,-1,0));
@@ -148,7 +166,6 @@ function main()
 			add_position_request(Vector3d(1,1,0));
 			return;
 		end
-
 	end
 	if (pos_u and pos_o and pos_l==false and pos_r==false) then
 		if (second_u and pos_ul==false) then
@@ -168,9 +185,9 @@ function main()
 			return;
 		end
 	end
-		
+	
 
-	-- moving to fill space	
+	-- move to fill hole in line	
 	if (pos_ul and pos_u==false and pos_ur) then
 		add_position_request(Vector3d(0,-1,0));
 		return;
