@@ -41,7 +41,7 @@ namespace {
 	}
 
 	std::string get_error_message(std::string method_name) {
-		return method_name + "not implemented in this model.";
+		return method_name + " not implemented in this model.";
 	}
 
 }

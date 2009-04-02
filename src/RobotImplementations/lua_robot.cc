@@ -604,6 +604,32 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("get_own_identifier", &get_own_identifier)
 	    ],
 
+		luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
+		luabind::def("get_visible_obstacles", &get_visible_obstacles, luabind::copy_table(luabind::result)),
+		luabind::def("get_visible_markers", &get_visible_markers, luabind::copy_table(luabind::result)),
+		luabind::def("get_position", &get_position),
+		luabind::def("get_marker_information", &get_marker_information),
+		luabind::def("get_id", &get_id),
+		luabind::def("get_robot_acceleration", &get_robot_acceleration),
+		luabind::def("get_robot_coordinate_system_origin", &get_robot_coordinate_system_origin),
+		luabind::def("get_robot_coordinate_system_axis", &get_robot_coordinate_system_axis),
+		luabind::def("get_robot_type", &get_robot_type),
+		luabind::def("get_robot_status", &get_robot_status),
+		luabind::def("is_point_in_obstacle", &is_point_in_obstacle),
+		luabind::def("get_box_depth", &get_box_depth),
+		luabind::def("get_box_width", &get_box_width),
+		luabind::def("get_box_height", &get_box_height),
+		luabind::def("get_sphere_radius", &get_sphere_radius),
+		luabind::def("get_time", &get_time),
+		luabind::def("is_sphere_identifier", &is_sphere_identifier),
+		luabind::def("is_box_identifier", &is_box_identifier),
+		luabind::def("add_acceleration_request", &add_acceleration_request),
+		luabind::def("add_position_request", &add_position_request),
+		luabind::def("add_velocity_request", &add_velocity_request),
+		luabind::def("add_type_change_request", &add_type_change_request),
+		luabind::def("add_marker_request", &add_marker_request),
+		luabind::def("get_own_identifier", &get_own_identifier),
+
 	    luabind::namespace_("Geometry")
 		 [
 			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox, luabind::copy_table(_1)),
