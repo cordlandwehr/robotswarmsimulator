@@ -87,7 +87,8 @@ function main()
 	-- STARTING OF THE ALGORITHM
 	-- PART A:
 	-- if I am not alone at my point: go away
-	if (pos_same) then
+--[[	if (pos_same) then
+		print ("SAME");
 		if (pos_u==false and (pos_ur or pos_ul)) then
 			add_position_request(Vector3d(0,-1,0));
 			return;
@@ -106,7 +107,7 @@ function main()
 		end
 		return;
 	end
-
+]]
 	-- PART B:
 	-- not moving if stable pattern
 	--   |  
@@ -117,10 +118,36 @@ function main()
 		-- do nothing
 		return;
 	end
+
+
+	-- PART F2:
+	-- delete Triangle Formations:
+	-- * ' '
+	-- * x '
+	-- * * * 
+	if (pos_ol and pos_l and pos_ul and pos_u and pos_ur and not (pos_o or pos_or or pos_r)) then
+		add_position_request(Vector3d(0,1,0));
+		return;
+	end
+	if (pos_ul and pos_l and pos_ol and pos_o and pos_o and not(pos_r or pos_ur or pos_u)) then
+		add_position_request(Vector3d(1,0,0));
+		return;
+	end
+	if (pos_ol and pos_o and pos_or and pos_r and pos_ur and not(pos_u or pos_ul or pos_l)) then
+		add_position_request(Vector3d(0,-1,0));
+		return;
+	end
+	if (pos_or and pos_r and pos_ur and pos_u and pos_ul and not(pos_l or pos_ol or pos_o)) then
+		add_position_request(Vector3d(-1,0,0));
+		return;
+	end
+
+
+
 	-- not moving if stable pattern
 	--  |      |    |
-	--  +--  --+  --+--  --+--  +-+
-	--  |      |           |    +-+
+	--  +--  --+  --+--  --+-- 
+	--  |      |           |  
 	-- check if robots are left or above, else move away
 	if ((pos_o and pos_r and pos_u)) then
 		-- do nothing
@@ -141,7 +168,7 @@ function main()
 
 
 	-- PART C:
-	-- next is: robot is corner of a box, this should not be destroyed in most cases, but to get local swarm, maybe sometimes...
+	-- robot is corner of a box, this should not be destroyed in most cases, but to get local swarm, maybe sometimes...
 	if ((pos_r and pos_ur and pos_u) or (pos_l and pos_ul and pos_u) or (pos_l and pos_ol and pos_o) or (pos_o and pos_or and pos_r)) then
 		-- top-left corner of box
 		if (pos_r and pos_ur and pos_u and pos_ul==false and pos_l==false and pos_ol==false and pos_o==false and pos_or==false) then
@@ -218,7 +245,7 @@ function main()
 
 	-- PART F:	
 	-- compact swarm lattice by compacting lines
-	if (pos_l and pos_r and pos_o==false and pos_u==false) then
+	if (pos_l and pos_r and not pos_o and not pos_u and not((pos_or and pos_ur) or (pos_ol and pos_ul))) then
 		if (second_l and pos_ul==false) then
 			add_position_request(Vector3d(-1,-1,0));
 			return;
@@ -235,8 +262,8 @@ function main()
 			add_position_request(Vector3d(1,1,0));
 			return;
 		end
-	end
-	if (pos_u and pos_o and pos_l==false and pos_r==false) then
+	end 
+	if (pos_u and pos_o and not pos_l and not pos_r and not((pos_ol and pos_ul) or (pos_or and pos_ur))) then
 		if (second_u and pos_ul==false) then
 			add_position_request(Vector3d(-1,-1,0));
 			return;
@@ -253,7 +280,9 @@ function main()
 			add_position_request(Vector3d(1,1,0));
 			return;
 		end
-	end
+	end 
+
+
 
 	-- PART G:
 	-- check for first row
