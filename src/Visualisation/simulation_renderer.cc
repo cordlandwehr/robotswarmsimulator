@@ -10,6 +10,10 @@
 
 #define GL_GLEXT_PROTOTYPES 1
 
+
+#include <boost/graph/strong_components.hpp>
+#include <boost/graph/graph_utility.hpp>
+
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
 #include "../OpenGL/glut_headers.h"
@@ -20,14 +24,15 @@
 #include "../Model/box.h"
 #include "../Model/sphere.h"
 #include "../Model/robot_data.h"
-
+#include "../Model/robot_identifier.h"
 
 
 #include "camera.h"
 #include "robot_renderer.h"
 #include "simulation_renderer.h"
 #include "cog_camera.h"
-#include "../Model/robot_identifier.h"
+
+
 
 namespace {
 // some simple constants
@@ -70,9 +75,9 @@ void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true), render_visibility_graph_(false) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
 
-
+	render_visibility_graph_=false;
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
 
@@ -240,6 +245,9 @@ void SimulationRenderer::setup_projection(){
 
 void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldInformation> &world_info){
 	this->extrapolate_ = extrapolate;
+	if (render_visibility_graph_ && world_info_!=world_info) calculate_visibility_graph(world_info);
+	world_info_=world_info;
+
 
 	// We draw the time in the upper left corner
 	char buf[100];
@@ -293,11 +301,11 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldI
 
 	if(render_cog_){
 
-		draw_cog(world_info);
+		draw_cog();
 	}
 
 	if (render_visibility_graph_){
-	draw_visibility_graph(world_info);
+		draw_visibility_graph();
 	}
 
 	if (render_help_){
@@ -384,6 +392,7 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 
 		case 'z':
 				render_visibility_graph_=!render_visibility_graph_;
+				calculate_visibility_graph(world_info_);
 			break;
 		default:
 			break;
@@ -433,28 +442,58 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 	return 1;
 }
 
-void SimulationRenderer::draw_visibility_graph(const boost::shared_ptr<WorldInformation> world_info){
+void SimulationRenderer::draw_visibility_graph(){
+
+	if (vis_graph_){
+	boost::graph_traits< boost::adjacency_list <> >::edge_iterator i, end;
+	Vector3d source_pos, target_pos;
+	 for (boost::tie(i, end) = boost::edges(*vis_graph_); i != end; ++i) {
+		 source_pos=*world_info_->robot_data()[boost::source(*i,*vis_graph_)]->extrapolated_position(extrapolate_);
+		 target_pos=*world_info_->robot_data()[boost::target(*i,*vis_graph_)]->extrapolated_position(extrapolate_);
+		 draw_line(source_pos,target_pos, components_[boost::source(*i,*vis_graph_)]+vis_graph_is_connected_);
+	 }
+	}
+}
+
+void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<WorldInformation> world_info){
 	std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots;
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 
-	//for all robots, get all visible robots and draw line between them
+	if (!(vis_graph_)) vis_graph_=boost::shared_ptr< boost::adjacency_list <> >(new boost::adjacency_list<>(world_info->robot_data().size()));
+	 if (components_.size()==0) components_.reserve(world_info->robot_data().size());
+
+	 (*vis_graph_).clear();
+
+
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		boost::shared_ptr<const View> view=(*it_robot)->view();
-		//get visible robots from view, get global positions from world info
+
 		if (view){
 				 visible_robots=view->get_visible_robots((*it_robot)->robot());
 
 				 BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
-					 draw_line(*(*it_robot)->extrapolated_position(extrapolate_),*(world_info->get_according_robot_data(cur_id)).extrapolated_position(extrapolate_));
+					 boost::add_edge((*it_robot)->id()->id(), cur_id->id(), *vis_graph_);
 				 }
 		}
-
 	}
+
+	   int number_connected_components=boost::strong_components((*vis_graph_),&components_[0]);
+
+	 if (number_connected_components==1){
+		std::cout<<"visibility graph IS connected"<<std::endl;
+	 }
+	 else{
+		 //single unconnected robots may not get added to the graph - offset accounts for that
+		 int offset=world_info->robot_data().size()-boost::num_vertices(*vis_graph_);
+		std::cout<<"visibility graph is NOT connected ("<<number_connected_components+offset<<" components)"<<std::endl;
+	 }
+
+	 vis_graph_is_connected_= (number_connected_components==1 ? 0 : 1);
 }
 
-void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2){
+void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 	glBegin(GL_LINES);
-
+				glColor3fv(&kRobotIdColor[colorcode % kRobotIdColorNum ][0]);
 				glVertex3f(pos1(0),pos1(1), pos1(2) );
 				glVertex3f(pos2(0), pos2(1), pos2(2) );
 			glEnd();
@@ -708,7 +747,7 @@ void SimulationRenderer::draw_about(){
 	}
 }
 
-void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> world_info ){
+void SimulationRenderer::draw_cog(){
 
 	cog_.insert_element(kXCoord, 0);
 	cog_.insert_element(kYCoord, 0);
@@ -717,7 +756,7 @@ void SimulationRenderer::draw_cog(const boost::shared_ptr<WorldInformation> worl
 	int num = 0;
 
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
-	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
+	for(it_robot = world_info_->robot_data().begin(); it_robot != world_info_->robot_data().end(); ++it_robot){
 		cog_ = cog_ + (*it_robot)->position();
 		num++;
 	}

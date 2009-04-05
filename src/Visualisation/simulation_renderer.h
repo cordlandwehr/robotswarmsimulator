@@ -13,6 +13,7 @@
 
 #include <boost/smart_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include "../Utilities/vector_arithmetics.h"
 #include "../Visualisation/simulation_renderer.h"
@@ -23,6 +24,7 @@
 #include "texture.h"
 #include "sky_box.h"
 #include "../Views/view.h"
+#include "robot_color.h"
 
 class WorldInformation;
 class WorldObject;
@@ -62,6 +64,10 @@ public:
 	 * \param height The new height of the window.
 	 */
     void resize(int width, int height);
+
+
+
+
 
     /**
      * These functions handle user input
@@ -270,7 +276,7 @@ public:
 	void set_free_cam_para(Vector3d & pos, Vector3d & at);
 
 private:
-	void draw_line(Vector3d pos1, Vector3d pos2);
+	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.
@@ -319,7 +325,7 @@ private:
 	/**
 	 * Calculates the Center of Gravity
 	 */
-	void draw_cog(const boost::shared_ptr<WorldInformation> world_info );
+	void draw_cog();
 
 	/**
 	 * Drawsthe global coord system
@@ -330,9 +336,26 @@ private:
 	 * draw visibility graph (which robots can see others)
 	 */
 
-	void draw_visibility_graph(const boost::shared_ptr<WorldInformation> world_info);
+	void draw_visibility_graph();
+
+
+	  /**
+	    	 * calculates the components of the visibility graph by placing the information from
+	    	 * world_info and the according views into the boost graph data structure
+	    	 * it then uses the boost component algorithm
+	    	 *
+	    	 * graph contains the visibility graph in the boost data structure
+	    	 * vertices are integers which correspond to robot ids
+	    	 * component contains a vector which maps robot ids to a component
+	    	 *
+	    	 * if graph is connected, returns 0, if it is not, it returns 1
+	    	 */
+	    	void calculate_visibility_graph(const boost::shared_ptr<WorldInformation> world_info);
+
 
 	void setup_projection();
+
+
 
 	enum ProjectionType {
 		PROJ_PERSP,
@@ -439,12 +462,14 @@ private:
 	 */
 	bool render_about_;
 
-	bool render_visibility_graph_;
+
 
 	/**
 	 * Specifies whether the skybox should be drawn.
 	 */
 	bool render_sky_box_;
+
+	bool render_visibility_graph_;
 
 	/*
 	 *
@@ -455,6 +480,13 @@ private:
 	 * The Robot Renderer used for drawing the Robots
 	 */
 	boost::shared_ptr<RobotRenderer> robot_renderer_;
+
+	boost::shared_ptr<WorldInformation> world_info_;
+
+	std::vector<int> components_;
+	boost::shared_ptr<boost::adjacency_list <> > vis_graph_;
+	size_t vis_graph_is_connected_;
+
 	Texture tex_;
 
 #if !defined(__linux__) && !defined(__APPLE__)

@@ -19,7 +19,7 @@
 #include "camera.h"
 #include "simulation_renderer.h"
 #include "robot_renderer.h"
-#include "robot_color.h"
+
 
 namespace {
 
