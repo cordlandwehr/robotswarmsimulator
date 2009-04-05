@@ -10,29 +10,18 @@
 --    with ability to walk exactly on the integer posititions on the layer
 --    with limited view on twice the walking distance (this is 2)
 --
-
-
-function distance(A, B)
-	return math.sqrt((A.x-B.x)*(A.x-B.x) + (A.y-B.y)*(A.y-B.y) + (A.z-B.z)*(A.z-B.z));
-end
+--  Algorithm works as follows:
+--    (A) move away, if robot is not alone at current point
+--    (B) if angle of stable position -> do not move
+--    (C) if non-angle point in semi stable/stable formation 
+--    (D) mirror L formation, iff usefull
+--    (E) fill holes in lines
+--    (F) pull together
+--
 
 function main() 
 
-	delta =  2;
 	robots = get_visible_robots();
-
-	-- compute all distances
-	dist = {};
-	for i = 1, #robots do
-		dist[i] = distance(get_position(robots[i]), get_position(get_own_identifier()));
-	end
-
---	for i = 1, #robots do
---		if (dist[i] == 0.5) then
---			add_position_request(get_position(robots[i]) -  get_position(get_own_identifier()));
---			return;
---		end
---	end
 
 	--test if robot is above
 	pos_r = false;
@@ -76,7 +65,6 @@ function main()
 		end
 	end
 
-
 	second_r = false;
 	second_l = false;
 	second_o = false;
@@ -96,8 +84,8 @@ function main()
 		end
 	end
 
-
-
+	-- STARTING OF THE ALGORITHM
+	-- PART A:
 	-- if I am not alone at my point: go away
 	if (pos_same) then
 		if (pos_u==false and (pos_ur or pos_ul)) then
@@ -116,24 +104,25 @@ function main()
 			add_position_request(Vector3d(1,0,0));
 			return;
 		end
+		return;
 	end
 
-	-- do not move if you see nothing right and below
---	if (pos_or==false and pos_r==false and pos_ur==false and pos_u==false and pos_ul==false and pos_ol and pos_o and pos_l) then
---		return;
---	end
---
-
+	-- PART B:
 	-- not moving if stable pattern
-	--   |    |      |    |
-	-- --+--  +--  --+  --+--  --+--  +-+
-	--   |    |      |           |    +-+
+	--   |  
+	-- --+--
+	--   | 
 	-- check if robots are left or above, else move away
 	if (pos_l and pos_o and pos_u and pos_r) then
 		-- do nothing
 		return;
 	end
-	if ((pos_o and pos_r and pos_u) or (pos_ol and pos_l and pos_ul)) then
+	-- not moving if stable pattern
+	--  |      |    |
+	--  +--  --+  --+--  --+--  +-+
+	--  |      |           |    +-+
+	-- check if robots are left or above, else move away
+	if ((pos_o and pos_r and pos_u)) then
 		-- do nothing
 		return;
 	end
@@ -149,31 +138,86 @@ function main()
 		-- do nothing
 		return;
 	end
-	-- next is: robot is corner of a box, this should not be destroyed in most cases, but to get local swarm, mayby sometimes...
+
+
+	-- PART C:
+	-- next is: robot is corner of a box, this should not be destroyed in most cases, but to get local swarm, maybe sometimes...
 	if ((pos_r and pos_ur and pos_u) or (pos_l and pos_ul and pos_u) or (pos_l and pos_ol and pos_o) or (pos_o and pos_or and pos_r)) then
-		-- bottom
-		if (pos_r and pos_ur and pos_u and pos_ul==false and pos_l==false and pos_ol==false and pos_o==false and pos_or==false and second_l) then
-			add_position_request(Vector3d(-1,0,0));
-			return;
+		-- top-left corner of box
+		if (pos_r and pos_ur and pos_u and pos_ul==false and pos_l==false and pos_ol==false and pos_o==false and pos_or==false) then
+			if (second_l) then
+				add_position_request(Vector3d(-1,0,0));
+				return;
+			end
+			if (second_o) then
+				add_position_request(Vector3d(0,1,0));
+				return;
+			end
 		end
-		if (pos_l and pos_ul and pos_u and pos_ur==false and pos_r==false and pos_or==false and pos_o==false and pos_ol==false and second_o) then
-			add_position_request(Vector3d(0,1,0));
-			return;
+		-- top-right corner of box
+		if (pos_l and pos_ul and pos_u and pos_ur==false and pos_r==false and pos_or==false and pos_o==false and pos_ol==false) then
+			if (second_o) then
+				add_position_request(Vector3d(0,1,0));
+				return;
+			end
+			if (second_r) then
+				add_position_request(Vector3d(1,0,0));
+				return;
+			end
 		end
-		if (pos_l and pos_ol and pos_o and pos_or==false and pos_r==false and pos_ur==false and pos_u==false and pos_ul==false and second_r) then
-			add_position_request(Vector3d(1,0,0));
-			return;
+		-- bottom-right corner of box
+		if (pos_l and pos_ol and pos_o and pos_or==false and pos_r==false and pos_ur==false and pos_u==false and pos_ul==false) then
+			if (second_r) then
+				add_position_request(Vector3d(1,0,0));
+				return;
+			end
+			if (second_u) then
+				add_position_request(Vector3d(0,-1,0));
+				return;
+			end
 		end
-		if (pos_o and pos_or and pos_r and pos_ur==false and pos_u==false and pos_ul==false and pos_l==false and pos_ol==false and second_u) then
-			add_position_request(Vector3d(0,-1,0));
-			return;
+		-- bottom-left corner of box
+		if (pos_o and pos_or and pos_r and pos_ur==false and pos_u==false and pos_ul==false and pos_l==false and pos_ol==false) then
+			if (second_u) then
+				add_position_request(Vector3d(0,-1,0));
+				return;
+			end
+			if (second_l) then
+				add_position_request(Vector3d(-1,0,0));
+				return;
+			end
 		end
-		-- else: do nothing
+		-- ELSE 
+		-- this point is stable and is not allowed to move!
 		return;
 	end
 
-	
-	-- create L formations
+	-- PART D:
+	-- TODO just an idea by now: mirror L formations if usefull and if angle point
+
+
+
+	-- PART E:
+	-- move to fill hole in line	
+	if (pos_ul and pos_u==false and pos_ur) then
+		add_position_request(Vector3d(0,-1,0));
+		return;
+	end
+	if (pos_ol and pos_l==false and pos_ul) then
+		add_position_request(Vector3d(-1,0,0));
+		return;
+	end
+	if (pos_ol and pos_o==false and pos_or) then
+		add_position_request(Vector3d(0,1,0));
+		return;
+	end
+	if (pos_or and pos_r==false and pos_ur) then
+		add_position_request(Vector3d(1,0,0));
+		return;
+	end
+
+	-- PART F:	
+	-- compact swarm lattice by compacting lines
 	if (pos_l and pos_r and pos_o==false and pos_u==false) then
 		if (second_l and pos_ul==false) then
 			add_position_request(Vector3d(-1,-1,0));
@@ -210,42 +254,27 @@ function main()
 			return;
 		end
 	end
-	
 
-	-- move to fill hole in line	
-	if (pos_ul and pos_u==false and pos_ur) then
+	-- PART G:
+	-- check for first row
+	-- if first radius is not filled, try second one
+	if (second_u and (second_o==false or pos_o or pos_ol or pos_or) and not (pos_ul or pos_u or pos_ur)) then
 		add_position_request(Vector3d(0,-1,0));
 		return;
 	end
-	if (pos_ol and pos_l==false and pos_ul) then
+	if (second_l and (second_r==false or pos_r or pos_or or pos_ur) and not (pos_ol or pos_l or pos_ul)) then
 		add_position_request(Vector3d(-1,0,0));
 		return;
 	end
-	if (pos_ol and pos_o==false and pos_or) then
+	if (second_o and (second_u==false or pos_u or pos_ul or pos_ur) and not (pos_o or pos_or or pos_ol)) then
 		add_position_request(Vector3d(0,1,0));
 		return;
 	end
-	if (pos_or and pos_r==false and pos_ur) then
+	if (second_r and (second_l==false or pos_l or pos_ul or pos_ol) and not (pos_or or pos_r or pos_ur)) then
 		add_position_request(Vector3d(1,0,0));
 		return;
 	end
 
-	-- if first radius is not working, try second
-	if (second_u and (second_o==false or pos_o or pos_ol or pos_or)) then
-		add_position_request(Vector3d(0,-1,0));
-	end
-	if (second_l and (second_r==false or pos_r or pos_or or pos_ur)) then
-		add_position_request(Vector3d(-1,0,0));
-	end
-	if (second_o and (second_u==false or pos_u or pos_ul or pos_ur)) then
-		add_position_request(Vector3d(0,1,0));
-	end
-	if (second_r and (second_l==false or pos_l or pos_ul or pos_ol)) then
-		add_position_request(Vector3d(1,0,0));
-	end
-
-	-- try something is better then nothing: no near robots, but some in each direction
-		
 	return;
 
 	
