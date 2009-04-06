@@ -479,9 +479,9 @@ void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<Worl
 					 boost::add_edge((*it_robot)->id()->id(), cur_id->id(), *vis_graph_);
 				 }
 		}
-	}
-
+	}	
 //calculate connected components
+	//TODO (dwonisch): components_ = emptyvector -> no element 0 -> access to element 0 -> crash
 	 int number_connected_components=boost::strong_components((*vis_graph_),&components_[0]);
 
 	 if (number_connected_components==1){
