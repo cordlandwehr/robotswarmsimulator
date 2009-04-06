@@ -36,6 +36,14 @@ include_directories(${LUA_INCLUDE_DIR})
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
+# find/configure CGAL
+# TODO(peter) packaging of CGAL libraries for release builds
+find_package(CGAL)
+if(CGAL_FOUND)
+	include(${CGAL_USE_FILE})
+	add_definitions(-DUSE_CGAL)
+endif(CGAL_FOUND)
+
 # generate executable of the above source files and link it
 add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
 target_link_libraries(RobotSwarmSimulator
@@ -44,6 +52,7 @@ target_link_libraries(RobotSwarmSimulator
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
+	${CGAL_LIBRARIES}
 	luabind
 )
 

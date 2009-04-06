@@ -24,6 +24,9 @@
 #include <Utilities/szenario_generator.h>
 #include <Utilities/console_output.h>
 
+#include "mubalabieeyes.h"
+
+
 int main(int argc, char** argv) {
 	namespace po = boost::program_options;
 
@@ -63,9 +66,16 @@ int main(int argc, char** argv) {
 		("dry", "disables statistic output")
 		("steps", po::value<unsigned int>(), "number of steps for blind mode")
 		("blind", "disables visualization");
+	
+	// hidden option list, pssst ;-)
+	po::options_description top_secret_options("Top Secret");
+	top_secret_options.add_options()("mubalabieeyes", "");
 
 	po::options_description options;
-	options.add(general_options).add(generation_options).add(simulation_options);
+	options.add(general_options).add(generation_options).add(simulation_options).add(top_secret_options);
+	
+	po::options_description options_help_list;
+	options_help_list.add(general_options).add(generation_options).add(simulation_options);
 
 	// create variable map and parse options from command line
 	po::variables_map vm;
@@ -82,10 +92,15 @@ int main(int argc, char** argv) {
 		throw; //rethrow exception
 	}
 
+	// ppssssstt
+	if (vm.count("mubalabieeyes")) {
+		mubalabieeyes();
+		return 0;
+	}
 
 	// check whether to show help message and exit
 	if (vm.count("help")) {
-		std::cout << options << std::endl;
+		std::cout << options_help_list << std::endl;
 		return 1;
 	}
 
