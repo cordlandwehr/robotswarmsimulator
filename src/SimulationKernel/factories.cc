@@ -169,22 +169,22 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 				strategy = CollisionPositionRequestHandler::TOUCH;
 			else {
 				strategy = CollisionPositionRequestHandler::STOP;
-				ConsoleOutput::out_warning("Unknown collision strategy, falling back to STOP strategy.");
+				ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::WARNING)  << "Unknown collision strategy, falling back to STOP strategy.";
 			}
-			
+
 			double clearance = boost::lexical_cast<double>(params["COLLISION_POSITION_REQUEST_HANDLER_CLEARANCE"]);
 			double discard_probability = boost::lexical_cast<double> (params["COLLISION_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
 			unsigned int seed = boost::lexical_cast<unsigned int> (params["COLLISION_POSITION_REQUEST_HANDLER_SEED"]);
-			
-			// build the collision position request handler			
+
+			// build the collision position request handler
 			boost::shared_ptr<CollisionPositionRequestHandler> collisionpos_request_handler(
 				new CollisionPositionRequestHandler(strategy, clearance, seed, discard_probability, *history)
 			);
-			
+
 			// set up vector modifiers
 			create_vector_modifiers_from_string(collisionpos_request_handler,
 					                            params["COLLISION_POSITION_REQUEST_HANDLER_MODIFIER"]);
-			
+
 			event_handler->set_position_request_handler(collisionpos_request_handler);
 		} catch (const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for collision position request handler");
@@ -296,7 +296,7 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
 		}
 	} else {
-		ConsoleOutput::out_info( "No View specified! Defaulting to global view.", ConsoleOutput::Parser);
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::INFO) << "No View specified! Defaulting to global view.";
 		view_factory.reset(new ViewFactory<GlobalView>);
 	}
 

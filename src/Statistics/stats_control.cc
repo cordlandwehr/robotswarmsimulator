@@ -7,7 +7,7 @@ StatsControl::StatsControl() {
 
 StatsControl::~StatsControl() {
 	if (stats_initialized_) {
-		ConsoleOutput::out_warning( "No explicit quit called - now terminated by deconstructor", ConsoleOutput::Statistics);
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::WARNING) << "No explicit quit called - now terminated by deconstructor";
 		quit();
 	}
 }
@@ -16,7 +16,7 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 
 	if (stats_initialized_) {
 		// log warning, because no quit was called before this init
-		ConsoleOutput::out_warning( "StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting...", ConsoleOutput::Statistics);
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::WARNING) << "StatsControl::init(...) called without any previous StatsControl::quit(...). Now auto-quitting...";
 		// quit current statistic-calculation
 		quit();
 	}
@@ -32,7 +32,9 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 	// sets and creates output dir
 	if (output_dir.compare("")!=0 && !boost::filesystem::exists(output_dir)) {
 		boost::filesystem::create_directory( output_dir );
-		ConsoleOutput::out_info( "Directory " + output_dir +" was created.", ConsoleOutput::Statistics);
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Directory "
+		                                                                   << output_dir
+		                                                                   << " was created.";
 	}
 
 	// create a StatsOut-instance for each subset
@@ -221,7 +223,7 @@ void StatsControl::quit() {
 
 	stats_initialized_ = false;
 
-	ConsoleOutput::out_info( "Output closed." , ConsoleOutput::Statistics);
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Output closed.";
 }
 
 void StatsControl::calculate() {

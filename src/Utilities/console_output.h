@@ -5,13 +5,26 @@
  *      Author: phoenixx
  */
 
-#include <string>
-
-
 #ifndef CONSOLE_OUTPUT_H_
 #define CONSOLE_OUTPUT_H_
 
-#include "console_output.h"
+#include <string>
+#include <fstream>
+
+/*
+ * The NullStream class sends incoming log messages into the vast nothingness
+ */
+class NullStream : public std::ostream {
+  public:
+    // constructor to enable constructing the class without parameters
+    NullStream():std::ostream(NULL) {};
+
+    // override of operator << to ignore the parameter
+    template<typename T>
+    std::ostream& operator<< (const T& t) {
+      return *this;
+    }
+};
 
 class ConsoleOutput {
 public:
@@ -26,35 +39,23 @@ public:
 		ComputationalGeometry
 	};
 
-	/**
-	 * Creates warning message with given string
-	 * @param outstring
-	 */
-	static void out_warning(std::string outstring);
+	enum Level {
+		DEBUG = 0,
+		INFO = 1,
+		WARNING = 2,
+		ERROR = 3,
+		NONE = 4
+	};
 
-	/**
-	 * Creates warning message with given string
-	 * @param outstring
-	 */
-	static void out_info(std::string outstring);
+	static void initalize_logging_system(Level level, bool log_to_file, std::string filename = "");
+
+	static std::ostream & log(Module talking_module, Level level);
 
 	/**
 	 * Creates warning message with given string
 	 * @param outstring
 	 */
 	static void out_error(std::string outstring);
-
-	/**
-	 * Creates warning message with given string
-	 * @param outstring
-	 */
-	static void out_warning(std::string outstring, Module talking_module);
-
-	/**
-	 * Creates warning message with given string
-	 * @param outstring
-	 */
-	static void out_info(std::string outstring, Module talking_module);
 
 	/**
 	 * Creates warning message with given string

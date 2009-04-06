@@ -127,7 +127,7 @@ void Texture::load(std::string & texture_file ){
 				load_tga();
 			break;
 		default:
-				ConsoleOutput::out_warning( "Can not determine texture file format.",ConsoleOutput::Visualization);
+			ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Can not determine texture file format.";
 			break;
 
 	}
@@ -154,7 +154,7 @@ void Texture::load(std::string & texture_file ){
 		glDisable( GL_TEXTURE_2D );
 
 	} else {
-		ConsoleOutput::out_warning( "Cannot load Texture from file: " + texture_file, ConsoleOutput::Visualization );
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Cannot load Texture from file: " << texture_file;
 	}
 
 }
@@ -190,7 +190,7 @@ void Texture::load_tga(){
 
 	if( fp == NULL){
 
-		ConsoleOutput::out_warning("Can't find file: " + file_name_ , ConsoleOutput::Visualization);
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Can't find file: " << file_name_;
 
 		loaded_ = false;
 		return;
@@ -199,7 +199,7 @@ void Texture::load_tga(){
 	std::size_t bytes_read = std::fread(tga_compare, 1, sizeof(tga_compare), fp);
 
 	if( bytes_read != 12){
-		ConsoleOutput::out_warning("Read too few bytes.", ConsoleOutput::Visualization);
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Read too few bytes.";
 		std::fclose(fp);
 		loaded_  = false;
 
@@ -208,7 +208,7 @@ void Texture::load_tga(){
 
 	if( std::memcmp(tga_header,tga_compare,sizeof(tga_header)) != 0	) {
 
-		ConsoleOutput::out_warning( "Header missmatch." , ConsoleOutput::Visualization);
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Header missmatch.";
 		std::fclose(fp);
 		loaded_ = false;
 
@@ -265,7 +265,8 @@ void Texture::load_bmp(){
 	std::FILE * fp = std::fopen(file_name_.c_str(), "rb");
 
 	if(fp == NULL){
-		ConsoleOutput::out_warning( "Cannot load texture file: "+ file_name_ , ConsoleOutput::Visualization);
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Cannot load texture file: "
+		                                                                         << file_name_;
 		return;
 	}
 

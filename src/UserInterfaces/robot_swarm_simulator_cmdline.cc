@@ -91,7 +91,9 @@ int main(int argc, char** argv) {
 		ConsoleOutput::out_error( "Uncaught unknown exception." );
 		throw; //rethrow exception
 	}
-
+	// TODO(craupach) do this properly with options...
+	// initalize logging system
+	ConsoleOutput::initalize_logging_system(ConsoleOutput::DEBUG, false);
 	// ppssssstt
 	if (vm.count("mubalabieeyes")) {
 		mubalabieeyes();
@@ -161,8 +163,10 @@ int main(int argc, char** argv) {
 			// write to file
 			generator.write_to_file();
 
-			ConsoleOutput::out_info( "Robots were generated!" );
-			ConsoleOutput::out_info( "Please see file: " + vm["swarmfile"].as<std::string>() + ".swarm" );
+			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Robots were generated!";
+			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Please see file: "
+			                                                                   << vm["swarmfile"].as<std::string>()
+			                                                                   << ".swarm";
 		}
 		catch (std::exception& e) {
 			ConsoleOutput::out_error( e.what() );

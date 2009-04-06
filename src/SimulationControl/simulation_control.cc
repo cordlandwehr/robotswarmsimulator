@@ -84,7 +84,7 @@ void SimulationControl::terminate_simulation() {
 
 		// simulation thread has up to three seconds to shut down; if it does not, issue a warning
 		if (!simulation_thread_.timed_join(boost::posix_time::seconds(3)))
-			ConsoleOutput::out_warning("Simulation thread seems to have deadlocked, terminating anyway",ConsoleOutput::Control);
+			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::WARNING) << "Simulation thread seems to have deadlocked, terminating anyway" ;
 		simulation_thread_ = boost::thread();
 		simulation_kernel_functor_ = boost::shared_ptr<SimulationKernelFunctor>();
 	}
