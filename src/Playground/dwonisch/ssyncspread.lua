@@ -39,19 +39,19 @@ function intersectlines(p1, p2, p3, p4)
 	if linear_independant(p2 - p1, p4 - p3) then
 		if (p2.x - p1.x) == 0 then
 			intersection.x = p1.x;
-			local m2 = p4.y - p3.y / p4.x - p3.x;
-			local n2 = p3.y / m2 * p3.x
+			local m2 = (p4.y - p3.y) / (p4.x - p3.x);
+			local n2 = p3.y - (m2 * p3.x);
 			intersection.y = m2 * p1.x + n2;
 		elseif (p3.x - p4.x) == 0 then
 			intersection.x = p3.x;
-			local m1 = p2.y - p1.y / p2.x - p1.x;
-			local n1 = p1.y / m1 * p1.x
+			local m1 = (p2.y - p1.y) / (p2.x - p1.x);
+			local n1 = p1.y - (m1 * p1.x);
 			intersection.y = m1 * p3.x + n1;
-		else
-			local m2 = p4.y - p3.y / p4.x - p3.x;
-			local n2 = p3.y / m2 * p3.x
-			local m1 = p2.y - p1.y / p2.x - p1.x;
-			local n1 = p1.y / m1 * p1.x
+		else			
+			local m2 = (p4.y - p3.y) / (p4.x - p3.x);
+			local n2 = p3.y - (m2 * p3.x);
+			local m1 = (p2.y - p1.y) / (p2.x - p1.x);
+			local n1 = p1.y - (m1 * p1.x);
 			intersection.x = (n2 - n1) / (m1 - m2)
 			intersection.y = m1 * intersection.x + n1;
 		end
@@ -81,45 +81,37 @@ function on_line(pos, linepos, line)
 	return math.abs(linepos.y - spos2) < eps;
 end
 
+-- function compute_new_pos(left, right) 
+	-- local kDesiredDist = 5; --maybe the same as view radius or a bit less
+	-- local kMaxStepDist = 2; --avoid moving into each other
+
+	-- local left_pos = left;
+	-- local right_pos = right;	
+
+	-- if(dist(left_pos) < kDesiredDist and dist(right_pos) < kDesiredDist) then
+		-- --do nothing
+		-- return Vector3d(0,0,0);
+	-- end
+
+	-- if(dist(left_pos) < kDesiredDist) then
+		-- --move to right
+		-- stepDist = (kDesiredDist - dist(left_pos));
+		-- return math.min(stepDist, kMaxStepDist) * normalize(right_pos);
+	-- end
+
+	-- if(dist(right_pos) < kDesiredDist) then
+		-- --move to left
+		-- stepDist = kDesiredDist - dist(right_pos);
+		-- return math.min(stepDist, kMaxStepDist) * normalize(left_pos);
+	-- end
+
+	-- --else
+	-- -- do nothing
+	-- return Vector3d(0,0,0);
+-- end
+
 function compute_new_pos(left, right) 
-	local kDesiredDist = 5; --maybe the same as view radius or a bit less
-	local kMaxStepDist = 2; --avoid moving into each other
-
-	local left_pos = nil;
-	local right_pos = nil;
-	
-	if(left ~= nil) then
-		left_pos = get_position(left);
-		if(right ~= nil) then
-			right_pos = get_position(right);
-		else
-			right_pos = (-(2^10)) * get_position(left);
-		end
-	else
-		right_pos = get_position(right);
-		left_pos = (-(2^10)) * get_position(right);
-	end
-
-	if(dist(left_pos) < kDesiredDist and dist(right_pos) < kDesiredDist) then
-		--do nothing
-		return Vector3d(0,0,0);
-	end
-
-	if(dist(left_pos) < kDesiredDist) then
-		--move to right
-		stepDist = (kDesiredDist - dist(left_pos));
-		return math.min(stepDist, kMaxStepDist) * normalize(right_pos);
-	end
-
-	if(dist(right_pos) < kDesiredDist) then
-		--move to left
-		stepDist = kDesiredDist - dist(right_pos);
-		return math.min(stepDist, kMaxStepDist) * normalize(left_pos);
-	end
-
-	--else
-	-- do nothing
-	return Vector3d(0,0,0);
+	return (left + right)/2;
 end
 
 function normalize(vec) 
@@ -132,10 +124,12 @@ function compute_neighbours(robots, pos)
 	local j = 1;
 	for i =1, #robots do 
 		local new_pos = View.get_position(robots[i]) - pos; --pos relative to given vector
-		robot_pos[j] = new_pos;
-		j = j + 1;		
+		if(dist(new_pos) > eps) then
+			robot_pos[j] = new_pos;
+			j = j + 1;
+		end
 	end
-	if(vector.x ~= 0 or vector.y ~= 0 or vector.z ~= 0) then
+	if(pos ~= zero) then
 		local new_pos = (-1) * pos; --pos relative to given vector
 		robot_pos[j] = new_pos;
 		j = j + 1;		
@@ -159,19 +153,32 @@ function compute_neighbours(robots, pos)
 			angle = 2*math.pi - angle;
 		end
 		
-		if (angle > (1/4 * math.pi)) and (angle <= (3/4 * math.pi)) and (x2 == nil) then
-			pos2 = robot_pos[i]];
-		elseif (angle > (3/4 * math.pi)) and (angle <= (5/4 * math.pi)) and (x3 == nil) then
+		if (angle > (1/4 * math.pi)) and (angle <= (3/4 * math.pi)) and (pos2 == nil) then
+			pos2 = robot_pos[i];
+		elseif (angle > (3/4 * math.pi)) and (angle <= (5/4 * math.pi)) and (pos3 == nil) then
 			pos3 = robot_pos[i];
-		elseif (angle > (5/4 * math.pi)) and (angle <= (7/4 * math.pi)) and (x4 == nil) then
+		elseif (angle > (5/4 * math.pi)) and (angle <= (7/4 * math.pi)) and (pos4 == nil) then
 			pos4 = robot_pos[i];
 		else
 			-- robot_pos[i] is in 1st sector
 		end
 
-		if(x1 ~= nil and x2 ~= nil and x3 ~= nil and x4 ~= nil) then
+		if(pos1 ~= nil and pos2 ~= nil and pos3 ~= nil and pos4 ~= nil) then
 			break;
 		end
+	end
+	
+	if(pos1 ~= nil) then
+		pos1 = pos1 + pos;
+	end
+	if(pos2 ~= nil) then
+		pos2 = pos2 + pos;
+	end
+	if(pos3 ~= nil) then
+		pos3 = pos3 + pos;
+	end
+	if(pos4 ~= nil) then
+		pos4 = pos4 + pos;
 	end
 	
 	return pos1,pos2,pos3,pos4;
@@ -189,6 +196,7 @@ function reorder(pos1, pos2, pos3, pos4, pos)
 		return pos4,pos1,pos2,pos3;
 	else
 		error("Reorder: Illegal argument exception");
+	end
 end
 
 -- rotates vector counterclockwise (2d)
@@ -204,16 +212,54 @@ end
 --     up
 --left  0  right
 function invariant_compute_new_pos(robots, left, up, right)
+	if(own_id == interesting_id) then
+		print("left");
+		print(left);
+		print("up");
+		print(up);
+		print("right");
+		print(right);		
+	end
+	if(left == nil or right == nil) then
+		--TODO: edge cases need to be considers, skipping for now
+		return zero;
+	end
+	
 	if(not on_line(right, zero, left)) then
+		if(own_id == interesting_id) then
+			print("left right not on line");
+		end
 		--left/right not on line -> robot must not move left/right, since otherwise top/bottom wont be on_line anymore too
 		return zero;
 	end
 	local new_pos = compute_new_pos(left,right);
+	if(new_pos == zero) then
+		--all fine
+		return zero;
+	end
 	local updir = get_normal(left); --because of invariant both left and up are lattice-lines.
 	
+	if(up == nil) then
+		return new_pos; 
+	end
 	
-	
-	local up1,up2,up3,up4 = reorder(compute_neighbours(robots, up), zero);
+	--local up1,up2,up3,up4 = reorder(compute_neighbours(robots, up), zero);
+	local up1,up2,up3,up4 = compute_neighbours(robots, up);
+	if(own_id == interesting_id) then
+		print("up1");
+		print(up1);
+		print("up2");
+		print(up2);
+		print("up3");
+		print(up3);
+		print("up4");
+		print(up4);
+		
+	end
+	if(up1 == nil or up2 == nil or up3 == nil or up4 == nil) then
+		--TODO: edge cases need to be considers, skipping for now
+		return zero;
+	end
 	--      up3
     --       |	
 	-- up2-- up -- up4
@@ -230,8 +276,19 @@ function invariant_compute_new_pos(robots, left, up, right)
 	
 	-- Dont move too far:
 	-- avoid moving out of view-field of up-robot
-	local max_left_movement = intersect(zero, left, up, up+rotate(updir, -math.pi/4)); 
-	local max_right_movement = intersect(zero, left, up, up+rotate(updir, math.pi/4));
+	local max_left_movement = intersectlines(zero, left, up, up+rotate(updir, -math.pi/4)); 
+	local max_right_movement = intersectlines(zero, left, up, up+rotate(updir, math.pi/4));
+	
+	if(own_id == interesting_id) then
+		print("updir");
+		print(updir);
+		print("max_left_movement");
+		print(max_left_movement);
+		print("max_right_movement");
+		print(max_right_movement);
+		print("new_pos");
+		print(new_pos);		
+	end
 	
 	if(normalize(new_pos) == normalize(max_left_movement)) then
 		if(dist(new_pos) > dist(max_left_movement)) then
@@ -241,14 +298,16 @@ function invariant_compute_new_pos(robots, left, up, right)
 		if(dist(new_pos) > dist(max_right_movement)) then
 			new_pos = dist(max_right_movement) * normalize(max_right_movement);
 		end
-	else
-		error("invariant_compute_new_pos: Something unexpected oo");
+	else	
+		error("invariant_compute_new_pos: Something unexpected for id " .. own_id);
 	end
 	
 	-- new_pos should be nearer to up than left and right (else we get problems with sector computations)
-	if(dist(up - new_pos) >= dist(right - new_pos) or dist(up - new_pos) >= dist(left - new_pos)) then
+	if(dist(up - new_pos) >= dist(up - right) or dist(up - new_pos) >= dist(up - left)) then
 		--TODO: trim new_pos such that dists are fixed afterwards.
-		print("Fallback to zero to ensure sector invariant. (Can be improved.)");
+		if(own_id == interesting_id) then			
+			print("Fallback to zero to ensure sector invariant. (Can be improved.)");
+		end
 		return zero;
 	end
 	
@@ -256,24 +315,29 @@ function invariant_compute_new_pos(robots, left, up, right)
 	local forbidden_pos = nil;
 	if(normalize(up3-up) ~= normalize(updir)) then
 		-- up3-up is not lattice-line, so (up3,up,zero) may not be on a line.
-		forbidden_pos = intersect(up, up3, zero, left);
+		forbidden_pos = intersectlines(up, up3, zero, left);
 	end
 	
 	if(forbidden_pos ~= nil and new_pos == forbidden_pos) then
 		--TODO: instead we also may simple change the pos a little bit to avoid the line
-		print("Fallback to zero to ensure correct lines invariant.");
+		if(own_id == interesting_id) then
+			print("Fallback to zero to ensure correct lines invariant.");
+		end
 		return zero;
 	end
 	
 	-- Hopefully we eventually got here, so we can suggest new_pos as new position..	
-	return new_pos;
-	
+	return new_pos; 
 end
 
 eps = 0.0001;
-zero = Vector3d(0.0,0.0,0.0);
+zero = nil;
+own_id = nil;
+interesting_id = 2;
 
 function main()
+	own_id = View.get_id(View.get_own_identifier());
+	zero = Vector3d(0.0,0.0,0.0);
 	local robots = View.get_visible_robots();	
 	local pos1,pos2,pos3,pos4 = compute_neighbours(robots, zero);
 	
@@ -282,18 +346,36 @@ function main()
 	local suggested_pos3 = invariant_compute_new_pos(robots, pos1, pos4, pos3);
 	local suggested_pos4 = invariant_compute_new_pos(robots, pos3, pos2, pos1);
 	
+	if(own_id == interesting_id) then
+		print("suggested_pos1");
+		print(suggested_pos1);
+		print("suggested_pos2");
+		print(suggested_pos2);
+		print("suggested_pos3");
+		print(suggested_pos3);
+		print("suggested_pos4");
+		print(suggested_pos4);
+	end
+	
 	local suggested_left_pos = nil;
 	local suggested_right_pos = nil;
 	
-	if(dist(suggested_pos1) > dist(suggest_pos2))
+	if(dist(suggested_pos1) > dist(suggested_pos2)) then
 		suggested_left_pos = suggested_pos2;
 	else
 		suggested_left_pos = suggested_pos1;
 	end
-	if(dist(suggested_pos3) > dist(suggest_pos4))
+	if(dist(suggested_pos3) > dist(suggested_pos4)) then
 		suggested_right_pos = suggested_pos4;
 	else
 		suggested_right_pos = suggested_pos3;
+	end
+	
+	if(own_id == interesting_id) then
+		print(suggested_right_pos);
+		print(suggested_left_pos);
+		print("-------------------");
+		print();
 	end
 	
 	if(suggested_left_pos ~= zero) then

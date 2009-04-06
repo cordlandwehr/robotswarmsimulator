@@ -71,6 +71,10 @@ namespace {
 			return Vector3dWrapper(x * scalar, y * scalar, z * scalar);
 		}
 
+		const bool operator==(const Vector3dWrapper& rhs) const {
+			return x == rhs.x && y == rhs.y && z == rhs.z;
+		}		
+
 		friend std::ostream& operator<<(std::ostream& os, const Vector3dWrapper& rhs) {
 			//Note: not implemented using operator<< of Vector3d, because latter is ugly.
 			return os << "{x = " << rhs.x << ", y = " << rhs.y << ", z = " << rhs.z << "}";
@@ -539,6 +543,7 @@ void LuaRobot::register_lua_methods() {
 			 .def(luabind::const_self + luabind::other<Vector3dWrapper>())
 			 .def(luabind::const_self - luabind::other<Vector3dWrapper>())
 			 .def(luabind::const_self * luabind::other<Vector3dWrapper>())
+			 .def(luabind::const_self == luabind::other<Vector3dWrapper>())
 			 .def(luabind::const_self * double())
 			 .def(double() * luabind::const_self)
 			 .def(luabind::const_self / double())
