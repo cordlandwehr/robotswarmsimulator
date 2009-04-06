@@ -66,7 +66,7 @@ void StatsOut::create_date() {
 
 void StatsOut::set_id(std::string stat_id) {
 	if (this->stat_id.length() != 0) {
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::WARNING) << "stat_id already set to " << this->stat_id;
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::warning) << "stat_id already set to " << this->stat_id;
 	} else {
 		this->stat_id = stat_id;
 	}
@@ -155,7 +155,7 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 
 void StatsOut::update(int stat_timestep, std::vector<double> stat_data) {
 	if (!is_open_) {
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::WARNING) << "Logfile for stats not opened";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::warning) << "Logfile for stats not opened";
 		return;
 	}
 

@@ -18,7 +18,7 @@ namespace {
 	bool log_to_file_;
 
 	NullStream global_null_stream;
-	std::fstream logfile_stream(NULL, std::fstream::out);
+	std::fstream logfile_stream("", std::fstream::out);
 }
 
 void ConsoleOutput::initalize_logging_system(Level level, bool log_to_file, std::string filename) {
@@ -55,13 +55,13 @@ std::ostream & ConsoleOutput::log(Module talking_module, Level level) {
 
 	// start a new line, log the level, log the module of the message
 	*output_stream << std::endl;
-	if (level == DEBUG) {
+	if (level == debug) {
 		*output_stream << "[DEBUG]";
-	} else if (level == INFO) {
+	} else if (level == info) {
 		*output_stream << "[INFO]";
-	} else if (level == WARNING) {
+	} else if (level == warning) {
 		*output_stream << "[WARNING]";
-	} else if (level == ERROR) {
+	} else if (level == error) {
 		*output_stream << "[ERROR]";
 	}
 	*output_stream << get_prefix(talking_module);

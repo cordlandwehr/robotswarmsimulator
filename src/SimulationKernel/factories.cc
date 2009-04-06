@@ -169,7 +169,7 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 				strategy = CollisionPositionRequestHandler::TOUCH;
 			else {
 				strategy = CollisionPositionRequestHandler::STOP;
-				ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::WARNING)  << "Unknown collision strategy, falling back to STOP strategy.";
+				ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::warning)  << "Unknown collision strategy, falling back to STOP strategy.";
 			}
 
 			double clearance = boost::lexical_cast<double>(params["COLLISION_POSITION_REQUEST_HANDLER_CLEARANCE"]);
@@ -296,7 +296,7 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
 		}
 	} else {
-		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::INFO) << "No View specified! Defaulting to global view.";
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to global view.";
 		view_factory.reset(new ViewFactory<GlobalView>);
 	}
 

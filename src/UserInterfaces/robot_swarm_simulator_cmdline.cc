@@ -66,14 +66,14 @@ int main(int argc, char** argv) {
 		("dry", "disables statistic output")
 		("steps", po::value<unsigned int>(), "number of steps for blind mode")
 		("blind", "disables visualization");
-	
+
 	// hidden option list, pssst ;-)
 	po::options_description top_secret_options("Top Secret");
 	top_secret_options.add_options()("mubalabieeyes", "");
 
 	po::options_description options;
 	options.add(general_options).add(generation_options).add(simulation_options).add(top_secret_options);
-	
+
 	po::options_description options_help_list;
 	options_help_list.add(general_options).add(generation_options).add(simulation_options);
 
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 	}
 	// TODO(craupach) do this properly with options...
 	// initalize logging system
-	ConsoleOutput::initalize_logging_system(ConsoleOutput::DEBUG, false);
+	ConsoleOutput::initalize_logging_system(ConsoleOutput::debug, false);
 	// ppssssstt
 	if (vm.count("mubalabieeyes")) {
 		mubalabieeyes();
@@ -163,8 +163,8 @@ int main(int argc, char** argv) {
 			// write to file
 			generator.write_to_file();
 
-			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Robots were generated!";
-			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Please see file: "
+			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Robots were generated!";
+			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Please see file: "
 			                                                                   << vm["swarmfile"].as<std::string>()
 			                                                                   << ".swarm";
 		}

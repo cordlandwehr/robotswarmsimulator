@@ -40,11 +40,11 @@ public:
 	};
 
 	enum Level {
-		DEBUG = 0,
-		INFO = 1,
-		WARNING = 2,
-		ERROR = 3,
-		NONE = 4
+		debug = 0,
+		info = 1,
+		warning = 2,
+		error = 3,
+		none = 4
 	};
 
 	static void initalize_logging_system(Level level, bool log_to_file, std::string filename = "");

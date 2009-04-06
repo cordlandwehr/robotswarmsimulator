@@ -43,7 +43,7 @@ bool SkyBox::init( std::string path_to_tex){
 
 		texture_[i].load(file);
 		if( texture_[i].loaded() == false){
-			ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Cannot load skybox texture: " << file;
+			ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Cannot load skybox texture: " << file;
 			can_use_ = false;
 			return false;
 		}

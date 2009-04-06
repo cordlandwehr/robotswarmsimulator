@@ -56,7 +56,7 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 	subset_actslaves_ ? subsetString += "{ACTSLAVES} " : "";
 	subset_inactslaves_ ? subsetString += "{INACTSLAVES} " : "";
 
-	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << subsetString;
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << subsetString;
 
 	// get template-configuration from Parser's STATS_TEMPLATE = ...
 	// e.g. STATS_TEMPLATE = DEFAULT
@@ -66,15 +66,15 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 
 	if (s.find("ALL", 0) != std::string::npos) {
 		init_activate_all();
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) <<"Configuration is: ALL";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) <<"Configuration is: ALL";
 	} else if (s.find("BASIC", 0) != std::string::npos) {
 		init_activate_basic();
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Configuration is: BASIC";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Configuration is: BASIC";
 	} else if (s.find("NONE", 0) != std::string::npos) {
 		init_activate_none();
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Configuration is: NONE";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Configuration is: NONE";
 	} else {
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::ERROR) << "Invalid value for STATS_TEMPLATE in projectfile. Using STATS_TEMPLATE = NONE";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "Invalid value for STATS_TEMPLATE in projectfile. Using STATS_TEMPLATE = NONE";
 		init_activate_none();
 	}
 
@@ -83,11 +83,11 @@ void StatsConfig::init(map<std::string, std::string> &params) {
 	s = params["STATISTICS_DATADUMP"];
 	if (s == "FULL") {
 		datadump_level_ = DATADUMP_FULL;
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Datadump is: FULL";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Datadump is: FULL";
 	} else {
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Datadump is: NONE";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Datadump is: NONE";
 		if (s != "" && s != "NONE")
-			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Invalid value for STATS_DATADUMP in projectfile. Using STATS_DATADUMP = NONE";
+			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Invalid value for STATS_DATADUMP in projectfile. Using STATS_DATADUMP = NONE";
 
 		datadump_level_ = DATADUMP_NONE;
 	}

@@ -127,7 +127,7 @@ void Texture::load(std::string & texture_file ){
 				load_tga();
 			break;
 		default:
-			ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Can not determine texture file format.";
+			ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Can not determine texture file format.";
 			break;
 
 	}
@@ -154,7 +154,7 @@ void Texture::load(std::string & texture_file ){
 		glDisable( GL_TEXTURE_2D );
 
 	} else {
-		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Cannot load Texture from file: " << texture_file;
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Cannot load Texture from file: " << texture_file;
 	}
 
 }
@@ -190,7 +190,7 @@ void Texture::load_tga(){
 
 	if( fp == NULL){
 
-		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Can't find file: " << file_name_;
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Can't find file: " << file_name_;
 
 		loaded_ = false;
 		return;
@@ -199,7 +199,7 @@ void Texture::load_tga(){
 	std::size_t bytes_read = std::fread(tga_compare, 1, sizeof(tga_compare), fp);
 
 	if( bytes_read != 12){
-		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Read too few bytes.";
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Read too few bytes.";
 		std::fclose(fp);
 		loaded_  = false;
 
@@ -208,7 +208,7 @@ void Texture::load_tga(){
 
 	if( std::memcmp(tga_header,tga_compare,sizeof(tga_header)) != 0	) {
 
-		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Header missmatch.";
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Header missmatch.";
 		std::fclose(fp);
 		loaded_ = false;
 
@@ -265,7 +265,7 @@ void Texture::load_bmp(){
 	std::FILE * fp = std::fopen(file_name_.c_str(), "rb");
 
 	if(fp == NULL){
-		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::WARNING) << "Cannot load texture file: "
+		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Cannot load texture file: "
 		                                                                         << file_name_;
 		return;
 	}

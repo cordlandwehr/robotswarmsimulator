@@ -72,7 +72,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	boost::shared_ptr<Parser> parser(new Parser());
 	parser->load_projectfiles(project_filename);
 	std::map<std::string, std::string> &params = parser->parameter_map();
-	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::INFO) << "Generated parameter map";
+	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Generated parameter map";
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
 	history_->insert(initial_world_information);
@@ -93,7 +93,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 		stats_->init(params, output_dir);
 	}
 	else
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::INFO) << "Output disabled.";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Output disabled.";
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	event_handler_->register_listener(asg_);
