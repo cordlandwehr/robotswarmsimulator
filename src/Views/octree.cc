@@ -346,6 +346,42 @@ void Octree::OctreeNode::create_new_node(const std::vector< boost::shared_ptr<Wo
 }
 
 
+void Octree::OctreeNode::add_robot(boost::shared_ptr<RobotData> robot) {
+	if (width_ > min_width_ && level_ < max_levels_) { // insertion node not yet reached --> recurse into child nodes
+		if (!sub_divided_) { // we have to create child nodes first
+			for (unsigned int i=0; i<8; i++) {
+				octree_nodes_[i] = boost::shared_ptr<OctreeNode>(new OctreeNode());
+				octree_nodes_[i]->center_ = new_node_center(center_, width_, i);
+				octree_nodes_[i]->width_ = width_/2;
+				octree_nodes_[i]->set_level(level_+1);
+				octree_nodes_[i]->set_max_levels(max_levels_);
+				octree_nodes_[i]->set_min_width(min_width_);
+			}
+			sub_divided_ = true;
+		}
+		
+		// add robot to appropriate child node
+		int child_num = point_in_node(robot->position());
+		child(child_num)->add_robot(robot);
+	} else { // reached insertion node --> insert robot
+		robot_datas_.push_back(robot);
+		object_count_ ++;
+	}
+}
+
+
+void Octree::OctreeNode::remove_robot(boost::shared_ptr<const RobotData> robot) {
+	if (sub_divided_) { // not yet reached a leaf, so recurse
+		int child_num = point_in_node(robot->position());
+		child(child_num)->remove_robot(robot);
+	} else { // reached a leaf --> if it contains the robot, remove it
+		unsigned int nr = robot_datas_.size();
+		std::remove(robot_datas_.begin(), robot_datas_.end(), robot);
+		nr -= robot_datas_.size();
+		assert(nr < 2); // an octree should never contain an object twice
+		object_count_ -= nr;
+	}
+}
 
 
 void Octree::OctreeNode::setup_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,

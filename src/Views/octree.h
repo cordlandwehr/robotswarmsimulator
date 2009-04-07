@@ -99,6 +99,23 @@ public:
 					 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
 					 const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
+	
+	/**
+	 * \brief Use this method to add a robot to the octree <em>after</em> its creation.
+	 * \param robot Robot to add to the octree.
+	 */
+	void add_robot(boost::shared_ptr<RobotData> robot) {
+		root_->add_robot(robot);
+	}
+	
+	
+	/**
+	 * \brief Use this method to remove a robot from the octree.
+	 * \param robot Robot to remove from the octree.
+	 */
+	void remove_robot(boost::shared_ptr<const RobotData> robot) {
+		root_->remove_robot(robot);
+	}
 
 
 	/**
@@ -305,6 +322,21 @@ public:
 			 */
 			Vector3d new_node_center(Vector3d center, double width, int node_id);
 
+			
+			/*! \brief Adds the given robot to this subtree.
+			 *
+			 * This method allows the insertion of robots after the creation of the octree by Octree::create_tree.
+			 * \param robot The robot to add to this subtree.
+			 */
+			void add_robot(boost::shared_ptr<RobotData> robot);
+		
+			
+			/*! \brief Removes the given robot from this subtree (if contained).
+			 *
+			 * This method searches this subtree for the given robot and removes it, if found.
+			 * \param robot Removes the given robot from this subtree (if contained).
+			 */
+			void remove_robot(boost::shared_ptr<const RobotData> robot);
 
 
 			/*! This subdivides a node depending on the objects and node width
