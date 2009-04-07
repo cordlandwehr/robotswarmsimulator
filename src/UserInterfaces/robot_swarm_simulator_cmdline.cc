@@ -17,6 +17,8 @@
 #include <boost/program_options.hpp>
 #include <boost/cast.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/algorithm/string/case_conv.hpp>
+
 
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
@@ -38,6 +40,10 @@ int main(int argc, char** argv) {
 		("version", "shows version of RobotSwarmSimulator");
 	general_options.add_options()
 		("about", "tells you who developed this awesome piece of software");
+	general_options.add_options()
+		("logfile", po::value<std::string>(), "file to log to");
+	general_options.add_options()
+		("loglevel", po::value<std::string>()->default_value("info"), "log level");
 
 	po::options_description generation_options("Generator options");
 	generation_options.add_options()
@@ -84,16 +90,40 @@ int main(int argc, char** argv) {
 		po::notify(vm);
 	}
 	catch (std::exception& e) {
-		ConsoleOutput::out_error( e.what() );
+		std::cout << "[ERROR] e.what()" << std::endl;
 		throw;
 	}
 	catch(...) {
-		ConsoleOutput::out_error( "Uncaught unknown exception." );
+		std::cout <<  "[ERROR] Uncaught unknown exception." << std::endl;
 		throw; //rethrow exception
 	}
-	// TODO(craupach) do this properly with options...
+
 	// initalize logging system
-	ConsoleOutput::initalize_logging_system(ConsoleOutput::debug, false);
+	ConsoleOutput::Level log_level = ConsoleOutput::none;
+	std::string arg_log_level = vm["loglevel"].as<std::string>();
+	boost::to_lower(arg_log_level);
+	if(arg_log_level == "debug") {
+		log_level = ConsoleOutput::debug;
+	} else if(arg_log_level == "info") {
+		log_level = ConsoleOutput::info;
+	} else if(arg_log_level == "warning") {
+		log_level = ConsoleOutput::warning;
+	} else if(arg_log_level == "error") {
+		log_level = ConsoleOutput::error;
+	} else if(arg_log_level == "none") {
+		log_level = ConsoleOutput::none;
+	} else {
+		std::cout << "[WARNING] unkown log level: resorting to INFO" << std::endl;
+		log_level = ConsoleOutput::info;
+	}
+
+
+	if(vm.count("logfile")) {
+		ConsoleOutput::initalize_logging_system(log_level, true, vm["logfile"].as<std::string>());
+	} else {
+		ConsoleOutput::initalize_logging_system(log_level, false);
+	}
+
 	// ppssssstt
 	if (vm.count("mubalabieeyes")) {
 		mubalabieeyes();
@@ -169,11 +199,11 @@ int main(int argc, char** argv) {
 			                                                                   << ".swarm";
 		}
 		catch (std::exception& e) {
-			ConsoleOutput::out_error( e.what() );
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << e.what();
 			throw;
 		}
 		catch(...) {
-			ConsoleOutput::out_error( "Uncaught unknown exception." );
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.";
 			throw; //rethrow exception
 		}
 
@@ -264,18 +294,18 @@ int main(int argc, char** argv) {
 				xt.sec += 1; // change xt to next second
 				boost::thread::sleep(xt);
 			}
-			std::cout << "Terminating simulation.." << std::endl;
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Terminating simulation..";
 			sim_control->terminate_simulation();
-			std::cout << "Simulation finished. Have a good day." << std::endl;
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Simulation finished. Have a good day.";
 		}
 
 	}
 	catch(std::exception& e) {
-		ConsoleOutput::out_error( e.what() );
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << e.what();
 		throw; //rethrow exception
 	}
 	catch(...) {
-		ConsoleOutput::out_error( "Uncaught unknown exception." );
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.";
 		throw; //rethrow exception
 	}
 	return 0;

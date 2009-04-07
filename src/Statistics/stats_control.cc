@@ -87,33 +87,29 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 			break;
 
 		default :
-			ConsoleOutput::out_error( "In Stats_control.init(...): unspecified datadump_level()==" + stats_cfg_.datadump_level(), ConsoleOutput::Statistics );
+			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "In Stats_control.init(...): unspecified datadump_level()==" << stats_cfg_.datadump_level();
 	}
 }
 
 void StatsControl::update(const WorldInformation& world_information, boost::shared_ptr<Event> event) {
-	if (DEBUG) {
-		std::cout << "DEBUG: >>>> StatsControl::update(...) with WorldInformation.time==" <<  world_information.time() << std::endl;
-	}
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug)  << "StatsControl::update(...) with WorldInformation.time==" <<  world_information.time();
+
 
 	if (stats_calc_indata_.world_info_.get() == NULL) {
-		if (DEBUG)
-			std::cout << "DEBUG:      no current world_info, so set it to given" << std::endl;
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "no current world_info, so set it to given";
 		// there's no current world_info_ (== in the first simulation-step) so set it and wait
 		// for any latter one with the same world-time.
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
 
 	} else if (stats_calc_indata_.world_info_.get()->time() == world_information.time()) {
-		if (DEBUG)
-			std::cout << "DEBUG:      existing current world_info for same time, so keep latter one" << std::endl;
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "existing current world_info for same time, so keep latter one";
 
 		// there's already a world_info_ for the same time, so overwrite it with the current latter one
 		// but wait if more updates for the same world-time will follow.
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
 
 	} else if (stats_calc_indata_.world_info_.get()->time() < world_information.time()) {
-		if (DEBUG)
-			std::cout << "DEBUG:      existing current world_info for earlier time, so do the calculation on it" << std::endl;
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "existing current world_info for earlier time, so do the calculation on it";
 
 		// the already existing world_info is the latest for the old time.
 		// So NOW do all the calculation and data-output to files...
@@ -127,21 +123,19 @@ void StatsControl::update(const WorldInformation& world_information, boost::shar
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
 
 	} else {
-		ConsoleOutput::out_error( "Error in StatsControl::update(...): unhandled case that must not occur.", ConsoleOutput::Statistics);
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "Error in StatsControl::update(...): unhandled case that must not occur.";
 	}
 
 	if (stats_cfg_.datadump_level() != StatsConfig::DATADUMP_NONE) {
 		do_datadump(world_information, event);
 	}
 
-	if (DEBUG) {
-		std::cout << "DEBUG:      now world_info_.time()==" << stats_calc_indata_.world_info_.get()->time() << std::endl;
-		if (stats_calc_indata_.prev_world_info_.get() == NULL) {
-			std::cout << "DEBUG:      now prev_world_info_==NULL" << std::endl;
-		} else {
-			std::cout << "DEBUG:      now prev_world_info_.time()=" << stats_calc_indata_.prev_world_info_.get()->time() << std::endl;
-		}
-		std::cout << "DEBUG: <<<<" << std::endl;
+	// some debug output
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "now world_info_.time()==" << stats_calc_indata_.world_info_.get()->time();
+	if (stats_calc_indata_.prev_world_info_.get() == NULL) {
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "now prev_world_info_==NULL";
+	} else {
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "now prev_world_info_.time()=" << stats_calc_indata_.prev_world_info_.get()->time();
 	}
 
 }
@@ -232,7 +226,7 @@ void StatsControl::calculate() {
 
 	if (stats_initialized_) {
 		// log error, because not initialized - but continue
-		ConsoleOutput::out_error( "StatsControl::calculate(...) called without any previous StatsControl::init(...)", ConsoleOutput::Statistics);
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "StatsControl::calculate(...) called without any previous StatsControl::init(...)";
 	}
 
 	if (!stats_cfg_.is_any_subset())
@@ -242,21 +236,17 @@ void StatsControl::calculate() {
 	// so recalculate all of them.
 	update_subsets();
 
-	if (DEBUG) {
-		std::cout << "DEBUG:          number of subsets: " << cur_subsets_.size() << std::endl;
-		for(unsigned int i=0; i<cur_subsets_.size(); i++) {
-			std::cout << "DEBUG:          size of subset " << i << " is " << cur_subsets_[i].size() << std::endl;
-		}
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "number of subsets: " << cur_subsets_.size() << std::endl;
+	for(unsigned int i=0; i<cur_subsets_.size(); i++) {
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "size of subset " << i << " is " << cur_subsets_[i].size();
 	}
+
 
 	// for each subset perform the calculation
 	// with the respective StatsOut-instance.
 	// asserts that stats_calc_indata_ contains valid information
 	for(unsigned int i=0; i<cur_subsets_.size(); i++)
 		stats_calc_.calculate(stats_calc_indata_, cur_subsets_[i], stats_out_[i], i);
-
-	if (DEBUG)
-		std::cout << "DEBUG: <<<<<<<<" << std::endl;
 }
 
 

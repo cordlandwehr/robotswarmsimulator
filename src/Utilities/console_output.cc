@@ -71,14 +71,6 @@ std::ostream & ConsoleOutput::log(Module talking_module, Level level) {
 
 }
 
-void ConsoleOutput::out_error(std::string outstring, Module talking_module) {
-	std::cerr << "(EE) " << get_prefix(talking_module) << outstring << std::endl;
-}
-
-void ConsoleOutput::out_error(std::string outstring) {
-	out_error(outstring, None);
-}
-
 std::string ConsoleOutput::get_prefix(Module talking_module) {
 	std::string prefix = "";
 	switch (talking_module) {
@@ -91,10 +83,6 @@ std::string ConsoleOutput::get_prefix(Module talking_module) {
 	default : prefix = ""; break;
 	}
 	return prefix;
-}
-
-std::string ConsoleOutput::wrap_line(std::string outstring) {
-	return outstring;
 }
 
 ConsoleOutput::ConsoleOutput() {

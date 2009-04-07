@@ -17,7 +17,7 @@
 Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 	if(positions.size() == 0) {
 		// do some error handling.
-		ConsoleOutput::out_error("Computing COG with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing COG with positions.size == 0";
 		return Vector3d();
 	}
 
@@ -40,7 +40,7 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 Vector3d PointAlgorithms::compute_CMinBall(const std::vector<Vector3d>& positions) {
 	if(positions.size() == 0) {
 		// do some error handling
-		ConsoleOutput::out_error("Computing CMinBall with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing CMinBall with positions.size == 0";
 		return Vector3d();
 	}
 
@@ -61,7 +61,7 @@ Vector3d PointAlgorithms::compute_CMinBall(const std::vector<Vector3d>& position
 Vector3d PointAlgorithms::compute_CMinBox(const std::vector<Vector3d>& positions) {
 	if(positions.size() == 0) {
 		// do some error handling
-		ConsoleOutput::out_error("Computing CMinBox with positions.size == 0", ConsoleOutput::ComputationalGeometry);
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing CMinBox with positions.size == 0";
 		return Vector3d();
 	}
 	Vector3d first = positions.at(0);
