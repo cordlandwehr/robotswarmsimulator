@@ -375,11 +375,12 @@ void Octree::OctreeNode::remove_robot(boost::shared_ptr<const RobotData> robot) 
 		int child_num = point_in_node(robot->position());
 		child(child_num)->remove_robot(robot);
 	} else { // reached a leaf --> if it contains the robot, remove it
-		unsigned int nr = robot_datas_.size();
-		std::remove(robot_datas_.begin(), robot_datas_.end(), robot);
-		nr -= robot_datas_.size();
-		assert(nr < 2); // an octree should never contain an object twice
-		object_count_ -= nr;
+		std::vector<boost::shared_ptr<RobotData> >::iterator search_result;
+		search_result = std::find(robot_datas_.begin(), robot_datas_.end(), robot);
+		if (search_result != robot_datas_.end()) {
+			robot_datas_.erase(search_result);
+			object_count_--;
+		}
 	}
 }
 
