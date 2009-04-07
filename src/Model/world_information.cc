@@ -124,3 +124,13 @@ RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIde
 	assert(id->id() < robot_data_.size());
 	return *(robot_data_[id->id()]);
 }
+
+boost::shared_ptr<const RobotData> WorldInformation::get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) const {
+	assert(id->id() < robot_data_.size());
+	return robot_data_[id->id()];
+}
+
+boost::shared_ptr<RobotData> WorldInformation::get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) {
+	assert(id->id() < robot_data_.size());
+	return robot_data_[id->id()];
+}

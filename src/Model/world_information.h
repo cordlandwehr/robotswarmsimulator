@@ -165,6 +165,31 @@ public:
 	* \return Mutable reference to according robotData of given robot ID.
 	*/
 	RobotData& get_according_robot_data(boost::shared_ptr<RobotIdentifier> id);
+	
+	
+	/**
+	 * Return constant pointer to according robotData of given robot ID
+	 *
+	 * This method assumes, that the according reference to the
+	 * robotData of a robot with ID i is saved at position i in
+	 * the robot_datas-vector.
+	 *
+	 * \param reference to identifier of robot whose robotData's reference shall be returned.
+	 * \return Constant reference to according robotData of given robot ID.
+	 */
+	boost::shared_ptr<const RobotData> get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) const;
+	
+	/**
+	 * Return (non-constant) pointer to according robotData of given robot ID.
+	 *
+	 * This method assumes, that the according reference to the
+	 * robotData of a robot with ID i is saved at position i in
+	 * the robot_datas-vector.
+	 *
+	 * \param reference to identifier of robot whose robotData's reference shall be returned.
+	 * \return Mutable reference to according robotData of given robot ID.
+	 */
+	boost::shared_ptr<RobotData> get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id);
 
 private:
 	/**
