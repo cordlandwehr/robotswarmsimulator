@@ -12,12 +12,14 @@
 #include <Model/robot_data.h>
 #include <Model/world_information.h>
 #include <Requests/position_request.h>
+#include <Views/octree_utilities.h>
 
 
 CollisionPositionRequestHandler::CollisionPositionRequestHandler(CollisionStrategy strategy, double clearance,
                                                                   unsigned int seed, double discard_probability,
                                                                   const History& history)
-: VectorRequestHandler(seed, discard_probability, history), strategy_(strategy), clearance_(clearance) { }
+: VectorRequestHandler(seed, discard_probability, history), strategy_(strategy), clearance_(clearance),
+  collision_tree_time_(-1) { }
 
 
 void CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
@@ -31,9 +33,18 @@ void CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<
 	// get requesting robot
 	const boost::shared_ptr<RobotIdentifier>& robot_id = position_request->robot().id();
 	RobotData& robot = world_information->get_according_robot_data(robot_id);
+
+	// check if this request is part of a new world_information (if so, we need to rebuild the collision tree)
+	if (collision_tree_time_ < world_information->time())
+		update_collision_tree(*world_information);
+	
+	// Remove requesting robot from collision tree (will be readded at the end of this method).
+	// This is important: the robot will probably be moved by the following commands and thus, the collision tree would
+	// become invalid (the robot may be placed in the wrong octree node)
+	collision_tree_->remove_robot(world_information->get_according_robot_data_ptr(robot_id));
 	
 	// if robot is already collided, we abort (no good way to resolve such collisions)
-	if (find_colliding_robot(robot, world_information->robot_data()))
+	if (find_colliding_robot(robot, *world_information))
 		return;
 	
 	// handle request, but save robot's current position
@@ -43,16 +54,19 @@ void CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<
 	// collision handling
 	if (strategy_ == STOP) {
 		// STOP strategy: reject request on collision (i.e. undo the already applied request)
-		if (find_colliding_robot(robot, world_information->robot_data())) {
+		if (find_colliding_robot(robot, *world_information)) {
 			boost::shared_ptr<Vector3d> old_position_ptr(new Vector3d(old_position));
 			robot.set_position(old_position_ptr);
 		}
 	} else if (strategy_ == TOUCH) {
 		// TOUCH strategy: on collision, move back until colliding robots are touching
-		while (const RobotPtr& other_robot = find_colliding_robot(robot, world_information->robot_data())) {
+		while (const RobotPtr& other_robot = find_colliding_robot(robot, *world_information)) {
 			move_back_to_touchpoint(robot, *other_robot, old_position);
 		}
 	}
+	
+	// re-add current robot to the collision tree
+	collision_tree_->add_robot(world_information->get_according_robot_data_ptr(robot_id));
 }
 
 
@@ -94,18 +108,27 @@ void CollisionPositionRequestHandler::move_back_to_touchpoint(RobotData& robot, 
 }
 
 
-CollisionPositionRequestHandler::RobotPtr CollisionPositionRequestHandler::find_colliding_robot(const RobotData& robot, const RobotContainer& robots) {
-	// TODO(peter): Collisions are currently detected by iterating over all robots in the world. It would be much more
-	//    efficient (at least for many robots) if we find colliding robots using a dedicated data structure as for
-	//    example an octree. However, we have to be able to change the octree if we change the robot's position (e.g.
-	//    remove the object from it's old position in the octree and readd it using it's new position). As far as I've
-	//    seen, our Octree class does not yet support such methods.
-	BOOST_FOREACH(const RobotPtr& other_robot, robots) {
-		if (other_robot.get() == &robot)
-			continue; // skip 'self-collision'
-		const double distance = boost::numeric::ublas::norm_2(other_robot->position() - robot.position());
-		if (distance < clearance_)
-			return other_robot; // found collision
-	}
-	return RobotPtr(); // no collision found
+CollisionPositionRequestHandler::RobotPtr CollisionPositionRequestHandler::find_colliding_robot(const RobotData& robot, WorldInformation& world_information) {
+	// use the octree to find the colliding robots
+	std::vector<boost::shared_ptr<RobotIdentifier> > colliding_robots;
+	colliding_robots = OctreeUtilities::get_visible_robots_by_radius(collision_tree_, robot.position(), clearance_, robot);
+	
+	// return the first colliding robot if we found one; otherwise, return an empty pointer
+	if (!colliding_robots.empty())
+		return world_information.get_according_robot_data_ptr(colliding_robots[0]);
+	return RobotPtr();
+}
+
+
+void CollisionPositionRequestHandler::update_collision_tree(const WorldInformation& world_information) {
+	std::vector<boost::shared_ptr<WorldObject> > markers; // empty, because markers can not collide
+	std::vector<boost::shared_ptr<Obstacle> > obstacles; // empty (obstacle collisions not yet supported)
+	
+	// creates the collision tree
+	if (!collision_tree_)
+		collision_tree_.reset(new Octree(50, clearance_));
+	collision_tree_->create_tree(markers, obstacles, world_information.robot_data());
+	
+	// update collision tree's creation time
+	collision_tree_time_ = world_information.time();
 }

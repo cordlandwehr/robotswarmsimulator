@@ -10,6 +10,7 @@
 #define COLLISION_POSITION_REQUEST_HANDLER_H
 
 #include <EventHandlers/vector_request_handler.h>
+#include <Views/octree.h>
 
 
 /**
@@ -52,13 +53,12 @@ protected:
 	
 private:	
 	/**
-	 * Checks wether one of the robots in the given container is colliding with the given robot.
+	 * Checks wether one of the robots in the given world is colliding with the given robot.
 	 *
-	 * If such a robot is found, a pointer to it is returned. If not, a NULL pointer is returned. Note that the
-	 * container may contain the regarded robot itself; however, 'self-collision' is not considered, that is, this will
-	 * never return a pointer to the robot itself.
+	 * If such a robot is found, a pointer to it is returned. If not, a NULL pointer is returned. Note 'self-collision'
+	 * is not considered, that is, this will never return a pointer to the robot itself.
 	 */
-	RobotPtr find_colliding_robot(const RobotData& robot, const RobotContainer& robots);
+	RobotPtr find_colliding_robot(const RobotData& robot, WorldInformation& world_information);
 	
 	
 	/**
@@ -74,8 +74,18 @@ private:
 	void move_back_to_touchpoint(RobotData& robot, const RobotData& other_robot, const Vector3d& old_position);
 	
 	
+	/**
+	 * Resets the collision tree to reflect the given world_information and updates the collision_tree_time_ to the
+	 * time the given world_information represents.
+	 */
+	void update_collision_tree(const WorldInformation& world_information);
+	
+	
 	const CollisionStrategy strategy_; ///< Indicates the strategy used if a collision is detected.
 	const double clearance_; ///< Two robots having a distance less than this value are considered collided.
+	
+	boost::shared_ptr<Octree> collision_tree_; ///< Used to hold the number of collision candidates low.
+	int collision_tree_time_; ///< Holds the time the current collision_tree_ was created for.
 };
 
 #endif /* COLLISION_POSITION_REQUEST_HANDLER_H */

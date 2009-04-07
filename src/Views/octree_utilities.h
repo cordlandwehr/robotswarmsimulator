@@ -309,14 +309,6 @@ private:
 	static bool compare_to_squared_radius(const boost::shared_ptr<const Octree::OctreeNode>& octree,
 											const Vector3d& pos,
 											double sq_radius);
-
-	/**
-	 * Helper function to get rid of roots.
-	 */
-	static double calculate_squared_dist(const boost::shared_ptr<const Octree::OctreeNode>& octree,
-										const Vector3d& pos);
-
-
 };
 
 

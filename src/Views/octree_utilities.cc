@@ -26,53 +26,29 @@
 
 
 
-
-
-
-bool OctreeUtilities::compare_to_squared_radius(const boost::shared_ptr<const OctreeNode>& octree,const Vector3d& pos, double sq_radius){
-
-	Vector3d center = octree->center();
-	double x = center(0) - pos(0);
-	double y = center(1) - pos(1);
-	double z = center(2) - pos(2);
-
-	return (x*x + y*y + z*z)*(1 - 2*octree->width()) + octree->width() *octree->width()/2.0 <  sq_radius ;
-
-}
-
-
-double OctreeUtilities::calculate_squared_dist(const boost::shared_ptr<const Octree::OctreeNode>& octree,const Vector3d& pos){
-	Vector3d center = octree->center();
-		double x = center(0) - pos(0);
-		double y = center(1) - pos(1);
-		double z = center(2) - pos(2);
-
-		return x*x + y*y + z*z ;
-}
-
-
-
-std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_radius(const boost::shared_ptr<const Octree> &octree,
-																				    const Vector3d & pos,
-																				    double view_radius,
-																				    const RobotData &robot){
+std::vector<OctreeUtilities::RobotRef> OctreeUtilities::get_visible_robots_by_radius(const boost::shared_ptr<const Octree> &octree,
+                                                                                     const Vector3d & pos,
+                                                                                     double view_radius,
+                                                                                     const RobotData &robot) {
 
 	std::vector<OctreeUtilities::RobotRef > found_robots;
 
 
 	// do the real work
-	get_visible_robots_by_radius_Rec(octree->root(), found_robots, view_radius*view_radius, pos);
+	get_visible_robots_by_radius_Rec(octree->root(), found_robots, view_radius, pos);
 
 	// remove caller from set
-	found_robots.erase(std::find(found_robots.begin(), found_robots.end(), boost::static_pointer_cast<RobotIdentifier>(robot.id())));
+	std::vector<OctreeUtilities::RobotRef>::iterator search_result;
+	search_result = std::find(found_robots.begin(), found_robots.end(), boost::static_pointer_cast<RobotIdentifier>(robot.id()));
+	if (search_result != found_robots.end())
+		found_robots.erase(search_result);
 
 	return found_robots;
 }
 
  void OctreeUtilities::get_visible_robots_by_radius_Rec(const boost::shared_ptr<const OctreeNode> &octree,
-														std::vector<OctreeUtilities::RobotRef > & robots_found,
-													    double sq_radius,
-													    const Vector3d & pos ) {
+                                                        std::vector<OctreeUtilities::RobotRef > & robots_found,
+                                                        double radius, const Vector3d & pos ) {
 
 
 	 // check all robots in this node
@@ -82,17 +58,10 @@ std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_r
 		 vector<boost::shared_ptr<RobotData> > robots = octree->robot_datas();
 		 vector<boost::shared_ptr<RobotData> >::const_iterator it_robots;
 
-		 for(it_robots = robots.begin(); it_robots != robots.end(); it_robots++ ){
-
-			 const Vector3d& rob_pos = (*it_robots)->position();
-
-			 double x = rob_pos(0) - pos(0);
-			 double y = rob_pos(1) - pos(1);
-			 double z = rob_pos(2) - pos(2);
-
+		 for(it_robots = robots.begin(); it_robots != robots.end(); it_robots++ ) {
 			 // check whether this robot is near enough
-			 if(x*x + y*y + z*z <= sq_radius){
-
+			 const double distance = boost::numeric::ublas::norm_2((*it_robots)->position() - pos);
+			 if(distance <= radius){
 				 robots_found.push_back(boost::static_pointer_cast<RobotIdentifier>((*it_robots)->id()));
 			 }
 		 }
@@ -103,19 +72,12 @@ std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_r
 	 // is this a leaf?
 	 if(octree->sub_divided()){
 
-		 // visit each node which has a distance at most the radius
-		 for(int child_num = 0; child_num < 8; child_num++){
-
-			 if(compare_to_squared_radius(octree->child( child_num ),pos,sq_radius)){
-
-				 get_visible_robots_by_radius_Rec(octree->child( child_num ), robots_found, sq_radius, pos);
-			 }
-
+		// visit each node which has a distance at most the radius
+		for(int child_num = 0; child_num < 8; child_num++){
+			if (octree->child(child_num)->calculate_dist_to_node(pos) < radius)
+				 get_visible_robots_by_radius_Rec(octree->child( child_num ), robots_found, radius, pos);
 		 }
-
-
 	 }
-
  }
 
  std::vector<OctreeUtilities::MarkerRef> OctreeUtilities::get_visible_markers_by_radius(const boost::shared_ptr<const Octree> &octree,
@@ -124,31 +86,23 @@ std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_r
 
  	std::vector<OctreeUtilities::MarkerRef > found_markers;
 
- 	get_visible_markers_by_radius_Rec(octree->root(), found_markers, view_radius*view_radius, pos);
+ 	get_visible_markers_by_radius_Rec(octree->root(), found_markers, view_radius, pos);
 
  	return found_markers;
  }
 
 
   void OctreeUtilities::get_visible_markers_by_radius_Rec(const boost::shared_ptr<const OctreeNode> &octree,
-														  std::vector<OctreeUtilities::MarkerRef > & markers_found,
- 													      double sq_radius,
- 													      const Vector3d & pos ) {
+                                                          std::vector<OctreeUtilities::MarkerRef > & markers_found,
+                                                          double radius, const Vector3d & pos ) {
 
 
  	 if(octree->marker_information().size() > 0){
  		 vector<boost::shared_ptr<WorldObject> > markers = octree->marker_information();
  		 vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;
- 		 for(it_markers = markers.begin(); it_markers != markers.end(); it_markers++ ){
-
- 			 Vector3d rob_pos = (*it_markers)->position();
-
- 			 double x = rob_pos(0) - pos(0);
- 			 double y = rob_pos(1) - pos(1);
- 			 double z = rob_pos(2) - pos(2);
-
- 			 if(x*x + y*y + z*z < sq_radius){
-
+ 		 for(it_markers = markers.begin(); it_markers != markers.end(); it_markers++ ) {
+			 const double distance = boost::numeric::ublas::norm_2((*it_markers)->position() - pos);
+ 			 if(distance < radius) {
  				 markers_found.push_back(boost::static_pointer_cast<MarkerIdentifier>((*it_markers)->id()));
  			 }
  		 }
@@ -156,20 +110,12 @@ std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_r
 
  	 }
 
- 	 if(octree->sub_divided()){
-
- 		 for(int child_num = 0; child_num < 8; child_num++){
-
- 			 if(compare_to_squared_radius(octree->child( child_num),pos,sq_radius)){
-
- 				 get_visible_markers_by_radius_Rec(octree->child(child_num), markers_found, sq_radius, pos);
- 			 }
-
- 		 }
-
-
- 	 }
-
+	  if(octree->sub_divided()){
+		  for(int child_num = 0; child_num < 8; child_num++) {
+			  if (octree->child(child_num)->calculate_dist_to_node(pos) < radius)
+				  get_visible_markers_by_radius_Rec(octree->child(child_num), markers_found, radius, pos);
+		  }
+	  }
   }
 
 
@@ -187,28 +133,21 @@ std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_r
 
 
  void OctreeUtilities::get_visible_obstacles_by_radius_Rec(const boost::shared_ptr<const OctreeNode> &octree,
-														   std::vector<OctreeUtilities::ObstacleRef > & obstacles_found,
-  													       double radius,
-  													       const Vector3d & pos ) {
+                                                           std::vector<OctreeUtilities::ObstacleRef > & obstacles_found,
+                                                           double radius, const Vector3d & pos ) {
 
 
-  	 if(octree->marker_information().size() > 0){
-  		 vector<boost::shared_ptr<Obstacle> > obstacles = octree->obstacles() ;
+  	 if(octree->marker_information().size() > 0) {
+  		 vector<boost::shared_ptr<Obstacle> > obstacles = octree->obstacles();
   		 vector<boost::shared_ptr<Obstacle> >::const_iterator it_obstacles;
-  		 for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); it_obstacles++ ){
-
+  		 for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); it_obstacles++ ) {
   			 Vector3d rob_pos = (*it_obstacles)->position();
-
-  			 double x = rob_pos(0) - pos(0);
-  			 double y = rob_pos(1) - pos(1);
-  			 double z = rob_pos(2) - pos(2);
 
   			 double obstacle_width = (*it_obstacles)->max_dimension();
   			 double r = radius + obstacle_width;
-  			 r*=r;
 
-  			 if(x*x + y*y + z*z < r){
-
+			 const double distance = boost::numeric::ublas::norm_2(rob_pos - pos);
+  			 if(distance < r) {
   				 obstacles_found.push_back(boost::static_pointer_cast<ObstacleIdentifier>((*it_obstacles)->id()));
   			 }
   		 }
@@ -217,19 +156,11 @@ std::vector<OctreeUtilities::RobotRef > OctreeUtilities::get_visible_robots_by_r
   	 }
 
   	 if(octree->sub_divided()){
-
   		 for(int child_num = 0; child_num < 8; child_num++){
-
-  			 if(compare_to_squared_radius(octree->child( child_num ) , pos, radius)){
-
+	 		 if (octree->child(child_num)->calculate_dist_to_node(pos) < radius)
   				 get_visible_obstacles_by_radius_Rec(octree->child(child_num), obstacles_found, radius, pos);
-  			 }
-
   		 }
-
-
   	 }
-
    }
 
 
@@ -288,13 +219,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<const Octre
 				 continue;
 			 }
 
-			 Vector3d robot_pos = (*it_robots)->position();
-			 double x = pos(0) - robot_pos(0);
-			 double y = pos(1) - robot_pos(1);
-			 double z = pos(2) - robot_pos(2);
-
-			 double dist = std::sqrt(x*x + y*y + z*z );
-
+			 const double dist = boost::numeric::ublas::norm_2(pos - (*it_robots)->position());
 			 if(num_robots_found < num_nearest){
 
 				 boost::shared_ptr<QueueEntry<RobotRef> > new_entry =
@@ -305,7 +230,7 @@ void OctreeUtilities::get_nearest_robots_Rec(const boost::shared_ptr<const Octre
 				 farest_dist = queue.top()->dist();
 				 num_robots_found++;
 
-			 }else if(dist < farest_dist){
+			 } else if(dist < farest_dist){
 
 				 boost::shared_ptr<QueueEntry<RobotRef> > new_entry =
 										 boost::shared_ptr<QueueEntry<RobotRef> >
@@ -408,15 +333,8 @@ void OctreeUtilities::get_nearest_markers_Rec(const boost::shared_ptr<const Octr
 		 }
 
 		 // check all robots in this node
-		 for(it_markers = markers.begin(); it_markers != markers.end(); ++it_markers){
-
-			 Vector3d robot_pos = (*it_markers)->position();
-			 double x = pos(0) - robot_pos(0);
-			 double y = pos(1) - robot_pos(1);
-			 double z = pos(2) - robot_pos(2);
-
-			 double dist = std::sqrt(x*x + y*y + z*z );
-
+		 for(it_markers = markers.begin(); it_markers != markers.end(); ++it_markers) {
+			 const double dist = boost::numeric::ublas::norm_2(pos - (*it_markers)->position());
 			 if(num_markers_found < num_nearest){
 
 				 boost::shared_ptr<QueueEntry<MarkerRef> > new_entry =
@@ -536,15 +454,9 @@ void OctreeUtilities::get_nearest_obstacles_Rec(const boost::shared_ptr<const Oc
 		 }
 
 		 // check all robots in this node
-		 for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); ++it_obstacles){
-
-			 Vector3d robot_pos = (*it_obstacles)->position();
-			 double x = pos(0) - robot_pos(0);
-			 double y = pos(1) - robot_pos(1);
-			 double z = pos(2) - robot_pos(2);
-
+		 for(it_obstacles = obstacles.begin(); it_obstacles != obstacles.end(); ++it_obstacles) {
 			 double width =  (*it_obstacles)->max_dimension();
-			 double dist = std::sqrt(x*x + y*y + z*z ) - width;
+			 const double dist = boost::numeric::ublas::norm_2(pos - (*it_obstacles)->position()) - width;
 
 			 // not enough found, so we have to add it anyway
 			 if(num_obstacles_found < num_nearest){

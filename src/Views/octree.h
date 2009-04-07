@@ -81,7 +81,6 @@ public:
 	 * \param min_width Used to set the min_width of an octree node
 	 */
 	Octree(int max_levels, double min_width);
-	~Octree();
 
 
 
@@ -124,25 +123,23 @@ public:
 	 * The only way to create new nodes is to create a new tree.
 	 */
 	class OctreeNode {
-
-      public:
-		  //TODO (dwonisch): added some initializations because sim crashes otherwise. Maybe some intializations are unnecessary
-		  OctreeNode() : level_(0), max_levels_(0), min_width_(0), sub_divided_(false), width_(0), object_count_(0) {
-			center_.insert_element(kXCoord, 0.0);
-			center_.insert_element(kYCoord, 0.0);
-			center_.insert_element(kZCoord, 0.0);
+		
+	public:
+		OctreeNode() : level_(0), max_levels_(0), min_width_(0), sub_divided_(false), width_(0), object_count_(0) {
+			center_ = boost::numeric::ublas::zero_vector<double>(3);
 		};
-
-		void init_node();
-
+		
 		/**
-		 * \brief Calculates the distance to this node from a given point
+		 * \brief Calculates the distance to this node from a given point.
+		 *
+		 * Note that this is an pessimistic approximation, in that the value returned may be less than the actual
+		 * distance. More exactly, the distance from the point to the smallest enclosing sphere of the node is returned.
 		 *
 		 * \param pos The position
 		 * \return Returns the distance to this node from the given point
 		 */
 		double calculate_dist_to_node(const Vector3d &pos) const;
-
+		
 
 		/**
 		 * Returns the index of the child node in which the point would belong to
@@ -171,33 +168,8 @@ public:
 									const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
 									const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
-
-		/**
-		 * This method allows to add a marker to this node
-		 *
-		 * \param marker The marker to add to this node
-		 */
-		void add_marker_to_node(boost::shared_ptr<WorldObject> marker);
-
-		/**
-		 * This method allows to add an obstacle to this node
-		 *
-		 * \param obstacle The obstacle to add to this node
-		 *
-		 */
-		void add_obstacle_to_node(boost::shared_ptr<Obstacle> obstacle);
-
-		/**
-		 * This method allows to add a robot data to this node
-		 *
-		 * \param robot_data the new robot_data to add to this node
-		 */
-		void add_robot_data_to_node(boost::shared_ptr<RobotData> robot_data);
-
-
 		/**
 		 * Returns the marker stored in this node.
-		 *
 		 */
 		const std::vector< boost::shared_ptr<WorldObject> > & marker_information() const {
 			return markers_;
@@ -302,75 +274,57 @@ public:
 	protected:
 
 		/*! \brief This sets the initial width, height and depth for the whole scene
-			 *  \param markers The marker object in an vector of shared_ptr
-			 *  \param obstacles The obstacles in an vector of shared_ptr
-			 *  \param robot_datas The robot_datas in an vector of shared_ptr
-			 */
-			void scene_dimensions(const std::vector< boost::shared_ptr<WorldObject> > & markers,
-								  const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-								  const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
+		 *  \param markers The marker object in an vector of shared_ptr
+		 *  \param obstacles The obstacles in an vector of shared_ptr
+		 *  \param robot_datas The robot_datas in an vector of shared_ptr
+		 */
+		void scene_dimensions(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+                              const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+                              const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
 
-
-
-			/*! \brief This Method calculates the new center point of a node.
-			 *
-			 * This takes in the previous nodes center, width and which node ID that will be subdivided.
-			 * The Result is the center of the new node.
-			 * \param center The center of the parent node
-			 * \param width  The width of the Octree Node box.
-			 * \param node_id The ID of the node
-			 */
-			Vector3d new_node_center(Vector3d center, double width, int node_id);
-
-			
-			/*! \brief Adds the given robot to this subtree.
-			 *
-			 * This method allows the insertion of robots after the creation of the octree by Octree::create_tree.
-			 * \param robot The robot to add to this subtree.
-			 */
-			void add_robot(boost::shared_ptr<RobotData> robot);
 		
-			
-			/*! \brief Removes the given robot from this subtree (if contained).
-			 *
-			 * This method searches this subtree for the given robot and removes it, if found.
-			 * \param robot Removes the given robot from this subtree (if contained).
-			 */
-			void remove_robot(boost::shared_ptr<const RobotData> robot);
+		/*! \brief This Method calculates the new center point of a node.
+		 *
+		 * It computes the center for the given child ID using the parent's (i.e. this node's) center and width.
+		 * \param node_id The child ID of the node
+		 */
+		Vector3d new_node_center(int node_id);
+		
+		
+		/*! \brief Adds the given robot to this subtree.
+		 *
+		 * This method allows the insertion of robots after the creation of the octree by Octree::create_tree.
+		 * \param robot The robot to add to this subtree.
+		 */
+		void add_robot(boost::shared_ptr<RobotData> robot);
+		
+		
+		/*! \brief Removes the given robot from this subtree (if contained).
+		 *
+		 * This method searches this subtree for the given robot and removes it, if found.
+		 * \param robot Removes the given robot from this subtree (if contained).
+		 */
+		void remove_robot(boost::shared_ptr<const RobotData> robot);
+		
+		
+		/*! Method to recursively build up the octree.
+		 *
+		 * \param markers the markers to store in this subtree
+		 * \param obstacles the obstacles to store in this subtree
+		 * \param robot_datas the robot_datas to store in this subtree
+		 */
+		void setup_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
+                        const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
+                        const std::vector< boost::shared_ptr<RobotData> > & robot_datas);
+		
 
 
-			/*! This subdivides a node depending on the objects and node width
-			 *
-			 * \param markers the markers to store in this subtree
-			 * \param obstacles the obstacles to store in this subtree
-			 * \param robot_datas the robot_datas to store in this subtree
-			 * \param center the center point of this node
-			 * \param width the width of this node
-			 *
-			 */
-			void setup_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
-							 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-							 const std::vector< boost::shared_ptr<RobotData> > & robot_datas,
-							 const Vector3d center,
-							 double width);
-
-
-
-			/**
-			 * \brief This creates a new node.
-			 *
-			 * \param markers The Markers to be stored in this subtree
-			 * \param obstacles The obstacles to be stored in this subtree
-			 * \param robot_datas The robot datas to be stored in this subtree
-			 * \param center The center point of the new node
-			 * \param width the width of the bounding box
-			 */
-			void create_new_node(const std::vector< boost::shared_ptr<WorldObject> > & markers,
-								 const std::vector< boost::shared_ptr<Obstacle> > & obstacles,
-								 const std::vector< boost::shared_ptr<RobotData> > & robot_datas,
-								 Vector3d center,
-								 double width,
-								 int node_id);
+		/**
+		 * \brief This creates a new child node (with the given child ID).
+		 *
+		 * \param node_ide Child ID of the child to create.
+		 */
+		void create_new_node(int node_id);
 
 
 		/**
@@ -385,13 +339,13 @@ public:
 		 * Sets the max depth of the tree
 		 * \param max_level The maximal depth of the tree.
 		 */
-		void set_max_levels(int max_level){max_levels_ = max_level;};
+		void set_max_levels(int max_level) { max_levels_ = max_level; }
 
 		/**
 		 * Sets the minimal width of a node.
 		 * \param min_width The minimal width of a node.
 		 */
-		void set_min_width(double min_width){min_width_ = min_width;};
+		void set_min_width(double min_width) { min_width_ = min_width; }
 
 
 
@@ -484,11 +438,6 @@ public:
 
 
 private:
-
-	// This initializes the data members
-	void init_octree();
-
-
 	/**
 	 * \var root_
 	 * The root of the octree
