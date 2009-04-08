@@ -19,6 +19,12 @@ class Robot;
 class Event;
 class WorldInformation;
 
+/**
+ * The atomic semisynchronous ASG generates a complete LCM cycle for a single random robot each timestep.
+ * At each timestep a robot is choosen uniform at random from all robots.
+ * That robots gets a look event, then a compute event, then a move event all in the same time step
+ * After the move event the time is advanced a single step
+ */
 class AtomicSemisynchronousASG : public ActivationSequenceGenerator {
 friend class atomic_semisynchronous_asg_smoke_test;
 
@@ -53,6 +59,9 @@ public:
 			    boost::shared_ptr<Event> event);
 
 private:
+	/**
+	 * enum for the state the asg is currently in (determines kind of next event)
+	 */
 	enum State {
 		look,
 		compute,
