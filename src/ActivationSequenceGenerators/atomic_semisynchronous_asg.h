@@ -28,7 +28,6 @@ public:
 	                                              distribution_generator_(new DistributionGenerator(seed)) {}
 	/**
 	 * Initializes the ASG.
-	 * \param The history
 	 */
 	void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots);
 
@@ -45,7 +44,7 @@ public:
 	int get_time_of_next_event() {return time_of_next_event_;};
 
 	/**
-	 * Updates the sequence of events. For the synchronous ASG this only stores the requests of robots
+	 * Updates the sequence of events. For the atomic semisynchronous ASG this only stores the requests of robots
 	 * stored in compute events. The requests are added to the next handle_requests event.
 	 * \param A constant refrence to the newest world information
 	 * \param The last handled event

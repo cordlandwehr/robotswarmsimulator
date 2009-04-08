@@ -17,6 +17,7 @@
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
+#include "../ActivationSequenceGenerators/atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/asynchronous_asg.h"
 
 #include "../Views/abstract_view_factory.h"
@@ -251,8 +252,13 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	// setup of activation sequence generator
 	if(asg_type == "SYNCHRONOUS") {
 			asg.reset(new SynchronousASG());
-	} else if(asg_type == "SEMISYNCHRONOUS") {
-			//TODO(craupach) make something semi-synchrounous here;
+	} else if(asg_type == "ATOMIC_SEMISYNCHRONOUS") {
+		try {
+			unsigned int seed = boost::lexical_cast<unsigned int>(params["ATOMIC_SEMISYNC_ASG_SEED"]);
+			asg.reset(new AtomicSemisynchronousASG(seed));
+		} catch(const boost::bad_lexical_cast&) {
+			throw UnsupportedOperationException("Failed reading parameters for atomic semisynchronous asg.");
+		}
 	} else if(asg_type == "ASYNCHRONOUS") {
 		try {
 			unsigned int seed = boost::lexical_cast<unsigned int>(params["ASYNC_ASG_SEED"]);

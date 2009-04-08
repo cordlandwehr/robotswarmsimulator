@@ -15,7 +15,7 @@ void AtomicSemisynchronousASG::initialize(const History& history, const vector<b
 	}
 
 	// initialize the distribution generator (needs to be done here since the size of robots is known here first.
-	distribution_generator_->init_uniform(1,robots_.size());
+	distribution_generator_->init_uniform(0,robots_.size() - 1);
 }
 
 boost::shared_ptr<Event> AtomicSemisynchronousASG::get_next_event() {
