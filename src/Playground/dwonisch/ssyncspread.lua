@@ -186,15 +186,22 @@ end
 
 -- Reorders pos1,..,pos4 such that pos1=pos
 function reorder(pos1, pos2, pos3, pos4, pos)
-	if(pos == pos1) then
+	if(dist(pos1-pos) < eps) then
 		return pos1,pos2,pos3,pos4;
-	elseif(pos == pos2) then
+	elseif(dist(pos2-pos) < eps) then
 		return pos2,pos3,pos4,pos1;
-	elseif(pos == pos3) then
+	elseif(dist(pos3-pos) < eps) then
 		return pos3,pos4,pos1,pos2;
-	elseif(pos == pos4) then
+	elseif(dist(pos4-pos) < eps) then
 		return pos4,pos1,pos2,pos3;
-	else
+	else	
+		print("Reorder: Illegal argument exception");
+		print(own_id);		
+		print(pos1);
+		print(pos2);
+		print(pos3);
+		print(pos4);
+		print(pos);
 		error("Reorder: Illegal argument exception");
 	end
 end
@@ -206,6 +213,11 @@ function rotate(vector, angle)
 	result.y = math.sin(angle)*vector.x + math.cos(angle)*vector.y;
 	return result;
 end
+
+-- Bugs: Beim Bewegen muss auch darauf geachtet werden, dass man nicht die sektoren von obenrechts, untenlinks, untenrechts, obenlinks verändert (reoder fehler)
+-- 		 Es muss auch darauf geachtet werden, dass down/up beim Bewegen keine Linie bilden (mehr forbidden pos)
+--       Edge cases: Inbesondere up3 == nil führt zu zero, obwohl unerheblich für movement
+--       Operator== sollte nicht auf Gleichheit prüfen, da double Werte, sondern auf eps Abstand.
 
 -- Computes new_pos using compute_new_pos and trims the pos such that all invariants are satisfied.
 -- May return zero vector
@@ -243,8 +255,15 @@ function invariant_compute_new_pos(robots, left, up, right)
 		return new_pos; 
 	end
 	
-	--local up1,up2,up3,up4 = reorder(compute_neighbours(robots, up), zero);
 	local up1,up2,up3,up4 = compute_neighbours(robots, up);
+	
+	if(up1 == nil or up2 == nil or up3 == nil or up4 == nil) then
+		--TODO: edge cases need to be considers, skipping for now
+		return zero;
+	end
+	
+	up1,up2,up3,up4 = reorder(up1,up2,up3,up4,zero);
+	
 	if(own_id == interesting_id) then
 		print("up1");
 		print(up1);
@@ -255,11 +274,7 @@ function invariant_compute_new_pos(robots, left, up, right)
 		print("up4");
 		print(up4);
 		
-	end
-	if(up1 == nil or up2 == nil or up3 == nil or up4 == nil) then
-		--TODO: edge cases need to be considers, skipping for now
-		return zero;
-	end
+	end	
 	--      up3
     --       |	
 	-- up2-- up -- up4
@@ -278,6 +293,12 @@ function invariant_compute_new_pos(robots, left, up, right)
 	-- avoid moving out of view-field of up-robot
 	local max_left_movement = intersectlines(zero, left, up, up+rotate(updir, -math.pi/4)); 
 	local max_right_movement = intersectlines(zero, left, up, up+rotate(updir, math.pi/4));
+	if(dist(max_left_movement) < eps) then
+		max_left_movement = Vector3d(0,0,0);
+	end
+	if(dist(max_right_movement) < eps) then
+		max_right_movement = Vector3d(0,0,0);
+	end
 	
 	if(own_id == interesting_id) then
 		print("updir");
@@ -298,8 +319,15 @@ function invariant_compute_new_pos(robots, left, up, right)
 		if(dist(new_pos) > dist(max_right_movement)) then
 			new_pos = dist(max_right_movement) * normalize(max_right_movement);
 		end
-	else	
+	elseif(max_left_movement == zero or max_right_movement == zero) then
+		return zero;
+	else
 		error("invariant_compute_new_pos: Something unexpected for id " .. own_id);
+	end
+	
+	if(own_id == interesting_id) then
+		print("Trimmed new_pos to: ");
+		print(new_pos);
 	end
 	
 	-- new_pos should be nearer to up than left and right (else we get problems with sector computations)
@@ -326,6 +354,10 @@ function invariant_compute_new_pos(robots, left, up, right)
 		return zero;
 	end
 	
+	if(own_id == interesting_id) then
+		print("Return new_pos");
+		print(new_pos);
+	end
 	-- Hopefully we eventually got here, so we can suggest new_pos as new position..	
 	return new_pos; 
 end
@@ -333,7 +365,7 @@ end
 eps = 0.0001;
 zero = nil;
 own_id = nil;
-interesting_id = 2;
+interesting_id = 81;
 
 function main()
 	own_id = View.get_id(View.get_own_identifier());
@@ -372,8 +404,10 @@ function main()
 	end
 	
 	if(own_id == interesting_id) then
-		print(suggested_right_pos);
+		print("suggested_left_pos");
 		print(suggested_left_pos);
+		print("suggested_right_pos");
+		print(suggested_right_pos);		
 		print("-------------------");
 		print();
 	end
