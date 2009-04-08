@@ -463,7 +463,7 @@ void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<Worl
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 //init the object variables
 	if (!(vis_graph_)) vis_graph_=boost::shared_ptr< boost::adjacency_list <> >(new boost::adjacency_list<>(world_info->robot_data().size()));
-	 if (components_.size()==0) components_.reserve(world_info->robot_data().size());
+	 if (components_.size()==0) components_.resize(world_info->robot_data().size());
 
 //reset the graph each time or else old edges would be retained
 	 (*vis_graph_).clear();
@@ -481,7 +481,6 @@ void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<Worl
 		}
 	}	
 //calculate connected components
-	//TODO (dwonisch): components_ = emptyvector -> no element 0 -> access to element 0 -> crash
 	 int number_connected_components=boost::strong_components((*vis_graph_),&components_[0]);
 
 	 if (number_connected_components==1){

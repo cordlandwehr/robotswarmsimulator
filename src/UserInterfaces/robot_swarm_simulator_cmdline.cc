@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 		po::notify(vm);
 	}
 	catch (std::exception& e) {
-		std::cout << "[ERROR] e.what()" << std::endl;
+		std::cout << "[ERROR] " << e.what() << std::endl;
 		throw;
 	}
 	catch(...) {
