@@ -111,22 +111,30 @@ function compute_nearby_robots(robots, view_radius)
 	--  8  o  6
 	--  4  7  3
 	
-	local nearest = nil;
-	if(nearest_dir ~= nil) then
-		nearest = nearest_dir;
-	else
-		nearest = robot_pos[1];
-		nearest_dir = nearest;
+	if(nearest_dir == nil) then
+		nearest_dir = robot_pos[1];
 	end
 	
 	local pos1 = nil;
 	local pos2 = nil;
 	local pos3 = nil;
 	local pos4 = nil;
-	local pos5 = nearest;
+	local pos5 = nil;
 	local pos6 = nil;
 	local pos7 = nil;
 	local pos8 = nil; 
+	
+	for i = 1, #robot_pos do 
+		if(normalize(nearest_dir) == normalize(robot_pos[i])) then
+			pos5 = robot_pos[i];
+			break;
+		end
+	end
+	
+	if(pos5 == nil) then
+		-- pos5 must not be nil
+		return nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil;
+	end
 	
 	if(dist(robot_pos[1]) < eps) then
 		return nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil;
@@ -167,6 +175,26 @@ function compute_nearby_robots(robots, view_radius)
 	
 	if(#robot_pos == 0) then
 		return nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil;
+	end
+	
+	if(own_id == interesting_id) then
+		print("Pos1: ");
+		print(pos1);
+		print("Pos2: ");
+		print(pos2);
+		print("Pos3: ");
+		print(pos3);
+		print("Pos4: ");
+		print(pos4);	
+		print("Pos5: ");
+		print(pos5);
+		print("Pos6: ");
+		print(pos6);
+		print("Pos7: ");
+		print(pos7);
+		print("Pos8: ");
+		print(pos8);	
+		print();
 	end
 	
 	local right = get_normal(pos5);
@@ -374,9 +402,11 @@ function normalize(vec)
 end
 
 own_id = 0;
+interesting_id = 35;
 last_dir1 = nil;
 last_dir2 = nil;
 nearest_dir = nil;
+
 
 
 function try_gap(new_position, pos, gap, gapcount) 
@@ -500,8 +530,10 @@ function main()
 		new_position = zero;
 	end
 	
-	if(own_id == 71) then
-		print("INNNER");
+	if(own_id == interesting_id) then
+		print("----------------");
+		print("Time:");
+		print(View.get_time());
 		print("Own_id: " .. own_id);
 		print("Pos1: ");
 		print(pos1);
@@ -539,6 +571,7 @@ function main()
 		print(last_dir1);
 		print("Last_dir2");
 		print(last_dir2);
+		print();
 	end
 	
 	View.add_position_request(new_position);
