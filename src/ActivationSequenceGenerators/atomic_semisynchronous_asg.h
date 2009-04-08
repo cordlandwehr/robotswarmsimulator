@@ -14,8 +14,12 @@
 #include "activation_sequence_generator.h"
 
 class Robot;
+class Event;
+class WorldInformation;
 
 class AtomicSemisynchronousASG : public ActivationSequenceGenerator {
+friend class atomic_semisynchronous_asg_smoke_test;
+
 public:
 	AtomicSemisynchronousASG() : time_of_next_event(0), current_state(AtomicSemisynchronousASG::look) {}
 	/**
@@ -35,6 +39,15 @@ public:
 	 * \return Integer representing the next time an event will happen
 	 */
 	int get_time_of_next_event() {return time_of_next_event;};
+
+	/**
+	 * Updates the sequence of events. For the synchronous ASG this only stores the requests of robots
+	 * stored in compute events. The requests are added to the next handle_requests event.
+	 * \param A constant refrence to the newest world information
+	 * \param The last handled event
+	 */
+	void update(const WorldInformation& world_information,
+			    boost::shared_ptr<Event> event) {};
 
 private:
 	enum State {
