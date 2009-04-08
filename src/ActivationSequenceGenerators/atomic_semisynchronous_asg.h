@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <boost/smart_ptr.hpp>
+#include <boost/foreach.hpp>
+#include "../Utilities/distribution_generator.h"
 
 #include "activation_sequence_generator.h"
 
@@ -21,7 +23,9 @@ class AtomicSemisynchronousASG : public ActivationSequenceGenerator {
 friend class atomic_semisynchronous_asg_smoke_test;
 
 public:
-	AtomicSemisynchronousASG() : time_of_next_event(0), current_state(AtomicSemisynchronousASG::look) {}
+	AtomicSemisynchronousASG(unsigned int seed) : time_of_next_event_(0),
+	                                              current_state_(AtomicSemisynchronousASG::look),
+	                                              distribution_generator_(new DistributionGenerator(seed)) {}
 	/**
 	 * Initializes the ASG.
 	 * \param The history
@@ -38,7 +42,7 @@ public:
 	 * Returns the time the next event happens
 	 * \return Integer representing the next time an event will happen
 	 */
-	int get_time_of_next_event() {return time_of_next_event;};
+	int get_time_of_next_event() {return time_of_next_event_;};
 
 	/**
 	 * Updates the sequence of events. For the synchronous ASG this only stores the requests of robots
@@ -47,7 +51,7 @@ public:
 	 * \param The last handled event
 	 */
 	void update(const WorldInformation& world_information,
-			    boost::shared_ptr<Event> event) {};
+			    boost::shared_ptr<Event> event);
 
 private:
 	enum State {
@@ -56,9 +60,24 @@ private:
 		move
 	};
 
-	int time_of_next_event;
-	State current_state;
-	boost::shared_ptr<Robot> cur_robot;
+	int time_of_next_event_;
+	State current_state_;
+	boost::shared_ptr<Robot> current_robot_;
+
+	/**
+	 * The set of all robots
+	 */
+	vector<boost::shared_ptr<Robot> > robots_;
+
+	/**
+	 * A set of unhandled requests from the last compute event.
+	 */
+	vector<boost::shared_ptr<const Request> > unhandled_request_set_;
+
+	/**
+	 * a source of randomness
+	 */
+	boost::shared_ptr<DistributionGenerator> distribution_generator_;
 };
 
 

@@ -25,6 +25,7 @@
 #include "../SimulationControl/history.h"
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
+#include "../Utilities/distribution_generator.h"
 
 #include "asynchronous_asg.h"
 

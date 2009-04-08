@@ -20,8 +20,7 @@
 
 BOOST_FIXTURE_TEST_CASE(atomic_semisynchronous_asg_smoke_test, SimpleWorldFixture)
 {
-	std::cout << " Testing atomic semisync asg " << std::endl;
-	AtomicSemisynchronousASG asg;
+	AtomicSemisynchronousASG asg(517);
 	asg.initialize(*history,robots);
 
 	// first event should be at time 0
