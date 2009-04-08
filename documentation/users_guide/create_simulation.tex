@@ -16,6 +16,12 @@ All global settings of your simulation can be defined in the main projectile (en
 There are two Activation Sequence Generators (ASGs). A synchronous ASG and an asynchronous ASG.
 
 To use the synchronous ASG one only needs to set the variable \texttt{ASG}=\texttt{SYNCHRONOUS}. No further variables need to be set.
+
+To use the atomic semi synchronous ASG one needs to set \texttt{ASG}=\texttt{ATOMIC\_SEMISYNCHRONOUS}. Furthermore one needs to set the following variables:
+\begin{itemize}
+\item \texttt{ATOMIC\_SEMISYNC\_ASG\_SEED}: Seed for the ASG
+\end{itemize}
+
 To use the asynchronous ASG one needs to set \texttt{ASG}=\texttt{ASYNCHRONOUS}. Furthermore one needs to set the following variables:
 \begin{itemize}
 \item \texttt{ASYNC\_ASG\_SEED}: Seed for the ASG
