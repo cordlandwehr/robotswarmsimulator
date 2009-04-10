@@ -147,46 +147,63 @@ function main()
 	add_position_request(newposition); 
 end
 
-function compute_new_pos(left, right) 
-	kDesiredDist = 5; --maybe the same as view radius or a bit less
-	kMaxStepDist = 2; --avoid moving into each other
+-- function compute_new_pos(left, right) 
+	-- kDesiredDist = 5; --maybe the same as view radius or a bit less
+	-- kMaxStepDist = 2; --avoid moving into each other
 
-	--if(left == nil and right == nil) then
-	--	return Vector3d(0,0,0);
-	--end
+	-- --if(left == nil and right == nil) then
+	-- --	return Vector3d(0,0,0);
+	-- --end
+	
+	-- if(left ~= nil) then
+		-- left_pos = get_position(left);
+		-- if(right ~= nil) then
+			-- right_pos = get_position(right);
+		-- else
+			-- right_pos = (-(2^10)) * get_position(left);
+		-- end
+	-- else
+		-- right_pos = get_position(right);
+		-- left_pos = (-(2^10)) * get_position(right);
+	-- end
+
+	-- if(dist(left_pos) < kDesiredDist and dist(right_pos) < kDesiredDist) then
+		-- --do nothing
+		-- return Vector3d(0,0,0);
+	-- end
+
+	-- if(dist(left_pos) < kDesiredDist) then
+		-- --move to right
+		-- stepDist = (kDesiredDist - dist(left_pos));
+		-- return math.min(stepDist, kMaxStepDist) * normalize(right_pos);
+	-- end
+
+	-- if(dist(right_pos) < kDesiredDist) then
+		-- --move to left
+		-- stepDist = kDesiredDist - dist(right_pos);
+		-- return math.min(stepDist, kMaxStepDist) * normalize(left_pos);
+	-- end
+
+	-- --else
+	-- -- do nothing
+	-- return Vector3d(0,0,0);
+-- end
+
+function compute_new_pos(left, right)
+	local kDesiredDist = 5; 
 	
 	if(left ~= nil) then
 		left_pos = get_position(left);
 		if(right ~= nil) then
 			right_pos = get_position(right);
-		else
-			right_pos = (-(2^10)) * get_position(left);
+		else	
+			right_pos = (-kDesiredDist) * normalize(left_pos);
 		end
 	else
 		right_pos = get_position(right);
-		left_pos = (-(2^10)) * get_position(right);
-	end
-
-	if(dist(left_pos) < kDesiredDist and dist(right_pos) < kDesiredDist) then
-		--do nothing
-		return Vector3d(0,0,0);
-	end
-
-	if(dist(left_pos) < kDesiredDist) then
-		--move to right
-		stepDist = (kDesiredDist - dist(left_pos));
-		return math.min(stepDist, kMaxStepDist) * normalize(right_pos);
-	end
-
-	if(dist(right_pos) < kDesiredDist) then
-		--move to left
-		stepDist = kDesiredDist - dist(right_pos);
-		return math.min(stepDist, kMaxStepDist) * normalize(left_pos);
-	end
-
-	--else
-	-- do nothing
-	return Vector3d(0,0,0);
+		left_pos = (-kDesiredDist) * normalize(right_pos);
+	end	
+	return (left_pos + right_pos)/2;
 end
 
 function normalize(vec) 
