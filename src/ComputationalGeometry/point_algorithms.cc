@@ -85,9 +85,9 @@ Vector3d PointAlgorithms::compute_CMinBox(const std::vector<Vector3d>& positions
 			max_y = position(kYCoord);
 		}
 
-		if(position(kZCoord) < min_x) {
+		if(position(kZCoord) < min_z) {
 			min_z = position(kZCoord);
-		} else if(position(kZCoord) > max_x) {
+		} else if(position(kZCoord) > max_z) {
 			max_z = position(kZCoord);
 		}
 	}

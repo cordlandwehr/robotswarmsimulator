@@ -48,10 +48,8 @@
 #include "../Model/robot_identifier.h"
 #include "../RobotImplementations/lua_robot.h"
 #include "../RobotImplementations/simple_robot.h"
-#include "../RobotImplementations/cog_robot.h"
 #include "../RobotImplementations/velocity_cog_robot.h"
 #include "../RobotImplementations/acceleration_cog_robot.h"
-#include "../RobotImplementations/miniball_robot.h"
 #include "../RobotImplementations/tp_algorithm_robot.h"
 
 #include "../SimulationKernel/robot_control.h"
