@@ -52,6 +52,7 @@
 #include "../RobotImplementations/velocity_cog_robot.h"
 #include "../RobotImplementations/acceleration_cog_robot.h"
 #include "../RobotImplementations/miniball_robot.h"
+#include "../RobotImplementations/tp_algorithm_robot.h"
 
 #include "../SimulationKernel/robot_control.h"
 #include "../SimulationKernel/uniform_robot_control.h"
@@ -321,15 +322,17 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new LuaRobot(id, algorithm));
 	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
 		robot.reset(new SimpleRobot(id));
-	} else if(algorithm == "COGRobot") {
-		robot.reset(new COGRobot(id));
+	} else if(algorithm == "COGRobot" || algorithm == "TPAlgorithmCOG") {
+		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cog));
 	} else if(algorithm == "VelocityCOGRobot") {
 		robot.reset(new VelocityCOGRobot(id));
 	} else if(algorithm == "AccelerationCOGRobot") {
 	    robot.reset(new AccelerationCOGRobot(id));
-	} else if(algorithm == "MiniballRobot") {
-	    robot.reset(new MiniballRobot(id));
-	}else {
+	} else if(algorithm == "MiniballRobot" || algorithm == "TPAlgorithmCMinball") {
+	    robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cminball));
+	} else if (algorithm == "TPAlgorithmCBox") {
+		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
+	} else {
 		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
 	}
 	return robot;

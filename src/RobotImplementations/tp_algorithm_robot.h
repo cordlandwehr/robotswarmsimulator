@@ -35,7 +35,7 @@ class TPAlgorithmRobot : public Robot {
 public:
 	enum Type {
 		cog,
-		cminiball,
+		cminball,
 		cbox
 	};
 
@@ -50,8 +50,8 @@ public:
 		switch(type_) {
 		case cog:
 			return "TPAlgorithmCOG";
-		case cminiball:
-			return "TPAlgorithmCMiniball";
+		case cminball:
+			return "TPAlgorithmCMinball";
 		case cbox:
 			return "TPAlgorithmCBox";
 		default:

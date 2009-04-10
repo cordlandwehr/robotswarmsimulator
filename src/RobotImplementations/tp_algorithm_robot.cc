@@ -49,7 +49,7 @@ Vector3d TPAlgorithmRobot::compute_target_point(const std::vector<Vector3d>& pos
 	switch(type_) {
 	case cog:
 		return PointAlgorithms::compute_COG(positions);
-	case cminiball:
+	case cminball:
 		return PointAlgorithms::compute_CMinBall(positions);
 	case cbox:
 		return PointAlgorithms::compute_CMinBox(positions);
