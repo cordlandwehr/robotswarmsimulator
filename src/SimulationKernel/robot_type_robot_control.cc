@@ -15,7 +15,7 @@
 #include "../Model/world_information.h"
 
 RobotTypeRobotControl::RobotTypeRobotControl(const boost::array<boost::shared_ptr<AbstractViewFactory>,kRobotTypeCount>& view_factories, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information)
-                           : view_buffer_(history_length), last_world_information_(initial_world_information) {
+                           : view_buffer_(history_length*10), last_world_information_(initial_world_information) {
 	view_factories_ = view_factories;
 	view_buffer_.push_back(create_views(initial_world_information));
 }
