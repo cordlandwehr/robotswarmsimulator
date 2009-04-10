@@ -139,12 +139,12 @@ public:
 	/**
 	 * sets the view of this robot_data
 	 */
-	void set_view(boost::shared_ptr<View> view);
+	void set_view(boost::weak_ptr<View> view);
 
 	/**
 	 * accessor for the view of this robot data
 	 */
-	boost::shared_ptr<const View> view();
+	boost::weak_ptr<const View> view();
 
 	void set_color( unsigned short int color){
 		color_ = color;
@@ -171,7 +171,7 @@ private:
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;
 
-	boost::shared_ptr<View> view_;
+	boost::weak_ptr<View> view_;
 	unsigned short int color_;
 
 };

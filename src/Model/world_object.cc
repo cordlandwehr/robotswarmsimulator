@@ -11,7 +11,7 @@ WorldObject::WorldObject(boost::shared_ptr<Identifier> id,
 }
 
 WorldObject::~WorldObject() {
-
+	
 }
 
 WorldObject::WorldObject(const WorldObject& rhs) {

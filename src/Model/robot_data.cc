@@ -19,7 +19,7 @@ RobotData::RobotData(boost::shared_ptr<Identifier> id,
 	;
 }
 
-RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_), status_(rhs.status_), color_(rhs.color_) {
+RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_), status_(rhs.status_), color_(rhs.color_), view_(rhs.view_) {
 	if(rhs.acceleration_) {
 		this->acceleration_.reset(new Vector3d(*rhs.acceleration_));
 	}
@@ -34,10 +34,6 @@ RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_
 	}
 	if(rhs.velocity_) {
 		this->velocity_.reset(new Vector3d(*rhs.velocity_));
-	}
-
-	if (rhs.view_){
-		this->view_=rhs.view_;
 	}
 }
 
@@ -103,11 +99,11 @@ void RobotData::set_status(RobotStatus new_status) {
 	status_ = new_status;
 }
 
-void RobotData::set_view(boost::shared_ptr<View> view) {
+void RobotData::set_view(boost::weak_ptr<View> view) {
 	view_ = view;
 }
 
-boost::shared_ptr<const View> RobotData::view()  {
+boost::weak_ptr<const View> RobotData::view()  {
 	return view_;
 }
 

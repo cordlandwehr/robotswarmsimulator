@@ -15,6 +15,9 @@ WorldInformation::WorldInformation() {
 }
 
 WorldInformation::~WorldInformation() {
+	
+	
+
 }
 
 WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time_){

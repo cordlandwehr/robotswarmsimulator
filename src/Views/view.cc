@@ -30,7 +30,7 @@ void View::set_distribution_generator(boost::shared_ptr<DistributionGenerator> g
 View::View() {
 }
 
-View::~View() {
+View::~View() {	
 }
 
 namespace {

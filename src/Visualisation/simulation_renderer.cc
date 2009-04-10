@@ -470,7 +470,7 @@ void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<Worl
 
 //go through all the robots and their visible neighbors, create edges in graph
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
-		boost::shared_ptr<const View> view=(*it_robot)->view();
+		boost::shared_ptr<const View> view=(*it_robot)->view().lock();
 
 		if (view){
 				 visible_robots=view->get_visible_robots((*it_robot)->robot());
