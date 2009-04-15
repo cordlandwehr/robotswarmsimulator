@@ -24,7 +24,7 @@ function compute_new_position(robots)
 	local movement_vector = nil;
 	for i = 1, #robots do
 		local movement = View.get_position(robot[i]) - last_position[View.get_id(robot[i])];
-		if(get_length(movement) < eps) then
+		if(get_length(movement) > eps) then
 			movement_vector = movement;
 			break;
 		end
