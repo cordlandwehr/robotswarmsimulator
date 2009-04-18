@@ -28,6 +28,7 @@
 #include "../ViewModels/one_point_formation_view.h"
 #include "../ViewModels/chain_view.h"
 #include "../ViewModels/self_view.h"
+#include "../ViewModels/clone_view.h"
 
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
@@ -299,6 +300,13 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 			view_factory.reset(new ParametrizedViewFactory<OnePointFormationView, double>(radius));
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
+		}
+	} else if(view_type == "CLONE_VIEW") {
+		try {
+			double radius = boost::lexical_cast<double>(params[prefix+"CLONE_VIEW_RADIUS"]);
+			view_factory.reset(new ParametrizedViewFactory<CloneView, double>(radius));
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading parameters for clone view.");
 		}
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to global view.";

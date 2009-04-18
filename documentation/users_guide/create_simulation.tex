@@ -127,6 +127,7 @@ The view type of a robot defines its vision model. Whenever a view type is expec
 	\item \texttt{CHAIN\_VIEW}
 	\item \texttt{ONE\_POINT\_FORMATION\_VIEW}
 	\item \texttt{SELF\_VIEW}
+	\item \texttt{CLONE\_VIEW}
 \end{enumerate}
 Each view type is explained in detail below.
 
@@ -139,6 +140,8 @@ Each view type is explained in detail below.
 \paragraph{CHAIN\_VIEW}\index{View!Chain} View model meant to be used for robot chain related algorithms, i.\,e. every robot can see $k$ neighbor robots position. Besides this no more information is visible. When using this view type you have to specify the variable $k \in \mathbb{N}$ using the parameter variable \texttt{CHAIN\_VIEW\_NUM\_ROBOTS}.
 
 \paragraph{ONE\_POINT\_FORMATION\_VIEW}\index{View!Radius} View model meant to be used for one point formation algorithms, i.\,e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
+
+\paragraph{CLONE\_VIEW}\index{View!Clone} View model designed for the use with the clone movement algorithm. In this view model every robot can see every other robots position, velocity and id only in a limited view radius $r$. Also in this model robots can query for the time of their last look event. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{CLONE\_VIEW\_RADIUS}.
 
 
 \section{Running the \RSS\ with Parameters}
