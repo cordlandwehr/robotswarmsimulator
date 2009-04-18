@@ -51,6 +51,14 @@ public:
 	void distribute_robots_normal(Vector3d boundingBox, double mean, double sigma);
 
 	/**
+	 * distributes the robots evenly on concentric circles
+	 * @param radius: radius of the inner circle. Circle i has radius i*radius
+	 * @param starting_angle: used to control the density of the robots.
+	 * Circle i has robots at each angle of starting_angle/i
+	 */
+	void distribute_robots_circle(double radius, double starting_angle);
+
+	/**
 	 * Method distributes robot initial velocities interior of sphere with max-radius, but outside sphere with min-radius
 	 * @param minVelocity double sets minimum velocity
 	 * @param maxVelocity double sets maximum velocity

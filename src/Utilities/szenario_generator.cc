@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <string>
+#include <cmath>
 
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
@@ -158,6 +159,45 @@ void szenario_generator::distribute_robots_normal(Vector3d boundingBox, double m
 			 	);
 
 		(*iter)->set_position( newRandomPosition );
+	}
+}
+
+void szenario_generator::distribute_robots_circle(double radius, double starting_angle) {
+	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
+	int circle_num = 0;
+	double cur_angle = 0.0;
+	double incr_angle = starting_angle;
+	const long double pi = 3.1415926535897932384626433832795028841968; // awkward.
+
+	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		if(circle_num == 0) {
+			// center robot
+			boost::shared_ptr<Vector3d> center(new Vector3d());
+			center->insert_element(kXCoord,0.0);
+			center->insert_element(kYCoord,0.0);
+			center->insert_element(kZCoord,0.0);
+			(*iter)->set_position( center );
+
+			// this robot is a chieftain
+			(*iter)->set_type( MASTER );
+			circle_num++;
+		} else {
+			// position robot on circle i at cur_angle
+			boost::shared_ptr<Vector3d> pos(new Vector3d());
+			pos->insert_element(kXCoord,std::cos(cur_angle));
+			pos->insert_element(kYCoord,std::sin(cur_angle));
+			pos->insert_element(kZCoord,0.0);
+			(*pos) *= (circle_num * radius);
+			(*iter)->set_position( pos );
+
+			// adjust counter variables
+			cur_angle += incr_angle;
+			if(cur_angle > 2 * pi) {
+				circle_num++;
+				cur_angle = 0.0;
+				incr_angle /= 2;
+			}
+		}
 	}
 }
 

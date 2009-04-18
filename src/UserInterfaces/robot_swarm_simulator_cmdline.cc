@@ -48,7 +48,8 @@ int main(int argc, char** argv) {
 	po::options_description generation_options("Generator options");
 	generation_options.add_options()
 		("generate", "switch to generator mode")
-		("generator", po::value<std::string>()->default_value("standard"), "generator to use")
+		("distr-pos-circle", po::value<double>(), "circle radius")
+		("distr-pos-circle-angle", po::value<double>()->default_value(15.0), "density of robots")
 		("seed", po::value<unsigned int>()->default_value(1), "seed for random number generator")
 		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
 		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
@@ -170,7 +171,12 @@ int main(int argc, char** argv) {
 				tmpVec.insert_element(kYCoord,vm["distr-pos"].as<double>());
 				tmpVec.insert_element(kZCoord,vm["distr-pos"].as<double>());
 				generator.distribute_robots_uniform(tmpVec);
+			} else if(vm.count("distr-pos-circle")) {
+				double radius = vm["distr-pos-circle"].as<double>();
+				double starting_angle = vm["distr-pos-circle-angle"].as<double>();
+				generator.distribute_robots_circle(radius, starting_angle);
 			}
+
 
 			// distribute initial velocities
 			if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
