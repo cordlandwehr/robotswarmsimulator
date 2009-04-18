@@ -53,6 +53,8 @@ end
 function save_configuration(robots)
 	last_positions = {};
 	for i = 1, #robots do
-		last_positions[View.get_id(robots[i])] = View.get_position(robots[i]);
+		if(get_length(View.get_position(robots[i])) < 6) then
+			last_positions[View.get_id(robots[i])] = View.get_position(robots[i]);
+		end
 	end
 end
