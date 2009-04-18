@@ -5,6 +5,9 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
+//include for enums of RobotType and RobotStatus
+#include "../Model/robot_data.h"
+
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() :  robot_filename_("rssfile"),
@@ -488,7 +491,11 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 	output << robot_data->position()(kYCoord) << ",";
 	output << robot_data->position()(kZCoord) << ",";
 
-	output << robot_data->type() << ",";
+	if ( robot_data->type() == MASTER ) {
+		output << "\"MASTER\"" << ",";
+	} else {
+		output << "\"SLAVE\"" << ",";
+	}
 
 	output << robot_data->velocity()(kXCoord) << ",";
 	output << robot_data->velocity()(kYCoord) << ",";
@@ -498,7 +505,11 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 	output << robot_data->acceleration()(kYCoord) << ",";
 	output << robot_data->acceleration()(kZCoord) << ",";
 
-	output << robot_data->status() << ",";
+	if ( robot_data->status() == SLEEPING ) {
+		output << "\"SLEEPING\"" << ",";
+	} else {
+		output << "\"READY\"" << ",";
+	}
 
 	//TODO(mmarcus) include marker-information
 	output << "0,";
