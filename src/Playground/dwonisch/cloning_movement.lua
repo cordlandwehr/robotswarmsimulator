@@ -12,21 +12,28 @@ function main()
 	-- save configuration so we can compute movementvectors
 	save_configuration(robots);
 	
-	add_position_request(new_position);	
+	if(new_position ~= nil) then
+		add_position_request(new_position);	
+	end
 end
 
 function compute_new_position(robots)
-	if(last_activation_time ~= nil and View.get_time() - last_activation_time < 3) then
+	if(last_activation_time ~= nil and View.get_time() - last_activation_time < 9) then
 		--not my turn to move..
-		return;
+		return nil;
+	end
+	if(last_positions == nil) then
+		return nil;
 	end
 	--check for movement
 	local movement_vector = nil;
 	for i = 1, #robots do
-		local movement = View.get_position(robot[i]) - last_position[View.get_id(robot[i])];
-		if(get_length(movement) > eps) then
-			movement_vector = movement;
-			break;
+		if(last_positions[View.get_id(robots[i])] ~= nil) then
+			local movement = View.get_position(robots[i]) - last_positions[View.get_id(robots[i])];
+			if(get_length(movement) > eps) then
+				movement_vector = movement;
+				break;
+			end
 		end
 	end
 	
@@ -43,8 +50,9 @@ function get_length(vector)
 end
 
 --memorises the positions of the robots using last_position map. 
-function save_configuration(robots) 
+function save_configuration(robots)
+	last_positions = {};
 	for i = 1, #robots do
-		last_positions[View.get_id(robot[i])] = View.get_position(robot[i]);
+		last_positions[View.get_id(robots[i])] = View.get_position(robots[i]);
 	end
 end
