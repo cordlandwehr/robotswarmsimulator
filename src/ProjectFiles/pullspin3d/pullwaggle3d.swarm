@@ -1,7 +1,7 @@
 # project file for pull & spin algorithms in 3d for building compact spheres.
 
 PROJECT_NAME="pullwaggle3d"
-ROBOT_FILENAME="pullwaggle3ddist"
+ROBOT_FILENAME="pullwaggle3dtwist"
 OBSTACLE_FILENAME="pullspin3d"
 
 #Switch between ASGs here
