@@ -274,17 +274,6 @@ void szenario_generator::set_projectName(string projectName) {
 	projectName_.reset(new std::string(projectName));
 }
 
-
-void szenario_generator::set_asg(string asg) {
-	asg_.reset(new std::string(asg));
-}
-
-
-void szenario_generator::set_compassModel(string compassModel) {
-	compassModel_.reset(new std::string(compassModel));
-}
-
-
 void szenario_generator::set_statisticsTemplate(string statisticsTemplate) {
 	statisticsTemplate_.reset(new std::string(statisticsTemplate));
 }

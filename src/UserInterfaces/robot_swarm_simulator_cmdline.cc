@@ -48,6 +48,7 @@ int main(int argc, char** argv) {
 	po::options_description generation_options("Generator options");
 	generation_options.add_options()
 		("generate", "switch to generator mode")
+		("generator", po::value<std::string>()->default_value("standard"), "generator to use")
 		("seed", po::value<unsigned int>()->default_value(1), "seed for random number generator")
 		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
 		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
@@ -171,14 +172,6 @@ int main(int argc, char** argv) {
 				generator.distribute_robots_uniform(tmpVec);
 			}
 
-			// sets request handler if requested
-			if (vm.count("add-pos-handler"))
-				generator.add_play_pos_request_handler();
-			if (vm.count("add-vel-handler"))
-				generator.add_play_vel_request_handler();
-			if (vm.count("add-acc-handler"))
-				generator.add_play_acc_request_handler();
-
 			// distribute initial velocities
 			if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
 				generator.distribute_velocity_uniform(vm["min-vel"].as<double>(),vm["max-vel"].as<double>());
@@ -189,6 +182,14 @@ int main(int argc, char** argv) {
 			}
 			if (vm.count("distr-coord"))
 				generator.distribute_coordsys_uniform();
+
+			// sets request handler if requested
+			if (vm.count("add-pos-handler"))
+				generator.add_play_pos_request_handler();
+			if (vm.count("add-vel-handler"))
+				generator.add_play_vel_request_handler();
+			if (vm.count("add-acc-handler"))
+				generator.add_play_acc_request_handler();
 
 			// write to file
 			generator.write_to_file();

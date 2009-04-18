@@ -105,16 +105,6 @@ public:
 	void set_projectName(string projectName);
 
 	/**
-	 * Set ASG
-	 */
-	void set_asg(string asg);
-
-	/**
-	 * Set compass model
-	 */
-	void set_compassModel(string compassModel);
-
-	/**
 	 * Set statistics template
 	 */
 	void set_statisticsTemplate(string statisticsTemplate);
