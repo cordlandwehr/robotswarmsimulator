@@ -33,59 +33,14 @@
 #include "../ComputationalGeometry/misc_algorithms.h"
 #include "../ComputationalGeometry/point_algorithms.h"
 
+#include "../Wrapper/vector_wrapper.h"
+
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
 	Robot* robot; //needed as "caller" in most view methods
 	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
 	std::set<boost::shared_ptr<Request> > requests;
 
-	/**
-	 * Wrapper for Vector3d. Allows lua scripts to work with Vector3d objects.
-	 * @see Vector3d
-	 */
-	struct Vector3dWrapper {
-		Vector3dWrapper() : x(0), y(0), z(0) {;}
-		Vector3dWrapper(double x, double y, double z) : x(x), y(y), z(z) {;}
-
-		const Vector3dWrapper operator+(const Vector3dWrapper& rhs) const {
-			return Vector3dWrapper(x + rhs.x, y + rhs.y, z + rhs.z);
-		}
-
-		const Vector3dWrapper operator-(const Vector3dWrapper& rhs) const {
-			return Vector3dWrapper(x - rhs.x, y - rhs.y, z - rhs.z);
-		}
-
-		const Vector3dWrapper operator*(const Vector3dWrapper& rhs) const {
-			return Vector3dWrapper(x * rhs.x, y * rhs.y, z * rhs.z);
-		}
-
-		friend const Vector3dWrapper operator*(double scalar, const Vector3dWrapper& vec) {
-			return vec*scalar;
-		}
-
-		const Vector3dWrapper operator/(double div) const {
-			return Vector3dWrapper(x / div, y / div, z / div);
-		}
-
-		const Vector3dWrapper operator*(double scalar) const {
-			return Vector3dWrapper(x * scalar, y * scalar, z * scalar);
-		}
-
-		const bool operator==(const Vector3dWrapper& rhs) const {
-			return x == rhs.x && y == rhs.y && z == rhs.z;
-		}		
-
-		friend std::ostream& operator<<(std::ostream& os, const Vector3dWrapper& rhs) {
-			//Note: not implemented using operator<< of Vector3d, because latter is ugly.
-			return os << "{x = " << rhs.x << ", y = " << rhs.y << ", z = " << rhs.z << "}";
-		}
-
-
-		double x;
-		double y;
-		double z;
-
-	};
 
 	/**
 	 * Wrapper for MarkerInformation. Allows lua scripts to work with MarkerInformation objects.
@@ -114,10 +69,10 @@ namespace {
 
 	struct CoordinateSystemWrapper {
 		CoordinateSystemWrapper() {;}
-		CoordinateSystemWrapper(Vector3dWrapper x_axis, Vector3dWrapper y_axis, Vector3dWrapper z_axis) : x_axis(x_axis), y_axis(y_axis), z_axis(z_axis) {;}
-		Vector3dWrapper x_axis;
-		Vector3dWrapper y_axis;
-		Vector3dWrapper z_axis;
+		CoordinateSystemWrapper(LuaWrapper::Vector3dWrapper x_axis, LuaWrapper::Vector3dWrapper y_axis, LuaWrapper::Vector3dWrapper z_axis) : x_axis(x_axis), y_axis(y_axis), z_axis(z_axis) {;}
+		LuaWrapper::Vector3dWrapper x_axis;
+		LuaWrapper::Vector3dWrapper y_axis;
+		LuaWrapper::Vector3dWrapper z_axis;
 	};
 
 	/**
@@ -156,38 +111,12 @@ namespace {
 		return result;
 	}
 
-	const Vector3dWrapper transform(const Vector3d& vec) {
-		return Vector3dWrapper(vec(0), vec(1), vec(2));
-	}
-
-	const std::vector<Vector3dWrapper> transform(const std::vector<Vector3d>& vec) {
-		std::vector<Vector3dWrapper> result;
-		result.resize(vec.size());
-		std::transform(vec.begin(), vec.end(), result.begin(), boost::bind(static_cast<const Vector3dWrapper(*)(const Vector3d&)>(&transform),_1));
-		return result;
-	}
-
 	const MarkerInformationWrapper transform(const MarkerInformation& marker) {
 		return MarkerInformationWrapper(marker);
 	}
 
 	const CoordinateSystemWrapper transform(const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >& cs) {
-		return CoordinateSystemWrapper(transform(*boost::get<0>(cs)), transform(*boost::get<1>(cs)), transform(*boost::get<2>(cs)));
-	}
-
-	const Vector3d transform(const Vector3dWrapper& vec) {
-		Vector3d result;
-		result.insert_element(kXCoord, vec.x);
-		result.insert_element(kYCoord, vec.y);
-		result.insert_element(kZCoord, vec.z);
-		return result;
-	}
-
-	const std::vector<Vector3d> transform(const std::vector<Vector3dWrapper>& vec) {
-		std::vector<Vector3d> result;
-		result.resize(vec.size());
-		std::transform(vec.begin(), vec.end(), result.begin(), boost::bind(static_cast<const Vector3d(*)(const Vector3dWrapper&)>(&transform),_1));
-		return result;
+		return CoordinateSystemWrapper(LuaWrapper::transform(*boost::get<0>(cs)), LuaWrapper::transform(*boost::get<1>(cs)), LuaWrapper::transform(*boost::get<2>(cs)));
 	}
 
 	const MarkerInformation transform(const MarkerInformationWrapper& marker) {
@@ -226,8 +155,8 @@ namespace {
 	 * @see View.get_position()
 	 */
 
-	const Vector3dWrapper get_position(std::size_t index) {
-		return transform(view->get_position(*robot, resolve<Identifier>(index)));
+	const LuaWrapper::Vector3dWrapper get_position(std::size_t index) {
+		return LuaWrapper::transform(view->get_position(*robot, resolve<Identifier>(index)));
 	}
 
 	/**
@@ -256,8 +185,8 @@ namespace {
 	 * @see View.get_robot_acceleration()
 	 */
 
-	const Vector3dWrapper get_robot_acceleration(std::size_t index) {
-		return transform(view->get_robot_acceleration(*robot, resolve<RobotIdentifier>(index)));
+	const LuaWrapper::Vector3dWrapper get_robot_acceleration(std::size_t index) {
+		return LuaWrapper::transform(view->get_robot_acceleration(*robot, resolve<RobotIdentifier>(index)));
 	}
 
 	/**
@@ -266,8 +195,8 @@ namespace {
 	 * @see View.get_robot_coordinate_system_origin()
 	 */
 
-	const Vector3dWrapper get_robot_coordinate_system_origin(std::size_t index) {
-		return transform(view->get_robot_coordinate_system_origin(*robot, resolve<RobotIdentifier>(index)));
+	const LuaWrapper::Vector3dWrapper get_robot_coordinate_system_origin(std::size_t index) {
+		return LuaWrapper::transform(view->get_robot_coordinate_system_origin(*robot, resolve<RobotIdentifier>(index)));
 	}
 
 	/**
@@ -306,8 +235,8 @@ namespace {
 	 * @see View.is_point_in_obstacle()
 	 */
 
-	const bool is_point_in_obstacle(std::size_t index, Vector3dWrapper point) {
-		return view->is_point_in_obstacle(resolve<ObstacleIdentifier>(index), transform(point));
+	const bool is_point_in_obstacle(std::size_t index, LuaWrapper::Vector3dWrapper point) {
+		return view->is_point_in_obstacle(resolve<ObstacleIdentifier>(index), LuaWrapper::transform(point));
 	}
 
 	/**
@@ -385,7 +314,7 @@ namespace {
 	 * @param Requested acceleration vector
 	 */
 
-	void add_acceleration_request(Vector3dWrapper requested_vector) {
+	void add_acceleration_request(LuaWrapper::Vector3dWrapper requested_vector) {
 		boost::shared_ptr<Vector3d> new_acc(new Vector3d(transform(requested_vector)));
 		requests.insert(boost::shared_ptr<Request>(new AccelerationRequest(*robot, new_acc)));
 	}
@@ -396,7 +325,7 @@ namespace {
 	 * @param Requested position vector
 	 */
 
-	void add_position_request(Vector3dWrapper requested_vector) {
+	void add_position_request(LuaWrapper::Vector3dWrapper requested_vector) {
 		boost::shared_ptr<Vector3d> new_pos(new Vector3d(transform(requested_vector)));
 		requests.insert(boost::shared_ptr<Request>(new PositionRequest(*robot, new_pos)));
 	}
@@ -407,7 +336,7 @@ namespace {
 	 * @param Requested velocity vector
 	 */
 
-	void add_velocity_request(Vector3dWrapper requested_vector) {
+	void add_velocity_request(LuaWrapper::Vector3dWrapper requested_vector) {
 		boost::shared_ptr<Vector3d> new_vel(new Vector3d(transform(requested_vector)));
 		requests.insert(boost::shared_ptr<Request>(new VelocityRequest(*robot, new_vel)));
 	}
@@ -443,48 +372,8 @@ namespace {
 	}
 
 	//TODO: doxy
-	const bool is_point_in_smallest_bbox(std::vector<Vector3dWrapper> point_list, const Vector3dWrapper& testpoint) {
+	const bool is_point_in_smallest_bbox(std::vector<LuaWrapper::Vector3dWrapper> point_list, const LuaWrapper::Vector3dWrapper& testpoint) {
 		return MiscAlgorithms::is_point_in_smallest_bbox(transform(point_list), transform(testpoint));
-	}
-
-	/**
-	 * Computes distance between two Vectors
-	 * @param v is the first vector
-	 * @param w is the second vector
-	 * @return distance
-	 */
-	const double compute_distance(const Vector3dWrapper& v, const Vector3dWrapper& w) {
-		return vector3d_distance(transform(v), transform(w));
-	}
-
-	/**
-	 * Computes distance between two Vectors by p-norm
-	 * @param v is the first vector
-	 * @param w is the second vector
-	 * @param p is value of norm
-	 * @return distance
-	 */
-	const double compute_distance(const Vector3dWrapper& v, const Vector3dWrapper& w, int p) {
-		return vector3d_distance(transform(v), transform(w), p);
-	}
-
-	/**
-	 * Computes center of given points.
-	 * @param point_list is vector of points
-	 * @return the center of gravity
-	 */
-	const Vector3dWrapper compute_COG(std::vector<Vector3dWrapper> point_list) {
-		return transform(PointAlgorithms::compute_COG(transform(point_list)));
-	}
-
-	/**
-	 * Sort vectors by euclidean norm, distance to zero
-	 * @return sorted point_list
-	 */
-	const std::vector<Vector3dWrapper> sort_points_by_distance(std::vector<Vector3dWrapper> point_list) {
-		std::vector<Vector3d> vec = transform(point_list);
-		MiscAlgorithms::sort_points_by_distance(vec, 2);
-		return transform(vec);
 	}
 
 	/**
@@ -496,7 +385,7 @@ namespace {
 
 		std::vector< std::pair<Vector3d,std::size_t> > point_list;
 		point_list.resize(index_list.size());
-		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(std::make_pair<Vector3d, std::size_t>, bind(static_cast<const Vector3d(*)(const Vector3dWrapper&)>(&transform), bind(get_position, 1)), _1));
+		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(std::make_pair<Vector3d, std::size_t>, bind(static_cast<const Vector3d(*)(const LuaWrapper::Vector3dWrapper&)>(&LuaWrapper::transform), bind(get_position, 1)), _1));
 
 		MiscAlgorithms::sort_pointslist_by_distance(point_list, 2);
 
@@ -537,20 +426,20 @@ void LuaRobot::register_lua_methods() {
 	//register view methods to lua
 	luabind::module(lua_state_.get())
 	[
-		 luabind::class_<Vector3dWrapper>("Vector3d")
+		 luabind::class_<LuaWrapper::Vector3dWrapper>("Vector3d")
 			 .def(luabind::constructor<>())
 			 .def(luabind::constructor<double, double, double>())
-			 .def(luabind::const_self + luabind::other<Vector3dWrapper>())
-			 .def(luabind::const_self - luabind::other<Vector3dWrapper>())
-			 .def(luabind::const_self * luabind::other<Vector3dWrapper>())
-			 .def(luabind::const_self == luabind::other<Vector3dWrapper>())
+			 .def(luabind::const_self + luabind::other<LuaWrapper::Vector3dWrapper>())
+			 .def(luabind::const_self - luabind::other<LuaWrapper::Vector3dWrapper>())
+			 .def(luabind::const_self * luabind::other<LuaWrapper::Vector3dWrapper>())
+			 .def(luabind::const_self == luabind::other<LuaWrapper::Vector3dWrapper>())
 			 .def(luabind::const_self * double())
 			 .def(double() * luabind::const_self)
 			 .def(luabind::const_self / double())
 			 .def(luabind::tostring(luabind::self))
-			 .def_readwrite("x", &Vector3dWrapper::x)
-			 .def_readwrite("y", &Vector3dWrapper::y)
-			 .def_readwrite("z", &Vector3dWrapper::z),
+			 .def_readwrite("x", &LuaWrapper::Vector3dWrapper::x)
+			 .def_readwrite("y", &LuaWrapper::Vector3dWrapper::y)
+			 .def_readwrite("z", &LuaWrapper::Vector3dWrapper::z),
 
 		 luabind::class_<MarkerInformationWrapper>("MarkerInformation")
 			 .def(luabind::constructor<>())
@@ -559,7 +448,7 @@ void LuaRobot::register_lua_methods() {
 
 		 luabind::class_<CoordinateSystemWrapper>("CoordinateSystem")
 			 .def(luabind::constructor<>())
-			 .def(luabind::constructor<Vector3dWrapper, Vector3dWrapper, Vector3dWrapper>())
+			 .def(luabind::constructor<LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper>())
 			 .def_readwrite("x_axis", &CoordinateSystemWrapper::x_axis)
 			 .def_readwrite("y_axis", &CoordinateSystemWrapper::y_axis)
 			 .def_readwrite("z_axis", &CoordinateSystemWrapper::z_axis),
@@ -638,10 +527,10 @@ void LuaRobot::register_lua_methods() {
 	    luabind::namespace_("Geometry")
 		 [
 			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox, luabind::copy_table(_1)),
-			 luabind::def("compute_distance", (const double (*) (const Vector3dWrapper&, const Vector3dWrapper&))&compute_distance),
-			 luabind::def("compute_distance", (const double (*) (const Vector3dWrapper&, const Vector3dWrapper&, int))&compute_distance),
-			 luabind::def("compute_cog", &compute_COG, luabind::copy_table(_1)),
-			 luabind::def("sort_vectors_by_length", &sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
+			 luabind::def("compute_distance", (const double (*) (const LuaWrapper::Vector3dWrapper&, const LuaWrapper::Vector3dWrapper&))&LuaWrapper::compute_distance),
+			 luabind::def("compute_distance", (const double (*) (const LuaWrapper::Vector3dWrapper&, const LuaWrapper::Vector3dWrapper&, int))&LuaWrapper::compute_distance),
+			 luabind::def("compute_cog", &LuaWrapper::compute_COG, luabind::copy_table(_1)),
+			 luabind::def("sort_vectors_by_length", &LuaWrapper::sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
 			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
 		 ]
 
@@ -666,7 +555,6 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 
 	return requests;
 }
-
 
 std::string LuaRobot::get_algorithm_id () const {
 	return lua_file_name_;
