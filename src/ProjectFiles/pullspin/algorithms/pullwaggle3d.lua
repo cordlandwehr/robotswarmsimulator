@@ -38,7 +38,7 @@ function spin()
 	--checking for errors
 	if (d1vec == zero) then
 		print ("Robot is directly on COG.");
-		exit();
+		return;
 	elseif (d1vec.x ~= 0.0) then
 		d2vec.x = ( (d1vec.y * d2vec.y) + (d1vec.z * d2vec.z) ) / ( (-1) * d1vec.x );
 	elseif (d1vec.y ~= 0.0) then
@@ -55,7 +55,7 @@ function spin()
 		alpha = 1.0 / radius;
 	else
 		print ("Robot is directly on COG.")
-		exit();
+		return;
 	end
 
 	--debugoutput for checking whether all vectors have same length and are indeed orthogonal 
@@ -87,6 +87,9 @@ end
 function pull()
 
 	newposition = cog(get_visible_robots())
+	if (newposition == zero) then -- robot reached COG, so return
+		return;
+	end
 	add_position_request(newposition / dist(newposition));
  
  end
@@ -106,16 +109,13 @@ end
 
 	--setting global nullvector
 	zero = Vector3d(0.0,0.0,0.0);
-
-	--just pull
-	pull();
-	
+ 
 	--Choose operation by random
---[[	
+---[[	
 	if (math.random() <= 0.5) then
 		pull();
 	else 
-		spin();
+		waggle(0.2);
 	end
 --]]
 
