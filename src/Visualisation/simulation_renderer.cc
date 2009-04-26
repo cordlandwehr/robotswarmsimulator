@@ -26,6 +26,7 @@
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
 
+#include "../SimulationControl/time_point.h"
 
 #include "camera.h"
 #include "robot_renderer.h"
@@ -243,7 +244,8 @@ void SimulationRenderer::setup_projection(){
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<WorldInformation> &world_info){
+void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePoint> & time_point){
+	boost::shared_ptr<WorldInformation> world_info = time_point->world_information_ptr();
 	this->extrapolate_ = extrapolate;
 	if (render_visibility_graph_ && world_info_!=world_info) calculate_visibility_graph(world_info);
 	world_info_=world_info;
@@ -479,7 +481,7 @@ void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<Worl
 					 boost::add_edge((*it_robot)->id()->id(), cur_id->id(), *vis_graph_);
 				 }
 		}
-	}	
+	}
 //calculate connected components
 	 int number_connected_components=boost::strong_components((*vis_graph_),&components_[0]);
 

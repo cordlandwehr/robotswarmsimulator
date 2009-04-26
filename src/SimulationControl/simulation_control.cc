@@ -5,6 +5,7 @@
 #include "../Model/world_information.h"
 #include "visualizer.h"
 #include "history.h"
+#include "time_point.h"
 #include <Utilities/console_output.h>
 
 #include <iostream>
@@ -58,11 +59,11 @@ void SimulationControl::start_simulation() {
 		simulation_thread_.swap(simulation_thread);
 
 		//fetch first two WorldInformations
-		current_world_information_ = history_->get_oldest_unused(true);
-		next_world_information_ = history_->get_oldest_unused(true);
+		current_time_point_ = history_->get_oldest_unused(true);
+		next_time_point_ = history_->get_oldest_unused(true);
 
 		//some initialization
-		current_processing_time_ = current_world_information_->time() * processing_time_factor_;
+		current_processing_time_ = current_time_point_->world_information().time() * processing_time_factor_; ;
 		last_process_simulation_time_ = boost::posix_time::microsec_clock::local_time();
 	}
 	else {
@@ -104,19 +105,19 @@ void SimulationControl::process_simulation() {
 	// If the Simulation has not produced the needed world informations yet, we pause
 	// the processing time.
 	double current_simulation_time = new_processing_time/processing_time_factor_;
-	while(current_simulation_time >= next_world_information_->time()) {
-		boost::shared_ptr<WorldInformation> new_world_information = history_->get_oldest_unused();
-		if(!new_world_information) {
+	while(current_simulation_time >= next_time_point_->world_information().time()) {
+		boost::shared_ptr<TimePoint> new_time_point = history_->get_oldest_unused();
+		if(!new_time_point) {
 			//try_wait failed
 			//proceed processing_time to next_world_information time instead of setting it to new_processing_time
 			//-> pauses processing_time at next_world_information_->time()
-			current_processing_time_ = next_world_information_->time() * processing_time_factor_;
+			current_processing_time_ = next_time_point_->world_information().time() * processing_time_factor_;
 			draw_current_simulation();
 			return;
 		}
 		else {
-			current_world_information_ = next_world_information_;
-			next_world_information_ = new_world_information;
+			current_time_point_ = next_time_point_;
+			next_time_point_ = new_time_point;
 		}
 	}
 	current_processing_time_ = new_processing_time;
@@ -127,8 +128,8 @@ void SimulationControl::draw_current_simulation()
 {
 	// draw the simulation state for the current processing time if there is a visualizer.
 	if(visualizer_) {
-		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_world_information_->time();
-		visualizer_->draw(extrapolation_time, current_world_information_);
+		double extrapolation_time = current_processing_time_/processing_time_factor_ - current_time_point_->world_information().time();
+		visualizer_->draw(extrapolation_time, current_time_point_);
 	}
 }
 

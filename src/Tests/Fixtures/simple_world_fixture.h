@@ -21,8 +21,10 @@
 #include "../../Events/look_event.h"
 #include "../../Events/event.h"
 #include "../../SimulationControl/history.h"
+#include "../../SimulationControl/time_point.h"
 #include "../../EventHandlers/event_handler.h"
 #include "../../Utilities/vector_arithmetics.h"
+
 
 
 class SimpleRobot : public Robot {
@@ -273,7 +275,9 @@ struct SimpleWorldFixture {
 		initial_world_information->set_time(0);
 
 		// insert initial world information into history
-		history->insert(initial_world_information);
+		boost::shared_ptr<TimePoint> new_time_point(new TimePoint());
+		new_time_point->set_world_information(initial_world_information);
+		history->insert(new_time_point);
 
 	}
 

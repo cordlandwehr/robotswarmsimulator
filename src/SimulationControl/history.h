@@ -15,6 +15,7 @@
 #include <boost/thread/mutex.hpp>
 
 class WorldInformation;
+class TimePoint;
 
 /**
  * \brief History of the simulation
@@ -29,29 +30,29 @@ public:
 	History(std::size_t size);
 
 	/**
-	 * inserts a new WorldInformation object into the history
+	 * inserts a new TimePoint object into the history
 	 */
-	void insert(boost::shared_ptr<WorldInformation> world_information);
+	void insert(boost::shared_ptr<TimePoint> time_point);
 
 	/**
-	 * gets the oldest WorldInformation object in the buffer as copy and marks it as consumed.
-	 * If no consumeable WorldInformation is available either the thread is blocked (blocked = true)
+	 * gets the oldest TimePoint object in the buffer as copy and marks it as consumed.
+	 * If no consumeable TimePoint is available either the thread is blocked (blocked = true)
 	 * or a NULL pointer is returned (block = false).
 	 */
-	boost::shared_ptr<WorldInformation> get_oldest_unused(bool block = false);
+	boost::shared_ptr<TimePoint> get_oldest_unused(bool block = false);
 
 	/**
-	 * returns a const reference to the newest world information object in the buffer.
+	 * returns a const reference to the newest TimePoint object in the buffer.
 	 * Should never be called if there is another thread which might call push_back()
 	 * concurrently
 	 */
-	const WorldInformation& get_newest() const;
+	const TimePoint& get_newest() const;
 
 	// .. other accessors may follow
 	const std::size_t size() {return history_.size();}
 	const std::size_t capacity() {return history_.capacity();}
 private:
-	boost::circular_buffer<boost::shared_ptr<WorldInformation> > history_;
+	boost::circular_buffer<boost::shared_ptr<TimePoint> > history_;
 	std::size_t consumer_position_;
 	boost::interprocess::interprocess_semaphore empty_count_;
 	boost::interprocess::interprocess_semaphore fill_count_;

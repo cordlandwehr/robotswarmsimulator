@@ -33,6 +33,7 @@
 #include "../Model/robot.h"
 
 #include "../SimulationControl/history.h"
+#include "../SimulationControl/time_point.h"
 
 #include "../Statistics/stats_control.h"
 

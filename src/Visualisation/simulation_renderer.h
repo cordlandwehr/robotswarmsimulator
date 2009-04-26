@@ -87,7 +87,7 @@ public:
      * \param world_info The WorldInformation Object which describes the current world
      * \param extrapolate The value to use for extrapolating.
      */
-	void draw(double extrapolate, const boost::shared_ptr<WorldInformation> & world_info);
+	void draw(double extrapolate, const boost::shared_ptr<TimePoint> & time_point);
 
 	/**
 	 * \brief This Method provides access to the camera Object.

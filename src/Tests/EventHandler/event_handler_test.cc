@@ -58,7 +58,7 @@ BOOST_FIXTURE_TEST_CASE(event_handler_test, SimpleWorldFixture)
 	event_handler.handle_event(look_event);
 
 	// newest world information is for t = 5
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 5);
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 5);
 
 	// all listeners update functions called once
 	BOOST_CHECK_EQUAL(listener_a->times_update_called(), 1);
@@ -134,7 +134,7 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_extrapolation_test, SimpleWorldFi
 	// BOOST_CHECK_EQUAL(event_handler.calls_position_request(),1);
 
 	// newest world information is for t = 7
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 7);
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 7);
 
 	// all listeners update functions called once
 	BOOST_CHECK_EQUAL(listener_a->times_update_called(), 1);

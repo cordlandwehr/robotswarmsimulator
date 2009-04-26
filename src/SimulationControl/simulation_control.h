@@ -19,6 +19,7 @@
 class SimulationKernel;
 class Visualizer;
 class WorldInformation;
+class TimePoint;
 class History;
 
 /**
@@ -163,8 +164,8 @@ private:
 	double current_processing_time_;
 	boost::posix_time::ptime last_process_simulation_time_;
 
-	boost::shared_ptr<WorldInformation> current_world_information_;
-	boost::shared_ptr<WorldInformation> next_world_information_;
+	boost::shared_ptr<TimePoint> current_time_point_;
+	boost::shared_ptr<TimePoint> next_time_point_;
 	boost::shared_ptr<History> history_;
 	boost::shared_ptr<SimulationKernelFunctor> simulation_kernel_functor_;
 	boost::thread simulation_thread_;

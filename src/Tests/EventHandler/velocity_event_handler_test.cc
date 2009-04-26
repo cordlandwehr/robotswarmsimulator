@@ -58,8 +58,8 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	 * - only one world information (at time 0)
 	 * - robot_a still at (0., 0., 0.) with velocity (0., 0., 0.) and acceleration (0., 0., 0.)
 	 */
-	const RobotData& robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
+	const RobotData& robot_data_before = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 0);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(0), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(1), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(2), 0., 0.1);
@@ -78,8 +78,8 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	 * - world information at time 3
 	 * - robot_a at (0., 0., 0.) with velocity (0., 1., -0.5)
 	 */
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 3);
+	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 3);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(0), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(1), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(2), 0., 0.1);
@@ -96,8 +96,8 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	 * - world information at time 8
 	 * - robot_a at (0., 5., -2.5) with velocity (0., 1., -0.5)
 	 */
-	const RobotData& robot_data_after2 = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 8);
+	const RobotData& robot_data_after2 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 8);
 	BOOST_CHECK_CLOSE(robot_data_after2.position()(0),  0. , 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after2.position()(1),  5. , 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after2.position()(2), -2.5, 0.1);
@@ -156,8 +156,8 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_local_coordinate_system, Sim
 	event_handler.handle_event(handle_requests_event);
 
 	// checking new velocity of robot_a: should be (3.0, -1.0, 0.75)
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 4);
+	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 4);
 	BOOST_CHECK_CLOSE(robot_data_after.velocity()(kXCoord),  3.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.velocity()(kYCoord), -1.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.velocity()(kZCoord), 0.75, 0.1);

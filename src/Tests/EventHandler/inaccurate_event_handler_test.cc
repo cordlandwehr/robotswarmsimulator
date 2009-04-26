@@ -73,7 +73,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 	Vector3d deviation_vector = boost::numeric::ublas::zero_vector<double>(3);
 	for (int i=1; i<=nr_requests; i++) {
 		// get global target point
-		RobotData robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
+		RobotData robot_data_before = history->get_newest().world_information().get_according_robot_data(robot_a->id());
 		boost::shared_ptr<Vector3d> target_point = local_to_global(*requested_vector, robot_data_before.position(),
 																   robot_data_before.coordinate_system_axis());
 
@@ -84,7 +84,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 
 		// get reached point
-		RobotData robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
+		RobotData robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());
 		const Vector3d& reached_point = robot_data_after.position();
 
 		// computation of mean displacement and deviation
@@ -159,7 +159,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 
 		// computation of mean displacement and deviation
-		const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_b->id());
+		const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_b->id());
 		const Vector3d& robot_vector_after = robot_data_after.acceleration();
 		Vector3d difference = robot_vector_after - *global_req_vector;
 		mean_vector += difference;
@@ -232,7 +232,7 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 
 		// computation of mean displacement and deviation
-		const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_b->id());
+		const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_b->id());
 		const Vector3d& robot_vector_after = robot_data_after.velocity();
 		Vector3d difference = robot_vector_after - *global_req_vector;
 		mean_vector += difference;

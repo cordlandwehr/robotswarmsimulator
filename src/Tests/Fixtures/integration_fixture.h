@@ -15,6 +15,7 @@
 #include "../../Events/event.h"
 #include "../../Requests/position_request.h"
 #include "../../SimulationControl/history.h"
+#include "../../SimulationControl/time_point.h"
 #include "../../EventHandlers/event_handler.h"
 #include "../../Utilities/vector_arithmetics.h"
 
@@ -221,7 +222,10 @@ struct IntegrationFixture {
 		initial_world_information->set_time(0);
 
 		// insert initial world information into history
-		history->insert(initial_world_information);
+		boost::shared_ptr<TimePoint> initial_time_point(new TimePoint());
+		initial_time_point->set_world_information(initial_world_information);
+		history->insert(initial_time_point);
+
 
 	}
 

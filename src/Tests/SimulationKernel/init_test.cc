@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(simkernel_init) {
 	simkernel->init("../RobotSwarmSimulator/src/Tests/TestData/testfile_2", history, "", false);
 
 	// get World-Information
-	boost::shared_ptr<WorldInformation> world_info(new WorldInformation(history->get_newest()));
+	boost::shared_ptr<WorldInformation> world_info(new WorldInformation(history->get_newest().world_information()));
 
 	// get Robotdata
 	std::vector< boost::shared_ptr<RobotData> > robots_data = world_info->robot_data();

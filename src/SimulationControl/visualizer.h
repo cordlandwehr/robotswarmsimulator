@@ -8,7 +8,7 @@
 #ifndef VISUALIZER_H_
 #define VISUALIZER_H_
 
-class WorldInformation;
+class TimePoint;
 
 /**
  * \brief Interface for visualization classes.
@@ -22,7 +22,7 @@ public:
 	 *
 	 * The given world information may be extrapolated using the given extrapolation time.
 	 */
-	virtual void draw(double extrapolation_time, const boost::shared_ptr<WorldInformation> & world_information) = 0;
+	virtual void draw(double extrapolation_time, const boost::shared_ptr<TimePoint> & time_point) = 0;
 
 	/**
 	 * \brief To be used for initialization.

@@ -30,6 +30,7 @@
 #include "../Requests/marker_change_request.h"
 
 #include "../SimulationControl/history.h"
+#include "../SimulationControl/time_point.h"
 #include "../SimulationKernel/simulation_listener.h"
 #include "../SimulationKernel/robot_control.h"
 
@@ -69,8 +70,10 @@ void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
 	boost::shared_ptr<WorldInformation> new_world_information =
 		extrapolate_old_world_information(look_event->time());
 
-	// push back new world information
-	history_->insert(new_world_information);
+	boost::shared_ptr<TimePoint> new_time_point(new TimePoint());
+	new_time_point->set_world_information(new_world_information);
+	// push back new time point
+	history_->insert(new_time_point);
 
 	// update robot control with the extrapolated world information
 	robot_control_->update(new_world_information);
@@ -150,13 +153,15 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 		}
 	}
 
-	// push back new world information
-	history_->insert(new_world_information);
+	// push back new time point
+	boost::shared_ptr<TimePoint> new_time_point(new TimePoint());
+	new_time_point->set_world_information(new_world_information);
+	history_->insert(new_time_point);
 }
 
 boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(int time) {
 	// get the old world information to extrapolate from
-	const WorldInformation& old_world_information = history_->get_newest();
+	const WorldInformation& old_world_information = history_->get_newest().world_information();
 
 	// create new world information
 	boost::shared_ptr<WorldInformation> new_world_information(new WorldInformation(old_world_information));
@@ -184,6 +189,6 @@ void EventHandler::register_listener(boost::shared_ptr<SimulationListener> liste
 
 void EventHandler::update_listeners(boost::shared_ptr<Event> event) {
 	BOOST_FOREACH(boost::shared_ptr<SimulationListener> listener, listeners_) {
-		listener->update(history_->get_newest(), event);
+		listener->update(history_->get_newest().world_information(), event);
 	}
 }

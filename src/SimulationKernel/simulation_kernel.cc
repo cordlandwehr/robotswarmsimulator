@@ -75,7 +75,10 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Generated parameter map";
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
-	history_->insert(initial_world_information);
+
+	boost::shared_ptr<TimePoint> initial_time_point(new TimePoint());
+	initial_time_point->set_world_information(initial_world_information);
+	history_->insert(initial_time_point);
 
 	// create Robot Control
 	boost::shared_ptr<RobotControl> robot_control = Factory::robot_control_factory(params, history_->capacity(), initial_world_information);

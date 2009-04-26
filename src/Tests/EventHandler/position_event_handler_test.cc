@@ -57,8 +57,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
 	 * - only one world information (at time 0)
 	 * - robot_a still at (0., 0., 0.)
 	 */
-	const RobotData& robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
+	const RobotData& robot_data_before = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 0);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(0), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(1), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(2), 0., 0.1);
@@ -71,8 +71,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
 	 * - world information at time 4
 	 * - robot_a at (-5., 0.1, 3.)
 	 */
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 4);
+	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 4);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(0), -5., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(1), 0.1, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(2), 3., 0.1);
@@ -109,8 +109,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFix
 //	 * - only one world information (at time 0)
 //	 * - robot_a has default marker information
 //	 */
-//	const RobotData& robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
-//	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
+//	const RobotData& robot_data_before = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 0);
 //	BOOST_CHECK_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_before.marker_information()), std::bad_cast);
 //	/* END: InitialTest */
 //
@@ -121,8 +121,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFix
 //	 * - world information at time 3
 //	 * - robot_a has marker information of type TestMarkerInformation with value '1'
 //	 */
-//	const RobotData& robot_data_after1 = history->get_newest().get_according_robot_data(robot_a->id());
-//	BOOST_CHECK_EQUAL(history->get_newest().time(), 3);
+//	const RobotData& robot_data_after1 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 3);
 //	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after1.marker_information()));
 //	const TestMarkerInformation& marker_information_after1 = dynamic_cast<const TestMarkerInformation&>(robot_data_after1.marker_information());
 //	BOOST_CHECK_EQUAL(marker_information_after1.value(), 1);
@@ -143,8 +143,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFix
 //	 * - world information at time 6
 //	 * - robot_a has marker information of type TestMarkerInformation with value '2'
 //	 */
-//	const RobotData& robot_data_after2 = history->get_newest().get_according_robot_data(robot_a->id());
-//	BOOST_CHECK_EQUAL(history->get_newest().time(), 6);
+//	const RobotData& robot_data_after2 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 6);
 //	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after2.marker_information()));
 //	const TestMarkerInformation& marker_information_after2 = dynamic_cast<const TestMarkerInformation&>(robot_data_after2.marker_information());
 //	BOOST_CHECK_EQUAL(marker_information_after2.value(), 2);
@@ -158,8 +158,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_marker_test, SimpleWorldFix
 //	 * - world information at time 9
 //	 * - robot_a has marker information of type TestMarkerInformation with value '2'
 //	 */
-//	const RobotData& robot_data_after3 = history->get_newest().get_according_robot_data(robot_a->id());
-//	BOOST_CHECK_EQUAL(history->get_newest().time(), 9);
+//	const RobotData& robot_data_after3 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+//	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 9);
 //	BOOST_REQUIRE_NO_THROW(dynamic_cast<const TestMarkerInformation&>(robot_data_after3.marker_information()));
 //	const TestMarkerInformation& marker_information_after3 = dynamic_cast<const TestMarkerInformation&>(robot_data_after3.marker_information());
 //	BOOST_CHECK_EQUAL(marker_information_after3.value(), 2);
@@ -215,8 +215,8 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_local_coordinate_system, Si
 	event_handler.handle_event(handle_requests_event);
 
 	// checking new position of robot_a: should be at (-10.0, 0.2, 6.0)
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 4);
+	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 4);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(kXCoord), -10.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(kYCoord), 0.2, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.position()(kZCoord), 6.0, 0.1);

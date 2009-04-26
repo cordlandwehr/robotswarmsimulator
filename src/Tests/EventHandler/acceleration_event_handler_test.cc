@@ -58,8 +58,8 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, Simpl
 	 * - only one world information (at time 0)
 	 * - robot_a still at (0., 0., 0.) with velocity (0., 0., 0.) and acceleration (0., 0., 0.)
 	 */
-	const RobotData& robot_data_before = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 0);
+	const RobotData& robot_data_before = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 0);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(0), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(1), 0., 0.1);
 	BOOST_CHECK_CLOSE(robot_data_before.position()(2), 0., 0.1);
@@ -78,8 +78,8 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, Simpl
 	 * - world information at time 3
 	 * - robot_a has acceleration (10., 1., -1.2)
 	 */
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_a->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 3);
+	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 3);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(0),  10.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(1),   1.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(2), - 1.2, 0.1);
@@ -136,8 +136,8 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system,
 	event_handler.handle_event(handle_requests_event);
 
 	// checking new acceleration of robot_b: should be (2.0, 0.0, 2.25)
-	const RobotData& robot_data_after = history->get_newest().get_according_robot_data(robot_b->id());
-	BOOST_CHECK_EQUAL(history->get_newest().time(), 1);
+	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_b->id());
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kXCoord), 2.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kYCoord), 0.0, 0.1);
 	BOOST_CHECK_CLOSE(robot_data_after.acceleration()(kZCoord), 2.25, 0.1);
