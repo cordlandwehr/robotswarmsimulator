@@ -33,6 +33,20 @@ if(CGAL_FOUND)
 	add_definitions(-DUSE_CGAL)
 endif(CGAL_FOUND)
 
+# find/configure LAPACK
+if(APPLE)
+	add_definitions(-DUSE_LAPACK)
+elseif(WIN32)
+	# currently tested only for MinGW
+	find_library(LAPACK_LIBRARY lapack)
+	find_library(LAPACK_BLAS_LIBRARY blas)
+	find_library(LAPACK_F77_LIBRARY F77)
+	find_library(LAPACK_I77_LIBRARY I77)
+	if(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
+		add_definitions(-DUSE_LAPACK)
+	endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
+endif(APPLE)
+
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 

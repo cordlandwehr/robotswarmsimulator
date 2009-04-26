@@ -23,8 +23,18 @@ include_directories(${luabind_SOURCE_DIR})
 
 # find/configure LAPACK
 if(APPLE)
-	find_library(Accelerate_FRAMEWORK Accelerate)
+	find_library(LAPACK_LIBRARIES Accelerate)
 	add_definitions(-DUSE_LAPACK)
+elseif(WIN32)
+	# currently tested only for MinGW
+	find_library(LAPACK_LIBRARY lapack)
+	find_library(LAPACK_BLAS_LIBRARY blas)
+	find_library(LAPACK_F77_LIBRARY F77)
+	find_library(LAPACK_I77_LIBRARY I77)
+	if(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
+		add_definitions(-DUSE_LAPACK)
+		set(LAPACK_LIBRARIES ${LAPACK_LIBRARY} ${LAPACK_BLAS_LIBRARY} ${LAPACK_F77_LIBRARY} ${LAPACK_I77_LIBRARY})
+	endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
 endif(APPLE)
 
 # generate executable of the above source files and link it
@@ -35,7 +45,7 @@ target_link_libraries(RSSUnitTests
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
-	${Accelerate_FRAMEWORK}
+	${LAPACK_LIBRARIES}
 	luabind
 )
 
