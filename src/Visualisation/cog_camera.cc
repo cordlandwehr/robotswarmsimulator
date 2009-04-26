@@ -31,6 +31,8 @@ const float kSpeedf = 0.1;
 const float kSpeedMovef = 1.0;
 const float kSpeedUpf = 0.4;
 
+const float eps = 0.4;
+
 }
 CogCamera::CogCamera(): rot_theta_(1.0), rot_phi_(0.0), radius_(5.0){
 
@@ -85,12 +87,28 @@ void CogCamera::strafe_camera(float speed){
  }
 
  void CogCamera::move_up(){
+	 Vector3d old_sphere_vec = sphere_vec_;
 	 move_camera_up_down(kSpeedUpf);
+
+	 Vector3d new_sphere_vec = sphere_vec_;
+	 double y = std::fabs(new_sphere_vec(1)) - radius_;
+	 if( std::sqrt( new_sphere_vec(0)* new_sphere_vec(0) + y*y + new_sphere_vec(2)*new_sphere_vec(2) )< eps*radius_ ){
+		 sphere_vec_ = old_sphere_vec;
+	 }
 
  }
 
 void CogCamera::move_down(){
-	move_camera_up_down( - kSpeedUpf );
+
+	Vector3d old_sphere_vec = sphere_vec_;
+	 move_camera_up_down( - kSpeedUpf );
+
+	 Vector3d new_sphere_vec = sphere_vec_;
+	 double y = std::fabs(new_sphere_vec(1)) - radius_;
+	 if( std::sqrt( new_sphere_vec(0)* new_sphere_vec(0) + y*y + new_sphere_vec(2)*new_sphere_vec(2) )< eps*radius_ ){
+		 sphere_vec_ = old_sphere_vec;
+	 }
+
 }
 
 

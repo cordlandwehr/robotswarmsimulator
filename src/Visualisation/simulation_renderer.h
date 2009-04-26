@@ -364,7 +364,7 @@ private:
 
 	ProjectionType projection_type_  ;
 
-	boost::array<boost::shared_ptr<SkyBox>,4 > sky_box_;
+	boost::array<boost::shared_ptr<SkyBox>,5 > sky_box_;
 
 	/**
 	 * A helper function to draw text

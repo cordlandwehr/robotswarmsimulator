@@ -61,7 +61,7 @@ const int kTextSpacing=15;
 const float kMarkerPointSize = 2.0;
 
 
-const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/"};
+const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
 
 
@@ -182,7 +182,7 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	for(int i = 0; i < 4;i++){
+	for(int i = 0; i < 5;i++){
 		sky_box_[i].reset( new SkyBox() );
 		sky_box_[i]->init( kSkyBoxTexName[i]);
 	}
