@@ -44,6 +44,12 @@ if(CGAL_FOUND)
 	add_definitions(-DUSE_CGAL)
 endif(CGAL_FOUND)
 
+# find/configure LAPACK
+if(APPLE)
+	find_library(Accelerate_FRAMEWORK Accelerate)
+	add_definitions(-DUSE_LAPACK)
+endif(APPLE)
+
 # generate executable of the above source files and link it
 add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
 target_link_libraries(RobotSwarmSimulator
@@ -53,6 +59,7 @@ target_link_libraries(RobotSwarmSimulator
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
 	${CGAL_LIBRARIES}
+	${Accelerate_FRAMEWORK}
 	luabind
 )
 

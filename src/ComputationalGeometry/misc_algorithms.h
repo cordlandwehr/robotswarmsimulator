@@ -12,14 +12,17 @@
 #ifndef GEOMETRY_H_
 #define GEOMETRY_H_
 
-#include <boost/unordered_map.hpp>
 #include <vector>
 #include <utility>
-#include "../Utilities/vector_arithmetics.h"
+
+#include <boost/tuple/tuple.hpp>
+#include <boost/unordered_map.hpp>
+
+#include <Utilities/vector_arithmetics.h>
+
 
 class MiscAlgorithms {
 public:
-
 	/**
 	 * Compares two Vector3ds a and b on given axis. Returns true iff a.axis <= b.axis.
 	 * @param vector a
@@ -60,17 +63,16 @@ public:
 	 * \return sorts given vector of indices for Vector3ds by euclidean distance from origin
 	 */
 	static void sort_pointslist_by_distance(std::vector< std::pair<Vector3d,std::size_t> >& point_list, int p);
+	
+	
+	/**
+	 * \brief Calculates the shim plane for the given set of points.
+	 */
+	static boost::tuple<Vector3d,Vector3d> calculate_shim_plane(const std::vector<Vector3d>& pos);
 
 
 private:
-	MiscAlgorithms();
-	virtual ~MiscAlgorithms();
-
 	static const double kEpsilon;	// accuracy value
-
-	// compares two vectors by there p-norm
-	static bool comperator(Vector3d a, Vector3d b);
-
 };
 
 #endif /* GEOMETRY_H_ */

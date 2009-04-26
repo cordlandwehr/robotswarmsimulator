@@ -21,6 +21,12 @@ include_directories(${LUA_INCLUDE_DIR})
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
+# find/configure LAPACK
+if(APPLE)
+	find_library(Accelerate_FRAMEWORK Accelerate)
+	add_definitions(-DUSE_LAPACK)
+endif(APPLE)
+
 # generate executable of the above source files and link it
 add_executable(RSSUnitTests ${RSSTESTS_SRCS})
 target_link_libraries(RSSUnitTests
@@ -29,6 +35,7 @@ target_link_libraries(RSSUnitTests
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
+	${Accelerate_FRAMEWORK}
 	luabind
 )
 
