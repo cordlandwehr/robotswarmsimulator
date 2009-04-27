@@ -17,17 +17,19 @@
  */
 class TimePoint {
 public:
-	TimePoint() : locked_(false) {}
+	TimePoint() : world_information_locked_(false), statistics_locked_(false) {}
 	/**
 	 * copy constructor copies the world information and the statistical data
 	 * Note that a copy will always be locked (no modifications possible)
 	 */
 	TimePoint(const TimePoint& rhs) : world_information_(new WorldInformation(rhs.world_information())),
-	                                  locked_(true) {};
+	                                  world_information_locked_(true),
+	                                  statistics_locked_(true) {};
 
 	void set_world_information(boost::shared_ptr<WorldInformation> world_information) {
-		if(!locked_) {
+		if(!world_information_locked_) {
 			world_information_ = world_information;
+			world_information_locked_ = true;
 		}
 	}
 
@@ -42,14 +44,25 @@ public:
 	/**
 	 * locks the time point
 	 */
-	void lock() { locked_ = true;}
+	void lock() {
+		world_information_locked_ = true;
+		statistics_locked_ = true;
+	}
 private:
 	boost::shared_ptr<WorldInformation> world_information_;
 
 	/**
 	 * true iff no further modifications should be allowed.
 	 */
-	bool locked_;
+	bool statistics_locked_;
+
+	/**
+	 * true iff no further modification of the world information should be allowed.
+	 * This is set to true as soon as the world information is inserted.
+	 */
+	bool world_information_locked_;
+
+
 };
 
 #endif /* TIME_POINT_H_ */
