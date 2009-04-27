@@ -9,6 +9,7 @@
 #define TIME_POINT_H_
 
 #include "../Model/world_information.h"
+#include "../Statistics/statistics_data_object.h"
 #include <boost/smart_ptr.hpp>
 
 /**
@@ -26,6 +27,9 @@ public:
 	                                  world_information_locked_(true),
 	                                  statistics_locked_(true) {};
 
+	/**
+	 * Inserts a new world information and locks the world information part of the time point
+	 */
 	void set_world_information(boost::shared_ptr<WorldInformation> world_information) {
 		if(!world_information_locked_) {
 			world_information_ = world_information;
@@ -33,9 +37,20 @@ public:
 		}
 	}
 
+	/**
+	 * Inserts a new statistics object and locks the statistics part of the time point
+	 */
+	void set_statistics_data_object(boost::shared_ptr<StatisticsDataObject> stat_object) {
+		if(!statistics_locked_) {
+			statistics_data_object_ = stat_object;
+			statistics_locked_ = true;
+		}
+	}
+
 	const boost::shared_ptr<WorldInformation> world_information_ptr() const {return world_information_;}
 	const WorldInformation& world_information() const {return *world_information_;}
 
+	const StatisticsDataObject& statistics_data_object() const {return *statistics_data_object_;}
 	/**
 	 * checks if this time point represents a real WorldInformation object
 	 */
@@ -50,6 +65,7 @@ public:
 	}
 private:
 	boost::shared_ptr<WorldInformation> world_information_;
+	boost::shared_ptr<StatisticsDataObject> statistics_data_object_;
 
 	/**
 	 * true iff no further modifications should be allowed.

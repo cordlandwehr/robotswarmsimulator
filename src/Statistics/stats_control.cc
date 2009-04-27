@@ -1,6 +1,7 @@
 #include "stats_control.h"
 #include <SimulationControl/time_point.h>
 #include <Utilities/console_output.h>
+#include "statistics_data_object.h"
 
 StatsControl::StatsControl() {
 	stats_initialized_ = false;
