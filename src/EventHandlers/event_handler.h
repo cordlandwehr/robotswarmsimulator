@@ -62,7 +62,7 @@ public:
 	/**
 	 * handles the given event. By calling appropriate handlers and updating the listeners.
 	 */
-	void handle_event(boost::shared_ptr<Event> event);
+	void handle_event(boost::shared_ptr<Event> event, TimePoint& time_point);
 
 	/**
 	 * registers a new listener.
@@ -112,24 +112,24 @@ private:
 	/**
 	 * handles the given look event by delegating it to RobotControl
 	 */
-	void handle_look_event(boost::shared_ptr<LookEvent> look_event);
+	boost::shared_ptr<WorldInformation> handle_look_event(boost::shared_ptr<LookEvent> look_event);
 
 	/**
 	 * handles the given compute event by delegating it to RobotControl
 	 */
-	void handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event);
+	boost::shared_ptr<WorldInformation> handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event);
 
 	/**
 	 * handles the given HandleRequests event by doing the following
 	 * 1. producing a new WorldInformation object by extrapolating and handling requests
 	 * 2. adding the new WorldInformation object to the history
 	 */
-	void handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
+	boost::shared_ptr<WorldInformation> handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
 
 	/**
 	 * informs all listeners after each event
 	 */
-	void update_listeners(boost::shared_ptr<Event> event);
+	void update_listeners(const TimePoint& time_point, boost::shared_ptr<Event> event);
 
 	/**
 	 * generates a new WorldInformation object by extrapolating it from the newest old one to time t

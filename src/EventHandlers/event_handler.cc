@@ -37,7 +37,7 @@
 #include "event_handler.h"
 #include <iostream>
 
-void EventHandler::handle_event(boost::shared_ptr<Event> event) {
+void EventHandler::handle_event(boost::shared_ptr<Event> event, TimePoint& time_point) {
 	// check that it is not for a past time
 	int time_difference = event->time() - time_of_last_event_;
 	if(time_difference < 0) {
@@ -51,29 +51,24 @@ void EventHandler::handle_event(boost::shared_ptr<Event> event) {
 	// The cast will return NULL if it is the wrong kind of event.
 	// A shared_ptr pointing to NULL converts to FALSE in a condition.
 	if(boost::shared_ptr<LookEvent> look_event = boost::dynamic_pointer_cast<LookEvent>(event)) {
-		handle_look_event(look_event);
+		time_point.set_world_information(handle_look_event(look_event));
 	} else if(boost::shared_ptr<ComputeEvent> compute_event = boost::dynamic_pointer_cast<ComputeEvent>(event)) {
-		handle_compute_event(compute_event);
+		time_point.set_world_information(handle_compute_event(compute_event));
 	} else if(boost::shared_ptr<HandleRequestsEvent> handle_requests_event =
 	          boost::dynamic_pointer_cast<HandleRequestsEvent> (event)) {
-		handle_handle_requests_event(handle_requests_event);
+		time_point.set_world_information(handle_handle_requests_event(handle_requests_event));
 	} else {
 		throw std::invalid_argument("Illegal type of event.");
 	}
 
 	// update all simulation listeners
-	update_listeners(event);
+	update_listeners(time_point, event);
 }
 
-void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
+boost::shared_ptr<WorldInformation> EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
 	// produce extrapolated world information
 	boost::shared_ptr<WorldInformation> new_world_information =
 		extrapolate_old_world_information(look_event->time());
-
-	boost::shared_ptr<TimePoint> new_time_point(new TimePoint());
-	new_time_point->set_world_information(new_world_information);
-	// push back new time point
-	history_->insert(new_time_point);
 
 	// update robot control with the extrapolated world information
 	robot_control_->update(new_world_information);
@@ -81,9 +76,11 @@ void EventHandler::handle_look_event(boost::shared_ptr<LookEvent> look_event) {
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, look_event->robot_subset()) {
 		robot_control_->compute_view(*robot);
 	}
+
+	return new_world_information;
 }
 
-void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event) {
+boost::shared_ptr<WorldInformation> EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event) {
   BOOST_FOREACH(boost::shared_ptr<Robot> robot, compute_event->robot_subset()) {
 	  // compute the requests for this robot.
 	  std::set<boost::shared_ptr<Request> > request_set = robot_control_->compute_new_request(*robot);
@@ -93,9 +90,10 @@ void EventHandler::handle_compute_event(boost::shared_ptr<ComputeEvent> compute_
 		  compute_event->add_to_requests(request);
 	  }
   }
+  return extrapolate_old_world_information(compute_event->time());
 }
 
-void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event) {
+boost::shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event) {
 	// produce extrapolated world information
 	boost::shared_ptr<WorldInformation> new_world_information =
 	    extrapolate_old_world_information(handle_requests_event->time());
@@ -153,10 +151,7 @@ void EventHandler::handle_handle_requests_event(boost::shared_ptr<HandleRequests
 		}
 	}
 
-	// push back new time point
-	boost::shared_ptr<TimePoint> new_time_point(new TimePoint());
-	new_time_point->set_world_information(new_world_information);
-	history_->insert(new_time_point);
+	return new_world_information;
 }
 
 boost::shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(int time) {
@@ -187,8 +182,8 @@ void EventHandler::register_listener(boost::shared_ptr<SimulationListener> liste
 	listeners_.push_back(listener);
 }
 
-void EventHandler::update_listeners(boost::shared_ptr<Event> event) {
+void EventHandler::update_listeners(const TimePoint& time_point, boost::shared_ptr<Event> event) {
 	BOOST_FOREACH(boost::shared_ptr<SimulationListener> listener, listeners_) {
-		listener->update(history_->get_newest().world_information(), event);
+		listener->update(time_point, event);
 	}
 }

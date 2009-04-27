@@ -80,7 +80,9 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 		// handle event
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(position_request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 
 		// get reached point
@@ -155,7 +157,9 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 		// handle event
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 
 		// computation of mean displacement and deviation
@@ -228,7 +232,9 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 		// handle event
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
 		handle_requests_event->add_to_requests(request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 
 		// computation of mean displacement and deviation

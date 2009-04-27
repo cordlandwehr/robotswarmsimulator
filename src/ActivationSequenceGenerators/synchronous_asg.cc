@@ -65,7 +65,7 @@ boost::shared_ptr<Event> SynchronousASG::get_next_event() {
 	return event;
 }
 
-void SynchronousASG::update(const WorldInformation& world_information,
+void SynchronousASG::update(const TimePoint& time_point,
                             boost::shared_ptr<Event> last_event) {
 	// check if it is a compute event
 	ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (last_event.get());

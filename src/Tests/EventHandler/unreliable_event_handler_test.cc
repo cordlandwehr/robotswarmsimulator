@@ -100,7 +100,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_all_test, SimpleWo
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 	}
 
@@ -178,7 +180,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_none_test, SimpleW
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 	}
 
@@ -256,7 +260,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_few_test, SimpleWo
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 	}
 
@@ -335,7 +341,9 @@ BOOST_FIXTURE_TEST_CASE(unreliable_event_handler_test_discard_many_test, SimpleW
 		handle_requests_event->add_to_requests(position_request);
 		handle_requests_event->add_to_requests(type_change_request);
 		handle_requests_event->add_to_requests(velocity_request);
-		event_handler.handle_event(handle_requests_event);
+		boost::shared_ptr<TimePoint> time_point(new TimePoint());
+		event_handler.handle_event(handle_requests_event, *time_point);
+		history->insert(time_point);
 		history->get_oldest_unused(); // consume, to make sure that we do not block
 	}
 

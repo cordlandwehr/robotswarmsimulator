@@ -71,7 +71,7 @@ public:
 	 * \param world_information the current worldinformation. Must not be NULL.
 	 * \param event the current event. Can be empty shared_ptr (event.get()==NULL)
 	 */
-	void update(const WorldInformation& world_information,
+	void update(const TimePoint& time_point,
 			    boost::shared_ptr<Event> event);
 
 	/**

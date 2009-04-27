@@ -65,7 +65,9 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_position_test, SimpleWorldF
 	/* END: InitialTest */
 
 	// handle event for position request
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	/* BEGIN: EventHandledTest
 	 * - world information at time 4
@@ -212,7 +214,9 @@ BOOST_FIXTURE_TEST_CASE(positiont_event_handler_test_local_coordinate_system, Si
 	handle_requests_event->add_to_requests(position_request);
 
 	// handling the event
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	// checking new position of robot_a: should be at (-10.0, 0.2, 6.0)
 	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());

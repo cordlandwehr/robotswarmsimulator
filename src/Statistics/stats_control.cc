@@ -1,4 +1,5 @@
 #include "stats_control.h"
+#include <SimulationControl/time_point.h>
 #include <Utilities/console_output.h>
 
 StatsControl::StatsControl() {
@@ -91,7 +92,8 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 	}
 }
 
-void StatsControl::update(const WorldInformation& world_information, boost::shared_ptr<Event> event) {
+void StatsControl::update(const TimePoint& time_point, boost::shared_ptr<Event> event) {
+	const WorldInformation & world_information = time_point.world_information();
 	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug)  << "StatsControl::update(...) with WorldInformation.time==" <<  world_information.time();
 
 

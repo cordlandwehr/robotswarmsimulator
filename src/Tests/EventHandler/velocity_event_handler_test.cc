@@ -72,7 +72,9 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 	/* END: InitialTest */
 
 	// handle event for velocity request
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	/* BEGIN: EventHandledTest1
 	 * - world information at time 3
@@ -90,7 +92,9 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_velocity_test, SimpleWorldFi
 
 	// construction and handling of empty handle_requests_event
 	handle_requests_event.reset(new HandleRequestsEvent(8));
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point_b(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point_b);
+	history->insert(time_point_b);
 
 	/* BEGIN: EventHandledTest2
 	 * - world information at time 8
@@ -153,7 +157,9 @@ BOOST_FIXTURE_TEST_CASE(velocity_event_handler_test_local_coordinate_system, Sim
 	handle_requests_event->add_to_requests(velocity_request);
 
 	// handling the event
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	// checking new velocity of robot_a: should be (3.0, -1.0, 0.75)
 	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_a->id());

@@ -53,9 +53,11 @@ BOOST_FIXTURE_TEST_CASE(event_handler_test, SimpleWorldFixture)
 	event_handler.register_listener(listener_b);
 
 	// Test Set up: Constructing Event and passing it to the handler
-	boost::shared_ptr<LookEvent> look_event;
-	look_event.reset(new LookEvent(5));
-	event_handler.handle_event(look_event);
+    boost::shared_ptr<LookEvent> look_event;
+    look_event.reset(new LookEvent(5));
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(look_event, *time_point);
+	history->insert(time_point);
 
 	// newest world information is for t = 5
 	BOOST_CHECK_EQUAL(history->get_newest().world_information().time(), 5);
@@ -128,7 +130,9 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_extrapolation_test, SimpleWorldFi
 	handle_requests_event->add_to_requests(position_request);
 
 	// Pass the Event to the Handler
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	// handle_position_request was called once
 	// BOOST_CHECK_EQUAL(event_handler.calls_position_request(),1);
@@ -229,60 +233,15 @@ BOOST_FIXTURE_TEST_CASE(abstract_event_handler_past_event_test, SimpleWorldFixtu
 	// Test set up: Constructing first event and passing it to the handler
 	boost::shared_ptr<LookEvent> look_event;
 	look_event.reset(new LookEvent(3));
-	event_handler.handle_event(look_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(look_event, *time_point);
+	history->insert(time_point);
 
 	// constructing the second event for past time t = 1
 	boost::shared_ptr<LookEvent> look_event_b;
 	look_event_b.reset(new LookEvent(1));
 
 	// Expect disappointment
-	BOOST_CHECK_THROW(event_handler.handle_event(look_event_b), std::invalid_argument);
+	boost::shared_ptr<TimePoint> time_point_b(new TimePoint());
+	BOOST_CHECK_THROW(event_handler.handle_event(look_event_b, *time_point_b), std::invalid_argument);
 }
-
-
-/*
- * Test: Pass two Handle Requests Events
- * Expected Results: ...
- *
- */
-
-/*
- * Test: pass an nonexisting request
- * Expected Results: An exception is thrown
- */
-
-/*
- * Test: pass an nonexisting event
- * Expected Results: An exception is thrown
- */
-BOOST_FIXTURE_TEST_CASE(abstract_event_handler_invalid_event_test, SimpleWorldFixture) {
-	// Test set up: EventHandler and Listeners
-	boost::shared_ptr<AbstractViewFactory> view_factory;
-	view_factory.reset(new ViewFactory<View> ());
-
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
-	EventHandler event_handler(history, robot_control);
-
-
-	boost::shared_ptr<TestSimulationListener> listener_a;
-	listener_a.reset(new TestSimulationListener());
-
-	boost::shared_ptr<TestSimulationListener> listener_b;
-	listener_b.reset(new TestSimulationListener());
-
-	event_handler.register_listener(listener_a);
-	event_handler.register_listener(listener_b);
-
-	// TODO(craupach) repair test
-	// constructing the second event for past time t = 1
-	// boost::shared_ptr<ThePigsCanFlyEvent> invalid_event;
-	// invalid_event.reset(new ThePigsCanFlyEvent(1));
-
-	// Expect disappointment
-	// BOOST_CHECK_THROW(event_handler.handle_event(invalid_event), std::invalid_argument);
-}
-
-/*
- * Test: check if obstacles / marker information get copied correctly
- * TODO(craupach) add obstacles and markers to the fixture.
- */

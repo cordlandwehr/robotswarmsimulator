@@ -12,6 +12,7 @@
 
 class WorldInformation;
 class Event;
+class TimePoint;
 
 /**
  * SimulationListener is an interface to be implemented by classes which wish to be informed of handled
@@ -27,10 +28,10 @@ public:
 	 * It is not guaranteed that last_event is a handle_request event and that world_information was generated
 	 * for last_event.
 	 *
-	 * \param A constant reference to the newest world information
+	 * \param A constant reference to a time point containing the newest world information
 	 * \param The last handled event
 	 */
-	virtual void update(const WorldInformation& world_information,
+	virtual void update(const TimePoint& time_point,
 			            boost::shared_ptr<Event> last_event) = 0;
 };
 

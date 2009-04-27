@@ -106,7 +106,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	// send initial worldinformation to statistics
 	if (create_statistics==true) {
 		boost::shared_ptr<Event> foo = boost::shared_ptr<Event>();
-		stats_->update(*(initial_world_information.get()), foo);
+		stats_->update(*initial_time_point, foo);
 	}
 
 	camera_position_ = params["CAMERA_POSITION"];
@@ -115,9 +115,14 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 
 void SimulationKernel::step() {
+	// create a new time point
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
 
-	event_handler_->handle_event(asg_->get_next_event());
-	//std::cout << "History Size: " << history_->size() << std::endl;
+	// fill time point
+	event_handler_->handle_event(asg_->get_next_event(), *time_point);
+
+	// insert time point
+	history_->insert(time_point);
 }
 
 

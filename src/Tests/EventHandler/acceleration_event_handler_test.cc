@@ -72,7 +72,9 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_acceleration_test, Simpl
 	/* END: InitialTest */
 
 	// handle event for acceleration request
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	/* BEGIN: EventHandledTest1
 	 * - world information at time 3
@@ -133,7 +135,9 @@ BOOST_FIXTURE_TEST_CASE(acceleration_event_handler_test_local_coordinate_system,
 	handle_requests_event->add_to_requests(acceleration_request);
 
 	// handling the event
-	event_handler.handle_event(handle_requests_event);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
 
 	// checking new acceleration of robot_b: should be (2.0, 0.0, 2.25)
 	const RobotData& robot_data_after = history->get_newest().world_information().get_according_robot_data(robot_b->id());
