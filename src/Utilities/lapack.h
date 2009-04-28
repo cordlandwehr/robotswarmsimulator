@@ -15,8 +15,8 @@
 #else
 
 #ifdef WIN32 // should work for MinGW, not tested for Visual Studio
-#include <blaswrap.h>
-#include <f2c.h>
+#include <Utilities/blaswrap.h>
+#include <Utilities/f2c.h>
 
 /* ---------- Declarations of the used lapack methods (see sources of your lapack implementation) ---------- */
 int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work,
