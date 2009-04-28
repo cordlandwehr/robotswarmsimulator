@@ -26,6 +26,7 @@
 #include <Utilities/szenario_generator.h>
 #include <Utilities/console_output.h>
 
+#include "aiee.h"
 #include "mubalabieeyes.h"
 
 
@@ -77,6 +78,7 @@ int main(int argc, char** argv) {
 
 	// hidden option list, pssst ;-)
 	po::options_description top_secret_options("Top Secret");
+	top_secret_options.add_options()("aiee", "");
 	top_secret_options.add_options()("mubalabieeyes", "");
 
 	po::options_description options;
@@ -127,6 +129,10 @@ int main(int argc, char** argv) {
 	}
 
 	// ppssssstt
+	if (vm.count("aiee")) {
+		aiee();
+		return 0;
+	}
 	if (vm.count("mubalabieeyes")) {
 		mubalabieeyes();
 		return 0;

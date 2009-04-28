@@ -18,9 +18,11 @@
 #include <blaswrap.h>
 #include <f2c.h>
 
-/* ---------- Declarations of the used lapack methods (see your lapack implementation sources) ---------- */
+/* ---------- Declarations of the used lapack methods (see sources of your lapack implementation) ---------- */
 int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work,
            integer *lwork, integer *info);
+int dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
+            doublereal *, integer *, doublereal *, integer *, integer *);
 #endif
 
 // Under Mac OS X, the Accelerate framework is used (it includes an implementation of CLAPACK).
