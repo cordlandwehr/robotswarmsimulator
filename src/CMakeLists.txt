@@ -28,10 +28,7 @@ include_directories(${LUA_INCLUDE_DIR})
 
 # find/configure CGAL
 find_package(CGAL)
-if(CGAL_FOUND)
-	include(${CGAL_USE_FILE})
-	add_definitions(-DUSE_CGAL)
-endif(CGAL_FOUND)
+include(${CGAL_USE_FILE})
 
 # find/configure LAPACK
 if(APPLE)

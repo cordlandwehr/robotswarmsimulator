@@ -5,12 +5,12 @@
  *  Created by Peter Kling on 06.04.09.
  */
 
-#ifndef USE_CGAL // if CGAL not available, don't include the full easter egg
-void mubalabieeyes() {
-	std::cout << "You found 'MUBALABIEEYES', but you seem not to have a working CGAL environment :-/" << std::endl;
-	std::cout << "If you want to know what 'MUBALABIEEYES' is, install/setup CGAL and come back!" << std::endl;
-}
-#else // CGAL available --> go on
+//#ifndef USE_CGAL // if CGAL not available, don't include the full easter egg
+//void mubalabieeyes() {
+//	std::cout << "You found 'MUBALABIEEYES', but you seem not to have a working CGAL environment :-/" << std::endl;
+//	std::cout << "If you want to know what 'MUBALABIEEYES' is, install/setup CGAL and come back!" << std::endl;
+//}
+//#else // CGAL available --> go on
 
 
 #include <CGAL/Cartesian.h>
@@ -107,4 +107,4 @@ void mubalabieeyes() {
 	<< " comprehensive list of topics" << std::endl << std::endl;
 }
 
-#endif /* USE_CGAL */
+//#endif /* USE_CGAL */

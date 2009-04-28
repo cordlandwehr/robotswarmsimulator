@@ -38,11 +38,8 @@ include_directories(${luabind_SOURCE_DIR})
 
 # find/configure CGAL
 # TODO(peter) packaging of CGAL libraries for release builds
-find_package(CGAL)
-if(CGAL_FOUND)
-	include(${CGAL_USE_FILE})
-	add_definitions(-DUSE_CGAL)
-endif(CGAL_FOUND)
+find_package(CGAL REQUIRED)
+include(${CGAL_USE_FILE})
 
 # find/configure LAPACK
 if(APPLE)
