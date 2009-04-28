@@ -182,7 +182,7 @@ void EventHandler::register_listener(boost::shared_ptr<SimulationListener> liste
 	listeners_.push_back(listener);
 }
 
-void EventHandler::update_listeners(const TimePoint& time_point, boost::shared_ptr<Event> event) {
+void EventHandler::update_listeners(TimePoint& time_point, boost::shared_ptr<Event> event) {
 	BOOST_FOREACH(boost::shared_ptr<SimulationListener> listener, listeners_) {
 		listener->update(time_point, event);
 	}

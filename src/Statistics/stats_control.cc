@@ -2,6 +2,10 @@
 #include <SimulationControl/time_point.h>
 #include <Utilities/console_output.h>
 #include "statistics_data_object.h"
+#include "../Views/view.h"
+#include "../Model/robot_identifier.h"
+#include <boost/graph/strong_components.hpp>
+#include <boost/graph/graph_utility.hpp>
 
 StatsControl::StatsControl() {
 	stats_initialized_ = false;
@@ -93,10 +97,17 @@ void StatsControl::init(map<std::string, std::string> &params, std::string outpu
 	}
 }
 
-void StatsControl::update(const TimePoint& time_point, boost::shared_ptr<Event> event) {
+void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event) {
 	const WorldInformation & world_information = time_point.world_information();
 	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug)  << "StatsControl::update(...) with WorldInformation.time==" <<  world_information.time();
 
+	/**
+	 * TODO(craupach): This should not happen here!!
+	 * calculate visibility graph
+	 */
+	boost::shared_ptr<StatisticsDataObject> data(new StatisticsDataObject());
+	calculate_visibility_graph(world_information, data);
+	time_point.set_statistics_data_object(data);
 
 	if (stats_calc_indata_.world_info_.get() == NULL) {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "no current world_info, so set it to given";
@@ -346,4 +357,46 @@ void StatsControl::update_subsets() {
 		cur_subsets_.push_back(actslaves);
 	if (stats_cfg_.is_subset_inactslaves())
 		cur_subsets_.push_back(inactslaves);
+}
+
+
+void StatsControl::calculate_visibility_graph(const WorldInformation& world_info,
+                                              boost::shared_ptr<StatisticsDataObject> data){
+	std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots;
+	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
+
+	// init the graph
+	boost::shared_ptr<boost::adjacency_list<> > vis_graph(
+			new boost::adjacency_list<>(world_info.robot_data().size()));
+
+	boost::shared_ptr<std::vector<int> > components(new std::vector<int>());
+	components->resize(world_info.robot_data().size());
+
+	//go through all the robots and their visible neighbors, create edges in graph
+	for (it_robot = world_info.robot_data().begin(); it_robot
+	!= world_info.robot_data().end(); ++it_robot) {
+		boost::shared_ptr<const View> view = (*it_robot)->view().lock();
+
+		if (view) {
+			visible_robots = view->get_visible_robots((*it_robot)->robot());
+
+			BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots){
+				boost::add_edge((*it_robot)->id()->id(), cur_id->id(), *vis_graph);
+			}
+		}
+	}
+
+	//calculate connected components
+	int number_connected_components = boost::strong_components((*vis_graph),&((*components)[0]));
+
+	if (number_connected_components != 1) {
+		//single unconnected robots may not get added to the graph - offset accounts for that
+		int offset = world_info.robot_data().size() - boost::num_vertices(*vis_graph);
+	}
+
+	//set 0 if graph is connected, 1 if it is not
+	size_t vis_graph_is_connected = (number_connected_components==1 ? 0 : 1);
+
+	// fill in data object
+	data->set_visibility_graph(vis_graph, vis_graph_is_connected, components);
 }

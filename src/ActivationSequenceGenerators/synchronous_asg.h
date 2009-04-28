@@ -58,7 +58,7 @@ public:
 	 * \param A constant refrence to the newest world information
 	 * \param The last handled event
 	 */
-	void update(const TimePoint& time_point,
+	void update(TimePoint& time_point,
 			    boost::shared_ptr<Event> event);
 
 private:

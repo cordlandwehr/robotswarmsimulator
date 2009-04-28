@@ -57,7 +57,7 @@ boost::shared_ptr<Event> AtomicSemisynchronousASG::get_next_event() {
 	return event;
 }
 
-void AtomicSemisynchronousASG::update(const TimePoint& time_point,
+void AtomicSemisynchronousASG::update(TimePoint& time_point,
                                boost::shared_ptr<Event> last_event) {
 	// check if it is a compute event
 	ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (last_event.get());

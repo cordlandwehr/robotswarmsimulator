@@ -50,6 +50,8 @@
 #include "stats_config.h"
 #include "stats_calc.h"
 
+class StatisticsDataObject;
+
 class StatsControl : public SimulationListener {
 public:
 	static const bool DEBUG = false;
@@ -71,7 +73,7 @@ public:
 	 * \param world_information the current worldinformation. Must not be NULL.
 	 * \param event the current event. Can be empty shared_ptr (event.get()==NULL)
 	 */
-	void update(const TimePoint& time_point,
+	void update(TimePoint& time_point,
 			    boost::shared_ptr<Event> event);
 
 	/**
@@ -139,6 +141,25 @@ private:
 	 */
 	void do_datadump(const WorldInformation& world_information, boost::shared_ptr<Event> event);
 
+	/**
+	 * calculates the visibility graph for the given world information
+	 * TODO(craupach) doing it here does not actually makes much sense with regard to the structure of
+	 * the statistics module. Should be moved appropriately!!
+	 *
+	 *
+	 * calculates the components of the visibility graph by placing the information from
+	 * world_info and the according views into the boost graph data structure
+	 * it then uses the boost component algorithm
+	 *
+	 * graph contains the visibility graph in the boost data structure
+	 * vertices are integers which correspond to robot ids
+	 * component contains a vector which maps robot ids to a component
+	 *
+	 * if graph is connected, returns 0, if it is not, it returns 1
+
+	 */
+	void calculate_visibility_graph(const WorldInformation& world_info,
+			boost::shared_ptr<StatisticsDataObject> data);
 };
 
 #endif /* STATS_CONTROL_H_ */

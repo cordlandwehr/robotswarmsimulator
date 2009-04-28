@@ -12,6 +12,8 @@
 #include "../Statistics/statistics_data_object.h"
 #include <boost/smart_ptr.hpp>
 
+#include <iostream>
+
 /**
  * The TimePoint class encapusaltes a WorldInformation Object and statistical information for a certain
  * point in time.
@@ -25,7 +27,12 @@ public:
 	 */
 	TimePoint(const TimePoint& rhs) : world_information_(new WorldInformation(rhs.world_information())),
 	                                  world_information_locked_(true),
-	                                  statistics_locked_(true) {};
+	                                  statistics_locked_(true) {
+		if(rhs.statistics_data_object_ptr()) {
+			statistics_data_object_ =
+			    boost::shared_ptr<StatisticsDataObject> (new StatisticsDataObject(rhs.statistics_data_object()));
+		}
+	};
 
 	/**
 	 * Inserts a new world information and locks the world information part of the time point
@@ -51,6 +58,7 @@ public:
 	const WorldInformation& world_information() const {return *world_information_;}
 
 	const StatisticsDataObject& statistics_data_object() const {return *statistics_data_object_;}
+	const boost::shared_ptr<StatisticsDataObject> statistics_data_object_ptr() const {return statistics_data_object_;}
 	/**
 	 * checks if this time point represents a real WorldInformation object
 	 */

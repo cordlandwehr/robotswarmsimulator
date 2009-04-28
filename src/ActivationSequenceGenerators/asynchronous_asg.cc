@@ -120,7 +120,7 @@ boost::shared_ptr<Event> AsynchronousASG::get_next_event() {
 	return event;
 }
 
-void AsynchronousASG::update(const TimePoint& time_point,
+void AsynchronousASG::update(TimePoint& time_point,
                             boost::shared_ptr<Event> last_event) {
 	// check what kind of event we got. Only care for compute events since they contain unhandled requests.
 	if(boost::shared_ptr<ComputeEvent> compute_event = boost::dynamic_pointer_cast<ComputeEvent> (last_event)) {

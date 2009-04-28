@@ -129,7 +129,7 @@ private:
 	/**
 	 * informs all listeners after each event
 	 */
-	void update_listeners(const TimePoint& time_point, boost::shared_ptr<Event> event);
+	void update_listeners(TimePoint& time_point, boost::shared_ptr<Event> event);
 
 	/**
 	 * generates a new WorldInformation object by extrapolating it from the newest old one to time t

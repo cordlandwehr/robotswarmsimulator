@@ -27,6 +27,7 @@
 #include "../Model/robot_identifier.h"
 
 #include "../SimulationControl/time_point.h"
+#include "../Statistics/statistics_data_object.h"
 
 #include "camera.h"
 #include "robot_renderer.h"
@@ -247,7 +248,6 @@ void SimulationRenderer::setup_projection(){
 void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePoint> & time_point){
 	boost::shared_ptr<WorldInformation> world_info = time_point->world_information_ptr();
 	this->extrapolate_ = extrapolate;
-	if (render_visibility_graph_ && world_info_!=world_info) calculate_visibility_graph(world_info);
 	world_info_=world_info;
 
 
@@ -307,7 +307,12 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	}
 
 	if (render_visibility_graph_){
-		draw_visibility_graph();
+		if(time_point->statistics_data_object_ptr()) {
+			draw_visibility_graph(time_point->statistics_data_object());
+		} else {
+			// TODO(craupach) Console output warning
+			std::cout << "no valid statistics object" << std::endl;
+		}
 	}
 
 	if (render_help_){
@@ -393,8 +398,7 @@ void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
 			break;
 
 		case 'z':
-				render_visibility_graph_=!render_visibility_graph_;
-				calculate_visibility_graph(world_info_);
+				render_visibility_graph_ = !render_visibility_graph_;
 			break;
 		default:
 			break;
@@ -444,57 +448,20 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 	return 1;
 }
 
-void SimulationRenderer::draw_visibility_graph(){
-//in vis graph, ids of vertices correspond to ids of robots
-	if (vis_graph_){
-	boost::graph_traits< boost::adjacency_list <> >::edge_iterator i, end;
-	Vector3d source_pos, target_pos;
-	//iterate through the edges and draw lines
-	//get color from component table so that each component has its own color
-	//add 0 or 1 so that the first component is not green to indicate the graph is not connected
-	 for (boost::tie(i, end) = boost::edges(*vis_graph_); i != end; ++i) {
-		 source_pos=*world_info_->robot_data()[boost::source(*i,*vis_graph_)]->extrapolated_position(extrapolate_);
-		 target_pos=*world_info_->robot_data()[boost::target(*i,*vis_graph_)]->extrapolated_position(extrapolate_);
-		 draw_line(source_pos,target_pos, components_[boost::source(*i,*vis_graph_)]+vis_graph_is_connected_);
-	 }
-	}
-}
-
-void SimulationRenderer::calculate_visibility_graph(const boost::shared_ptr<WorldInformation> world_info){
-	std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots;
-	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
-//init the object variables
-	if (!(vis_graph_)) vis_graph_=boost::shared_ptr< boost::adjacency_list <> >(new boost::adjacency_list<>(world_info->robot_data().size()));
-	 if (components_.size()==0) components_.resize(world_info->robot_data().size());
-
-//reset the graph each time or else old edges would be retained
-	 (*vis_graph_).clear();
-
-//go through all the robots and their visible neighbors, create edges in graph
-	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
-		boost::shared_ptr<const View> view=(*it_robot)->view().lock();
-
-		if (view){
-				 visible_robots=view->get_visible_robots((*it_robot)->robot());
-
-				 BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
-					 boost::add_edge((*it_robot)->id()->id(), cur_id->id(), *vis_graph_);
-				 }
+void SimulationRenderer::draw_visibility_graph(const StatisticsDataObject& data){
+	//in vis graph, ids of vertices correspond to ids of robots
+	if (data.vis_graph_ptr()){
+		boost::graph_traits< boost::adjacency_list <> >::edge_iterator i, end;
+		Vector3d source_pos, target_pos;
+		// iterate through the edges and draw lines
+		// get color from component table so that each component has its own color
+		// add 0 or 1 so that the first component is not green to indicate the graph is not connected
+		for (boost::tie(i, end) = boost::edges(*(data.vis_graph_ptr())); i != end; ++i) {
+			source_pos=*world_info_->robot_data()[boost::source(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
+			target_pos=*world_info_->robot_data()[boost::target(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
+			draw_line(source_pos,target_pos, data.components().at(boost::source(*i,data.vis_graph()))+data.vis_graph_is_connected());
 		}
 	}
-//calculate connected components
-	 int number_connected_components=boost::strong_components((*vis_graph_),&components_[0]);
-
-	 if (number_connected_components==1){
-		std::cout<<"visibility graph IS connected"<<std::endl;
-	 }
-	 else{
-		 //single unconnected robots may not get added to the graph - offset accounts for that
-		 int offset=world_info->robot_data().size()-boost::num_vertices(*vis_graph_);
-		std::cout<<"visibility graph is NOT connected ("<<number_connected_components+offset<<" components)"<<std::endl;
-	 }
-//set 0 if graph is connected, 1 if it is not
-	 vis_graph_is_connected_= (number_connected_components==1 ? 0 : 1);
 }
 
 void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){

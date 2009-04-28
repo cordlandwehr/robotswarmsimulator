@@ -34,7 +34,7 @@ class Sphere;
 class RobotData;
 class Camera;
 class RobotRenderer;
-
+class StatisticsDataObject;
 
 
 class SimulationRenderer : public Visualizer {
@@ -336,26 +336,9 @@ private:
 	 * draw visibility graph (which robots can see others)
 	 */
 
-	void draw_visibility_graph();
-
-
-	  /**
-	    	 * calculates the components of the visibility graph by placing the information from
-	    	 * world_info and the according views into the boost graph data structure
-	    	 * it then uses the boost component algorithm
-	    	 *
-	    	 * graph contains the visibility graph in the boost data structure
-	    	 * vertices are integers which correspond to robot ids
-	    	 * component contains a vector which maps robot ids to a component
-	    	 *
-	    	 * if graph is connected, returns 0, if it is not, it returns 1
-	    	 */
-	    	void calculate_visibility_graph(const boost::shared_ptr<WorldInformation> world_info);
-
+	void draw_visibility_graph(const StatisticsDataObject& data);
 
 	void setup_projection();
-
-
 
 	enum ProjectionType {
 		PROJ_PERSP,
@@ -482,10 +465,6 @@ private:
 	boost::shared_ptr<RobotRenderer> robot_renderer_;
 
 	boost::shared_ptr<WorldInformation> world_info_;
-
-	std::vector<int> components_;
-	boost::shared_ptr<boost::adjacency_list <> > vis_graph_;
-	size_t vis_graph_is_connected_;
 
 	Texture tex_;
 

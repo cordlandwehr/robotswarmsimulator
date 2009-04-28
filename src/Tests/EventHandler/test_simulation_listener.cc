@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-void TestSimulationListener::update(const TimePoint& time_point,
+void TestSimulationListener::update(TimePoint& time_point,
                                     boost::shared_ptr<Event> last_event) {
 	times_update_called_++;
 	last_world_information_ = time_point.world_information();

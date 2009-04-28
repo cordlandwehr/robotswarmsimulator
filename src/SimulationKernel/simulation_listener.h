@@ -24,14 +24,15 @@ public:
 
 	/**
 	 * updates the listener after a event has happened.
-	 * World_information is guaranteed to be a pointer to the most recently generated WorldInformation object.
-	 * It is not guaranteed that last_event is a handle_request event and that world_information was generated
+	 * The time point is guaranteed to be a pointer to the most recently generated TimePoint object.
+	 * It is not guaranteed that last_event is a handle_request event and that time_point was generated
 	 * for last_event.
+	 * The time point will generally not be in the history at the time of calling.
 	 *
-	 * \param A constant reference to a time point containing the newest world information
+	 * \param A reference to a time point containing the newest (locked!) world information
 	 * \param The last handled event
 	 */
-	virtual void update(const TimePoint& time_point,
+	virtual void update(TimePoint& time_point,
 			            boost::shared_ptr<Event> last_event) = 0;
 };
 

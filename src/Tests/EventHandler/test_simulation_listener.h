@@ -19,7 +19,7 @@ class WorldInformation;
 class TestSimulationListener : public SimulationListener {
 public:
 	TestSimulationListener() : times_update_called_(0) {}
-	void update(const TimePoint& time_point,
+	void update(TimePoint& time_point,
 				boost::shared_ptr<Event> last_event);
 
 	int times_update_called() {return times_update_called_;}
