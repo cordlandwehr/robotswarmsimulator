@@ -30,12 +30,16 @@ typedef __CLPK_integer    integer;
 #include <Utilities/f2c.h>
 
 /* ---------- Declarations of the used lapack methods (see sources of your lapack implementation) ---------- */
+#ifndef WIN32 // extern "C" leads to compiler errors under Windows, but is needed under Linux?!? :-/
 extern "C" {
+#endif
 	int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work,
 	           integer *lwork, integer *info);
 	int dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
 	            doublereal *, integer *, doublereal *, integer *, integer *);
+#ifndef WIN32
 }
+#endif
 
 #endif /* __APPLE__ */
 

@@ -21,6 +21,10 @@ include_directories(${LUA_INCLUDE_DIR})
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
+# find/configure CGAL
+find_package(CGAL)
+include(${CGAL_USE_FILE})
+
 # find/configure LAPACK
 if(APPLE)
 	find_library(LAPACK_LIBRARIES Accelerate)
@@ -35,6 +39,11 @@ elseif(WIN32)
 		add_definitions(-DUSE_LAPACK)
 		set(LAPACK_LIBRARIES ${LAPACK_LIBRARY} ${LAPACK_BLAS_LIBRARY} ${LAPACK_F77_LIBRARY} ${LAPACK_I77_LIBRARY})
 	endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
+else(APPLE)
+	find_package(LAPACK) # do not rely on this for other OS, because it needs a working Fortran environment
+	if(LAPACK_LIBRARIES)
+		add_definitions(-DUSE_LAPACK)
+	endif(LAPACK_LIBRARIES)
 endif(APPLE)
 
 # generate executable of the above source files and link it
@@ -45,7 +54,9 @@ target_link_libraries(RSSUnitTests
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
+	${CGAL_LIBRARIES}
 	${LAPACK_LIBRARIES}
+	${BLAS_LIBRARIES}
 	luabind
 )
 

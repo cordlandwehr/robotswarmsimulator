@@ -32,6 +32,7 @@ include(${CGAL_USE_FILE})
 
 # find/configure LAPACK
 if(APPLE)
+	#find_library(LAPACK_LIBRARIES Accelerate)
 	add_definitions(-DUSE_LAPACK)
 elseif(WIN32)
 	# currently tested only for MinGW
@@ -41,7 +42,13 @@ elseif(WIN32)
 	find_library(LAPACK_I77_LIBRARY I77)
 	if(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
 		add_definitions(-DUSE_LAPACK)
+		set(LAPACK_LIBRARIES ${LAPACK_LIBRARY} ${LAPACK_BLAS_LIBRARY} ${LAPACK_F77_LIBRARY} ${LAPACK_I77_LIBRARY})
 	endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
+else(APPLE)
+	find_package(LAPACK) # do not rely on this for other OS, because it needs a working Fortran environment
+	if(LAPACK_LIBRARIES)
+		add_definitions(-DUSE_LAPACK)
+	endif(LAPACK_LIBRARIES)
 endif(APPLE)
 
 # include directory for Luabind
