@@ -299,7 +299,7 @@ struct SimpleWorldFixture {
 	boost::shared_ptr<RobotIdentifier> id_b;
 	boost::shared_ptr<RobotIdentifier> id_c;
 
-	vector<boost::shared_ptr<Robot> > robots;
+	std::vector<boost::shared_ptr<Robot> > robots;
 
 	// Obstacle Identifiers
 	boost::shared_ptr<SphereIdentifier> id_sphere;

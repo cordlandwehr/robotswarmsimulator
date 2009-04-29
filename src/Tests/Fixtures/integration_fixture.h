@@ -247,7 +247,7 @@ struct IntegrationFixture {
 	boost::shared_ptr<RobotIdentifier> id_b;
 	boost::shared_ptr<RobotIdentifier> id_c;
 
-	vector<boost::shared_ptr<Robot> > robots;
+	std::vector<boost::shared_ptr<Robot> > robots;
 
 	// constant for readbility
 	static const int kHistorySize = 5;
