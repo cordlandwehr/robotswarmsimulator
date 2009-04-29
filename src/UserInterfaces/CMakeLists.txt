@@ -60,6 +60,7 @@ else(APPLE)
 	find_package(LAPACK) # do not rely on this for other OS, because it needs a working Fortran environment
 	if(LAPACK_LIBRARIES)
 		add_definitions(-DUSE_LAPACK)
+		set(LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 	endif(LAPACK_LIBRARIES)
 endif(APPLE)
 
@@ -73,7 +74,6 @@ target_link_libraries(RobotSwarmSimulator
 	${LUA_LIBRARIES}
 	${CGAL_LIBRARIES}
 	${LAPACK_LIBRARIES}
-	${BLAS_LIBRARIES}
 	luabind
 )
 
