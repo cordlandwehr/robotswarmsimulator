@@ -15,3 +15,13 @@ CHAlgorithms::CHAlgorithms() {
 CHAlgorithms::~CHAlgorithms() {
 	// TODO Auto-generated destructor stub
 }
+
+CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Point_3> points) {
+	// define object to hold convex hull
+	CGAL::Object ch_object;
+
+	//compute convex hull
+	CGAL::convex_hull_3(points.begin(), points.end(), ch_object);
+
+	return ch_object;
+}
