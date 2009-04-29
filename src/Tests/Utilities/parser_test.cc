@@ -31,6 +31,7 @@
 
 #include "../Fixtures/simple_world_fixture.h"
 
+/*
 BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 {
 	boost::shared_ptr<Parser> parser;
@@ -100,7 +101,9 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	BOOST_REQUIRE(boost::dynamic_pointer_cast<AsynchronousASG>(asg));
 
 }
+*/
 
+/*
 BOOST_AUTO_TEST_CASE(load_robot_file_1)
 {
 	boost::shared_ptr<Parser> parser;
@@ -209,7 +212,9 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 
 }
 
+*/
 
+/*
 BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 {
 	boost::shared_ptr<Parser> parser;
@@ -243,6 +248,7 @@ BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](2), 5.1);
 
 }
+*/
 
 /*
 BOOST_FIXTURE_TEST_CASE(save_main_project_file_1, SimpleWorldFixture)

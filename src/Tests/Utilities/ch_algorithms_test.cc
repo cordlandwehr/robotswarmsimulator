@@ -16,7 +16,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE(ch_test_1) {
 
-	cout << "####################### BEGIN: CH-TEST 1 ####################################" << endl;
+	//cout << "####################### BEGIN: CH-TEST 1 ####################################" << endl;
 
 	boost::shared_ptr<CHAlgorithms> chalgo;
 	chalgo.reset(new CHAlgorithms());
@@ -31,5 +31,5 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 	CGAL::Object ch_object;
 	//ch_object = chalgo->compute_convex_hull_3d(points);
 
-	cout << "####################### END: CH-TEST 1 ####################################" << endl;
+	//cout << "####################### END: CH-TEST 1 ####################################" << endl;
 }
