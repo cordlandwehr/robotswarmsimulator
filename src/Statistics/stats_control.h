@@ -66,7 +66,7 @@ public:
 	 * \param parser the parser to use for configuration
 	 * \param output_dir the directory for all output files, created iff does not exists
 	 */
-	void init(map<std::string, std::string> &params, std::string output_dir);
+	void init(std::map<std::string, std::string> &params, std::string output_dir);
 
 	/**
 	 * implemented from SimulationListener.

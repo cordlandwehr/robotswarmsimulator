@@ -24,7 +24,7 @@ StatsConfig::~StatsConfig() {
  *
  */
 
-void StatsConfig::init(map<std::string, std::string> &params) {
+void StatsConfig::init(std::map<std::string, std::string> &params) {
 
 	// get subsets-configuration from Parser's STATS_SUBSETS = ...
 	// e.g. STATS_SUBSETS = {ALL} {MASTERS} {INACTALL} ...

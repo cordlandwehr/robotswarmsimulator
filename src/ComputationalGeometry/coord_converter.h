@@ -11,7 +11,6 @@
 #include "../Utilities/vector_arithmetics.h"
 #include <boost/tuple/tuple.hpp>
 #include <boost/shared_ptr.hpp>
-using namespace std;
 
 
 /**

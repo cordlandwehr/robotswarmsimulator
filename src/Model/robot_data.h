@@ -13,8 +13,6 @@
 #include "../Utilities/vector_arithmetics.h"
 
 
-using namespace std;
-
 #include "world_object.h"
 
 //TODO(martinah) set possible stati of a robot

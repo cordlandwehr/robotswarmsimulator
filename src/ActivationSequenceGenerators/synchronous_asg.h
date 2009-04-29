@@ -17,7 +17,6 @@
 #include "../Events/look_event.h"
 #include "../Requests/request.h"
 
-using namespace std;
 
 // forward declarations
 class History;
@@ -35,7 +34,7 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event. Since the ASG is synchronous the sequence of events will have the form
@@ -70,12 +69,12 @@ private:
 	/**
 	 * A set of unhandled requests from the last compute event.
 	 */
-	vector<boost::shared_ptr<const Request> > unhandled_request_set_;
+	std::vector<boost::shared_ptr<const Request> > unhandled_request_set_;
 
 	/**
 	 * The set of all robots
 	 */
-	vector<boost::shared_ptr<Robot> > robots_;
+	std::vector<boost::shared_ptr<Robot> > robots_;
 
 	// constants for readability
 	const static int kTimeToLook = 0;

@@ -41,7 +41,6 @@
 class EventHandler;
 class ActivationSequenceGenerator;
 
-using namespace std;
 
 class SimulationKernel {
 	friend class save_main_project_file_1;
@@ -58,7 +57,7 @@ public:
 	 * Returns a constant reference to the set of the robots.
 	 * \return Constant reference to the set of the robots.
 	 */
-	const vector<boost::shared_ptr<Robot> >& robots() const;
+	const std::vector<boost::shared_ptr<Robot> >& robots() const;
 
 	/**
 	 * Returns a constant reference to History of WorldInformations.
@@ -70,7 +69,7 @@ public:
 	/**
 	 * This method initializes the simulation kernel
 	 */
-	void init(const string& project_filename, boost::shared_ptr<History> history, std::string output_dir, bool create_statistics);
+	void init(const std::string& project_filename, boost::shared_ptr<History> history, std::string output_dir, bool create_statistics);
 
 	/**
 	 * Method for performing one event-based step of the simulation
@@ -151,31 +150,31 @@ private:
 	 * Map for different types of ASG. This map is used to toggle between the
 	 * String defined for the ASG in the projectfile and the right ASG class
 	 */
-	map<string, ASGType> ASG_map_;
+	std::map<std::string, ASGType> ASG_map_;
 
 	/**
 	 * Map for different types of Views. This map is used to toggle between the
 	 * String defined for the Views in the projectfile and the right View class
 	 */
-	map<string, ViewType> view_map_;
+	std::map<std::string, ViewType> view_map_;
 
 	/**
 	 * Map for different stati of Robots. This map is used to toggle between the
 	 * String defined for the Robotstatus in the robotfile and the enum for Robotstati
 	 */
-	map<string, RobotStatus> robot_status_map_;
+	std::map<std::string, RobotStatus> robot_status_map_;
 
 	/**
 	 * Map for different types of Robots. This map is used to toggle between the
 	 * String defined for the Robotstatus in the robotfile and the enum for Robottypes
 	 */
-	map<string, RobotType> robot_type_map_;
+	std::map<std::string, RobotType> robot_type_map_;
 
 	/**
 	 * Map for different types of Vector Modifiers. This map is used to toggle between the
 	 * String defined for the Vectormodifiers in the projectfile and the Modifiers.
 	 */
-	map<string, VectorModifierType> vector_modifier_map_;
+	std::map<std::string, VectorModifierType> vector_modifier_map_;
 
 	/**
 	 * This method will do the dirty job in the init-method and construct the 1st world-information.
@@ -188,12 +187,12 @@ private:
 	 * General method to setup any kind of request handler with all that stuff you need for it.
 	 */
 	boost::shared_ptr<RequestHandler> setup_request_handler(RequestHandlerType,
-			unsigned int, double, boost::shared_ptr<History>, vector<string>);
+			unsigned int, double, boost::shared_ptr<History>, std::vector<std::string>);
 
 	/**
 	 * Genereal method to setup modifiers for vector-request-handlers.
 	 */
-	void setup_vectormodifier(boost::shared_ptr<VectorRequestHandler>, vector<string>);
+	void setup_vectormodifier(boost::shared_ptr<VectorRequestHandler>, std::vector<std::string>);
 
 	/**
 	 * This method creates the robots using the information read from the robot input file.

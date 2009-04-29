@@ -19,7 +19,7 @@
 class StatisticsDataObject {
 public:
 	StatisticsDataObject() {}
-	StatisticsDataObject(const StatisticsDataObject& rhs) : components_(new vector<int>(rhs.components())),
+	StatisticsDataObject(const StatisticsDataObject& rhs) : components_(new std::vector<int>(rhs.components())),
 	                                                        vis_graph_(new boost::adjacency_list <> (rhs.vis_graph())),
 	                                                        vis_graph_is_connected_(rhs.vis_graph_is_connected()) {}
 

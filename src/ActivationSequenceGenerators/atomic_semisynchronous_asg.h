@@ -35,7 +35,7 @@ public:
 	/**
 	 * Initializes the ASG.
 	 */
-	void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event.
@@ -75,12 +75,12 @@ private:
 	/**
 	 * The set of all robots
 	 */
-	vector<boost::shared_ptr<Robot> > robots_;
+	std::vector<boost::shared_ptr<Robot> > robots_;
 
 	/**
 	 * A set of unhandled requests from the last compute event.
 	 */
-	vector<boost::shared_ptr<const Request> > unhandled_request_set_;
+	std::vector<boost::shared_ptr<const Request> > unhandled_request_set_;
 
 	/**
 	 * a source of randomness

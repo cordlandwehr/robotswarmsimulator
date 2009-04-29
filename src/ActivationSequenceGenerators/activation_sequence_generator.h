@@ -14,7 +14,6 @@
 #include "../Events/look_event.h"
 #include "../SimulationKernel/simulation_listener.h"
 
-using namespace std;
 
 // forward declarations
 class History;
@@ -41,7 +40,7 @@ public:
 	 * Initializes the ASG.
 	 * \param The history
 	 */
-	virtual void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) = 0;
+	virtual void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots) = 0;
 
 	/**
 	 * Returns the next event.

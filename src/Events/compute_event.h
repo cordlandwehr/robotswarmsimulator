@@ -14,7 +14,6 @@
 #include "../Model/robot.h"
 #include "../Requests/request.h"
 
-using namespace std;
 
 /**
  * \class ComputeEvent
@@ -36,7 +35,7 @@ public:
 	 * Returns a constant reference to the robot subset.
 	 * \return A constant reference to the robot subset.
 	 */
-	const list<boost::shared_ptr<Robot> >& robot_subset() const;
+	const std::list<boost::shared_ptr<Robot> >& robot_subset() const;
 
 	/**
 	 * Adds a new request to the set of requests.
@@ -48,18 +47,18 @@ public:
 	 * Returns a constant reference to the set of requests.
 	 * \return A constant reference to the set of requests.
 	 */
-	const list<boost::shared_ptr<const Request> >& requests() const;
+	const std::list<boost::shared_ptr<const Request> >& requests() const;
 
 private:
 	/**
 	 * The robot subset for this event.
 	 */
-	list<boost::shared_ptr<Robot> > robot_subset_;
+	std::list<boost::shared_ptr<Robot> > robot_subset_;
 
 	/**
 	 * The set of resulting requests
 	 */
-	list<boost::shared_ptr<const Request> > requests_;
+	std::list<boost::shared_ptr<const Request> > requests_;
 };
 
 

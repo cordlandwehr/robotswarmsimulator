@@ -8,6 +8,9 @@
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
 
+using namespace std;
+
+
 void AtomicSemisynchronousASG::initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) {
 	// extract robots from robot data
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {

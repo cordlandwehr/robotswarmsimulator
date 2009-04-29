@@ -24,6 +24,7 @@
 #include "octree.h"
 #include "octree_utilities.h"
 
+using namespace std;
 
 
 std::vector<OctreeUtilities::RobotRef> OctreeUtilities::get_visible_robots_by_radius(const boost::shared_ptr<const Octree> &octree,

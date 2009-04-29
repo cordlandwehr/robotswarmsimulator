@@ -14,7 +14,6 @@
 #include "../Model/robot.h"
 #include "../Requests/request.h"
 
-using namespace std;
 
 /**
  * \class HandleRequestsEvent
@@ -36,13 +35,13 @@ public:
 	 * Returns a constant reference to the set of requests.
 	 * \return A constant reference to the set of requests.
 	 */
-	const list<boost::shared_ptr<const Request> >& requests() const;
+	const std::list<boost::shared_ptr<const Request> >& requests() const;
 
 private:
 	/**
 	 * The set of resulting requests
 	 */
-	list<boost::shared_ptr<const Request> > requests_;
+	std::list<boost::shared_ptr<const Request> > requests_;
 };
 
 #endif /* HANDLE_REQUEST_EVENT_H_ */

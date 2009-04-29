@@ -18,7 +18,7 @@ StatsControl::~StatsControl() {
 	}
 }
 
-void StatsControl::init(map<std::string, std::string> &params, std::string output_dir) {
+void StatsControl::init(std::map<std::string, std::string> &params, std::string output_dir) {
 
 	if (stats_initialized_) {
 		// log warning, because no quit was called before this init

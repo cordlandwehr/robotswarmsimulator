@@ -146,7 +146,7 @@ private:
 	boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler_;
 	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
 
-	vector<boost::shared_ptr<SimulationListener> > listeners_;
+	std::vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;
 	boost::shared_ptr<RobotControl> robot_control_;
 

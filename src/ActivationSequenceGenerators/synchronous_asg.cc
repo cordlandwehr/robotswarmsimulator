@@ -21,6 +21,9 @@
 
 #include "synchronous_asg.h"
 
+using namespace std;
+
+
 void SynchronousASG::initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) {
 
 	// extract robots from robot data

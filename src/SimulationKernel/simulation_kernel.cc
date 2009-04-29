@@ -34,6 +34,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 
 SimulationKernel::SimulationKernel() {
 	/* REMARK: If you want to add some Values to the maps, make sure to use only

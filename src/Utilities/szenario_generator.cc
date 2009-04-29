@@ -300,26 +300,26 @@ void szenario_generator::set_robotFile(std::string filename) {
 }
 
 
-void szenario_generator::set_obstacleFile(string filename) {
+void szenario_generator::set_obstacleFile(std::string filename) {
 	obstacleFileName_.reset(new std::string(filename));
 }
 
 
-void szenario_generator::set_worldFile(string filename) {
+void szenario_generator::set_worldFile(std::string filename) {
 	worldFileName_.reset(new std::string(filename));
 }
 
 
-void szenario_generator::set_projectName(string projectName) {
+void szenario_generator::set_projectName(std::string projectName) {
 	projectName_.reset(new std::string(projectName));
 }
 
-void szenario_generator::set_statisticsTemplate(string statisticsTemplate) {
+void szenario_generator::set_statisticsTemplate(std::string statisticsTemplate) {
 	statisticsTemplate_.reset(new std::string(statisticsTemplate));
 }
 
 
-void szenario_generator::set_statisticsSubsets(string statisticsSubsets) {
+void szenario_generator::set_statisticsSubsets(std::string statisticsSubsets) {
 	statisticsSubsets_.reset(new std::string(statisticsSubsets));
 }
 

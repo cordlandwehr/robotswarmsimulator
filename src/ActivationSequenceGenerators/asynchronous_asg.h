@@ -19,7 +19,6 @@
 #include "../Requests/request.h"
 #include "../Utilities/distribution_generator.h"
 
-using namespace std;
 
 // forward declarations
 class History;
@@ -51,7 +50,7 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event.
@@ -88,22 +87,22 @@ private:
 	/**
 	 * A set of unhandled requests from some compute events in the past.
 	 */
-	list<boost::shared_ptr<const Request> > unhandled_request_set_;
+	std::list<boost::shared_ptr<const Request> > unhandled_request_set_;
 
 	/**
 	 * The set of all robots which will have a look event as their next event.
 	 */
-	list<boost::shared_ptr<Robot> > looking_robots_;
+	std::list<boost::shared_ptr<Robot> > looking_robots_;
 
 	/**
 	 * The set of all robots which will have a compute event as their next event.
 	 */
-	list<boost::shared_ptr<Robot> > computing_robots_;
+	std::list<boost::shared_ptr<Robot> > computing_robots_;
 
 	/**
 	 * The set of all robots which will have handle requests event as their next event.
 	 */
-	list<boost::shared_ptr<Robot> > handling_robots_;
+	std::list<boost::shared_ptr<Robot> > handling_robots_;
 
 	/**
 	 * a source of randomness

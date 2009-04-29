@@ -8,6 +8,9 @@
 //include for enums of RobotType and RobotStatus
 #include "../Model/robot_data.h"
 
+using namespace std;
+
+
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() :  robot_filename_("rssfile"),

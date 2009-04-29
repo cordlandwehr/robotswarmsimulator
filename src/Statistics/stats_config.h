@@ -33,7 +33,7 @@ public:
 	 * whether or not the respective information should
 	 * be calculated or how it should be configured.
 	 */
-	void init(map<std::string, std::string> &params);
+	void init(std::map<std::string, std::string> &params);
 
 	/**
 	 * Returns an integer identifying the datadump-level set in projectfile

@@ -12,8 +12,6 @@
 #include <boost/smart_ptr.hpp>
 
 
-using namespace std;
-
 class Identifier;
 class MarkerIdentifier;
 class RobotIdentifier;
@@ -42,13 +40,13 @@ public:
 	 * Returns a constant reference to the set of the markers.
 	 * \return Constant reference to the set of the markers.
 	 */
-	const vector<boost::shared_ptr<WorldObject> >& markers() const;
+	const std::vector<boost::shared_ptr<WorldObject> >& markers() const;
 
 	/**
 	 * Returns a (non-constant) reference to the set of markers.
 	 * \return reference to the set of markers.
 	 */
-	vector<boost::shared_ptr<WorldObject> >& markers();
+	std::vector<boost::shared_ptr<WorldObject> >& markers();
 
 	/**
 	 * Adds a new marker to the end of the current marker vector.
@@ -66,13 +64,13 @@ public:
 	 * Returns a constant reference to the set of the obstacles.
 	 * \return Constant reference to the set of the obstacles.
 	 */
-	const vector<boost::shared_ptr<Obstacle> >& obstacles() const;
+	const std::vector<boost::shared_ptr<Obstacle> >& obstacles() const;
 
 	/**
 	 * Returns a (non-constant) reference to the set of obstacles.
 	 * \return reference to the set of obstacles.
 	 */
-	vector<boost::shared_ptr<Obstacle> >& obstacles();
+	std::vector<boost::shared_ptr<Obstacle> >& obstacles();
 
 	/**
 	 * Adds a new obstacle to the end of the current obstacle vector.
@@ -90,13 +88,13 @@ public:
 	 * Returns a constant reference to the set of the robot data.
 	 * \return Constant reference to the set of the robots data.
 	 */
-	const vector<boost::shared_ptr<RobotData> >& robot_data() const;
+	const std::vector<boost::shared_ptr<RobotData> >& robot_data() const;
 
 	/**
 	 * Returns a (non-constant) reference to the set of robot data.
 	 * \return reference to the set of robot data.
 	 */
-	vector<boost::shared_ptr<RobotData> >& robot_data();
+	std::vector<boost::shared_ptr<RobotData> >& robot_data();
 
 	/**
 	 * Adds a new robot data to the end of the current RobotData vector.

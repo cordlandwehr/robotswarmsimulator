@@ -13,7 +13,6 @@
 #include "event.h"
 #include "../Model/robot.h"
 
-using namespace std;
 
 /**
  * \class LookEvent
@@ -36,13 +35,13 @@ public:
 	 * Returns a constant reference to the robot subset.
 	 * \return A constant reference to the robot subset.
 	 */
-	const list<boost::shared_ptr<Robot> >& robot_subset() const;
+	const std::list<boost::shared_ptr<Robot> >& robot_subset() const;
 
 private:
 	/**
 	 * The robot subset for this event.
 	 */
-	list<boost::shared_ptr<Robot> > robot_subset_;
+	std::list<boost::shared_ptr<Robot> > robot_subset_;
 };
 
 #endif /* LOOK_EVENT_H_ */

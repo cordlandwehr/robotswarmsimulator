@@ -32,7 +32,6 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
-using namespace std;
 
 class Parser {
 
@@ -60,43 +59,43 @@ public:
 	 * Set-method for compass model
 	 * @param compass_model string
 	 */
-	void set_compass_model(const string& compass_model);
+	void set_compass_model(const std::string& compass_model);
 
 	/**
 	 * Set-method for obstacle filename
 	 * @param obstacle_filename string
 	 */
-	void set_obstacle_filename(const string& obstacle_filename);
+	void set_obstacle_filename(const std::string& obstacle_filename);
 
 	/**
 	 * Set-method for project_name
 	 * @param project_name string
 	 */
-	void set_project_name(const string& project_name);
+	void set_project_name(const std::string& project_name);
 
 	/**
 	 * Set-method for robot filename
 	 * @param robot_filename string
 	 */
-	void set_robot_filename(const string& robot_filename);
+	void set_robot_filename(const std::string& robot_filename);
 
 	/**
 	 * Set-method for statistics_template
 	 * @param statistics template string
 	 */
-	void set_statistics_template(const string& statistics_template);
+	void set_statistics_template(const std::string& statistics_template);
 
 	/**
 	 * Set-method for statistics_subsets
 	 * @param statistics subsets string
 	 */
-	void set_statistics_subsets(const string& statistics_subsets);
+	void set_statistics_subsets(const std::string& statistics_subsets);
 
 	/**
 	 * Set-method for project filename
 	 * @param project_filename string
 	 */
-	void set_project_filename(const string& project_filename);
+	void set_project_filename(const std::string& project_filename);
 
 	/**
 	 * This method loads the data written in the given project files
@@ -104,14 +103,14 @@ public:
 	 * and initializes the according variables.
 	 * \param Name of the main project file.
 	 */
-	void load_projectfiles(const string& project_filename);
+	void load_projectfiles(const std::string& project_filename);
 
 	/**
 	 * This method saves the data to the predefined project files
 	 * (main project file, robot file, obstacle file)
 	 * \param Name of the main project file.
 	 */
-	void save_projectfiles(const string& project_filename, const WorldInformation& world_info);
+	void save_projectfiles(const std::string& project_filename, const WorldInformation& world_info);
 
 	/**
 	 * This method sets default variables and values.
@@ -121,82 +120,82 @@ public:
 	/**
 	 * \return constant reference to the string describing the type of the Compass Model in the parser
 	 */
-	const string& compass_model() const;
+	const std::string& compass_model() const;
 
 	/**
 	 * \return constant reference to the string describing the Robot Filename.
 	 */
-	const string& robot_filename() const;
+	const std::string& robot_filename() const;
 
 	/**
 	 * \return reference to vector of Robot Positions.
 	 */
-	vector<Vector3d>& robot_positions();
+	std::vector<Vector3d>& robot_positions();
 
 	/**
 	 * \return reference to vector of Robot Velocites.
 	 */
-	vector<Vector3d>& robot_velocities();
+	std::vector<Vector3d>& robot_velocities();
 
 	/**
 	 * \return reference to vector of Robot Accelerations.
 	 */
-	vector<Vector3d>& robot_accelerations();
+	std::vector<Vector3d>& robot_accelerations();
 
 	/**
 	 * \return reference to vector of Robot Types.
 	 */
-	vector<string>& robot_types();
+	std::vector<std::string>& robot_types();
 
 	/**
 	 * \return reference to vector of Robot Stati.
 	 */
-	vector<string>& robot_stati();
+	std::vector<std::string>& robot_stati();
 
 	/**
 	 * \return reference to vector of Robot Marker Information.
 	 */
-	vector<string>& robot_marker_information();
+	std::vector<std::string>& robot_marker_information();
 
 	/**
 	 * \return reference to vector of Robot algorithms.
 	 */
-	vector<string>& robot_algorithms();
+	std::vector<std::string>& robot_algorithms();
 
 	/**
 	 * \return reference to vector of Robot color.
 	 */
-	vector<string>& robot_colors();
+	std::vector<std::string>& robot_colors();
 
 	/**
 	 * \return reference to 3-tuple of Robot coordinate axis.
 	 */
-	vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& robot_coordinate_systems();
+	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& robot_coordinate_systems();
 
 	/**
 	 * \return reference to vector of Obstacle types.
 	 */
-	vector<string>& obstacle_types();
+	std::vector<std::string>& obstacle_types();
 
 	/**
 	 * \return reference to vector of Obstacle positions.
 	 */
-	vector<Vector3d>& obstacle_positions();
+	std::vector<Vector3d>& obstacle_positions();
 
 	/**
 	 * \return reference to vector of Obstacle Marker information
 	 */
-	vector<string>& obstacle_marker_information();
+	std::vector<std::string>& obstacle_marker_information();
 
 	/**
 	 * \return reference to vector of Obstacle radius.
 	 */
-	vector<double>& obstacle_radius();
+	std::vector<double>& obstacle_radius();
 
 	/**
 	 * \return reference to vector of Obstacle size.
 	 */
-	vector<Vector3d>& obstacle_size();
+	std::vector<Vector3d>& obstacle_size();
 
 private:
 
@@ -209,11 +208,11 @@ private:
 	// parameter map
 	std::map<std::string, std::string> parameter_map_;
 
-	string robot_filename_;
-	string obstacle_filename_;
+	std::string robot_filename_;
+	std::string obstacle_filename_;
 
 	//file name of project file
-	string project_filename_;
+	std::string project_filename_;
 
 	//position in line for getting values
 	size_t position_in_line_;
@@ -224,19 +223,19 @@ private:
 	std::vector<Vector3d> initiale_robot_positions_;
 	std::vector<Vector3d> initiale_robot_velocities_;
 	std::vector<Vector3d> initiale_robot_accelerations_;
-	std::vector<string> initiale_robot_types_;
-	std::vector<string> initiale_robot_stati_;
-	std::vector<string> initiale_robot_marker_information_;
-	std::vector<string> initiale_robot_algorithms_;
-	std::vector<string> initiale_robot_colors_;
+	std::vector<std::string> initiale_robot_types_;
+	std::vector<std::string> initiale_robot_stati_;
+	std::vector<std::string> initiale_robot_marker_information_;
+	std::vector<std::string> initiale_robot_algorithms_;
+	std::vector<std::string> initiale_robot_colors_;
 	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d> > initiale_robot_coordinate_systems_;
 
 	////////////////////////////////////////////////////////
 	// OBSTACLE DATA
 	////////////////////////////////////////////////////////
-	std::vector<string> initiale_obstacle_types_;
+	std::vector<std::string> initiale_obstacle_types_;
 	std::vector<Vector3d> initiale_obstacle_positions_;
-	std::vector<string> initiale_obstacle_marker_information_;
+	std::vector<std::string> initiale_obstacle_marker_information_;
 	std::vector<double> initiale_obstacle_radius_;
 	std::vector<Vector3d> initiale_obstacle_size_;
 
@@ -246,7 +245,7 @@ private:
 	 * \param var Variable which default value will be returned.
 	 * \return Default value of given variable, if given variable has a default value, otherwise "".
 	 */
-	string get_default_value(const string& var);
+	std::string get_default_value(const std::string& var);
 
 	/**
 	 * This method loads the data written in the main project file
@@ -255,14 +254,14 @@ private:
 	 * project_name_, robot_filename_, statistics_module_
 	 * \param Name of the main project file.
 	 */
-	void load_main_project_file(const string& project_filename);
+	void load_main_project_file(const std::string& project_filename);
 
 	/**
 	 * This method removes leading and trailing quotes if the given string is quoted.
 	 * \param value String which may contain quotes to be removed.
 	 * \return Given string without leading or trailing quotes.
 	 */
-	string remove_quotes_and_leading_and_trailing_spaces(const string& value);
+	std::string remove_quotes_and_leading_and_trailing_spaces(const std::string& value);
 
 	/**
 	 * This method loads the data written in the robot file.
@@ -286,13 +285,13 @@ private:
 	 *
 	 * \return True, if line is a comment.
 	 */
-	bool is_comment(const string& line);
+	bool is_comment(const std::string& line);
 
 	/**
 	 * This methods returns the variable contained in the given line.
 	 * Excepts, that the given line contains an assignment.
 	 */
-	string get_var_name(const string& line);
+	std::string get_var_name(const std::string& line);
 
 	/**
 	 * This methods returns the value of the assignment in this line.
@@ -301,7 +300,7 @@ private:
 	 * \param line Line from file containing an assignment.
 	 * \param name Variable name in line.
 	 */
-	string get_var_value(const string& line, const string& name);
+	std::string get_var_value(const std::string& line, const std::string& name);
 
 
 	/**
@@ -312,7 +311,7 @@ private:
 	 *
 	 * TODO(martinah) use a constant reference to map as input parameter
 	 */
-	void init_variables(map<string,string> variables_and_values);
+	void init_variables(std::map<std::string,std::string> variables_and_values);
 
 	/**
 	 * This methods returns the (string) value of the variable according to var_name saved in the given map.
@@ -323,26 +322,26 @@ private:
 	 * \return 	If var_name exists in the map, return (string) value of var_name saved in the map.
 	 * 			If var_name doesn't exist in the map, but var_name has a default value, return this default_value.
 	 */
-	string get_string_value_from_map(map<string,string> variables_and_values, const string& var_name);
+	std::string get_string_value_from_map(std::map<std::string,std::string> variables_and_values, const std::string& var_name);
 
 	/**
 	 * Checks whether the given string contains an assignment.
 	 */
-	bool contains_assignment(const string& line);
+	bool contains_assignment(const std::string& line);
 
 	/**
 	 * This methods reads the values in the given line and initializes the according variables.
 	 * \param line Line containing information for one robot
 	 * \param line_number number of given line in file
 	 */
-	void init_robot_values_for_line(const string& line, int line_number);
+	void init_robot_values_for_line(const std::string& line, int line_number);
 
 	/**
 	 * This methods reads the in the given line and initializes the according variables.
 	 * \param line Line containing information for one obstacle
 	 * \param line_number number of given line in file
 	 */
-	void init_obstacle_values_for_line(const string& line, int line_number);
+	void init_obstacle_values_for_line(const std::string& line, int line_number);
 
 	/**
 	 * This methods returns the next value in the given line (beginning at given postion).
@@ -353,7 +352,7 @@ private:
 	 * 				is not limited by the seperator specified, but by the end of line)
 	 * \return Next value in given line.
 	 */
-	string get_next_value_in_line(const string& line, int line_number, bool last_value);
+	std::string get_next_value_in_line(const std::string& line, int line_number, bool last_value);
 
 	/**
 	 * This method returns the next double value in given line.
@@ -363,7 +362,7 @@ private:
 	 * 				is not limited by the seperator specified, but by the end of line)
 	 * \return Next double in given line.
 	 */
-	double get_next_double_value_in_line(const string& line, int line_number, bool last_value);
+	double get_next_double_value_in_line(const std::string& line, int line_number, bool last_value);
 
 	/**
 	 * This methods reads the next 3 values from line and returns a vector3d containing these values.
@@ -374,13 +373,13 @@ private:
 	 * 				is not limited by the seperator specified, but by the end of line)
 	 * \return Vector3d containing the next 3 values in line.
 	 */
-	Vector3d get_next_vector3d_in_line(const string& line, int line_number, bool last_value);
+	Vector3d get_next_vector3d_in_line(const std::string& line, int line_number, bool last_value);
 
 	/**
 	 * This method converts the given string to double (if given string represents a double value)
 	 * \return double value of given string
 	 */
-	double string_to_double(const string& my_string);
+	double string_to_double(const std::string& my_string);
 
 	/**
 	 * This method saves the following variables with their current
@@ -389,7 +388,7 @@ private:
 	 * project_name_, robot_filename_, statistics_module_
 	 * \param Name of the main project file.
 	 */
-	void save_main_project_file(const string& project_filename);
+	void save_main_project_file(const std::string& project_filename);
 
 	/**
 	 * This method saves information about the robots.
@@ -402,7 +401,7 @@ private:
 	 * the current robot
 	 * \param Pointer to the robot
 	 */
-	string write_robot(boost::shared_ptr<RobotData> robot_data);
+	std::string write_robot(boost::shared_ptr<RobotData> robot_data);
 
 	/**
 	 * This method saves information about the obstacles
@@ -415,14 +414,14 @@ private:
 	 * the current obstacle
 	 * \param Pointer to the obstacle
 	 */
-	string write_obstacle(boost::shared_ptr<Obstacle> current_obstacle);
+	std::string write_obstacle(boost::shared_ptr<Obstacle> current_obstacle);
 
 	/**
 	 * This method constructs a line for the obstacle_file which describes
 	 * the current marker
 	 * \param Pointer to the marker
 	 */
-	string write_marker(boost::shared_ptr<WorldObject> marker);
+	std::string write_marker(boost::shared_ptr<WorldObject> marker);
 };
 
 #endif /* PARSER_H_ */

@@ -12,8 +12,6 @@
 #include <string>
 #include <map>
 
-using namespace std;
-
 
 /**
  * \brief This class represents abstract information types that may be appended to any WorldObject.
@@ -33,19 +31,19 @@ public:
 	 * \param var_name		Name of variable (used as key)
 	 * \param insert_data	Data to be stored.
 	 */
-	void add_data(const string& var_name, const boost::any& insert_data);
+	void add_data(const std::string& var_name, const boost::any& insert_data);
 
 	/**
 	 * Removes the given data item from this MarkerInformation. Has no effect if no such data item is stored.
 	 */
-	void remove_data(const string& var_name);
+	void remove_data(const std::string& var_name);
 
 	/**
 	 * This method returns data stored in given variable.
 	 * \param 	var_name	Return data of this variable.
 	 * \return	Data stored in data-map for given variable.
 	 */
-	const boost::any get_data(const string& var_name);
+	const boost::any get_data(const std::string& var_name);
 
 
 private:
@@ -53,7 +51,7 @@ private:
 	 * Contains data of this marker. A string (that denotes 'variable name') is used as a key
 	 * and a boost::any as a value for the key (holds custom data)
 	 */
-	map<string, boost::any> data_;
+	std::map<std::string, boost::any> data_;
 };
 
 #endif /* MARKER_INFORMATION_H_ */

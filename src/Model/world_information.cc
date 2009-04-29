@@ -52,11 +52,11 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 	}
 }
 
-const vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() const {
+const std::vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() const {
 	return markers_;
 }
 
-vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() {
+std::vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() {
 	return markers_;
 }
 
@@ -70,11 +70,11 @@ void WorldInformation::set_marker_data(std::vector<boost::shared_ptr<WorldObject
 	markers_ = new_markers;
 }
 
-const vector<boost::shared_ptr<Obstacle> >& WorldInformation::obstacles() const {
+const std::vector<boost::shared_ptr<Obstacle> >& WorldInformation::obstacles() const {
 	return obstacles_;
 }
 
-vector<boost::shared_ptr<Obstacle> >& WorldInformation::obstacles() {
+std::vector<boost::shared_ptr<Obstacle> >& WorldInformation::obstacles() {
 	return obstacles_;
 }
 
@@ -87,11 +87,11 @@ void WorldInformation::set_obstacle_data(std::vector<boost::shared_ptr<Obstacle>
 	obstacles_ = new_obstacles;
 }
 
-const vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
+const std::vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
 	return robot_data_;
 }
 
-vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
+std::vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
 	return robot_data_;
 }
 

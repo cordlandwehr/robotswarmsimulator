@@ -95,32 +95,32 @@ public:
 	/**
 	 * Set filename for output, without file extension
 	 */
-	void set_robotFile(string filename);
+	void set_robotFile(std::string filename);
 
 	/**
 	 * Set filename for output, without file extension
 	 */
-	void set_obstacleFile(string filename);
+	void set_obstacleFile(std::string filename);
 
 	/**
 	 * Set filename for output, without file extension
 	 */
-	void set_worldFile(string filename);
+	void set_worldFile(std::string filename);
 
 	/**
 	 * Set project name
 	 */
-	void set_projectName(string projectName);
+	void set_projectName(std::string projectName);
 
 	/**
 	 * Set statistics template
 	 */
-	void set_statisticsTemplate(string statisticsTemplate);
+	void set_statisticsTemplate(std::string statisticsTemplate);
 
 	/**
 	 * Set statistics subsets
 	 */
-	void set_statisticsSubsets(string statisticsSubsets);
+	void set_statisticsSubsets(std::string statisticsSubsets);
 
 	/**
 	 * Sets position request handler for project file.

@@ -29,6 +29,9 @@
 
 #include "asynchronous_asg.h"
 
+using namespace std;
+
+
 AsynchronousASG::AsynchronousASG(unsigned int seed,
 	                             double participation_probability,
 	                             double p): ActivationSequenceGenerator(),
