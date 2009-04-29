@@ -14,24 +14,30 @@
 // do not try to include anything if lapack not supported on this system
 #else
 
-#ifdef WIN32 // should work for MinGW, not tested for Visual Studio
+
+#ifdef __APPLE__
+// Under Mac OS X, the Accelerate framework is used (it includes an implementation of CLAPACK).
+// We provide some common typedefs that are used in most versions of f2c.h.
+
+#include <Accelerate/Accelerate.h>
+typedef __CLPK_doublereal doublereal;
+typedef __CLPK_integer    integer;
+
+#else
+// extra headers/declarations for Linux and Windows
+
 #include <Utilities/blaswrap.h>
 #include <Utilities/f2c.h>
 
 /* ---------- Declarations of the used lapack methods (see sources of your lapack implementation) ---------- */
-int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work,
-           integer *lwork, integer *info);
-int dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
-            doublereal *, integer *, doublereal *, integer *, integer *);
-#endif
+extern "C" {
+	int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work,
+	           integer *lwork, integer *info);
+	int dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
+	            doublereal *, integer *, doublereal *, integer *, integer *);
+}
 
-// Under Mac OS X, the Accelerate framework is used (it includes an implementation of CLAPACK).
-// We provide some common typedefs that are used in most versions of f2c.h.
-#ifdef __APPLE__
-#include <Accelerate/Accelerate.h>
-typedef __CLPK_doublereal doublereal;
-typedef __CLPK_integer    integer;
-#endif
+#endif /* __APPLE__ */
 
 
 #endif /* USE_LAPACK */
