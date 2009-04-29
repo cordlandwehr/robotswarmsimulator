@@ -29,7 +29,15 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 	CGAL::copy_n(gen, 250, std::back_inserter(points));
 
 	CGAL::Object ch_object;
-	//ch_object = chalgo->compute_convex_hull_3d(points);
+	ch_object = chalgo->compute_convex_hull_3d(points);
+
+	// determine what kind of object it is
+	if (CGAL::object_cast<Segment_3>(&ch_object) )
+		cout << "convex hull is a segment " << std::endl;
+	else if (CGAL::object_cast<Polyhedron_3>(&ch_object) )
+		cout << "convex hull is a polyhedron " << std::endl;
+	else
+		cout << "convex hull error!" << std::endl;
 
 	//cout << "####################### END: CH-TEST 1 ####################################" << endl;
 }
