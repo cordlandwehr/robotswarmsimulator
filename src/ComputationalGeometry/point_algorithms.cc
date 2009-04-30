@@ -101,8 +101,28 @@ Vector3d PointAlgorithms::compute_CMinBox(const std::vector<Vector3d>& positions
 	return CMinBox;
 }
 
-Vector3d PointAlgorithms::compute_MaxLine(const std::vector<Vector3d>& positions) {
-	return Vector3d();
+Vector3d PointAlgorithms::compute_MaxLine(int coord, const std::vector<Vector3d>& positions) {
+	// tp is extreme position with regard to coord
+	if(coord < 0 || coord > 2 || positions.size() == 0) {
+		// do some error handling
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing MaxLine with invalid parameters";
+		return Vector3d();
+	}
+
+	double extreme_distance = positions.at(0)[coord];
+	Vector3d extreme_vec = positions.at(0);
+
+	std::vector<Vector3d>::const_iterator iter;
+
+	BOOST_FOREACH(Vector3d position, positions) {
+		double cur_extreme_distance = position[coord];
+		if(cur_extreme_distance > extreme_distance) {
+			extreme_distance = cur_extreme_distance;
+			extreme_vec = position;
+		}
+	}
+
+	return extreme_vec;
 }
 
 Vector3d PointAlgorithms::compute_CCH(const std::vector<Vector3d>& positions) {
