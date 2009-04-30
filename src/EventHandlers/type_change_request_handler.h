@@ -22,7 +22,11 @@ public:
     virtual ~TypeChangeRequestHandler() {}
 
 protected:
-	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+	/**
+	 * \brief Performs the given requested without any changes.
+	 * \return Returns true.
+	 */
+	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                          boost::shared_ptr<const Request> request);
 };
 

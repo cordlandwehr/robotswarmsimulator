@@ -32,8 +32,10 @@ public:
 	 * \brief Randomizes the given input vector.
 	 *
 	 * Ignores reference vector.
+	 *
+	 * \return Returns true if the input vector was changed. Otherwise, false is returned.
 	 */
-	void modify_vector(Vector3d& input_vector, const Vector3d& reference_vector);
+	bool modify_vector(Vector3d& input_vector, const Vector3d& reference_vector);
 
 private:
 	DistributionGenerator distribution_generator_;

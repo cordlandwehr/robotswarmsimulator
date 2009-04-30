@@ -16,7 +16,7 @@
 
 #include "type_change_request_handler.h"
 
-void TypeChangeRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+bool TypeChangeRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                                         boost::shared_ptr<const Request> request) {
 	boost::shared_ptr<const TypeChangeRequest> type_change_request =
 	     boost::dynamic_pointer_cast<const TypeChangeRequest> (request);
@@ -27,5 +27,6 @@ void TypeChangeRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldI
 	const boost::shared_ptr<RobotIdentifier>& robot_id = type_change_request->robot().id();
 	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
 	robot_data.set_type(type_change_request->requested_type());
+	return true;
 }
 

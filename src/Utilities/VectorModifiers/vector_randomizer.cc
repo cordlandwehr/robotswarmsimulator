@@ -8,7 +8,7 @@
 #include "vector_randomizer.h"
 
 
-void VectorRandomizer::modify_vector(Vector3d& input_vector, const Vector3d& reference_vector) {
+bool VectorRandomizer::modify_vector(Vector3d& input_vector, const Vector3d& reference_vector) {
 	// generate random vector (each coordinate independently according to N(0, standard_deviation_))
 	double x = distribution_generator_.get_value_normal();
 	double y = distribution_generator_.get_value_normal();
@@ -18,4 +18,5 @@ void VectorRandomizer::modify_vector(Vector3d& input_vector, const Vector3d& ref
 	input_vector(0) += x;
 	input_vector(1) += y;
 	input_vector(2) += z;
+	return (x != 0 || y != 0 || z != 0);
 }

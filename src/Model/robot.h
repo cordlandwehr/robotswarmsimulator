@@ -35,7 +35,7 @@ protected:
 
 
 private:
-	boost::shared_ptr<RobotIdentifier> id_;	
+	boost::shared_ptr<RobotIdentifier> id_;
 
 };
 

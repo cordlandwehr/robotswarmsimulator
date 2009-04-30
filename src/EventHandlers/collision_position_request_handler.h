@@ -45,9 +45,12 @@ protected:
 	 * Handling of the position request.
 	 *
 	 * The request is actually handles be VectorRequestHandler::handle_request_reliable(). However, additionally we
-	 * check for collisions and react according to
+	 * check for collisions and react according to the collision strategy.
+	 *
+	 * \return Returns true if the request has been performed as given and false if it was changed (by one of the vector
+	 *         modifiers or due to a collision).
 	 */
-	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
 	                                     boost::shared_ptr<const Request> request);
 										 
 	

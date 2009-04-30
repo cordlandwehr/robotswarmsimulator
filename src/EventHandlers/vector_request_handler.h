@@ -53,9 +53,11 @@ protected:
 	 * For each vector modifier applied, the reference vector is set to the original value of the data the robot
 	 * requested to change.
 	 *
+	 * \return Returns true if the request has been performed as given and false if it was changed (by one of the vector
+	 *         modifiers).
 	 * \see extract_ref_vector
 	 */
-	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                          boost::shared_ptr<const Request> request);
 
 private:

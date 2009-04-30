@@ -12,7 +12,7 @@
 #include "../Requests/marker_change_request.h"
 
 
-void MarkerChangeRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+bool MarkerChangeRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                                          boost::shared_ptr<const Request> request) {
 	using boost::any;
 	using boost::dynamic_pointer_cast;
@@ -36,5 +36,6 @@ void MarkerChangeRequestHandler::handle_request_reliable(boost::shared_ptr<World
 		marker_information.add_data(var_name, *var_value);
 	else
 		marker_information.remove_data(var_name);
+	return true;
 }
 

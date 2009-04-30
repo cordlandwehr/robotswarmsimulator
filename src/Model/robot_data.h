@@ -147,6 +147,22 @@ public:
 	void set_color( unsigned short int color){
 		color_ = color;
 	}
+	
+	/**
+	 * Indicates wether the last request issued by this robot has been performed in (exactly) the way the robot
+	 * intended.
+	 */
+	bool last_request_successful() const {
+		return last_request_successful_;
+	}
+	
+	/**
+	 * To change the last_request_successful_ attribute, used to indicate wether the last request of this robot was
+	 * successful.
+	 */
+	void set_last_request_successful(bool value) {
+		last_request_successful_ = value;
+	}
 
 	virtual boost::shared_ptr<WorldObject> clone() const;
 
@@ -168,6 +184,7 @@ private:
 	RobotType type_;
 	boost::shared_ptr<Vector3d> velocity_;
 	RobotStatus status_;
+	bool last_request_successful_;
 
 	boost::weak_ptr<View> view_;
 	unsigned short int color_;

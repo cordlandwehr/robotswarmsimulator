@@ -22,7 +22,7 @@ CollisionPositionRequestHandler::CollisionPositionRequestHandler(CollisionStrate
   collision_tree_time_(-1) { }
 
 
-void CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+bool CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                                                boost::shared_ptr<const Request> request) {
 	// this handler does support only position requests
 	typedef boost::shared_ptr<const PositionRequest> ConstPositionRequestPtr;
@@ -45,11 +45,15 @@ void CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<
 	
 	// if robot is already collided, we abort (no good way to resolve such collisions)
 	if (find_colliding_robot(robot, *world_information))
-		return;
+		return false;
 	
-	// handle request, but save robot's current position
+	// two boolean variables used to propagate information about the request handling process to caller of this method
+	bool handle_result;
+	bool collision_result = false;
+	
+	// handle request, but save robot's current position (handling itself is done by super class)
 	const Vector3d old_position = robot.position();
-	VectorRequestHandler::handle_request_reliable(world_information, request); // handling itself is done by super class
+	handle_result = VectorRequestHandler::handle_request_reliable(world_information, request);
 	
 	// collision handling
 	if (strategy_ == STOP) {
@@ -57,16 +61,21 @@ void CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<
 		if (find_colliding_robot(robot, *world_information)) {
 			boost::shared_ptr<Vector3d> old_position_ptr(new Vector3d(old_position));
 			robot.set_position(old_position_ptr);
+			collision_result = true;
 		}
 	} else if (strategy_ == TOUCH) {
 		// TOUCH strategy: on collision, move back until colliding robots are touching
 		while (const RobotPtr& other_robot = find_colliding_robot(robot, *world_information)) {
 			move_back_to_touchpoint(robot, *other_robot, old_position);
+			collision_result = true;
 		}
 	}
 	
 	// re-add current robot to the collision tree
 	collision_tree_->add_robot(world_information->get_according_robot_data_ptr(robot_id));
+	
+	// return whether we could perform the request exactly as requested
+	return !collision_result && handle_result;
 }
 
 

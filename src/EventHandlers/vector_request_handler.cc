@@ -28,7 +28,7 @@
 #include "vector_request_handler.h"
 
 
-void VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+bool VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                                     boost::shared_ptr<const Request> request) {
 	 boost::shared_ptr<const VectorRequest> vector_request = boost::dynamic_pointer_cast<const VectorRequest> (request);
 	 if(!vector_request) {
@@ -40,12 +40,14 @@ void VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInform
 	const Vector3d& reference_vector = extract_ref_vector(*vector_request, robot_data);
 
     // apply vector modifiers from pipeline
+	bool vector_changed = false;
 	BOOST_FOREACH(boost::shared_ptr<VectorModifier>& vector_modifier, vector_modifiers_) {
-		vector_modifier->modify_vector(global_vector,reference_vector);
+		vector_changed = vector_modifier->modify_vector(global_vector,reference_vector);
 	}
 
 	// update corresponding robot property
     update_vector(*vector_request, robot_data, global_vector);
+	return !vector_changed; // return false if the request was not performed exactly as requested
 }
 
 void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData& robot_data, const Vector3d& vector) {

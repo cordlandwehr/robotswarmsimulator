@@ -23,9 +23,10 @@ RequestHandler::RequestHandler(unsigned int seed,
 
 RequestHandler::~RequestHandler() {};
 
-void RequestHandler::handle_request(boost::shared_ptr<WorldInformation> world_information,
+bool RequestHandler::handle_request(boost::shared_ptr<WorldInformation> world_information,
                                     boost::shared_ptr<const Request> request) {
 	if (!distribution_generator_->get_value_bernoulli()) {
-		handle_request_reliable(world_information, request);
+		return handle_request_reliable(world_information, request);
 	}
+	return false;
 }

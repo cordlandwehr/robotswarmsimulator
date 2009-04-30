@@ -27,8 +27,10 @@ public:
 	 * \brief Trims the input vector to have at most the configured length.
 	 *
 	 * Ignores reference vector.
+	 *
+	 * \return Returns true if the input vector was changed. Otherwise, false is returned.
 	 */
-	void modify_vector(Vector3d& input_vector, const Vector3d& reference_vector);
+	bool modify_vector(Vector3d& input_vector, const Vector3d& reference_vector);
 
 
 	double length() const { return length_; }

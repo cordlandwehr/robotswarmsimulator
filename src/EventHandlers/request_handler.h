@@ -36,8 +36,11 @@ public:
 	 * delegated to the abstract handle_request_reliable member.
 	 *
 	 * Non-abstract RequestHandlers should implement handle_request_reliable
+	 *
+	 * \return Returns true if event was handled without any change, false otherwise (e.g. if it was decarded or not
+	 *         performed completely.
 	 */
-	void handle_request(boost::shared_ptr<WorldInformation> world_information,
+	bool handle_request(boost::shared_ptr<WorldInformation> world_information,
 	                    boost::shared_ptr<const Request> request);
 
 protected:
@@ -47,7 +50,11 @@ protected:
 	const History& history_;
 
 private:
-	virtual void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+	/**
+	 * \return Subclasses have to use the return value to indicate wether they changed the incoming request in any way
+	 *         before it was performed  (if it has been performed at all).
+	 */
+	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
 	                                     boost::shared_ptr<const Request> request) = 0;
 
 	double discard_probability_;

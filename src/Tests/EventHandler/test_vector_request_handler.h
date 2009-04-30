@@ -25,10 +25,10 @@ public:
 	unsigned int nr_handled() { return nr_handled_; }
 	
 protected:
-	void handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+	bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
 								 boost::shared_ptr<const Request> request) {
-		VectorRequestHandler::handle_request_reliable(world_information, request);
 		nr_handled_++;
+		return VectorRequestHandler::handle_request_reliable(world_information, request);
 	}
 
 private:

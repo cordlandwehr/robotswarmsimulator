@@ -103,6 +103,7 @@ boost::shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(b
 
 	// handle requests
 	BOOST_FOREACH(boost::shared_ptr<const Request> request, handle_requests_event->requests()) {
+		bool handled_as_expected;
 
 		// Try to cast the pointer to all types of request to see what kind of request it is.
 		// The cast will return NULL if it is the wrong kind of request.
@@ -110,48 +111,52 @@ boost::shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(b
 		if(boost::shared_ptr<const PositionRequest> position_request =
 		   boost::dynamic_pointer_cast<const PositionRequest> (request)) {
 			if(position_request_handler_) {
-				position_request_handler_->handle_request(new_world_information, position_request);
+				handled_as_expected = position_request_handler_->handle_request(new_world_information, position_request);
 			} else {
 				std::cerr << "No Position Request Handler Set" << std::endl;
 			}
 		} else if(boost::shared_ptr<const AccelerationRequest> acceleration_request =
 		          boost::dynamic_pointer_cast<const AccelerationRequest> (request)) {
 			if(acceleration_request_handler_) {
-				acceleration_request_handler_->handle_request(new_world_information, acceleration_request);
+				handled_as_expected = acceleration_request_handler_->handle_request(new_world_information, acceleration_request);
 			} else {
 				std::cerr << "No Acceleration Request Handler Set" << std::endl;
 			}
 		} else if(boost::shared_ptr<const MarkerRequest> marker_request =
 		          boost::dynamic_pointer_cast<const MarkerRequest> (request)) {
 			if(marker_request_handler_) {
-				marker_request_handler_->handle_request(new_world_information, marker_request);
+				handled_as_expected = marker_request_handler_->handle_request(new_world_information, marker_request);
 			} else {
 				std::cerr << "No Marker Request Handler Set" << std::endl;
 			}
 		} else if(boost::shared_ptr<const TypeChangeRequest> type_change_request =
 		          boost::dynamic_pointer_cast<const TypeChangeRequest>(request)) {
 			if(type_change_request_handler_) {
-				type_change_request_handler_->handle_request(new_world_information, type_change_request);
+				handled_as_expected = type_change_request_handler_->handle_request(new_world_information, type_change_request);
 			} else {
 				std::cerr << "No Type Change Request Handler Set" << std::endl;
 			}
 		} else if(boost::shared_ptr<const VelocityRequest> velocity_request =
 		          boost::dynamic_pointer_cast<const VelocityRequest> (request)) {
 			if(velocity_request_handler_) {
-				velocity_request_handler_->handle_request(new_world_information, velocity_request);
+				handled_as_expected = velocity_request_handler_->handle_request(new_world_information, velocity_request);
 			} else {
 				std::cerr << "No Velocity Request Handler Set" << std::endl;
 			}
 		} else if(boost::shared_ptr<const MarkerChangeRequest> marker_change_request =
 		          boost::dynamic_pointer_cast<const MarkerChangeRequest> (request)) {
 			if (marker_change_request_handler_) {
-				marker_change_request_handler_->handle_request(new_world_information, marker_change_request);
+				handled_as_expected = marker_change_request_handler_->handle_request(new_world_information, marker_change_request);
 			} else {
 				std::cerr << "No Marker Change Request Handler Set" << std::endl;
 			}
 		} else {
 			throw std::invalid_argument("Illegal type of request.");
 		}
+		
+		// inform robot data about the success state of its request
+		RobotData& robot_data = new_world_information->get_according_robot_data(request->robot().id());
+		robot_data.set_last_request_successful(handled_as_expected);
 	}
 
 	return new_world_information;

@@ -29,8 +29,10 @@ public:
 	 * specification. The reference_vector is used to give vector modifiers additional information about the original
 	 * vector (for example to make sure that difference between input and reference vector does not become too large).
 	 * However, subclasses may ignore it.
+	 *
+	 * The return value has to indicate wether the input vector has actually been modified (true) or not (false).
 	 */
-	virtual void modify_vector(Vector3d& input_vector, const Vector3d& reference_vector) = 0;
+	virtual bool modify_vector(Vector3d& input_vector, const Vector3d& reference_vector) = 0;
 };
 
 #endif /* VECTOR_MODIFIER_H_ */

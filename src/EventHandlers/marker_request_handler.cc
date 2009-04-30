@@ -16,7 +16,7 @@
 
 #include "marker_request_handler.h"
 
-void MarkerRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
+bool MarkerRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
                                                     boost::shared_ptr<const Request> request) {
 	boost::shared_ptr<const MarkerRequest> marker_request =
 	     boost::dynamic_pointer_cast<const MarkerRequest> (request);
@@ -28,4 +28,5 @@ void MarkerRequestHandler:: handle_request_reliable(boost::shared_ptr<WorldInfor
 	RobotData& robot_data = world_information->get_according_robot_data(robot_id);
 	boost::shared_ptr<MarkerInformation> new_marker_information(new MarkerInformation(marker_request->requested_marker_information()));
 	robot_data.set_marker_information(new_marker_information);
+	return true;
 }
