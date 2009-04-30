@@ -30,6 +30,10 @@ public:
 
 private:
 	void distribute_robots_uniform(std::vector< boost::shared_ptr<RobotData> >& robotDataList);
+
+	/**
+	 * TODO(craupach) These should become part of the formation generator abstract class itself
+	 */
 	void distribute_velocity_uniform(std::vector< boost::shared_ptr<RobotData> >& robotDataList);
 	void distribute_acceleration_uniform(std::vector< boost::shared_ptr<RobotData> >& robotDataList);
 

@@ -28,6 +28,7 @@
 
 #include "formation_generator.h"
 #include "uniform_formation_generator.h"
+#include "circle_formation_generator.h"
 
 #include "szenario_generator.h"
 
