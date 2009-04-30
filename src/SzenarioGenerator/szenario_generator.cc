@@ -26,6 +26,9 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/distribution_generator.h"
 
+#include "formation_generator.h"
+#include "uniform_formation_generator.h"
+
 #include "szenario_generator.h"
 
 

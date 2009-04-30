@@ -24,6 +24,7 @@
 #include <SimulationControl/simulation_control.h>
 #include <UserInterfaces/glut_visualizer.h>
 #include <SzenarioGenerator/szenario_generator.h>
+#include <SzenarioGenerator/formation_generator.h>
 #include <Utilities/console_output.h>
 
 #include "aiee.h"
