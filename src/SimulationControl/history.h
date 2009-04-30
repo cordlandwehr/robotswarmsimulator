@@ -14,7 +14,6 @@
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
 #include <boost/thread/mutex.hpp>
 
-class WorldInformation;
 class TimePoint;
 
 /**

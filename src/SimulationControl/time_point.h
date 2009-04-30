@@ -17,6 +17,7 @@
 /**
  * The TimePoint class encapusaltes a WorldInformation Object and statistical information for a certain
  * point in time.
+ * A TimePoint in the History MUST contain a WorldInformation. It MAY contain statistical information.
  */
 class TimePoint {
 public:
@@ -59,8 +60,10 @@ public:
 
 	const StatisticsDataObject& statistics_data_object() const {return *statistics_data_object_;}
 	const boost::shared_ptr<StatisticsDataObject> statistics_data_object_ptr() const {return statistics_data_object_;}
+
 	/**
-	 * checks if this time point represents a real WorldInformation object
+	 * checks if this time point represents a real WorldInformation object.
+	 * There may be a statistics object but not necessarly
 	 */
 	bool isValid() {return world_information_;}
 
@@ -76,7 +79,8 @@ private:
 	boost::shared_ptr<StatisticsDataObject> statistics_data_object_;
 
 	/**
-	 * true iff no further modifications should be allowed.
+	 * true iff no further modifications should be allowed. This is set to true as soon as
+	 * a statistics object is inserted or the time point is inserted into the history.
 	 */
 	bool statistics_locked_;
 

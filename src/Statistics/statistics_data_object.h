@@ -38,7 +38,7 @@ public:
 
 private:
 	/**
-	 * I don't know what this was for...
+	 * Array indicating for each robot its connected component
 	 */
 	boost::shared_ptr<std::vector<int> > components_;
 
