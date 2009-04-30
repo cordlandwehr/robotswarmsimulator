@@ -33,11 +33,17 @@
 #include "szenario_generator.h"
 
 
-void szenario_generator::init(int number_robots, std::string algorithm_id) {
+void szenario_generator::init(const boost::program_options::variables_map& vm) {
+
+	// initialize the formation generator
+	init_formation_generator(vm);
+
 	// the world information object contains all information that shall be saved in the robot file
 	generatedWorld_.reset( new WorldInformation());
 	parser_.reset(new Parser());
 
+	int number_robots = vm["robots"].as<unsigned int>();
+	std::string algorithm_id = vm["algorithm"].as<std::string>();
 	for (int ctr=0; ctr < number_robots; ctr++) {
 		boost::shared_ptr< RobotIdentifier > tmpIdent;
 		boost::shared_ptr< RobotData > tmpRobotData;
@@ -107,6 +113,22 @@ void szenario_generator::init(int number_robots, std::string algorithm_id) {
 	compassModel_.reset(new std::string("NO_COMPASS"));
 	statisticsTemplate_.reset(new std::string("ALL"));
 	statisticsSubsets_.reset(new std::string("{ALL}"));
+}
+
+void szenario_generator::distribute() {
+	formation_generator_->distribute(robotDataList_);
+}
+
+void szenario_generator::init_formation_generator(const boost::program_options::variables_map& vm) {
+	// create formation generator
+	if (vm["distr-pos"].as<double>() != 0.0) {
+		formation_generator_.reset(new UniformFormationGenerator());
+	} else if(vm.count("distr-pos-circle")) {
+		formation_generator_.reset(new CircleFormationGenerator());
+	}
+
+	// initalize formation generator
+	formation_generator_->init(vm);
 }
 
 void szenario_generator::distribute_robots_uniform(Vector3d boundingBox) {

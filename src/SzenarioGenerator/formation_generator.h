@@ -10,6 +10,8 @@
 
 #include <boost/program_options.hpp>
 
+class RobotData;
+
 /**
  * Abstract class for formation generation
  */

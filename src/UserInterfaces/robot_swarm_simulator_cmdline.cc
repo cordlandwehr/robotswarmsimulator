@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
 		try {
 			// init
 			szenario_generator generator(vm["seed"].as<unsigned int>());	// set seed
-			generator.init(vm["robots"].as<unsigned int>(), vm["algorithm"].as<std::string>());				// init number of robots
+			generator.init(vm);				// init distribution generator
 
 			// files
 			generator.set_worldFile(vm["swarmfile"].as<std::string>());

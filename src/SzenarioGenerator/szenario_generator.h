@@ -12,6 +12,7 @@
 #include <boost/random/variate_generator.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/program_options.hpp>
 
 #include <vector>
 #include <string>
@@ -25,6 +26,8 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/distribution_generator.h"
 
+class FormationGenerator;
+
 class szenario_generator {
 public:
 	/**
@@ -32,7 +35,12 @@ public:
 	 * @param number_robots int
 	 * @param algorithm-name for robot algorithm
 	 */
-	void init(int number_robots, std::string algorithm_id);
+	void init(const boost::program_options::variables_map& vm);
+
+	/**
+	 * Creates a new initial formation according to the set formation generator
+	 */
+	void distribute();
 
 	/**
 	 * Method distributes robots interior of a bounding box uniformly
@@ -156,12 +164,24 @@ public:
 	void generate_coords_uniform(Vector3d boundingBox);
 
 private:
+	void init_formation_generator(const boost::program_options::variables_map& vm);
+
 	boost::shared_ptr< DistributionGenerator > png_;
 	boost::shared_ptr< Parser > parser_;
+
+	/**
+	 * A generator to distribute position, velocity and acceleration
+	 */
+	boost::shared_ptr< FormationGenerator> formation_generator_;
+
+
 	boost::shared_ptr< WorldInformation > generatedWorld_;
 
 	std::vector< boost::shared_ptr<Robot> > robotList_;
 	std::vector< boost::shared_ptr<RobotData> > robotDataList_;
+
+
+
 
 	boost::shared_ptr< std::string > projectName_;
 	boost::shared_ptr< std::string > projectFileName_;

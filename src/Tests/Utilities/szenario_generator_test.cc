@@ -25,7 +25,7 @@
 #include "../../Utilities/distribution_generator.h"
 
 #include <iostream>
-
+/*
 BOOST_AUTO_TEST_CASE( szenario_generator_test )
 {
 	szenario_generator generator(17);
@@ -43,3 +43,4 @@ BOOST_AUTO_TEST_CASE( szenario_generator_test )
 
 	std::cout << "42 robots generated" << std::endl;
 }
+*/

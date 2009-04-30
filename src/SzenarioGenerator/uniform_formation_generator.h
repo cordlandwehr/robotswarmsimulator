@@ -9,6 +9,7 @@
 #define UNIFORM_FORMATION_GENERATOR_H_
 
 #include "../Utilities/vector_arithmetics.h"
+#include "formation_generator.h"
 
 /**
  * A formation generator which distributes the robot positions uniform.

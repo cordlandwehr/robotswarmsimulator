@@ -8,16 +8,21 @@
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/distribution_generator.h"
 
+#include "../Model/robot_data.h"
+#include "../Model/robot.h"
+#include "../Model/robot_identifier.h"
+#include "../Model/world_information.h"
+
 #include "uniform_formation_generator.h"
 
 void UniformFormationGenerator::init(const boost::program_options::variables_map& vm) {
 	// Source of randomness
-	png_.reset(new DistributionGenerator(vm["seed"].as<unsigned int>());
+	png_.reset(new DistributionGenerator(vm["seed"].as<unsigned int>()));
 
 	// Bounding box
-	boundingBox.insert_element(kXCoord,vm["distr-pos"].as<double>());
-	boundingBox.insert_element(kYCoord,vm["distr-pos"].as<double>());
-	boundingBox.insert_element(kZCoord,vm["distr-pos"].as<double>());
+	boundingBox_.insert_element(kXCoord,vm["distr-pos"].as<double>());
+	boundingBox_.insert_element(kYCoord,vm["distr-pos"].as<double>());
+	boundingBox_.insert_element(kZCoord,vm["distr-pos"].as<double>());
 
 	// Initial velocities
 	if (vm["min-vel"].as<double>() != 0.0 || vm["max-vel"].as<double>() != 0.0) {
@@ -34,9 +39,9 @@ void UniformFormationGenerator::init(const boost::program_options::variables_map
 	}
 }
 
-void UniformFormationGenerator:distribute(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
+void UniformFormationGenerator::distribute(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
 	distribute_robots_uniform(robotDataList);
-	if(distrVec_) {
+	if(distrVel_) {
 		distribute_velocity_uniform(robotDataList);
 	}
 
@@ -48,13 +53,13 @@ void UniformFormationGenerator:distribute(std::vector< boost::shared_ptr<RobotDa
 void UniformFormationGenerator::distribute_robots_uniform(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
-	for(iter = robotDataList.begin(); iter != robotDataList_.end() ; iter++ ) {
+	for(iter = robotDataList.begin(); iter != robotDataList.end() ; iter++ ) {
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform_real(-boundingBox(kXCoord)/2, boundingBox(kXCoord)/2);
+		png_->init_uniform_real(-boundingBox_(kXCoord)/2, boundingBox_(kXCoord)/2);
 		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(-boundingBox(kYCoord)/2, boundingBox(kYCoord)/2);
+		png_->init_uniform_real(-boundingBox_(kYCoord)/2, boundingBox_(kYCoord)/2);
 		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(-boundingBox(kZCoord)/2, boundingBox(kZCoord)/2);
+		png_->init_uniform_real(-boundingBox_(kZCoord)/2, boundingBox_(kZCoord)/2);
 		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
 
 		(*iter)->set_position( newRandomPosition );
@@ -64,7 +69,7 @@ void UniformFormationGenerator::distribute_robots_uniform(std::vector< boost::sh
 void UniformFormationGenerator::distribute_velocity_uniform(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
-	for(iter = robotDataList.begin(); iter != robotDataList_.end() ; iter++ ) {
+	for(iter = robotDataList.begin(); iter != robotDataList.end() ; iter++ ) {
 		// get vector uniform on unit sphere
 		png_->init_uniform_on_sphere(3);
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
@@ -83,7 +88,7 @@ void UniformFormationGenerator::distribute_velocity_uniform(std::vector< boost::
 void UniformFormationGenerator::distribute_acceleration_uniform(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
-	for(iter = robotDataList.begin(); iter != robotDataList_.end() ; iter++ ) {
+	for(iter = robotDataList.begin(); iter != robotDataList.end() ; iter++ ) {
 		// get vector uniform on unit sphere
 		png_->init_uniform_on_sphere(3);
 		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d(png_->get_value_uniform_on_sphere_3d()));

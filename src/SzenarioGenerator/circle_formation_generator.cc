@@ -4,6 +4,13 @@
  *  Created on: Apr 30, 2009
  *      Author: craupach
  */
+#include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/distribution_generator.h"
+
+#include "../Model/robot_data.h"
+#include "../Model/robot.h"
+#include "../Model/robot_identifier.h"
+#include "../Model/world_information.h"
 
 #include "circle_formation_generator.h"
 
@@ -13,7 +20,7 @@ void CircleFormationGenerator::init(const boost::program_options::variables_map&
 }
 
 void CircleFormationGenerator::distribute(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
-	distribue_robots_circle(robotDataList);
+	distribute_robots_circle(robotDataList);
 }
 
 void CircleFormationGenerator::distribute_robots_circle(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
