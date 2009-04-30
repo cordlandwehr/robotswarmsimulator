@@ -21,9 +21,9 @@
 #include "../Model/robot_identifier.h"
 #include "../Model/world_information.h"
 
-#include "parser.h"
-#include "vector_arithmetics.h"
-#include "distribution_generator.h"
+#include "../Utilities/parser.h"
+#include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/distribution_generator.h"
 
 class szenario_generator {
 public:

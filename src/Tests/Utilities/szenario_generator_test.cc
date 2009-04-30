@@ -21,7 +21,7 @@
 
 #include "../../Utilities/parser.h"
 #include "../../Utilities/vector_arithmetics.h"
-#include "../../Utilities/szenario_generator.h"
+#include "../../SzenarioGenerator/szenario_generator.h"
 #include "../../Utilities/distribution_generator.h"
 
 #include <iostream>

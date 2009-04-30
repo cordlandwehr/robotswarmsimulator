@@ -22,11 +22,11 @@
 
 #include "../SimulationKernel/factories.h"
 
-#include "parser.h"
-#include "vector_arithmetics.h"
-#include "szenario_generator.h"
-#include "distribution_generator.h"
+#include "../Utilities/parser.h"
+#include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/distribution_generator.h"
 
+#include "szenario_generator.h"
 
 
 void szenario_generator::init(int number_robots, std::string algorithm_id) {

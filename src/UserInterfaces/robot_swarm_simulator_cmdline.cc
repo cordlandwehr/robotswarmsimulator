@@ -23,7 +23,7 @@
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
 #include <UserInterfaces/glut_visualizer.h>
-#include <Utilities/szenario_generator.h>
+#include <SzenarioGenerator/szenario_generator.h>
 #include <Utilities/console_output.h>
 
 #include "aiee.h"
