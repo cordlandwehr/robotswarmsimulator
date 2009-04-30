@@ -126,18 +126,62 @@ Vector3d PointAlgorithms::compute_MaxLine(int coord, const std::vector<Vector3d>
 }
 
 Vector3d PointAlgorithms::compute_CCH(const std::vector<Vector3d>& positions) {
+	// TODO(craupach) needs CGAL
 	return Vector3d();
 }
 
 Vector3d PointAlgorithms::compute_RCH(const std::vector<Vector3d>& positions) {
+	// TODO(craupach) needs CGAL
 	return Vector3d();
 }
 
-Vector3d PointAlgorithms::compute_RMinRect(const std::vector<Vector3d>& positions) {
-	return Vector3d();
+Vector3d PointAlgorithms::compute_RMinRect(const boost::shared_ptr<DistributionGenerator> source_of_randomness, const std::vector<Vector3d>& positions) {
+	if(positions.size() == 0) {
+		// do some error handling
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing CMinBox with positions.size == 0";
+		return Vector3d();
+	}
+	Vector3d first = positions.at(0);
+	double min_x = first(kXCoord);
+	double max_x = first(kXCoord);
+	double min_y = first(kYCoord);
+	double max_y = first(kYCoord);
+	double min_z = first(kZCoord);
+	double max_z = first(kZCoord);
+
+	BOOST_FOREACH(Vector3d position, positions) {
+		if(position(kXCoord) < min_x) {
+			min_x = position(kXCoord);
+		} else if(position(kXCoord) > max_x) {
+			max_x = position(kXCoord);
+		}
+
+		if(position(kYCoord) < min_y) {
+			min_y = position(kYCoord);
+		} else if(position(kYCoord) > max_y) {
+			max_y = position(kYCoord);
+		}
+
+		if(position(kZCoord) < min_z) {
+			min_z = position(kZCoord);
+		} else if(position(kZCoord) > max_z) {
+			max_z = position(kZCoord);
+		}
+	}
+
+	Vector3d target_point;
+	source_of_randomness->init_uniform_real(min_x, max_x);
+	target_point[kXCoord] = source_of_randomness->get_value_uniform_real();
+	source_of_randomness->init_uniform_real(min_y, max_y);
+	target_point[kYCoord] = source_of_randomness->get_value_uniform_real();
+	source_of_randomness->init_uniform_real(min_z, max_z);
+	target_point[kZCoord] = source_of_randomness->get_value_uniform_real();
+
+	return target_point;
 }
 
 Vector3d PointAlgorithms::compute_ACH(const std::vector<Vector3d>& positions) {
+	// TODO(craupach) This cannot be implemented in  a more arbitrary way than being random (RCH)
 	return Vector3d();
 }
 
