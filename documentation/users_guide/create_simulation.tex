@@ -357,6 +357,6 @@ For creating a new robot algorithm inside the simulator you need to do the follo
 	\item Put the algorithm into \texttt{src/RobotImplementations/}.
 	\item Write the method \texttt{compute()}.
 	\item Write the method \texttt{get\_algorithm\_id()}.
-	\item Add the algorithm identifier as option in file\newline \texttt{src/SimulationKernel/factories.cc} in method \texttt{robot\_factory(\dots)}.
+	\item Add an include of the header of your new robot class in file \texttt{src/SimulationKernel/factories.cc} and also add here the algorithm identifier as option in method \texttt{robot\_factory(\dots)}.\\
 \end{enumerate}
 
