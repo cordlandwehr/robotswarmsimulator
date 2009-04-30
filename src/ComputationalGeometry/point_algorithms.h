@@ -29,7 +29,7 @@ public:
 	static Vector3d compute_RCH(const std::vector<Vector3d>& positions);
 	static Vector3d compute_RMinRect(const std::vector<Vector3d>& positions);
 	static Vector3d compute_ACH(const std::vector<Vector3d>& positions);
-	static Vector3d compute_MidFar(const std::vector<Vector3d>& positions);
+	static Vector3d compute_MidFar(const Vector3d & own_position, const std::vector<Vector3d>& positions);
 	static Vector3d compute_MED(const std::vector<Vector3d>& positions);
 	static Vector3d compute_FW(const std::vector<Vector3d>& positions);
 	static Vector3d compute_kMin(const std::vector<Vector3d>& positions, int k);

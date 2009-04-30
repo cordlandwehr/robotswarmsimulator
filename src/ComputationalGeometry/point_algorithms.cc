@@ -11,6 +11,7 @@
 #include "miniball_b.h"
 #include "miniball_b.cc"
 #include "../Utilities/console_output.h"
+#include "../Utilities/vector_arithmetics.h"
 
 #include <boost/foreach.hpp>
 
@@ -120,8 +121,30 @@ Vector3d PointAlgorithms::compute_ACH(const std::vector<Vector3d>& positions) {
 	return Vector3d();
 }
 
-Vector3d PointAlgorithms::compute_MidFar(const std::vector<Vector3d>& positions) {
-	return Vector3d();
+Vector3d PointAlgorithms::compute_MidFar(const Vector3d & own_position, const std::vector<Vector3d>& positions) {
+	if(positions.size() == 0) {
+		// do some error handling.
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing MidFar with positions.size == 0";
+		return Vector3d();
+	}
+
+	double longest_distance = vector3d_distance(own_position, positions.at(0));
+	Vector3d longest_distance_vec = positions.at(0);
+
+	std::vector<Vector3d>::const_iterator iter;
+
+	BOOST_FOREACH(Vector3d position, positions) {
+		double cur_distance = vector3d_distance(own_position, position);
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::debug) << "cur distance: " << cur_distance;
+		if(cur_distance > longest_distance) {
+			longest_distance = cur_distance;
+			longest_distance_vec = position;
+		}
+	}
+
+	Vector3d target_point = own_position + 0.5 * (longest_distance_vec - own_position);
+
+	return target_point;
 }
 
 Vector3d PointAlgorithms::compute_MED(const std::vector<Vector3d>& positions) {
