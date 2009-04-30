@@ -172,27 +172,8 @@ int main(int argc, char** argv) {
 			generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
 
 			// distribute everything
-			if (vm["distr-pos"].as<double>()!=0.0) {
-				Vector3d tmpVec;
-				tmpVec.insert_element(kXCoord,vm["distr-pos"].as<double>());
-				tmpVec.insert_element(kYCoord,vm["distr-pos"].as<double>());
-				tmpVec.insert_element(kZCoord,vm["distr-pos"].as<double>());
-				generator.distribute_robots_uniform(tmpVec);
-			} else if(vm.count("distr-pos-circle")) {
-				double radius = vm["distr-pos-circle"].as<double>();
-				double starting_angle = vm["distr-pos-circle-angle"].as<double>();
-				generator.distribute_robots_circle(radius, starting_angle);
-			}
+			generator.distribute();
 
-
-			// distribute initial velocities
-			if (vm["min-vel"].as<double>()!=0.0 || vm["max-vel"].as<double>()!=0.0) {
-				generator.distribute_velocity_uniform(vm["min-vel"].as<double>(),vm["max-vel"].as<double>());
-			}
-
-			if (vm["min-acc"].as<double>()!=0.0 || vm["max-acc"].as<double>()!=0.0) {
-				generator.distribute_acceleration_uniform(vm["min-acc"].as<double>(),vm["max-acc"].as<double>());
-			}
 			if (vm.count("distr-coord"))
 				generator.distribute_coordsys_uniform();
 
