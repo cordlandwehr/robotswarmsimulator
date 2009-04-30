@@ -131,22 +131,6 @@ void szenario_generator::init_formation_generator(const boost::program_options::
 	formation_generator_->init(vm);
 }
 
-void szenario_generator::distribute_robots_uniform(Vector3d boundingBox) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_uniform_real(-boundingBox(kXCoord)/2, boundingBox(kXCoord)/2);
-		newRandomPosition->insert_element(kXCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(-boundingBox(kYCoord)/2, boundingBox(kYCoord)/2);
-		newRandomPosition->insert_element(kYCoord,png_->get_value_uniform_real());
-		png_->init_uniform_real(-boundingBox(kZCoord)/2, boundingBox(kZCoord)/2);
-		newRandomPosition->insert_element(kZCoord,png_->get_value_uniform_real());
-
-		(*iter)->set_position( newRandomPosition );
-	}
-}
-
 void szenario_generator::distribute_robots_normal(Vector3d boundingBox, double mean, double sigma) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
@@ -188,64 +172,6 @@ void szenario_generator::distribute_robots_normal(Vector3d boundingBox, double m
 	}
 }
 
-void szenario_generator::distribute_robots_circle(double radius, double starting_angle) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-	int circle_num = 0;
-	double cur_angle = 0.0;
-	double incr_angle = starting_angle;
-	const long double pi = 3.1415926535897932384626433832795028841968; // awkward.
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		if(circle_num == 0) {
-			// center robot
-			boost::shared_ptr<Vector3d> center(new Vector3d());
-			center->insert_element(kXCoord,0.0);
-			center->insert_element(kYCoord,0.0);
-			center->insert_element(kZCoord,0.0);
-			(*iter)->set_position( center );
-
-			// this robot is a chieftain
-			(*iter)->set_type( MASTER );
-			circle_num++;
-		} else {
-			// position robot on circle i at cur_angle
-			boost::shared_ptr<Vector3d> pos(new Vector3d());
-			pos->insert_element(kXCoord,std::cos(cur_angle));
-			pos->insert_element(kYCoord,std::sin(cur_angle));
-			pos->insert_element(kZCoord,0.0);
-			(*pos) *= (circle_num * radius);
-			(*iter)->set_position( pos );
-
-			// adjust counter variables
-			cur_angle += incr_angle;
-			if(cur_angle > 2 * pi) {
-				circle_num++;
-				cur_angle = 0.0;
-				incr_angle /= 2;
-			}
-		}
-	}
-}
-
-
-void szenario_generator::distribute_velocity_uniform(double minVelocity, double maxVelocity) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		// get vector uniform on unit sphere
-		png_->init_uniform_on_sphere(3);
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
-
-		// get vector length uniform in range [minVelocity,maxVelocity]
-		png_->init_uniform_real(minVelocity, maxVelocity);
-		double vecLength = png_->get_value_uniform_real();
-		newRandomPosition->insert_element(kXCoord,vecLength * (*newRandomPosition)(kXCoord));
-		newRandomPosition->insert_element(kYCoord,vecLength * (*newRandomPosition)(kYCoord));
-		newRandomPosition->insert_element(kZCoord,vecLength * (*newRandomPosition)(kZCoord));
-
-		(*iter)->set_velocity( newRandomPosition );
-	}
-}
 
 
 void szenario_generator::distribute_velocity_normal(double mean, double sigma) {
@@ -262,27 +188,6 @@ void szenario_generator::distribute_velocity_normal(double mean, double sigma) {
 		(*iter)->set_velocity( newRandomPosition );
 	}
 }
-
-
-void szenario_generator::distribute_acceleration_uniform(double minAcc, double maxAcc) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		// get vector uniform on unit sphere
-		png_->init_uniform_on_sphere(3);
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
-
-		// get vector length uniform in range [minAcc,maxAcc]
-		png_->init_uniform_real(minAcc, maxAcc);
-		double vecLength = png_->get_value_uniform_real();
-		newRandomPosition->insert_element(kXCoord,vecLength * (*newRandomPosition)(kXCoord));
-		newRandomPosition->insert_element(kYCoord,vecLength * (*newRandomPosition)(kYCoord));
-		newRandomPosition->insert_element(kZCoord,vecLength * (*newRandomPosition)(kZCoord));
-
-		(*iter)->set_acceleration( newRandomPosition );
-	}
-}
-
 
 void szenario_generator::distribute_acceleration_normal(double mean, double sigma) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;

@@ -42,11 +42,7 @@ public:
 	 */
 	void distribute();
 
-	/**
-	 * Method distributes robots interior of a bounding box uniformly
-	 * @param boundingBox Vector3d the spans the bounding box
-	 */
-	void distribute_robots_uniform(Vector3d boundingBox);
+
 
 	/**
 	 * Method distributes robots interior of a bounding box by normal distribution
@@ -58,20 +54,6 @@ public:
 	 */
 	void distribute_robots_normal(Vector3d boundingBox, double mean, double sigma);
 
-	/**
-	 * distributes the robots evenly on concentric circles
-	 * @param radius: radius of the inner circle. Circle i has radius i*radius
-	 * @param starting_angle: used to control the density of the robots.
-	 * Circle i has robots at each angle of starting_angle/i
-	 */
-	void distribute_robots_circle(double radius, double starting_angle);
-
-	/**
-	 * Method distributes robot initial velocities interior of sphere with max-radius, but outside sphere with min-radius
-	 * @param minVelocity double sets minimum velocity
-	 * @param maxVelocity double sets maximum velocity
-	 */
-	void distribute_velocity_uniform(double minVelocity, double maxVelocity);
 
 	/**
 	 * Method distributes robot initial velocities by normal distribution
@@ -79,13 +61,6 @@ public:
 	 * @param sigma double value for normal distribution
 	 */
 	void distribute_velocity_normal(double mean, double sigma);
-
-	/**
-	 * Method distributes robot initial accelerations interior of sphere with max-radius, but outside sphere with min-radius
-	 * @param minAcc double sets minimum acceleration
-	 * @param maxAcc double sets maximum acceleration
-	 */
-	void distribute_acceleration_uniform(double minAcc, double maxAcc);
 
 	/**
 	 * Method distributes robot initial accelerations by normal distribution
