@@ -19,7 +19,7 @@ RobotData::RobotData(boost::shared_ptr<Identifier> id,
 	;
 }
 
-RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_), status_(rhs.status_), last_request_successful_(rhs.status_), color_(rhs.color_), view_(rhs.view_) {
+RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_), status_(rhs.status_), last_request_successful_(rhs.last_request_successful_), color_(rhs.color_), view_(rhs.view_) {
 	if(rhs.acceleration_) {
 		this->acceleration_.reset(new Vector3d(*rhs.acceleration_));
 	}

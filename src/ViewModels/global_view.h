@@ -17,6 +17,7 @@
 #include "../Views/point_in_obstacle_view.h"
 #include "../Views/position_view.h"
 #include "../Views/robot_status_view.h"
+#include "../Views/robot_last_request_successful_view.h"
 #include "../Views/robot_type_view.h"
 #include "../Views/sphere_view.h"
 #include "../Views/velocity_view.h"
@@ -40,6 +41,7 @@ class GlobalView: public virtual BoxView,
 		public virtual PointInObstacleView,
 		public virtual PositionView,
 		public virtual RobotStatusView,
+		public virtual RobotLastRequestSuccessfulView,
 		public virtual RobotTypeView,
 		public virtual SphereView,
 		public virtual OriginView,

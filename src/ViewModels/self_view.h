@@ -14,6 +14,7 @@
 #include "../Views/own_marker_view.h"
 #include "../Views/own_position_view.h"
 #include "../Views/own_status_view.h"
+#include "../Views/own_last_request_successful_view.h"
 #include "../Views/own_type_view.h"
 #include "../Views/own_velocity_view.h"
 
@@ -31,6 +32,7 @@ class SelfView: public virtual OwnAccelerationView,
 		public virtual OwnMarkerView,
 		public virtual OwnPositionView,
 		public virtual OwnStatusView,
+		public virtual OwnLastRequestSuccessfulView,
 		public virtual OwnTypeView,
 		public virtual OwnVelocityView {
 public:

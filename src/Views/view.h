@@ -174,6 +174,15 @@ public:
 	 * @see RobotData::status()
 	 */
 	const RobotStatus get_robot_status(const Robot& caller, RobotRef robot) const;
+	/**
+	 * Queries whether last (already performed) request issued by the given robot has been successful, that is has been
+	 * performed exactly as requested without any change (due to inaccuracy, collisions, ...).
+	 * @param The robot which is asking..
+	 * @param RobotIdentifier
+	 * @return bool
+	 * @see RobotData::last_request_successful()
+	 */
+	const bool get_robot_last_request_successful(const Robot& caller, RobotRef robot) const;
 
 	//-- Obstacle --
 	/**
@@ -290,6 +299,11 @@ protected:
 	//View::get_robot_status.
 	virtual RobotStatus get_own_status(const RobotData& robot) const;
 	virtual RobotStatus get_others_status(const RobotData& robot) const;
+	
+	//Pretty much the same concept as in View::get_own_acceleration besides this methods are called by
+	//View::get_robot_last_request_successful.
+	virtual bool get_own_last_request_successful(const RobotData& robot) const;
+	virtual bool get_others_last_request_successful(const RobotData& robot) const;
 
 	//Called by non virtual View::is_point_in_obstacle
 	virtual bool is_point_in_obstacle(const Obstacle& obstacle, const Vector3d& point) const;

@@ -196,6 +196,11 @@ const RobotStatus View::get_robot_status(const Robot& caller, RobotRef robot) co
 	return delegate_function<RobotStatus>(&View::get_own_status, &View::get_others_status, caller, robot);
 }
 
+const bool View::get_robot_last_request_successful(const Robot& caller, RobotRef robot) const {
+	return delegate_function<bool>(&View::get_own_last_request_successful, &View::get_others_last_request_successful,
+	                               caller, robot);
+}
+
 const bool View::is_point_in_obstacle(ObstacleRef obstacle, const Vector3d& point) const {
 	return is_point_in_obstacle(resolve_obstacle_ref_safe(obstacle), point);
 }
@@ -324,6 +329,14 @@ RobotStatus View::get_own_status(const RobotData& robot) const {
 
 RobotStatus View::get_others_status(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_robot_status"));
+}
+
+bool View::get_own_last_request_successful(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_last_request_successful"));
+}
+
+bool View::get_others_last_request_successful(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_last_request_successful"));
 }
 
 bool View::is_point_in_obstacle(const Obstacle& obstacle, const Vector3d& point) const {

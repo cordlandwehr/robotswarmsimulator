@@ -228,6 +228,17 @@ namespace {
 	const unsigned get_robot_status(std::size_t index) {
 		return view->get_robot_status(*robot, resolve<RobotIdentifier>(index));
 	}
+	
+	/**
+	 * @param (Robot-)Identifier
+	 * @return Returns whether last (already performed) request has been successful (i.e. was handled in exactly the way
+	 *         the issuer requested) for the robot with the given identifier.
+	 * @see View.get_robot_last_request_successful()
+	 */
+	
+	const unsigned get_robot_last_request_successful(std::size_t index) {
+		return view->get_robot_last_request_successful(*robot, resolve<RobotIdentifier>(index));
+	}
 
 	/**
 	 * @param (Obstacle-)Identifier
@@ -482,6 +493,7 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("get_robot_coordinate_system_axis", &get_robot_coordinate_system_axis),
 			 luabind::def("get_robot_type", &get_robot_type),
 			 luabind::def("get_robot_status", &get_robot_status),
+			 luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
 			 luabind::def("is_point_in_obstacle", &is_point_in_obstacle),
 			 luabind::def("get_box_depth", &get_box_depth),
 			 luabind::def("get_box_width", &get_box_width),
@@ -509,6 +521,7 @@ void LuaRobot::register_lua_methods() {
 		luabind::def("get_robot_coordinate_system_axis", &get_robot_coordinate_system_axis),
 		luabind::def("get_robot_type", &get_robot_type),
 		luabind::def("get_robot_status", &get_robot_status),
+		luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
 		luabind::def("is_point_in_obstacle", &is_point_in_obstacle),
 		luabind::def("get_box_depth", &get_box_depth),
 		luabind::def("get_box_width", &get_box_width),
