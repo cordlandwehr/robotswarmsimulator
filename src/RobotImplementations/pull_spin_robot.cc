@@ -28,7 +28,7 @@ namespace { // some internals
 
 
 PullSpinRobot::PullSpinRobot(boost::shared_ptr<RobotIdentifier> id)
-: Robot(id), current_phase_(PULL), step_length_(0.2), spin_length_(M_PI/2.), spin_steps_nr_(spin_length_/step_length_),
+: Robot(id), current_phase_(PULL), step_length_(0.2), spin_length_(3.1415/2.), spin_steps_nr_(spin_length_/step_length_),
   spin_counter_(0) { 
 	if (!prg) { // all robots use the same prg, so we initialize it only once
 		prg.reset(new DistributionGenerator(89713));

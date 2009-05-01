@@ -138,7 +138,7 @@ boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::
 	// output variables for LAPACK call
 	integer info; // error value (0 = successful)
 	doublereal eigvals[dim]; // storage for the eigenvalues (will be stored in ascending order)
-	doublereal work[lwork]; // memory for the 'dsyev' method to work in
+	doublereal work[9]; // memory for the 'dsyev' method to work in
 	
 	// input/output variables for LAPACK call
 	// the matrix parameter is used as input (the matrix whose eigenvals to compute) and output (eigenvectors)

@@ -27,7 +27,7 @@ void aiee() {
 	long int lda = mmax, ldvt = nmax, lwork = mmax+4*nmax+nb*(mmax+nmax);
 	long int ldu = 1;
 	long int  i, ifail, info, j, m, n;
-	double a[lda*nmax],  dummy[1*1], s[nmax], vt[ldvt*nmax], work[lwork];
+	double a[10*10],  dummy[1*1], s[8], vt[8*8], work[10+4*8+64*(10+8)];
 	char *str;
 	
 	// input matrix (column major ordering)
