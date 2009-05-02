@@ -28,6 +28,7 @@
 
 #include "formation_generator.h"
 #include "uniform_formation_generator.h"
+#include "gaussian_formation_generator.h"
 #include "circle_formation_generator.h"
 
 #include "szenario_generator.h"
@@ -125,83 +126,12 @@ void szenario_generator::init_formation_generator(const boost::program_options::
 		formation_generator_.reset(new UniformFormationGenerator());
 	} else if(vm.count("distr-pos-circle")) {
 		formation_generator_.reset(new CircleFormationGenerator());
+	} else if(vm.count("distr-gauss-pos")) {
+		formation_generator_.reset(new GaussianFormationGenerator());
 	}
 
 	// initalize formation generator
 	formation_generator_->init(vm);
-}
-
-void szenario_generator::distribute_robots_normal(Vector3d boundingBox, double mean, double sigma) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_normal(mean, sigma);		// set up the generator
-		double randomValue;					// random value to be generated
-
-		/*
-		 * generates values according normal distribution until value inside bounding box is found
-		 * if one side ob box is equal to zero no limit is asssumed, cause probability to be zero is exactly 0 ;)
-		 */
-		do {
-			randomValue = png_->get_value_normal();
-			newRandomPosition->insert_element(kXCoord,randomValue);
-		} while (
-				randomValue + boundingBox(kXCoord)/2.0 > boundingBox(kXCoord) ||
-				randomValue + boundingBox(kXCoord)/2.0 < 0.0 ||
-			 	boundingBox(kXCoord)==0.0
-			 	);
-		do {
-			randomValue = png_->get_value_normal();
-			newRandomPosition->insert_element(kYCoord,randomValue);
-		} while (
-				randomValue + boundingBox(kYCoord)/2.0 > boundingBox(kYCoord) ||
-				randomValue + boundingBox(kYCoord)/2.0 < 0.0 ||
-			 	boundingBox(kYCoord)==0.0
-			 	);
-		do {
-			randomValue = png_->get_value_normal();
-			newRandomPosition->insert_element(kZCoord,randomValue);
-		} while (
-				randomValue + boundingBox(kZCoord)/2.0 > boundingBox(kZCoord) ||
-				randomValue + boundingBox(kZCoord)/2.0 < 0.0 ||
-			 	boundingBox(kZCoord)==0.0
-			 	);
-
-		(*iter)->set_position( newRandomPosition );
-	}
-}
-
-
-
-void szenario_generator::distribute_velocity_normal(double mean, double sigma) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_normal(mean, sigma);		// set up the generator
-
-		newRandomPosition->insert_element(kXCoord,png_->get_value_normal());
-		newRandomPosition->insert_element(kYCoord,png_->get_value_normal());
-		newRandomPosition->insert_element(kZCoord,png_->get_value_normal());
-
-		(*iter)->set_velocity( newRandomPosition );
-	}
-}
-
-void szenario_generator::distribute_acceleration_normal(double mean, double sigma) {
-	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-
-	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
-		boost::shared_ptr<Vector3d> newRandomPosition(new Vector3d());
-		png_->init_normal(mean, sigma);		// set up the generator
-
-		newRandomPosition->insert_element(kXCoord,png_->get_value_normal());
-		newRandomPosition->insert_element(kYCoord,png_->get_value_normal());
-		newRandomPosition->insert_element(kZCoord,png_->get_value_normal());
-
-		(*iter)->set_acceleration( newRandomPosition );
-	}
 }
 
 void szenario_generator::distribute_coordsys_uniform() {
