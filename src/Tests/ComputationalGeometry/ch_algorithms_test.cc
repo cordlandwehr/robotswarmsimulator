@@ -22,8 +22,19 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 	CGAL::Random_points_in_sphere_3<Point_3, PointCreator> gen(100.0);
 
 	//copy generated points to a vector
-	std::vector<Point_3> points;
-	CGAL::copy_n(gen, 250, std::back_inserter(points));
+	std::vector<Point_3> points_3;
+	CGAL::copy_n(gen, 250, std::back_inserter(points_3));
+
+	//create Vector3d out of Point_3
+	std::vector<Vector3d> points;
+	Point_3 cur_point;
+	Vector3d p;
+	for(int i=0; i<points_3.size(); i++) {
+		p(0) = points_3[i].x();
+		p(1) = points_3[i].y();
+		p(2) = points_3[i].z();
+		points.push_back(p);
+	}
 
 	CGAL::Object ch_object;
 	ch_object = CHAlgorithms::compute_convex_hull_3d(points);
