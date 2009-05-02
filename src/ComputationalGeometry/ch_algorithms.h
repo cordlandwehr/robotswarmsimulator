@@ -50,7 +50,19 @@ public:
 	 */
 	static CGAL::Object compute_convex_hull_3d(std::vector<Point_3> points);
 
-	static Vector3d compute_cog_of_ch(CGAL::Object ch);
+	/**
+	 * This method computes the COG of the given polyhedron.
+	 * \param poly		Polyhedron of which to compute COG
+	 * \return			COG of the given polyhedron
+	 */
+	static Vector3d compute_cog_of_polyhedron(CGAL::Object poly);
+
+	/**
+	 * This method computes the COG of the convex hull of the given set of points.
+	 * \param points	Set of points of which to compute CH
+	 * \return			COG of the convex hull of the given set of points.
+	 */
+	static Vector3d compute_cog_of_ch_of_points(std::vector<Point_3> points);
 
 };
 

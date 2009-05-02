@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 	else
 		cout << "convex hull error!" << std::endl;
 
-	Vector3d cog = CHAlgorithms::compute_cog_of_ch(ch_object);
+	Vector3d cog = CHAlgorithms::compute_cog_of_polyhedron(ch_object);
 
 	//cout << "####################### END: CH-TEST 1 ####################################" << endl;
 }
