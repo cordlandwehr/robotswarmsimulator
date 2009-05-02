@@ -104,5 +104,5 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
     	}
     }
 
-	return false;
+	return true;
 }
