@@ -15,6 +15,12 @@
 
 #include <boost/foreach.hpp>
 
+namespace {
+bool compareX (const Vector3d& i,const Vector3d& j) { return (i[kXCoord] < j[kXCoord]); }
+bool compareY (const Vector3d& i,const Vector3d& j) { return (i[kYCoord] < j[kYCoord]); }
+bool compareZ (const Vector3d& i,const Vector3d& j) { return (i[kZCoord] < j[kZCoord]); }
+}
+
 Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 	if(positions.size() == 0) {
 		// do some error handling.
@@ -26,8 +32,6 @@ Vector3d PointAlgorithms::compute_COG(const std::vector<Vector3d>& positions) {
 	cog(0) = 0;
 	cog(1) = 0;
 	cog(2) = 0;
-
-	std::vector<Vector3d>::const_iterator iter;
 
 	BOOST_FOREACH(Vector3d position, positions) {
 		cog += position;
@@ -112,8 +116,6 @@ Vector3d PointAlgorithms::compute_MaxLine(int coord, const std::vector<Vector3d>
 	double extreme_distance = positions.at(0)[coord];
 	Vector3d extreme_vec = positions.at(0);
 
-	std::vector<Vector3d>::const_iterator iter;
-
 	BOOST_FOREACH(Vector3d position, positions) {
 		double cur_extreme_distance = position[coord];
 		if(cur_extreme_distance > extreme_distance) {
@@ -195,8 +197,6 @@ Vector3d PointAlgorithms::compute_MidFar(const Vector3d & own_position, const st
 	double longest_distance = vector3d_distance(own_position, positions.at(0));
 	Vector3d longest_distance_vec = positions.at(0);
 
-	std::vector<Vector3d>::const_iterator iter;
-
 	BOOST_FOREACH(Vector3d position, positions) {
 		double cur_distance = vector3d_distance(own_position, position);
 		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::debug) << "cur distance: " << cur_distance;
@@ -212,13 +212,32 @@ Vector3d PointAlgorithms::compute_MidFar(const Vector3d & own_position, const st
 }
 
 Vector3d PointAlgorithms::compute_MED(const std::vector<Vector3d>& positions) {
-	return Vector3d();
+	std::vector<Vector3d> positions_mutable = positions;
+
+	// get (upper) median for kXCoord, kYCoord, kZCoord by sorting
+	// this could use Median of Median algorithms to be more efficient
+	// if it causes run-time problems.
+	std::sort(positions_mutable.begin(), positions_mutable.end(), &compareX);
+	double x = positions_mutable.at(positions_mutable.size() / 2)[kXCoord];
+	std::sort(positions_mutable.begin(), positions_mutable.end(), &compareY);
+	double y = positions_mutable.at(positions_mutable.size() / 2)[kYCoord];
+	std::sort(positions_mutable.begin(), positions_mutable.end(), &compareZ);
+	double z = positions_mutable.at(positions_mutable.size() / 2)[kZCoord];
+
+	Vector3d target_point;
+	target_point[kXCoord] = x;
+	target_point[kYCoord] = y;
+	target_point[kZCoord] = z;
+
+	return target_point;
 }
 
 Vector3d PointAlgorithms::compute_FW(const std::vector<Vector3d>& positions) {
+	// TODO(craupach) complicated to implement ;-)
 	return Vector3d();
 }
 
 Vector3d PointAlgorithms::compute_kMin(const std::vector<Vector3d>& positions, int k) {
+	// TODO(craupach) complicated to implement ;-)
 	return Vector3d();
 }
