@@ -543,6 +543,7 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("compute_distance", (const double (*) (const LuaWrapper::Vector3dWrapper&, const LuaWrapper::Vector3dWrapper&))&LuaWrapper::compute_distance),
 			 luabind::def("compute_distance", (const double (*) (const LuaWrapper::Vector3dWrapper&, const LuaWrapper::Vector3dWrapper&, int))&LuaWrapper::compute_distance),
 			 luabind::def("compute_cog", &LuaWrapper::compute_COG, luabind::copy_table(_1)),
+			 luabind::def("compute_cminiball", &LuaWrapper::compute_CMinBall, luabind::copy_table(_1)),
 			 luabind::def("sort_vectors_by_length", &LuaWrapper::sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
 			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
 		 ]

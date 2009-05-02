@@ -129,6 +129,15 @@ const LuaWrapper::Vector3dWrapper compute_COG(std::vector<LuaWrapper::Vector3dWr
 }
 
 /**
+ * Computes center of the miniball around the given points.
+ * @param point_list is vector of points
+ * @return the center of the miniball around the given points
+ */
+const LuaWrapper::Vector3dWrapper compute_CMinBall(std::vector<LuaWrapper::Vector3dWrapper> point_list) {
+	return transform(PointAlgorithms::compute_CMinBall(transform(point_list)));
+}
+
+/**
  * Sort vectors by euclidean norm, distance to zero
  * @return sorted point_list
  */
