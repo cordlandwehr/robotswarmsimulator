@@ -18,9 +18,6 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 
 	//cout << "####################### BEGIN: CH-TEST 1 ####################################" << endl;
 
-	boost::shared_ptr<CHAlgorithms> chalgo;
-	chalgo.reset(new CHAlgorithms());
-
 	//generate 250 points randomly on a sphere of radius 100.0
 	CGAL::Random_points_in_sphere_3<Point_3, PointCreator> gen(100.0);
 
@@ -29,7 +26,7 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 	CGAL::copy_n(gen, 250, std::back_inserter(points));
 
 	CGAL::Object ch_object;
-	ch_object = chalgo->compute_convex_hull_3d(points);
+	ch_object = CHAlgorithms::compute_convex_hull_3d(points);
 
 	// determine what kind of object it is
 	if (CGAL::object_cast<Segment_3>(&ch_object) )
@@ -38,6 +35,8 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 		cout << "convex hull is a polyhedron " << std::endl;
 	else
 		cout << "convex hull error!" << std::endl;
+
+	Vector3d cog = CHAlgorithms::compute_cog_of_ch(ch_object);
 
 	//cout << "####################### END: CH-TEST 1 ####################################" << endl;
 }
