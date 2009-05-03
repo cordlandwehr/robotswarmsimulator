@@ -306,6 +306,7 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 	\item [\texttt{Geometry.is\_in\_smallest\_bbox(<vector of Vector3d>,<Vector3d>)}]
 	\item [\texttt{Geometry.compute\_distance(<Vector3d, Vector3d>)}]
 	\item [\texttt{Geometry.compute\_cog(<vector of Vector3d>)}]
+	\item [\texttt{Geometry.compute\_cminiball(<vector of Vector3d>)}] Computes the center of the miniball around the given points.
 	\item [\texttt{Geometry.sort\_vectors\_by\_length(<vector of Vector3d>)}] Sorts Vector3d points by distance to origin
 \end{description}
 
@@ -322,6 +323,11 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 	\begin{itemize}
 		\item Operators: \texttt{+, *, /}
 		\item Dimensions: \texttt{x, y, z}
+	\end{itemize}
+	\item [\texttt{DistributionGenerator}] This type is the \Lua equivalent to the class \texttt{DistributionGenerator} in \RSS
+	\begin{itemize}
+		\item Constructor: takes the seed as parameter
+		\item Methods: \texttt{set\_seed, init\_uniform, get\_value\_uniform, }\ldots (everything that the \texttt{DistributionGenerator} class provides at public scope)
 	\end{itemize}
 	\item [\texttt{MarkerInformation}] This is the data type for marker information. The information can be accessed by the according operators:
 	\begin{itemize}
