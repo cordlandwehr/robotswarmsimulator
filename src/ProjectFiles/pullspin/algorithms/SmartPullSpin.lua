@@ -17,6 +17,15 @@ seed        = 42-23;
 PULL = 1; SPIN = 2;
 current_state = PULL;
 
+-- random number generator used to get random vectors on unit sphere
+-- Note: Every robot needs its own seed, otherwise they will get the same sequence of 'random' values. Therefor, we use
+--       Lua's random number generator to generate seeds for each robot.
+--       This still is not perfect, because the probability that two robots get the same seed is still relatively high
+--       and if this happens this two robots will generate once more the exactly same 'random' values :-/.
+math.randomseed(42-23)
+distribution_generator_seed = math.random(2000000000) -- this should be as large a integer as possible
+distribution_generator = DistributionGenerator(distribution_generator_seed)
+distribution_generator:init_uniform_on_sphere(3)
 
 -- more internal variables and initialization
 spin_counter = 0;       -- used to count the number of steps done in this spin phase
@@ -61,14 +70,14 @@ function compute_random_orthogonal_vector(input_vector)
 	-- compute a random vector that is orthogonal to the input_vector
 	local output_vector = nil;
 	local output_length = nil;
---	repeat
-		output_vector = Vector3d(10.3, 11, 15); -- values choosen randomly on (non unit) sphere ;-)
+	repeat
+		output_vector = distribution_generator:get_value_uniform_on_sphere_3d()
 		
 		-- project output vector onto plane perpendicular to v
 		local input_vector_normalized = input_vector/input_length;
 		output_vector = output_vector - inner_product(output_vector, input_vector_normalized)*input_vector_normalized;
 		output_length = length(output_vector);
---	until output_length > 0
+	until output_length > 0
 	
 	-- scale output_vector to same length as input_vector
 	output_vector = input_length * output_vector/output_length;
@@ -136,7 +145,9 @@ end
 
 
 --[[
----- 
+---- The robot will move on it's movement circle (computed by the switch_state() function) up to a distance of
+---- spin_length. Note that a collision during a SPIN operation will cause a state change and therefor end the SPIN
+---- operation (see the collision check in the main() function).
 --]]
 function spin()
 	-- update spin counter ("time spent in SPIN state so far")
