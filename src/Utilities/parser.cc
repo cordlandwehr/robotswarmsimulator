@@ -496,8 +496,10 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	if ( robot_data->type() == MASTER ) {
 		output << "\"MASTER\"" << ",";
-	} else {
+	} else if ( robot_data->type() == SLAVE ){
 		output << "\"SLAVE\"" << ",";
+	} else {
+		throw UnsupportedOperationException("Parser found some robottype that it cannot write.");
 	}
 
 	output << robot_data->velocity()(kXCoord) << ",";
@@ -510,15 +512,18 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	if ( robot_data->status() == SLEEPING ) {
 		output << "\"SLEEPING\"" << ",";
-	} else {
+	} else if ( robot_data->status() == READY) {
 		output << "\"READY\"" << ",";
+	} else {
+		throw UnsupportedOperationException("Parser found some robotstatus that it cannot write.");
 	}
 
 	//TODO(mmarcus) include marker-information
 	output << "0,";
+
 	output << "\"" << robot_data->robot().get_algorithm_id() << "\",";
-	//TODO(mmarcus) include color-information
-	output << "0,";
+
+	output << robot_data->color() << ",";
 
 	//x-axis
 	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(kXCoord) << ",";
