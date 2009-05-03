@@ -22,7 +22,6 @@ CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) 
 
 	// define object to hold convex hull
 	CGAL::Object ch_object;
-
 	//compute convex hull
 	CGAL::convex_hull_3(points_3.begin(), points_3.end(), ch_object);
 
@@ -106,3 +105,4 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 
 	return true;
 }
+

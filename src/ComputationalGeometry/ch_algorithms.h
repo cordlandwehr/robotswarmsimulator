@@ -24,6 +24,7 @@
 #include <CGAL/Convex_hull_d.h>
 #include <CGAL/Convex_hull_d_traits_3.h>
 #include <CGAL/Convex_hull_d_to_polyhedron_3.h>
+#include <CGAL/Polygon_2.h>
 #include <vector>
 
 #include "../Utilities/vector_arithmetics.h"
@@ -36,8 +37,10 @@ typedef CGAL::Convex_hull_traits_3<K>			Traits;
 typedef Traits::Polyhedron_3					Polyhedron_3;
 typedef K::Segment_3							Segment_3;
 typedef K::Point_3								Point_3;
+typedef K::Point_2								Point_2;
 typedef CGAL::Convex_hull_d_traits_3<K>			Hull_traits_3;
 typedef CGAL::Convex_hull_d< Hull_traits_3 >	Convex_hull_3;
+typedef CGAL::Polygon_2<K>						Polygon;
 
 // define point creator
 typedef CGAL::Creator_uniform_3<double, Point_3>  PointCreator;
@@ -76,7 +79,6 @@ public:
 	 * \return			true, if the given point is contained in the convex hull of the given points, false otherwise.
 	 */
 	static bool point_contained_in_convex_hull_of_points(Vector3d point, std::vector<Vector3d> points);
-
 
 };
 

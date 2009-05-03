@@ -53,6 +53,8 @@
 #include "../RobotImplementations/acceleration_cog_robot.h"
 #include "../RobotImplementations/tp_algorithm_robot.h"
 #include "../RobotImplementations/pull_spin_robot.h"
+#include "../RobotImplementations/pull_spin_robot.h"
+#include "../RobotImplementations/ch_robot.h"
 
 #include "../SimulationKernel/robot_control.h"
 #include "../SimulationKernel/uniform_robot_control.h"
@@ -341,7 +343,10 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
 	} else if (algorithm == "PullSpinRobot") {
 		robot.reset(new PullSpinRobot(id));
-	} else {
+	} else if (algorithm == "CHRobot") {
+		robot.reset(new CHRobot(id));
+	}
+	else {
 		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
 	}
 	return robot;
