@@ -32,7 +32,7 @@
 #include "../Views/view.h"
 #include "../ComputationalGeometry/misc_algorithms.h"
 #include "../ComputationalGeometry/point_algorithms.h"
-
+#include "../Wrapper/distribution_generator_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
 
 namespace {
@@ -423,6 +423,7 @@ LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua
                    : Robot(id), lua_file_name_(lua_file_name), lua_state_(lua_open(), lua_close) {
 	luaL_openlibs(lua_state_.get());
 	luabind::open(lua_state_.get());
+	register_lua_methods();
 	int status = luaL_loadfile(lua_state_.get(), lua_file_name.c_str());
 	if(status != 0) {
 		report_errors(status);
@@ -430,7 +431,6 @@ LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua
 	}
 	status = lua_pcall(lua_state_.get(), 0, LUA_MULTRET, 0);
 	report_errors(status);
-	register_lua_methods();
 }
 
 void LuaRobot::register_lua_methods() {
@@ -451,6 +451,25 @@ void LuaRobot::register_lua_methods() {
 			 .def_readwrite("x", &LuaWrapper::Vector3dWrapper::x)
 			 .def_readwrite("y", &LuaWrapper::Vector3dWrapper::y)
 			 .def_readwrite("z", &LuaWrapper::Vector3dWrapper::z),
+	 
+		 luabind::class_<DistributionGenerator>("DistributionGenerator")
+			 .def(luabind::constructor<int>())
+			 .def("set_seed", &DistributionGenerator::set_seed)
+			 .def("init_uniform", &DistributionGenerator::init_uniform)
+			 .def("init_normal", &DistributionGenerator::init_normal)
+			 .def("init_bernoulli", &DistributionGenerator::init_bernoulli)
+			 .def("init_exponential", &DistributionGenerator::init_exponential)
+			 .def("init_geometric", &DistributionGenerator::init_geometric)
+			 .def("init_uniform_real", &DistributionGenerator::init_uniform_real)
+			 .def("init_uniform_on_sphere", &DistributionGenerator::init_uniform_on_sphere)
+			 .def("get_value_uniform", &DistributionGenerator::get_value_uniform)
+			 .def("get_value_normal", &DistributionGenerator::get_value_normal)
+			 .def("get_value_bernoulli", &DistributionGenerator::get_value_bernoulli)
+			 .def("get_value_exponential", &DistributionGenerator::get_value_exponential)
+			 .def("get_value_geometric", &DistributionGenerator::get_value_geometric)
+			 .def("get_value_uniform_real", &DistributionGenerator::get_value_uniform_real)
+			 .def("get_value_uniform_on_sphere", &DistributionGenerator::get_value_uniform_on_sphere, luabind::copy_table(luabind::result))
+			 .def("get_value_uniform_on_sphere_3d", &LuaWrapper::get_value_uniform_on_sphere_3d),
 
 		 luabind::class_<MarkerInformationWrapper>("MarkerInformation")
 			 .def(luabind::constructor<>())
