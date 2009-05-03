@@ -12,6 +12,7 @@
 #include <Model/robot_data.h>
 #include <Model/world_information.h>
 #include <Requests/position_request.h>
+#include <Utilities/console_output.h>
 #include <Views/octree_utilities.h>
 
 
@@ -69,6 +70,12 @@ bool CollisionPositionRequestHandler::handle_request_reliable(boost::shared_ptr<
 			move_back_to_touchpoint(robot, *other_robot, old_position);
 			collision_result = true;
 		}
+	}
+	
+	// debug output if a collision happened
+	if (collision_result) {
+		ConsoleOutput::log(ConsoleOutput::EventHandler, ConsoleOutput::debug)
+			<< "Detected collision at time " << world_information->time() << std::endl;
 	}
 	
 	// re-add current robot to the collision tree

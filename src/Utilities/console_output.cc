@@ -75,6 +75,7 @@ std::string ConsoleOutput::get_prefix(Module talking_module) {
 	std::string prefix = "";
 	switch (talking_module) {
 	case Visualization: prefix = "[VISUALIZATION] "; break;
+	case EventHandler: prefix = "[EVENTHANDLER] "; break;
 	case Control: prefix = "[SIMCONTROL] "; break;
 	case Statistics: prefix = "[STATISTICS] "; break;
 	case Parser: prefix = "[PARSER] "; break;

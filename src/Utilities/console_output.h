@@ -31,6 +31,7 @@ public:
 	enum Module {
 		None,
 		Visualization,
+		EventHandler,
 		Control,
 		Statistics,
 		Parser,
