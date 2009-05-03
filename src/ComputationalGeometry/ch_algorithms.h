@@ -16,34 +16,31 @@
 #ifndef CH_ALGORITHMS_H_
 #define CH_ALGORITHMS_H_
 
-#include <CGAL/point_generators_3.h>
+#include <boost/smart_ptr.hpp>
+#include <iostream>
+#include <vector>
+
+//CGAL includes
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/Homogeneous.h>
 #include <CGAL/copy_n.h>
+#include <CGAL/point_generators_3.h>
+#include <CGAL/algorithm.h>
 #include <CGAL/Convex_hull_traits_3.h>
 #include <CGAL/convex_hull_3.h>
-#include <CGAL/Simple_cartesian.h>
-#include <CGAL/Convex_hull_d.h>
-#include <CGAL/Convex_hull_d_traits_3.h>
-#include <CGAL/Convex_hull_d_to_polyhedron_3.h>
-#include <CGAL/Polygon_2.h>
-#include <vector>
+#include <CGAL/MP_Float.h>
 
 #include "../Utilities/vector_arithmetics.h"
 
-#include <CGAL/double.h>
-typedef double RT;
-
-typedef CGAL::Simple_cartesian<double>			K;
-typedef CGAL::Convex_hull_traits_3<K>			Traits;
-typedef Traits::Polyhedron_3					Polyhedron_3;
-typedef K::Segment_3							Segment_3;
-typedef K::Point_3								Point_3;
-typedef K::Point_2								Point_2;
-typedef CGAL::Convex_hull_d_traits_3<K>			Hull_traits_3;
-typedef CGAL::Convex_hull_d< Hull_traits_3 >	Convex_hull_3;
-typedef CGAL::Polygon_2<K>						Polygon;
-
-// define point creator
-typedef CGAL::Creator_uniform_3<double, Point_3>  PointCreator;
+//CGAL typedefs
+typedef CGAL::MP_Float 								RT;
+typedef CGAL::Homogeneous<RT>						K;
+typedef CGAL::Convex_hull_traits_3<K>				Traits;
+typedef Traits::Polyhedron_3						Polyhedron_3;
+typedef K::Segment_3								Segment_3;
+typedef K::Point_3									Point_3;
+typedef K::Point_2									Point_2;
+typedef CGAL::Creator_uniform_3<RT, Point_3>		PointCreator;
 
 class CHAlgorithms {
 
@@ -57,6 +54,14 @@ public:
 	 * \return 			Object containing the convex hull of the given points.
 	 */
 	static CGAL::Object compute_convex_hull_3d(std::vector<Vector3d> points);
+
+	/**
+	 * This method computes the convex hull of the given points.
+	 * \param points	Points whose convex hull to compute.
+	 * \return 			Object containing the convex hull of the given points.
+	 */
+	//static CGAL::Object compute_convex_hull_3d(std::vector<Point_3> points);
+
 
 	/**
 	 * This method computes the COG of the given polyhedron.
@@ -79,6 +84,29 @@ public:
 	 * \return			true, if the given point is contained in the convex hull of the given points, false otherwise.
 	 */
 	static bool point_contained_in_convex_hull_of_points(Vector3d point, std::vector<Vector3d> points);
+
+	/**
+	 * This method transforms the given Point_3 to a Vector3d.
+	 * \param point_3	Point_3 to transform to Vector3d.
+	 * \return 			Vector3d of the given Point_3
+	 * \see				vector3d_to_point_3
+	 */
+	static Vector3d point_3_to_vector3d(Point_3 point_3);
+
+	/**
+	 * This method transforms the given Vector3d to a Point_3.
+	 * \param point		Vector3d to transform to a Point_3
+	 * \return 			Point_3 of the given Vector3d
+	 * \see 			point_3_to_vector3d
+	 */
+	static Point_3 vector3d_to_point_3(Vector3d point);
+
+	/**
+	 * This method prints the vertices of the given convex hull.
+	 * \param ch	Convex hull which vertices to print.
+	 */
+	static void print_vertices_of_ch(CGAL::Object ch);
+
 
 };
 

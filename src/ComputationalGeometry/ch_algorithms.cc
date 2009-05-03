@@ -9,15 +9,14 @@
 #include "../Utilities/unsupported_operation_exception.h"
 
 
+
 CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) {
 
 	//create Point_3 out of Vector3d
 	std::vector<Point_3> points_3;
-	Vector3d cur_point;
+	Vector3d tmp_point;
 	for(int i=0; i<points.size(); i++) {
-		cur_point = points[i];
-		Point_3 p(cur_point(0), cur_point(1), cur_point(2));
-		points_3.push_back(p);
+		points_3.push_back(vector3d_to_point_3(points[i]));
 	}
 
 	// define object to hold convex hull
@@ -26,25 +25,40 @@ CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) 
 	CGAL::convex_hull_3(points_3.begin(), points_3.end(), ch_object);
 
 	return ch_object;
+
 }
 
-Vector3d CHAlgorithms::compute_cog_of_polyhedron(CGAL::Object poly) {
+void CHAlgorithms::print_vertices_of_ch(CGAL::Object ch) {
+	Polyhedron_3 poly;
+
+	//determine type of given convex hull
+	int num = 0;
+	if ( CGAL::assign (poly, ch) ) {
+	    for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
+	    	std::cout << "Vertex " << num++ << ": " << v->point() << std::endl;
+	    }
+	}
+
+	//TODO(martinah) implement for other types
+}
+
+
+Vector3d CHAlgorithms::compute_cog_of_polyhedron(CGAL::Object obj) {
 	Vector3d cog;
 	cog(0) = 0;
 	cog(1) = 0;
 	cog(2) = 0;
 
-	Polyhedron_3 polyhedron;
+	//check if object is a polyhedron
+	Polyhedron_3 poly;
 	Point_3 p;
     int num = 0;
-
-	// determine what kind of object it is
-	if ( CGAL::assign (polyhedron, poly) ) {
-	    for ( Polyhedron_3::Vertex_iterator v = polyhedron.vertices_begin(); v != polyhedron.vertices_end(); ++v) {
+	if ( CGAL::assign (poly, obj) ) {
+	    for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
 	    	p = v->point();
-	    	cog(0) += p.x();
-	    	cog(1) += p.y();
-	    	cog(2) += p.z();
+	    	cog(0) += CGAL::to_double(p.hx());
+	    	cog(1) += CGAL::to_double(p.hy());
+	    	cog(2) += CGAL::to_double(p.hz());
 	    	num++;
 	    }
 	    cog /= num;
@@ -58,7 +72,6 @@ Vector3d CHAlgorithms::compute_cog_of_polyhedron(CGAL::Object poly) {
 
 Vector3d CHAlgorithms::compute_cog_of_ch_of_points(std::vector<Vector3d> points) {
 
-	// define object to hold convex hull
 	CGAL::Object ch_object = compute_convex_hull_3d(points);
 	Vector3d cog = compute_cog_of_polyhedron(ch_object);
 
@@ -79,6 +92,7 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	new_points.push_back(point);
 	ch2 = compute_convex_hull_3d(points);
 
+	//TODO(martinah) determine type of convex hull
 	//transform convex hull to polyhedrons
 	if( !CGAL::assign(poly1, ch1) || !CGAL::assign(poly2, ch2) ) {
 		throw UnsupportedOperationException("Given CGAL-object isn't a polyhedron.");
@@ -102,7 +116,17 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
     		return false;
     	}
     }
-
 	return true;
+}
+
+Point_3 CHAlgorithms::vector3d_to_point_3(Vector3d point) {
+	Point_3 point_3(point(0), point(1), point(2));
+	return point_3;
+}
+
+Vector3d CHAlgorithms::point_3_to_vector3d(Point_3 point_3) {
+	//TODO(martinah) implement
+	Vector3d point;
+	return point;
 }
 
