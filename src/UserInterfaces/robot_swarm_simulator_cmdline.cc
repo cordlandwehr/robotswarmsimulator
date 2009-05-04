@@ -66,7 +66,12 @@ int main(int argc, char** argv) {
 		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value max-vel")
 		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value min-acc")
 		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with maximal absolute value max-acc")
-		("distr-coord", "distribute robot coordinate-systems uniformly");
+		("cosys-rotate-x", "rotate x-axis of robot coordinate-systems uniformly")
+		("cosys-rotate-y", "rotate y-axis of robot coordinate-systems uniformly")
+		("cosys-rotate-z", "rotate z-axis of robot coordinate-systems uniformly")
+		("cosys-scale-x", "scale x-axis-vector of robot coordinate-systems uniformly in range (0,1]")
+		("cosys-scale-y", "scale y-axis-vector of robot coordinate-systems uniformly in range (0,1]")
+		("cosys-scale-z", "scale z-axis-vector of robot coordinate-systems uniformly in range (0,1]");
 
 	po::options_description simulation_options("Simulation options");
 	simulation_options.add_options()
@@ -174,8 +179,8 @@ int main(int argc, char** argv) {
 			// distribute everything
 			generator.distribute();
 
-			if (vm.count("distr-coord"))
-				generator.distribute_coordsys_uniform();
+			//if (vm.count("distr-coord"))
+				generator.distribute_coordsys(vm);
 
 			// sets request handler if requested
 			if (vm.count("add-pos-handler"))

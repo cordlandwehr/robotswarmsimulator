@@ -71,9 +71,12 @@ public:
 
 
 	/**
-	 * Method generates random coordinate system, each axis is distributed uniformly at random on 3-dim sphere
+	 * Method generates random coordinate systems with:
+	 *  - scaled: if x, y, z requested
+	 *  - rotated: if x, y, z requested
+	 *  @param vm parameter-map with parameter from command-line, theses are: cosys-scale-{x,y,z}, cosys-rotate-{x,y,z}
 	 */
-	void distribute_coordsys_uniform();
+	void distribute_coordsys(const boost::program_options::variables_map& vm);
 
 	/**
 	 * Set filename for output, without file extension

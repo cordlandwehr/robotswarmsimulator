@@ -129,23 +129,63 @@ void szenario_generator::init_formation_generator(const boost::program_options::
 	} else if(vm.count("distr-gauss-pos")) {
 		formation_generator_.reset(new GaussianFormationGenerator());
 	}
+	else // use default formation generator
+		formation_generator_.reset(new UniformFormationGenerator());
 
 	// initalize formation generator
 	formation_generator_->init(vm);
 }
 
-void szenario_generator::distribute_coordsys_uniform() {
+void szenario_generator::distribute_coordsys(const boost::program_options::variables_map& vm) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
-	png_->init_uniform_on_sphere(3);	// 3 dimensional
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
+		boost::shared_ptr<Vector3d> axis_x(new Vector3d());
+		boost::shared_ptr<Vector3d> axis_y(new Vector3d());
+		boost::shared_ptr<Vector3d> axis_z(new Vector3d());
 		boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,
-					boost::shared_ptr<Vector3d> > newRandomCoordSys;
+					boost::shared_ptr<Vector3d> > newRandomCoordSys(axis_x, axis_y, axis_z);
 
+		// set default coordinate system (the canonic one)
+		boost::get<0>(newRandomCoordSys)->insert_element(kXCoord, 1.0);
+		boost::get<0>(newRandomCoordSys)->insert_element(kYCoord, 0.0);
+		boost::get<0>(newRandomCoordSys)->insert_element(kZCoord, 0.0);
+		boost::get<1>(newRandomCoordSys)->insert_element(kXCoord, 0.0);
+		boost::get<1>(newRandomCoordSys)->insert_element(kYCoord, 1.0);
+		boost::get<1>(newRandomCoordSys)->insert_element(kZCoord, 0.0);
+		boost::get<2>(newRandomCoordSys)->insert_element(kXCoord, 0.0);
+		boost::get<2>(newRandomCoordSys)->insert_element(kYCoord, 0.0);
+		boost::get<2>(newRandomCoordSys)->insert_element(kZCoord, 1.0);
 		do {
-			newRandomCoordSys.get<0>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
-			newRandomCoordSys.get<1>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
-			newRandomCoordSys.get<2>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+			// generate coordsystem rotations
+			png_->init_uniform_on_sphere(3);	// 3 dimensional
+			if (vm.count("cosys-rotate-x"))
+				newRandomCoordSys.get<0>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+			if (vm.count("cosys-rotate-y"))
+				newRandomCoordSys.get<1>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+			if (vm.count("cosys-rotate-z"))
+				newRandomCoordSys.get<2>().reset(new Vector3d(png_->get_value_uniform_on_sphere_3d()));
+
+			// scale the axis
+			png_->init_uniform_real(0.000000001,1);
+			if (vm.count("cosys-scale-x")) {
+				double scale = png_->get_value_uniform_real();
+				boost::get<0>(newRandomCoordSys)->insert_element(kXCoord, (*newRandomCoordSys.get<0>())(kXCoord) * scale);
+				boost::get<0>(newRandomCoordSys)->insert_element(kYCoord, (*newRandomCoordSys.get<0>())(kYCoord) * scale);
+				boost::get<0>(newRandomCoordSys)->insert_element(kZCoord, (*newRandomCoordSys.get<0>())(kZCoord) * scale);
+			}
+			if (vm.count("cosys-scale-y")) {
+				double scale = png_->get_value_uniform_real();
+				boost::get<1>(newRandomCoordSys)->insert_element(kXCoord, (*newRandomCoordSys.get<1>())(kXCoord) * scale);
+				boost::get<1>(newRandomCoordSys)->insert_element(kYCoord, (*newRandomCoordSys.get<1>())(kYCoord) * scale);
+				boost::get<1>(newRandomCoordSys)->insert_element(kZCoord, (*newRandomCoordSys.get<1>())(kZCoord) * scale);
+			}
+			if (vm.count("cosys-scale-z")) {
+				double scale = png_->get_value_uniform_real();
+				boost::get<2>(newRandomCoordSys)->insert_element(kXCoord, (*newRandomCoordSys.get<2>())(kXCoord) * scale);
+				boost::get<2>(newRandomCoordSys)->insert_element(kYCoord, (*newRandomCoordSys.get<2>())(kYCoord) * scale);
+				boost::get<2>(newRandomCoordSys)->insert_element(kZCoord, (*newRandomCoordSys.get<2>())(kZCoord) * scale);
+			}
 		} while (!vector3d_linear_independent(
 				*(newRandomCoordSys.get<0>()),
 				*(newRandomCoordSys.get<1>()),
