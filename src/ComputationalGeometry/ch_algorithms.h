@@ -58,19 +58,19 @@ public:
 	static CGAL::Object compute_convex_hull_3d(std::vector<Vector3d> points);
 
 	/**
-	 * This method computes the convex hull of the given points.
-	 * \param points	Points whose convex hull to compute.
-	 * \return 			Object containing the convex hull of the given points.
-	 */
-	//static CGAL::Object compute_convex_hull_3d(std::vector<Point_3> points);
-
-
-	/**
 	 * This method computes the COG of the given polyhedron.
 	 * \param poly		Polyhedron of which to compute COG
 	 * \return			COG of the given polyhedron
 	 */
-	static Vector3d compute_cog_of_polyhedron(CGAL::Object poly);
+	static Vector3d compute_cog_of_polyhedron(Polyhedron_3 poly);
+
+	/**
+	 * This method computes the COG of the given segment.
+	 * I.e. this mehtod only computes the center of the endpoints of the given segment.
+	 * \param seg			Segment which COG to compute.
+	 * \return				Center of given segment segment.
+	 */
+	static Vector3d compute_cog_of_segment(Segment_3 seg);
 
 	/**
 	 * This method computes the COG of the convex hull of the given set of points.
@@ -101,6 +101,17 @@ public:
 	 */
 	static void print_vertices_of_ch(CGAL::Object ch);
 
+	/**
+	 * This method prints the endpoints of the given segment.
+	 * \param seg	Segment whose endpoints to print.
+	 */
+	static void print_vertices_of_segment(Segment_3 seg);
+
+	/**
+	 * This method prints the vertices of the given polyhedron.
+	 * \param poly	Polyhedron whose vertices to print.
+	 */
+	static void print_vertices_of_polyhedron(Polyhedron_3 poly);
 
 };
 

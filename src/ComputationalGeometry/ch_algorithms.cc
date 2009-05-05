@@ -21,59 +21,93 @@ CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) 
 
 	// define object to hold convex hull
 	CGAL::Object ch_object;
+
 	//compute convex hull
 	CGAL::convex_hull_3(points_3.begin(), points_3.end(), ch_object);
 
 	return ch_object;
-
 }
 
 void CHAlgorithms::print_vertices_of_ch(CGAL::Object ch) {
 	Polyhedron_3 poly;
+	Segment_3 seg;
+	Point_3 point;
 
 	//determine type of given convex hull
-	int num = 0;
 	if ( CGAL::assign (poly, ch) ) {
-	    for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
-	    	std::cout << "Vertex " << num++ << ": " << v->point() << std::endl;
-	    }
+		print_vertices_of_polyhedron(poly);
+	} else if ( CGAL::assign (seg, ch) ) {
+		print_vertices_of_segment(seg);
+	} else if ( CGAL::assign (point, ch) ) {
+		cout << point << endl;
 	}
+}
 
-	//TODO(martinah) implement for other types
+void CHAlgorithms::print_vertices_of_polyhedron(Polyhedron_3 poly) {
+	int num = 0;
+	for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
+	   	std::cout << "Vertex " << num++ << ": " << v->point() << std::endl;
+	}
+}
+
+void CHAlgorithms::print_vertices_of_segment(Segment_3 seg) {
+   	std::cout << "Source: " << seg.source() << endl;
+   	std::cout << "Target: " << seg.target() << endl;
 }
 
 
-Vector3d CHAlgorithms::compute_cog_of_polyhedron(CGAL::Object obj) {
+Vector3d CHAlgorithms::compute_cog_of_segment(Segment_3 seg) {
+	Vector3d cog;
+	Point_3 source = seg.source();
+	Point_3 target = seg.target();
+
+	cog(0) = (CGAL::to_double(source.hx()) + CGAL::to_double(target.hx())) / 2;
+	cog(1) = (CGAL::to_double(source.hy()) + CGAL::to_double(target.hy())) / 2;
+	cog(2) = (CGAL::to_double(source.hz()) + CGAL::to_double(target.hz())) / 2;
+
+	return cog;
+}
+
+
+Vector3d CHAlgorithms::compute_cog_of_polyhedron(Polyhedron_3 poly) {
 	Vector3d cog;
 	cog(0) = 0;
 	cog(1) = 0;
 	cog(2) = 0;
 
-	//check if object is a polyhedron
-	Polyhedron_3 poly;
 	Point_3 p;
     int num = 0;
-	if ( CGAL::assign (poly, obj) ) {
-	    for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
-	    	p = v->point();
-	    	cog(0) += CGAL::to_double(p.hx());
-	    	cog(1) += CGAL::to_double(p.hy());
-	    	cog(2) += CGAL::to_double(p.hz());
-	    	num++;
-	    }
-	    cog /= num;
-	}
-	else {
-		throw UnsupportedOperationException("Given CGAL-object isn't a polyhedron.");
-	}
+    for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
+    	p = v->point();
+    	cog(0) += CGAL::to_double(p.hx());
+    	cog(1) += CGAL::to_double(p.hy());
+    	cog(2) += CGAL::to_double(p.hz());
+    	num++;
+    }
+    cog /= num;
 
 	return cog;
 }
 
 Vector3d CHAlgorithms::compute_cog_of_ch_of_points(std::vector<Vector3d> points) {
 
-	CGAL::Object ch_object = compute_convex_hull_3d(points);
-	Vector3d cog = compute_cog_of_polyhedron(ch_object);
+	Vector3d cog;
+	Polyhedron_3 poly;
+	Segment_3 seg;
+	Point_3 point;
+
+	CGAL::Object cd = compute_convex_hull_3d(points);
+
+	//Depending on type of convex hull, compute its COG
+	if ( CGAL::assign(poly, cd) ) {
+		cog = compute_cog_of_polyhedron(poly);
+	} else if ( CGAL::assign(seg, cd) ) {
+		cog = compute_cog_of_ch_of_points(seg);
+	} else if ( CGAL::assign(point, cd) ) {
+		cog = point;
+	} else {
+		throw UnsupportedOperationException("Type of convex hull couldn't be determined.");
+	}
 
 	return cog;
 }
@@ -125,16 +159,6 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 		ch2_is_point = true;
 	else
 		invalid_type = true;
-
-/*
-	cout << "Types: " << endl;
-	cout << "ch1_is_polyhedron = " << ch1_is_polyhedron << endl;
-	cout << "ch2_is_polyhedron = " << ch2_is_polyhedron << endl;
-	cout << "ch1_is_segment = " << ch1_is_segment << endl;
-	cout << "ch2_is_segment = " << ch2_is_segment << endl;
-	cout << "ch1_is_point = " << ch1_is_point << endl;
-	cout << "ch2_is_point = " << ch2_is_point << endl;
-*/
 
 	if(invalid_type)
 		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
