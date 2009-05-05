@@ -126,7 +126,7 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	else
 		invalid_type = true;
 
-	/*
+/*
 	cout << "Types: " << endl;
 	cout << "ch1_is_polyhedron = " << ch1_is_polyhedron << endl;
 	cout << "ch2_is_polyhedron = " << ch2_is_polyhedron << endl;
@@ -134,7 +134,7 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	cout << "ch2_is_segment = " << ch2_is_segment << endl;
 	cout << "ch1_is_point = " << ch1_is_point << endl;
 	cout << "ch2_is_point = " << ch2_is_point << endl;
-	*/
+*/
 
 	if(invalid_type)
 		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
@@ -167,9 +167,6 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 		//compare endpoints of segments
 		if( seg1.source() == seg2.source() && seg1.target() == seg2.target() )
 			return true;
-		else
-			return false;
-
 
 	}
 	else if ( ch1_is_point && ch2_is_point ) {
@@ -177,12 +174,14 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 		//ch1 and ch2 are both points => compare points
 		if(point1 == point2)
 			return true;
-		else
-			return false;
 	}
-	else {
-		return false;
+	else if (ch1_is_point && ch2_is_segment) {
+		//CGAL interprets the convex hull of two equal points as a segment,
+		//thus in case of ch1 is a point and the point to check equals to this point, true has to be returned
+		if(point1 == seg2.source() && point1 == seg2.target())
+			return true;
 	}
+	return false;
 }
 
 Point_3 CHAlgorithms::vector3d_to_point_3(Vector3d point) {
