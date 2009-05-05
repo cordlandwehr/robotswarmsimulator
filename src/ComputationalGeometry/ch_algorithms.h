@@ -44,7 +44,9 @@ typedef CGAL::Creator_uniform_3<RT, Point_3>		PointCreator;
 
 class CHAlgorithms {
 
-	friend class ch_test_1;
+	friend class point_contained_in_ch_polyhedron_test;
+	friend class point_contained_in_ch_segment_test;
+	friend class point_contained_in_ch_point_test;
 
 public:
 
@@ -84,14 +86,6 @@ public:
 	 * \return			true, if the given point is contained in the convex hull of the given points, false otherwise.
 	 */
 	static bool point_contained_in_convex_hull_of_points(Vector3d point, std::vector<Vector3d> points);
-
-	/**
-	 * This method transforms the given Point_3 to a Vector3d.
-	 * \param point_3	Point_3 to transform to Vector3d.
-	 * \return 			Vector3d of the given Point_3
-	 * \see				vector3d_to_point_3
-	 */
-	static Vector3d point_3_to_vector3d(Point_3 point_3);
 
 	/**
 	 * This method transforms the given Vector3d to a Point_3.
