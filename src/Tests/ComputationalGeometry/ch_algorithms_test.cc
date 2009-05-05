@@ -45,16 +45,15 @@ BOOST_AUTO_TEST_CASE(ch_test_1) {
 	//check if point is contained in convex hull of the point created above
 	Vector3d check_point;
 
-	check_point(0)=0;
+	check_point(0)=1;
 	check_point(1)=0;
 	check_point(2)=0;
 	BOOST_CHECK_EQUAL(CHAlgorithms::point_contained_in_convex_hull_of_points(check_point, points), true);
 
-	check_point(0)=2;
-	check_point(1)=2;
-	check_point(2)=2;
-	//TODO(martinah) function outputs true, but is supposed to output false
-	//BOOST_CHECK_EQUAL(CHAlgorithms::point_contained_in_convex_hull_of_points(check_point, points), false);
+	check_point(0)=5;
+	check_point(1)=5;
+	check_point(2)=5;
+	BOOST_CHECK_EQUAL(CHAlgorithms::point_contained_in_convex_hull_of_points(check_point, points), false);
 
 	check_point(0)=cog(0);
 	check_point(1)=cog(1);

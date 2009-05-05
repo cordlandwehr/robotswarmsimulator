@@ -90,7 +90,7 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	//compute convex hull of the given points including point to check
 	std::vector<Vector3d> new_points = points;
 	new_points.push_back(point);
-	ch2 = compute_convex_hull_3d(points);
+	ch2 = compute_convex_hull_3d(new_points);
 
 	//TODO(martinah) determine type of convex hull
 	//transform convex hull to polyhedrons
@@ -101,15 +101,16 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	//Check if convex hull has been modified by adding this point.
 	//If it hasn't, then the given point is inside the convex hull of the given points.
 	//To do this, check if each vertex of poly2 is a vertex of poly1
-	//TODO(martinah) Maybe use a more efficient way to check this.
 	bool vertex_exists;
     for ( Polyhedron_3::Vertex_iterator u = poly2.vertices_begin(); u != poly2.vertices_end(); ++u) {
     	p = u->point();
     	//check if p is a vertex of poly1
     	vertex_exists = false;
     	for ( Polyhedron_3::Vertex_iterator v = poly1.vertices_begin(); v != poly1.vertices_end(); ++v) {
-    		if( p == v->point() )
+    		if( p == v->point() ) {
+    			//std::cout << "vertex exists" << std::endl;
     			vertex_exists = true;
+    		}
     	}
     	if(!vertex_exists) {
     		//p isn't a vertex of poly1 => given point is not contained in the CH of the given points
