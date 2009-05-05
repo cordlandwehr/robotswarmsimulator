@@ -5,6 +5,7 @@
  *      Author: martinah
  */
 
+#include <iostream>
 #include "ch_algorithms.h"
 #include "../Utilities/unsupported_operation_exception.h"
 
@@ -39,7 +40,7 @@ void CHAlgorithms::print_vertices_of_ch(CGAL::Object ch) {
 	} else if ( CGAL::assign (seg, ch) ) {
 		print_vertices_of_segment(seg);
 	} else if ( CGAL::assign (point, ch) ) {
-		cout << point << endl;
+		std::cout << point << std::endl;
 	}
 }
 
@@ -51,20 +52,14 @@ void CHAlgorithms::print_vertices_of_polyhedron(Polyhedron_3 poly) {
 }
 
 void CHAlgorithms::print_vertices_of_segment(Segment_3 seg) {
-   	std::cout << "Source: " << seg.source() << endl;
-   	std::cout << "Target: " << seg.target() << endl;
+   	std::cout << "Source: " << seg.source() << std::endl;
+   	std::cout << "Target: " << seg.target() << std::endl;
 }
 
 
 Vector3d CHAlgorithms::compute_cog_of_segment(Segment_3 seg) {
 	Vector3d cog;
-	Point_3 source = seg.source();
-	Point_3 target = seg.target();
-
-	cog(0) = (CGAL::to_double(source.hx()) + CGAL::to_double(target.hx())) / 2;
-	cog(1) = (CGAL::to_double(source.hy()) + CGAL::to_double(target.hy())) / 2;
-	cog(2) = (CGAL::to_double(source.hz()) + CGAL::to_double(target.hz())) / 2;
-
+	cog = (point_3_to_vector3d(seg.source()) + point_3_to_vector3d(seg.target())) / 2;
 	return cog;
 }
 
@@ -79,9 +74,7 @@ Vector3d CHAlgorithms::compute_cog_of_polyhedron(Polyhedron_3 poly) {
     int num = 0;
     for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
     	p = v->point();
-    	cog(0) += CGAL::to_double(p.hx());
-    	cog(1) += CGAL::to_double(p.hy());
-    	cog(2) += CGAL::to_double(p.hz());
+    	cog += point_3_to_vector3d(p);
     	num++;
     }
     cog /= num;
@@ -102,9 +95,9 @@ Vector3d CHAlgorithms::compute_cog_of_ch_of_points(std::vector<Vector3d> points)
 	if ( CGAL::assign(poly, cd) ) {
 		cog = compute_cog_of_polyhedron(poly);
 	} else if ( CGAL::assign(seg, cd) ) {
-		cog = compute_cog_of_ch_of_points(seg);
+		cog = compute_cog_of_segment(seg);
 	} else if ( CGAL::assign(point, cd) ) {
-		cog = point;
+    	cog = point_3_to_vector3d(point);
 	} else {
 		throw UnsupportedOperationException("Type of convex hull couldn't be determined.");
 	}
@@ -213,3 +206,18 @@ Point_3 CHAlgorithms::vector3d_to_point_3(Vector3d point) {
 	return point_3;
 }
 
+Vector3d CHAlgorithms::point_3_to_vector3d(Point_3 point_3) {
+	Vector3d point;
+	point(0) += CGAL::to_double(point_3.hx());
+	point(1) += CGAL::to_double(point_3.hy());
+	point(2) += CGAL::to_double(point_3.hz());
+	return point;
+}
+
+Vector3d CHAlgorithms::random_point_in_ch(std::vector<Vector3d> points) {
+	Vector3d random_point;
+
+	//TODO(martinah) implement
+
+	return random_point;
+}

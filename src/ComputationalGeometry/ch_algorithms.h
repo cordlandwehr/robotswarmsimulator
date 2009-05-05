@@ -17,7 +17,6 @@
 #define CH_ALGORITHMS_H_
 
 #include <boost/smart_ptr.hpp>
-#include <iostream>
 #include <vector>
 
 //CGAL includes
@@ -96,6 +95,14 @@ public:
 	static Point_3 vector3d_to_point_3(Vector3d point);
 
 	/**
+	 * This method transforms the given Point_3 to a Vector3d.
+	 * \param point		Point_3 to transform to a Vector3d
+	 * \return 			Vector3d of the given Point_3
+	 * \see 			vector3d_to_point_3
+	 */
+	static Vector3d point_3_to_vector3d(Point_3 point_3);
+
+	/**
 	 * This method prints the vertices of the given convex hull.
 	 * \param ch	Convex hull which vertices to print.
 	 */
@@ -112,6 +119,13 @@ public:
 	 * \param poly	Polyhedron whose vertices to print.
 	 */
 	static void print_vertices_of_polyhedron(Polyhedron_3 poly);
+
+	/**
+	 * This method returns a point chosen uniformly at random from the convex hull of the given points
+	 * \param points	Points whose convex hull to compute from which to choose random point.
+	 * \return 			Point chosen chosen uniformly at random from the convex hull of the given points.
+	 */
+	static Vector3d random_point_in_ch(std::vector<Vector3d> points);
 
 };
 
