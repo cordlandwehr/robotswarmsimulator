@@ -6,9 +6,10 @@
  */
 
 #include <iostream>
+#include <math.h>
 #include "ch_algorithms.h"
 #include "../Utilities/unsupported_operation_exception.h"
-
+#include "../Utilities/distribution_generator.h"
 
 
 CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) {
@@ -214,10 +215,81 @@ Vector3d CHAlgorithms::point_3_to_vector3d(Point_3 point_3) {
 	return point;
 }
 
-Vector3d CHAlgorithms::random_point_in_ch(std::vector<Vector3d> points) {
-	Vector3d random_point;
+Vector3d CHAlgorithms::random_point_in_ch(std::vector<Vector3d> points, unsigned int seed) {
+	Vector3d rnd_point;
+	Polyhedron_3 poly;
+	Segment_3 seg;
+	Point_3 point;
 
-	//TODO(martinah) implement
+	//compute convex hull
+	CGAL::Object ch;
+	ch = compute_convex_hull_3d(points);
 
-	return random_point;
+	//determine type of convex hull
+	if (CGAL::assign(poly, ch)) {
+
+		Polyhedron_3 min_box;
+		Vector3d rnd_point_in_min_box;
+
+		//determine minimum and maximum x, y and z coordinates
+		Polyhedron_3::Vertex_iterator u = poly.vertices_begin();
+		Vector3d p = point_3_to_vector3d(u->point());
+		double min_x = p(0);
+		double max_x = p(0);
+		double min_y = p(1);
+		double max_y = p(1);
+		double min_z = p(2);
+		double max_z = p(2);
+
+		while(u!=poly.vertices_end()) {
+
+			p = point_3_to_vector3d(u->point());
+			if(p(0) < min_x)
+				min_x = p(0);
+			if(p(0) > max_x)
+				max_x = p(0);
+			if(p(1) < min_y)
+				min_y = p(1);
+			if(p(1) > max_y)
+				max_y = p(1);
+			if(p(2) < min_z)
+				min_z = p(2);
+			if(p(2) > max_z)
+				max_z = p(2);
+
+			++u;
+		}
+		boost::shared_ptr<DistributionGenerator> dist_gen_x;
+		boost::shared_ptr<DistributionGenerator> dist_gen_y;
+		boost::shared_ptr<DistributionGenerator> dist_gen_z;
+		dist_gen_x.reset(new DistributionGenerator(seed));
+		dist_gen_y.reset(new DistributionGenerator(seed+1));
+		dist_gen_z.reset(new DistributionGenerator(seed+2));
+
+		dist_gen_x->init_uniform_real(min_x, max_x);
+		dist_gen_y->init_uniform_real(min_y, max_y);
+		dist_gen_z->init_uniform_real(min_z, max_z);
+
+		do {
+			//choose random point in minimum surrounding box
+			rnd_point_in_min_box(0) = dist_gen_x->get_value_uniform_real();
+			rnd_point_in_min_box(1) = dist_gen_y->get_value_uniform_real();
+			rnd_point_in_min_box(2) = dist_gen_z->get_value_uniform_real();
+
+		} while(!point_contained_in_convex_hull_of_points(rnd_point_in_min_box, points));
+
+		rnd_point = rnd_point_in_min_box;
+
+	} else if (CGAL::assign(seg, ch)) {
+
+		//TODO(martinah) implement
+
+	} else if (CGAL::assign(point, ch)) {
+		rnd_point = point_3_to_vector3d(point);
+
+	} else {
+		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
+	}
+
+	return rnd_point;
 }

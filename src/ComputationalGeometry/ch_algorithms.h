@@ -46,6 +46,7 @@ class CHAlgorithms {
 	friend class point_contained_in_ch_polyhedron_test;
 	friend class point_contained_in_ch_segment_test;
 	friend class point_contained_in_ch_point_test;
+	friend class rnd_poin_in_ch;
 
 public:
 
@@ -123,9 +124,10 @@ public:
 	/**
 	 * This method returns a point chosen uniformly at random from the convex hull of the given points
 	 * \param points	Points whose convex hull to compute from which to choose random point.
+	 * \param seed		Seed
 	 * \return 			Point chosen chosen uniformly at random from the convex hull of the given points.
 	 */
-	static Vector3d random_point_in_ch(std::vector<Vector3d> points);
+	static Vector3d random_point_in_ch(std::vector<Vector3d> points, unsigned int seed);
 
 };
 
