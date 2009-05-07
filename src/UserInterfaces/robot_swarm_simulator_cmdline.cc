@@ -56,8 +56,8 @@ int main(int argc, char** argv) {
 		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
 		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
 		("swarmfile", po::value<std::string>()->default_value("newrandom"), "swarm-file for output")
-		("robotfile", po::value<std::string>()->default_value("newrandom"), "robot-file for output")
-		("obstaclefile", po::value<std::string>()->default_value("newrandom"), "obstacle-file for output")
+		("robotfile", "robot-file for output")
+		("obstaclefile", "obstacle-file for output")
 		("add-pos-handler", "add position request handler for testing")
 		("add-vel-handler", "add velocity request handler for testing")
 		("add-acc-handler", "add acceleration request handler for testing")
@@ -173,14 +173,20 @@ int main(int argc, char** argv) {
 
 			// files
 			generator.set_worldFile(vm["swarmfile"].as<std::string>());
-			generator.set_robotFile(vm["robotfile"].as<std::string>());
-			generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
+			if (vm.count("robotfile"))
+				generator.set_robotFile(vm["robotfile"].as<std::string>());
+			else
+				generator.set_robotFile(vm["swarmfile"].as<std::string>());
+			if (vm.count("obstaclefile"))
+				generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
+			else
+				generator.set_obstacleFile(vm["swarmfile"].as<std::string>());
 
 			// distribute everything
 			generator.distribute();
 
-			//if (vm.count("distr-coord"))
-				generator.distribute_coordsys(vm);
+			// always start coord-system distributer
+			generator.distribute_coordsys(vm);
 
 			// sets request handler if requested
 			if (vm.count("add-pos-handler"))
