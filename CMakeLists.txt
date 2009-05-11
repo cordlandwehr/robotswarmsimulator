@@ -50,6 +50,7 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	        PATTERN *.swarm
 	        PATTERN *.robot
 	        PATTERN *.obstacle
+	        PATTERN *.lua
 	        PATTERN .svn EXCLUDE
 	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
