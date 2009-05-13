@@ -8,6 +8,7 @@
 
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/distribution_generator.h"
+#include "../Utilities/console_output.h"
 
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
@@ -25,15 +26,27 @@ void GaussianFormationGenerator::init(const boost::program_options::variables_ma
 	boundingBox_.insert_element(kYCoord,vm["distr-gauss-pos"].as<double>());
 	boundingBox_.insert_element(kZCoord,vm["distr-gauss-pos"].as<double>());
 
+	// Mean and Sigma
+	if(vm.count("mean-pos") && vm.count("sigma-pos")) {
+		pos_mean_ = vm["mean-pos"].as<double>();
+		pos_sigma_ = vm["sigma-pos"].as<double>();
+	} else {
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::warning) << "no mean and / or sigma given";
+		pos_mean_ = vm["distr-gauss-pos"].as<double>() / 2.0;
+		pos_sigma_ = 42.0; // as per RFC 2549
+	}
+
 	// Initial velocities
-	if (vm["sigma-vel"].as<double>() != 0.0 && vm["mean-vel"].as<double>() != 0.0) {
+	if (vm.count("sigma-vel") && vm.count("mean-vel") &&
+		vm["sigma-vel"].as<double>() > 0.0 && vm["mean-vel"].as<double>() != 0.0) {
 		distrVel_ = true;
 		vel_sigma_ = vm["sigma-vel"].as<double>();
 		vel_mean_ = vm["mean-vel"].as<double>();
 	}
 
 	// Initial accelerations
-	if (vm["sigma-acc"].as<double>() != 0.0 && vm["mean-acc"].as<double>() != 0.0) {
+	if (vm.count("sigma-acc") && vm.count("mean-acc") &&
+		vm["sigma-acc"].as<double>() != 0.0 && vm["mean-acc"].as<double>() != 0.0) {
 		distrAcc_ = true;
 		acc_mean_ = vm["mean-acc"].as<double>();
 		acc_sigma_ = vm["sigma-acc"].as<double>();
