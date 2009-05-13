@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
 	if (vm.count("generate")) {
 		try {
 			// init
-			szenario_generator generator(vm["seed"].as<unsigned int>());	// set seed
+			ScenarioGenerator generator(vm["seed"].as<unsigned int>());	// set seed
 			generator.init(vm);				// init distribution generator
 
 			// files

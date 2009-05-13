@@ -1,5 +1,5 @@
 /*
- * szenario_generator.cc
+ * ScenarioGenerator.cc
  *
  *  Created on: Jan 19, 2009
  *      Author: phoenixx
@@ -34,7 +34,7 @@
 #include "szenario_generator.h"
 
 
-void szenario_generator::init(const boost::program_options::variables_map& vm) {
+void ScenarioGenerator::init(const boost::program_options::variables_map& vm) {
 
 	// initialize the formation generator
 	init_formation_generator(vm);
@@ -116,11 +116,11 @@ void szenario_generator::init(const boost::program_options::variables_map& vm) {
 	statisticsSubsets_.reset(new std::string("{ALL}"));
 }
 
-void szenario_generator::distribute() {
+void ScenarioGenerator::distribute() {
 	formation_generator_->distribute(robotDataList_);
 }
 
-void szenario_generator::init_formation_generator(const boost::program_options::variables_map& vm) {
+void ScenarioGenerator::init_formation_generator(const boost::program_options::variables_map& vm) {
 	// create formation generator
 	if (vm["distr-pos"].as<double>() != 0.0) {
 		formation_generator_.reset(new UniformFormationGenerator());
@@ -136,7 +136,7 @@ void szenario_generator::init_formation_generator(const boost::program_options::
 	formation_generator_->init(vm);
 }
 
-void szenario_generator::distribute_coordsys(const boost::program_options::variables_map& vm) {
+void ScenarioGenerator::distribute_coordsys(const boost::program_options::variables_map& vm) {
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;
 
 	for(iter = robotDataList_.begin(); iter != robotDataList_.end() ; iter++ ) {
@@ -196,36 +196,36 @@ void szenario_generator::distribute_coordsys(const boost::program_options::varia
 	}
 }
 
-void szenario_generator::set_robotFile(std::string filename) {
+void ScenarioGenerator::set_robotFile(std::string filename) {
 	robotFileName_.reset(new std::string(filename));
 }
 
 
-void szenario_generator::set_obstacleFile(std::string filename) {
+void ScenarioGenerator::set_obstacleFile(std::string filename) {
 	obstacleFileName_.reset(new std::string(filename));
 }
 
 
-void szenario_generator::set_worldFile(std::string filename) {
+void ScenarioGenerator::set_worldFile(std::string filename) {
 	worldFileName_.reset(new std::string(filename));
 }
 
 
-void szenario_generator::set_projectName(std::string projectName) {
+void ScenarioGenerator::set_projectName(std::string projectName) {
 	projectName_.reset(new std::string(projectName));
 }
 
-void szenario_generator::set_statisticsTemplate(std::string statisticsTemplate) {
+void ScenarioGenerator::set_statisticsTemplate(std::string statisticsTemplate) {
 	statisticsTemplate_.reset(new std::string(statisticsTemplate));
 }
 
 
-void szenario_generator::set_statisticsSubsets(std::string statisticsSubsets) {
+void ScenarioGenerator::set_statisticsSubsets(std::string statisticsSubsets) {
 	statisticsSubsets_.reset(new std::string(statisticsSubsets));
 }
 
 
-void szenario_generator::add_play_pos_request_handler() {
+void ScenarioGenerator::add_play_pos_request_handler() {
 	parser_->parameter_map()["POSITION_REQUEST_HANDLER_TYPE"]="VECTOR";
 	parser_->parameter_map()["VECTOR_POSITION_REQUEST_HANDLER_SEED"]="1";
 	parser_->parameter_map()["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]="(VECTOR_DIFFERENCE_TRIMMER,4.0)";
@@ -233,7 +233,7 @@ void szenario_generator::add_play_pos_request_handler() {
 }
 
 
-void szenario_generator::add_play_vel_request_handler() {
+void ScenarioGenerator::add_play_vel_request_handler() {
 	parser_->parameter_map()["VELOCITY_REQUEST_HANDLER_TYPE"]="VECTOR";
 	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]="1";
 	parser_->parameter_map()["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]="(VECTOR_TRIMMER,0.4)";
@@ -241,7 +241,7 @@ void szenario_generator::add_play_vel_request_handler() {
 }
 
 
-void szenario_generator::add_play_acc_request_handler() {
+void ScenarioGenerator::add_play_acc_request_handler() {
 	parser_->parameter_map()["ACCELERATION_REQUEST_HANDLER_TYPE"]="VECTOR";
 	parser_->parameter_map()["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]="1";
 	parser_->parameter_map()["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]="(VECTOR_TRIMMER,0.2)";
@@ -249,7 +249,7 @@ void szenario_generator::add_play_acc_request_handler() {
 }
 
 
-void szenario_generator::write_to_file() {
+void ScenarioGenerator::write_to_file() {
 
 	// setup parser for writing with previously set values.
 	parser_->set_obstacle_filename(*obstacleFileName_);
@@ -273,12 +273,12 @@ void szenario_generator::write_to_file() {
 }
 
 
-szenario_generator::szenario_generator(int seed) {
+ScenarioGenerator::ScenarioGenerator(int seed) {
 	png_.reset(new DistributionGenerator(seed));
 }
 
 
-szenario_generator::~szenario_generator() {
+ScenarioGenerator::~ScenarioGenerator() {
 
 }
 

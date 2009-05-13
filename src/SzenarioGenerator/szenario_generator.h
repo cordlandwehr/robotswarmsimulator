@@ -28,7 +28,7 @@
 
 class FormationGenerator;
 
-class szenario_generator {
+class ScenarioGenerator {
 public:
 	/**
 	 * Initializes the szenario generator with number_robots
@@ -131,8 +131,8 @@ public:
 	 */
 	void write_to_file();
 
-	szenario_generator(int seed);
-	virtual ~szenario_generator();
+	ScenarioGenerator(int seed);
+	virtual ~ScenarioGenerator();
 
 	/**
 	 * Creates unordered list of coordinates for coordinates for roboters
