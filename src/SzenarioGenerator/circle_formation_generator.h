@@ -10,6 +10,9 @@
 
 #include "formation_generator.h"
 
+/**
+ * Formation Generator which generates a formation with multiple circles around a single leader in the middle
+ */
 class CircleFormationGenerator : public FormationGenerator {
 public:
 	/**

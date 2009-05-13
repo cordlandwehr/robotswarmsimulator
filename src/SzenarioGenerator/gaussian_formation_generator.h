@@ -12,8 +12,8 @@
 #include "formation_generator.h"
 
 /**
- * A formation generator which distributes the robot positions uniform.
- * May also be used to distribute Acceleration and Velocity uniform.
+ * A formation generator which distributes the robot positions gaussian.
+ * May also be used to distribute Acceleration and Velocity gaussian.
  */
 class GaussianFormationGenerator : public FormationGenerator {
 public:

@@ -30,6 +30,7 @@
 #include "uniform_formation_generator.h"
 #include "gaussian_formation_generator.h"
 #include "circle_formation_generator.h"
+#include "random_walk_formation_generator.h"
 
 #include "szenario_generator.h"
 
@@ -128,6 +129,8 @@ void ScenarioGenerator::init_formation_generator(const boost::program_options::v
 		formation_generator_.reset(new CircleFormationGenerator());
 	} else if(vm.count("distr-gauss-pos")) {
 		formation_generator_.reset(new GaussianFormationGenerator());
+	} else if(vm.count("random-walk")) {
+		formation_generator_.reset(new RandomWalkFormationGenerator());
 	}
 	else // use default formation generator
 		formation_generator_.reset(new UniformFormationGenerator());
