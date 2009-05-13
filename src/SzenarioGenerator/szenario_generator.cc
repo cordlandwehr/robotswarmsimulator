@@ -31,6 +31,7 @@
 #include "gaussian_formation_generator.h"
 #include "circle_formation_generator.h"
 #include "random_walk_formation_generator.h"
+#include "cluster_formation_generator.h"
 
 #include "szenario_generator.h"
 
@@ -131,6 +132,8 @@ void ScenarioGenerator::init_formation_generator(const boost::program_options::v
 		formation_generator_.reset(new GaussianFormationGenerator());
 	} else if(vm.count("random-walk")) {
 		formation_generator_.reset(new RandomWalkFormationGenerator());
+	} else if(vm.count("cluster")) {
+		formation_generator_.reset(new ClusterFormationGenerator());
 	}
 	else // use default formation generator
 		formation_generator_.reset(new UniformFormationGenerator());

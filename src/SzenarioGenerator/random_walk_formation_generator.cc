@@ -19,7 +19,7 @@ void RandomWalkFormationGenerator::init(const boost::program_options::variables_
 
 	steps_ = vm["rnd-walk-steps"].as<unsigned int>();
 	min_distance_ = vm["rnd-min-distance"].as<double>();
-	max_distance_ = vm["rnd-min-distance"].as<double>();
+	max_distance_ = vm["rnd-max-distance"].as<double>();
 
 	png_.reset(new DistributionGenerator(vm["seed"].as<unsigned int>()));
 
