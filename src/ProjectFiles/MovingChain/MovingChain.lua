@@ -7,11 +7,7 @@
 ----------------------------- globals/initialization ---------------------------
 
 
-master_moves = {
-	Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0),
-	Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0),
-	Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0), Vector3d(1,0,0)
-}
+master_moves = dofile("MovingChainPath.dat")
 master_moves_nr = table.getn(master_moves)
 
 zero_vector = Vector3d(0,0,0)

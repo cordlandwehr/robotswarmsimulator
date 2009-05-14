@@ -1,0 +1,118 @@
+-- This data describes the path of the master robot.
+return {
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	
+	
+	
+	
+	
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	
+	
+	
+	
+	
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	
+	
+	
+	
+	
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	
+	
+	
+	
+	
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	
+	
+	
+	
+	
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+	Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0), Vector3d( 1, 0,0),
+
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0), Vector3d( 0, 1,0),
+	
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0), Vector3d(-1, 0,0),
+	
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+	Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0), Vector3d( 0,-1,0),
+}
