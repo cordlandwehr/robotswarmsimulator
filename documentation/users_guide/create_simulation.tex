@@ -128,6 +128,7 @@ The view type of a robot defines its vision model. Whenever a view type is expec
 	\item \texttt{ONE\_POINT\_FORMATION\_VIEW}
 	\item \texttt{SELF\_VIEW}
 	\item \texttt{CLONE\_VIEW}
+	\item \texttt{RADIAL\_VIEW}
 \end{enumerate}
 Each view type is explained in detail below.
 
@@ -142,6 +143,8 @@ Each view type is explained in detail below.
 \paragraph{ONE\_POINT\_FORMATION\_VIEW}\index{View!Radius} View model meant to be used for one point formation algorithms, i.\,e. every robot can see every other robots position, velocity and acceleration only in a limited view radius $r$. The coordinate-system and id of each robot is not visible. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{ONE\_POINT\_FORMATION\_VIEW\_RADIUS}.
 
 \paragraph{CLONE\_VIEW}\index{View!Clone} View model designed for the use with the clone movement algorithm. In this view model every robot can see every other robots position, velocity and id only in a limited view radius $r$. Also in this model robots can query for the time of their last look event. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{CLONE\_VIEW\_RADIUS}.
+
+\paragraph{RADIAL\_VIEW}\index{View!Radial} This view model is similar to \texttt{CLONE\_VIEW} and \texttt{ONE\_POINT\_FORMATION\_VIEW} in that the robots have a specific view range and can only observe objects that have distance at most this view range. However, this is the only limitation: robots can see any information about objects inside their view range. When using this view type you have to specify the variable $r \in \mathbb{R}$ using the parameter variable \texttt{RADIAL\_VIEW\_RADIUS}.
 
 
 \section{Running the \RSS\ with Parameters}
