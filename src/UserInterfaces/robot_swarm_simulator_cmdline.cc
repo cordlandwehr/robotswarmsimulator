@@ -79,6 +79,8 @@ int main(int argc, char** argv) {
 		("clt-max-distance", po::value<double>()->default_value(25.0), "maximum distance of a cluster center from the origin")
 		("clt-sigma", po::value<double>()->default_value(1.0), "sigma for gaussian distribution around the cluster centres")
 		("poisson-disc", "poisson disc formation generator is used")
+		("pd-spread", po::value<double>()->default_value(0.005), "controls the spreading of the robots. If choosen too high to few robots might be generated. (Interval: 0.0005 to 0.2)")
+		("pd-diameter", po::value<double>()->default_value(0.15), "controls the diameter of the sphere in which no other robot is generated")
 		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with minimal absolute value min-vel")
 		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value max-vel")
 		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value min-acc")

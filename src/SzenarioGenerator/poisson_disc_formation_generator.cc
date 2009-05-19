@@ -18,12 +18,27 @@
 #include "../Utilities/PoissonDiscSampler/PDSampling.h"
 
 void PoissonDiscFormationGenerator::init(const boost::program_options::variables_map& vm) {
-	double radius = 0.0009; // this controls how many robots will be generated
-	double robot_diameter = 0.15; // the real diameter of a robot
+	if(!vm.count("seed") || !vm.count("pd-spread") || !vm.count("pd-diameter")) {
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "alone again";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "with the wind in the pines";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "somewhere else";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "(missing parameters for pd generator)";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "";
+	}
+
+	double radius = vm["pd-spread"].as<double>(); // this controls how many robots will be generated
+	double robot_diameter = vm["pd-diameter"].as<double>(); // the real diameter of a robot
 	scaling_factor_ = robot_diameter / radius;
 
-	if (radius<0.0005 || radius>.2) {
+	if (radius < 0.0005 || radius > 0.2) {
 		// do some error handling
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning)  << "";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning) << "sunny sea winds";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning) << "shoulders ache";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning) << "for the want of wings";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning) << "(Poisson Disc Parameter outside of recommended interval)";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning)  << "";
 	}
 
 	/*
@@ -34,7 +49,7 @@ void PoissonDiscFormationGenerator::init(const boost::program_options::variables
 	 *
 	 * it is the fastest and bestest.
 	 */
-	sampler_.reset(new BoundarySampler(radius, true, 12));
+	sampler_.reset(new BoundarySampler(radius, true, vm["seed"].as<unsigned int>()));
 }
 
 void PoissonDiscFormationGenerator::distribute(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
@@ -43,7 +58,12 @@ void PoissonDiscFormationGenerator::distribute(std::vector< boost::shared_ptr<Ro
 	int num_points_generated = sampler_->points.size();
 
 	if(num_points_generated < robotDataList.size()) {
-		// catastrophe
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Greedy man,";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "steal steal steal,";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "mad with power";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "(too many robots were requested for this spread)";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "";
 	}
 
 	std::vector< boost::shared_ptr<RobotData> >::iterator iter;

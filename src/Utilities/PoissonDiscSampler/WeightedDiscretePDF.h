@@ -56,4 +56,4 @@ private:
 	void propogateSumsUp(WDPDF_Node<T> *n);
 };
 
-#include "WeightedDiscretePDF.cpp"
+#include "WeightedDiscretePDF.hpp"
