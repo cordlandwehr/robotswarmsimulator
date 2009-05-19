@@ -42,7 +42,7 @@ public:
 	void update(T item, float newWeight);
 	void remove(T item);
 	bool inTree(T item);
-	
+
 		/* pick a tree element according to its
 		 * weight. p should be in [0,1).
 		 */

@@ -78,6 +78,7 @@ int main(int argc, char** argv) {
 		("clt-min-distance", po::value<double>()->default_value(1.0), "minimum distance of a cluster center from the origin")
 		("clt-max-distance", po::value<double>()->default_value(25.0), "maximum distance of a cluster center from the origin")
 		("clt-sigma", po::value<double>()->default_value(1.0), "sigma for gaussian distribution around the cluster centres")
+		("poisson-disc", "poisson disc formation generator is used")
 		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with minimal absolute value min-vel")
 		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value max-vel")
 		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value min-acc")

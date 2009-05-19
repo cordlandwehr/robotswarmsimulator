@@ -16,13 +16,10 @@ typedef std::vector<int> IntVector;
 
 ///
 
-PDSampler::PDSampler(float _radius, bool _isTiled, bool usesGrid) :
-	m_rng((unsigned long) (timeInSeconds()*1000)),
-	radius(_radius),
-	isTiled(_isTiled)
+PDSampler::PDSampler(unsigned int seed, float _radius, bool _isTiled, bool usesGrid) : m_rng((unsigned long) (seed)), radius(_radius), isTiled(_isTiled)
 {
 	if (usesGrid) {
-			// grid size is chosen so that 4*radius search only 
+			// grid size is chosen so that 4*radius search only
 			// requires searching adjacent cells, this also
 			// determines max points per cell
 		m_gridSize = (int) ceil(2./(4.*_radius));
@@ -44,7 +41,7 @@ PDSampler::PDSampler(float _radius, bool _isTiled, bool usesGrid) :
 		m_grid = 0;
 	}
 }
-	
+
 bool PDSampler::pointInDomain(Vec2 &a)
 {
 	return -1<=a.x && -1<=a.y && 1>=a.x && 1>=a.y;
@@ -111,7 +108,7 @@ int PDSampler::findNeighbors(Vec2 &pt, float distance)
 	float distanceSqrd = distance*distance;
 	int i, j, k, gx, gy, N = (int) ceil(distance/m_gridCellSize);
 	if (N>(m_gridSize>>1)) N = m_gridSize>>1;
-	
+
 	m_neighbors.clear();
 	getGridXY(pt, &gx, &gy);
 	for (j=-N; j<=N; j++) {
@@ -144,7 +141,7 @@ float PDSampler::findClosestNeighbor(Vec2 &pt, float distance)
 	float closestSqrd = distance*distance;
 	int i, j, k, gx, gy, N = (int) ceil(distance/m_gridCellSize);
 	if (N>(m_gridSize>>1)) N = m_gridSize>>1;
-	
+
 	getGridXY(pt, &gx, &gy);
 	for (j=-N; j<=N; j++) {
 		for (i=-N; i<=N; i++) {
@@ -179,7 +176,7 @@ void PDSampler::findNeighborRanges(int index, RangeList &rl)
 	float rangeSqrd = 4*4*radius*radius;
 	int i, j, k, gx, gy, N = (int) ceil(4*radius/m_gridCellSize);
 	if (N>(m_gridSize>>1)) N = m_gridSize>>1;
-	
+
 	getGridXY(candidate, &gx, &gy);
 
 	int xSide = (candidate.x - (-1 + gx*m_gridCellSize))>m_gridCellSize*.5;
@@ -325,8 +322,8 @@ exit:
 
 ///
 
-DartThrowing::DartThrowing(float radius, bool isTiled, int minMaxThrows, int maxThrowsMult) :
-	PDSampler(radius, isTiled),
+DartThrowing::DartThrowing(float radius, bool isTiled, int minMaxThrows, int maxThrowsMult, unsigned int seed) :
+	PDSampler(seed, radius, isTiled),
 	m_minMaxThrows(minMaxThrows),
 	m_maxThrowsMult(maxThrowsMult)
 {
@@ -357,8 +354,8 @@ void DartThrowing::complete()
 
 ///
 
-BestCandidate::BestCandidate(float radius, bool isTiled, int multiplier) :
-	PDSampler(radius, isTiled),
+BestCandidate::BestCandidate(float radius, bool isTiled, int multiplier, unsigned int seed) :
+	PDSampler(seed, radius, isTiled),
 	m_multiplier(multiplier),
 	m_N((int) (.7/(radius*radius)))
 {
@@ -437,7 +434,7 @@ void PureSampler::complete()
 
 	while (regions.size()) {
 		int idx = regionsPDF.choose(m_rng.getFloatL());
-		
+
 		pt = getTiled(((*regions.find(idx)).second)->sample(m_rng));
 		rgn = new ScallopedRegion(pt, radius*2, radius*4);
 
@@ -445,7 +442,7 @@ void PureSampler::complete()
 		for (IntVector::const_iterator it=m_neighbors.begin(); it!=m_neighbors.end(); it++) {
 			int nIdx = *it;
 			Vec2 &n = points[nIdx];
-			
+
 			rgn->subtractDisk(pt+getTiled(n-pt), radius*4);
 
 			RegionMap::iterator entry = regions.find(nIdx);
@@ -492,7 +489,7 @@ void LinearPureSampler::complete()
 
 		ScallopedRegion sr(candidate, radius*2, radius*4);
 		findNeighbors(candidate, radius*8);
-		
+
 		for (IntVector::const_iterator it=m_neighbors.begin(); it!=m_neighbors.end(); it++) {
 			int nIdx = *it;
 			Vec2 &n = points[nIdx];

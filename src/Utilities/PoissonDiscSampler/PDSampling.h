@@ -48,25 +48,20 @@ class PDSampler {
 protected:
 	RNG m_rng;
 	std::vector<int> m_neighbors;
-	
+
 	int (*m_grid)[kMaxPointsPerCell];
 	int m_gridSize;
 	float m_gridCellSize;
-	
-public:
-	std::vector<Vec2> points;
-	float radius;
-	bool isTiled;
 
 public:
-	PDSampler(float radius, bool isTiled, bool usesGrid=true);
+	PDSampler(unsigned int seed, float radius, bool isTiled, bool usesGrid=true);
 	virtual ~PDSampler() { };
 
 	//
 
 	bool pointInDomain(Vec2 &a);
 
-		// return shortest distance between _a_ 
+		// return shortest distance between _a_
 		// and _b_ (accounting for tiling)
 	float getDistanceSquared(Vec2 &a, Vec2 &b) { Vec2 v = getTiled(b-a); return v.x*v.x + v.y*v.y; }
 	float getDistance(Vec2 &a, Vec2 &b) { return sqrt(getDistanceSquared(a, b)); }
@@ -91,11 +86,11 @@ public:
 		// return distance to closest neighbor within _radius_
 	float findClosestNeighbor(Vec2 &pt, float radius);
 
-		// find available angle ranges on boundary for candidate 
+		// find available angle ranges on boundary for candidate
 		// by subtracting occluded neighbor ranges from _rl_
 	void findNeighborRanges(int index, RangeList &rl);
 
-		// extend point set by boundary sampling until domain is 
+		// extend point set by boundary sampling until domain is
 		// full
 	void maximize();
 
@@ -105,6 +100,10 @@ public:
 	//
 
 	virtual void complete() = 0;
+
+	std::vector<Vec2> points;
+	float radius;
+	bool isTiled;
 };
 
 ///
@@ -114,7 +113,7 @@ private:
 	int m_minMaxThrows, m_maxThrowsMult;
 
 public:
-	DartThrowing(float radius, bool isTiled, int minMaxThrows, int maxThrowsMult);
+	DartThrowing(float radius, bool isTiled, int minMaxThrows, int maxThrowsMult, unsigned int seed);
 
 	virtual void complete();
 };
@@ -126,7 +125,7 @@ private:
 	int m_multiplier, m_N;
 
 public:
-	BestCandidate(float radius, bool isTiled, int multiplier);
+	BestCandidate(float radius, bool isTiled, int multiplier, unsigned int seed);
 
 	virtual void complete();
 };
@@ -135,7 +134,7 @@ public:
 
 class BoundarySampler : public PDSampler {
 public:
-	BoundarySampler(float radius, bool isTiled) : PDSampler(radius, isTiled) {};
+	BoundarySampler(float radius, bool isTiled, unsigned int seed) : PDSampler(seed, radius, isTiled) {};
 
 	virtual void complete();
 };
@@ -144,7 +143,7 @@ public:
 
 class PureSampler : public PDSampler {
 public:
-	PureSampler(float radius) : PDSampler(radius, true) {};
+	PureSampler(float radius, unsigned int seed) : PDSampler(seed, radius, true) {};
 
 	virtual void complete();
 };
@@ -153,7 +152,7 @@ public:
 
 class LinearPureSampler : public PDSampler {
 public:
-	LinearPureSampler(float radius) : PDSampler(radius, true) {};
+	LinearPureSampler(float radius, unsigned int seed) : PDSampler(seed, radius, true) {};
 
 	virtual void complete();
 };
@@ -162,7 +161,7 @@ public:
 
 class PenroseSampler : public PDSampler {
 public:
-	PenroseSampler(float radius) : PDSampler(radius, false, false) {};
+	PenroseSampler(float radius, unsigned int seed) : PDSampler(seed, radius, false, false) {};
 
 	virtual void complete();
 };
@@ -171,7 +170,7 @@ public:
 
 class UniformSampler : public PDSampler {
 public:
-	UniformSampler(float radius) : PDSampler(radius, false, false) {};
+	UniformSampler(float radius, unsigned int seed) : PDSampler(seed, radius, false, false) {};
 
 	virtual void complete();
 };
