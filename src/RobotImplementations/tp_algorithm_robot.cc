@@ -34,7 +34,7 @@ std::set<boost::shared_ptr<Request> > TPAlgorithmRobot::compute() {
 		}
 
 		// compute the target point
-		Vector3d target_point = compute_target_point(positions);
+		Vector3d target_point = compute_target_point(own_position,positions);
 
 		// build a position request for given target point
 		boost::shared_ptr<Vector3d> target_point_ptr(new Vector3d(target_point));
@@ -45,7 +45,7 @@ std::set<boost::shared_ptr<Request> > TPAlgorithmRobot::compute() {
 		return result_set;
 }
 
-Vector3d TPAlgorithmRobot::compute_target_point(const std::vector<Vector3d>& positions) {
+Vector3d TPAlgorithmRobot::compute_target_point(const Vector3d & own_position, const std::vector<Vector3d>& positions) {
 	switch(type_) {
 	case cog:
 		return PointAlgorithms::compute_COG(positions);
@@ -53,6 +53,14 @@ Vector3d TPAlgorithmRobot::compute_target_point(const std::vector<Vector3d>& pos
 		return PointAlgorithms::compute_CMinBall(positions);
 	case cbox:
 		return PointAlgorithms::compute_CMinBox(positions);
+	case maxline:
+		return PointAlgorithms::compute_MaxLine(0, positions);
+	case midfar:
+		return PointAlgorithms::compute_MidFar(own_position, positions);
+	case median:
+		return PointAlgorithms::compute_MED(positions);
+	case rminrect:
+		return PointAlgorithms::compute_RMinRect(source_of_randomness, positions);
 	default:
 		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "tried to invoke unkown tp algorithm";
 		return Vector3d();

@@ -351,8 +351,14 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
 	} else if (algorithm == "PullSpinRobot") {
 		robot.reset(new PullSpinRobot(id));
-	} else if (algorithm == "CHRobot") {
-		robot.reset(new CHRobot(id));
+	} else if (algorithm == "TPAlgorithmMaxline") {
+		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::maxline));
+	} else if (algorithm == "TPAlgorithmMidfar") {
+		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::midfar));
+	} else if (algorithm == "TPAlgorithmMedian") {
+		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::median));
+	} else if (algorithm == "TPAlgorithmRMinRect") {
+		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::rminrect));
 	}
 	else {
 		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);

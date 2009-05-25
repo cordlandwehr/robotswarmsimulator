@@ -140,7 +140,7 @@ Vector3d PointAlgorithms::compute_RCH(const std::vector<Vector3d>& positions) {
 Vector3d PointAlgorithms::compute_RMinRect(const boost::shared_ptr<DistributionGenerator> source_of_randomness, const std::vector<Vector3d>& positions) {
 	if(positions.size() == 0) {
 		// do some error handling
-		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing CMinBox with positions.size == 0";
+		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error) << "Computing RMinRect with positions.size == 0";
 		return Vector3d();
 	}
 	Vector3d first = positions.at(0);

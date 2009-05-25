@@ -13,8 +13,10 @@
 #include <string>
 #include <set>
 
+
 #include "../Model/robot.h"
 #include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/distribution_generator.h"
 
 class RobotIdentifier;
 class Request;
@@ -36,10 +38,20 @@ public:
 	enum Type {
 		cog,
 		cminball,
-		cbox
+		cbox,
+		maxline,
+		midfar,
+		median,
+		rminrect
 	};
 
-	TPAlgorithmRobot(boost::shared_ptr<RobotIdentifier> id, Type type) : Robot(id), type_(type) {}
+	TPAlgorithmRobot(boost::shared_ptr<RobotIdentifier> id, Type type) : Robot(id), type_(type) {
+		if (type_==rminrect){
+			source_of_randomness=boost::shared_ptr<DistributionGenerator>(new DistributionGenerator(1));
+		}
+
+
+	}
 
 	/**
 	 * computes a position request for a target point based on the type of the robot
@@ -54,6 +66,14 @@ public:
 			return "TPAlgorithmCMinball";
 		case cbox:
 			return "TPAlgorithmCBox";
+		case maxline:
+			return "TPAlgorithmMaxline";
+		case midfar:
+			return "TPAlgorithmMidfar";
+		case median:
+			return "TPAlgorithmMedian";
+		case rminrect:
+			return "TPAlgorithmRMinRect";
 		default:
 			return "TPAlgorithm";
 		}
@@ -62,8 +82,9 @@ private:
 	/**
 	 * computes a target point based on the type of the robot
 	 */
-	Vector3d compute_target_point(const std::vector<Vector3d>& positions);
+	Vector3d compute_target_point(const Vector3d & own_position, const std::vector<Vector3d>& positions);
 	Type type_;
+	boost::shared_ptr<DistributionGenerator> source_of_randomness;
 };
 
 #endif /* TP_ALGORITHM_ROBOT_H_ */
