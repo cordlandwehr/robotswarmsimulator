@@ -93,7 +93,7 @@ void PDSampler::addPoint(Vec2 pt)
 		}
 		if (i==kMaxPointsPerCell) {
 			printf("Internal error, overflowed max points per grid cell. Exiting.\n");
-			exit(1);
+			//exit(1);
 		}
 	}
 }
@@ -102,7 +102,7 @@ int PDSampler::findNeighbors(Vec2 &pt, float distance)
 {
 	if (!m_grid) {
 		printf("Internal error, sampler cannot search without grid.\n");
-		exit(1);
+		//exit(1);
 	}
 
 	float distanceSqrd = distance*distance;
@@ -135,7 +135,7 @@ float PDSampler::findClosestNeighbor(Vec2 &pt, float distance)
 {
 	if (!m_grid) {
 		printf("Internal error, sampler cannot search without grid.\n");
-		exit(1);
+		//exit(1);
 	}
 
 	float closestSqrd = distance*distance;
@@ -169,7 +169,7 @@ void PDSampler::findNeighborRanges(int index, RangeList &rl)
 {
 	if (!m_grid) {
 		printf("Internal error, sampler cannot search without grid.\n");
-		exit(1);
+		//exit(1);
 	}
 
 	Vec2 &candidate = points[index];
