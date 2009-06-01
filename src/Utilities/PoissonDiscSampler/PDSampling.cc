@@ -277,7 +277,7 @@ void PDSampler::relax()
 
 	tmp = fopen("relaxTmpOut.txt", "w");
 	fclose(tmp);
-	system("qvoronoi p FN < relaxTmpIn.txt > relaxTmpOut.txt");
+	//system("qvoronoi p FN < relaxTmpIn.txt > relaxTmpOut.txt");
 
 	tmp = fopen("relaxTmpOut.txt", "r");
 	fscanf(tmp, "%d\n%d\n", &dim, &numVerts);
