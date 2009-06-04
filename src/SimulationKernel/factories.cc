@@ -54,6 +54,7 @@
 #include "../RobotImplementations/acceleration_cog_robot.h"
 #include "../RobotImplementations/tp_algorithm_robot.h"
 #include "../RobotImplementations/rndjmp_robot.h"
+#include "../RobotImplementations/pot_robot.h"
 #include "../RobotImplementations/pull_spin_robot.h"
 #include "../RobotImplementations/pull_spin_robot.h"
 #include "../RobotImplementations/ch_robot.h"
@@ -352,6 +353,8 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
 	} else if(algorithm == "RndJmpRobot") {
 		robot.reset(new RndJmpRobot(id));
+	} else if(algorithm.substr(0,8) == "PotRobot") {
+		robot.reset(new PotRobot(id, algorithm.substr(8)));
 	} else if (algorithm == "PullSpinRobot") {
 		robot.reset(new PullSpinRobot(id));
 	} else if (algorithm == "TPAlgorithmMaxline") {
