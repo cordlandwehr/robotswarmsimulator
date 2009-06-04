@@ -53,6 +53,7 @@
 #include "../RobotImplementations/velocity_cog_robot.h"
 #include "../RobotImplementations/acceleration_cog_robot.h"
 #include "../RobotImplementations/tp_algorithm_robot.h"
+#include "../RobotImplementations/rndjmp_robot.h"
 #include "../RobotImplementations/pull_spin_robot.h"
 #include "../RobotImplementations/pull_spin_robot.h"
 #include "../RobotImplementations/ch_robot.h"
@@ -349,6 +350,8 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	    robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cminball));
 	} else if (algorithm == "TPAlgorithmCBox") {
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
+	} else if(algorithm == "RndJmpRobot") {
+		robot.reset(new RndJmpRobot(id));
 	} else if (algorithm == "PullSpinRobot") {
 		robot.reset(new PullSpinRobot(id));
 	} else if (algorithm == "TPAlgorithmMaxline") {
@@ -359,8 +362,7 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::median));
 	} else if (algorithm == "TPAlgorithmRMinRect") {
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::rminrect));
-	}
-	else {
+	} else {
 		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
 	}
 	return robot;

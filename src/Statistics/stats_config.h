@@ -167,6 +167,11 @@ public:
 	 */
 	const int vel_cfg() const;
 
+	/**
+	 * \return whether or not to log iff the visibility graph is connected
+	 */
+	const bool is_visgraph_connected() const;
+
 private:
 	/**
 	 * the datadumplevel used (one of DATADUMP_*)
@@ -187,7 +192,9 @@ private:
 	bool num_robots_, num_masters_, num_slaves_;
 	bool swarm_avg_pos_;
 	bool miniball_center_, miniball_radius_, miniball_movedist_;
-	int vel_cfg_;
+	int  vel_cfg_;
+	bool visgraph_connected_;
+
 	/*
 	 * END Configuration-Block
 	 */

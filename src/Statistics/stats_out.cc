@@ -14,6 +14,7 @@
 #include <ctime>
 
 #include <boost/filesystem/fstream.hpp>
+#include <boost/program_options.hpp>
 
 #include "stats_out.h"
 #include <Utilities/console_output.h>
@@ -44,24 +45,31 @@ StatsOut::~StatsOut() {
 	}
 }
 
-void StatsOut::create_date() {
-	char stat_time [80];
+void StatsOut::create_prefixes(std::string s) {
+	if (s.length()==0) {
+		char stat_time [80];
+		time_t stat_rawtime;
+		struct tm * stat_timeinfo;
 
-	time_t stat_rawtime;
-	struct tm * stat_timeinfo;
+		time ( &stat_rawtime );
+		stat_timeinfo = localtime ( &stat_rawtime );
 
-	time ( &stat_rawtime );
-	stat_timeinfo = localtime ( &stat_rawtime );
+		strftime (stat_time,80,"%Y%m%d_%H%M%S",stat_timeinfo);
+		//year (four digits), month, (day of the month), Hour (in 24h format), Minute, Second
+		// http://www.cplusplus.com/reference/clibrary/ctime/strftime.html
 
-	strftime (stat_time,80,"%Y%m%d_%H%M%S",stat_timeinfo);
-	//year (four digits), month, (day of the month), Hour (in 24h format), Minute, Second
-	// http://www.cplusplus.com/reference/clibrary/ctime/strftime.html
+		std::strcpy (stat_gnuplot_date, "gnuplot_");
+		std::strcat (stat_gnuplot_date, stat_time);
 
-	std::strcpy (stat_gnuplot_date, "gnuplot_");
-	std::strcat (stat_gnuplot_date, stat_time);
+		std::strcpy (stat_output_date, "output_");
+		std::strcat (stat_output_date, stat_time);
+	} else {
+		std::strcpy (stat_gnuplot_date, "gnuplot_");
+		std::strcat (stat_gnuplot_date, s.c_str());
 
-	std::strcpy (stat_output_date, "output_");
-	std::strcat (stat_output_date, stat_time);
+		std::strcpy (stat_output_date, "output_");
+		std::strcat (stat_output_date, s.c_str());
+	}
 }
 
 void StatsOut::set_id(std::string stat_id) {
@@ -137,7 +145,7 @@ void StatsOut::open(std::vector<std::string> stat_designation, bool gnuPlot) {
 	 *  Building the skeletal structure of the output-file
 	 */
 
-	stat_output_.open(stat_dir_ / stat_output_filename, std::ios::app);
+	stat_output_.open(stat_dir_ / stat_output_filename);
 
 	stat_output_ << std::right
 				<< std::setw(stat_output_width)

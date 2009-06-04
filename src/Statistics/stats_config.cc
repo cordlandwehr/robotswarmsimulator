@@ -99,6 +99,7 @@ const void StatsConfig::init_activate_all() {
 	swarm_avg_pos_ = true;
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = true;
 	vel_cfg_ = VecSetStats::ALL;
+	visgraph_connected_ = true;
 }
 
 const void StatsConfig::init_activate_basic() {
@@ -107,6 +108,7 @@ const void StatsConfig::init_activate_basic() {
 	miniball_center_ = false;
 	miniball_radius_ = miniball_movedist_ = true;
 	vel_cfg_ = 0;
+	visgraph_connected_ = false;
 }
 
 const void StatsConfig::init_activate_none() {
@@ -114,6 +116,7 @@ const void StatsConfig::init_activate_none() {
 	swarm_avg_pos_ = false;
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = false;
 	vel_cfg_ = 0;
+	visgraph_connected_ = false;
 }
 
 const int StatsConfig::datadump_level() const {
@@ -206,4 +209,8 @@ const bool StatsConfig::is_miniball_movedist() const {
 
 const int StatsConfig::vel_cfg() const {
 	return vel_cfg_;
+}
+
+const bool StatsConfig::is_visgraph_connected() const {
+	return visgraph_connected_;
 }

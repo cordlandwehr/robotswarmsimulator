@@ -81,3 +81,23 @@ Vector3d string_to_vec(std::string str ){
 double vector3d_get_length(Vector3d vec, int p) {
 	return pow( pow(vec(0),p) + pow(vec(1),p) + pow(vec(2),p) , 1.0/p);
 }
+
+void vector3d_normalize(Vector3d& vec) {
+	double len = vector3d_get_length(vec, 2);
+	if (len != 0) {
+		vec /= len;
+	}
+}
+
+void vector3d_set_length(Vector3d& vec, double len) {
+	vector3d_normalize(vec);
+	vec(0) *= len;
+	vec(1) *= len;
+	vec(2) *= len;
+}
+
+void vector3d_set_maxlength(Vector3d& vec, double len) {
+	double isLen = pow( pow(vec(0),2) + pow(vec(1),2) + pow(vec(2),2) , 0.5);
+	if(isLen > len)
+		vector3d_set_length(vec, len);
+}

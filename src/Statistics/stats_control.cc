@@ -65,7 +65,8 @@ void StatsControl::init(std::map<std::string, std::string> &params, std::string 
 
 	// create data-prefix for all StatsOut-instances
 	// by calling the respective static function
-	StatsOut::create_date();
+	std::string prefix = params["STATISTICS_FILEID"];
+	StatsOut::create_prefixes(prefix);
 
 	// initialize stats_calc_indata_
 	stats_calc_indata_.prev_world_info_.reset();
@@ -104,6 +105,12 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 	/**
 	 * TODO(craupach): This should not happen here!!
 	 * calculate visibility graph
+	 *
+	 * Hint(kurras): It is not neccessary for *statistics* to compute the visibilty graph
+	 * for each event. It would sufficient to compute it for the last event of
+	 * each unique time, as done below for the calc_indata-update.
+	 * But since this data is shared via time_point with other software components that
+	 * I don't know, I did not modify this.
 	 */
 	boost::shared_ptr<StatisticsDataObject> data(new StatisticsDataObject());
 	calculate_visibility_graph(world_information, data);
@@ -121,20 +128,25 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 		// there's already a world_info_ for the same time, so overwrite it with the current latter one
 		// but wait if more updates for the same world-time will follow.
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
+		stats_calc_indata_.visib_ = data;
 
 	} else if (stats_calc_indata_.world_info_.get()->time() < world_information.time()) {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "existing current world_info for earlier time, so do the calculation on it";
 
 		// the already existing world_info is the latest for the old time.
-		// So NOW do all the calculation and data-output to files...
+
+		// So NOW compute the visibilities therefore (err.. already done)
+		// ...and NOW do all the calculation and data-output to files...
 		calculate();
 
 		// Move the world_info_ to prev_world_info_
 		// (any existing prev_world_info_-content will be freed through the shared_ptr's destructor)
 		stats_calc_indata_.prev_world_info_ = stats_calc_indata_.world_info_;
+		stats_calc_indata_.prev_visib_ = stats_calc_indata_.visib_;
 
 		// Set the new world_information from this update-call as the new world_info_
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
+		stats_calc_indata_.visib_ = data;
 
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "Error in StatsControl::update(...): unhandled case that must not occur.";

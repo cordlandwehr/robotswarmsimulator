@@ -37,6 +37,7 @@
 #include "stats_out.h"
 #include "numset_stats.h"
 #include "vecset_stats.h"
+#include "statistics_data_object.h"
 
 struct StatsCalcInData {
 
@@ -46,12 +47,16 @@ struct StatsCalcInData {
 	 */
 	boost::shared_ptr<WorldInformation> world_info_;
 
+	boost::shared_ptr<StatisticsDataObject> visib_;
+
 	/**
 	 * After performing the calculations on world_info_ it is moved to prev_world_info_ for
 	 * latter additional calculations on the differences to future world_info_.
 	 * At simulation's begin it will hold that "prev_world_info_.get() == NULL"
 	 */
 	boost::shared_ptr<WorldInformation> prev_world_info_;
+
+	boost::shared_ptr<StatisticsDataObject> prev_visib_;
 
 	// SAVED PRECALCULATED VALUES
 	// for all subsets in one vector.

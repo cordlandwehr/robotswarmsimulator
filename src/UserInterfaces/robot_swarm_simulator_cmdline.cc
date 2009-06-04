@@ -99,7 +99,8 @@ int main(int argc, char** argv) {
 		("history-length", po::value<unsigned int>()->default_value(25), "history length")
 		("dry", "disables statistic output")
 		("steps", po::value<unsigned int>(), "number of steps for blind mode")
-		("blind", "disables visualization");
+		("blind", "disables visualization")
+		("statsfile", po::value<std::string>()->default_value(""), "prefix for the statisticsfiles (using timestamp by default)");
 
 	// hidden option list, pssst ;-)
 	po::options_description top_secret_options("Top Secret");
@@ -130,6 +131,7 @@ int main(int argc, char** argv) {
 	// initalize logging system
 	ConsoleOutput::Level log_level = ConsoleOutput::none;
 	std::string arg_log_level = vm["loglevel"].as<std::string>();
+
 	boost::to_lower(arg_log_level);
 	if(arg_log_level == "debug") {
 		log_level = ConsoleOutput::debug;

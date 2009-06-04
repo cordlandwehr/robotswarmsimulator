@@ -106,8 +106,9 @@ public:
 	/**
 	 * creates a new timestamp that is used by all latter calls
 	 * to open(...) of any instance (!) for creating the filenames.
+	 * If s is null then a timestamp is used, otherwise the given string s
 	 */
-	static void create_date();
+	static void create_prefixes(std::string s);
 
 	/**
 	 * sets the id for this instance that is used by a latter call

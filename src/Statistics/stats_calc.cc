@@ -11,6 +11,7 @@
 #include "../ComputationalGeometry/miniball.cc"
 #include "../ComputationalGeometry/miniball_b.cc"
 #include "../Utilities/vector_arithmetics.h"
+#include "../Views/view.h"
 
 StatsCalc::StatsCalc() {
 
@@ -128,6 +129,12 @@ void StatsCalc::calculate(StatsCalcInData & data,
 //		if (push_names)
 //			num_stats.push_names(names, "vel");
 //	}
+
+	if (stats_cfg->is_visgraph_connected()) {
+		values.push_back(data.visib_->vis_graph_is_connected());
+		if (push_names)
+			names.push_back("visgraph_connected");
+	}
 
 	// DO ALL THE CALCULATION
 	// ...
