@@ -42,3 +42,7 @@ std::vector<View::MarkerRef> SphericView::get_visible_markers(const RobotData& r
 
 	return OctreeUtilities::get_visible_markers_by_radius(octree(),robot.position() , view_radius() );
 }
+
+const double SphericView::get_view_radius() const {
+	return view_radius_;
+}

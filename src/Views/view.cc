@@ -370,3 +370,7 @@ const std::size_t View::get_id(boost::shared_ptr<Identifier> identifier) const {
 const int View::get_time() const {
 	throw UnsupportedOperationException(get_error_message("get_time"));
 }
+
+const double View::get_view_radius() const {
+	throw UnsupportedOperationException(get_error_message("get_view_radius"));
+}

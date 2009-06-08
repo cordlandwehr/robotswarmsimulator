@@ -234,6 +234,13 @@ public:
 	 */
 	virtual const int get_time() const;
 
+	/**
+	 * Queries the view radius of the view. Throws an UnsupportedOperationException 
+	 * if the view does not have a view radius.
+	 * @return view radius
+	 */
+	virtual const double get_view_radius() const;
+
 
 
 protected:

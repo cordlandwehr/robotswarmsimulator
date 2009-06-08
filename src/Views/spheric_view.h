@@ -28,6 +28,8 @@ public:
 	virtual ~SphericView();
 	void init(const boost::shared_ptr<WorldInformation>& world_information );
 
+	virtual const double get_view_radius() const;
+
 protected:
 	virtual std::vector<RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
