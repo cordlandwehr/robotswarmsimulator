@@ -47,7 +47,8 @@ BOOST_AUTO_TEST_CASE(stats_out_test) {
 	slave.set_id("slave");
 	slave.set_dir(s);
 
-	StatsOut::create_date();
+	std::string prefix = "";
+	StatsOut::create_prefixes(prefix);
 
 	master.open(stat_designation);
 	slave.open(stat_designation);
