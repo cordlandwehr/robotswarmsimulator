@@ -2,6 +2,7 @@
 #include <math.h>
 #include <float.h>
 
+#include <stdio.h>
 #include <algorithm>
 
 #include "PDSampling.h"
@@ -22,12 +23,12 @@ static float integralOfDistToCircle(float x, float d, float r, float k)
 
 	float theta = asin(y);
 
-	return (r*(r*(x + 
+	return (r*(r*(x +
 				  k*theta) +
 			   k*cos(theta)*d_sin_x) +
 		    d*cos(x)*d_sin_x)*.5f;
 }
-	
+
 ScallopedSector::ScallopedSector(Vec2 &_Pt, float _a1, float _a2, Vec2 &P1, float r1, float sign1, Vec2 &P2, float r2, float sign2)
 {
 	Vec2 v1 = Vec2(P1.x - _Pt.x, P1.y - _Pt.y);
@@ -101,7 +102,7 @@ Vec2 ScallopedSector::sample(RNG &rng)
 	float d1 = distToCurve(angle, 0);
 	float d2 = distToCurve(angle, 1);
 	float d = sqrt(d1*d1 + (d2*d2 - d1*d1)*rng.getFloat());
-	
+
 	return Vec2(P.x + cos(angle)*d, P.y + sin(angle)*d);
 }
 
@@ -144,7 +145,7 @@ void ScallopedSector::subtractDisk(Vec2 &C, float r, std::vector<ScallopedSector
 		float theta = atan2(v.y, v.x);
 		float x = sqrt(d*d-r*r);
 		float angle, alpha = asin(r/d);
-		
+
 		angle = canonizeAngle(theta+alpha);
 		if (a1<angle && angle<a2) {
 			if (distToCurve(angle,0)<x && x<distToCurve(angle,1))
@@ -153,7 +154,7 @@ void ScallopedSector::subtractDisk(Vec2 &C, float r, std::vector<ScallopedSector
 
 		angle = canonizeAngle(theta-alpha);
 		if (a1<angle && angle<a2) {
-			if (distToCurve(angle,0)<x && x<distToCurve(angle,1)) 
+			if (distToCurve(angle,0)<x && x<distToCurve(angle,1))
 				angles.push_back(angle);
 		}
 	}
@@ -187,7 +188,7 @@ void ScallopedSector::subtractDisk(Vec2 &C, float r, std::vector<ScallopedSector
 			}
 		}
 	}
-	
+
 	sort(angles.begin(), angles.end());
 	angles.insert(angles.begin(), a1);
 	angles.push_back(a2);
@@ -272,7 +273,7 @@ Vec2 ScallopedRegion::sample(RNG &rng)
 	if (!regions->size()) {
 		printf("Fatal error, sampled from empty region.");
 		exit(1);
-		return Vec2(0,0); 
+		return Vec2(0,0);
 	} else {
 		float a = area*rng.getFloatL();
 		ScallopedSector &ss = (*regions)[0];
