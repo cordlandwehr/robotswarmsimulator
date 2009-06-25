@@ -12,6 +12,7 @@
 #include <boost/foreach.hpp>
 #include <string>
 #include <set>
+#include <cmath>
 
 #include "../Utilities/distribution_generator.h"
 
@@ -24,15 +25,14 @@ class Request;
 
 class RndJmpRobot : public Robot {
 public:
-
+	static unsigned int rndInit;
 	RndJmpRobot(boost::shared_ptr<RobotIdentifier> id) : Robot(id) {
-		rand = boost::shared_ptr<DistributionGenerator>(new DistributionGenerator(123));
-		rand->init_normal(0, 1);
+		rand = boost::shared_ptr<DistributionGenerator>(new DistributionGenerator(rndInit));
+		rndInit += 123123;
+		rand->init_normal(0, M_PI/4.0);
 	}
 
 	std::set<boost::shared_ptr<Request> > compute();
-	void cut_trivial(Vector3d & tp, std::vector<Vector3d> & positions, double v);
-	void cut_maxmove(Vector3d & tp, std::vector<Vector3d> & positions, double v);
 
 	virtual std::string get_algorithm_id () const {
 		return "RndJmpRobot";
@@ -40,6 +40,7 @@ public:
 
 private:
 	boost::shared_ptr<DistributionGenerator> rand;
+	double get_min_dist(Vector3d & tp, std::vector<Vector3d> & positions);
 };
 
 

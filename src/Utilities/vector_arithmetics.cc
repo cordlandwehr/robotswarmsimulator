@@ -101,3 +101,24 @@ void vector3d_set_maxlength(Vector3d& vec, double len) {
 	if(isLen > len)
 		vector3d_set_length(vec, len);
 }
+
+void vector3d_rotate(Vector3d & tp, double rx, double ry, double rz) {
+	double x,y,z;
+	double newX, newY, newZ;
+
+	x = tp[0];
+	y = tp[1];
+	z = tp[2];
+
+	newX = cos(rx)*cos(rz)*x - cos(ry)*sin(rz)*y + sin(ry)*z;
+	newY = (cos(rx)*sin(rz)+sin(rx)*sin(ry)*cos(rz))*x;
+	newY += (cos(rx)*cos(rz)-sin(rx)*sin(ry)*sin(rz))*y;
+	newY -= sin(rx)*cos(ry)*z;
+	newZ = (sin(rx)*sin(rz)-cos(rx)*sin(ry)*cos(rz))*x;
+	newZ += (sin(rx)*cos(rz)+cos(rx)*sin(ry)*sin(rz))*y;
+	newZ += cos(rx)*cos(ry)*z;
+
+	tp[0] = newX;
+	tp[1] = newY;
+	tp[2] = newZ;
+}

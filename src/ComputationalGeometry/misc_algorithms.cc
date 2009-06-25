@@ -103,11 +103,11 @@ boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::
 boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::vector<Vector3d>& pos) {
 	// compute the cog (as a point lying on the to be computed shim plane)
 	const Vector3d cog = PointAlgorithms::compute_COG(pos);
-	
+
 	// TODO(Peter@Kamil) comment (why have the points to be sorted?)
 	std::vector<Vector3d> positions(pos);
 	sort(positions.begin(), positions.end(), (boost::bind(vector3d_distance, _1, cog) < boost::bind(vector3d_distance, _2, cog)));
-	
+
 	// setup matrix (this is a symmetrical matrix!)
 	// TODO(Peter@Kamil) Please have a look at the setup of this matrix. The setup should be equivalent to the code you
 	//     mailed me, but it looks somewhat strange. For once, you used a symmetric matrix type, but nevertheless set
@@ -125,8 +125,8 @@ boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::
 			}
 		}
 	}
-	
-	
+
+
 	/* ------------------------- BEGIN: solve the eigenvalue problem using LAPACK ------------------------- */
 	// input variables for LAPACK call
 	char jobz = 'V'; // compute eigenvalues and eigenvectors
@@ -134,19 +134,19 @@ boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::
 	integer N = dim; // order of the matrix (i.e. dimension)
 	integer lda = dim; // leading dimension of matrix array (in our case the matrix dimension)
 	integer lwork = 3*N; // length of the work array; note: this is not optimal, see documentation of 'dsyev'
-	
+
 	// output variables for LAPACK call
 	integer info; // error value (0 = successful)
 	doublereal eigvals[dim]; // storage for the eigenvalues (will be stored in ascending order)
 	doublereal work[9]; // memory for the 'dsyev' method to work in
-	
+
 	// input/output variables for LAPACK call
 	// the matrix parameter is used as input (the matrix whose eigenvals to compute) and output (eigenvectors)
 	// note that the eigenvectors will form an ortonormal system (especially: they are already normalized!)
-	
+
 	// compute the eigenvalues/-vectors by a call to the LAPACK method 'DSYEV' (Double, SYmmetric matrix, EigenValues)
 	dsyev_(&jobz, &uplo, &N, matrix, &lda, eigvals, work, &lwork, &info);
-	
+
 	// error checking
 	if (info != 0) {
 		ConsoleOutput::log(ConsoleOutput::ComputationalGeometry, ConsoleOutput::error)
@@ -160,7 +160,102 @@ boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::
 	Vector3d normal;
 	normal(0) = matrix[0*dim+0];
 	normal(1) = matrix[0*dim+1];
-	normal(2) = matrix[0*dim+2];	
+	normal(2) = matrix[0*dim+2];
 	return boost::make_tuple(cog, normal);
 }
 #endif
+
+// Cuts the length of the given targetposition tp in-place such that the
+// visibility to the given positions of neighbours (already with distance <= view radius v)
+// is kept. Therefore the trivial (direction-independant) algorithm is applied.
+// Remark that it is no problem to have the current position of the robot (0,0,0)
+// itself contained in positions.
+void MiscAlgorithms::cut_trivial(Vector3d & tp, std::vector<Vector3d> & positions, double v) {
+	// calculate maximal distance to any robot
+	double maxDist = 0.0;
+	for (int i=0; i<positions.size(); i++) {
+		double dist = vector3d_distance(positions[0], positions[i]);
+		if (dist > maxDist)
+			maxDist = dist;
+	}
+
+	// now let maxDist the maximum distance of tp to self in (0,0,0)
+	maxDist = (v-maxDist)/2.0;
+
+	// trim tp to length maxDist if neccessary
+	vector3d_set_maxlength(tp, maxDist);
+}
+
+void MiscAlgorithms::cut_maxmove(Vector3d & tp, std::vector<Vector3d> & positions, double v) {
+	bool DEBUG = false;
+
+	double maxDistStart = 0.0;
+	for (int i=0; i<positions.size(); i++) {
+		double curDist = vector3d_distance(tp, positions[i], 2);
+		if(curDist > maxDistStart)
+			maxDistStart = curDist;
+	}
+
+	double min_t = 1.0;
+
+	for (int i=1; i<positions.size(); i++) {
+		Vector3d q = positions[i];
+
+		// calculate distance of target tp to the middlepos of me and other q/2
+		if (vector3d_distance(tp, q/2.0) > v/2.0) {
+			// calculate some magic a,b,c (from maths behind)
+			double a, b, c;
+			a = tp[0]*tp[0] + tp[1]*tp[1] + tp[2]*tp[2];
+			b = -q[0]*tp[0]-q[1]*tp[1]-q[2]*tp[2];
+			c = (q[0]*q[0] + q[1]*q[1] + q[2]*q[2] - v*v)/4.0;
+
+			// do some integrity check
+			if (b*b-4*a*c < 0) {
+				std::cout << "ERROR: 0 > b*b-4*a*c = " << b*b-4*a*c << std::endl;
+				std::cout << " for tp=" << tp << " q= " << q << " (self at=" << positions[0] << ")" << std::endl;
+			}
+
+			// calculate both solutions of a * t^2 + b*t + c = 0
+			double t1 = (-b - sqrt(b*b-4*a*c))/(2*a);
+			double t2 = (-b + sqrt(b*b-4*a*c))/(2*a);
+
+			// we might assert: Either t1=t2=0
+			// or there exists exactly one tj with tj in ]0,1[ and the other is < 0
+			// so we use the bigger to shorten our tp nearer to self position along direction
+			double t = std::max(t1, t2);
+
+			// handle some rounding errors
+			if (t > 0.0001 && t < 0.0001)
+				t = 0.0;
+
+			// do some integrity check
+			if (t < 0) {
+				std::cout << "ERROR: t1=" << t1 << ", t2=" << t2;
+				std::cout << " for tp=" << tp << " q= " << q << " (self at=" << positions[0] << ")" << std::endl;
+			}
+
+			if (t < min_t)
+				min_t = t;
+		}
+	}
+
+	// stretch tp by given factor
+	tp = min_t * tp;
+
+	if (DEBUG && min_t < 1.0)
+		std::cout << " new tp=" << tp << " (by t=" << min_t << ")" << std::endl;
+
+	// check new maxDist
+	double maxDistEnd = 0.0;
+	for (int i=0; i<positions.size(); i++) {
+		double curDist = vector3d_distance(tp, positions[i], 2);
+		if(curDist > maxDistEnd)
+			maxDistEnd = curDist;
+	}
+
+	// simply cut to avoid latter rounding errors
+	// due to robots to near at sightradius
+	if (maxDistEnd > v-0.001) {
+		tp[0]=tp[1]=tp[2]=0;
+	}
+}

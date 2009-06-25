@@ -30,7 +30,7 @@ public:
 		rand->init_uniform_on_sphere(3);
 		rand->init_uniform(1, 100000);
 
-		potfunc_id_ = 1;
+		potfunc_id_ = 3;
 		/* TODO latter
 		if (potfunc=="A") {
 			potfunc_id_=1;
@@ -40,7 +40,7 @@ public:
 		}*/
 
 		// TODO atm very bad: the robot's view-radius is hardcoded, because I don't know how to read it.
-		v_ = 50;
+		v_ = 30;
 		finalMinDist_ = 0.2;
 		aimDist_ = 0.4;
 		maxTries_ = 1000;

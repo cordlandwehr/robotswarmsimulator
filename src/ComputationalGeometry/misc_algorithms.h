@@ -63,13 +63,16 @@ public:
 	 * \return sorts given vector of indices for Vector3ds by euclidean distance from origin
 	 */
 	static void sort_pointslist_by_distance(std::vector< std::pair<Vector3d,std::size_t> >& point_list, int p);
-	
-	
+
+
 	/**
 	 * \brief Calculates the shim plane for the given set of points.
 	 */
 	static boost::tuple<Vector3d,Vector3d> calculate_shim_plane(const std::vector<Vector3d>& pos);
 
+	static void cut_trivial(Vector3d & tp, std::vector<Vector3d> & positions, double v);
+
+	static void cut_maxmove(Vector3d & tp, std::vector<Vector3d> & positions, double v);
 
 private:
 	static const double kEpsilon;	// accuracy value

@@ -80,18 +80,24 @@ Vector3d string_to_vec(std::string  str);
 double vector3d_get_length(Vector3d vec, int p);
 
 /**
- * \return normalizes the given vector (iff vector3d_get_length(Vector3d vec, 2) != 0)
+ * normalizes the given vector (iff vector3d_get_length(Vector3d vec, 2) != 0)
  */
 void vector3d_normalize(Vector3d& vec);
 
 /**
- * \return sets the given vector to length len
+ * sets the given vector to length len
  */
 void vector3d_set_length(Vector3d& vec, double len);
 
 /**
- * \return sets the given vector to length len, iff it is longer than len
+ * sets the given vector to length len, iff it is longer than len
  */
 void vector3d_set_maxlength(Vector3d& vec, double len);
+
+/**
+ * rotates the given vector around x-axis by rx and around y-axis by ry and around z-axis by rz.
+ * angles are specified in rad.
+ */
+void vector3d_rotate(Vector3d & tp, double rx, double ry, double rz);
 
 #endif /* VECTOR_ARITHMETICS_H */
