@@ -298,7 +298,17 @@ int main(int argc, char** argv) {
 			sim_control->set_visualizer(visualizer);
 			Vector3d cam_pos = string_to_vec( sim_control->camera_position() );
 			Vector3d cam_dir = string_to_vec( sim_control->camera_direction() );
-			visualizer->set_free_cam_para( cam_pos, cam_dir );
+			std::string cam_type = sim_control->camera_type();
+
+			if( cam_type.compare("FREE") == 0 ){
+				visualizer->set_free_cam_para( cam_pos, cam_dir );
+				visualizer->set_active_cam(1);
+			} else if( cam_type.compare("COG") == 0) {
+				visualizer->set_active_cam(2);
+				visualizer->set_cog_cam_pos( cam_pos );
+			}
+
+
 
 			sim_control->start_simulation();
 

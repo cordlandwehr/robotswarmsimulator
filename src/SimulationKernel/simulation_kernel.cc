@@ -9,6 +9,7 @@
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
 #include "../EventHandlers/type_change_request_handler.h"
+#include "../EventHandlers/color_change_request_handler.h"
 
 #include "robot_control.h"
 #include "../Views/abstract_view_factory.h"
@@ -113,6 +114,7 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 
 	camera_position_ = params["CAMERA_POSITION"];
 	camera_direction_ = params["CAMERA_DIRECTION"];
+	camera_type_ = params["CAMERA_TYPE"];
 }
 
 
@@ -330,6 +332,9 @@ boost::shared_ptr<RequestHandler> SimulationKernel::setup_request_handler(Reques
 				break;
 			case MARKER_REQUEST_HANDLER:
 				request_handler.reset(new MarkerRequestHandler(seed, discard_prob, *history));
+				break;
+			case COLOR_REQUEST_HANDLER:
+				request_handler.reset(new ColorChangeRequestHandler(seed,discard_prob,*history));
 				break;
 		}
 

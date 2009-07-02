@@ -275,6 +275,16 @@ public:
 	 */
 	void set_free_cam_para(Vector3d & pos, Vector3d & at);
 
+	/**
+	 *
+	 */
+     void set_active_cam(unsigned int i);
+
+     /**
+      *
+      */
+     void set_cog_cam_pos(Vector3d & pos);
+
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**

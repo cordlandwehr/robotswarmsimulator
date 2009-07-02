@@ -49,7 +49,7 @@ const std::string kModelName = "resources/model/tris.MD2";
 
 }
 
-RobotRenderer::RobotRenderer(SimulationRenderer * renderer ){
+RobotRenderer::RobotRenderer(SimulationRenderer * renderer ): robot_size_(1.0){
 
 
 	renderer_ = renderer;
@@ -190,6 +190,7 @@ void RobotRenderer::load_model(std::string & filename ){
 
 inline void RobotRenderer::draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const{
 
+		glScalef(robot_size_, robot_size_, robot_size_);
 		glCallList( compiled_list_ );
 
 }

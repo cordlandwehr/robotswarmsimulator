@@ -81,7 +81,7 @@ class CogCamera : public Camera {
 
 
 
-
+	void set_init_pos(Vector3d & pos);
 
 	/**
 	 * Returns the name of the camera type.
@@ -112,6 +112,8 @@ class CogCamera : public Camera {
 	  double radius_;
 
 	  Vector3d sphere_vec_;
+	  Vector3d init_pos_;
+	  bool need_init_pos_;
 
 };
 

@@ -33,6 +33,7 @@ void Parser::init() {
 	parameter_map_["ROBOT_CONTROL"] = "UNIFORM_ROBOT_CONTROL";
 	parameter_map_["CAMERA_POSITION"] = "0,0,0";
 	parameter_map_["CAMERA_DIRECTION"] = "1,0,0";
+	parameter_map_["CAMERA_TYPE"] = "FOLLOW";
 }
 
 bool Parser::is_comment(const string& line) {

@@ -91,6 +91,7 @@ public:
 
 	std::string camera_position(){ return camera_position_; }
 	std::string camera_direction(){ return camera_direction_;}
+	std::string camera_type(){return  camera_type_;}
 
 private:
 
@@ -115,7 +116,8 @@ private:
 							  VELOCITY_REQUEST_HANDLER,
 							  ACCELERATION_REQUEST_HANDLER,
 							  TYPE_CHANGE_REQUEST_HANDLER,
-							  MARKER_REQUEST_HANDLER };
+							  MARKER_REQUEST_HANDLER,
+							  COLOR_REQUEST_HANDLER};
 
 	/**
 	 * Set of robots in the world
@@ -206,6 +208,7 @@ private:
 
 	std::string camera_position_;
 	std::string camera_direction_;
+	std::string camera_type_;
 
 };
 

@@ -15,6 +15,7 @@
 #include "marker_request_handler.h"
 #include "type_change_request_handler.h"
 #include "marker_change_request_handler.h"
+#include "color_change_request_handler.h"
 
 // forward declarations
 class Event;
@@ -29,6 +30,7 @@ class PositionRequest;
 class TypeChangeRequest;
 class VelocityRequest;
 class MarkerChangeRequest;
+class ColorChangeRequest;
 
 class WorldInformation;
 class SimulationListener;
@@ -108,6 +110,10 @@ public:
 		marker_change_request_handler_ = marker_change_request_handler;
 	}
 
+	void set_color_change_request_handler(boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler){
+		color_change_request_handler_ = color_change_request_handler;
+	}
+
 private:
 	/**
 	 * handles the given look event by delegating it to RobotControl
@@ -145,6 +151,7 @@ private:
 	boost::shared_ptr<MarkerRequestHandler> marker_request_handler_;
 	boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler_;
 	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
+	boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler_;
 
 	std::vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;

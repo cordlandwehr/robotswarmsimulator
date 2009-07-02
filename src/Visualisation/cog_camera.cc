@@ -154,6 +154,10 @@ void CogCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & mark
 	}
 
 
+	if(need_init_pos_){
+		sphere_vec_ = init_pos_ - center;
+		radius_ = boost::numeric::ublas::norm_2(sphere_vec_);
+	}
 
 	position_ = center + sphere_vec_;
 	view_ = center;
@@ -175,6 +179,10 @@ void CogCamera::calc_sphere_vec(){
 }
 
 
+void CogCamera::set_init_pos(Vector3d & pos){
+	need_init_pos_ = true;
+	init_pos_ = pos;
+}
 
 std::string CogCamera::get_name(){
 

@@ -15,6 +15,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
 
+
 #include <luabind/object.hpp>
 #include <luabind/operator.hpp>
 
@@ -29,6 +30,7 @@
 #include "../Requests/position_request.h"
 #include "../Requests/type_change_request.h"
 #include "../Requests/velocity_request.h"
+#include "../Requests/color_change_request.h"
 #include "../Views/view.h"
 #include "../ComputationalGeometry/misc_algorithms.h"
 #include "../ComputationalGeometry/point_algorithms.h"
@@ -40,6 +42,7 @@ namespace {
 	Robot* robot; //needed as "caller" in most view methods
 	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
 	std::set<boost::shared_ptr<Request> > requests;
+
 
 
 	/**
@@ -141,6 +144,7 @@ namespace {
 		return transform(view->get_visible_obstacles(*robot));
 	}
 
+
 	/**
 	 * @see View.get_visible_markers()
 	 * @return Array of identifiers
@@ -228,14 +232,14 @@ namespace {
 	const unsigned get_robot_status(std::size_t index) {
 		return view->get_robot_status(*robot, resolve<RobotIdentifier>(index));
 	}
-	
+
 	/**
 	 * @param (Robot-)Identifier
 	 * @return Returns whether last (already performed) request has been successful (i.e. was handled in exactly the way
 	 *         the issuer requested) for the robot with the given identifier.
 	 * @see View.get_robot_last_request_successful()
 	 */
-	
+
 	const unsigned get_robot_last_request_successful(std::size_t index) {
 		return view->get_robot_last_request_successful(*robot, resolve<RobotIdentifier>(index));
 	}
@@ -373,6 +377,10 @@ namespace {
 		requests.insert(boost::shared_ptr<Request>(new TypeChangeRequest(*robot, static_cast<RobotType>(type))));
 	}
 
+	void add_color_change_request(unsigned short int color){
+		requests.insert(boost::shared_ptr<Request>(new ColorChangeRequest(*robot,color)));
+	}
+
 	/**
 	 * Returns the identifier of this robot.
 	 * @return Identifier
@@ -406,6 +414,24 @@ namespace {
 
 		return result;
 	}
+
+	const std::vector<LuaWrapper::Vector3dWrapper> calculate_shim_plane(std::vector<std::size_t> index_list){
+		using boost::bind;
+
+		std::vector<Vector3d > point_list;
+		point_list.resize(index_list.size());
+		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(static_cast<const Vector3d(*)(const LuaWrapper::Vector3dWrapper&)>(&LuaWrapper::transform), bind(get_position, _1)));
+
+		boost::tuple<Vector3d,Vector3d> vec = MiscAlgorithms::calculate_shim_plane(point_list);
+
+		std::vector<LuaWrapper::Vector3dWrapper> ret_vec ;
+		ret_vec.push_back(LuaWrapper::transform(vec.get<0>() ));
+		ret_vec.push_back(LuaWrapper::transform(vec.get<1>() ));
+
+		return ret_vec;
+	}
+
+
 }
 
 void LuaRobot::report_errors(int status) {
@@ -451,7 +477,7 @@ void LuaRobot::register_lua_methods() {
 			 .def_readwrite("x", &LuaWrapper::Vector3dWrapper::x)
 			 .def_readwrite("y", &LuaWrapper::Vector3dWrapper::y)
 			 .def_readwrite("z", &LuaWrapper::Vector3dWrapper::z),
-	 
+
 		 luabind::class_<DistributionGenerator>("DistributionGenerator")
 			 .def(luabind::constructor<int>())
 			 .def("set_seed", &DistributionGenerator::set_seed)
@@ -526,6 +552,7 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("add_velocity_request", &add_velocity_request),
 			 luabind::def("add_type_change_request", &add_type_change_request),
 			 luabind::def("add_marker_request", &add_marker_request),
+			 luabind::def("add_color_change_request", &add_color_change_request),
 			 luabind::def("get_own_identifier", &get_own_identifier)
 	    ],
 
@@ -554,7 +581,9 @@ void LuaRobot::register_lua_methods() {
 		luabind::def("add_velocity_request", &add_velocity_request),
 		luabind::def("add_type_change_request", &add_type_change_request),
 		luabind::def("add_marker_request", &add_marker_request),
+		luabind::def("add_color_change_request", &add_color_change_request),
 		luabind::def("get_own_identifier", &get_own_identifier),
+		luabind::def("calculate_shim_plane",&calculate_shim_plane,  luabind::copy_table(luabind::result) + luabind::copy_table(_1) ),
 
 	    luabind::namespace_("Geometry")
 		 [

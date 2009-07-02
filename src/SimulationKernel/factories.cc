@@ -37,6 +37,7 @@
 #include "../EventHandlers/vector_request_handler.h"
 #include "../EventHandlers/marker_change_request_handler.h"
 #include "../EventHandlers/collision_position_request_handler.h"
+#include "../EventHandlers/color_change_request_handler.h"
 
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
@@ -246,6 +247,20 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
 		}
+	}
+
+	// 7. Color Change Request Handler
+	std::string color_change_request_handler_type = boost::any_cast<std::string >(params["COLOR_CHANGE_REQUEST_HANDLER_TYPE"]);
+	if(color_change_request_handler_type == "STANDARD"){
+		try {
+				// build the type change request handler
+				double discard_probability = 0.0;
+				unsigned int seed = 1;
+				boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler(new ColorChangeRequestHandler(seed, discard_probability, *history));
+				event_handler->set_color_change_request_handler(color_change_request_handler);
+			} catch(const boost::bad_lexical_cast& ) {
+				throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
+			}
 	}
 
 	return event_handler;

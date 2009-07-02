@@ -62,9 +62,12 @@ public:
 			extrapolate = ext;
 		}
 
+		void set_robot_size(double s){ robot_size_ = s;};
 private:
 
 	void draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const;
+
+	double robot_size_;
 
 	/**
 	 * The Simulationrenderer which uses this robot renderer.

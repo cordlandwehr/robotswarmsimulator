@@ -7,12 +7,15 @@
 
 #include <ctime>
 #include <cstdio>
+#include <algorithm>
+
 
 #define GL_GLEXT_PROTOTYPES 1
 
-
+#include <boost/pointer_cast.hpp>
 #include <boost/graph/strong_components.hpp>
 #include <boost/graph/graph_utility.hpp>
+
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
@@ -55,6 +58,10 @@ const float kCoordLineWidth = 1.0;
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
+const double kMinScale = 1.0;
+const double kMaxScale = 25.0;
+const double kFactorScale = 0.05;
+
 const int kDefHeight = 500;
 const int kDefWidth = 500;
 const int kTextSpacing=15;
@@ -65,6 +72,14 @@ const float kMarkerPointSize = 2.0;
 const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
 
+void SimulationRenderer::set_active_cam(unsigned int i){
+	active_camera_index_ = i % cameras_.size();
+}
+
+void SimulationRenderer::set_cog_cam_pos(Vector3d & pos){
+	boost::shared_ptr<CogCamera> cog_cam = boost::dynamic_pointer_cast<CogCamera>(cameras_[2]);
+	cog_cam->set_init_pos(pos);
+}
 
 void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 	Vector3d up;
@@ -250,6 +265,13 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	this->extrapolate_ = extrapolate;
 	world_info_=world_info;
 
+	double max_dist = 1.0;
+	BOOST_FOREACH(boost::shared_ptr<RobotData> it_robot_data, world_info->robot_data()){
+		double dist = boost::numeric::ublas::norm_2( it_robot_data->position() - cameras_[active_camera_index_]->position());
+
+		if(max_dist < dist)
+			max_dist = dist;
+	}
 
 	// We draw the time in the upper left corner
 	char buf[100];
@@ -322,6 +344,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 
 	robot_renderer_->set_extrapolate( extrapolate_ );
 	// draw all robots
+	robot_renderer_->set_robot_size(max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale));
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );

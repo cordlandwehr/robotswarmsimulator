@@ -44,6 +44,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 
 	camera_position_ = simulation_kernel->camera_position();
 	camera_direction_ = simulation_kernel->camera_direction();
+	camera_type_ = simulation_kernel->camera_type();
 
 	if(!limited_steps) {
 		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));

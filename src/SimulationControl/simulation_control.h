@@ -85,6 +85,7 @@ public:
 
 	std::string camera_position(){return camera_position_; }
 	std::string camera_direction(){ return camera_direction_;}
+	std::string camera_type(){ return camera_type_;}
 
 private:
 	/**
@@ -183,6 +184,7 @@ private:
 
 	std::string camera_position_;
 	std::string camera_direction_;
+	std::string camera_type_;
 };
 
 #endif

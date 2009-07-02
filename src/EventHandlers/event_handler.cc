@@ -28,6 +28,7 @@
 #include "../Requests/type_change_request.h"
 #include "../Requests/velocity_request.h"
 #include "../Requests/marker_change_request.h"
+#include "../Requests/color_change_request.h"
 
 #include "../SimulationControl/history.h"
 #include "../SimulationControl/time_point.h"
@@ -150,10 +151,18 @@ boost::shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(b
 			} else {
 				std::cerr << "No Marker Change Request Handler Set" << std::endl;
 			}
+
+		} else if(boost::shared_ptr<const ColorChangeRequest> color_change_request =
+				 boost::dynamic_pointer_cast<const ColorChangeRequest>(request)){
+			if(color_change_request_handler_){
+				handled_as_expected = color_change_request_handler_->handle_request(new_world_information, color_change_request);
+			}else {
+				std::cerr << "No Color Change Request Handler Set" << std::endl;
+			}
 		} else {
 			throw std::invalid_argument("Illegal type of request.");
 		}
-		
+
 		// inform robot data about the success state of its request
 		RobotData& robot_data = new_world_information->get_according_robot_data(request->robot().id());
 		robot_data.set_last_request_successful(handled_as_expected);
