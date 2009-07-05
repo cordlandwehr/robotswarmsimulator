@@ -41,6 +41,20 @@ void Miniball<d>::check_in (const Point<d>& p)
 }
 
 template <int d>
+void Miniball<d>::check_in (const Vector3d& p) {
+	if (d != 3) {
+		std::cerr << "must not call Miniball<d>::check_in (const Vector3d& p) with d <> 3" << std::endl;
+		return;
+	}
+
+	Point<3> ppoint;
+	ppoint[0] = p[0];
+	ppoint[1] = p[1];
+	ppoint[2] = p[2];
+	check_in(ppoint);
+}
+
+template <int d>
 void Miniball<d>::check_in (const std::vector<Vector3d>& vec)
 {
 	if (d != 3) {

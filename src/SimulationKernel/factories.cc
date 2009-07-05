@@ -366,8 +366,8 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	    robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cminball));
 	} else if (algorithm == "TPAlgorithmCBox") {
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
-	} else if(algorithm == "RndJmpRobot") {
-		robot.reset(new RndJmpRobot(id));
+	} else if(algorithm.substr(0,11) == "RndJmpRobot") {
+		robot.reset(robot, new RndJmpRobot(id, algorithm.substr(11)));
 	} else if(algorithm.substr(0,8) == "PotRobot") {
 		robot.reset(new PotRobot(id, algorithm.substr(8)));
 	} else if (algorithm == "PullSpinRobot") {

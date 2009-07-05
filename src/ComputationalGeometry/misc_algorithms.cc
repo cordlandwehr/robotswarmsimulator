@@ -198,8 +198,10 @@ void MiscAlgorithms::cut_maxmove(Vector3d & tp, std::vector<Vector3d> & position
 
 	double min_t = 1.0;
 
-	for (int i=1; i<positions.size(); i++) {
+	for (int i=0; i<positions.size(); i++) {
 		Vector3d q = positions[i];
+		if(q[0]==0 && q[1]==0 && q[2]==0)
+			continue;
 
 		// calculate distance of target tp to the middlepos of me and other q/2
 		if (vector3d_distance(tp, q/2.0) > v/2.0) {

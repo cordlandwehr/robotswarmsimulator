@@ -1,0 +1,9 @@
+#/bin/sh
+
+for FILE in "line100.csv" "line50.csv" "cross.csv" "random.csv"
+do
+	for ID in 0 1 2 3 4 5 6
+	do
+		sed 's/'ALGNAME'/'RndJmpRobot$ID'/g' ../formations/$FILE > formations/$FILE'_'$ID.robot
+	done
+done

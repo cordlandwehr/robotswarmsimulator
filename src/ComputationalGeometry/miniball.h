@@ -73,6 +73,9 @@ public:
   // copies p to the internal point set
   void        check_in (const Point<d>& p);
 
+  // copies p to the internal point set
+  void        check_in (const Vector3d& p);
+
   // copies all vectors in vec as points to the internal point set
   void        check_in (const std::vector<Vector3d>& vec);
 

@@ -23,6 +23,11 @@
 
 #include "../ComputationalGeometry/misc_algorithms.h"
 
+#include "../ComputationalGeometry/miniball.h"
+#include "../ComputationalGeometry/miniball.cc"
+#include "../ComputationalGeometry/miniball_b.h"
+#include "../ComputationalGeometry/miniball_b.cc"
+
 using namespace std;
 
 unsigned int RndJmpRobot::rndInit = 0;
@@ -30,9 +35,8 @@ unsigned int RndJmpRobot::rndInit = 0;
 std::set<boost::shared_ptr<Request> > RndJmpRobot::compute() {
 		bool DEBUG = false;
 
-		double s = 0.25;
-
 		double v = view_->get_view_radius();
+		double maxDist = 0.0; // not used atm
 
 		std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots = view_->get_visible_robots(*this);
 
@@ -41,58 +45,68 @@ std::set<boost::shared_ptr<Request> > RndJmpRobot::compute() {
 
 		positions.push_back(view_->get_position(*this, id()));
 
-		double maxDist = 0;
-		double minXYZ[3];
-		double maxXYZ[3];
-
-		minXYZ[0]=minXYZ[1]=minXYZ[2]=999999999;
-		maxXYZ[0]=maxXYZ[1]=maxXYZ[2]=0;
-
+		// add all robots to positions and keep coordinates of nearest and farest.
 		BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
 			Vector3d q = view_->get_position(*this, cur_id);
-			maxDist = max(maxDist, vector3d_get_length(q, 2));
+			double curDist = vector3d_get_length(q, 2);
+			if (curDist > maxDist)
+				maxDist = curDist;
 			positions.push_back(q);
-			for (int d=0; d<3; d++) {
-				if (q[d] < minXYZ[d])
-					minXYZ[d] = q[d];
-				if (q[d] > maxXYZ[d])
-					maxXYZ[d] = q[d];
-			}
 		}
 
-		double diam = 0.0;
-		for (int d=0; d<3; d++)
-			diam += (maxXYZ[d]-minXYZ[d])*(maxXYZ[d]-minXYZ[d]);
-		diam = sqrt(diam);
+		// parameters for algorithm
+		double r = m_/2.0;
+		double alpha = alpha_;
 
-		if (DEBUG) {
-			cout << "diam=" << diam << endl;
-			cout << "maxDist=" << maxDist << endl;
+		// calculate MinBall (center and diameter needed)
+		Miniball<3> miniball;
+		miniball.check_in(positions);
+		miniball.build();
+		double k = miniball.radius();
+
+		// modify parameters in freeze-mode
+		if (freeze_ > 0) {
+			// calculate density t
+			double t;
+
+			t = positions.size() * s3_ / (freeze_ * 3.0/4.0 * k * k * k);
+
+			if (t < eps_)
+				t = eps_;
+			if (t > 1.0 - eps_)
+				t = 1.0 - eps_;
+
+			if (log_)
+				std::cout << "t = " << t << " (k=" << k << ")" << std::endl;
+
+			r = (1 - t) * r;
+			alpha = (1 + 3.0/4.0*t) * alpha;
+
+			// reinit normal distribution with new alpha
+			rand->init_normal(0, alpha);
 		}
 
-		// compute the main target position
-		Vector3d tp = PointAlgorithms::compute_CMinBox(positions);
-
-		// set most wanted target position
-		vector3d_set_maxlength(tp, s/2.0);
-
-		// trim further by density
-		double densityTrim = diam / positions.size();
-		vector3d_set_maxlength(tp, densityTrim);
+		// compute the most wanted target position
+		Point<3> tppoint = miniball.center();
+		Vector3d tp;
+		tp[0] = tppoint[0];
+		tp[1] = tppoint[1];
+		tp[2] = tppoint[2];
+		vector3d_set_maxlength(tp, r);
 
 		// randomize the moving direction
 		vector3d_rotate(tp, rand->get_value_normal(), rand->get_value_normal(), rand->get_value_normal());
 
 		// cut move to keep visibilities
 		MiscAlgorithms::cut_maxmove(tp, positions, v);
-		//MiscAlgorithms::cut_trivial(tp, positions, v);
 
 		// check if new position is safe
 		double minDist = get_min_dist(tp, positions);
 
 		// if not then stand still
-		if (minDist < s)
+		if (minDist < s_) {
 			tp[0]=tp[1]=tp[2]=0;
+		}
 
 		// build position request and insert into request set
 		boost::shared_ptr<Vector3d> result_ptr(new Vector3d(tp));
