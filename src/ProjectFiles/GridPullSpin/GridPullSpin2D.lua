@@ -139,9 +139,11 @@ end
 -------------- main program --------------
 function main()
 	if (get_robot_last_request_successful(get_own_identifier()) == 0 and last_phase == PULL) then
+		add_color_change_request(1)
 		spin()
 		last_phase = SPIN
 	else
+		add_color_change_request(0)
 		pull()
 		last_phase = PULL
 	end

@@ -220,7 +220,6 @@ function push()
 	-- submit position request
 	local position_request = (-1.0) * step_length * (center_mball - my_position)/distance;
 	View.add_position_request(position_request);
-	print("performed push!");
 	
 end
 
@@ -257,10 +256,13 @@ function main()
 	
 	-- dispatch action depending on current state
 	if (current_state == PULL) then
+		add_color_change_request(0)
 		pull();
 	elseif (current_state == SPIN) then
+		add_color_change_request(1)
 		spin();
 	else
+		add_color_change_request(3)
 		push();
 	end
 end
