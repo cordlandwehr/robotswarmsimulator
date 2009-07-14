@@ -15,7 +15,7 @@ set(RSSMAIN_SRCS
 if(CMAKE_BUILD_TYPE MATCHES Release)
 	set(Boost_USE_STATIC_LIBS TRUE)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
-set(Boost_ADDITIONAL_VERSIONS 1.37)
+set(Boost_ADDITIONAL_VERSIONS 1.37 1.37.0 1.38 1.38.0 1.39 1.39.0)
 find_package(Boost 1.37 REQUIRED filesystem program_options system thread)
 include_directories(${Boost_INCLUDE_DIRS})
 

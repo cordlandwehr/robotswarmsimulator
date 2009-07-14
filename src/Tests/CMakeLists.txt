@@ -8,7 +8,7 @@ file(GLOB_RECURSE RSSTESTS_SRCS *.cc)
 file(GLOB_RECURSE RSSTESTS_HDRS *.h)
 
 # find/configure boost
-set(Boost_ADDITIONAL_VERSIONS 1.37)
+set(Boost_ADDITIONAL_VERSIONS 1.37 1.37.0 1.38 1.38.0 1.39 1.39.0)
 find_package(Boost 1.37 REQUIRED filesystem system thread unit_test_framework)
 include_directories(${Boost_INCLUDE_DIRS})
 
