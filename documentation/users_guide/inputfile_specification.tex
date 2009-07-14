@@ -58,8 +58,9 @@ Also the following should be considered:
 		 \texttt{ASYNC\_ASG\_TIME\_P} & double & parameter governing the timing of asynch ASG, only set if ASG = ASYNCHRNOUS. The lower this is the more often events happen. & - \\\hline
 		 
 		\texttt{ROBOT\_CONTROL} &  see section \ref{sec:robotControl} & RobotControl to use & -\\\hline
-		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position & \texttt{0,0,0}\\\hline
-		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction & \texttt{1,0,0}\\\hline
+		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position of startup Camera & \texttt{0,0,0}\\\hline
+		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction of startup camera & \texttt{1,0,0}\\\hline
+		\texttt{CAMERA\_TYPE} &  $[$"FOLLOW"|"FREE"|"COG"$]$& Sets the startup camera& FOLLOW\\\hline
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars}
 \end{sidewaystable}
@@ -83,6 +84,8 @@ Also the following should be considered:
 		\texttt{VELOCITY\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Velocity Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
 
 		\texttt{ACCELERATION\_REQUEST\_HANDLER\_TYPE} &  element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Acceleration Request Handler to use & v\\\hline
+		
+		\texttt{COLOR\_CHANGE\_REQUEST\_HANDLER\_TYPE}& element from $\{$\texttt{VECTOR,NONE}$\}$ & Type of Color Change Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
 		
 		 \texttt{STANDARD\_MARKER\_REQUEST\_HANDLER\_SEED} &  integer & Seed for Marker Request Handler to use & $\{$\texttt{NONE}$\}$\\\hline
 		 
