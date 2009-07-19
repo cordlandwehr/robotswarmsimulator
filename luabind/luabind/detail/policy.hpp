@@ -774,11 +774,12 @@ struct default_converter<type const&> \
 
 LUABIND_NUMBER_CONVERTER(char)
 LUABIND_NUMBER_CONVERTER(signed char)
-LUABIND_NUMBER_CONVERTER(short)
+LUABIND_NUMBER_CONVERTER(unsigned char)
+LUABIND_NUMBER_CONVERTER(signed short)
 LUABIND_NUMBER_CONVERTER(unsigned short)
-LUABIND_NUMBER_CONVERTER(int)
+LUABIND_NUMBER_CONVERTER(signed int)
 LUABIND_NUMBER_CONVERTER(unsigned int)
-LUABIND_NUMBER_CONVERTER(long)
+LUABIND_NUMBER_CONVERTER(signed long)
 LUABIND_NUMBER_CONVERTER(unsigned long)
 LUABIND_NUMBER_CONVERTER(float)
 LUABIND_NUMBER_CONVERTER(double)
@@ -1043,7 +1044,7 @@ namespace detail
 namespace luabind { namespace
 {
 #if defined(__GNUC__) && \
-  (__GNUC__ * 100 + __GNUC_MINOR__ < 400 || BOOST_VERSION <= 103401)
+  (__GNUC__ * 100 + __GNUC_MINOR__ <= 400 || BOOST_VERSION <= 103401)
   static inline boost::arg<0> return_value()
   {
 	  return boost::arg<0>();
