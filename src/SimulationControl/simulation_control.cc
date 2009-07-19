@@ -17,7 +17,9 @@ namespace {
 	}
 }
 
-SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0), processing_time_delta_(1)  {
+SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0),
+                                         processing_time_delta_(1), single_step_mode_(false),
+                                         limit_processing_time_(0), processing_time_paused_(false) {
 
 }
 
@@ -78,6 +80,24 @@ void SimulationControl::pause_simulation() {
 	}
 }
 
+void SimulationControl::enter_single_step_mode() {
+	single_step_mode_ = true;
+	limit_processing_time_ = current_processing_time_;
+	pause_processing_time(true);
+}
+
+void SimulationControl::do_single_step() {
+	limit_processing_time_ += processing_time_factor_;
+	pause_processing_time(false);
+}
+
+void SimulationControl::exit_single_step_mode() {
+	single_step_mode_ = false;
+
+	// unpause is nop if not paused
+	pause_processing_time(false);
+}
+
 void SimulationControl::terminate_simulation() {
 	if(is_thread_started(simulation_thread_)) {
 		simulation_kernel_functor_->terminate();
@@ -106,6 +126,10 @@ void SimulationControl::process_simulation() {
 	// If the Simulation has not produced the needed world informations yet, we pause
 	// the processing time.
 	double current_simulation_time = new_processing_time/processing_time_factor_;
+	if(single_step_mode_ && current_processing_time_ > limit_processing_time_) {
+		pause_processing_time(true);
+	}
+
 	while(current_simulation_time >= next_time_point_->world_information().time()) {
 		boost::shared_ptr<TimePoint> new_time_point = history_->get_oldest_unused();
 		if(!new_time_point) {
@@ -166,13 +190,17 @@ void SimulationControl::decrease_processing_time_exp(){
 }
 
 
-void SimulationControl::pause_processing_time(){
-	if (processing_time_delta_==0){
-		processing_time_delta_=old_processing_time_delta_;
+void SimulationControl::pause_processing_time(bool pause){
+	if (!pause && processing_time_paused_){
+		// resuming
+		processing_time_delta_ = old_processing_time_delta_;
+		processing_time_paused_ = false;
 	}
-	else {
-		old_processing_time_delta_=processing_time_delta_;
+	else if(pause && !processing_time_paused_) {
+		// pausing
+		old_processing_time_delta_= processing_time_delta_;
 		processing_time_delta_=0;
+		processing_time_paused_ = true;
 	}
 }
 

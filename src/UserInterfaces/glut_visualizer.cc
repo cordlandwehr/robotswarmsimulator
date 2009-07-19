@@ -66,7 +66,19 @@ void GlutVisualizer::keyboard_func(unsigned char key, int x, int y){
 				exit(0);
 			break;
 		case ' ':
-				simulation_control_.pause_processing_time();
+				simulation_control_.pause_processing_time(!simulation_control_.is_processing_time_paused());
+			break;
+		case 's':
+				// simulate one more step
+				if(simulation_control_.is_single_step_mode()) {
+					simulation_control_.do_single_step();
+				} else {
+					simulation_control_.enter_single_step_mode();
+				}
+			break;
+		case 'e':
+				// exit single step mode
+				simulation_control_.exit_single_step_mode();
 			break;
 		case '+':
 				simulation_control_.increase_processing_time_linearly();
@@ -81,7 +93,7 @@ void GlutVisualizer::keyboard_func(unsigned char key, int x, int y){
 				simulation_control_.decrease_processing_time_exp();
 			break;
 		case 'h':
-				simulation_control_.pause_processing_time();
+				simulation_control_.pause_processing_time(!simulation_control_.is_processing_time_paused());
 				SimulationRenderer::keyboard_func(key,x,y);
 			break;
 		default:

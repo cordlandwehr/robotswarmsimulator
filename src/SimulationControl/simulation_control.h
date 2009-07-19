@@ -51,7 +51,12 @@ public:
 	void decrease_processing_time_linearly();
 	void increase_processing_time_exp();
 	void decrease_processing_time_exp();
-	void pause_processing_time();
+
+	/**
+	 * pauses or unpauses the processing time depending on the passed value for pause.
+	 */
+	void pause_processing_time(bool pause);
+	bool is_processing_time_paused() {return processing_time_paused_;}
 
 	/**
 	 * starts the simulation
@@ -59,9 +64,17 @@ public:
 	void start_simulation();
 
 	/**
-	 * pauses the simulation
+	 * pauses or unpauses the simulation
 	 */
 	void pause_simulation();
+
+	/**
+	 * members for control of the single step mode
+	 */
+	void enter_single_step_mode();
+	void do_single_step();
+	void exit_single_step_mode();
+	bool is_single_step_mode() { return single_step_mode_; }
 
 	/**
 	 * terminates simulation and cleans up the simulation thread
@@ -185,6 +198,21 @@ private:
 	std::string camera_position_;
 	std::string camera_direction_;
 	std::string camera_type_;
+
+	/**
+	 * if we reach this time, the simulation is paused
+	 */
+	double limit_processing_time_;
+
+	/**
+	 * true iff we are in single step mode
+	 */
+	bool single_step_mode_;
+
+	/**
+	 * true iff processing time is paused
+	 */
+	bool processing_time_paused_;
 };
 
 #endif
