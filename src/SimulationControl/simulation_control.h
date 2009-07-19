@@ -64,7 +64,7 @@ public:
 	void start_simulation();
 
 	/**
-	 * pauses or unpauses the simulation
+	 * pauses the simulation
 	 */
 	void pause_simulation();
 
