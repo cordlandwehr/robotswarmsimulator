@@ -96,6 +96,9 @@ void GlutVisualizer::keyboard_func(unsigned char key, int x, int y){
 				simulation_control_.pause_processing_time(!simulation_control_.is_processing_time_paused());
 				SimulationRenderer::keyboard_func(key,x,y);
 			break;
+		case 'd':
+				simulation_control_.dump_simulation();
+			break;
 		default:
 				SimulationRenderer::keyboard_func(key,x,y);
 			break;

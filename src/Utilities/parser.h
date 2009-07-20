@@ -197,6 +197,11 @@ public:
 	 */
 	std::vector<Vector3d>& obstacle_size();
 
+	/**
+	 * \returns the dumpnumber (for saving snapshots of configurations).
+	 */
+	int dumpnumber();
+
 private:
 
 	////////////////////////////////////////////////////////
@@ -210,6 +215,7 @@ private:
 
 	std::string robot_filename_;
 	std::string obstacle_filename_;
+	int dumpnumber_;
 
 	//file name of project file
 	std::string project_filename_;

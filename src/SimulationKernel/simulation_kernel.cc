@@ -72,12 +72,12 @@ void SimulationKernel::init(const string& project_filename, boost::shared_ptr<Hi
 	history_ = history;
 
 	// create Parser, load project file and get map
-	boost::shared_ptr<Parser> parser(new Parser());
-	parser->load_projectfiles(project_filename);
-	std::map<std::string, std::string> &params = parser->parameter_map();
+	parser_.reset(new Parser());
+	parser_->load_projectfiles(project_filename);
+	std::map<std::string, std::string> &params = parser_->parameter_map();
 	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Generated parameter map";
 	// create and add initial world information to history
-	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser);
+	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser_);
 
 	boost::shared_ptr<TimePoint> initial_time_point(new TimePoint());
 	initial_time_point->set_world_information(initial_world_information);
@@ -363,3 +363,13 @@ void SimulationKernel::setup_vectormodifier(boost::shared_ptr<VectorRequestHandl
 		}
 	}
 }
+
+void SimulationKernel::dump_simulation() {
+	// create a Parser to save actual robotconfiguration
+	std::string dumpnumber = boost::lexical_cast<std::string>(parser_->dumpnumber());
+	parser_->set_project_filename(("dump_" + dumpnumber).c_str());
+	parser_->set_robot_filename(("dump_" + dumpnumber).c_str());
+	parser_->set_obstacle_filename(("dump_" + dumpnumber).c_str());
+	parser_->save_projectfiles(("dump_" + dumpnumber).c_str(), history_->get_newest().world_information());
+}
+

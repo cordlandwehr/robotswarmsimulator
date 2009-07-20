@@ -685,7 +685,7 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 }
 
 void SimulationRenderer::draw_help(){
-boost::array<std::string, 17> helptext;
+boost::array<std::string, 18> helptext;
 	helptext[0]="Arrow keys to navigate";
 	helptext[1]="W and S to go up and down";
 	helptext[2]="M to toggle mouse control (rotate view) (Works only in the free camera)";
@@ -703,6 +703,8 @@ boost::array<std::string, 17> helptext;
 	helptext[14] = "t to switch skybox";
 	helptext[15] = "s to enter single step mode or to advance the time one step";
 	helptext[16] = "e to exit single step mode";
+	helptext[17] = "d to save current simulation";
+
 
 	for (unsigned int i=0;i<helptext.size();i++){
 		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);

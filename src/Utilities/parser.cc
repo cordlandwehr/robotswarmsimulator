@@ -14,7 +14,8 @@ using namespace std;
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() :  robot_filename_("rssfile"),
-					obstacle_filename_("rssfile") {
+					obstacle_filename_("rssfile"),
+					dumpnumber_(0) {
 	//initialize Parser with default values
 	init();
 
@@ -429,7 +430,7 @@ void Parser::load_projectfiles(const string& project_filename) {
 
 void Parser::save_main_project_file(const string& project_filename) {
 	ofstream project_file;
-	project_file.open((project_filename+".swarm").c_str());
+	project_file.open((project_filename + ".swarm").c_str());
 	if(project_file.is_open()) {
 		// Save the map. Should contain all variables.
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
@@ -437,10 +438,14 @@ void Parser::save_main_project_file(const string& project_filename) {
 
 		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
 		while(param_map_iter != parameter_map_.end()) {
+			if ((*param_map_iter).first == "ROBOT_FILENAME" or (*param_map_iter).first == "OBSTACLE_FILENAME") {
+				project_file << "# Old robot/obstacle-files: ";
+			}
 			project_file << (*param_map_iter).first << "=" << "\"" << (*param_map_iter).second << "\"" << std::endl;
 			param_map_iter++;
 		}
 		project_file.close();
+		dumpnumber_++;
 	} else {
 		throw UnsupportedOperationException("Unable to open project file: " +project_filename);
 	}
@@ -710,3 +715,7 @@ vector<double>& Parser::obstacle_radius() {
 vector<Vector3d>& Parser::obstacle_size() {
 	return initiale_obstacle_size_;
 }
+int Parser::dumpnumber() {
+	return dumpnumber_;
+}
+

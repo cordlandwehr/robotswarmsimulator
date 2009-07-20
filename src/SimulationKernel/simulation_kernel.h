@@ -89,6 +89,11 @@ public:
 	 */
 	void quit();
 
+	/**
+	 * Calls the Parser to save the current configuration
+	 */
+	void dump_simulation();
+
 	std::string camera_position(){ return camera_position_; }
 	std::string camera_direction(){ return camera_direction_;}
 	std::string camera_type(){return  camera_type_;}
@@ -128,6 +133,11 @@ private:
 	 * Reference to a History of the WorldInformations.
 	 */
 	boost::shared_ptr<History> history_;
+
+	/**
+	 * Reference to the Parser
+	 */
+	boost::shared_ptr<Parser> parser_;
 
 	/**
 	 * Event Handler
