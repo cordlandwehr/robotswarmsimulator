@@ -41,7 +41,8 @@ public:
 	                           std::string ouput_dir,
 	                           bool create_statistics,
 	                           bool limited_steps,
-	                           int number_of_steps);
+	                           int number_of_steps,
+	                           bool run_until_no_multiplicity);
 
 	/**
 	 * change processing_time_delta (see below)
@@ -115,13 +116,15 @@ private:
 		/**
 		 * constructs a new functor with the given simulation kernel thread.
 		 */
-		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel);
+		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
+				                bool run_until_no_multiplicity);
 
 		/**
 		 * constructs a new functor with the given simulation kernel thread and
 		 * limits the number of steps to be simulated
 		 */
 		SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
+				                bool run_until_no_multiplicity,
 		                        int number_of_steps);
 
 		/**
@@ -174,6 +177,10 @@ private:
 		bool limited_steps_;
 		int number_of_steps_;
 
+		/**
+		 * true iff the simulation should quit when no two robots occupy the same spot
+		 */
+		bool run_until_no_multiplicity_;
 
 		boost::interprocess::interprocess_semaphore unpaused_;
 		boost::shared_ptr<SimulationKernel> simulation_kernel_;

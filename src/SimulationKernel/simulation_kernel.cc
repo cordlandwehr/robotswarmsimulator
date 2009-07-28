@@ -37,6 +37,9 @@
 
 using namespace std;
 
+// Radius below which robots are counted as being on the same spot
+// for multiplicity detection
+double kEpsilonRadius = 0.001;
 
 SimulationKernel::SimulationKernel() {
 	/* REMARK: If you want to add some Values to the maps, make sure to use only
@@ -66,7 +69,10 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 }
 
 
-void SimulationKernel::init(const string& project_filename, boost::shared_ptr<History> history, std::string output_dir, bool create_statistics) {
+void SimulationKernel::init(const string& project_filename,
+		                    boost::shared_ptr<History> history,
+		                    std::string output_dir,
+		                    bool create_statistics) {
 
 	// set history
 	history_ = history;
@@ -371,5 +377,34 @@ void SimulationKernel::dump_simulation() {
 	parser_->set_robot_filename(("dump_" + dumpnumber).c_str());
 	parser_->set_obstacle_filename(("dump_" + dumpnumber).c_str());
 	parser_->save_projectfiles(("dump_" + dumpnumber).c_str(), history_->get_newest().world_information());
+}
+
+bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) {
+	bool result = false;
+	if (run_until_no_multiplicity) {
+		const TimePoint& newest = history_->get_newest();
+		const WorldInformation& world_info = newest.world_information();
+		const std::vector<boost::shared_ptr<RobotData> >& robot_data_vec =
+		    world_info.robot_data();
+
+		// This is a very naive approach.
+		bool no_multiplicity = true;
+		BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data, robot_data_vec) {
+			BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data_b, robot_data_vec) {
+				if(&robot_data->robot() != &robot_data_b->robot()) {
+					double distance = vector3d_distance(robot_data->position(),
+							                            robot_data_b->position());
+					if (distance < kEpsilonRadius) {
+						no_multiplicity = false;
+						break;
+					}
+
+				}
+			}
+		}
+		result = result || no_multiplicity;
+	}
+
+	return result;
 }
 

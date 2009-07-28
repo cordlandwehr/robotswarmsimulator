@@ -98,6 +98,13 @@ public:
 	std::string camera_direction(){ return camera_direction_;}
 	std::string camera_type(){return  camera_type_;}
 
+	/**
+	 * This function checks a number of (well at the moment only one) terminate conditions.
+	 * If one is fullfilled it returns true. The simulation can then be terminated from
+	 * simulation control.
+	 */
+	bool terminate_condition(bool run_until_no_multiplicity);
+
 private:
 
 	/**

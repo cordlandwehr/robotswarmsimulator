@@ -100,7 +100,8 @@ int main(int argc, char** argv) {
 		("dry", "disables statistic output")
 		("steps", po::value<unsigned int>(), "number of steps for blind mode")
 		("blind", "disables visualization")
-		("statsfile", po::value<std::string>()->default_value(""), "prefix for the statisticsfiles (using timestamp by default)");
+		("statsfile", po::value<std::string>()->default_value(""), "prefix for the statisticsfiles (using timestamp by default)")
+		("run_until_no_multiplicity", "quits the simulation when no two robots occupy the same point");
 
 	// hidden option list, pssst ;-)
 	po::options_description top_secret_options("Top Secret");
@@ -251,6 +252,7 @@ int main(int argc, char** argv) {
 		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
+		bool run_until_no_multiplicity = vm.count("run_until_no_multiplicity");
 
 		// checks iff statistics shall be created
 		bool create_statistics = !vm.count("dry");
@@ -280,7 +282,8 @@ int main(int argc, char** argv) {
 					                           vm["output"].as<std::string>(),
 					                           create_statistics,
 					                           false,
-					                           0);
+					                           0,
+					                           run_until_no_multiplicity);
 		} else {
 			std::cout <<  "creating simulation with limited steps" << std::endl;
 			sim_control->create_new_simulation(tmpProjectFile,
@@ -288,7 +291,8 @@ int main(int argc, char** argv) {
 			                                   vm["output"].as<std::string>(),
 			                                   create_statistics,
 			                                   true,
-			                                   vm["steps"].as<unsigned int>());
+			                                   vm["steps"].as<unsigned int>(),
+			                                   run_until_no_multiplicity);
 		}
 
 		boost::shared_ptr<GlutVisualizer> visualizer;

@@ -32,7 +32,8 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 		                                      std::string output_dir="",
 		                                      bool create_statistics=true,
 		                                      bool limited_steps=false,
-		                                      int number_of_steps=0) {
+		                                      int number_of_steps=0,
+		                                      bool run_until_no_multiplicity=false) {
 	// terminate the old simulation including the old simulation thread.
 	terminate_simulation();
 
@@ -49,9 +50,9 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	camera_type_ = simulation_kernel->camera_type();
 
 	if(!limited_steps) {
-		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel));
+		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel, run_until_no_multiplicity));
 	} else {
-		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel, number_of_steps));
+		simulation_kernel_functor_.reset(new SimulationKernelFunctor(simulation_kernel, run_until_no_multiplicity, number_of_steps));
 	}
 	current_processing_time_ = 0;
 }
@@ -165,14 +166,26 @@ double SimulationControl::compute_new_processing_time() {
 	return current_processing_time_ + processing_time_delta_*time_elapsed.total_milliseconds();
 }
 
-SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel)
-: terminated_(false), paused_(false), unpaused_(1), limited_steps_(false), number_of_steps_(0), simulation_kernel_(simulation_kernel) {
+SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
+		                                                            bool run_until_no_multiplicity) : terminated_(false),
+		                                                                                              paused_(false),
+		                                                                                              unpaused_(1),
+		                                                                                              limited_steps_(false),
+		                                                                                              number_of_steps_(0),
+		                                                                                              run_until_no_multiplicity_(run_until_no_multiplicity),
+		                                                                                              simulation_kernel_(simulation_kernel) {
 
 }
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
-                                                                    int number_of_steps)
-: terminated_(false), paused_(false), unpaused_(1), limited_steps_(true), number_of_steps_(number_of_steps), simulation_kernel_(simulation_kernel) {
+																	bool run_until_no_multiplicity,
+                                                                    int number_of_steps) : terminated_(false),
+																						   paused_(false),
+																						   unpaused_(1),
+																						   limited_steps_(true),
+																						   run_until_no_multiplicity_(run_until_no_multiplicity),
+																						   number_of_steps_(number_of_steps),
+																						   simulation_kernel_(simulation_kernel) {
 
 }
 
@@ -250,6 +263,11 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 			if( steps > number_of_steps_) {
 				terminate();
 			}
+		}
+
+		// check for a termination condition
+		if(simulation_kernel_->terminate_condition(run_until_no_multiplicity_)) {
+			terminate();
 		}
 	}
 	simulation_kernel_->quit();
