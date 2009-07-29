@@ -20,7 +20,6 @@
 
 #include "vector_wrapper.h"
 
-
 namespace LuaWrapper {
 	/**
 	 * DistributionGenerator::get_value_uniform_on_sphere_3d() must be wrapped because it returns a Vector3d, which is

@@ -35,6 +35,7 @@
 #include "../ComputationalGeometry/misc_algorithms.h"
 #include "../ComputationalGeometry/point_algorithms.h"
 #include "../Wrapper/distribution_generator_wrapper.h"
+#include <Wrapper/lua_distribution_generator.h>
 #include "../Wrapper/vector_wrapper.h"
 
 namespace {
@@ -584,6 +585,10 @@ void LuaRobot::register_lua_methods() {
 		luabind::def("add_color_change_request", &add_color_change_request),
 		luabind::def("get_own_identifier", &get_own_identifier),
 		luabind::def("calculate_shim_plane",&calculate_shim_plane,  luabind::copy_table(luabind::result) + luabind::copy_table(_1) ),
+
+		// some functions to access global number generator from lua.
+		luabind::def("gen_init_uniform", &LuaWrapper::lua_generator_init_uniform),
+		luabind::def("gen_get_uniform", &LuaWrapper::lua_generator_get_uniform),
 
 	    luabind::namespace_("Geometry")
 		 [

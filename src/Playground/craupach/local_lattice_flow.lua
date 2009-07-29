@@ -83,7 +83,7 @@ end
 
 EPS = 0.001;
 
-function main() 
+function main()
 	local robots = get_visible_robots();
 	local x_dir, y_dir = find_lattice_axis(robots);
 	if(x_dir == nil) then
@@ -91,7 +91,8 @@ function main()
 		add_position_request(Vector3d(0,1.0,0));
 	else
 		local lowest_positions = find_lowest_positions(robots, x_dir, y_dir);
-		local random_index = math.random(1, #lowest_positions);
+		gen_init_uniform(1, #lowest_positions);
+		local random_index = gen_get_uniform();
 		add_position_request(lowest_positions[random_index]);		
 	end
 end

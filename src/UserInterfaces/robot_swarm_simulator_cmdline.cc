@@ -26,6 +26,7 @@
 #include <SzenarioGenerator/szenario_generator.h>
 #include <SzenarioGenerator/formation_generator.h>
 #include <Utilities/console_output.h>
+#include <Wrapper/lua_distribution_generator.h>
 
 #include "aiee.h"
 #include "mubalabieeyes.h"
@@ -100,6 +101,7 @@ int main(int argc, char** argv) {
 		("dry", "disables statistic output")
 		("steps", po::value<unsigned int>(), "number of steps for blind mode")
 		("blind", "disables visualization")
+		("luaseed", po::value<unsigned int>(), "seed for global distribution generator used in lua.")
 		("statsfile", po::value<std::string>()->default_value(""), "prefix for the statisticsfiles (using timestamp by default)")
 		("run_until_no_multiplicity", "quits the simulation when no two robots occupy the same point");
 
@@ -253,6 +255,12 @@ int main(int argc, char** argv) {
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
 		bool run_until_no_multiplicity = vm.count("run_until_no_multiplicity");
+
+		// initializes the lua random number generator
+		if(vm.count("luaseed")) {
+			unsigned int luaseed = vm["luaseed"].as<unsigned int>();
+			LuaWrapper::lua_generator_set_seed(luaseed);
+		}
 
 		// checks iff statistics shall be created
 		bool create_statistics = !vm.count("dry");
