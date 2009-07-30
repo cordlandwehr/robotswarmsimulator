@@ -12,12 +12,11 @@
 #include "../Utilities/distribution_generator.h"
 
 
-CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) {
+CGAL::Object CHAlgorithms::compute_convex_hull_3d(const std::vector<Vector3d>& points) {
 
 	//create Point_3 out of Vector3d
 	std::vector<Point_3> points_3;
-	Vector3d tmp_point;
-	for(int i=0; i<points.size(); i++) {
+	for(std::size_t i=0; i<points.size(); i++) {
 		points_3.push_back(vector3d_to_point_3(points[i]));
 	}
 
@@ -30,7 +29,7 @@ CGAL::Object CHAlgorithms::compute_convex_hull_3d(std::vector<Vector3d> points) 
 	return ch_object;
 }
 
-void CHAlgorithms::print_vertices_of_ch(CGAL::Object ch) {
+void CHAlgorithms::print_vertices_of_ch(const CGAL::Object& ch) {
 	Polyhedron_3 poly;
 	Segment_3 seg;
 	Point_3 point;
@@ -45,27 +44,27 @@ void CHAlgorithms::print_vertices_of_ch(CGAL::Object ch) {
 	}
 }
 
-void CHAlgorithms::print_vertices_of_polyhedron(Polyhedron_3 poly) {
+void CHAlgorithms::print_vertices_of_polyhedron(const Polyhedron_3& poly) {
 	int num = 0;
-	for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
+	for ( Polyhedron_3::Vertex_const_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
 	   	std::cout << "Vertex " << num++ << ": " << v->point() << std::endl;
 	}
 }
 
-void CHAlgorithms::print_vertices_of_segment(Segment_3 seg) {
+void CHAlgorithms::print_vertices_of_segment(const Segment_3& seg) {
    	std::cout << "Source: " << seg.source() << std::endl;
    	std::cout << "Target: " << seg.target() << std::endl;
 }
 
 
-Vector3d CHAlgorithms::compute_cog_of_segment(Segment_3 seg) {
+Vector3d CHAlgorithms::compute_cog_of_segment(const Segment_3& seg) {
 	Vector3d cog;
 	cog = (point_3_to_vector3d(seg.source()) + point_3_to_vector3d(seg.target())) / 2;
 	return cog;
 }
 
 
-Vector3d CHAlgorithms::compute_cog_of_polyhedron(Polyhedron_3 poly) {
+Vector3d CHAlgorithms::compute_cog_of_polyhedron(const Polyhedron_3& poly) {
 	Vector3d cog;
 	cog(0) = 0;
 	cog(1) = 0;
@@ -73,7 +72,7 @@ Vector3d CHAlgorithms::compute_cog_of_polyhedron(Polyhedron_3 poly) {
 
 	Point_3 p;
     int num = 0;
-    for ( Polyhedron_3::Vertex_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
+    for ( Polyhedron_3::Vertex_const_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
     	p = v->point();
     	cog += point_3_to_vector3d(p);
     	num++;
@@ -83,7 +82,7 @@ Vector3d CHAlgorithms::compute_cog_of_polyhedron(Polyhedron_3 poly) {
 	return cog;
 }
 
-Vector3d CHAlgorithms::compute_cog_of_ch_of_points(std::vector<Vector3d> points) {
+Vector3d CHAlgorithms::compute_cog_of_ch_of_points(const std::vector<Vector3d>& points) {
 
 	Vector3d cog;
 	Polyhedron_3 poly;
@@ -106,7 +105,7 @@ Vector3d CHAlgorithms::compute_cog_of_ch_of_points(std::vector<Vector3d> points)
 	return cog;
 }
 
-bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std::vector<Vector3d> points) {
+bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& point, const std::vector<Vector3d>& points) {
 
 	using namespace std;
 
@@ -162,12 +161,12 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	if ( ch1_is_polyhedron && ch2_is_polyhedron ) {
 
 		//iterate through vertices of convex hull 2
-		for ( Polyhedron_3::Vertex_iterator u = poly2.vertices_begin(); u != poly2.vertices_end(); ++u) {
+		for ( Polyhedron_3::Vertex_const_iterator u = poly2.vertices_begin(); u != poly2.vertices_end(); ++u) {
 		   	p = u->point();
 
 		   	//check if p is a vertex of convex hull 1
 	    	vertex_exists = false;
-	    	for ( Polyhedron_3::Vertex_iterator v = poly1.vertices_begin(); v != poly1.vertices_end(); ++v) {
+	    	for ( Polyhedron_3::Vertex_const_iterator v = poly1.vertices_begin(); v != poly1.vertices_end(); ++v) {
 	    		if( p == v->point() ) {
 	    			vertex_exists = true;
 	    		}
@@ -202,20 +201,20 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(Vector3d point, std:
 	return false;
 }
 
-Point_3 CHAlgorithms::vector3d_to_point_3(Vector3d point) {
+Point_3 CHAlgorithms::vector3d_to_point_3(const Vector3d& point) {
 	Point_3 point_3(point(0), point(1), point(2));
 	return point_3;
 }
 
-Vector3d CHAlgorithms::point_3_to_vector3d(Point_3 point_3) {
+Vector3d CHAlgorithms::point_3_to_vector3d(const Point_3& point_3) {
 	Vector3d point;
-	point(0) += CGAL::to_double(point_3.hx());
-	point(1) += CGAL::to_double(point_3.hy());
-	point(2) += CGAL::to_double(point_3.hz());
+	point(0) = CGAL::to_double(point_3.x());
+	point(1) = CGAL::to_double(point_3.y());
+	point(2) = CGAL::to_double(point_3.z());
 	return point;
 }
 
-Vector3d CHAlgorithms::random_point_in_ch(std::vector<Vector3d> points, unsigned int seed) {
+Vector3d CHAlgorithms::random_point_in_ch(const std::vector<Vector3d>& points, unsigned int seed) {
 	Vector3d rnd_point;
 	Polyhedron_3 poly;
 	Segment_3 seg;
@@ -232,7 +231,7 @@ Vector3d CHAlgorithms::random_point_in_ch(std::vector<Vector3d> points, unsigned
 		Vector3d rnd_point_in_min_box;
 
 		//determine minimum and maximum x, y and z coordinates
-		Polyhedron_3::Vertex_iterator u = poly.vertices_begin();
+		Polyhedron_3::Vertex_const_iterator u = poly.vertices_begin();
 		Vector3d p = point_3_to_vector3d(u->point());
 		double min_x = p(0);
 		double max_x = p(0);
