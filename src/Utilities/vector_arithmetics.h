@@ -31,6 +31,16 @@ const int kZCoord = 2;
  */
 typedef boost::numeric::ublas::c_vector<double, 3> Vector3d;
 
+/**
+ * Elementwise comparisson of three-dimensional vectors.
+ */
+bool operator==(const Vector3d& v, const Vector3d& w);
+
+/**
+ * Elementwise comparisson of three-dimensional vectors.
+ */
+bool operator!=(const Vector3d& v, const Vector3d& w);
+
 
 /**
  * \brief Support class for 3x3 matrices.

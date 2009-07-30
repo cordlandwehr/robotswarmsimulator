@@ -11,6 +11,14 @@
 #include <iostream>
 #include <sstream>
 
+bool operator==(const Vector3d& v, const Vector3d& w) {
+    return v(0) == w(0) && v(1) == w(1) && v(2) == w(2);
+}
+
+bool operator!=(const Vector3d& v, const Vector3d& w) {
+    return v(0) != w(0) || v(1) != w(1) || v(2) != w(2);
+}
+
 double det_matrix3d(const Matrix3d& matrix) {
 	double det =   matrix(0,0) * (matrix(1,1)*matrix(2,2) - matrix(2,1)*matrix(1,2))
 	             - matrix(1,0) * (matrix(0,1)*matrix(2,2) - matrix(2,1)*matrix(0,2))

@@ -20,7 +20,6 @@
 #include <CGAL/algorithm.h>
 #include <CGAL/Convex_hull_traits_3.h>
 #include <CGAL/convex_hull_3.h>
-#include <CGAL/MP_Float.h>
 
 #include "../Utilities/vector_arithmetics.h"
 
