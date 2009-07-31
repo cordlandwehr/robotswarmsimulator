@@ -34,6 +34,7 @@
 #include "../Views/view.h"
 #include "../ComputationalGeometry/misc_algorithms.h"
 #include "../ComputationalGeometry/point_algorithms.h"
+#include "../ComputationalGeometry/points_sepplane.h"
 #include "../Wrapper/distribution_generator_wrapper.h"
 #include <Wrapper/lua_distribution_generator.h>
 #include "../Wrapper/vector_wrapper.h"
@@ -598,7 +599,8 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("compute_cog", &LuaWrapper::compute_COG, luabind::copy_table(_1)),
 			 luabind::def("compute_cminiball", &LuaWrapper::compute_CMinBall, luabind::copy_table(_1)),
 			 luabind::def("sort_vectors_by_length", &LuaWrapper::sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
-			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1))
+			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
+			 luabind::def("separate_point_from_points", &LuaWrapper::separate_point_from_points, luabind::copy_table(_2))
 		 ]
 
 	];

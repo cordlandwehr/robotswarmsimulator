@@ -167,7 +167,7 @@ namespace {
 }
 
 
-boost::shared_ptr<Vector3d> separate_point_from_points(const Vector3d& v, const std::vector<Vector3d>& w) {
+const Vector3d separate_point_from_points(const Vector3d& v, const std::vector<Vector3d>& w) {
     // filter duplicates of v from w
     std::vector<Vector3d> filtered_w;
     BOOST_FOREACH(const Vector3d& w_elem, w) {
@@ -177,11 +177,11 @@ boost::shared_ptr<Vector3d> separate_point_from_points(const Vector3d& v, const 
     
     // check whether there are any w's left; if not, v was on same spot as w's --> return null pointer
     if (filtered_w.empty())
-        return boost::shared_ptr<Vector3d>();
+        return boost::numeric::ublas::zero_vector<double>(3);
     
     // check whether v is contained in the convex hull of the w's
     if (CHAlgorithms::point_contained_in_convex_hull_of_points(v, filtered_w))
-        return boost::shared_ptr<Vector3d>();
+        return boost::numeric::ublas::zero_vector<double>(3);
     
     // compute convex hul of the w's and check for degenerated cases
     Polyhedron_3 polyhedron;
@@ -203,6 +203,5 @@ boost::shared_ptr<Vector3d> separate_point_from_points(const Vector3d& v, const 
     
     // compute return vector
     const Point_3 cgal_ret_vector = CGAL::ORIGIN + (sep_plane.projection(cgal_v) - cgal_v);
-    const Vector3d ret_vector = CHAlgorithms::point_3_to_vector3d(cgal_ret_vector);
-    return boost::shared_ptr<Vector3d>(new Vector3d(ret_vector));
+    return CHAlgorithms::point_3_to_vector3d(cgal_ret_vector);
 }
