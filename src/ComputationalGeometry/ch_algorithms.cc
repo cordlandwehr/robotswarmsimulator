@@ -109,96 +109,49 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& poin
 
 	using namespace std;
 
-	Polyhedron_3 poly1, poly2;
-	Segment_3 seg1, seg2;
-	Point_3 point1, point2;
+	Polyhedron_3 poly1;
+	Segment_3 seg1;
+	Point_3 point1;
 
-	CGAL::Object ch1, ch2;
-	Point_3 p;
-
-	bool ch1_is_polyhedron = false;
-	bool ch2_is_polyhedron = false;
-	bool ch1_is_segment = false;
-	bool ch2_is_segment = false;
-	bool ch1_is_point = false;
-	bool ch2_is_point = false;
-
-	bool vertex_exists, invalid_type;
+	//convert given point to Point_3
+	Point_3 p = vector3d_to_point_3(point);
 
 	//compute convex hull of the given points
-	ch1 = compute_convex_hull_3d(points);
+	CGAL::Object ch1 = compute_convex_hull_3d(points);
 
-	//compute convex hull of the given points including point to check
-	std::vector<Vector3d> new_points = points;
-	new_points.push_back(point);
-	ch2 = compute_convex_hull_3d(new_points);
-
-	//determine type of convex hulls
-	invalid_type = false;
-	if ( CGAL::assign(poly1, ch1) )
-		ch1_is_polyhedron = true;
-	else if (CGAL::assign(seg1, ch1))
-		ch1_is_segment = true;
-	else if (CGAL::assign(point1, ch1))
-		ch1_is_point = true;
-	else
-		invalid_type = true;
-
-	if ( CGAL::assign(poly2, ch2) )
-		ch2_is_polyhedron = true;
-	else if (CGAL::assign(seg2, ch2))
-		ch2_is_segment = true;
-	else if (CGAL::assign(point2, ch2))
-		ch2_is_point = true;
-	else
-		invalid_type = true;
-
-	if(invalid_type)
-		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
-
-	//depending on type of convex hulls, compare vertices
-	//at this point the convex hull are of the same type
-	if ( ch1_is_polyhedron && ch2_is_polyhedron ) {
-
-		//iterate through vertices of convex hull 2
-		for ( Polyhedron_3::Vertex_const_iterator u = poly2.vertices_begin(); u != poly2.vertices_end(); ++u) {
-		   	p = u->point();
-
-		   	//check if p is a vertex of convex hull 1
-	    	vertex_exists = false;
-	    	for ( Polyhedron_3::Vertex_const_iterator v = poly1.vertices_begin(); v != poly1.vertices_end(); ++v) {
-	    		if( p == v->point() ) {
-	    			vertex_exists = true;
-	    		}
-	    	}
-	    	if(!vertex_exists) {
-	    		//p isn't a vertex of poly1 => given point is not contained in the CH of the given points
-	    		return false;
-	    	}
+	//get type of convex hull
+	if ( CGAL::assign(poly1, ch1) ) {
+		//convex hull is a polyhedron
+		//iterate over facets of convex hull and check whether the given point is on the same side of all planes
+		Polyhedron_3::Plane_3 plane;
+		CGAL::Oriented_side new_orientation;
+		CGAL::Oriented_side last_orientation = ((poly1.facets_begin())->plane()).oriented_side(p);
+		for(Polyhedron_3::Facet_iterator facet = poly1.facets_begin(); facet!= poly1.facets_end(); ++facet) {
+			plane = facet->plane();
+			new_orientation = plane.oriented_side(p);
+			if(new_orientation != last_orientation) {
+				return false;
+			}
 		}
-		//if this point is reached, each vertex of ch2 is also a vertex of ch1 => convex hulls are equal
 		return true;
-	}
-	else if ( ch1_is_segment && ch2_is_segment ) {
 
-		//compare endpoints of segments
-		if( seg1.source() == seg2.source() && seg1.target() == seg2.target() )
-			return true;
+	} else if ( CGAL::assign(seg1, ch1) ) {
+		//convex hull is a segment
+		//test if the given point lies on the segment
+		return seg1.has_on(p);
 
+	} else if ( CGAL::assign(point1, ch1) ) {
+		//convex hull is a point
+		//test if given point and convex hull equal
+		if(point1 == p) {
+			return true;
+		}
+	} else {
+		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
 	}
-	else if ( ch1_is_point && ch2_is_point ) {
 
-		//ch1 and ch2 are both points => compare points
-		if(point1 == point2)
-			return true;
-	}
-	else if (ch1_is_point && ch2_is_segment) {
-		//CGAL interprets the convex hull of two equal points as a segment,
-		//thus in case of ch1 is a point and the point to check equals to this point, true has to be returned
-		if(point1 == seg2.source() && point1 == seg2.target())
-			return true;
-	}
 	return false;
+
 }
 
 Point_3 CHAlgorithms::vector3d_to_point_3(const Vector3d& point) {
