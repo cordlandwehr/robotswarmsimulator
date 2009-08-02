@@ -17,6 +17,7 @@
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
+#include "../ActivationSequenceGenerators/fair_atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/asynchronous_asg.h"
 
@@ -37,7 +38,6 @@
 #include "../EventHandlers/vector_request_handler.h"
 #include "../EventHandlers/marker_change_request_handler.h"
 #include "../EventHandlers/collision_position_request_handler.h"
-#include "../EventHandlers/color_change_request_handler.h"
 
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
@@ -249,20 +249,6 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		}
 	}
 
-	// 7. Color Change Request Handler
-	std::string color_change_request_handler_type = boost::any_cast<std::string >(params["COLOR_CHANGE_REQUEST_HANDLER_TYPE"]);
-	if(color_change_request_handler_type == "STANDARD"){
-		try {
-				// build the type change request handler
-				double discard_probability = 0.0;
-				unsigned int seed = 1;
-				boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler(new ColorChangeRequestHandler(seed, discard_probability, *history));
-				event_handler->set_color_change_request_handler(color_change_request_handler);
-			} catch(const boost::bad_lexical_cast& ) {
-				throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
-			}
-	}
-
 	return event_handler;
 }
 
@@ -279,6 +265,13 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 			asg.reset(new AtomicSemisynchronousASG(seed));
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for atomic semisynchronous asg.");
+		}
+	} else if(asg_type == "FAIR_ATOMIC_SEMISYNCHRONOUS") {
+		try {
+			unsigned int seed = boost::lexical_cast<unsigned int>(params["FAIR_ATOMIC_SEMISYNC_ASG_SEED"]);
+			asg.reset(new FairAtomicSemisynchronousASG(seed));
+		} catch(const boost::bad_lexical_cast&) {
+			throw UnsupportedOperationException("Failed reading parameters for fair atomic semisynchronous asg.");
 		}
 	} else if(asg_type == "ASYNCHRONOUS") {
 		try {

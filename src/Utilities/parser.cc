@@ -438,7 +438,7 @@ void Parser::save_main_project_file(const string& project_filename) {
 
 		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
 		while(param_map_iter != parameter_map_.end()) {
-			if ((*param_map_iter).first == "ROBOT_FILENAME" or (*param_map_iter).first == "OBSTACLE_FILENAME") {
+			if ((*param_map_iter).first == "ROBOT_FILENAME" || (*param_map_iter).first == "OBSTACLE_FILENAME") {
 				project_file << "# Old robot/obstacle-files: ";
 			}
 			project_file << (*param_map_iter).first << "=" << "\"" << (*param_map_iter).second << "\"" << std::endl;
