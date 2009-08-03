@@ -38,8 +38,9 @@ boost::shared_ptr<Event> FairAtomicSemisynchronousASG::get_next_event() {
 
 		std::list<boost::shared_ptr<Robot> >::iterator it = unactivated_robots_.begin();
 		std::advance(it, distribution_generator_->get_value_uniform());
-				
-		look_event->add_to_robot_subset(*it);
+
+		current_robot_ = *it;		
+		look_event->add_to_robot_subset(current_robot_);
 		unactivated_robots_.erase(it);
 		
 		current_state_ = compute;
