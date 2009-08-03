@@ -148,11 +148,24 @@ const std::vector<LuaWrapper::Vector3dWrapper> sort_points_by_distance(std::vect
 }
 
 /**
- * Wrapper around 
+ * Wrapper around
  */
 const LuaWrapper::Vector3dWrapper separate_point_from_points(const LuaWrapper::Vector3dWrapper& v, const std::vector<LuaWrapper::Vector3dWrapper>& w) {
     return transform(::separate_point_from_points(transform(v), transform(w)));
 }
+
+const LuaWrapper::Vector3dWrapper compute_cog_of_ch_of_points(const std::vector<LuaWrapper::Vector3dWrapper>& points) {
+    return transform(CHAlgorithms::compute_cog_of_ch_of_points(transform(points)));
+}
+
+const bool point_contained_in_convex_hull_of_points(const LuaWrapper::Vector3dWrapper& point, const std::vector<LuaWrapper::Vector3dWrapper> points) {
+	return CHAlgorithms::point_contained_in_convex_hull_of_points(transform(point), transform(points));
+}
+
+const LuaWrapper::Vector3dWrapper random_point_in_ch(const std::vector<LuaWrapper::Vector3dWrapper> points, int seed) {
+	return transform(CHAlgorithms::random_point_in_ch(transform(points), seed));
+}
+
 
 }
 
