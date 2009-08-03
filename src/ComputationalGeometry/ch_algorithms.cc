@@ -105,6 +105,17 @@ Vector3d CHAlgorithms::compute_cog_of_ch_of_points(const std::vector<Vector3d>& 
 	return cog;
 }
 
+
+void CHAlgorithms::compute_facet_planes(Polyhedron_3& polyhedron) {
+    Polyhedron_3::Facet_iterator facet_it;
+    for (facet_it = polyhedron.facets_begin(); facet_it != polyhedron.facets_end(); ++facet_it) {
+        Polyhedron_3::Facet::Halfedge_handle edge = facet_it->halfedge();
+        facet_it->plane() = Plane_3(edge->vertex()->point(),
+                                    edge->next()->vertex()->point(),
+                                    edge->next()->next()->vertex()->point());
+    }
+}
+
 bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& point, const std::vector<Vector3d>& points) {
 
 	using namespace std;
@@ -124,11 +135,24 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& poin
 		//convex hull is a polyhedron
 		//iterate over facets of convex hull and check whether the given point is on the same side of all planes
 		Polyhedron_3::Plane_3 plane;
+
 		CGAL::Oriented_side new_orientation;
-		CGAL::Oriented_side last_orientation = ((poly1.facets_begin())->plane()).oriented_side(p);
+		CGAL::Oriented_side last_orientation;
+		bool first_iteration = true;
+
+		//compute plane equations of polyhedron's facets
+		compute_facet_planes(poly1);
+
 		for(Polyhedron_3::Facet_iterator facet = poly1.facets_begin(); facet!= poly1.facets_end(); ++facet) {
+
 			plane = facet->plane();
 			new_orientation = plane.oriented_side(p);
+
+			if(first_iteration) {
+				last_orientation = new_orientation;
+				first_iteration = false;
+			}
+
 			if(new_orientation != last_orientation) {
 				return false;
 			}

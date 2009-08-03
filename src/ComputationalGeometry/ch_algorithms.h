@@ -26,14 +26,15 @@
 
 
 // CGAL typedefs
-typedef CGAL::Homogeneous<double>                Kernel;
-typedef CGAL::Convex_hull_traits_3<Kernel>       CHTraits;
-typedef CHTraits::Polyhedron_3                   Polyhedron_3;
-typedef Kernel::Segment_3                        Segment_3;
-typedef Kernel::Point_3                          Point_3;
-typedef Kernel::Point_2                          Point_2;
-typedef CGAL::Creator_uniform_3<double, Point_3> PointCreator;
-
+typedef CGAL::Homogeneous<double>                	Kernel;
+typedef CGAL::Convex_hull_traits_3<Kernel>       	CHTraits;
+typedef CHTraits::Polyhedron_3                   	Polyhedron_3;
+typedef Kernel::Segment_3                        	Segment_3;
+typedef Kernel::Point_3                          	Point_3;
+typedef Kernel::Point_2                          	Point_2;
+typedef CGAL::Creator_uniform_3<double, Point_3>	PointCreator;
+typedef Polyhedron_3::Facet							Facet;
+typedef Kernel::Plane_3        						Plane_3;
 
 /**
  * This class provides some useful algorithms working with a convex hull.
@@ -46,6 +47,11 @@ class CHAlgorithms {
 	friend class rnd_poin_in_ch;
 
 public:
+
+    /**
+     * Given a polyhedron, this method computes the planes corresponding to any of the polyhedron's facets.
+     */
+    static void compute_facet_planes(Polyhedron_3& polyhedron);
 
 	/**
 	 * This method computes the convex hull of the given points.
