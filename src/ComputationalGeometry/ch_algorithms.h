@@ -86,7 +86,8 @@ public:
 	 * This method checks whether the given point is contained in the given convex hull of the given points.
 	 * \param point		Point to check.
 	 * \param points	Points of whicht to compute convex hull.
-	 * \return			true, if the given point is contained in the convex hull of the given points, false otherwise.
+	 * \return			true, if the given point is contained in or on the boundary of the convex hull
+	 * 					of the given points, false otherwise.
 	 */
 	static bool point_contained_in_convex_hull_of_points(const Vector3d& point, const std::vector<Vector3d>& points);
 

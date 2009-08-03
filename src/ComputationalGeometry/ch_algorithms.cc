@@ -134,11 +134,13 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& poin
 	if ( CGAL::assign(poly1, ch1) ) {
 		//convex hull is a polyhedron
 		//iterate over facets of convex hull and check whether the given point is on the same side of all planes
-		Polyhedron_3::Plane_3 plane;
 
+		//compute plane equations of polyhedron's facets
+		compute_facet_planes(poly1);
+
+		CGAL::Oriented_side last_orientation = CGAL::ON_ORIENTED_BOUNDARY;
 		CGAL::Oriented_side new_orientation;
-		CGAL::Oriented_side last_orientation;
-		bool first_iteration = true;
+		Polyhedron_3::Plane_3 plane;
 
 		//compute plane equations of polyhedron's facets
 		compute_facet_planes(poly1);
@@ -148,13 +150,17 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& poin
 			plane = facet->plane();
 			new_orientation = plane.oriented_side(p);
 
-			if(first_iteration) {
-				last_orientation = new_orientation;
-				first_iteration = false;
+			//check if orientation equals to old orientation
+			if( new_orientation != CGAL::ON_ORIENTED_BOUNDARY
+				&& last_orientation != CGAL::ON_ORIENTED_BOUNDARY
+				&& new_orientation != last_orientation) {
+				return false;
 			}
 
-			if(new_orientation != last_orientation) {
-				return false;
+			//set last_orientation
+			//(will only be set once: will be set at the first time new_orientation isn't on the boundary)
+			if(last_orientation == CGAL::ON_ORIENTED_BOUNDARY && new_orientation != CGAL::ON_ORIENTED_BOUNDARY) {
+				last_orientation = new_orientation;
 			}
 		}
 		return true;
@@ -175,7 +181,6 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& poin
 	}
 
 	return false;
-
 }
 
 Point_3 CHAlgorithms::vector3d_to_point_3(const Vector3d& point) {
