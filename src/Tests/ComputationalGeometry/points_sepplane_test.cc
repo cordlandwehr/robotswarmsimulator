@@ -1,8 +1,54 @@
 #include <boost/test/unit_test.hpp>
 
+#include "../ComputationalGeometry/ch_algorithms.h"
 #include "../ComputationalGeometry/points_sepplane.h"
 
-using namespace std;
+
+// This test makes sure that the CGAL kernel used does not cause infinite loops due to numerical rounding. If the unit
+// tests deadlock here, it probably is caused by such a numeric instability.
+BOOST_AUTO_TEST_CASE(separate_point_from_points_numeric_deadlock_test) {
+    std::vector<Vector3d> points;
+    
+    Vector3d point;
+    point(0) = -0.82978;
+    point(1) = 4.97185;
+    point(2) = 2.20324;
+    points.push_back(point);
+    
+    point(0) = 4.32557;
+    point(1) = -4.99886;
+    point(2) = -3.71876;
+    points.push_back(point);
+    
+    point(0) = 1.97667;
+    point(1) = 4.99041;
+    point(2) = -3.53244;
+    points.push_back(point);
+    
+    point(0) = -2.63911;
+    point(1) = -4.07661;
+    point(2) = -1.03419;
+    points.push_back(point);
+    
+    point(0) = -3.1374;
+    point(1) = -1.12089;
+    point(2) = -1.54439;
+    points.push_back(point);
+    
+    point(0) = 1.69746;
+    point(1) = -1.03233;
+    point(2) = 4.35539;
+    points.push_back(point);
+    
+    point(0) = 0.388167;
+    point(1) = 3.46311;
+    point(2) = -0.808055;
+    points.push_back(point);
+    
+    CGAL::Object object;
+    std::vector<Point_3> cgal_points = CHAlgorithms::transform(points);
+    CGAL::convex_hull_3(cgal_points.begin(), cgal_points.end(), object);
+}
 
 BOOST_AUTO_TEST_CASE(separate_point_from_points_unit_cube_test) {
 	//create points

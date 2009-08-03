@@ -12,31 +12,8 @@
 #include "../Utilities/unsupported_operation_exception.h"
 
 
-// CGAL typedefs
-typedef Polyhedron_3::Facet    Facet;
-typedef Polyhedron_3::Halfedge Halfedge;
-typedef Polyhedron_3::Vertex   Vertex;
-typedef Kernel::Vector_3       Vector_3;
-typedef Kernel::Line_3         Line_3;
-typedef Kernel::Plane_3        Plane_3;
-
-
 // contains non-public helper methods
 namespace {
-    /**
-     * Given a facet, this method computes the planes corresponding to any of the polyhedron's facets.
-     */
-    void compute_facet_planes(Polyhedron_3& polyhedron) {
-        Polyhedron_3::Facet_iterator facet_it;
-        for (facet_it = polyhedron.facets_begin(); facet_it != polyhedron.facets_end(); ++facet_it) {
-            Polyhedron_3::Facet::Halfedge_handle edge = facet_it->halfedge();
-            facet_it->plane() = Plane_3(edge->vertex()->point(),
-                                        edge->next()->vertex()->point(),
-                                        edge->next()->next()->vertex()->point());
-        }
-    }
-    
-    
     /**
      * Helper method for separate_point_from_points(). Returns the plane with maximum distance to v that separates v
      * from the given point. Method assumes v to be unequal to w.
@@ -168,40 +145,43 @@ namespace {
 
 
 const Vector3d separate_point_from_points(const Vector3d& v, const std::vector<Vector3d>& w) {
-    // filter duplicates of v from w
-    std::vector<Vector3d> filtered_w;
+    // filter duplicates of v from w and convert input to cgal objects
+    Point_3 cgal_v = CHAlgorithms::transform(v);
+    std::vector<Point_3> filtered_cgal_w;
     BOOST_FOREACH(const Vector3d& w_elem, w) {
         if (w_elem != v)
-            filtered_w.push_back(w_elem);
+            filtered_cgal_w.push_back(CHAlgorithms::transform(w_elem));
     }
     
-    // check whether there are any w's left; if not, v was on same spot as w's --> return null pointer
-    if (filtered_w.empty())
+    // check whether there are any w's left; if not, v was on same spot as w's --> return null vector
+    if (filtered_cgal_w.empty())
         return boost::numeric::ublas::zero_vector<double>(3);
     
     // check whether v is contained in the convex hull of the w's
-    if (CHAlgorithms::point_contained_in_convex_hull_of_points(v, filtered_w))
+    if (CHAlgorithms::point_contained_in_convex_hull_of_points(cgal_v, filtered_cgal_w))
         return boost::numeric::ublas::zero_vector<double>(3);
     
-    // compute convex hul of the w's and check for degenerated cases
+    // compute convex hul of the w's
+    CGAL::Object convex_hull;
+    CGAL::convex_hull_3(filtered_cgal_w.begin(), filtered_cgal_w.end(), convex_hull);
+    
+    // check for degenerated cases
     Polyhedron_3 polyhedron;
     Segment_3 segment;
     Point_3 point;
-    Plane_3 sep_plane(0, 0, 0, 0);
-    CGAL::Object convex_hull = CHAlgorithms::compute_convex_hull_3d(filtered_w);
-    const Point_3 cgal_v = CHAlgorithms::vector3d_to_point_3(v);
+    Plane_3 sep_plane;
     if (CGAL::assign(polyhedron, convex_hull)) {
-        compute_facet_planes(polyhedron);
+        CHAlgorithms::compute_facet_planes(polyhedron);
         sep_plane = separate_point_from_polyhedron(cgal_v, polyhedron);
     } else if (CGAL::assign(segment, convex_hull)) {
         sep_plane = separate_point_from_segment(cgal_v, segment);
 	} else if (CGAL::assign(point, convex_hull)) {
-        sep_plane = separate_point_from_point(cgal_v, CHAlgorithms::vector3d_to_point_3(filtered_w[0]));
+        sep_plane = separate_point_from_point(cgal_v, filtered_cgal_w[0]);
 	} else {
 		throw std::runtime_error("Type of convex hull couldn't be determined (is neither plane, segment or point).");
 	}
     
     // compute return vector
     const Point_3 cgal_ret_vector = CGAL::ORIGIN + (sep_plane.projection(cgal_v) - cgal_v);
-    return CHAlgorithms::point_3_to_vector3d(cgal_ret_vector);
+    return CHAlgorithms::transform(cgal_ret_vector);
 }
