@@ -83,7 +83,7 @@ public:
      * Given a polyhedron, this method computes the planes corresponding to any of the polyhedron's facets. The planes
      * are saved within the 'plane' attribute of the facets.
      */
-    static void CHAlgorithms::compute_facet_planes(Polyhedron_3& polyhedron);
+    static void compute_facet_planes(Polyhedron_3& polyhedron);
     
 	/**
 	 * This method computes the COG of the given polyhedron.
