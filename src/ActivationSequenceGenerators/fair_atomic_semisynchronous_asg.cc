@@ -8,6 +8,9 @@
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
 
+#include <algorithm>
+#include <iterator>
+
 using namespace std;
 
 
