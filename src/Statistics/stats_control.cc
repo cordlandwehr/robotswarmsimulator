@@ -243,7 +243,7 @@ void StatsControl::quit() {
 
 	stats_initialized_ = false;
 
-	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Output closed.";
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Output closed.\n";
 }
 
 void StatsControl::calculate() {

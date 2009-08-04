@@ -343,9 +343,9 @@ int main(int argc, char** argv) {
 				xt.sec += 1; // change xt to next second
 				boost::thread::sleep(xt);
 			}
-			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Terminating simulation..";
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Terminating simulation.\n";
 			sim_control->terminate_simulation();
-			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Simulation finished. Have a good day.";
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Simulation finished. Have a good day.\n";
 		}
 
 	}
@@ -354,7 +354,7 @@ int main(int argc, char** argv) {
 		throw; //rethrow exception
 	}
 	catch(...) {
-		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.";
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.\n";
 		throw; //rethrow exception
 	}
 	return 0;
