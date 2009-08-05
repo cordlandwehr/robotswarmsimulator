@@ -1,5 +1,5 @@
 PROJECT_NAME="New generated Project"
-ROBOT_FILENAME="RandomGrid2D.robot"
+ROBOT_FILENAME="Line.robot"
 OBSTACLE_FILENAME="empty.obstacle"
 
 CAMERA_DIRECTION="0,0,-1"
