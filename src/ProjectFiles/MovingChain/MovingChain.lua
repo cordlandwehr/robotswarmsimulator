@@ -23,7 +23,7 @@
 
 
 -- load the (fixed) path followed by master robots
-master_moves    = dofile("MovingChainPath02.dat")
+master_moves    = dofile("4Clique04.dat")
 master_moves_nr = table.getn(master_moves)
 
 
@@ -124,8 +124,8 @@ function slave()
 		next_move = get_slave_target_position()
 	end
 	
-	if (next_move ~= nil) then
-		-- if we know where to go and either have no successor or it has already arrived, proceed
+	if (next_move ~= nil and position_occupied(next_move) == false) then
+		-- if we know where to go (and it is free) and either have no successor or it has already arrived, proceed
 		if (not has_successor or successor_arrived()) then
 			add_position_request(next_move)
 			last_move = next_move
@@ -156,6 +156,10 @@ function init()
 		-- if a slave sees only one other robot, it assumes to have no succesor to wait for
 		local visible_robots = View.get_visible_robots();
 		has_successor = (table.getn(visible_robots) > 1)
+		
+		-- initially, we know that our predecessor is to the right
+		candidate_positions = { Vector3d(1,0,0) }
+		freed_candidate_positions = { }
 	end
 end
 
@@ -167,7 +171,9 @@ function position_occupied(position)
 	visible_robots = View.get_visible_robots()
 	for ignore, robot in pairs(visible_robots) do
 		local robot_position = View.get_position(robot)
-		if (position == robot_position) then
+		if (math.abs((position - robot_position).x) +
+		    math.abs((position - robot_position).y) +
+		    math.abs((position - robot_position).z) < 0.000000001) then
 			return true
 		end
 	end
@@ -204,22 +210,43 @@ function get_slave_target_position()
 	-- if we do not have any candidates for next move, set them to the current view and return nil (idle one step)
 	if (candidate_positions == nil) then
 		candidate_positions = current_view
+		freed_candidate_positions = { }		
 		return nil
 	end
 	
-	-- if we have candidates, compute the ones that are currently free (so that we can possibly move there)
-	local feasible_candidates = { }
+	-- if we have candidates, compute the ones that have become free (so that we can possibly move there)
+	local tmp_candidate_positions = { }
 	for ignore, candidate_position in pairs(candidate_positions) do
 		if (position_occupied(candidate_position) == false) then
-			table.insert(feasible_candidates, candidate_position)
+			table.insert(freed_candidate_positions, candidate_position)
+		else
+			table.insert(tmp_candidate_positions, candidate_position)
 		end
 	end
+	candidate_positions = tmp_candidate_positions
 	
-	-- if there is exactly one feasible candidate, assume it to be the last known position of our predecessor
-	local feasible_candidates_nr = table.getn(feasible_candidates)
-	if (feasible_candidates_nr == 1) then
-		candidate_positions = nil
-		return feasible_candidates[1]
+	-- freed candidate positions that have been occupied once more can be rejected
+	local tmp_freed_candidate_positions = { }
+	for ignore, freed_candidate_position in pairs(freed_candidate_positions) do
+		if (position_occupied(freed_candidate_position) == false) then
+			table.insert(tmp_freed_candidate_positions, freed_candidate_position)
+		end
 	end
+	freed_candidate_positions = tmp_freed_candidate_positions
+	
+	-- if there is exactly one candidate left (freed or not), we have found our predecessor
+	if (table.getn(candidate_positions) + table.getn(freed_candidate_positions) ~= 1) then
+		return nil
+	end
+		
+	if (table.getn(candidate_positions) == 1) then
+		result_candidate = candidate_positions[1]
+		candidate_positions = nil
+		return result_candidate
+	elseif (table.getn(freed_candidate_positions) == 1) then
+		candidate_positions = nil
+		return freed_candidate_positions[1]
+	end
+	
 	return nil -- several feasible candidates --> we don't know what to do, so idle one step
 end
