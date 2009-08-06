@@ -128,8 +128,10 @@ function main()
 	-- now check whether we can pull along x, y or spin (in that order!)
 	if (not position_occupied(pull1)) then
 		movement_vector = pull1
+		add_color_change_request(1)
 	elseif (not position_occupied(pull2)) then
 		movement_vector = pull2
+		add_color_change_request(2)
 	elseif (not position_occupied(spin)) then
 		-- spin is a bit more complicate, because we manually have to check whether another robot is trying a pull on
 		-- our target position (in this case, we resign)
@@ -140,10 +142,13 @@ function main()
 			not robot_pulling_at_position(Vector3d(-1,0,0), spin) and
 			not robot_pulling_at_position(Vector3d(0,-1,0), spin)) then
 			movement_vector = spin
+			add_color_change_request(3)
 		end
 	end
 	
 	if (movement_vector ~= nil) then
 		View.add_position_request(movement_vector)
+	else
+		add_color_change_request(0)
 	end
 end
