@@ -13,16 +13,17 @@
 
 #include <boost/smart_ptr.hpp>
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/convex_hull_3.h>
 
 #include "../Utilities/vector_arithmetics.h"
 
 
 // CGAL typedefs
-typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+typedef CGAL::Exact_predicates_exact_constructions_kernel   Kernel;
 typedef CGAL::Convex_hull_traits_3<Kernel>                  CHTraits;
 typedef CHTraits::Polyhedron_3                              Polyhedron_3;
+typedef CHTraits::Triangle_3                                Triangle_3;
 typedef Kernel::Segment_3                                   Segment_3;
 typedef Kernel::Point_3                                     Point_3;
 typedef Kernel::Vector_3                                    Vector_3;
@@ -91,7 +92,14 @@ public:
 	 * \return			COG of the given polyhedron
 	 */
 	static Point_3 compute_cog_of_polyhedron(const Polyhedron_3& poly);
-
+    
+	/**
+	 * This method computes the COG of the given triangle.
+	 * \param triangle Triangle of which to compute COG
+	 * \return         COG of the given triangle
+	 */
+	static Point_3 compute_cog_of_triangle(const Triangle_3& triangle);
+    
 	/**
 	 * This method computes the COG of the given segment.
 	 * I.e. this mehtod only computes the center of the endpoints of the given segment.

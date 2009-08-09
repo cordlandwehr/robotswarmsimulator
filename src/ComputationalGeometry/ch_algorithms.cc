@@ -25,17 +25,14 @@ void CHAlgorithms::compute_facet_planes(Polyhedron_3& polyhedron) {
 
 
 void CHAlgorithms::print_vertices_of_ch(const CGAL::Object& ch) {
-	Polyhedron_3 poly;
-	Segment_3 seg;
-	Point_3 point;
-
-	//determine type of given convex hull
-	if ( CGAL::assign (poly, ch) ) {
-		print_vertices_of_polyhedron(poly);
-	} else if ( CGAL::assign (seg, ch) ) {
-		print_vertices_of_segment(seg);
-	} else if ( CGAL::assign (point, ch) ) {
-		std::cout << point << std::endl;
+	if (const Polyhedron_3* poly = CGAL::object_cast<Polyhedron_3>(&ch)) {
+		print_vertices_of_polyhedron(*poly);
+    } else if (const Triangle_3* triangle = CGAL::object_cast<Triangle_3>(&ch)) {
+        std::cout << *triangle << std::endl;
+	} else if (const Segment_3* seg = CGAL::object_cast<Segment_3>(&ch)) {
+		print_vertices_of_segment(*seg);
+	} else if (const Point_3* point = CGAL::object_cast<Point_3>(&ch)) {
+		std::cout << *point << std::endl;
 	}
 }
 
@@ -58,6 +55,9 @@ Point_3 CHAlgorithms::compute_cog_of_segment(const Segment_3& seg) {
 	return seg.source() + (seg.target() - seg.source())/2.;
 }
 
+Point_3 CHAlgorithms::compute_cog_of_triangle(const Triangle_3& triangle) {
+    return CGAL::ORIGIN + ((triangle[0]-CGAL::ORIGIN) + (triangle[1]-CGAL::ORIGIN) + (triangle[2]-CGAL::ORIGIN))/3.;
+}
 
 Point_3 CHAlgorithms::compute_cog_of_polyhedron(const Polyhedron_3& poly) {
 	Vector_3 cog(0, 0, 0);
@@ -65,28 +65,25 @@ Point_3 CHAlgorithms::compute_cog_of_polyhedron(const Polyhedron_3& poly) {
     for ( Polyhedron_3::Vertex_const_iterator v = poly.vertices_begin(); v != poly.vertices_end(); ++v) {
         cog = cog + (v->point() - CGAL::ORIGIN);
     }
-	return CGAL::ORIGIN + cog/poly.size_of_vertices();
+	return CGAL::ORIGIN + cog/static_cast<int>(poly.size_of_vertices());
 }
 
 
 Vector3d CHAlgorithms::compute_cog_of_ch_of_points(const std::vector<Vector3d>& points) {
-
-	Vector3d cog;
-	Polyhedron_3 poly;
-	Segment_3 seg;
-	Point_3 point;
-
 	CGAL::Object ch;
     std::vector<Point_3> cgal_points = transform(points);
     CGAL::convex_hull_3(cgal_points.begin(), cgal_points.end(), ch);
 
 	//Depending on type of convex hull, compute its COG
-	if ( CGAL::assign(poly, ch) ) {
-		cog = transform(compute_cog_of_polyhedron(poly));
-	} else if ( CGAL::assign(seg, ch) ) {
-		cog = transform(compute_cog_of_segment(seg));
-	} else if ( CGAL::assign(point, ch) ) {
-    	cog = transform(point);
+    Vector3d cog;
+	if (const Polyhedron_3* poly = CGAL::object_cast<Polyhedron_3>(&ch)) {
+		cog = transform(compute_cog_of_polyhedron(*poly));
+    } else if (const Triangle_3* triangle = CGAL::object_cast<Triangle_3>(&ch)) {
+        cog = transform(compute_cog_of_triangle(*triangle));
+	} else if (const Segment_3* seg = CGAL::object_cast<Segment_3>(&ch)) {
+		cog = transform(compute_cog_of_segment(*seg));
+	} else if (const Point_3* point = CGAL::object_cast<Point_3>(&ch)) {
+    	cog = transform(*point);
 	} else {
 		throw UnsupportedOperationException("Type of convex hull couldn't be determined.");
 	}
@@ -100,44 +97,58 @@ bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Vector3d& poin
 }
 
 bool CHAlgorithms::point_contained_in_convex_hull_of_points(const Point_3& p, const std::vector<Point_3>& cgal_points) {
-    
-	Polyhedron_3 poly1;
-	Segment_3 seg1;
-	Point_3 point1;
-    
 	//compute convex hull of the given points
 	CGAL::Object ch1;
     CGAL::convex_hull_3(cgal_points.begin(), cgal_points.end(), ch1);
     
 	//get type of convex hull
-	if ( CGAL::assign(poly1, ch1) ) {
-		//convex hull is a polyhedron
-		//iterate over bounding planes of convex hull and check whether the point is on the positive side of a plane
-        
-		//compute plane equations of polyhedron's facets and iterate over all planes
+	if (CGAL::object_cast<Polyhedron_3>(&ch1)) {
+        // compute plane equations
+        Polyhedron_3 poly1;
+        CGAL::assign(poly1, ch1);
 		compute_facet_planes(poly1);
+        
+        // check whether polyhedron is planar
+        if (!poly1.is_closed()) {
+            // point must lie on suporting plane
+            if (!poly1.planes_begin()->has_on(p))
+                 return false;
+            
+            // point must be on the facet
+            const Facet& facet = *(poly1.facets_begin());
+            Polyhedron_3::Halfedge_const_handle facet_edge = facet.halfedge();
+            for (std::size_t i=0; i<facet.facet_degree(); ++i) {
+                const Vector_3 edge_vector = facet_edge->vertex()->point() - facet_edge->prev()->vertex()->point();
+                const Vector_3 normal = CGAL::cross_product(facet.plane().orthogonal_vector(), edge_vector);
+                if (Plane_3(facet_edge->vertex()->point(), normal).has_on_negative_side(p))
+                    return false;
+                facet_edge = facet_edge->next();
+            }
+            
+            return true;
+        }
+        
+        // polyhedron is non-degenerated (not planar)
+		// iterate over bounding planes of convex hull and check whether the point is on the positive side of a plane
 		for(Polyhedron_3::Plane_const_iterator plane = poly1.planes_begin(); plane != poly1.planes_end(); ++plane) {
             if (plane->has_on_positive_side(p))
                 return false;
 		}
 		return true;
-        
-	} else if ( CGAL::assign(seg1, ch1) ) {
+    } else if (const Triangle_3* triangle = CGAL::object_cast<Triangle_3>(&ch1)) {
+        return triangle->has_on(p);
+	} else if (const Segment_3* seg1 = CGAL::object_cast<Segment_3>(&ch1)) {
 		//convex hull is a segment
 		//test if the given point lies on the segment
-		return seg1.has_on(p);
+		return seg1->has_on(p);
         
-	} else if ( CGAL::assign(point1, ch1) ) {
+	} else if (const Point_3* point1 = CGAL::object_cast<Point_3>(&ch1)) {
 		//convex hull is a point
 		//test if given point and convex hull equal
-		if(point1 == p) {
-			return true;
-		}
+		return *point1 == p;
 	} else {
 		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
 	}
-    
-	return false;
 }
 
 
@@ -171,30 +182,25 @@ std::vector<Point_3> CHAlgorithms::transform(const std::vector<Vector3d>& points
 }
 
 Vector3d CHAlgorithms::random_point_in_ch(const std::vector<Vector3d>& points, unsigned int seed) {
-	Vector3d rnd_point;
-	Polyhedron_3 poly;
-	Segment_3 seg;
-	Point_3 point;
-
 	//compute convex hull
     CGAL::Object ch;
     std::vector<Point_3> cgal_points = transform(points);
     CGAL::convex_hull_3(cgal_points.begin(), cgal_points.end(), ch);
 
 	//determine type of convex hull
-	if (CGAL::assign(poly, ch)) {
+	if (const Polyhedron_3* poly = CGAL::object_cast<Polyhedron_3>(&ch)) {
 
 		Polyhedron_3 min_box;
 
 		//determine minimum and maximum x, y and z coordinates
-        Polyhedron_3::Point_const_iterator u = poly.points_begin();
+        Polyhedron_3::Point_const_iterator u = poly->points_begin();
         Kernel::FT min_x = u->x();
 		Kernel::FT max_x = u->x();
 		Kernel::FT min_y = u->y();
 		Kernel::FT max_y = u->y();
 		Kernel::FT min_z = u->z();
 		Kernel::FT max_z = u->z();
-		while(++u != poly.points_end()) {
+		while(++u != poly->points_end()) {
 			if(u->x() < min_x)
 				min_x = u->x();
 			if(u->x() > max_x)
@@ -230,18 +236,17 @@ Vector3d CHAlgorithms::random_point_in_ch(const std::vector<Vector3d>& points, u
 
 		} while(!point_contained_in_convex_hull_of_points(rnd_point_in_min_box, cgal_points));
 
-		rnd_point = transform(rnd_point_in_min_box);
+		return transform(rnd_point_in_min_box);
 
-	} else if (CGAL::assign(seg, ch)) {
-
+	} else if (/* const Triangle_3* triangle = */CGAL::object_cast<Triangle_3>(&ch)) {
+		//TODO(martinah) implement
+        throw UnsupportedOperationException("Random point of a degenerated convex hull (triangle) not yet supported.");
+	} else if (/* const Segment_3* seg = */CGAL::object_cast<Segment_3>(&ch)) {
 		//TODO(martinah) implement
         throw UnsupportedOperationException("Random point of a degenerated convex hull (segment) not yet supported.");
-	} else if (CGAL::assign(point, ch)) {
-		rnd_point = transform(point);
-
+	} else if (const Point_3* point = CGAL::object_cast<Point_3>(&ch)) {
+		return transform(*point);
 	} else {
 		throw UnsupportedOperationException("Type of convex hulls couldn't be determined.");
 	}
-
-	return rnd_point;
 }

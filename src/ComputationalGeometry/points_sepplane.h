@@ -25,8 +25,11 @@
  *     - plane's normal vector: -returned_vector
  *     - point on plane: v+returned_vector
  * If no such plane exists, the null-vector is returned.
+ *
+ * As a second parameter, one has to specify an epsilon value that is used to filter points from w that are nearly equal
+ * to v (needed because of numeric inaccuracies).
  */
-const Vector3d separate_point_from_points(const Vector3d& v, const std::vector<Vector3d>& w);
+const Vector3d separate_point_from_points(const Vector3d& v, const std::vector<Vector3d>& w, double epsilon);
 
 
 #endif /* POINTS_SEPPLANE_H_ */
