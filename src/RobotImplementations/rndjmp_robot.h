@@ -88,11 +88,11 @@ public:
 				freeze_ = 0.5;
 				break;
 			case 6 :  // move with freeze 0.5 AND logging
-				s_ = 0.25;
-				m_ = 2.0/3.0*s_;
+				m_ = 0.13;
+				s_ = 0.13;
 				alpha_ = M_PI/4.0;
-				freeze_ = 0.5;
-				log_ = true;
+				freeze_ = 0;
+				pullSpinCompare_ = true;
 				break;
 		}
 
@@ -124,6 +124,7 @@ private:
 	double m3_;
 	double eps_;
 	bool log_;
+	bool pullSpinCompare_;
 };
 
 

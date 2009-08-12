@@ -56,6 +56,10 @@ std::set<boost::shared_ptr<Request> > RndJmpRobot::compute() {
 
 		// parameters for algorithm
 		double r = m_/2.0;
+
+		if (pullSpinCompare_)
+			r = 0.2;
+
 		double alpha = alpha_;
 
 		// calculate MinBall (center and diameter needed)
@@ -97,15 +101,17 @@ std::set<boost::shared_ptr<Request> > RndJmpRobot::compute() {
 		// randomize the moving direction
 		vector3d_rotate(tp, rand->get_value_normal(), rand->get_value_normal(), rand->get_value_normal());
 
-		// cut move to keep visibilities
-		MiscAlgorithms::cut_maxmove(tp, positions, v);
+		if (!pullSpinCompare_) {
+			// cut move to keep visibilities
+			MiscAlgorithms::cut_maxmove(tp, positions, v);
 
-		// check if new position is safe
-		double minDist = get_min_dist(tp, positions);
+			// check if new position is safe
+			double minDist = get_min_dist(tp, positions);
 
-		// if not then stand still
-		if (minDist < s_) {
-			tp[0]=tp[1]=tp[2]=0;
+			// if not then stand still
+			if (minDist < s_) {
+				tp[0]=tp[1]=tp[2]=0;
+			}
 		}
 
 		// build position request and insert into request set
