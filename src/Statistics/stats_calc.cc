@@ -7,6 +7,7 @@
 
 #include "stats_calc.h"
 #include "../Model/robot_data.h"
+#include "../Model/robot_identifier.h"
 #include "../ComputationalGeometry/miniball.h"
 #include "../ComputationalGeometry/miniball.cc"
 #include "../ComputationalGeometry/miniball_b.cc"
@@ -146,6 +147,31 @@ void StatsCalc::calculate(StatsCalcInData & data,
 		values.push_back(data.visib_->vis_graph_is_connected());
 		if (push_names)
 			names.push_back("visgraph_connected");
+	}
+
+	if (stats_cfg->is_max_mindist()) {
+		double max_minDist = 0.0;
+
+		for (unsigned int i=0; i<subset.size(); i++) {
+			double curMinDist = 999999999.0;
+
+			const View *view = subset[0]->view().lock().get();
+			std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(subset[i]->robot());
+
+			BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
+					Vector3d q = view->get_position(subset[i]->robot(), cur_id);
+					double curDist = vector3d_get_length(q, 2);
+					if (curDist < curMinDist)
+						curMinDist = curDist;
+			}
+
+			if (curMinDist > max_minDist)
+				max_minDist = curMinDist;
+		}
+
+		values.push_back(max_minDist);
+		if (push_names)
+			names.push_back("max_minDist");
 	}
 
 	// DO ALL THE CALCULATION

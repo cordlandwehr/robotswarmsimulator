@@ -178,6 +178,13 @@ public:
 	 */
 	const bool is_visgraph_connected() const;
 
+	/**
+	 * \return whether or not to log the maximum of all robots' minimum
+	 * distance to another in local view.
+	 */
+	const bool is_max_mindist() const;
+
+
 private:
 	/**
 	 * the datadumplevel used (one of DATADUMP_*)
@@ -200,6 +207,7 @@ private:
 	bool miniball_center_, miniball_radius_, miniball_movedist_, volume_quot_;
 	int  vel_cfg_;
 	bool visgraph_connected_;
+	bool max_mindist_;
 
 	/*
 	 * END Configuration-Block
