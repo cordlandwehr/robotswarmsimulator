@@ -97,7 +97,7 @@ void StatsConfig::init(std::map<std::string, std::string> &params) {
 const void StatsConfig::init_activate_all() {
 	num_robots_ = num_masters_ = num_slaves_ = true;
 	swarm_avg_pos_ = true;
-	miniball_center_ = miniball_radius_ = miniball_movedist_ = true;
+	miniball_center_ = miniball_radius_ = miniball_movedist_ = volume_quot_ = true;
 	vel_cfg_ = VecSetStats::ALL;
 	visgraph_connected_ = true;
 }
@@ -106,7 +106,7 @@ const void StatsConfig::init_activate_basic() {
 	num_robots_ = num_masters_ = num_slaves_ = false;
 	swarm_avg_pos_ = true;
 	miniball_center_ = false;
-	miniball_radius_ = miniball_movedist_ = true;
+	miniball_radius_ = miniball_movedist_ = volume_quot_ = true;
 	vel_cfg_ = 0;
 	visgraph_connected_ = false;
 }
@@ -114,7 +114,7 @@ const void StatsConfig::init_activate_basic() {
 const void StatsConfig::init_activate_none() {
 	num_robots_ = num_masters_ = num_slaves_ = false;
 	swarm_avg_pos_ = false;
-	miniball_center_ = miniball_radius_ = miniball_movedist_ = false;
+	miniball_center_ = miniball_radius_ = miniball_movedist_ = volume_quot_ = false;
 	vel_cfg_ = 0;
 	visgraph_connected_ = false;
 }
@@ -205,6 +205,10 @@ const bool StatsConfig::is_miniball_radius() const {
 
 const bool StatsConfig::is_miniball_movedist() const {
 	return miniball_movedist_;
+}
+
+const bool StatsConfig::is_volume_quot() const {
+	return volume_quot_;
 }
 
 const int StatsConfig::vel_cfg() const {

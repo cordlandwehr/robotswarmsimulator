@@ -163,6 +163,12 @@ public:
 	const bool is_miniball_movedist() const;
 
 	/**
+	 * \return whether or not to log the quotient of robots' total volume
+	 * (naively computed number*robotvolume) and the miniball volume.
+	 */
+	const bool is_volume_quot() const;
+
+	/**
 	 * \return configuration-flags for velocities' NumSetStats
 	 */
 	const int vel_cfg() const;
@@ -191,7 +197,7 @@ private:
 	 */
 	bool num_robots_, num_masters_, num_slaves_;
 	bool swarm_avg_pos_;
-	bool miniball_center_, miniball_radius_, miniball_movedist_;
+	bool miniball_center_, miniball_radius_, miniball_movedist_, volume_quot_;
 	int  vel_cfg_;
 	bool visgraph_connected_;
 

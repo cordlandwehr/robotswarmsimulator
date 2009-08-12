@@ -79,7 +79,7 @@ void StatsCalc::calculate(StatsCalcInData & data,
 		}
 	}
 
-	if (stats_cfg->is_miniball_center() || stats_cfg->is_miniball_radius() || stats_cfg->is_miniball_movedist()) {
+	if (stats_cfg->is_miniball_center() || stats_cfg->is_miniball_radius() || stats_cfg->is_miniball_movedist() || stats_cfg->is_volume_quot()) {
 		// calculate the miniball
 		Miniball<3> mb;
 		mb.check_in(*positions.get());
@@ -111,6 +111,18 @@ void StatsCalc::calculate(StatsCalcInData & data,
 			values.push_back(miniball_movedist);
 			if (push_names)
 				names.push_back("miniball_movedist");
+		}
+
+		if (stats_cfg->is_volume_quot()) {
+			double volRobots = subset.size() * 0.002197; // = 0.13^3
+			double volMinball = mb.radius() * mb.radius() * mb.radius();
+			if (volMinball == 0)
+				values.push_back(-1);
+			else
+				values.push_back(volRobots / volMinball);
+
+			if (push_names)
+				names.push_back("volume_quot");
 		}
 
 		mb.center().set_other(*data.prev_miniball_center[subset_id]);
