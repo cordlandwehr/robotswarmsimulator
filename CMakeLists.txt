@@ -37,7 +37,10 @@ include_directories(/usr/include/c++/4.3)
 add_subdirectory(luabind)
 add_subdirectory(src)
 add_subdirectory(src/UserInterfaces)
-add_subdirectory(src/Tests)
+if(CMAKE_BUILD_TYPE MATCHES Release)
+else(CMAKE_BUILD_TYPE MATCHES Release)
+	add_subdirectory(src/Tests)
+endif(CMAKE_BUILD_TYPE MATCHES Release)
 add_subdirectory(documentation)
 
 # package projectfiles in src/Projectfiles for release builds

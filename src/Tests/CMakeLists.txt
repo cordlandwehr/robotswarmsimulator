@@ -13,9 +13,7 @@ find_package(Boost 1.37 REQUIRED filesystem system thread unit_test_framework)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # find/configure Lua (statically linked for release builds)
-reverse_link_preference_in_release()
 find_package(Lua51 REQUIRED)
-reverse_link_preference_in_release()
 include_directories(${LUA_INCLUDE_DIR})
 
 # include directory for Luabind
@@ -44,7 +42,7 @@ else(APPLE)
 	if(LAPACK_LIBRARIES)
 		add_definitions(-DUSE_LAPACK)
 		set(LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-	endif(LAPACK_LIBRARIES)
+	endif(LAPACK_LIBRARIES)	
 endif(APPLE)
 
 # generate executable of the above source files and link it

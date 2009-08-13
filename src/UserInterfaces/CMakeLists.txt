@@ -24,7 +24,9 @@ find_package(OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 
 # find/configure glut
+reverse_link_preference_in_release()
 find_package(GLUT)
+reverse_link_preference_in_release()
 include_directories(${GLUT_INCLUDE_DIR})
 
 # find/configure Lua (statically linked for release builds)
@@ -57,11 +59,24 @@ elseif(WIN32)
 		set(LAPACK_LIBRARIES ${LAPACK_LIBRARY} ${LAPACK_BLAS_LIBRARY} ${LAPACK_F77_LIBRARY} ${LAPACK_I77_LIBRARY})
 	endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
 else(APPLE)
-	find_package(LAPACK) # do not rely on this for other OS, because it needs a working Fortran environment
-	if(LAPACK_LIBRARIES)
-		add_definitions(-DUSE_LAPACK)
-		set(LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-	endif(LAPACK_LIBRARIES)
+	if(CMAKE_BUILD_TYPE MATCHES Release)
+		# we can't use find_package(LAPACK) here (as for non-release builds), due to a bug #354463 of the lapack .deb package. Therefor, find the correct libraries manually.
+		reverse_link_preference_in_release()
+		find_library(LAPACK_LIBRARY lapack-3)
+		find_library(LAPACK_BLAS_LIBRARY blas-3)
+		find_library(LAPACK_GFORTRAN_LIBRARY gfortran)
+		reverse_link_preference_in_release()
+		if (LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_GFORTRAN_LIBRARY)
+			add_definitions(-DUSE_LAPACK)
+			set(LAPACK_LIBRARIES ${LAPACK_LIBRARY} ${LAPACK_BLAS_LIBRARY} ${LAPACK_GFORTRAN_LIBRARY})
+		endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_GFORTRAN_LIBRARY)
+	else(CMAKE_BUILD_TYPE MATCHES Release)
+		find_package(LAPACK) # do not rely on this for other OS, because it needs a working Fortran environment
+		if(LAPACK_LIBRARIES)
+			add_definitions(-DUSE_LAPACK)
+			set(LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+		endif(LAPACK_LIBRARIES)	
+	endif(CMAKE_BUILD_TYPE MATCHES Release)
 endif(APPLE)
 
 # generate executable of the above source files and link it
