@@ -423,3 +423,62 @@ BOOST_AUTO_TEST_CASE(separate_point_from_points_degenerated_point_test) {
     BOOST_CHECK_EQUAL(result(1),  1.1309);
     BOOST_CHECK_EQUAL(result(2), -12);
 }
+
+
+// Test that checks behaviour if the point-set given to separate_point_from_points contains contains several equal points.
+BOOST_AUTO_TEST_CASE(separate_point_from_points_several_equal_points_test) {
+    std::vector<Vector3d> points;
+    Vector3d point;
+    Vector3d check_point;
+    double epsilon = 1e-07;
+    Vector3d result;
+    
+    check_point(0) = 0;
+    check_point(1) = 0;
+    check_point(2) = 0;
+    
+    point(0) = 1;
+    point(1) = 0;
+    point(2) = 0;
+    points.push_back(point);
+    BOOST_CHECK_NO_THROW(separate_point_from_points(check_point, points, epsilon));
+    result = separate_point_from_points(check_point, points, epsilon);
+    BOOST_CHECK_EQUAL(result(0), 1);
+    BOOST_CHECK_EQUAL(result(1), 0);
+    BOOST_CHECK_EQUAL(result(2), 0);
+    
+    points.push_back(point);
+    BOOST_CHECK_NO_THROW(separate_point_from_points(check_point, points, epsilon));
+    result = separate_point_from_points(check_point, points, epsilon);
+    BOOST_CHECK_EQUAL(result(0), 1);
+    BOOST_CHECK_EQUAL(result(1), 0);
+    BOOST_CHECK_EQUAL(result(2), 0);
+    
+    points.push_back(point);
+    BOOST_CHECK_NO_THROW(separate_point_from_points(check_point, points, epsilon));
+    result = separate_point_from_points(check_point, points, epsilon);
+    BOOST_CHECK_EQUAL(result(0), 1);
+    BOOST_CHECK_EQUAL(result(1), 0);
+    BOOST_CHECK_EQUAL(result(2), 0);
+    
+    points.push_back(point);
+    BOOST_CHECK_NO_THROW(separate_point_from_points(check_point, points, epsilon));
+    result = separate_point_from_points(check_point, points, epsilon);
+    BOOST_CHECK_EQUAL(result(0), 1);
+    BOOST_CHECK_EQUAL(result(1), 0);
+    BOOST_CHECK_EQUAL(result(2), 0);
+    
+    points.push_back(point);
+    BOOST_CHECK_NO_THROW(separate_point_from_points(check_point, points, epsilon));
+    result = separate_point_from_points(check_point, points, epsilon);
+    BOOST_CHECK_EQUAL(result(0), 1);
+    BOOST_CHECK_EQUAL(result(1), 0);
+    BOOST_CHECK_EQUAL(result(2), 0);
+    
+    points.push_back(point);
+    BOOST_CHECK_NO_THROW(separate_point_from_points(check_point, points, epsilon));
+    result = separate_point_from_points(check_point, points, epsilon);
+    BOOST_CHECK_EQUAL(result(0), 1);
+    BOOST_CHECK_EQUAL(result(1), 0);
+    BOOST_CHECK_EQUAL(result(2), 0);
+}

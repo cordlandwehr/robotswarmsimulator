@@ -14,6 +14,14 @@
 
 // contains non-public helper methods
 namespace {
+    // mimics std::count template, which seems to have problems with the ublas vector templates
+    int count(std::vector<Vector3d>::const_iterator first, std::vector<Vector3d>::const_iterator last, const Vector3d& value) {
+        int i=0;
+        for (;first != last; ++first)
+            if (*first == value) ++i;
+        return i;
+    }
+    
     /**
      * Helper method for separate_point_from_points(). Returns the plane with maximum distance to v that separates v
      * from the given point. Method assumes v to be unequal to w.
@@ -196,11 +204,13 @@ namespace {
 
 const Vector3d separate_point_from_points(const Vector3d& v, const std::vector<Vector3d>& w, double epsilon) {
     // filter duplicates of v from w and convert input to cgal objects
+    // filter duplicates in w itself (workaround: CGAL has problems computing convex hull of several equal points)
     Point_3 cgal_v = CHAlgorithms::transform(v);
     std::vector<Point_3> filtered_cgal_w;
-    BOOST_FOREACH(const Vector3d& w_elem, w) {
-        if (boost::numeric::ublas::norm_2(w_elem - v) > epsilon)
-            filtered_cgal_w.push_back(CHAlgorithms::transform(w_elem));
+    std::vector<Vector3d>::const_iterator w_it;
+    for (w_it=w.begin(); w_it != w.end(); ++w_it) {
+        if (boost::numeric::ublas::norm_2(*w_it - v) > epsilon && count(w_it, w.end(), *w_it) == 1)
+            filtered_cgal_w.push_back(CHAlgorithms::transform(*w_it));
     }
     
     // check whether there are any w's left; if not, v was on same spot as w's --> return null vector
