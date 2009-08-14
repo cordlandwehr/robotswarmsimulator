@@ -7,12 +7,12 @@
 
 There are exactly four kinds of input files for the \RSS. This includes the project specification files and also the \Lua-script-files that define the robot behavior.
 \begin{enumerate}
-	\item The main projectfile containing information about the model. The extension of this type of file is "`.swarm"'.
-	\item A file containing robot information. The extension of this file is "`.robot"'.
-	\item A file containing obstacle information. The extension of this file is "`.obstacle"'.
-	\item \Lua\ file that describes the robot behavouir. The extension of this file is "`.lua"'.
+	\item The main projectfile containing information about the model. The extension of this type of file is ``.swarm''.
+	\item A file containing robot information. The extension of this file is ``.robot''.
+	\item A file containing obstacle information. The extension of this file is ``.obstacle''.
+	\item \Lua\ file that describes the robot behavouir. The extension of this file is ``.lua''.
 \end{enumerate}
-
+For easier handling of the robot and obstacle files it is also possible to take the ending ``.csv''. In this case the ending also must be part of the filename in the main projedtfile.
 
 \subsection{Main projectfile}
 The following specifications hold only for the main projectfile (with extension \texttt{.swarm}):
@@ -150,8 +150,8 @@ A main project file may look like:
 	ASG="ASYNCHRONOUS"
 	ROBOT_CONTROL="ROBOT_TYPE_ROBOT_CONTROL"
 	MASTER_VIEW="GLOBAL_VIEW"
-	SLAVE_VIEW="ONE_POINT_FORMATION_VIEW"
-	SLAVE_ONE_POINT_FORMATION_VIEW_RADIUS="5.0"
+	VIEW="ONE_POINT_FORMATION_VIEW"
+	ONE_POINT_FORMATION_VIEW_RADIUS="5.0"
 	
 	CAMERA_POSITION="0,0,0"
 	CAMERA_DIRECTION="1.5,0,0.5"
