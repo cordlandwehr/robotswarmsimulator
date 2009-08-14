@@ -378,11 +378,19 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 
 	//depending on which file to load, specify file extension
 	string filename;
-	if(load_robot_file)
-		filename = robot_filename_ + ".robot";
-	else
-		filename = obstacle_filename_ + ".obstacle";
-
+	if(load_robot_file) {
+		// this allows ending ".csv" for robot files.
+		if (robot_filename_.rfind(".csv")!=string::npos)
+			filename = robot_filename_;
+		else
+			filename = robot_filename_ + ".robot";
+	}
+	else {
+		if (obstacle_filename_.rfind(".csv")!=string::npos)
+			filename = obstacle_filename_;
+		else
+			filename = obstacle_filename_ + ".obstacle";
+	}
 	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
 	using boost::filesystem::path;
 	path file = path(project_filename_).parent_path() / filename;
