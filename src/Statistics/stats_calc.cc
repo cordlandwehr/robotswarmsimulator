@@ -174,6 +174,19 @@ void StatsCalc::calculate(StatsCalcInData & data,
 			names.push_back("max_minDist");
 	}
 
+	if (stats_cfg->is_max_origindist()) {
+		double maxDist = 0.0;
+		for (unsigned int j=0; j<(*positions.get()).size(); j++) {
+			double curDist = vector3d_get_length((*positions.get())[j], 2);
+			if (curDist > maxDist)
+				maxDist = curDist;
+		}
+
+		values.push_back(maxDist);
+		if (push_names)
+			names.push_back("max_originDist");
+	}
+
 	// DO ALL THE CALCULATION
 	// ...
 
