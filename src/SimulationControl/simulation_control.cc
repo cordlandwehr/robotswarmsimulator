@@ -258,7 +258,7 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 		simulation_kernel_->step();
 
 		if(limited_steps_) {
-			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_;
+			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::debug) << "completed step " << steps << "/" << number_of_steps_;
 			steps++;
 			if( steps > number_of_steps_) {
 				terminate();

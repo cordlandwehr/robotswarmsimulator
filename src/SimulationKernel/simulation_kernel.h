@@ -103,7 +103,7 @@ public:
 	 * If one is fullfilled it returns true. The simulation can then be terminated from
 	 * simulation control.
 	 */
-	bool terminate_condition(bool run_until_no_multiplicity);
+	bool terminate_condition(bool run_until_no_multiplicity) const;
 
 private:
 
@@ -222,6 +222,14 @@ private:
 	 * This method creates the obstacles using the information read from the obstacles input file.
 	 */
 	void create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+
+
+	/**
+	 * Used to do any last minute statistics before termination. We don't want to compute these
+	 * Statistics at all steps for runtime reasons.
+	 * TODO(craupach) this should integrated into statistics.
+	 */
+	void last_breath() const;
 
 	std::string camera_position_;
 	std::string camera_direction_;

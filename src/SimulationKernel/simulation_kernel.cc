@@ -149,6 +149,7 @@ void SimulationKernel::multistep(int steps) {
 
 
 void SimulationKernel::quit() {
+	last_breath();
 	if (stats_!=NULL)
 		stats_->quit();
 }
@@ -384,7 +385,7 @@ void SimulationKernel::dump_simulation() {
 	parser_->save_projectfiles(("dump_" + dumpnumber).c_str(), history_->get_newest().world_information());
 }
 
-bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) {
+bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) const {
 	bool result = false;
 	if (run_until_no_multiplicity) {
 		const TimePoint& newest = history_->get_newest();
@@ -411,5 +412,47 @@ bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) {
 	}
 
 	return result;
+}
+
+void SimulationKernel::last_breath() const {
+	const TimePoint& newest = history_->get_newest();
+	const WorldInformation& world_info = newest.world_information();
+	const std::vector<boost::shared_ptr<RobotData> >& robot_data_vec =
+	    world_info.robot_data();
+
+	double max_dist_x = 0.0;
+	double max_dist_y = 0.0;
+	double max_dist_z = 0.0;
+
+	// Computing the Regularity metric.
+	// This is a very naive approach.
+	BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data, robot_data_vec) {
+		BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data_b, robot_data_vec) {
+			if(&robot_data->robot() != &robot_data_b->robot()) {
+				double dist_x = (robot_data->position())(kXCoord) -
+				                (robot_data_b->position())(kXCoord);
+				if(dist_x < 0) dist_x *= -1;
+				max_dist_x = max(max_dist_x, dist_x);
+
+				double dist_y = (robot_data->position())(kYCoord) -
+								(robot_data_b->position())(kYCoord);
+				if(dist_y < 0) dist_y *= -1;
+				max_dist_y = max(max_dist_y, dist_y);
+
+				double dist_z = (robot_data->position())(kZCoord) -
+				                (robot_data_b->position())(kZCoord);
+				if(dist_z < 0) dist_z *= -1;
+				max_dist_z = max(max_dist_z, dist_z);
+			}
+		}
+	}
+
+	// This differs by the regularity metric as defined in
+	// "Local lattice construction and the Flow algorithm"
+	// but only by a constant factor c which is good enough for us.
+	double regularity = max(max_dist_x, max_dist_y);
+	regularity = max(regularity, max_dist_z);
+	std::cout << "REGULARITY: " << regularity;
+	// TODO(craupach) calculation of GAP metric
 }
 
