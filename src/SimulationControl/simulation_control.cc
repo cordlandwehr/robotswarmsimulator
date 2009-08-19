@@ -7,6 +7,7 @@
 #include "history.h"
 #include "time_point.h"
 #include <Utilities/console_output.h>
+#include <ctime>
 
 #include <iostream>
 
@@ -173,7 +174,8 @@ SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::share
 		                                                                                              limited_steps_(false),
 		                                                                                              number_of_steps_(0),
 		                                                                                              run_until_no_multiplicity_(run_until_no_multiplicity),
-		                                                                                              simulation_kernel_(simulation_kernel) {
+		                                                                                              simulation_kernel_(simulation_kernel),
+		                                                                                              totalcalctime_(0) {
 
 }
 
@@ -185,7 +187,8 @@ SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::share
 																						   limited_steps_(true),
 																						   run_until_no_multiplicity_(run_until_no_multiplicity),
 																						   number_of_steps_(number_of_steps),
-																						   simulation_kernel_(simulation_kernel) {
+																						   simulation_kernel_(simulation_kernel),
+																						   totalcalctime_(0) {
 
 }
 
@@ -255,10 +258,18 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 		unpaused_.wait();
 		unpaused_.post();
 
+		long curStepClock = clock();
+
 		simulation_kernel_->step();
 
+		curStepClock = (clock() - curStepClock);
+		totalcalctime_ += curStepClock;
+		double avgtime = totalcalctime_*1000.0/(CLOCKS_PER_SEC*(steps+1));
+		double curtime = curStepClock*1000.0/(CLOCKS_PER_SEC);
+
 		if(limited_steps_) {
-			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::debug) << "completed step " << steps << "/" << number_of_steps_;
+			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_ << " with " << curtime << " ms (avg is " << avgtime << " ms)";
+
 			steps++;
 			if( steps > number_of_steps_) {
 				terminate();

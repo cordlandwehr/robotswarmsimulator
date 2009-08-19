@@ -114,14 +114,14 @@ void SimulationKernel::init(const string& project_filename,
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	event_handler_->register_listener(asg_);
-	//if (create_statistics==true)
+	if (create_statistics==true)
 		event_handler_->register_listener(stats_);
 
 	// send initial worldinformation to statistics
-	//if (create_statistics==true) {
+	if (create_statistics==true) {
 		boost::shared_ptr<Event> foo = boost::shared_ptr<Event>();
 		stats_->update(*initial_time_point, foo);
-	//}
+	}
 
 	camera_position_ = params["CAMERA_POSITION"];
 	camera_direction_ = params["CAMERA_DIRECTION"];

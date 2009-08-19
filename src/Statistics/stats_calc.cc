@@ -156,6 +156,10 @@ void StatsCalc::calculate(StatsCalcInData & data,
 			double curMinDist = 999999999.0;
 
 			const View *view = subset[0]->view().lock().get();
+
+			if (view == 0)
+				std::cout << "Fehler in Statistics! *view ist 0!\n" << std::flush;
+
 			std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(subset[i]->robot());
 
 			BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
