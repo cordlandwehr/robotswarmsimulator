@@ -82,7 +82,7 @@ struct StatsCalcInData {
 class StatsCalc {
 public:
 
-	static const bool DEBUG = true;
+	static const bool DEBUG = false;
 
 	StatsCalc();
 	virtual ~StatsCalc();
