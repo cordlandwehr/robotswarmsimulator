@@ -6,6 +6,8 @@
  */
 
 #include "stats_calc.h"
+#include "float.h"
+
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
 #include "../ComputationalGeometry/miniball.h"
@@ -152,21 +154,17 @@ void StatsCalc::calculate(StatsCalcInData & data,
 	if (stats_cfg->is_max_mindist()) {
 		double max_minDist = 0.0;
 
-		for (unsigned int i=0; i<subset.size(); i++) {
-			double curMinDist = 999999999.0;
+		for (unsigned int i=0; i<positions->size(); i++) {
+			double curMinDist = DBL_MAX;
 
-			const View *view = subset[0]->view().lock().get();
+			for (unsigned int j=0; j<positions->size(); j++) {
+				if (i==j)
+					continue;
 
-			if (view == 0)
-				std::cout << "Fehler in Statistics! *view ist 0!\n" << std::flush;
+				double curDist = vector3d_distance(positions->at(i), positions->at(j), 2);
 
-			std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots = view->get_visible_robots(subset[i]->robot());
-
-			BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> cur_id, visible_robots) {
-					Vector3d q = view->get_position(subset[i]->robot(), cur_id);
-					double curDist = vector3d_get_length(q, 2);
-					if (curDist < curMinDist)
-						curMinDist = curDist;
+				if (curDist < curMinDist)
+					curMinDist = curDist;
 			}
 
 			if (curMinDist > max_minDist)
