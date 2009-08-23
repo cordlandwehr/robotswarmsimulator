@@ -44,6 +44,10 @@ public:
 			paramset_ = 5;
 		} else if (paramset=="6") {
 			paramset_ = 6;
+		} else if (paramset=="7") {
+			paramset_ = 7;
+		} else if (paramset=="8") {
+			paramset_ = 8;
 		} else {
 			std::cout << "unknown paramset: " << paramset << " set to default " << std::endl;
 			paramset_ = 1;
@@ -87,10 +91,24 @@ public:
 				alpha_ = M_PI/4.0;
 				freeze_ = 0.5;
 				break;
-			case 6 :  // move with freeze 0.5 AND logging
+			case 6 :  // experiments for pullspincompare
 				m_ = 0.13;
 				s_ = 0.13;
 				alpha_ = M_PI/4.0;
+				freeze_ = 0;
+				pullSpinCompare_ = true;
+				break;
+			case 7 :  // experiments for pullspincompare
+				m_ = 0.13;
+				s_ = 0.13;
+				alpha_ = M_PI/6.0;
+				freeze_ = 0;
+				pullSpinCompare_ = true;
+				break;
+			case 8 :  // experiments for pullspincompare
+				m_ = 0.13;
+				s_ = 0.13;
+				alpha_ = M_PI/8.0;
 				freeze_ = 0;
 				pullSpinCompare_ = true;
 				break;
