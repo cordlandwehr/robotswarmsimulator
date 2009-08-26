@@ -30,7 +30,7 @@ The following specifications hold only for the main projectfile (with extension 
 
 
 \subsubsection{Variables}
-The main project file contains the variables defined in Tables \ref{tab:mainvars} and \ref{tab:mainvars2}.
+The main project file contains the variables defined in Tables~\ref{tab:mainvars} and \ref{tab:mainvars2}.
 	
 Also the following should be considered:
 \begin{itemize}
@@ -61,6 +61,7 @@ Also the following should be considered:
 		\texttt{CAMERA\_POSITION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera position of startup Camera & \texttt{0,0,0}\\\hline
 		\texttt{CAMERA\_DIRECTION} &  \texttt{x,y,z}, where $x,y,z\in\mathbb{R}$& Initial camera direction of startup camera & \texttt{1,0,0}\\\hline
 		\texttt{CAMERA\_TYPE} &  $[$"FOLLOW"|"FREE"|"COG"$]$& Sets the startup camera& FOLLOW\\\hline
+		\texttt{STATISTICS\_FILEID} & string & ID for simulation output, is used instead of timestep\\\hline
 	\end{tabular}
 	\caption{Variables in the main project file}\label{tab:mainvars}
 \end{sidewaystable}
