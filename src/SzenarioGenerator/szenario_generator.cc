@@ -33,6 +33,7 @@
 #include "random_walk_formation_generator.h"
 #include "cluster_formation_generator.h"
 #include "poisson_disc_formation_generator.h"
+#include "uniform_on_sphere_formation_generator.h"
 
 #include "szenario_generator.h"
 
@@ -137,6 +138,8 @@ void ScenarioGenerator::init_formation_generator(const boost::program_options::v
 		formation_generator_.reset(new ClusterFormationGenerator());
 	} else if(vm.count("poisson-disc")) {
 		formation_generator_.reset(new PoissonDiscFormationGenerator());
+	} else if(vm.count("distr-uniform-on-sphere")) {
+		formation_generator_.reset(new UniformOnSphereFormationGenerator());
 	}
 	else // use default formation generator
 		formation_generator_.reset(new UniformFormationGenerator());

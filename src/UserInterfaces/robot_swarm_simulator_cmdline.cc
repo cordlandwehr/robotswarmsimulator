@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
 		("generate", "switch to generator mode")
 		("distr-pos-circle", po::value<double>(), "circle radius")
 		("distr-pos-circle-angle", po::value<double>()->default_value(15.0), "density of robots")
+		("distr-uniform-on-sphere", po::value<double>()->default_value(15.0), "sphere radius")
 		("seed", po::value<unsigned int>()->default_value(1), "seed for random number generator")
 		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
 		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
