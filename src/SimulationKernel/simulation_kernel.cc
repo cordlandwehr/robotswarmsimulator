@@ -427,7 +427,6 @@ void SimulationKernel::last_breath() const {
 
 	// Computing the Regularity metric.
 	// This is a very naive approach.
-	std::cout << "Beginning loop" << std::endl;
 	BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data, robot_data_vec) {
 		BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data_b, robot_data_vec) {
 			if(&robot_data->robot() != &robot_data_b->robot()) {
