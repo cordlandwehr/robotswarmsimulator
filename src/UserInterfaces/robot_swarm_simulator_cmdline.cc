@@ -103,7 +103,6 @@ int main(int argc, char** argv) {
 		("steps", po::value<unsigned int>(), "number of steps for blind mode")
 		("blind", "disables visualization")
 		("luaseed", po::value<unsigned int>(), "seed for global distribution generator used in lua.")
-		("statsfile", po::value<std::string>()->default_value(""), "prefix for the statisticsfiles (using timestamp by default)")
 		("run_until_no_multiplicity", "quits the simulation when no two robots occupy the same point");
 
 	// hidden option list, pssst ;-)

@@ -415,6 +415,7 @@ bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) const
 }
 
 void SimulationKernel::last_breath() const {
+	std::cout << "Last breath start" << std::endl;
 	const TimePoint& newest = history_->get_newest();
 	const WorldInformation& world_info = newest.world_information();
 	const std::vector<boost::shared_ptr<RobotData> >& robot_data_vec =
@@ -426,21 +427,22 @@ void SimulationKernel::last_breath() const {
 
 	// Computing the Regularity metric.
 	// This is a very naive approach.
+	std::cout << "Beginning loop" << std::endl;
 	BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data, robot_data_vec) {
 		BOOST_FOREACH(boost::shared_ptr<RobotData> robot_data_b, robot_data_vec) {
 			if(&robot_data->robot() != &robot_data_b->robot()) {
 				double dist_x = (robot_data->position())(kXCoord) -
-				                (robot_data_b->position())(kXCoord);
+				                (robot_data_b->position())(kXCoord) + 1;
 				if(dist_x < 0) dist_x *= -1;
 				max_dist_x = max(max_dist_x, dist_x);
 
 				double dist_y = (robot_data->position())(kYCoord) -
-								(robot_data_b->position())(kYCoord);
+								(robot_data_b->position())(kYCoord) + 1;
 				if(dist_y < 0) dist_y *= -1;
 				max_dist_y = max(max_dist_y, dist_y);
 
 				double dist_z = (robot_data->position())(kZCoord) -
-				                (robot_data_b->position())(kZCoord);
+				                (robot_data_b->position())(kZCoord) + 1;
 				if(dist_z < 0) dist_z *= -1;
 				max_dist_z = max(max_dist_z, dist_z);
 			}
@@ -452,7 +454,7 @@ void SimulationKernel::last_breath() const {
 	// but only by a constant factor c which is good enough for us.
 	double regularity = max(max_dist_x, max_dist_y);
 	regularity = max(regularity, max_dist_z);
-	std::cout << "REGULARITY: " << regularity;
+	std::cout << std::endl << "REGULARITY: " << regularity << std::endl;
 	// TODO(craupach) calculation of GAP metric
 }
 
