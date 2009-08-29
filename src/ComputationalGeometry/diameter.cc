@@ -6,149 +6,95 @@
  */
 
 #include "diameter.h"
-#include "ch_algorithms.h"
+#include "gdiam.h"
 #include "../Utilities/vector_arithmetics.h"
-#include <limits>
 
-// contains non-public helper methods
-namespace {
-	// returns the signed area of the triangle with vertices (x, y, z)
-	const double area(const Vector3d& x, const Vector3d& y, const Vector3d& z) {
-    	double a;
+std::vector<Vector3d> DiameterAlgorithms::compute_diametrical_pair(
+		const std::vector<Vector3d>& points, const double epsilon) {
+	const int n = points.size();
 
-    	const Vector3d u = y - x;
-    	const Vector3d v = z - x;
+	if (n == 0 || n == 1) {
+		Vector3d vector;
+		std::vector<Vector3d> result;
 
-    	Vector3d cross;
-    	cross(0) = u(1) * v(2) - u(2) * v(1);
-    	cross(1) = u(2) * v(0) - u(0) * v(2);
-    	cross(2) = u(0) * v(1) - u(1) * v(0);
+		if (n == 0) {
+			vector(0) = 0;
+			vector(1) = 0;
+			vector(2) = 0;
 
-    	double l = vector3d_get_length(cross, 2);
+			result.push_back(vector);
+			result.push_back(vector);
+		} else {
+			vector(0) = points.at(0)(0);
+			vector(1) = points.at(0)(1);
+			vector(2) = points.at(0)(2);
 
-    	// TODO calculate sign
+			result.push_back(vector);
+			result.push_back(vector);
+		}
 
-    	return l;
-    }
+		return result;
+	}
+
+	gdiam_real * pts;
+
+	pts = (gdiam_point) malloc(sizeof(gdiam_point_t) * n);
+	assert(pts != NULL);
+
+	for (int i = 0; i < n; i++) {
+		Vector3d v = points.at(i);
+		pts[i * 3 + 0] = v(0);
+		pts[i * 3 + 1] = v(1);
+		pts[i * 3 + 2] = v(2);
+	}
+
+	gdiam_real eps = (gdiam_real) epsilon;
+
+	GPointPair pair = gdiam_approx_diam_pair(pts, n, eps);
+
+	std::vector<Vector3d> return_pair;
+
+	Vector3d p, q;
+	p(0) = pair.p[0];
+	p(1) = pair.p[1];
+	p(2) = pair.p[2];
+	q(0) = pair.q[0];
+	q(1) = pair.q[1];
+	q(2) = pair.q[2];
+	return_pair.push_back(p);
+	return_pair.push_back(q);
+
+	return return_pair;
 }
 
-const double calculate_diameter(const std::vector<Vector3d>& w) {
-	return calculate_diameter(w, true);
+double DiameterAlgorithms::compute_diameter(
+		const std::vector<Vector3d>& points, const double epsilon) {
+	std::vector<Vector3d> pair = compute_diametrical_pair(points, epsilon);
+	return vector3d_distance(pair.at(0), pair.at(1));
 }
 
-const double calculate_diameter(const std::vector<Vector3d>& w, const bool efficient) {
-	const int w_size = w.size();
+double DiameterAlgorithms::compute_diameter_naive(
+		const std::vector<Vector3d>& points) {
+	const int n = points.size();
 
-	if (w_size == 0 || w_size == 1)
+	if (n == 0 || n == 1)
 		return 0;
 
-	double dist = std::numeric_limits<double>::max();
+	double dist = 0;
 	double t_dist;
 
-	if (efficient) {
-		std::vector<Point_3> ch_p;
-		std::vector<Vector3d> ch_points;
+	Vector3d u;
+	Vector3d v;
 
-		CGAL::Object ch; // define object to hold convex hull
-		std::vector<Point_3> cgal_w = CHAlgorithms::transform(w);
-		CGAL::convex_hull_3(cgal_w.begin(), cgal_w.end(), ch); // compute convex hull
-
-		// determine what kind of object it is
-		if (CGAL::object_cast<Segment_3>(&ch))
-		{
-			// convex hull is a segment
-			const Segment_3* seg = CGAL::object_cast<Segment_3>(&ch);
-			ch_p.push_back(seg->source());
-			ch_p.push_back(seg->target());
-		}
-		else if (CGAL::object_cast<Polyhedron_3>(&ch)) {
-			// convex hull is a polyhedron
-			const Polyhedron_3* poly = CGAL::object_cast<Polyhedron_3>(&ch);
-			int num = 0;
-			for (Polyhedron_3::Vertex_const_iterator v = poly->vertices_begin(); v != poly->vertices_end(); ++v) {
-			   	ch_p.push_back(v->point());
-			}
-		}
-		else if (CGAL::object_cast<Triangle_3>(&ch)) {
-			// convex hull is a triangle
-			const Triangle_3* triangle = CGAL::object_cast<Triangle_3>(&ch);
-			ch_p.push_back(triangle->vertex(0));
-			ch_p.push_back(triangle->vertex(1));
-			ch_p.push_back(triangle->vertex(2));
-		}
-		else if (CGAL::object_cast<Point_3>(&ch)) {
-			// convex hull is a point
-			const Point_3* point = CGAL::object_cast<Point_3>(&ch);
-			ch_p.push_back(*point);
-		}
-		else {
-			std::cout << "convex hull error!" << std::endl;
-		}
-
-	    ch_points = CHAlgorithms::transform(ch_p);
-
-	    // TODO
-	    for (int i = 0; i < ch_points.size(); i++)
-	    {
-	    	std::cout << ch_points.at(i) << " @ ";
-	    }
-
-		std::vector<Vector3d> pairs;
-		const Vector3d first = ch_points.at(0);
-		const Vector3d last = ch_points.at(ch_points.size() - 1);
-
-		int k = 0; // TODO k=1?
-		while (k < ch_points.size() - 1 && area(last, first, ch_points.at(k + 1)) > area(last, first, ch_points.at(k))) {
-			k++;
-		}
-
-	    std::cout << "STEP 2";
-
-		int i = 0;
-		int j = k;
-
-		while (i <= k && j < ch_points.size()) {
-			std::cout << "outer loop" << "i: " << i << " j: " << j << " k: " << k << "  ";
-			pairs.push_back(ch_points.at(i));
-			pairs.push_back(ch_points.at(j));
-			while (area(ch_points.at(i), ch_points.at(i + 1), ch_points.at(j + 1)) > area(ch_points.at(i), ch_points.at(i + 1), ch_points.at(j)) && j < ch_points.size() - 1) {
-				std::cout << "inner loop " << "i: " << i << " j: " << j << " k: " << k << "  ";
-				pairs.push_back(ch_points.at(i));
-				pairs.push_back(ch_points.at(j));
-				j++;
-			}
-			i++;
-		}
-
-	    std::cout << "STEP 3";
-
-		for (int i = 0; i < pairs.size() - 2; i += 2)
-		{
-			t_dist = vector3d_distance(pairs.at(i), pairs.at(i + 1));
-			if (t_dist < dist)
+	for (int i = 0; i < n - 1; i++) {
+		u = points.at(i);
+		for (int j = i + 1; j < n; j++) {
+			v = points.at(j);
+			t_dist = vector3d_distance(u, v);
+			if (t_dist > dist)
 				dist = t_dist;
 		}
-
-	    std::cout << "STEP 4";
-
-		return dist;
-	} else
-	{
-		Vector3d w_u = w.at(0);
-		Vector3d w_v = w.at(1);
-
-		for (int i = 0; i < w_size - 1; i++)
-		{
-			w_u = w.at(i);
-			for (int j = i + 1; j < w_size; j++)
-			{
-				w_v = w.at(j);
-				t_dist = vector3d_distance(w_u, w_v);
-				if (t_dist < dist)
-					dist = t_dist;
-			}
-		}
-
-		return dist;
 	}
+
+	return dist;
 }
