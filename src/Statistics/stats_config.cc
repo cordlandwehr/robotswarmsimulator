@@ -100,7 +100,7 @@ const void StatsConfig::init_activate_all() {
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = volume_quot_ = true;
 	vel_cfg_ = VecSetStats::ALL;
 	visgraph_connected_ = true;
-	max_mindist_ = max_origindist_ = true;
+	max_mindist_ = max_origindist_ = max_l1origindist_ = true;
 }
 
 const void StatsConfig::init_activate_basic() {
@@ -110,7 +110,7 @@ const void StatsConfig::init_activate_basic() {
 	miniball_radius_ = miniball_movedist_ = volume_quot_ = true;
 	vel_cfg_ = 0;
 	visgraph_connected_ = false;
-	max_mindist_ = max_origindist_ = false;
+	max_mindist_ = max_origindist_ = max_l1origindist_ = false;
 }
 
 const void StatsConfig::init_activate_none() {
@@ -119,7 +119,7 @@ const void StatsConfig::init_activate_none() {
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = volume_quot_ = false;
 	vel_cfg_ = 0;
 	visgraph_connected_ = false;
-	max_mindist_ = max_origindist_ = false;
+	max_mindist_ = max_origindist_ = max_l1origindist_ = false;
 }
 
 const int StatsConfig::datadump_level() const {
@@ -228,4 +228,8 @@ const bool StatsConfig::is_max_mindist() const {
 
 const bool StatsConfig::is_max_origindist() const {
 	return max_origindist_;
+}
+
+const bool StatsConfig::is_max_l1origindist() const {
+	return max_l1origindist_;
 }

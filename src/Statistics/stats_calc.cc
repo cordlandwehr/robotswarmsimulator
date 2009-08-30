@@ -5,6 +5,8 @@
  *      Author: sven
  */
 
+#include <cmath>
+
 #include "stats_calc.h"
 #include "float.h"
 
@@ -188,6 +190,19 @@ void StatsCalc::calculate(StatsCalcInData & data,
 		if (push_names)
 			names.push_back("max_originDist");
 	}
+    
+    if (stats_cfg->is_max_l1origindist()) {
+        double maxDist = 0.0;
+		for (unsigned int j=0; j<(*positions.get()).size(); j++) {
+			double curDist = std::abs((*positions.get())[j](0)) + std::abs((*positions.get())[j](1)) + std::abs((*positions.get())[j](2));
+			if (curDist > maxDist)
+				maxDist = curDist;
+		}
+        
+		values.push_back(maxDist);
+		if (push_names)
+			names.push_back("max_l1originDist");
+    }
 
 	// DO ALL THE CALCULATION
 	// ...

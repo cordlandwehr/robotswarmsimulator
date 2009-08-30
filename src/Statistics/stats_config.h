@@ -189,6 +189,12 @@ public:
 	 * to the origin.
 	 */
 	const bool is_max_origindist() const;
+    
+    /**
+     * \return whether or not to log the maximum of all robots' L1 distance
+     * to the origin.
+     */
+    const bool is_max_l1origindist() const;
 
 
 private:
@@ -213,7 +219,7 @@ private:
 	bool miniball_center_, miniball_radius_, miniball_movedist_, volume_quot_;
 	int  vel_cfg_;
 	bool visgraph_connected_;
-	bool max_mindist_, max_origindist_;
+	bool max_mindist_, max_origindist_, max_l1origindist_;
 
 	/*
 	 * END Configuration-Block
