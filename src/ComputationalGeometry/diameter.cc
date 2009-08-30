@@ -64,6 +64,8 @@ std::vector<Vector3d> DiameterAlgorithms::compute_diametrical_pair(
 	return_pair.push_back(p);
 	return_pair.push_back(q);
 
+	free(pts);
+
 	return return_pair;
 }
 
