@@ -214,10 +214,10 @@ const void GridPullSpinRobot::update_robot_field() {
             robot_field_max_y_ = robot_y;
     }
     
-    robot_field_min_x_--;
-    robot_field_min_y_--;
-    robot_field_max_x_++;
-    robot_field_max_y_++;
+    robot_field_min_x_ -= 2;
+    robot_field_min_y_ -= 2;
+    robot_field_max_x_ += 2;
+    robot_field_max_y_ += 2;
     robot_field_x_dim_size_ = static_cast<unsigned int>(robot_field_max_x_ - robot_field_min_x_ + 1);
     robot_field_y_dim_size_ = static_cast<unsigned int>(robot_field_max_y_ - robot_field_min_y_ + 1);
     
