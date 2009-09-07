@@ -22,11 +22,11 @@ void aiee() {
 	
 	/* ----- stolen lapack test (from http://hep.ph.liv.ac.uk/~hock/My_reports/CLAPACK/CLAPACK_notes.htm) ----- */
 	
-	long int nin = 5,    nout = 6;
-	long int  mmax = 10, nb = 64,     nmax = 8;
-	long int lda = mmax, ldvt = nmax, lwork = mmax+4*nmax+nb*(mmax+nmax);
-	long int ldu = 1;
-	long int  i, ifail, info, j, m, n;
+	integer nin = 5,    nout = 6;
+	integer  mmax = 10, nb = 64,     nmax = 8;
+	integer lda = mmax, ldvt = nmax, lwork = mmax+4*nmax+nb*(mmax+nmax);
+	integer ldu = 1;
+	integer  i, ifail, info, j, m, n;
 	double a[10*10],  dummy[1*1], s[8], vt[8*8], work[10+4*8+64*(10+8)];
 	char *str;
 	
