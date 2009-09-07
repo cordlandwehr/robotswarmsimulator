@@ -23,7 +23,7 @@
 
 
 -- load the (fixed) path followed by master robots
-master_moves    = dofile("4Clique04.dat")
+master_moves    = dofile("4Clique01.dat")
 master_moves_nr = table.getn(master_moves)
 
 
