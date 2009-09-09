@@ -270,56 +270,10 @@ During the simulation it is possible to interact with the simulation in differen
 At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
 
 \section{Create Robot Algorithms for the \RSS}
-There are two ways to define a new robot. One way is to write a subclass of \texttt{Robot} and add a new condition in \texttt{factories.cc}. The other way is to define the robot algorithm by the {\sffamily Lua} scripting language and to load the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for small numbers of robots. Thus, for robot swarms of sizes greater than 500 robots you will (on standard computers) recognize a lack of performance.
+There are two ways to define a new robot algorithm for your simulations. One way is to write a subclass of \texttt{Robot} and add a new condition in \texttt{factories.cc} (for this please confer the Implementations Guide). The other way is to define your robot algorithm by scripting it in the {\sffamily Lua} scripting language and to load the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for a small number of robots. Thus, for robot swarms of sizes greater than 500 to 1000 robots you will (on standard computers) recognize a major lack of performance.
 
 \subsection{Create Robot Algorithms by Lua Scripts}\index{Lua}
 For information on how to write \Lua scripts please visit \url{http://www.lua.org} and use the documentation presented there. For interacting the environment \Lua scripts may access the following functions and constants (if allowed by the current view and if the according request handlers are set):
-
-\paragraph{Lua Functions}
-%TODO(cola) wee need to document ALL of these functions :/
-
-\begin{description}
-	\item [\texttt{get\_visible\_robots()}] Returns the array of visible robots.
-	\item [\texttt{get\_visible\_obstacles()}] Returns the array of visible obstacles.
-	\item [\texttt{get\_visible\_markers()}] Returns the array of visible markers.
-	\item [\texttt{get\_position(<robot>)}] Returns the position of the calling robot as a Vector3d.
-	\item [\texttt{get\_marker\_information(<robot>)}] Returns the MarkerInformation of the calling\linebreak robot.
-	\item [\texttt{get\_id(<robot>)}] Returns the identifier of the calling robot.
-	\item [\texttt{get\_robot\_acceleration(<robot>)}] Returns the acceleration of the calling robot as Vector3d.
-	\item [\texttt{get\_robot\_coordinate\_system\_axis(<robot>)}] Returns the coordinate system of the calling robot as a CoordinateSystem.
-	\item [\texttt{get\_robot\_type(<robot>)}] Returns the type of the calling robot as a RobotType.
-	\item [\texttt{get\_robot\_status(<robot>)}] Returns the status of the calling robot as a RobotStatus.
-	\item [\texttt{is\_point\_in\_obstacle(<obstacle>, <point>)}] Returns true iff the given point of\linebreak type Vector3d is within the given obstacle.
-	\item [\texttt{get\_box\_depth(<box>)}] Returns the depth of the given box as a double.
-	\item [\texttt{get\_box\_width(<box>)}] Returns the width of the given box as a double.
-	\item [\texttt{get\_box\_height(<box>)}] Returns the height of the given box as a double.
-	\item [\texttt{get\_sphere\_radius(<sphere>)}] Returns the radius of the given sphere as a double.
-	\item [\texttt{is\_box\_identifier(<identifier>)}] Returns true iff the given identifier is an identifier of a box.
-	\item [\texttt{is\_sphere\_identifier(<identifier>)}] Returns true iff the given identifier is an identifier of a sphere.
-	\item [\texttt{add\_acceleration\_request(<Vector3d>)}] 
-	\item [\texttt{add\_position\_request(<Vector3d>)}]
-	\item [\texttt{add\_velocity\_request(<Vector3d>)}]
-	\item [\texttt{add\_marker\_request(<marker>)}]
-	\item [\texttt{add\_type\_change\_request(<type>)}]
-	\item [\texttt{add\_color\_change\_request(<number>)}]
-	\item [\texttt{get\_own\_identifier()}]
-\end{description}
-
-\paragraph{Geometry Package}
-\begin{description}
-	\item [\texttt{Geometry.is\_in\_smallest\_bbox(<vector of Vector3d>,<Vector3d>)}]
-	\item [\texttt{Geometry.compute\_distance(<Vector3d, Vector3d>)}]
-	\item [\texttt{Geometry.compute\_cog(<vector of Vector3d>)}]
-	\item [\texttt{Geometry.compute\_cminiball(<vector of Vector3d>)}] Computes the center of the miniball around the given points.
-	\item [\texttt{Geometry.sort\_vectors\_by\_length(<vector of Vector3d>)}] Sorts Vector3d points by distance to origin
-\end{description}
-
-
-\paragraph{\Lua Constants}
-\begin{description}
-	\item [\texttt{RobotType}] \texttt{SLAVE, MASTER}
-	\item [\texttt{RobotStatus}] \texttt{SLEEPING, READY}
-\end{description}
 
 \paragraph{Special Variable Types}
 \begin{description}
@@ -341,8 +295,128 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 	\begin{itemize}
 		\item Operators: \texttt{x\_axis, y\_axis, z\_axis}
 	\end{itemize}
-
 \end{description}
+
+\paragraph{\Lua Constants}
+\begin{description}
+	\item [\texttt{RobotType}] \texttt{SLAVE, MASTER}
+	\item [\texttt{RobotStatus}] \texttt{SLEEPING, READY}
+\end{description}
+
+\paragraph{General Lua Functions for Environment information}
+
+\begin{description}
+	\item [\texttt{TABLE get\_visible\_robots()}] 
+		Returns visible robots as array of type table.
+		
+	\item [\texttt{TABLE get\_visible\_obstacles()}] 
+		Returns visible obstacles as array of type table.
+		
+	\item [\texttt{TABLE get\_visible\_markers()}] 
+		Returns visible markers as array of type table.
+		
+	\item [\texttt{VECTOR3D get\_position(INTEGER <robot>)}] 
+		Returns the position of the calling robot as a Vector3d. As input the robot identifier is expected.
+		
+	\item [\texttt{VECTOR3D get\_marker\_information(INTEGER <robot>)}] 
+		Returns the MarkerInformation of the calling\linebreak robot. Expects robot identifier as input.
+		
+	\item [\texttt{INTEGER get\_id(INTEGER <robot>)}] 
+		Returns the ID as given in robot-file of the calling robot. Expects robot identifier as input.
+		
+	\item [\texttt{INTEGER get\_own\_identifier()}]
+		This function returns the identifier of the calling robot. It is only included for consistancy, the answer is always $0$.
+		
+	\item [\texttt{VECTOR3D get\_robot\_acceleration(INTEGER <robot>)}] 
+		Returns the acceleration of the calling robot as Vector3d. Expects robot identifier as input.
+		
+	\item [\texttt{COORDINATESYSTEM get\_robot\_coordinate\_system\_axis(INTEGER <robot>)}] 
+		Returns the coordinate system of the calling robot as a CoordinateSystem. Expects robot identifier as input.
+		
+	\item [\texttt{ROBOTTYPE get\_robot\_type(INTEGER <robot>)}] 
+		Returns the type of the calling robot as RobotType. Expects robot identifier as input.
+		
+	\item [\texttt{STRING get\_robot\_status(INTEGER <robot>)}] 
+		Returns the status of the calling robot as a RobotStatus. Expects robot identifier as input.
+		
+	\item [\texttt{BOOLEAN is\_point\_in\_obstacle(INTEGER <obstacle>, VECTOR3D<point>)}] 
+		Returns true iff the given point is within the given obstacle.
+		
+	\item [\texttt{DOUBLE get\_box\_depth(INTEGER <obstacle identifier>)}] 
+		Returns the depth of the given box as a double. Expects obstacle identifier for box.
+		
+	\item [\texttt{DOUBLE get\_box\_width(INTEGER <obstacle identifier>)}] 
+		Returns the width of the given box as a double. Expects obstacle identifier for box.
+		
+	\item [\texttt{DOUBLE get\_box\_height(INTEGER <obstacle identifier>)}] 
+		Returns the height of the given box as a double. Expects obstacle identifier for box.
+		
+	\item [\texttt{DOUBLE get\_sphere\_radius(INTEGER <obstacle identifier>)}] 
+		Returns the radius of the given sphere as a double. Expects obstacle identifier for sphere.
+	
+	\item [\texttt{BOOLEAN is\_box\_identifier(INTEGER <obstacle identifier>)}] 
+		Returns true iff the given identifier is an identifier of a box.
+		
+	\item [\texttt{BOOLEAN is\_sphere\_identifier(INTEGER <obstacle dentifier>)}] 
+		Returns true iff the given identifier is an identifier of a sphere.
+
+
+\paragraph{Change Environment by Requests}	
+The following functions can be used to add an request, that is performed during the movement phase.
+
+	\item [\texttt{VOID add\_acceleration\_request(VECTOR3D)}] 
+		Set new acceleration. Will only be performed if robot is allowed to.
+		
+	\item [\texttt{VOID add\_position\_request(VECTOR3D)}]
+		Set new position. Will only be performed if robot is allowed to.
+		
+	\item [\texttt{VOID add\_velocity\_request(VECTOR3D)}]
+		Set new velocity. Will only be perforemd if robot is allowed to.
+		
+	\item [\texttt{VOID add\_marker\_request(MARKER)}]
+		Add new marker.
+		
+	\item [\texttt{VOID add\_type\_change\_request(INTEGER <robotType>)}]
+		Change the robot type to another value. Only predefined values are allowed.
+		
+	\item [\texttt{VOID add\_color\_change\_request(INTEGER <color>)}]
+		Change robot color. Confer input file specifications on allowed values.
+\end{description}
+
+
+\paragraph{Geometry Package}
+\begin{description}
+	\item [\texttt{BOOLEAN Geometry.is\_in\_smallest\_bbox(TABLE<VECTOR3D> <points for box>, VECTOR3D <test point>)}]
+		Returns true if given point is contained in smallest bounding box of given vectors.
+		
+	\item [\texttt{DOUBLE Geometry.compute\_distance(VECTOR3D <a>, VECTOR3D <b>)}]
+		Returns the Eucledian distance between two points $a$ and $b$.
+		
+	\item [\texttt{VECTOR3D Geometry.compute\_cog(TABLE<VECTOR3D> <table of points>)}]
+		Returns the center of gravity of a given point set.
+
+	\item [\texttt{VECTOR3D Geometry.compute\_cminiball(TABLE<VECTOR3D> <table of points>)}] 
+		Computes the center of the miniball around the given points.
+		
+	\item [\texttt{TABLE<VECTOR3D> Geometry.sort\_vectors\_by\_length(TABLE<VECTOR3D> <table of points>)}] 
+		Sorts points by Eucledian distance to origin.
+		
+	\item [\texttt{BOOLEAN Geometry.separate\_point\_from\_points(VECTOR3D <point>, TABLE<VECTOR3D> <table of points>)}] 
+		Tests if point is linearly separable from other points. Returns boolean.		
+		
+	\item [\texttt{BOOLEAN Geometry.point\_contained\_in\_convex\_hull\_of\_points(VECTOR3D <point>, TABLE<VECTOR3D> <table of points>)}] 
+		Returns true iff point is contained in convex hull of given set of points.
+		
+	\item [\texttt{VECTOR3D Geometry.compute\_cog\_of\_ch\_of\_points(TABLE<VECTOR3D> <table of points>)}] 
+		Returns center of gravity of convex hull of given set of points.
+		
+	\item [\texttt{VECTOR3D Geometry.random\_point\_in\_ch(TABLE<VECTOR3D> <table of points>)}] 
+		Returns random point in convex hull of given set of points.
+%TODO: missing is calculate_shim_plate, no idea what it does ;)
+\end{description}
+
+%TODO subsection for random point generation, bindings from christoph
+
 
 \subsubsection{Example Algorithm}
 Listing~\ref{lst:cog-lua} shows you how to formulate the COG-algorithm in \Lua.
