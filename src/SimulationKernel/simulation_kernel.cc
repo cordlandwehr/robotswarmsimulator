@@ -452,8 +452,9 @@ void SimulationKernel::last_breath() const {
 	// "Local lattice construction and the Flow algorithm"
 	// but only by a constant factor c which is good enough for us.
 	double regularity = max(max_dist_x, max_dist_y);
+	double gaps = max_dist_x * max_dist_y - robot_data_vec.size();
 	regularity = max(regularity, max_dist_z);
 	std::cout << std::endl << "REGULARITY: " << regularity << std::endl;
-	// TODO(craupach) calculation of GAP metric
+	std::cout << std::endl << "GAPS: " << gaps << std::endl;
 }
 
