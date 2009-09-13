@@ -320,8 +320,7 @@ int main(int argc, char** argv) {
 				visualizer->set_cog_cam_pos( cam_pos );
 			}
 
-
-
+			// Start the simulation thread.
 			sim_control->start_simulation();
 
 			// enter visualization's main-loop

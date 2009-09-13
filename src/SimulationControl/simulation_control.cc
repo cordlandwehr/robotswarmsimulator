@@ -63,15 +63,14 @@ void SimulationControl::start_simulation() {
 		boost::thread simulation_thread(boost::bind(&SimulationKernelFunctor::loop, simulation_kernel_functor_));
 		simulation_thread_.swap(simulation_thread);
 
-		//fetch first two WorldInformations
+		//fetch the first two WorldInformations
 		current_time_point_ = history_->get_oldest_unused(true);
 		next_time_point_ = history_->get_oldest_unused(true);
 
 		//some initialization
 		current_processing_time_ = current_time_point_->world_information().time() * processing_time_factor_; ;
 		last_process_simulation_time_ = boost::posix_time::microsec_clock::local_time();
-	}
-	else {
+	} else {
 		simulation_kernel_functor_->unpause();
 	}
 }
@@ -103,7 +102,7 @@ void SimulationControl::exit_single_step_mode() {
 void SimulationControl::terminate_simulation() {
 	if(is_thread_started(simulation_thread_)) {
 		simulation_kernel_functor_->terminate();
-		//note: terminate above will have no effect if the thread is blocked, so unblock it
+		// note: terminate above will have no effect if the thread is blocked, so unblock it
 		history_->get_oldest_unused();
 
 		// simulation thread has up to three seconds to shut down; if it does not, issue a warning
@@ -135,9 +134,9 @@ void SimulationControl::process_simulation() {
 	while(current_simulation_time >= next_time_point_->world_information().time()) {
 		boost::shared_ptr<TimePoint> new_time_point = history_->get_oldest_unused();
 		if(!new_time_point) {
-			//try_wait failed
-			//proceed processing_time to next_world_information time instead of setting it to new_processing_time
-			//-> pauses processing_time at next_world_information_->time()
+			// try_wait failed
+			// proceed processing_time to next_world_information time instead of setting it to new_processing_time
+			// -> pauses processing_time at next_world_information_->time()
 			current_processing_time_ = next_time_point_->world_information().time() * processing_time_factor_;
 			draw_current_simulation();
 			return;
@@ -175,9 +174,7 @@ SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::share
 		                                                                                              number_of_steps_(0),
 		                                                                                              run_until_no_multiplicity_(run_until_no_multiplicity),
 		                                                                                              simulation_kernel_(simulation_kernel),
-		                                                                                              totalcalctime_(0) {
-
-}
+		                                                                                              totalcalctime_(0) {}
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
 																	bool run_until_no_multiplicity,
@@ -188,9 +185,7 @@ SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::share
 																						   run_until_no_multiplicity_(run_until_no_multiplicity),
 																						   number_of_steps_(number_of_steps),
 																						   simulation_kernel_(simulation_kernel),
-																						   totalcalctime_(0) {
-
-}
+																						   totalcalctime_(0) {}
 
 void SimulationControl::increase_processing_time_exp(){
 	if (processing_time_delta_<1000)	{
@@ -264,8 +259,8 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 
 		curStepClock = (clock() - curStepClock);
 		totalcalctime_ += curStepClock;
-		double avgtime = totalcalctime_*1000.0/(CLOCKS_PER_SEC*(steps+1));
-		double curtime = curStepClock*1000.0/(CLOCKS_PER_SEC);
+		double avgtime = totalcalctime_ * 1000.0/(CLOCKS_PER_SEC * (steps+1));
+		double curtime = curStepClock * 1000.0/(CLOCKS_PER_SEC);
 
 		if(limited_steps_) {
 			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_ << " with " << curtime << " ms (avg is " << avgtime << " ms)";

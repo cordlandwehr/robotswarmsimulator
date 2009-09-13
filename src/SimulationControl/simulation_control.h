@@ -102,9 +102,9 @@ public:
 	 */
 	void dump_simulation();
 
-	std::string camera_position(){return camera_position_; }
-	std::string camera_direction(){ return camera_direction_;}
-	std::string camera_type(){ return camera_type_;}
+	std::string camera_position(){ return camera_position_; }
+	std::string camera_direction(){ return camera_direction_; }
+	std::string camera_type(){ return camera_type_; }
 
 private:
 	/**
@@ -132,8 +132,6 @@ private:
 		 */
 		void unpause();
 
-
-
 		/**
 		 * pauses the simulation thread using a semaphor
 		 */
@@ -158,7 +156,6 @@ private:
 		 * Used to tell the Simkernel to save the current configuration
 		 */
 		void dump_simulation();
-
 
 	private:
 		/**
@@ -192,7 +189,7 @@ private:
 
 
 private:
-	//TODO (dwonsich): processing_time_factor_ == \Delta in paper; Maybe should be moved to somewhere else
+	// processing_time_factor_ == \Delta in paper
 	double processing_time_factor_;
 	double current_processing_time_;
 
