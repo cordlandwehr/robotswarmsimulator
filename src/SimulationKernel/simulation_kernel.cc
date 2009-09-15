@@ -365,6 +365,7 @@ void SimulationKernel::setup_vectormodifier(boost::shared_ptr<VectorRequestHandl
 				vecmod.reset(new VectorTrimmer(42.0));
 				request_handler->add_vector_modifier(vecmod);
 				break;
+			case VECTOR_DIFFERENCE_TRIMMER:
 				vecmod.reset(new VectorDifferenceTrimmer(42.0));
 				request_handler->add_vector_modifier(vecmod);
 				break;

@@ -17,6 +17,8 @@ class RobotData;
  */
 class FormationGenerator {
 public:
+	virtual ~FormationGenerator() {};
+	
 	/**
 	 * initializes the formation generator with parameters from the given map
 	 */

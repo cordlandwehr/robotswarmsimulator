@@ -17,6 +17,7 @@
 
 #include "../Views/view.h"
 
+#include "../Utilities/unsupported_operation_exception.h"
 #include "../Utilities/vector_arithmetics.h"
 
 #include "../ComputationalGeometry/point_algorithms.h"
@@ -158,6 +159,8 @@ double PotRobot::calc_pot(Vector3d & me, std::vector<Vector3d> & others) {
 			return calc_pot_3(me, others);
 		case 4 :
 			return calc_pot_4(me, others);
+		default:
+			throw UnsupportedOperationException("Given potential function ID is unknown.");
 	}
 }
 

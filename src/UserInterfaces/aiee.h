@@ -63,8 +63,8 @@ void aiee() {
 	a[5+3*lda] = -2.57;
 	
 	// print input matrix
-	printf("\nOriginal matrix A\n\n");
-	printf("Dimension:   %d    %d\n\n", m, n);
+	std::cout << std::endl << "Original matrix A" << std::endl << std::endl;
+	std::cout << "Dimension: " << m << "\t" << n << std::endl << std::endl;
 	for (i=0; i<m; i++) {
 		for (j=0; j<n; j++) printf("%lf    ", a[i+j*lda]);
 		printf("\n");

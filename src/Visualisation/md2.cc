@@ -69,7 +69,7 @@ bool MD2::load_model_file(const std::string & model_file ){
 	std::fseek( fp, 0, SEEK_END );
 
 	std::size_t file_size = std::ftell(fp);
-	std::printf("file size: %i \n", file_size );
+	std::cout << "file size: " << file_size << std::endl;
 
 	std::fseek( fp, 0, SEEK_SET );
 	boost::scoped_ptr<Header> header( new Header );
@@ -123,8 +123,8 @@ bool MD2::load_model_file(const std::string & model_file ){
 	std::fread( buffer.get(), sizeof(STIndex), header->num_tex_coords , fp);
 
 	STIndex * st_ptr = reinterpret_cast<STIndex* >( buffer.get() );
-	for(unsigned int i  = 0; i < num_st_; i++ ){
-		std::printf("s: %i   t: %i\n");
+	for(unsigned int i  = 0; i < num_st_; i++ ) {
+		std::cout << "s: " << st_index_[i].s << "\tt: " << st_ptr[i].t << std::endl;
 		st_index_[i].s = 1.0 * st_ptr[i].s / header->skin_width;
 		st_index_[i].t = 1.0 - 1.0 * st_ptr[i].t / header->skin_height;
 	}
