@@ -55,7 +55,7 @@ void PoissonDiscFormationGenerator::init(const boost::program_options::variables
 void PoissonDiscFormationGenerator::distribute(std::vector< boost::shared_ptr<RobotData> >& robotDataList) {
 	sampler_->complete();
 	sampler_->maximize();
-	int num_points_generated = sampler_->points.size();
+	std::size_t num_points_generated = sampler_->points.size();
 
 	if(num_points_generated < robotDataList.size()) {
 		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error)  << "";

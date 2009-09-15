@@ -127,7 +127,7 @@ double RndJmpRobot::get_min_dist(Vector3d & tp, std::vector<Vector3d> & position
 	// assuming that robot itself with (0,0,0) is at positions[0]
 
 	double minDist = vector3d_distance(tp, positions[1], 2);
-	for (int i=2; i<positions.size(); i++) {
+	for (std::size_t i=2; i<positions.size(); i++) {
 		double curDist = vector3d_distance(tp, positions[i], 2);
 		if(curDist < minDist)
 			minDist = curDist;

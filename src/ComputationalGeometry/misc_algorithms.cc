@@ -173,7 +173,7 @@ boost::tuple<Vector3d,Vector3d> MiscAlgorithms::calculate_shim_plane(const std::
 void MiscAlgorithms::cut_trivial(Vector3d & tp, std::vector<Vector3d> & positions, double v) {
 	// calculate maximal distance to any robot
 	double maxDist = 0.0;
-	for (int i=0; i<positions.size(); i++) {
+	for (std::size_t i=0; i<positions.size(); i++) {
 		double dist = vector3d_distance(positions[0], positions[i]);
 		if (dist > maxDist)
 			maxDist = dist;
@@ -190,7 +190,7 @@ void MiscAlgorithms::cut_maxmove(Vector3d & tp, std::vector<Vector3d> & position
 	bool DEBUG = false;
 
 	double maxDistStart = 0.0;
-	for (int i=0; i<positions.size(); i++) {
+	for (std::size_t i=0; i<positions.size(); i++) {
 		double curDist = vector3d_distance(tp, positions[i], 2);
 		if(curDist > maxDistStart)
 			maxDistStart = curDist;
@@ -198,7 +198,7 @@ void MiscAlgorithms::cut_maxmove(Vector3d & tp, std::vector<Vector3d> & position
 
 	double min_t = 1.0;
 
-	for (int i=0; i<positions.size(); i++) {
+	for (std::size_t i=0; i<positions.size(); i++) {
 		Vector3d q = positions[i];
 		if(q[0]==0 && q[1]==0 && q[2]==0)
 			continue;
@@ -249,7 +249,7 @@ void MiscAlgorithms::cut_maxmove(Vector3d & tp, std::vector<Vector3d> & position
 
 	// check new maxDist
 	double maxDistEnd = 0.0;
-	for (int i=0; i<positions.size(); i++) {
+	for (std::size_t i=0; i<positions.size(); i++) {
 		double curDist = vector3d_distance(tp, positions[i], 2);
 		if(curDist > maxDistEnd)
 			maxDistEnd = curDist;

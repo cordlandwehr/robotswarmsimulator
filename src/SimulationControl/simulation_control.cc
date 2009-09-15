@@ -19,8 +19,8 @@ namespace {
 }
 
 SimulationControl::SimulationControl() : processing_time_factor_(1000), current_processing_time_(0),
-                                         processing_time_delta_(1), single_step_mode_(false),
-                                         limit_processing_time_(0), processing_time_paused_(false) {
+                                         processing_time_delta_(1), limit_processing_time_(0),
+                                         single_step_mode_(false), processing_time_paused_(false) {
 
 }
 
@@ -169,23 +169,23 @@ double SimulationControl::compute_new_processing_time() {
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
 		                                                            bool run_until_no_multiplicity) : terminated_(false),
 		                                                                                              paused_(false),
-		                                                                                              unpaused_(1),
 		                                                                                              limited_steps_(false),
 		                                                                                              number_of_steps_(0),
+		                                                                                              totalcalctime_(0),
 		                                                                                              run_until_no_multiplicity_(run_until_no_multiplicity),
-		                                                                                              simulation_kernel_(simulation_kernel),
-		                                                                                              totalcalctime_(0) {}
+		                                                                                              unpaused_(1),
+		                                                                                              simulation_kernel_(simulation_kernel) {}
 
 SimulationControl::SimulationKernelFunctor::SimulationKernelFunctor(boost::shared_ptr<SimulationKernel> simulation_kernel,
 																	bool run_until_no_multiplicity,
                                                                     int number_of_steps) : terminated_(false),
 																						   paused_(false),
-																						   unpaused_(1),
 																						   limited_steps_(true),
-																						   run_until_no_multiplicity_(run_until_no_multiplicity),
 																						   number_of_steps_(number_of_steps),
-																						   simulation_kernel_(simulation_kernel),
-																						   totalcalctime_(0) {}
+																						   totalcalctime_(0),
+																						   run_until_no_multiplicity_(run_until_no_multiplicity),
+																						   unpaused_(1),
+																						   simulation_kernel_(simulation_kernel) {}
 
 void SimulationControl::increase_processing_time_exp(){
 	if (processing_time_delta_<1000)	{

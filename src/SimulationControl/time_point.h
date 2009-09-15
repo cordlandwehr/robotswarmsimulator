@@ -21,14 +21,14 @@
  */
 class TimePoint {
 public:
-	TimePoint() : world_information_locked_(false), statistics_locked_(false) {}
+	TimePoint() : statistics_locked_(false), world_information_locked_(false) {}
 	/**
 	 * copy constructor copies the world information and the statistical data
 	 * Note that a copy will always be locked (no modifications possible)
 	 */
 	TimePoint(const TimePoint& rhs) : world_information_(new WorldInformation(rhs.world_information())),
-	                                  world_information_locked_(true),
-	                                  statistics_locked_(true) {
+	                                  statistics_locked_(true),
+	                                  world_information_locked_(true) {
 		if(rhs.statistics_data_object_ptr()) {
 			statistics_data_object_ =
 			    boost::shared_ptr<StatisticsDataObject> (new StatisticsDataObject(rhs.statistics_data_object()));

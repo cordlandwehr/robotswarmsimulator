@@ -333,7 +333,7 @@ int main(int argc, char** argv) {
 			unsigned int history_length = vm["history-length"].as<unsigned int>();
 			while(!sim_control->is_simulation_finished()) {
 				// clean out history
-				for(int i = 0; i < history_length; i++) {
+				for(unsigned int i = 0; i < history_length; i++) {
 					sim_control->process_simulation();
 				}
 				// wait for the simulation thread to refill history

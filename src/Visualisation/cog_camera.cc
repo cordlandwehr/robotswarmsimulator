@@ -34,7 +34,7 @@ const float kSpeedUpf = 0.4;
 const float eps = 0.4;
 
 }
-CogCamera::CogCamera(): rot_theta_(1.0), rot_phi_(0.0), radius_(5.0){
+CogCamera::CogCamera(): rot_phi_(0.0), rot_theta_(1.0), radius_(5.0){
 
 	sphere_vec_(0)=1.0;
 	sphere_vec_(1) = 1.0;
