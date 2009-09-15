@@ -169,11 +169,6 @@ public:
 	const bool is_volume_quot() const;
 
 	/**
-	 * \return configuration-flags for velocities' NumSetStats
-	 */
-	const int vel_cfg() const;
-
-	/**
 	 * \return whether or not to log iff the visibility graph is connected
 	 */
 	const bool is_visgraph_connected() const;
@@ -189,7 +184,7 @@ public:
 	 * to the origin.
 	 */
 	const bool is_max_origindist() const;
-    
+
     /**
      * \return whether or not to log the maximum of all robots' L1 distance
      * to the origin.
@@ -217,7 +212,6 @@ private:
 	bool num_robots_, num_masters_, num_slaves_;
 	bool swarm_avg_pos_;
 	bool miniball_center_, miniball_radius_, miniball_movedist_, volume_quot_;
-	int  vel_cfg_;
 	bool visgraph_connected_;
 	bool max_mindist_, max_origindist_, max_l1origindist_;
 

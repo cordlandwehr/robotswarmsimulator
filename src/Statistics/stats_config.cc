@@ -8,7 +8,6 @@
 #include <string>
 
 #include "stats_config.h"
-#include "vecset_stats.h"
 
 StatsConfig::StatsConfig() {
 }
@@ -98,7 +97,6 @@ const void StatsConfig::init_activate_all() {
 	num_robots_ = num_masters_ = num_slaves_ = true;
 	swarm_avg_pos_ = true;
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = volume_quot_ = true;
-	vel_cfg_ = VecSetStats::ALL;
 	visgraph_connected_ = true;
 	max_mindist_ = max_origindist_ = max_l1origindist_ = true;
 }
@@ -108,7 +106,6 @@ const void StatsConfig::init_activate_basic() {
 	swarm_avg_pos_ = true;
 	miniball_center_ = false;
 	miniball_radius_ = miniball_movedist_ = volume_quot_ = true;
-	vel_cfg_ = 0;
 	visgraph_connected_ = false;
 	max_mindist_ = max_origindist_ = max_l1origindist_ = false;
 }
@@ -117,7 +114,6 @@ const void StatsConfig::init_activate_none() {
 	num_robots_ = num_masters_ = num_slaves_ = false;
 	swarm_avg_pos_ = false;
 	miniball_center_ = miniball_radius_ = miniball_movedist_ = volume_quot_ = false;
-	vel_cfg_ = 0;
 	visgraph_connected_ = false;
 	max_mindist_ = max_origindist_ = max_l1origindist_ = false;
 }
@@ -212,10 +208,6 @@ const bool StatsConfig::is_miniball_movedist() const {
 
 const bool StatsConfig::is_volume_quot() const {
 	return volume_quot_;
-}
-
-const int StatsConfig::vel_cfg() const {
-	return vel_cfg_;
 }
 
 const bool StatsConfig::is_visgraph_connected() const {

@@ -35,8 +35,6 @@
 
 #include "stats_config.h"
 #include "stats_out.h"
-#include "numset_stats.h"
-#include "vecset_stats.h"
 #include "statistics_data_object.h"
 
 struct StatsCalcInData {
@@ -104,17 +102,7 @@ private:
 	/**
 	 * pointer to the stats_cfg stored in StatsControl
 	 */
-	StatsConfig* stats_cfg;
-
-	/**
-	 * instance of NumSetStats used for some calculations
-	 */
-	NumSetStats num_stats;
-
-	/**
-	 * instance of VecSetStats used for some calculations
-	 */
-	VecSetStats vec_stats;
+	StatsConfig* stats_cfg_;
 };
 
 #endif /* STATS_CALC_H_ */
