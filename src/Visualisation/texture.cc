@@ -299,7 +299,9 @@ void Texture::load_bmp(){
 		return;
 	}
 
-	std::size_t bytes_read = std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
+	// TODO(peter): I guess the side effect is needed, but bytes_read itself not; please recheck and adapt as necessary
+	//std::size_t bytes_read = std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
+	std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
 
 
 	data_.reset(   new unsigned char[ bmp_info.biSizeImage ] );

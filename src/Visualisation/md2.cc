@@ -51,11 +51,8 @@ bool MD2::load_model(const std::string & model_file ){
 
 }
 
-void MD2::try_setup_vbo(){
-
+void MD2::try_setup_vbo() {
 	draw_type = DRAW_LISTS;
-
-	int extension_available = glutExtensionSupported("GL_ARB_vertex_buffer_object");
 }
 
 
@@ -98,7 +95,9 @@ bool MD2::load_model_file(const std::string & model_file ){
 	for( unsigned int i = 0; i < num_frames_; i++ ){
 
 		std::fseek( fp , header->offset_frames + i * frame_size_ , SEEK_SET);
-		std::size_t br = std::fread( buffer.get(), 1, frame_size_  , fp);
+		// TODO(peter): I guess the side effect is needed, but br itself not; please recheck and adapt as necessary
+		//std::size_t br = std::fread( buffer.get(), 1, frame_size_  , fp);
+		std::fread( buffer.get(), 1, frame_size_  , fp);
 
 		Frame * frame = (Frame*)( buffer.get());
 

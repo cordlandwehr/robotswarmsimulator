@@ -33,8 +33,6 @@ using namespace std;
 unsigned int RndJmpRobot::rndInit = 0;
 
 std::set<boost::shared_ptr<Request> > RndJmpRobot::compute() {
-		bool DEBUG = false;
-
 		double v = view_->get_view_radius();
 		double maxDist = 0.0; // not used atm
 

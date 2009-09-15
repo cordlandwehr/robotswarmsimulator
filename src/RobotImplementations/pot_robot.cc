@@ -167,7 +167,6 @@ double PotRobot::calc_pot(Vector3d & me, std::vector<Vector3d> & others) {
 double PotRobot::calc_pot_1(Vector3d & me, std::vector<Vector3d> & others) {
 	double res = 0.0;
 	double dx, dy, dz;
-	double curMinDist = 9999999;
 	BOOST_FOREACH(Vector3d other, others) {
 		dx = me[0] - other[0];
 		dy = me[1] - other[1];
@@ -184,7 +183,6 @@ double PotRobot::calc_pot_1(Vector3d & me, std::vector<Vector3d> & others) {
 }
 
 double PotRobot::calc_pot_2(Vector3d & me, std::vector<Vector3d> & others) {
-	double res = 0.0;
 	double dx, dy, dz;
 	double curMinDist = 9999999;
 	double curMaxDist = 0;

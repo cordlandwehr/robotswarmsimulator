@@ -403,6 +403,7 @@ void StatsControl::calculate_visibility_graph(const WorldInformation& world_info
 
 	if (number_connected_components != 1) {
 		//single unconnected robots may not get added to the graph - offset accounts for that
+		// TODO(peter): is this a bug (because offset is not used) or a leftover of past-days?
 		int offset = world_info.robot_data().size() - boost::num_vertices(*vis_graph);
 	}
 
