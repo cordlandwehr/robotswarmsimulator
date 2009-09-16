@@ -45,11 +45,9 @@ const float kCoordZColor[] = {0.0f,0.0f,1.0f,1.0f};
 const float kScaleVecs = 2.0;
 const float kScaleCoordVecsRev = 2.0;
 
-const std::string kModelName = "resources/model/tris.MD2";
-
 }
 
-RobotRenderer::RobotRenderer(SimulationRenderer * renderer ): robot_size_(1.0){
+RobotRenderer::RobotRenderer(SimulationRenderer * renderer): robot_size_(1.0){
 	renderer_ = renderer;
 	use_model_ = false;
 	for (int i=0; i < 4; i++ ){
@@ -57,11 +55,11 @@ RobotRenderer::RobotRenderer(SimulationRenderer * renderer ): robot_size_(1.0){
 	}
 }
 
-RobotRenderer::~RobotRenderer(){
+RobotRenderer::~RobotRenderer() {
 	//Nothing to do atm
 }
 
-void RobotRenderer::init(){
+void RobotRenderer::init() {
 	compiled_list_ = glGenLists(1);
 
 	glNewList( compiled_list_, GL_COMPILE );
@@ -162,7 +160,7 @@ void RobotRenderer::set_default_color(float r, float g, float b, float alpha){
 	default_color_[3] = alpha;
 }
 
-void RobotRenderer::load_model(std::string & filename ){
+void RobotRenderer::load_model(std::string & filename ) {
 	model_.load_model( filename );
 }
 

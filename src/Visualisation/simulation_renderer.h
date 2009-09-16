@@ -65,10 +65,6 @@ public:
 	 */
     void resize(int width, int height);
 
-
-
-
-
     /**
      * These functions handle user input
      * Two functions for keyboard input are necessary as special keys and ASCII character encodings overlap (example: d=100='left')

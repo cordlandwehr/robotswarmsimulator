@@ -90,7 +90,6 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 		if(current_depth > max_depth)	max_depth  = current_depth;
 	}
 
-
 	if( max_width < 1.0)
 		max_width = 1.0;
 
@@ -111,9 +110,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 }
 
 
-void FollowSwarmCamera::look_rot() const{
-
-
+void FollowSwarmCamera::look_rot() const {
 
 	Vector3d n = position_ - view_;
 	Vector3d u = Cross( up_vector_, n);
@@ -128,16 +125,12 @@ void FollowSwarmCamera::look_rot() const{
 	mat[3] = 0; mat[7] = 0; mat[11] = 0; mat[15] = 1;
 
 	glLoadMatrixf(mat);
-
-
 };
 
-
-void FollowSwarmCamera::look_translate() const{
+void FollowSwarmCamera::look_translate() const {
 	glTranslatef(- position_(0), - position_(1), - position_(2) );
 }
 
-std::string FollowSwarmCamera::get_name(){
-
+std::string FollowSwarmCamera::get_name() {
 	return "Follow Swarm Camera";
 }

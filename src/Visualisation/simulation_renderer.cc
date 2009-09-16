@@ -96,7 +96,7 @@ SimulationRenderer::SimulationRenderer()
 
 	render_visibility_graph_=false;
 
-	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer( this ) );
+	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer(this) );
 
 
 	cameras_[1]=boost::shared_ptr<Camera>(new MoveableCamera());
@@ -136,9 +136,7 @@ SimulationRenderer::SimulationRenderer()
 }
 
 void SimulationRenderer::init(){
-
 	init(kDefWidth, kDefHeight );
-
 }
 
 void SimulationRenderer::init(int x, int y){
@@ -204,9 +202,6 @@ void SimulationRenderer::init(int x, int y){
 	}
 	actuall_skybox_ = 0;
 	robot_renderer_->init();
-
-
-
 	resize(x,y);
 }
 
