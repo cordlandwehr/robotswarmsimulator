@@ -16,6 +16,10 @@
 
 #include "moveable_camera.h"
 
+namespace {
+const float kSpeed = 0.5f;
+}  // namespace
+
 MoveableCamera::MoveableCamera(): Camera() {
 
 	position_.insert_element(kXCoord, 0);

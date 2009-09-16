@@ -24,57 +24,32 @@
 
 FollowSwarmCamera::FollowSwarmCamera() : Camera() {
 
-
 }
-
 
 void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & markers,
 						const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
 						const std::vector<boost::shared_ptr<RobotData> >& robot_datas,
 						double extrapolate ){
-
 	// Set new look at and camera position
-	extrapolate = extrapolate +0.02;
-	float max_width = 0;
-	float max_height = 0;
-	float max_depth = 0;
-
-	float width = 0.0;
-	// Return from this function if we passed in bad data
-
-	if(markers.size() + obstacles.size() + robot_datas.size() == 0){
-		width = 2.0;
-	}
-
-
+	extrapolate = extrapolate + 0.02;
 
 	// Sum up all positions to get the center point of all objects
-
 	Vector3d center;
 	center.insert_element(kXCoord, 0);
 	center.insert_element(kYCoord, 0);
 	center.insert_element(kZCoord, 0);
-	int num_objects = 0;
+	int num_objects = markers.size() + robot_datas.size();
 
 	std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_markers;
 	for(it_markers = markers.begin(); it_markers < markers.end(); it_markers++){
 		center += (*it_markers)->position();
-		num_objects++;
-
 	}
-
-
 
 	std::vector< boost::shared_ptr<RobotData> >::const_iterator it_robot_data;
-
 	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
 		boost::shared_ptr<Vector3d> pos = (*it_robot_data)->extrapolated_position(extrapolate);
-
 		center += (*pos);
-		num_objects++;
 	}
-
-
 
 	// Divide the total by the number of objects to get the center point.
 	// But check first if there were objects at all.
@@ -82,16 +57,16 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 		center /= num_objects;
 	}
 
-
-
 	// Calculate the fartest distance to the center point.
-	// Calculate the distance to the center point for all objects
+	float max_width = 0;
+	float max_height = 0;
+	float max_depth = 0;
+
+	// Calculate the distance to the center point for all robots and markers
 	for(it_markers = markers.begin(); it_markers < markers.end(); it_markers++){
 		float current_width  = fabsf(center(0) - (*it_markers)->position()(0));
 		float current_height = fabsf(center(1) - (*it_markers)->position()(1));
 		float current_depth  = fabsf(center(2) - (*it_markers)->position()(2));
-
-
 
 		// Check if the current width value is greater than the max width stored.
 		if(current_width  > max_width)	max_width  = current_width;
@@ -99,19 +74,13 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 		if(current_height > max_height)	max_height = current_height;
 		// Check if the current depth value is greater than the max depth stored.
 		if(current_depth > max_depth)	max_depth  = current_depth;
-
-
 	}
-
 
 	// Don't forget the robots
 	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
 		float current_width  = fabsf(center(0) - (*(*it_robot_data)->extrapolated_position(extrapolate))(0));
 		float current_height = fabsf(center(1) - (*(*it_robot_data)->extrapolated_position(extrapolate))(1));
 		float current_depth  = fabsf(center(2) - (*(*it_robot_data)->extrapolated_position(extrapolate))(2));
-
-
-
 
 		// Check if the current width value is greater than the max width stored.
 		if(current_width  > max_width)	max_width  = current_width;
@@ -132,8 +101,6 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 		max_depth = 1.0;
 	}
 
-
-
 	this->view_(0) = center(0);
 	view_(1) = center(1);
 	view_(2) = center(2);
@@ -141,7 +108,6 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	position_(0) = center(0)  + max_width * 1.3;
 	position_(1) = center(1) + max_height *1.4 ;
 	position_(2) = center(2) + max_depth* 1.4;
-
 }
 
 

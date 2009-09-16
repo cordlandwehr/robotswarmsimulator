@@ -11,7 +11,6 @@
 #include <SimulationControl/simulation_control.h>
 #include <Visualisation/simulation_renderer.h>
 
-
 /**
  * \brief Visualizes the simulation process using GLUT.
  */

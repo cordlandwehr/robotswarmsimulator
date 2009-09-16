@@ -14,11 +14,10 @@
 #include <boost/smart_ptr.hpp>
 
 #include "../Utilities/vector_arithmetics.h"
-#define kSpeed	0.5f
+
 class WorldObject;
 class Obstacle;
 class RobotData;
-
 
 /**
  * This is the base class for all cameras.
@@ -52,7 +51,6 @@ public:
 	 */
 	void position_camera(const Vector3d & position,const Vector3d &view, const Vector3d &up_vector);
 
-
 	/**
 	 * This rotates the camera's view around the position depending on the values passed in.
 	 *
@@ -62,8 +60,6 @@ public:
 	 */
 	virtual void rotate_view(float angle, const Vector3d & rot_vec);
 
-
-
 	/**
 	 *  \brief Handles the mouse input
 	 *
@@ -71,7 +67,6 @@ public:
 	 *  \param y The new position in y direction
 	 */
 	virtual void set_view_by_mouse(int x, int y);
-
 
 	virtual void set_button_press_mouse(int x, int y);
 
@@ -83,8 +78,6 @@ public:
 	 */
 	virtual void rotate_around_point(Vector3d center, Vector3d rot_vec);
 
-
-
 	/**
 	 * \brief This strafes the camera left or right depending on the speed (+/-)
 	 *
@@ -92,14 +85,11 @@ public:
 	 */
 	virtual void strafe_camera(float speed);
 
-
 	/**
 	 *  \brief This will move the camera forward or backward depending on the speed
 	 * \param speed The speed for movement
 	 */
 	virtual void move_camera(float speed);
-
-
 
 	/**
 	 * This will move the camera forward
@@ -162,7 +152,6 @@ public:
 	 */
 	virtual void look() const;
 
-
 	/**
 	 * Returns the position of the camera.
 	 */
@@ -211,31 +200,23 @@ public:
 protected:
 
 	// The camera's position
-
 	Vector3d position_;
 
 	// The camera's view
-
 	Vector3d view_;
 
 	// The camera's up vector
-
 	Vector3d up_vector_;
 
 	// The camera's strafe vector
-
 	Vector3d strafe_;
 
 	int screen_width_;
-
 	int screen_height_;
-
 };
 
 Vector3d  Cross(const Vector3d & vector1 ,const  Vector3d & vector2);
 float Magnitude(const Vector3d & vec);
 Vector3d & Normalize(Vector3d & vector) ;
-
-
 
 #endif /* CAMERA_H_ */

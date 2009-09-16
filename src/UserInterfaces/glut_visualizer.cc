@@ -15,7 +15,6 @@
 #include <OpenGL/glut_headers.h>
 #include <OpenGL/pg_glut.h>
 
-
 namespace {
 	// GLUT timer callback that tries to achieve the requested framerate
 	void timer_callback(int ms) {
@@ -55,9 +54,6 @@ void GlutVisualizer::init() {
 		initialized_ = true;
 	}
 }
-
-
-
 
 void GlutVisualizer::keyboard_func(unsigned char key, int x, int y){
 	switch(key){
@@ -104,7 +100,6 @@ void GlutVisualizer::keyboard_func(unsigned char key, int x, int y){
 			break;
 	}
 }
-
 
 void GlutVisualizer::keyboard_special_func(int key, int x, int y){
 	switch(key){
