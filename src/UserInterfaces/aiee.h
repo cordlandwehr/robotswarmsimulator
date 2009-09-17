@@ -69,7 +69,7 @@ void aiee() {
 	}
 
 	// computation of singular value decomposition of the matrix
-	dgesvd_("O", "S", &m, &n, a, &lda, s, dummy, &ldu, vt, &ldvt, work, &lwork, &info);
+	dgesvd_((char*)"O", (char*)"S", &m, &n, a, &lda, s, dummy, &ldu, vt, &ldvt, work, &lwork, &info);
 	
 	// print the results		
 	printf("\nDGESVD Example Program Results\n\n");	

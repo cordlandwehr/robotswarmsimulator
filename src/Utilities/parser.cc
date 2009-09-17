@@ -42,12 +42,12 @@ bool Parser::is_comment(const string& line) {
 }
 
 bool Parser::contains_assignment(const string& line) {
-	unsigned int pos_of_equal_sign = line.find_first_of("=");
+	const std::size_t pos_of_equal_sign = line.find_first_of("=");
 	return pos_of_equal_sign != string::npos;
 }
 
 string Parser::get_var_name(const string& line) {
-	unsigned int pos_of_equal_sign = line.find_first_of("=");
+	const std::size_t pos_of_equal_sign = line.find_first_of("=");
 
 	//check if equal sign exists in line
 	if(pos_of_equal_sign == string::npos) {

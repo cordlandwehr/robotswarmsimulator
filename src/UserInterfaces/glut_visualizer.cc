@@ -38,7 +38,7 @@ void GlutVisualizer::init() {
 
 		// dummy variables for GLUT's init method
 		int argc = 1;
-		char* argv[] = {"dummy"}; //dummy value needed since otherwise glutinit crashes (on windows)
+		char* argv[] = { (char*)"dummy" }; //dummy value needed since otherwise glutinit crashes (on windows)
 
 		// initialize/configure glut
 		PgGLUT::init("Robot Swarm Simulator", argc, argv);
