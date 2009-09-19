@@ -13,8 +13,6 @@
 
 #include "../Utilities/vector_arithmetics.h"
 
-#include "md2.h"
-
 class SimulationRenderer;
 class RobotData;
 
@@ -53,11 +51,6 @@ public:
 		 */
 		void set_default_color(float r, float g, float b, float alpha);
 
-		/**
-		 * This is used for loading the model for the robot.
-		 */
-		void load_model(std::string & filename );
-
 		void set_extrapolate( double ext){
 			extrapolate = ext;
 		}
@@ -80,19 +73,9 @@ private:
 	float default_color_[4];
 
 	/**
-	 * Indicates whether models are used for drawing the robots
-	 */
-	bool use_model_;
-
-	/**
 	 * Holds the id of the compiled list with the sphere.
 	 */
 	unsigned int compiled_list_;
-
-	/**
-	 * The MD2 model.
-	 */
-	MD2 model_;
 
 	/**
 	 *

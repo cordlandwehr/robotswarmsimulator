@@ -49,7 +49,6 @@ const float kScaleCoordVecsRev = 2.0;
 
 RobotRenderer::RobotRenderer(SimulationRenderer * renderer): robot_size_(1.0){
 	renderer_ = renderer;
-	use_model_ = false;
 	for (int i=0; i < 4; i++ ){
 		default_color_[i] = kRobotColor[i];
 	}
@@ -65,10 +64,6 @@ void RobotRenderer::init() {
 	glNewList( compiled_list_, GL_COMPILE );
 		glutSolidSphere(kRobotRadius, kRobotSlices, kRobotStacks);
 	glEndList();
-
-	// load model..
-	//use_model_ = model_.load_model( kModelName );
-	use_model_ = false;
 }
 
 void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) const{
@@ -142,13 +137,9 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 
 	glEnd();
 
-	if (use_model_) {
-		model_.draw_model();
-	} else {
-		unsigned int rob_color =  robot->color() < kRobotIdColorNum ? robot->color() : 0 ;
-		glColor3fv(&kRobotIdColor[rob_color][0]);
-		draw_robot_sphere( rob_pos );
-	}
+	unsigned int rob_color =  robot->color() < kRobotIdColorNum ? robot->color() : 0 ;
+	glColor3fv(&kRobotIdColor[rob_color][0]);
+	draw_robot_sphere( rob_pos );
 
 	glPopMatrix();
 }
@@ -158,10 +149,6 @@ void RobotRenderer::set_default_color(float r, float g, float b, float alpha){
 	default_color_[1] = g;
 	default_color_[2] = b;
 	default_color_[3] = alpha;
-}
-
-void RobotRenderer::load_model(std::string & filename ) {
-	model_.load_model( filename );
 }
 
 inline void RobotRenderer::draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const{
