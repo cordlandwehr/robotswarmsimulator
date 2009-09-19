@@ -6,15 +6,6 @@
  */
 #include <cmath>
 
-//#ifdef WIN32
-//	#include <GL/gl.h>
-//	#include <GL/glu.h>
-//	#include <GL/glut.h>
-//#else
-//	#include <gl.h>
-//	#include <glu.h>
-//	#include <glut.h>
-//#endif
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
 #include "../OpenGL/glut_headers.h"
@@ -67,9 +58,7 @@ Camera::Camera() {
 	up_vector_(1) = 1.0;
 }
 
-Camera::~Camera(){
-
-}
+Camera::~Camera() {}
 
 void Camera::position_camera(const Vector3d & position,const Vector3d &view, const Vector3d &up_vector) {
 	position_	= position;

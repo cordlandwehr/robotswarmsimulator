@@ -22,9 +22,7 @@
 
 #include "follow_swarm_camera.h"
 
-FollowSwarmCamera::FollowSwarmCamera() : Camera() {
-
-}
+FollowSwarmCamera::FollowSwarmCamera() : Camera() {}
 
 void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & markers,
 						const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
@@ -109,7 +107,6 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 	position_(2) = center(2) + max_depth* 1.4;
 }
 
-
 void FollowSwarmCamera::look_rot() const {
 
 	Vector3d n = position_ - view_;
@@ -125,7 +122,7 @@ void FollowSwarmCamera::look_rot() const {
 	mat[3] = 0; mat[7] = 0; mat[11] = 0; mat[15] = 1;
 
 	glLoadMatrixf(mat);
-};
+}
 
 void FollowSwarmCamera::look_translate() const {
 	glTranslatef(- position_(0), - position_(1), - position_(2) );

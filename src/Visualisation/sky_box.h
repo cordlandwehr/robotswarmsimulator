@@ -62,7 +62,6 @@ class SkyBox{
 	  * Index for the compiled list
 	  */
 	 unsigned int compiled_list_;
-
 };
 
 #endif /* SKY_BOX_H_ */

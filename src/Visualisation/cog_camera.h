@@ -14,19 +14,15 @@
 
 #include "../Utilities/vector_arithmetics.h"
 
-
 class WorldObject;
 class Obstacle;
 class RobotData;
 
 #include "camera.h"
 
-
-
 class CogCamera : public Camera {
 
   public:
-
 	CogCamera();
 	~CogCamera(){};
 
@@ -35,39 +31,44 @@ class CogCamera : public Camera {
 	 */
 	void strafe_camera(float speed);
 
-
 	/**
 	 *  \brief This will move the camera forward or backward depending on the speed
 	 * \param speed The speed for movement
 	 */
-	 void move_camera(float speed);
+	void move_camera(float speed);
 
-	 void move_camera_up_down(float speed);
-
-
-	 /**
-	  * lets the camera move "up" on the sphere.
-	  */
-	 void move_up();
-
-	 /**
-	 * Lets the camera moce "down" on the sphere.
-	 */
-	 void move_down();
-
-
-	void move_forward();
 	/**
-	 * This will move the camera backward
+	 *  Moves the camera up or down depending on the speed
+	 */
+	void move_camera_up_down(float speed);
+
+	/**
+	 * lets the camera move "up" on the sphere.
+	 */
+	void move_up();
+
+	/**
+	* Lets the camera moce "down" on the sphere.
+	*/
+	void move_down();
+
+	/**
+	 * Moves the camera forward.
+	 */
+	void move_forward();
+
+	/**
+	 * This will move the camera backward.
 	 */
 	void move_backward();
 
 	/**
-	 * This will strafe the camera to the left
+	 * This will strafe the camera to the left.
 	 */
 	void strafe_left();
+
 	/**
-	 * This will strafe the camera to the right
+	 * This will strafe the camera to the right.
 	 */
 	void strafe_right();
 
@@ -79,15 +80,12 @@ class CogCamera : public Camera {
 			const std::vector<boost::shared_ptr<RobotData> >& robot_data,
 			double extrapolate );
 
-
-
 	void set_init_pos(Vector3d & pos);
 
 	/**
 	 * Returns the name of the camera type.
 	 */
 	std::string get_name();
-
 
   private:
 
@@ -114,7 +112,6 @@ class CogCamera : public Camera {
 	  Vector3d sphere_vec_;
 	  Vector3d init_pos_;
 	  bool need_init_pos_;
-
 };
 
 #endif /* COG_CAMERA_H_ */

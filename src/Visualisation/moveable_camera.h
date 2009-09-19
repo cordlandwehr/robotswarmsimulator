@@ -8,13 +8,8 @@
 #ifndef MOVEABLECAMERA_H_
 #define MOVEABLECAMERA_H_
 
-
-
-
 #include "../Utilities/vector_arithmetics.h"
 #include "camera.h"
-
-
 
 /**
  * The MoveableCamera is a first person camera. It allows to navigate in the world freely
@@ -31,10 +26,7 @@
 class MoveableCamera : public  Camera {
 
 public:
-
-
 	MoveableCamera();
-
 
 	/**
 	 * \brief This moves the camera's view by the mouse movements (First person view)
@@ -53,7 +45,6 @@ public:
 	 */
 	void strafe_camera(float speed);
 
-
 	/**
 	 *  \brief This will move the camera forward or backward depending on the speed
 	 * \param speed The speed for movement
@@ -61,7 +52,6 @@ public:
 	 void move_camera(float speed);
 
 	 void move_camera_up_down(float speed);
-
 
 	/**
 	 * This will move the camera forward
@@ -92,8 +82,6 @@ public:
 			const std::vector<boost::shared_ptr<RobotData> >& robot_data,
 			double extrapolate );
 
-
-
 	/**
 	 * \brief This method lets the maera look at the view point from the position point
 	 */
@@ -109,7 +97,6 @@ public:
 private:
 	int down_x_;
 	int down_y_;
-
 };
 
 

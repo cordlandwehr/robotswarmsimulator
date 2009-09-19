@@ -23,7 +23,7 @@ class RobotData;
  *  Like the Camera class.
  *
  */
-class FollowSwarmCamera : public Camera{
+class FollowSwarmCamera : public Camera {
 
 public:
 	FollowSwarmCamera();
@@ -36,7 +36,6 @@ public:
 						const std::vector<boost::shared_ptr<RobotData> >& robot_data,
 						double extrapolate);
 
-
 	/**
 	 * \brief This method lets the maera look at the view point from the position point
 	 */
@@ -47,7 +46,6 @@ public:
 	 * Returns the name of the camera type.
 	 */
 	virtual std::string get_name();
-
 };
 
 #endif /* FOLLOW_SWARM_CAMERA_H_ */

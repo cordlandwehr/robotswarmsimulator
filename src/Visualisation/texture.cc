@@ -53,9 +53,6 @@ typedef struct _BITMAPFILEHEADER {
   DWORD   bfOffBits;
 } BITMAPFILEHEADER, *PBITMAPFILEHEADER;
 
-
-
-
 typedef struct   _TGA{
 	unsigned char imageIDLength;
 	unsigned char colorMapType;
@@ -69,9 +66,6 @@ typedef struct   _TGA{
 	short int imageHeight;
 	unsigned char bitCount;
 	unsigned char imageDescriptor;
-
-
-
 }TGAHEADER, *PTGAHEADER;
 
 typedef struct  _TGADATA{
@@ -84,29 +78,25 @@ typedef struct  _TGADATA{
 }TGADATA;
 
 
-};
+}  // namespace fileheader
 
 
 Texture::~Texture(){
-
 	if(loaded_){
 		glDeleteTextures(1, &tex_id_ );
 	}
 }
 
 void Texture::bind() const{
-
 	if( loaded_ ){
 		glEnable(GL_TEXTURE_2D );
 		glBindTexture(GL_TEXTURE_2D, tex_id_ );
 	} else  {
 		glDisable( GL_TEXTURE_2D );
 	}
-
 }
 
 void Texture::load(std::string & texture_file ){
-
 	if( loaded_ ){
 		// make clean...
 		glDeleteTextures(1, &tex_id_ );
@@ -114,9 +104,7 @@ void Texture::load(std::string & texture_file ){
 	}
 
 	loaded_ = false;
-
 	file_name_ = texture_file;
-
 	FileType file_type = determine_extension();
 
 	switch ( file_type ){
@@ -129,12 +117,9 @@ void Texture::load(std::string & texture_file ){
 		default:
 			ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Can not determine texture file format.";
 			break;
-
 	}
 
 	if( loaded_ ){
-
-
 		glEnable(GL_TEXTURE_2D);
 		glGenTextures(1, &tex_id_);
 		glBindTexture(GL_TEXTURE_2D, tex_id_ );
@@ -145,22 +130,15 @@ void Texture::load(std::string & texture_file ){
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
-
-
-		//glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width_, height_,0, GL_RGB, GL_UNSIGNED_BYTE, data_.get() );
-
 		gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, width_, height_, GL_RGB, GL_UNSIGNED_BYTE, data_.get() );
 
 		glDisable( GL_TEXTURE_2D );
-
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Cannot load Texture from file: " << texture_file;
 	}
-
 }
 
 Texture::FileType Texture::determine_extension(){
-
 	std::size_t length = file_name_.size();
 	if( length < 3 ){
 		return UNKNOWN_FILE_TYPE;
@@ -176,34 +154,26 @@ Texture::FileType Texture::determine_extension(){
 
 
 void Texture::load_tga(){
-
-
 	unsigned char header[6];
 
 	// Uncompressed TGA Header
 	unsigned char tga_header[12]={0,0,2,0,0,0,0,0,0,0,0,0};
 	unsigned char tga_compare[12];
 
-
-
 	std::FILE * fp = fopen(file_name_.c_str(), "rb");
 
 	if( fp == NULL){
-
 		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Can't find file: " << file_name_;
-
 		loaded_ = false;
 		return;
 	}
 
 	std::size_t bytes_read = std::fread(tga_compare, 1, sizeof(tga_compare), fp);
-
 	if( bytes_read != 12){
 		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Read too few bytes.";
 		std::fclose(fp);
 		loaded_  = false;
-
-		 return;
+		return;
 	}
 
 	if( std::memcmp(tga_header,tga_compare,sizeof(tga_header)) != 0	) {
@@ -211,22 +181,17 @@ void Texture::load_tga(){
 		ConsoleOutput::log(ConsoleOutput::Visualization, ConsoleOutput::warning) << "Header missmatch.";
 		std::fclose(fp);
 		loaded_ = false;
-
 		return;
 	}
 
 	std::fread(header,1,sizeof(header),fp);
 
-
-
 	width_  = header[1] * 256 + header[0];
 	height_ = header[3] * 256 + header[2];
 
 	if(	width_	<=0	||	height_	<=0	||	(header[4]!= TGA_24 && header[4]!= TGA_32)) {
-
 		std::fclose(fp);
 		loaded_ =false;
-
 		return;
 	}
 
@@ -238,15 +203,11 @@ void Texture::load_tga(){
 	 data_.reset( new unsigned char [image_size] );
 
 	if(	data_.get() ==NULL ) {
-
 		std::fclose(fp);
 		return;
-
 	}
 
-	if (std::fread(data_.get(), 1, image_size, fp)!= image_size){
-
-	}
+	std::fread(data_.get(), 1, image_size, fp);
 
 	for(std::size_t i=0; i< image_size; i+= bytes_per_pixel)
 	{
@@ -258,8 +219,6 @@ void Texture::load_tga(){
 	std::fclose(fp);
 	loaded_ = true;
 }
-
-
 
 void Texture::load_bmp(){
 	std::FILE * fp = std::fopen(file_name_.c_str(), "rb");
@@ -303,19 +262,15 @@ void Texture::load_bmp(){
 	//std::size_t bytes_read = std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
 	std::fread(bmp_data.get(), 1, bmp_info.biSizeImage , fp );
 
-
 	data_.reset(   new unsigned char[ bmp_info.biSizeImage ] );
 
 	for( unsigned int index = 0; index < bmp_info.biSizeImage -3  ; index+= 3){
-
 		data_[index] = bmp_data[ index +2];
 		data_[index+1] = bmp_data[ index + 1];
 		data_[index+2] = bmp_data[ index ];
 	}
 
-
 	std::fclose( fp );
 	loaded_ = true;
-
 }
 

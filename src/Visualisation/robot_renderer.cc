@@ -67,7 +67,7 @@ void RobotRenderer::init() {
 }
 
 void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) const{
-	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position(extrapolate);
+	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position(extrapolate_);
 
 	if (renderer_->render_cog()) {
 		glBegin(GL_LINES);

@@ -37,7 +37,6 @@ const float eps = 0.4;
 } // namespace
 
 CogCamera::CogCamera(): rot_phi_(0.0), rot_theta_(1.0), radius_(5.0) {
-
 	sphere_vec_(0)=1.0;
 	sphere_vec_(1) = 1.0;
 	sphere_vec_(2) = 0.0;
@@ -52,7 +51,6 @@ void CogCamera::strafe_camera(float speed) {
 }
 
 void CogCamera::move_camera(float speed) {
-
 	radius_ += speed;
 	if (radius_ < 1.0) {
 		radius_ = 1.0;
@@ -79,20 +77,18 @@ void CogCamera::move_camera_up_down(float speed) {
 	calc_sphere_vec();
 }
 
- void CogCamera::move_up() {
-	 Vector3d old_sphere_vec = sphere_vec_;
-	 move_camera_up_down(kSpeedUpf);
+void CogCamera::move_up() {
+	Vector3d old_sphere_vec = sphere_vec_;
+	move_camera_up_down(kSpeedUpf);
 
-	 Vector3d new_sphere_vec = sphere_vec_;
-	 double y = std::fabs(new_sphere_vec(1)) - radius_;
-	 if( std::sqrt( new_sphere_vec(0)* new_sphere_vec(0) + y*y + new_sphere_vec(2)*new_sphere_vec(2) )< eps*radius_ ){
-		 sphere_vec_ = old_sphere_vec;
-	 }
-
- }
+	Vector3d new_sphere_vec = sphere_vec_;
+	double y = std::fabs(new_sphere_vec(1)) - radius_;
+	if( std::sqrt( new_sphere_vec(0)* new_sphere_vec(0) + y*y + new_sphere_vec(2)*new_sphere_vec(2) )< eps*radius_ ){
+		sphere_vec_ = old_sphere_vec;
+	}
+}
 
 void CogCamera::move_down() {
-
 	Vector3d old_sphere_vec = sphere_vec_;
 	move_camera_up_down( - kSpeedUpf );
 
@@ -116,14 +112,14 @@ void CogCamera::strafe_right(){
 void CogCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & marker,
 		const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
 		const std::vector<boost::shared_ptr<RobotData> >& robot_data,
-		double extrapolate ){
+		double extrapolate ) {
 	Vector3d center;
 	center.insert_element(kXCoord, 0);
 	center.insert_element(kYCoord, 0);
 	center.insert_element(kZCoord, 0);
 	int num_objects = 0;
 
-	BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data, robot_data ){
+	BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data, robot_data ) {
 		boost::shared_ptr<Vector3d> pos = it_robot_data->extrapolated_position(extrapolate);
 
 		center += (*pos);
@@ -132,11 +128,11 @@ void CogCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & mark
 
 	// Divide the total by the number of objects to get the center point.
 	// But check first if there were objects at all.
-	if(num_objects > 0){
+	if(num_objects > 0) {
 		center /= num_objects;
 	}
 
-	if(need_init_pos_){
+	if(need_init_pos_) {
 		sphere_vec_ = init_pos_ - center;
 		radius_ = boost::numeric::ublas::norm_2(sphere_vec_);
 		need_init_pos_ = false;
@@ -146,29 +142,29 @@ void CogCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & mark
 	view_ = center;
 }
 
-void CogCamera::calc_sphere_vec(){
+void CogCamera::calc_sphere_vec() {
 	sphere_vec_ = Normalize(sphere_vec_);
 
 	sphere_vec_(0) = radius_ * sphere_vec_(0);
 	sphere_vec_(1) = radius_ * sphere_vec_(1);
 	sphere_vec_(2) = radius_ * sphere_vec_(2);
 
-	if( sphere_vec_(0) == 0.0 && sphere_vec_(2) == 0.0 ){
+	if( sphere_vec_(0) == 0.0 && sphere_vec_(2) == 0.0 ) {
 		sphere_vec_(0) = 0.1;
 		sphere_vec_(2) = -0.1;
 	}
 }
 
-void CogCamera::set_init_pos(Vector3d & pos){
+void CogCamera::set_init_pos(Vector3d & pos) {
 	need_init_pos_ = true;
 	init_pos_ = pos;
 }
 
-std::string CogCamera::get_name(){
+std::string CogCamera::get_name() {
 	return "Center of Gravity";
 }
 
-void CogCamera::set_rot_phi(double phi){
+void CogCamera::set_rot_phi(double phi) {
 	if( phi < 0) {
 		rot_phi_ = 2*PI + phi;
 	} else if( phi > 2*PI ) {
@@ -178,8 +174,8 @@ void CogCamera::set_rot_phi(double phi){
 	 }
 }
 
-void CogCamera::set_rot_theta(double theta){
-	if( theta < 0){
+void CogCamera::set_rot_theta(double theta) {
+	if( theta < 0) {
 		rot_theta_ = PI + theta;
 	}else if( theta > PI ) {
 		rot_theta_ = theta - PI;

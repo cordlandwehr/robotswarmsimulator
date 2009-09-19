@@ -27,7 +27,7 @@ public:
 		/**
 		 * This robot renderer needs the SimulationRenderer which is uses this renderer.
 		 */
-		RobotRenderer(SimulationRenderer * renderer );
+		RobotRenderer(SimulationRenderer* renderer );
 		~RobotRenderer();
 
 		/**
@@ -44,18 +44,18 @@ public:
 		 * \param extrapolate The value for the extrapolating.
 		 *
 		 */
-		void draw_robot(const boost::shared_ptr<RobotData> & robot ) const;
+		void draw_robot(const boost::shared_ptr<RobotData>& robot ) const;
 
 		/**
 		 * Sets the default color of the drawn robots.
 		 */
 		void set_default_color(float r, float g, float b, float alpha);
 
-		void set_extrapolate( double ext){
-			extrapolate = ext;
+		void set_extrapolate(double ext) {
+			extrapolate_ = ext;
 		}
 
-		void set_robot_size(double s){ robot_size_ = s;};
+		void set_robot_size(double s) { robot_size_ = s; }
 private:
 
 	void draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const;
@@ -77,11 +77,7 @@ private:
 	 */
 	unsigned int compiled_list_;
 
-	/**
-	 *
-	 */
-	double extrapolate;
+	double extrapolate_;
 };
-
 
 #endif /* ROBOT_RENDERER_H_ */

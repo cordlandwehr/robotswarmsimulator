@@ -14,7 +14,6 @@
 
 #include "../OpenGL/gl_headers.h"
 
-
 /**
  * This is a simple texture object. It can load BMP and uncompressed TGA files.
  *
@@ -109,7 +108,6 @@ class Texture {
 	  * Each value is an unsigned char.
 	  */
 	 boost::scoped_array<unsigned char> data_;
-
 };
 
 #endif /* TEXTURE_H_ */

@@ -18,24 +18,14 @@
 float kSkyBoxSize = 6.0f;
 
 namespace texnames {
-
 	std::string tex_names[6] = {"front.bmp", "back.bmp", "up.bmp", "down.bmp", "right.bmp", "left.bmp" };
-
-
 };
 
-SkyBox::SkyBox(){
+SkyBox::SkyBox() {}
 
+SkyBox::~SkyBox() {}
 
-
-}
-
-SkyBox::~SkyBox(){
-
-}
-
-bool SkyBox::init( std::string path_to_tex){
-
+bool SkyBox::init(std::string path_to_tex) {
 	// Load Textures...
 	for( int i = 0; i < 6 ; i++){
 		std::string file = path_to_tex;
@@ -47,10 +37,7 @@ bool SkyBox::init( std::string path_to_tex){
 			can_use_ = false;
 			return false;
 		}
-
 	}
-
-
 
 	// Create Compiled List
 	compiled_list_ = glGenLists( 1);
@@ -88,7 +75,6 @@ bool SkyBox::init( std::string path_to_tex){
 	  glTexCoord2f(1, 0); glVertex3f(kSkyBoxSize, kSkyBoxSize , -kSkyBoxSize);
 	 glEnd();
 
-
 	// DOWN
 	texture_[TEX_DOWN].bind();
 	 glBegin(GL_QUADS);
@@ -122,17 +108,10 @@ bool SkyBox::init( std::string path_to_tex){
 	glEndList();
 	can_use_ = true;
 	return true;
-
 }
 
-void SkyBox::draw(){
-
-
-	if(can_use_){
-
+void SkyBox::draw() {
+	if(can_use_) {
 		glCallList( compiled_list_ );
-
 	}
-
-
 }
