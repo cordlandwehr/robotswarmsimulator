@@ -84,7 +84,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	glBegin(GL_LINES);
 	if (renderer_->render_velocity()){
 
-		Vector3d vel = *robot->extrapolated_velocity(extrapolate);
+		Vector3d vel = *robot->extrapolated_velocity(extrapolate_);
 		glColor3fv(kVelColor);
 		glVertex3f(0 ,0, 0 );
 		glVertex3f( kScaleVecs * vel(0),
