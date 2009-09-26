@@ -6,7 +6,8 @@
 \section{Introduction}
 This document shall help you to use the \RSS to simulate robot swarms and to get useful information by the visualization and statistics modules.
 
-For this purpose the document is divided in several sections. It will be useful if you just start with the ``Getting Started'' section and play a little bit with the simulator and continue by reading the more detailed information on input parameters, input file specifications, generating simulations and getting statistics.
+For this purpose, the document is divided into several sections. It would be useful, if you just start with the ``Getting Started'' section and play a little bit with the simulator, before continue reading the more detailed information on input parameters, input file specifications, generating simulations and statistics.
+
 
 \section{Getting Started}\index{project file}
 If you are using the \RSS the first time, we will present you a simple way to create an example scenario to get a feeling about the usage of this simulator. All example files can be found in subdirectory {\tt ProjectFiles} of the install directory. Here we will present an example on how to simulate the behavior of the {\sffamily Center of Gravity} algorithm (COG).
@@ -22,8 +23,7 @@ If you are using the \RSS the first time, we will present you a simple way to cr
 			\item {\tt newrandom.robot} -- contains information about the robots
 			\item {\tt newrandom.obstacle} -- contains information about the obstacles
 		\end{itemize}
-		The last two files are referenced in the {\tt .swarm} file. Thus, to load the simulation, you only need to load the {\tt .swarm} file. Note that all these files
-are simple text files that can be edited by hand.
+		The last two files are referenced in the {\tt .swarm} file. Thus, to load the simulation, you only need to tell the simulator where the {\tt .swarm} file is located. Note that all these files are simple text files that can be edited by your favourite text editor.
 	\item Run the command:
 
 		\centerline{\tt RobotSwarmSimulator -{}-project-file newrandom -{}-output mylogs}
@@ -31,4 +31,4 @@ are simple text files that can be edited by hand.
 		This will start the simulation process. There are various keyboard shortcuts that can be used to control the simulation. Press \fbox{\tt h} for an overview. You can quit the simulation by pressing \fbox{\tt q}.
 	\item The previous step has generated various output files in the subdirectory {\tt mylogs}, mainly produced by the statistics module of the \RSS. You may directly use \gnuplot to analyze these files.
 \end{enumerate}
-This simple example can be used as a base for further test runs. Please look at the following chaptors to get specifications of the input files and the user inferface.
+This simple example can be used as a base for further tests. Please look at the following chapters to get specifications of the input files and the user inferface.
