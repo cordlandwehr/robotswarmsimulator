@@ -21,20 +21,22 @@ class Event;
 class WorldInformation;
 
 /**
- * The fair atomic semisynchronous ASG generates a complete LCM cycle for a single random robot each timestep. 
+ * The fair atomic semisynchronous ASG generates a complete LCM cycle for a single random robot each timestep.
  * In constrast to unfair atomic semisynchronous ASG it also ensures that every robot is activated exaclty once,
  * every n timesteps (where n is the number of robots).
  */
 class FairAtomicSemisynchronousASG : public ActivationSequenceGenerator {
-
 public:
-	FairAtomicSemisynchronousASG(unsigned int seed) : time_of_next_event_(0),
-	                                              current_state_(FairAtomicSemisynchronousASG::look),
-	                                              distribution_generator_(new DistributionGenerator(seed)) {}
+	explicit FairAtomicSemisynchronousASG(unsigned int seed) :
+	    time_of_next_event_(0),
+	    current_state_(FairAtomicSemisynchronousASG::look),
+	    distribution_generator_(new DistributionGenerator(seed)) {}
+
 	/**
 	 * Initializes the ASG.
 	 */
-	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history,
+	                const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event.
@@ -46,7 +48,7 @@ public:
 	 * Returns the time the next event happens
 	 * \return Integer representing the next time an event will happen
 	 */
-	int get_time_of_next_event() {return time_of_next_event_;};
+	int get_time_of_next_event() { return time_of_next_event_; }
 
 	/**
 	 * Updates the sequence of events. For the atomic semisynchronous ASG this only stores the requests of robots

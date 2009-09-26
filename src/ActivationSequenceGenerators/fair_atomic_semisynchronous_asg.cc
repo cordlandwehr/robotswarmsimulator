@@ -1,5 +1,8 @@
 #include "fair_atomic_semisynchronous_asg.h"
 
+#include <algorithm>
+#include <iterator>
+
 #include "../Events/event.h"
 #include "../Events/look_event.h"
 #include "../Events/compute_event.h"
@@ -8,20 +11,15 @@
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
 
-#include <algorithm>
-#include <iterator>
-
 using std::vector;
 
-
-void FairAtomicSemisynchronousASG::initialize(const History& history, const vector<boost::shared_ptr<Robot> >& robots) {
+void FairAtomicSemisynchronousASG::initialize(
+    const History& history,
+    const vector<boost::shared_ptr<Robot> >& robots) {
 	// extract robots from robot data
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		robots_.push_back(robot);
 	}
-
-	// initialize the distribution generator (needs to be done here since the size of robots is known here first.
-	//
 }
 
 boost::shared_ptr<Event> FairAtomicSemisynchronousASG::get_next_event() {
@@ -32,14 +30,16 @@ boost::shared_ptr<Event> FairAtomicSemisynchronousASG::get_next_event() {
 
 		// add one random non-yet-activated robot.
 		if(unactivated_robots_.size() == 0) {
-			//if all activated already, begin a new activation cycle
-			//->copy all robots into unactivated_robots
-			std::copy(robots_.begin(), robots_.end(), std::back_inserter(unactivated_robots_));
+			// if all activated already, begin a new activation cycle
+			// -> copy all robots into unactivated_robots
+			std::copy(robots_.begin(), robots_.end(),
+			          std::back_inserter(unactivated_robots_));
 		}
 
-		distribution_generator_->init_uniform(0,unactivated_robots_.size() - 1);
+		distribution_generator_->init_uniform(0, unactivated_robots_.size() - 1);
 
-		std::list<boost::shared_ptr<Robot> >::iterator it = unactivated_robots_.begin();
+		std::list<boost::shared_ptr<Robot> >::iterator it =
+		    unactivated_robots_.begin();
 		std::advance(it, distribution_generator_->get_value_uniform());
 
 		current_robot_ = *it;
@@ -56,13 +56,15 @@ boost::shared_ptr<Event> FairAtomicSemisynchronousASG::get_next_event() {
 		compute_event->add_to_robot_subset(current_robot_);
 
 		current_state_ = move;
-
 	} else if(current_state_ == move) {
-		HandleRequestsEvent * handle_requests_event = new HandleRequestsEvent(time_of_next_event_);
+		HandleRequestsEvent * handle_requests_event =
+		    new HandleRequestsEvent(time_of_next_event_);
 		event.reset(handle_requests_event);
 
-		// copy over all requests (there might be more than one if the current robot issued more than one
-		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request, unhandled_request_set_) {
+		// Copy over all requests (there might be more than one
+		// if the current robot issued more than one).
+		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request,
+		              unhandled_request_set_) {
 			handle_requests_event->add_to_requests(cur_request);
 		}
 		unhandled_request_set_.clear();
@@ -80,7 +82,8 @@ void FairAtomicSemisynchronousASG::update(TimePoint& time_point,
 	// check if it is a compute event
 	ComputeEvent* compute_event = dynamic_cast<ComputeEvent*> (last_event.get());
 	if(compute_event != NULL) {
-		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request, compute_event->requests()) {
+		BOOST_FOREACH(boost::shared_ptr<const Request> cur_request,
+		              compute_event->requests()) {
 			unhandled_request_set_.push_back(cur_request);
 		}
 	}

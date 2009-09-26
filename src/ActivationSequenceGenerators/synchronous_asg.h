@@ -27,14 +27,15 @@ class History;
  */
 class SynchronousASG : public ActivationSequenceGenerator {
 public:
-	SynchronousASG(): time_of_next_event_(0) {};
+	SynchronousASG(): time_of_next_event_(0) {}
 
 	/**
 	 * initializes the synchronous ASG from the given intial world_state. Needs to be called before the
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history,
+	                const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event. Since the ASG is synchronous the sequence of events will have the form
@@ -49,7 +50,7 @@ public:
 	 * Returns the time of the next event. This is always the time of the last event plus one.
 	 * \return The time of the next event.
 	 */
-	int get_time_of_next_event() {return time_of_next_event_;};
+	int get_time_of_next_event() { return time_of_next_event_; }
 
 	/**
 	 * Updates the sequence of events. For the synchronous ASG this only stores the requests of robots
@@ -77,10 +78,10 @@ private:
 	std::vector<boost::shared_ptr<Robot> > robots_;
 
 	// constants for readability
-	const static int kTimeToLook = 0;
-	const static int kTimeToCompute = 1;
-	const static int kTimeToMove = 2;
-	const static int kNumberOfEvents = 3;
+	static const int kTimeToLook = 0;
+	static const int kTimeToCompute = 1;
+	static const int kTimeToMove = 2;
+	static const int kNumberOfEvents = 3;
 };
 
 #endif /* SYNCHRONOUSASG_H_ */
