@@ -23,7 +23,7 @@
 class HandleRequestsEvent : public Event {
 public:
 
-	explicit HandleRequestsEvent(int time): Event(time) {};
+	explicit HandleRequestsEvent(int time): Event(time) {}
 
 	/**
 	 * Adds a new request to the set of requests.

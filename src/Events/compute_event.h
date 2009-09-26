@@ -23,7 +23,7 @@
 class ComputeEvent : public Event {
 public:
 
-	explicit ComputeEvent(int time) : Event(time) {};
+	explicit ComputeEvent(int time) : Event(time) {}
 
 	/**
 	 * Adds a new robot to the subset of robots in the event.
