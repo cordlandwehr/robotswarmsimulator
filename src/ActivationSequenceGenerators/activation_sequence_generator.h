@@ -10,6 +10,8 @@
 
 #include <boost/smart_ptr.hpp>
 #include <boost/circular_buffer.hpp>
+#include <vector>
+
 #include "../Model/world_information.h"
 #include "../Events/look_event.h"
 #include "../SimulationKernel/simulation_listener.h"
@@ -30,17 +32,17 @@ class History;
  *
  */
 class ActivationSequenceGenerator : public SimulationListener {
-
-
 public:
 
-	virtual ~ActivationSequenceGenerator() {};
+	virtual ~ActivationSequenceGenerator() {}
 
 	/**
 	 * Initializes the ASG.
 	 * \param The history
 	 */
-	virtual void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots) = 0;
+	virtual void initialize(
+	    const History& history,
+	    const std::vector<boost::shared_ptr<Robot> >& robots) = 0;
 
 	/**
 	 * Returns the next event.
@@ -53,7 +55,6 @@ public:
 	 * \return Integer representing the next time an event will happen
 	 */
 	virtual int get_time_of_next_event() = 0;
-
 };
 
 #endif /* ACTIVATION_SEQUENCE_GENERATOR_H_ */

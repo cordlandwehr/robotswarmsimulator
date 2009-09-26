@@ -29,13 +29,15 @@ class AtomicSemisynchronousASG : public ActivationSequenceGenerator {
 friend class atomic_semisynchronous_asg_smoke_test;
 
 public:
-	AtomicSemisynchronousASG(unsigned int seed) : time_of_next_event_(0),
-	                                              current_state_(AtomicSemisynchronousASG::look),
-	                                              distribution_generator_(new DistributionGenerator(seed)) {}
+	explicit AtomicSemisynchronousASG(unsigned int seed) :
+	    time_of_next_event_(0),
+	    current_state_(AtomicSemisynchronousASG::look),
+	    distribution_generator_(new DistributionGenerator(seed)) {}
 	/**
 	 * Initializes the ASG.
 	 */
-	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history,
+			        const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event.
@@ -47,7 +49,7 @@ public:
 	 * Returns the time the next event happens
 	 * \return Integer representing the next time an event will happen
 	 */
-	int get_time_of_next_event() {return time_of_next_event_;};
+	int get_time_of_next_event() { return time_of_next_event_; }
 
 	/**
 	 * Updates the sequence of events. For the atomic semisynchronous ASG this only stores the requests of robots

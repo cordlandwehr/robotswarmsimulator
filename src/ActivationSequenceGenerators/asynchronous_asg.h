@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <list>
+
 #include <boost/smart_ptr.hpp>
 #include <boost/circular_buffer.hpp>
 
@@ -50,7 +51,8 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(const History& history, const std::vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(const History& history,
+			        const std::vector<boost::shared_ptr<Robot> >& robots);
 
 	/**
 	 * Returns the next event.
@@ -62,7 +64,7 @@ public:
 	 * Returns the time of the next event. This is computed according to...
 	 * \return The time of the next event.
 	 */
-	int get_time_of_next_event() {return time_of_next_event_;};
+	int get_time_of_next_event() { return time_of_next_event_; }
 
 	/**
 	 * Updates the sequence of events. Ensures that the events for each fixed robot are in the right
