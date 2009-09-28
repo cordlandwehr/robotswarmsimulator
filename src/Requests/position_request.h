@@ -24,7 +24,6 @@ class PositionRequest : public VectorRequest {
 public:
 	PositionRequest(Robot& robot, boost::shared_ptr<Vector3d> requested_vector) :
 	    VectorRequest(robot, requested_vector) {}
-
 };
 
 

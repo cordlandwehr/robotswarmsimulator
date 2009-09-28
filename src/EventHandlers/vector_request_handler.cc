@@ -8,8 +8,6 @@
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <iostream>
-
 #include "../Model/world_information.h"
 #include "../Model/robot.h"
 #include "../Model/robot_data.h"
@@ -27,31 +25,41 @@
 
 #include "vector_request_handler.h"
 
+using boost::shared_ptr;
 
-bool VectorRequestHandler::handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
-                                                    boost::shared_ptr<const Request> request) {
-	 boost::shared_ptr<const VectorRequest> vector_request = boost::dynamic_pointer_cast<const VectorRequest> (request);
-	 if(!vector_request) {
-		 throw std::invalid_argument("Not a vector request.");
-	 }
-    const boost::shared_ptr<RobotIdentifier>& robot_id = vector_request->robot().id();
-    RobotData& robot_data = world_information->get_according_robot_data(robot_id);
-	Vector3d global_vector = extract_global_vector(*vector_request, robot_data);
-	const Vector3d& reference_vector = extract_ref_vector(*vector_request, robot_data);
+bool VectorRequestHandler::handle_request_reliable(
+    shared_ptr<WorldInformation> world_information,
+    shared_ptr<const Request> request) {
+	shared_ptr<const VectorRequest> vector_request =
+	    boost::dynamic_pointer_cast<const VectorRequest> (request);
+	if(!vector_request) {
+		throw std::invalid_argument("Not a vector request.");
+	}
+    const shared_ptr<RobotIdentifier>& robot_id = vector_request->robot().id();
+    RobotData& robot_data =
+        world_information->get_according_robot_data(robot_id);
+	Vector3d global_vector = extract_global_vector(*vector_request,
+	                                               robot_data);
+	const Vector3d& reference_vector = extract_ref_vector(*vector_request,
+	                                                      robot_data);
 
     // apply vector modifiers from pipeline
 	bool vector_changed = false;
-	BOOST_FOREACH(boost::shared_ptr<VectorModifier>& vector_modifier, vector_modifiers_) {
-		vector_changed = vector_modifier->modify_vector(global_vector,reference_vector);
+	BOOST_FOREACH(shared_ptr<VectorModifier>& vector_modifier, vector_modifiers_) {
+		vector_changed = vector_modifier->modify_vector(global_vector,
+		                                                reference_vector);
 	}
 
 	// update corresponding robot property
     update_vector(*vector_request, robot_data, global_vector);
-	return !vector_changed; // return false if the request was not performed exactly as requested
+    // return false if the request was not performed exactly as requested
+	return !vector_changed;
 }
 
-void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData& robot_data, const Vector3d& vector) {
-	boost::shared_ptr<Vector3d> vector_ptr(new Vector3d(vector));
+void VectorRequestHandler::update_vector(const VectorRequest& request,
+                                         RobotData& robot_data,
+                                         const Vector3d& vector) {
+	shared_ptr<Vector3d> vector_ptr(new Vector3d(vector));
 	if (typeid(request) == typeid(PositionRequest))
 		robot_data.set_position(vector_ptr);
 	else if (typeid(request) == typeid(VelocityRequest))
@@ -62,19 +70,27 @@ void VectorRequestHandler::update_vector(const VectorRequest& request, RobotData
 		throw std::invalid_argument("VectorRequestHandler: unknown vector request; can not update robot's vector");
 }
 
-Vector3d VectorRequestHandler::extract_global_vector(const VectorRequest& request, const RobotData& robot_data) {
+Vector3d VectorRequestHandler::extract_global_vector(
+    const VectorRequest& request,
+    const RobotData& robot_data) {
 	using CoordConverter::local_to_global;
-	using boost::shared_ptr;
 
     const Vector3d& local_vector(request.requested_vector());
 	Vector3d position(robot_data.position());
-	if (typeid(request) == typeid(VelocityRequest) || typeid(request) == typeid(AccelerationRequest))
+	if (typeid(request) == typeid(VelocityRequest)
+	    || typeid(request) == typeid(AccelerationRequest)) {
 		position = boost::numeric::ublas::zero_vector<double>(3);
-	shared_ptr<Vector3d> global_vector = local_to_global(local_vector, position, robot_data.coordinate_system_axis());
+	}
+	shared_ptr<Vector3d> global_vector = local_to_global(
+	    local_vector,
+	    position,
+	    robot_data.coordinate_system_axis());
 	return *global_vector;
 }
 
-const Vector3d& VectorRequestHandler::extract_ref_vector(const VectorRequest& request, const RobotData& robot_data) {
+const Vector3d& VectorRequestHandler::extract_ref_vector(
+    const VectorRequest& request,
+    const RobotData& robot_data) {
 	if (typeid(request) == typeid(PositionRequest))
 		return robot_data.position();
 	else if (typeid(request) == typeid(VelocityRequest))
@@ -85,6 +101,7 @@ const Vector3d& VectorRequestHandler::extract_ref_vector(const VectorRequest& re
 		throw std::invalid_argument("VectorRequestHandler: unknown vector request, can not extract reference vector");
 }
 
-void VectorRequestHandler::add_vector_modifier(boost::shared_ptr<VectorModifier> vector_modifier) {
+void VectorRequestHandler::add_vector_modifier(
+    shared_ptr<VectorModifier> vector_modifier) {
 	vector_modifiers_.push_back(vector_modifier);
 }

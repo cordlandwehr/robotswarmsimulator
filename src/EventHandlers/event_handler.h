@@ -8,7 +8,8 @@
 #ifndef EVENT_HANDLER_H_
 #define EVENT_HANDLER_H_
 
-#include <iostream>
+#include <vector>
+
 #include <boost/smart_ptr.hpp>
 
 #include "vector_request_handler.h"
@@ -37,7 +38,6 @@ class SimulationListener;
 class RobotControl;
 class History;
 
-
 /**
  *
  * \brief The event handler determines, according to some user�specified rules,
@@ -57,9 +57,11 @@ class EventHandler {
 	friend class LoadMainProjectFileTest;
 
 public:
-	EventHandler(boost::shared_ptr<History> history, boost::shared_ptr<RobotControl> robot_control): history_(history),
-	                                                                                                 robot_control_(robot_control),
-	                                                                                                 time_of_last_event_(0) {}
+	EventHandler(boost::shared_ptr<History> history,
+	             boost::shared_ptr<RobotControl> robot_control) :
+	    history_(history),
+	    robot_control_(robot_control),
+	    time_of_last_event_(0) {}
 
 	/**
 	 * handles the given event. By calling appropriate handlers and updating the listeners.
@@ -74,63 +76,74 @@ public:
 	/**
 	 * setter for position request handler
 	 */
-	void set_position_request_handler(boost::shared_ptr<VectorRequestHandler> position_request_handler) {
+	void set_position_request_handler(
+	    boost::shared_ptr<VectorRequestHandler> position_request_handler) {
 		position_request_handler_ = position_request_handler;
 	}
 
 	/**
 	 * setter for velocity request handler
 	 */
-	void set_velocity_request_handler(boost::shared_ptr<VectorRequestHandler> velocity_request_handler) {
+	void set_velocity_request_handler(
+	    boost::shared_ptr<VectorRequestHandler> velocity_request_handler) {
 		velocity_request_handler_ = velocity_request_handler;
 	}
 
 	/**
 	 * setter for acceleration request handler
 	 */
-	void set_acceleration_request_handler(boost::shared_ptr<VectorRequestHandler> acceleration_request_handler) {
+	void set_acceleration_request_handler(
+	    boost::shared_ptr<VectorRequestHandler> acceleration_request_handler) {
 		acceleration_request_handler_ = acceleration_request_handler;
 	}
 
 	/**
 	 * setter for marker request handler
 	 */
-	void set_marker_request_handler(boost::shared_ptr<MarkerRequestHandler> marker_request_handler) {
+	void set_marker_request_handler(
+	    boost::shared_ptr<MarkerRequestHandler> marker_request_handler) {
 		marker_request_handler_ = marker_request_handler;
 	}
 
 	/**
 	 * setter for type change request handler
 	 */
-	void set_type_change_request_handler(boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler) {
-		type_change_request_handler_ = type_change_request_handler;
+	void set_type_change_request_handler(
+	    boost::shared_ptr<TypeChangeRequestHandler> request_handler) {
+		type_change_request_handler_ = request_handler;
 	}
 
-	void set_marker_change_request_handler(boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler) {
-		marker_change_request_handler_ = marker_change_request_handler;
+	void set_marker_change_request_handler(
+	    boost::shared_ptr<MarkerChangeRequestHandler> request_handler) {
+		marker_change_request_handler_ = request_handler;
 	}
 
-	void set_color_change_request_handler(boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler){
-		color_change_request_handler_ = color_change_request_handler;
+	void set_color_change_request_handler(
+	    boost::shared_ptr<ColorChangeRequestHandler> request_handler) {
+		color_change_request_handler_ = request_handler;
 	}
 
 private:
 	/**
 	 * handles the given look event by delegating it to RobotControl
 	 */
-	boost::shared_ptr<WorldInformation> handle_look_event(boost::shared_ptr<LookEvent> look_event);
+	boost::shared_ptr<WorldInformation> handle_look_event(
+	    boost::shared_ptr<LookEvent> look_event);
 
 	/**
 	 * handles the given compute event by delegating it to RobotControl
 	 */
-	boost::shared_ptr<WorldInformation> handle_compute_event(boost::shared_ptr<ComputeEvent> compute_event);
+	boost::shared_ptr<WorldInformation> handle_compute_event(
+	    boost::shared_ptr<ComputeEvent> compute_event);
 
 	/**
 	 * handles the given HandleRequests event by doing the following
-	 * 1. producing a new WorldInformation object by extrapolating and handling requests
+	 * 1. producing a new WorldInformation object by extrapolating and
+	 * handling requests
 	 * 2. adding the new WorldInformation object to the history
 	 */
-	boost::shared_ptr<WorldInformation> handle_handle_requests_event(boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
+	boost::shared_ptr<WorldInformation> handle_handle_requests_event(
+	    boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
 
 	/**
 	 * informs all listeners after each event
@@ -138,9 +151,11 @@ private:
 	void update_listeners(TimePoint& time_point, boost::shared_ptr<Event> event);
 
 	/**
-	 * generates a new WorldInformation object by extrapolating it from the newest old one to time t
+	 * generates a new WorldInformation object by extrapolating it
+	 * from the newest old one to time t
 	 */
-	boost::shared_ptr<WorldInformation> extrapolate_old_world_information(int time);
+	boost::shared_ptr<WorldInformation> extrapolate_old_world_information(
+	    int time);
 
 	/**
 	 * Request Handlers. One for each type of request.

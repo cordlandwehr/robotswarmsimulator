@@ -24,19 +24,22 @@ public:
 	 * constructs a new MarkerRequest.
 	 * The request cannot be changed after constructing.
 	 */
-	MarkerRequest(Robot& robot,
-	              boost::shared_ptr<MarkerInformation> requested_marker_information) : Request(robot),
-	                                                                                   requested_marker_information_(requested_marker_information) {}
+	MarkerRequest(
+	    Robot& robot,
+	    boost::shared_ptr<MarkerInformation> requested_marker_information) :
+	        Request(robot),
+	        requested_marker_information_(requested_marker_information) {}
 
 	/**
 	 * Returns a constant reference to the requested marker information
 	 * \Return A constant reference to the requested marker information
 	 */
-	const MarkerInformation& requested_marker_information() const {return *requested_marker_information_;}
+	const MarkerInformation& requested_marker_information() const {
+		return *requested_marker_information_;
+	}
 
 private:
 	boost::shared_ptr<MarkerInformation> requested_marker_information_;
-
 };
 
 #endif /* MARKER_REQUEST_H_ */

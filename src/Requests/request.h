@@ -25,7 +25,7 @@ public:
 	 * returns a constant reference to the robot which issued the request
 	 * \Return a constant reference to the robot which issued the request
 	 */
-	const Robot& robot() const {return robot_;};
+	const Robot& robot() const { return robot_; }
 
 private:
 	/**

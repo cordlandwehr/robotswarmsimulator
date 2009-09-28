@@ -22,7 +22,8 @@
  */
 class AccelerationRequest : public VectorRequest {
 public:
-	AccelerationRequest(Robot& robot, boost::shared_ptr<Vector3d> requested_vector) :
+	AccelerationRequest(Robot& robot,
+	                    boost::shared_ptr<Vector3d> requested_vector) :
 		    VectorRequest(robot, requested_vector) {}
 };
 

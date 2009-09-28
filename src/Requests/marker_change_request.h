@@ -34,9 +34,13 @@ public:
 	 *                  marker_to_change to the data object pointed to by var_value. If the var_value pointer is not
 	 *                  valid, the removal of data item var_name will be requested.
 	 */
-	MarkerChangeRequest(Robot& robot, MarkerIdentifier& marker_to_change, const std::string& var_name,
+	MarkerChangeRequest(Robot& robot, MarkerIdentifier& marker_to_change,
+	                    const std::string& var_name,
 	                    boost::shared_ptr<const boost::any> var_value)
-	: Request(robot), marker_to_change_(marker_to_change), var_name_(var_name), var_value_(var_value) {}
+	: Request(robot),
+	  marker_to_change_(marker_to_change),
+	  var_name_(var_name),
+	  var_value_(var_value) {}
 
 	/**
 	 * \brief Returns a constant reference to the identifier of the marker that was requsted to be changed.

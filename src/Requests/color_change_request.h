@@ -12,15 +12,15 @@
 
 
 class ColorChangeRequest : public Request {
-
 public:
-	ColorChangeRequest( Robot & robot, unsigned short int color ) : Request(robot), requested_color_(color){};
+	ColorChangeRequest(Robot & robot, unsigned int color) :
+	    Request(robot),
+	    requested_color_(color) {}
 
-	unsigned short int requested_color() const { return requested_color_;}
+	unsigned int requested_color() const { return requested_color_; }
 
 private:
-	unsigned short int requested_color_;
-
+	unsigned int requested_color_;
 };
 
 

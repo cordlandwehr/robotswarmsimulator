@@ -35,7 +35,9 @@ class RobotData;
 class VectorRequestHandler : public RequestHandler {
 	friend class LoadMainProjectFileTest;
 public:
-	VectorRequestHandler(unsigned int seed, double discard_probability, const History& history)
+	VectorRequestHandler(unsigned int seed,
+	                     double discard_probability,
+	                     const History& history)
 	: RequestHandler(seed, discard_probability, history) { }
     virtual ~VectorRequestHandler() { }
 
@@ -48,39 +50,49 @@ public:
 
 protected:
 	/**
-	 * \brief Handles a given vector request by extracting the corresponding vector and applying the modifier pipeline.
+	 * \brief Handles a given vector request by extracting the
+	 * corresponding vector and applying the modifier pipeline.
 	 *
-	 * For each vector modifier applied, the reference vector is set to the original value of the data the robot
+	 * For each vector modifier applied, the reference vector is set to
+	 * the original value of the data the robot
 	 * requested to change.
 	 *
-	 * \return Returns true if the request has been performed as given and false if it was changed (by one of the vector
+	 * \return Returns true if the request has been performed as given
+	 * and false if it was changed (by one of the vector
 	 *         modifiers).
 	 * \see extract_ref_vector
 	 */
-	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
-                                         boost::shared_ptr<const Request> request);
+	virtual bool handle_request_reliable(
+	    boost::shared_ptr<WorldInformation> world_information,
+	    boost::shared_ptr<const Request> request);
 
 private:
 	/**
-	 * \brief Updates the robot property corresponding to the given vector request using the given vector.
+	 * \brief Updates the robot property corresponding to
+	 * the given vector request using the given vector.
 	 */
-    void update_vector(const VectorRequest& vector_request, RobotData& robot_data, const Vector3d& vector);
+    void update_vector(const VectorRequest& vector_request,
+                       RobotData& robot_data,
+                       const Vector3d& vector);
 
 	/**
 	 * \brief Returns a vector that matches the global version of the vector in the given request.
 	 *
-	 * The provided robot data is used to for information needed to transform the local requested vector into the global
-	 * coordinate system.
+	 * The provided robot data is used to for information needed to transform
+	 * the local requested vector into the global coordinate system.
 	 */
-	static Vector3d extract_global_vector(const VectorRequest& request, const RobotData& robot_data);
+	static Vector3d extract_global_vector(const VectorRequest& request,
+	                                      const RobotData& robot_data);
 
 	/**
 	 * \brief Extracts the reference vector for the given request from the robot data.
 	 *
-	 * The reference vector matches the robot's original value of the data he requests to change. For example, in case
-	 * of a positional request, the robot's current position will be extracted.
+	 * The reference vector matches the robot's original value of the data
+	 * he requests to change. For example, in case of a positional request,
+	 * the robot's current position will be extracted.
 	 */
-	static const Vector3d& extract_ref_vector(const VectorRequest& request, const RobotData& robot_data);
+	static const Vector3d& extract_ref_vector(const VectorRequest& request,
+	                                          const RobotData& robot_data);
 
 	std::list<boost::shared_ptr<VectorModifier> > vector_modifiers_;
 };

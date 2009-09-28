@@ -28,8 +28,9 @@ public:
 	 * Constructs a new type change request.
 	 * The request cannot be changed after construction.
 	 */
-	TypeChangeRequest(Robot& robot, RobotType requested_type) : Request(robot),
-	                                                                         requested_type_(requested_type) {}
+	TypeChangeRequest(Robot& robot, RobotType requested_type) :
+	    Request(robot),
+	    requested_type_(requested_type) {}
 
 	/**
 	 * Returns a constant reference to the requested type
