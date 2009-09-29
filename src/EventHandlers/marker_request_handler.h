@@ -17,9 +17,12 @@ class MarkerRequestHandler : public RequestHandler {
 	friend class EventHandlerFactoryTest;
 	friend class LoadMainProjectFileTest;
 public:
-	MarkerRequestHandler(unsigned int seed,
-                         double discard_probability,
-                         const History& history) : RequestHandler(seed, discard_probability, history) {}
+	MarkerRequestHandler(
+	    unsigned int seed,
+	    double discard_probability,
+	    const History& history) : RequestHandler(seed,
+	                                             discard_probability,
+	                                             history) {}
     virtual ~MarkerRequestHandler() {}
 
 protected:
@@ -27,8 +30,9 @@ protected:
 	 * \brief Performs the given requested without any changes.
 	 * \return Returns true.
 	 */
-	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
-                                         boost::shared_ptr<const Request> request);
+	virtual bool handle_request_reliable(
+	    boost::shared_ptr<WorldInformation> world_information,
+	    boost::shared_ptr<const Request> request);
 };
 
 #endif /* MARKER_REQUEST_HANDLER_H_ */

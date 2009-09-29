@@ -8,7 +8,7 @@
 #ifndef MARKER_DELETE_REQUEST_HANDLER
 #define MARKER_DELETE_REQUEST_HANDLER
 
-#include "request_handler.h"
+#include "../EventHandlers/request_handler.h"
 
 
 /**
@@ -16,7 +16,9 @@
  */
 class MarkerChangeRequestHandler : public RequestHandler {
 public:
-	MarkerChangeRequestHandler(unsigned int seed, double discard_probability, const History& history)
+	MarkerChangeRequestHandler(unsigned int seed,
+	                           double discard_probability,
+	                           const History& history)
 	: RequestHandler(seed, discard_probability, history) { }
 
 	virtual ~MarkerChangeRequestHandler() { }
@@ -26,8 +28,9 @@ protected:
 	 * \brief Performs the given requested without any changes.
 	 * \return Returns true.
 	 */
-	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<const Request> request);
+	virtual bool handle_request_reliable(
+	    boost::shared_ptr<WorldInformation> world_information,
+	    boost::shared_ptr<const Request> request);
 };
 
 #endif /* MARKER_CHANGE_REQUEST_HANDLER */

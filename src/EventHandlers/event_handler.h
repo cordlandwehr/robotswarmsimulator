@@ -12,11 +12,11 @@
 
 #include <boost/smart_ptr.hpp>
 
-#include "vector_request_handler.h"
-#include "marker_request_handler.h"
-#include "type_change_request_handler.h"
-#include "marker_change_request_handler.h"
-#include "color_change_request_handler.h"
+#include "../EventHandlers/vector_request_handler.h"
+#include "../EventHandlers/marker_request_handler.h"
+#include "../EventHandlers/type_change_request_handler.h"
+#include "../EventHandlers/marker_change_request_handler.h"
+#include "../EventHandlers/color_change_request_handler.h"
 
 // forward declarations
 class Event;

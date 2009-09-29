@@ -5,6 +5,8 @@
  *      Author: craupach
  */
 
+#include "../EventHandlers/vector_request_handler.h"
+
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -22,8 +24,6 @@
 #include "../ComputationalGeometry/coord_converter.h"
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/VectorModifiers/vector_modifier.h"
-
-#include "vector_request_handler.h"
 
 using boost::shared_ptr;
 

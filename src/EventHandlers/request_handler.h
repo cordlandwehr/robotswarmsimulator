@@ -28,7 +28,8 @@ public:
 	 * constructs the RequestHandler by setting up the distribution generator with the given
 	 * seed and discard probability.
 	 */
-	RequestHandler(unsigned int seed, double discard_probability, const History& history);
+	RequestHandler(unsigned int seed, double discard_probability,
+	               const History& history);
 	virtual ~RequestHandler() = 0;
 
 	/**
@@ -51,11 +52,13 @@ protected:
 
 private:
 	/**
-	 * \return Subclasses have to use the return value to indicate wether they changed the incoming request in any way
-	 *         before it was performed  (if it has been performed at all).
+	 * \return Subclasses have to use the return value to indicate wether
+	 *         they changed the incoming request in any way before it was
+	 *         performed  (if it has been performed at all).
 	 */
-	virtual bool handle_request_reliable(boost::shared_ptr<WorldInformation> world_information,
-	                                     boost::shared_ptr<const Request> request) = 0;
+	virtual bool handle_request_reliable(
+	    boost::shared_ptr<WorldInformation> world_information,
+	    boost::shared_ptr<const Request> request) = 0;
 
 	double discard_probability_;
 	boost::shared_ptr<DistributionGenerator> distribution_generator_;

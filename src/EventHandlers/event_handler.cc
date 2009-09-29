@@ -5,7 +5,7 @@
  *      Author: craupach
  */
 
-#include "event_handler.h"
+#include "../EventHandlers/event_handler.h"
 
 #include <set>
 #include <typeinfo>
