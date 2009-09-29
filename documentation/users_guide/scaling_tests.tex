@@ -55,7 +55,7 @@ Consider the same algorithm with only a local view. We use the spheric view with
 \subsection{Further Results}
 In this section, we present results based on a late version of \RSS, specifically SVN Version 1133. We focus on verifying the earlier results and give stronger evidence, while only regarding the overall performance rather than individual parts of the software.
 
-We have varied the amount of robots in the simulation and ran the target position algorithm. That is, each robot computes a target position (specifically, \textsp{RMinRect}) and attempts to jump to it. We iterate this \LCM cycle 500 times and take the average. Initially, the robots have been positioned uniformly within a cube with edge length $n$, where $n$ is the number of robots. The robots operate with global view and the synchronous time model. For details, refer to the theory documents. Each simulation run has been repeated 5 times.
+We have varied the amount of robots in the simulation and ran the target position algorithm. That is, each robot computes a target position (specifically, \textsc{RMinRect}) and attempts to jump to it. We iterate this \LCM cycle 500 times and take the average. Initially, the robots have been positioned uniformly within a cube with edge length $n$, where $n$ is the number of robots. The robots operate with global view and the synchronous time model. For details, refer to the theory documents. Each simulation run has been repeated 5 times.
 
 \begin{figure}[p]
 	\begin{center}
