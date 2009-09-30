@@ -164,58 +164,23 @@ There are other command line options that may be used to show help or about mess
                          --history-length 10
 \end{verbatim}
 
-All options listed in Listing~\ref{lst:RSS-help} can be used. Further information for this parameters can be found in the following sections. The definition of most of the parameters can be found in Table~\ref{tab:mainvars}.
-
-\begin{lstlisting}[caption={\RSS Helpline},label=lst:RSS-help]
-localhost:~$ ./RobotSwarmSimulator --help
-
-General options:
- --help                shows this help message
- --version             shows version of RobotSwarmSimulator
- --about               tells you who developed this awesome piece of software
-
-Generator options:
- --generate                      switch to generator mode
- --seed arg (=1)                 seed for random number generator
- --robots arg (=100)             number of robots
- --algorithm arg (=NONE)         name of algorithm or lua-file
- --swarmfile arg (=newrandom)    swarm-file for output
- --robotfile arg (=newrandom)    robot-file for output
- --obstaclefile arg (=newrandom) obstacle-file for output
- --add-pos-handler               add position request handler for testing
- --add-vel-handler               add velocity request handler for testing
- --add-acc-handler               add acceleration request handler for testing
- --distr-pos arg (=0)            distribute position in cube [0;distr-pos]^3
- --min-vel arg (=0)              distribute velocity in sphere with minimal  
-                                 absolut value min-vel
- --max-vel arg (=0)              distribute velocity in sphere with maximal
-                                 absolute value max-vel
- --min-acc arg (=0)              distribute acceleration in sphere with minimal  
-                                 absolut value min-acc
- --max-acc arg (=0)              distribute acceleration in sphere with maximal
-                                 absolute value max-acc
- --distr-coord                   distribute robot coordinate-systems uniformly
-
-Simulation options:
- --project-file arg         Project file to load
- --output arg               Path to directory for output
- --history-length arg (=25) history length
- --dry                      disables statistics output
- --blind                    disables visual output
- --steps                    if set this terminates the simulation after a given amount of steps
-\end{lstlisting}
-
+Further information about the single parameters can be found in the following sections.
 
 \subsection{General options}
 \begin{description}
 	\item [-{}-help] Lists all possible options including a short description.
 	\item [-{}-version] This option shows the version information of your \RSS.
 	\item [-{}-about] Get information about the developer team, contact information and more.
+	\item [-{}-logfile arg] This enables logging of important simulator messages to a logfile. If not specified, these messages are sent to the standard output device.
+	\item [-{}-loglevel arg] Sets the loglevel. Possible arguments are: \texttt{debug}, \texttt{info}, \texttt{warning}, \texttt{error}, \texttt{none}. Defaults to \texttt{info}.
 \end{description}
 
 \subsection{Generator options}\index{generate}
 \begin{description}
-	\item [-{}-generate] Switch to generator mode. This is necessary for the further options of this section.
+	\item [-{}-generate] Switch to generator mode. This is necessary to use any further options of this section.
+	\item [-{}-distr-pos-circle arg] Will generate robots distributed on a circle. The argument defines the circle radius.
+	\item [-{}-distr-pos-circle-angle arg] In circle generation mode, defines the angle between two robots on the circle. Defaults to 15.
+	\item [-{}-distr-uniform-on-sphere arg] Will generate robots positioned uniform on a sphere of the given radius.
 	\item [-{}-seed arg] Sets the seed for the random number generator for robot generation. If not set the seed is {\tt 1}. An unsigned integer value is expected.
 	\item [-{}-robots arg] The number of robots to be generated. The default number is 100. An unsigned integer value is expected.
 	\item [-{}-algorithm arg] The name of the algorithm the robots should use. If not set the algorithm {\tt SimpleRobot} is used. This is only a stub without any functionality. Also the name of a \Lua-file can be given. The extension {\tt .lua} is mandatory for lua-files.
@@ -225,14 +190,37 @@ Simulation options:
 	\item [-{}-add-pos-handler] Causes the generated files to contain a position request handler with reasonable default values. If you need a more sophisticated position request handler, you have to edit the generated {\tt .swarm} file yourself.
 	\item [-{}-add-vel-handler] Causes the generated files to contain a velocity request handler with reasonable default values. If you need a more sophisticated velocity request handler, you have to edit the generated {\tt .swarm} file yourself.
 	\item [-{}-add-acc-handler] Causes the generated files to contain a acceleration request handler with reasonable default values. If you need a more acceleration request handler, you have to edit the generated {\tt .swarm} file yourself.
-	\item [-{}-distr-pos arg] Distributes the position of robots uniformly at random in the cube $[-arg/2,+arg/2]^3$
+	\item [-{}-distr-pos arg] Distributes the position of robots uniformly at random in the cube $[-arg/2,+arg/2]^3$.
  If not set, all robots are at position zero.
+ 	\item [-{}-distr-gauss-pos arg] Distributes the positions of robots using a gaussian distribution in the cube $[0,arg]^3$. Using the options \texttt{mean-/sigma-vel/acc}, one may also activate the gaussian distribution of velocities and acceleration vectors.
+ 	\item [-{}-mean-pos arg] Mean value for the gaussian distribution of positions.
+	\item [-{}-sigma-pos arg] Sigmal value for the gaussian distribution of positions.
+ 	\item [-{}-mean-vel arg] Mean value for the gaussian distribution of velocities.
+	\item [-{}-sigma-vel arg] Sigmal value for the gaussian distribution of velocities.
+ 	\item [-{}-mean-acc arg] Mean value for the gaussian distribution of accelerations.
+	\item [-{}-sigma-acc arg] Sigmal value for the gaussian distribution of accelerations.
+	\item [-{}-random-walk] Activates a random walk formation generator. That is, the initial formation is achieved by letting each robot do a random walk. See the options \texttt{rnd-walk-steps} and \texttt{rnd-min/max-distance} for options to customize the random walk.
+	\item [-{}-rnd-walk-steps arg] Number of steps each robot does in the random walk generator.
+	\item [-{}-rnd-min-distance arg] Minimum distance of each random step in the random walk generator.
+	\item [-{}-rnd-max-distance arg] Maximum distance of a random step in the random walk generator.
+	\item [-{}-cluster] Activates a generator that generates clusters of robots.
+	\item [-{}-clt-clusters arg] Number of clusters to be generated by the cluster generator.
+	\item [-{}-clt-min-distance arg] Minmum distance of each cluster center to the origin for the cluster generator.
+	\item [-{}-clt-max-distance arg] Maximum distance of each cluster center to the origin for the cluster generator.
+	\item [-{}-clt-sigma arg] Sets the sigma value for the gaussian distribution of robot positions around each cluster center in the cluster generator.
+ 	\item [-{}-poisson-disc] Activates the poisson disc formation generator. This allows to generate random positioned robots with a surrounding clearance for each robot.
+	\item [-{}-pd-spread arg] Controls the spreading of robots in the poisson disc generator.
+	\item [-{}-pd-diameter arg] Controls the diameter of the clearance around a robot in the poisson disc generator.
 	\item [-{}-min-vel arg] The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}---max-vel}). This parameter defaults to 0.
 	\item [-{}-max-vel arg] The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}---min-vel}). This parameter defaults to 0.
 	\item [-{}-min-acc arg] The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}-max-acc}). This parameter defaults to 0.
 	\item [-{}-max-acc arg] The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum and maximum absolute value (see {\tt -{}-min-acc}). This parameter defaults to 0.
-	\item [-{}-distr-coord arg] Generates uniformly distributed coordinate--systems for the robots. If this option is not given, all robots will have the same global coordinate system (defined by a unit matrix).
- If not set, all velocities are zero.
+	\item [-{}-cosys-rotate-x] This option will rotate the x-axis of any robot coordinate-system uniformly at random.
+	\item [-{}-cosys-rotate-y] This option will rotate the y-axis of any robot coordinate-system uniformly at random.
+	\item [-{}-cosys-rotate-z] This option will rotate the z-axis of any robot coordinate-system uniformly at random.
+	\item [-{}-cosys-scale-x] This option will scale the x-axis of any robot coordinate-system using a randomly chosen factor from the interval (0,1].
+	\item [-{}-cosys-scale-y] This option will scale the y-axis of any robot coordinate-system using a randomly chosen factor from the interval (0,1].
+	\item [-{}-cosys-scale-z] This option will scale the z-axis of any robot coordinate-system using a randomly chosen factor from the interval (0,1].
 \end{description}
 
 \subsection{Simulation options}
@@ -241,6 +229,10 @@ Simulation options:
 	\item [-{}-output arg] Specifies a directory to be used for files generated by the simulation (e.\,g. statistics files for \gnuplot). The given name is interpreted relative to the current directory and will create the directory if necessary. If ommitted, all generated files will be stored in the current directory.
 	\item [-{}-history-length arg] Sets the history length, i.\,e. the length of the ringbuffer that stores past simulation states. Standard is 25 (which should be a good choice in most cases). An unsigned integer is expected.
 	\item [-{}-dry] No statistic files are beeing generated.
+	\item [-{}-blind] Disables the visualization. Instead, the user is given some additional textual output that gives information about the current simulation state. Note that this disables direct user interaction (as for example pausing/stopping simulation by keyboard shortcuts). If you use this option, you have to provide a maximum number of steps using the \texttt{steps} option.
+	\item [-{}-steps arg] Specifies the maximum number of steps to simulate. Once this number is exceeded, the simulator will quit automatically. This options is mandatory in \texttt{blind} mode.
+	\item [-{}-luaseed arg] Allows the user to set the seed for the global distribution generator that may be used in lua scripts.
+	\item [-{}-run\_until\_no\_multiplicity] Activates a termination hook that terminates the simulation as soon as no two robots occupy the same point.
 \end{description}
 
 
@@ -250,29 +242,30 @@ During the simulation it is possible to interact with the simulation in differen
 \begin{description}
 	\item [\fbox{\tt Space}] Start/ Stop.
 	\item [\fbox{\tt q}] Quit the \RSS.
-	\item [\fbox{\tt F1}] Help!
+	\item [\fbox{\tt F1}] Toggles display of about screen.
+	\item [\fbox{\tt h}] Toggles display of help screen.
 	\item [\fbox{\tt g}] Show the center of gravity of the swarm.
 	\item [\fbox{\tt v}] Show velocity vectors.
 	\item [\fbox{\tt b}] Show acceleration vectors.
 	\item [\fbox{\tt k}] Show global coordinates system.
+	\item [\fbox{\tt l}] Show local coordinates systems.
 	\item [\fbox{\tt w},\fbox{\tt s}] In the corresponding camera mode use \fbox{\tt w} for up  and \fbox{\tt s} for down.
-	\item [Arrow-Keys] Moves the view: left, right, before, behind.
-	\item [\fbox{\tt m}] Use \fbox{\tt m} to switch to mouse spinning mode and use your mouse to rotate the view. Note that this is not supported in every camera mode.
-	\item [\fbox{\tt +}, \fbox{\tt -}] Increase/ decrease simulation-speed by constant.
-	\item [\fbox{\tt *},\fbox{\tt /}] Double/ half simulation-speed.
+	\item [Arrow-Keys] Moves the view: left, right, before, behind. These are not available in all camera modes.
+	\item [\fbox{\tt m}] Use to switch to mouse spinning mode and use your mouse to rotate the view. Note that this is not supported in every camera mode.
+	\item [\fbox{\tt +}, \fbox{\tt -}] Increase/ decrease simulation-speed by a constant.
+	\item [\fbox{\tt *},\fbox{\tt /}] Double/half simulation-speed.
 	\item [\fbox{\tt c}] Change camera mode.
-	\item [\fbox{\tt t}] Switch skybox
+	\item [\fbox{\tt t}] Switch skybox.
 	\item [\fbox{\tt z}] Show strongly connected componends of visibility graph. Each strongly connected component is drawn in another color. Only undirected edges of visibility graph are drawn.
 \end{description}
 
 \subsection{Information from Vizualisation}
-%TODO (cola) at this point ther should be an diagram with size relationships of the different objects, axis, robots etc)
 At the beginning of a simulation the camera view is directed to point \texttt{(0,0,0)}, if not explicitely specified. The axis, displayed when activated by pressing \fbox{\tt K} are scaled with each unit equals to \texttt{2}. All presented robots always have diameter \texttt{0.15}, where the ball is defined with center equals to the roboter position.
 
 \section{Create Robot Algorithms for the \RSS}
 There are two ways to define a new robot algorithm for your simulations. One way is to write a subclass of \texttt{Robot} and add a new condition in \texttt{factories.cc} (for this please confer the Implementations Guide). The other way is to define your robot algorithm by scripting it in the {\sffamily Lua} scripting language and to load the algorithm at run-time. We want to stress, that a definition of robot algorithms by \Lua scripts only scales for a small number of robots. Thus, for robot swarms of sizes greater than 500 to 1000 robots you will (on standard computers) recognize a major lack of performance.
 
-\subsection{Create Robot Algorithms by Lua Scripts}\index{Lua}
+\subsection{Create Robot Algorithms using Lua Scripts}\index{Lua}
 For information on how to write \Lua scripts please visit \url{http://www.lua.org} and use the documentation presented there. For interacting the environment \Lua scripts may access the following functions and constants (if allowed by the current view and if the according request handlers are set):
 
 \paragraph{Special Variable Types}
@@ -338,6 +331,9 @@ For information on how to write \Lua scripts please visit \url{http://www.lua.or
 		
 	\item [\texttt{STRING get\_robot\_status(INTEGER <robot>)}] 
 		Returns the status of the calling robot as a RobotStatus. Expects robot identifier as input.
+		
+	\item [\texttt{BOOLEAN get\_robot\_last\_request\_successful(INTEGER <robot>)}] 
+		Returns whether the last request issued by the corresponding robot was successful. Expects the robot's robot identifier as input.
 		
 	\item [\texttt{BOOLEAN is\_point\_in\_obstacle(INTEGER <obstacle>, VECTOR3D<point>)}] 
 		Returns true iff the given point is within the given obstacle.
@@ -412,10 +408,10 @@ The following functions can be used to add an request, that is performed during 
 		
 	\item [\texttt{VECTOR3D Geometry.random\_point\_in\_ch(TABLE<VECTOR3D> <table of points>)}] 
 		Returns random point in convex hull of given set of points.
-%TODO: missing is calculate_shim_plate, no idea what it does ;)
-\end{description}
 
-%TODO subsection for random point generation, bindings from christoph
+	\item [\texttt{VECTOR3D Geometry.calculate\_shim\_plane(TABLE<VECTOR3D> <table of points>)}] 
+		Calculates a shim plane for the given points. See the documentation of the corresponding C++ method for further detailts.
+\end{description}
 
 
 \subsubsection{Example Algorithm}

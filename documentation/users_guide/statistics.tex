@@ -13,3 +13,5 @@ A simulation run results in three output files of statistic data:
 \end{itemize}
 
 The filenames results from current date (year, month, day), the current time (hour, minute, second), followed by description of observed object subset (e.\,g. \texttt{ALL}, \linebreak \texttt{MASTERS,}\dots).
+
+Besides simple statistical information as for example the current time step, the robots' distance to the origin or the radius of the smallest enclosing sphere around all robots, the statistics module allows the computation of more complex data structures that may even be visualized by the simulation. For example, the simulator can compute a (directed) visibility graph on the robots that may be visualized (to activate, press \fbox{\tt z} in the GLUT user interface). The statistics module provides further information on the structure of this visibility graph, as for example whether it is strongly connected.

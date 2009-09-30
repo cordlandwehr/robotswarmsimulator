@@ -586,7 +586,6 @@ void LuaRobot::register_lua_methods() {
 		luabind::def("add_marker_request", &add_marker_request),
 		luabind::def("add_color_change_request", &add_color_change_request),
 		luabind::def("get_own_identifier", &get_own_identifier),
-		luabind::def("calculate_shim_plane",&calculate_shim_plane,  luabind::copy_table(luabind::result) + luabind::copy_table(_1) ),
 
 		// some functions to access global number generator from lua.
 		luabind::def("gen_init_uniform", &LuaWrapper::lua_generator_init_uniform),
@@ -605,6 +604,7 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("point_contained_in_convex_hull_of_points", &LuaWrapper::point_contained_in_convex_hull_of_points, luabind::copy_table(_2)),
 			 luabind::def("compute_cog_of_ch_of_points", &LuaWrapper::compute_cog_of_ch_of_points, luabind::copy_table(_1)),
 			 luabind::def("random_point_in_ch", (const LuaWrapper::Vector3dWrapper (*) (const std::vector<LuaWrapper::Vector3dWrapper>&, int))&LuaWrapper::random_point_in_ch)
+			 luabind::def("calculate_shim_plane",&calculate_shim_plane,  luabind::copy_table(luabind::result) + luabind::copy_table(_1) ),
 		 ]
 	];
 
