@@ -23,6 +23,7 @@ class Event;
 class ComputeEvent;
 class LookEvent;
 class HandleRequestsEvent;
+class WorldModifierEvent;
 
 class Request;
 class AccelerationRequest;
@@ -144,6 +145,15 @@ private:
 	 */
 	boost::shared_ptr<WorldInformation> handle_handle_requests_event(
 	    boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
+    
+    /**
+     * handles the given WorldModifierEvent by doing the following
+     * 1. execute all WolrModifiers and collect generated requests
+     * 2. create anonymous HandleRequests event and process it
+     * 3. adding the new WorldInformation object to the history
+     */
+    boost::shared_ptr<WorldInformation> handle_world_modifier_event(
+        boost::shared_ptr<WorldModifierEvent> world_modifier_event);
 
 	/**
 	 * informs all listeners after each event
