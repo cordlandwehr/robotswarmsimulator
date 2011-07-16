@@ -17,6 +17,7 @@
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
+#include "../ActivationSequenceGenerators/synchronous_asg_wm.h"
 #include "../ActivationSequenceGenerators/fair_atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/asynchronous_asg.h"
@@ -273,7 +274,10 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
 	// setup of activation sequence generator
 	if(asg_type == "SYNCHRONOUS") {
-			asg.reset(new SynchronousASG());
+        asg.reset(new SynchronousASG());
+	} else if(asg_type == "SYNCHRONOUS_WM") {
+        // TODO: Load/read actual world modifiers?
+        asg.reset(new SynchronousASGWM());
 	} else if(asg_type == "ATOMIC_SEMISYNCHRONOUS") {
 		try {
 			unsigned int seed = boost::lexical_cast<unsigned int>(params["ATOMIC_SEMISYNC_ASG_SEED"]);

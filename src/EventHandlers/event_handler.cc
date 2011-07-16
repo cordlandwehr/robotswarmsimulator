@@ -219,7 +219,7 @@ shared_ptr<WorldInformation> EventHandler::handle_world_modifier_event(
 	shared_ptr<WorldInformation> new_world_information =
         extrapolate_old_world_information(world_modifier_event->time());
     
-    // TODO: Implement actual behaviour (right here) ...debug
+    // TODO: Implement actual behaviour (right here) ...
     ConsoleOutput::log(ConsoleOutput::EventHandler, ConsoleOutput::debug)
         << "Handling WorldModifierEvent (time = "
         << world_modifier_event->time()

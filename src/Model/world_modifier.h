@@ -12,6 +12,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#include "../Requests/request.h"
 
 class WorldModifier {
 public:
