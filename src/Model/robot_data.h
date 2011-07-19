@@ -11,6 +11,8 @@
 
 #include <boost/tuple/tuple.hpp>
 #include "../Utilities/vector_arithmetics.h"
+#include "edge.h"
+#include <set>
 
 
 #include "world_object.h"
@@ -188,6 +190,8 @@ private:
 
 	boost::weak_ptr<View> view_;
 	unsigned short int color_;
+
+	std::set<Edge> edges_;
 
 };
 
