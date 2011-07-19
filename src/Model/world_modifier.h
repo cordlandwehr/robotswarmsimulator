@@ -12,6 +12,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#include "../Model/world_information.h"
 #include "../Views/abstract_view_factory.h"
 #include "../Requests/request.h"
 
@@ -23,12 +24,14 @@ public:
 	virtual std::string get_algorithm_id () const = 0;
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
     
+    void update_view(const boost::shared_ptr<WorldInformation> &world_information);
     static boost::shared_ptr<AbstractViewFactory> get_view_factory();
     
 protected:
     /* nothing here (yet) */
     
 private:
+    boost::shared_ptr<View> view_;
 	static boost::shared_ptr<AbstractViewFactory> view_factory_;
     
 };
