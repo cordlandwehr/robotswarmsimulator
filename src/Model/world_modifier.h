@@ -12,6 +12,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#include "../Views/abstract_view_factory.h"
 #include "../Requests/request.h"
 
 class WorldModifier {
@@ -22,11 +23,13 @@ public:
 	virtual std::string get_algorithm_id () const = 0;
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
     
+    static boost::shared_ptr<AbstractViewFactory> get_view_factory();
+    
 protected:
-    /* nothing here (yet?) */
+    /* nothing here (yet) */
     
 private:
-	/* nothing here (yet?) */
+	static boost::shared_ptr<AbstractViewFactory> view_factory_;
     
 };
 
