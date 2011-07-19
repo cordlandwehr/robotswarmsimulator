@@ -4,12 +4,14 @@
 #include "math.h"
 
 #include <string.h>
+#include <stdio.h>
 #include <map>
 
 #include "PDSampling.h"
 #include "RangeList.h"
 #include "ScallopedSector.h"
 #include "WeightedDiscretePDF.h"
+
 
 #include "quasisampler_prototype.h"
 

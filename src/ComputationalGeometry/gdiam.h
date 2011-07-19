@@ -18,6 +18,7 @@
 #define  __GDIAM__H
 
 #include <memory.h>
+#include <stdio.h>
 
 #define  GDIAM_DIM   3
 typedef double gdiam_real;
