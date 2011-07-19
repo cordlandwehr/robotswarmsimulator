@@ -19,6 +19,7 @@
 #include "../Events/world_modifier_event.h"
 #include "../SimulationControl/history.h"
 #include "../Model/robot_data.h"
+#include "../WorldModifierImplementations/test_world_modifier.h"
 
 #include "synchronous_asg_wm.h"
 
@@ -40,7 +41,9 @@ boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
 		WorldModifierEvent * world_modifier_event = new WorldModifierEvent(time_of_next_event_);
 		event.reset(world_modifier_event);
         
-		// TODO: Add actual WorldModifier objects ...        
+		// TODO: Add actual WorldModifier objects ... (this is only a hardcoded test)
+        boost::shared_ptr<WorldModifier> modifier(new TestWorldModifier());
+        world_modifier_event->add_to_world_modifier_set(modifier);
         
 	} else if(time_of_next_event_ % kNumberOfEvents == kTimeToLook) {
 		LookEvent * look_event = new LookEvent(time_of_next_event_);

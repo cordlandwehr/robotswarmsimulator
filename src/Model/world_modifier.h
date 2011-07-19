@@ -19,9 +19,9 @@
 class WorldModifier {
 public:
 	WorldModifier(){};
-	virtual ~WorldModifier();
+	virtual ~WorldModifier(){};
         
-	virtual std::string get_algorithm_id () const = 0;
+	virtual std::string get_algorithm_id() const = 0;
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
     
     void update_view(const boost::shared_ptr<WorldInformation> &world_information);

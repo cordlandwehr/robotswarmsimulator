@@ -29,8 +29,3 @@ boost::shared_ptr<AbstractViewFactory> WorldModifier::get_view_factory() {
 void WorldModifier::update_view(const boost::shared_ptr<WorldInformation> &world_information) {
     view_ = get_view_factory()->create_new_view_instance(world_information);
 }
-
-WorldModifier::~WorldModifier() {
-    
-}
-

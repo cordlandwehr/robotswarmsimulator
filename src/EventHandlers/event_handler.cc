@@ -219,13 +219,37 @@ shared_ptr<WorldInformation> EventHandler::handle_world_modifier_event(
 	shared_ptr<WorldInformation> new_world_information =
         extrapolate_old_world_information(world_modifier_event->time());
     
-    // TODO: Implement actual behaviour (right here) ...
+    // debug message (annoucing the event)
     ConsoleOutput::log(ConsoleOutput::EventHandler, ConsoleOutput::debug)
         << "Handling WorldModifierEvent (time = "
         << world_modifier_event->time()
         << ").";
     
-    return new_world_information;
+    // create anonymous handle request event for the generated requests
+    shared_ptr<HandleRequestsEvent> handle_request_event
+        (new HandleRequestsEvent(world_modifier_event->time()));
+    
+    BOOST_FOREACH(shared_ptr<WorldModifier> modifier,
+                  world_modifier_event->world_modifier_set()) {
+        // debug message (modifier id)
+        ConsoleOutput::log(ConsoleOutput::EventHandler, ConsoleOutput::debug)
+            << "Executing WorldModifier (id = "
+            << modifier->get_algorithm_id()
+            << ").";
+        
+        // update view of current modifier and compute requests
+        modifier->update_view(new_world_information);
+        std::set< shared_ptr<Request> > request_set = modifier->compute();
+        
+        // add requests to compute event
+        // add the requests to the event.
+		BOOST_FOREACH(shared_ptr<Request> request, request_set) {
+			handle_request_event->add_to_requests(request);
+		}
+    }
+    
+    // process anonymous handle request event, return modified world
+    return handle_handle_requests_event(handle_request_event);
 }
 
 shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(
