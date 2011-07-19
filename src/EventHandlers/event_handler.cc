@@ -237,9 +237,8 @@ shared_ptr<WorldInformation> EventHandler::handle_world_modifier_event(
             << modifier->get_algorithm_id()
             << ").";
         
-        // update view of current modifier and compute requests
-        modifier->update_view(new_world_information);
-        std::set< shared_ptr<Request> > request_set = modifier->compute();
+        // compute requests
+        std::set< shared_ptr<Request> > request_set = modifier->compute(new_world_information);
         
         // add requests to compute event
         // add the requests to the event.

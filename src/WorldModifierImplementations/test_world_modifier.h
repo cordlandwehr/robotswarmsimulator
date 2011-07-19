@@ -15,5 +15,6 @@
 class TestWorldModifier : public WorldModifier {
 public:
     virtual std::string get_algorithm_id() const;
-    virtual std::set< boost::shared_ptr<Request> > compute();
+    virtual std::set< boost::shared_ptr<Request> >
+        compute(const boost::shared_ptr<WorldInformation> &world_information);
 };

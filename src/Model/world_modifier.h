@@ -18,21 +18,18 @@
 
 class WorldModifier {
 public:
-	WorldModifier(){};
+	WorldModifier();
 	virtual ~WorldModifier(){};
         
 	virtual std::string get_algorithm_id() const = 0;
-	virtual std::set<boost::shared_ptr<Request> > compute() = 0;
-    
-    void update_view(const boost::shared_ptr<WorldInformation> &world_information);
-    static boost::shared_ptr<AbstractViewFactory> get_view_factory();
+	virtual std::set<boost::shared_ptr<Request> >
+        compute(const boost::shared_ptr<WorldInformation> &world_information) = 0;
     
 protected:
     /* nothing here (yet) */
     
 private:
-    boost::shared_ptr<View> view_;
-	static boost::shared_ptr<AbstractViewFactory> view_factory_;
+    /* nothing here (yet) */
     
 };
 
