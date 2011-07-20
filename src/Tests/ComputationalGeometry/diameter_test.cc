@@ -1,6 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include "../ComputationalGeometry/diameter.h"
 #include <boost/timer.hpp>
+#include <stdio.h>
 
 using namespace std;
 
