@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include <map>
+#include <stdio.h>
 
 #include "PDSampling.h"
 #include "RangeList.h"
