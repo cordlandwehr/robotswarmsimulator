@@ -12,7 +12,11 @@
 #include <boost/tuple/tuple.hpp>
 #include "../Utilities/vector_arithmetics.h"
 #include "edge.h"
+#include "undirected_edge.h"
+#include "directed_edge.h"
+#include "message.h"
 #include <set>
+#include <deque>
 
 
 #include "world_object.h"
@@ -168,6 +172,49 @@ public:
 
 	virtual boost::shared_ptr<WorldObject> clone() const;
 
+	/**
+	 * Adds message so end of message queue
+	 */
+	void push_back_message(boost::shared_ptr<Message> m) {
+		messages_.push_back(m);
+	}
+
+	/**
+	 * Returns first message from queue
+	 */
+	boost::shared_ptr<Message> get_message() {
+		return messages_.front();
+	}
+
+	/**
+	 * Removes first message from queue
+	 */
+	void pop_front_message() {
+		messages_.pop_front();
+	}
+
+	/**
+	 * Adds edge to adjacency list
+	 */
+	void add_edge(boost::shared_ptr<Edge> e) {
+		edges_.insert(e);
+	}
+
+	/**
+	 * Removes edge from adjacency list
+	 * TODO: Same shared_ptr needed -> check some other way?!?
+	 */
+	void remove_edge(boost::shared_ptr<Edge> e) {
+		edges_.erase(e);
+	}
+
+	/**
+	 * Returns constant set of edges
+	 */
+	const std::set<boost::shared_ptr<Edge> >& get_edges() {
+		return edges_;
+	}
+
 
 private:
 	/**
@@ -191,8 +238,8 @@ private:
 	boost::weak_ptr<View> view_;
 	unsigned short int color_;
 
-	std::set<Edge> edges_;
-
+	std::set<boost::shared_ptr<Edge> > edges_;
+	std::deque<boost::shared_ptr<Message> > messages_;
 };
 
 #endif /* ROBOT_DATA_H_ */
