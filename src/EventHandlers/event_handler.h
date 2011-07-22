@@ -126,6 +126,21 @@ public:
 		color_change_request_handler_ = request_handler;
 	}
 
+	void set_message_request_handler(
+		boost::shared_ptr<MessageRequestHandler> request_handler) {
+		message_request_handler_ = request_handler;
+	}
+
+	void set_insert_edge_request_handler(
+		boost::shared_ptr<InsertEdgeRequestHandler> request_handler) {
+		insert_edge_request_handler_ = request_handler;
+	}
+
+	void set_remove_edge_request_handler(
+		boost::shared_ptr<ColorChangeRequestHandler> request_handler) {
+		remove_edge_request_handler_ = request_handler;
+	}
+
 private:
 	/**
 	 * handles the given look event by delegating it to RobotControl
