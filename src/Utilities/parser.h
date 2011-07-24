@@ -198,6 +198,11 @@ public:
 	std::vector<Vector3d>& obstacle_size();
 
 	/**
+	 * \return reference to vector of world modifier.
+	 */
+	std::vector<std::string>& world_modifiers();
+
+	/**
 	 * \returns the dumpnumber (for saving snapshots of configurations).
 	 */
 	int dumpnumber();
@@ -215,6 +220,7 @@ private:
 
 	std::string robot_filename_;
 	std::string obstacle_filename_;
+	std::vector<std::string> world_modfiers_;
 	int dumpnumber_;
 
 	//file name of project file
@@ -244,6 +250,7 @@ private:
 	std::vector<std::string> initiale_obstacle_marker_information_;
 	std::vector<double> initiale_obstacle_radius_;
 	std::vector<Vector3d> initiale_obstacle_size_;
+
 
 	/**
 	 * This method returns the default value of the given variable, if the given variable has a default value,

@@ -27,11 +27,17 @@ using std::vector;
 
 
 void SynchronousASGWM::initialize(
-                                const History& history,
-                                const vector<boost::shared_ptr<Robot> >& robots) {
+	    const History& history,
+	    const std::vector<boost::shared_ptr<Robot> >& robots,
+	    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers){
 	// extract robots from robot data
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		robots_.push_back(robot);
+	}
+
+	// extract world modifiers from robot data
+	BOOST_FOREACH(boost::shared_ptr<WorldModifier> world_modifier, world_modifiers) {
+		world_modifiers_.push_back(world_modifier);
 	}
 }
 
@@ -41,9 +47,16 @@ boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
 		WorldModifierEvent * world_modifier_event = new WorldModifierEvent(time_of_next_event_);
 		event.reset(world_modifier_event);
         
-		// TODO: Add actual WorldModifier objects ... (this is only a hardcoded test)
-        boost::shared_ptr<WorldModifier> modifier(new TestWorldModifier());
-        world_modifier_event->add_to_world_modifier_set(modifier);
+//		// TODO: Add actual WorldModifier objects ... (this is only a hardcoded test)
+//        boost::shared_ptr<WorldModifier> modifier(new TestWorldModifier());
+//        world_modifier_event->add_to_world_modifier_set(modifier);
+
+		// add all world modifiers. This uses the raw pointer because it is of the right type.
+		// (it is protected by a shared_ptr and I'm saving a cast)
+		BOOST_FOREACH(boost::shared_ptr<WorldModifier> world_modifier, world_modifiers_) {
+			world_modifier_event->add_to_world_modifier_set(world_modifier);
+		}
+
         
 	} else if(time_of_next_event_ % kNumberOfEvents == kTimeToLook) {
 		LookEvent * look_event = new LookEvent(time_of_next_event_);

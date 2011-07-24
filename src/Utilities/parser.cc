@@ -4,6 +4,8 @@
 #include <boost/foreach.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/algorithm/string.hpp>
+
 
 //include for enums of RobotType and RobotStatus
 #include "../Model/robot_data.h"
@@ -135,6 +137,11 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	if (robot_filename_.rfind(".robot")!=string::npos)
 		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
 
+	string tmp_world_modifiers = get_string_value_from_map(variables_and_values, "WORLD_MODIFIERS");
+
+//	boost::is_any_of(",");
+
+	boost::split(world_modfiers_, tmp_world_modifiers, boost::is_any_of(","));
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -723,6 +730,14 @@ vector<double>& Parser::obstacle_radius() {
 vector<Vector3d>& Parser::obstacle_size() {
 	return initiale_obstacle_size_;
 }
+
+
+/*** GET-method for world modfiers ***/
+vector<string>& Parser::world_modifiers() {
+	return world_modfiers_;
+}
+
+
 int Parser::dumpnumber() {
 	return dumpnumber_;
 }

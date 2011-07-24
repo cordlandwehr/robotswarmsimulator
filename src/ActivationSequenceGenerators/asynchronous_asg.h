@@ -51,8 +51,10 @@ public:
 	 * ASG is used
 	 * \param The intial world state
 	 */
-	void initialize(const History& history,
-	                const std::vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(
+		    const History& history,
+		    const std::vector<boost::shared_ptr<Robot> >& robots,
+		    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers = *new std::vector<boost::shared_ptr<WorldModifier> >()); //TODO: Change test cases to specify world modifiers
 
 	/**
 	 * Returns the next event.

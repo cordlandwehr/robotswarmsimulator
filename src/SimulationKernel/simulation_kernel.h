@@ -31,6 +31,7 @@
 #include "../EventHandlers/vector_request_handler.h"
 
 #include "../Model/robot.h"
+#include "../Model/world_modifier.h"
 
 #include "../SimulationControl/history.h"
 #include "../SimulationControl/time_point.h"
@@ -137,6 +138,11 @@ private:
 	std::vector< boost::shared_ptr<Robot> > robots_;
 
 	/**
+	 * Set of world modifiers
+	 */
+	std::vector< boost::shared_ptr<WorldModifier> > world_modifiers_;
+
+	/**
 	 * Reference to a History of the WorldInformations.
 	 */
 	boost::shared_ptr<History> history_;
@@ -222,6 +228,11 @@ private:
 	 * This method creates the obstacles using the information read from the obstacles input file.
 	 */
 	void create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+
+	/**
+	 * This method creates the world modifiers using the information read from the project file.
+	 */
+	void create_world_modifiers(boost::shared_ptr<Parser> parser);
 
 
 	/**
