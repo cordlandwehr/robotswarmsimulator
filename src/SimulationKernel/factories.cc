@@ -67,6 +67,7 @@
 #include "../SimulationKernel/robot_type_robot_control.h"
 #include "../Model/world_information.h"
 #include "../Model/robot_data.h"
+#include "../WorldModifierImplementations/test_world_modifier.h"
 
 #include <iostream>
 
@@ -395,9 +396,30 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	} else if (algorithm == "TPAlgorithmRMinRect") {
 		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::rminrect));
 	} else {
-		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
+		throw UnsupportedOperationException("Tried to create unknown robot type: "+algorithm);
 	}
 	return robot;
+}
+
+boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::string &str) {
+	boost::shared_ptr<WorldModifier> world_modifier;
+
+	// check if the algorithm is a lua file
+	std::string subfix;
+	if(str.size() >= 4)
+		subfix = str.substr(str.size() - 4, 4);
+
+	if(subfix == ".lua") {
+		//TODO: Add LuaWorldModifier
+//		world_modifier.reset(new LuaWorldModifier(id, algorithm));
+	}
+	else if(str == "TestWorldModifier" || str == "NONE") {
+		world_modifier.reset(new TestWorldModifier());
+	} else {
+		throw UnsupportedOperationException("Tried to create unknown world modifier type: " + str);
+	}
+
+	return world_modifier;
 }
 
 boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {

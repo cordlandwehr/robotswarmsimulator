@@ -137,11 +137,19 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	if (robot_filename_.rfind(".robot")!=string::npos)
 		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
 
-	string tmp_world_modifiers = get_string_value_from_map(variables_and_values, "WORLD_MODIFIERS");
+	string temp_world_modifiers = get_string_value_from_map(variables_and_values, "WORLD_MODIFIERS");
 
 //	boost::is_any_of(",");
 
-	boost::split(world_modfiers_, tmp_world_modifiers, boost::is_any_of(","));
+	std::vector<std::string> temp_split_world_modifiers;
+
+	boost::split(temp_split_world_modifiers, temp_world_modifiers, boost::is_any_of(","));
+
+	for(int i = 0; i < temp_split_world_modifiers.size(); i++){
+		std::string temp_string = temp_split_world_modifiers[i]; //TODO: Is there a memory leak?
+		boost::trim(temp_string);
+		world_modifiers_.push_back(temp_string);
+	}
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -734,7 +742,7 @@ vector<Vector3d>& Parser::obstacle_size() {
 
 /*** GET-method for world modfiers ***/
 vector<string>& Parser::world_modifiers() {
-	return world_modfiers_;
+	return world_modifiers_;
 }
 
 

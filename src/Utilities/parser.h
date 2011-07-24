@@ -220,7 +220,7 @@ private:
 
 	std::string robot_filename_;
 	std::string obstacle_filename_;
-	std::vector<std::string> world_modfiers_;
+	std::vector<std::string> world_modifiers_;
 	int dumpnumber_;
 
 	//file name of project file

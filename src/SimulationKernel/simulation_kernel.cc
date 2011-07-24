@@ -308,7 +308,19 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 }
 
 void SimulationKernel::create_world_modifiers(boost::shared_ptr<Parser> parser) {
-	//TODO:
+	boost::shared_ptr<WorldModifier> temp_world_modifier;
+	std::string temp_world_modifier_name;
+
+	vector<string>& temp_world_modifiers = parser->world_modifiers();
+
+	for (int i = 0; i < temp_world_modifiers.size(); i++) {
+		temp_world_modifier_name = temp_world_modifiers[i];
+		temp_world_modifier = Factory::world_modifier_factory(temp_world_modifier_name);
+
+
+
+		world_modifiers_.push_back(temp_world_modifier);
+	}
 }
 
 boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_information(
