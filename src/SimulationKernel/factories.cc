@@ -68,6 +68,7 @@
 #include "../Model/world_information.h"
 #include "../Model/robot_data.h"
 #include "../WorldModifierImplementations/test_world_modifier.h"
+#include "../WorldModifierImplementations/lua_world_modifier.h"
 
 #include <iostream>
 
@@ -410,8 +411,7 @@ boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::stri
 		subfix = str.substr(str.size() - 4, 4);
 
 	if(subfix == ".lua") {
-		//TODO: Add LuaWorldModifier
-//		world_modifier.reset(new LuaWorldModifier(id, algorithm));
+		world_modifier.reset(new LuaWorldModifier(str));
 	}
 	else if(str == "TestWorldModifier" || str == "NONE") {
 		world_modifier.reset(new TestWorldModifier());
