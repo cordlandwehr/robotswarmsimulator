@@ -458,9 +458,7 @@ LuaRobot::LuaRobot(boost::shared_ptr<RobotIdentifier> id, const std::string& lua
 		report_errors(status);
 		throw std::invalid_argument("Error while loading given lua file (" + lua_file_name + ").");
 	}
-                       
-    std::cout << lua_file_name << std::endl;
-                       
+
 	status = lua_pcall(lua_state_.get(), 0, LUA_MULTRET, 0);
 	report_errors(status);
 }
