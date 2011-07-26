@@ -28,7 +28,7 @@
  * 3. Call open(...) for each instance and pass the column-titles.
  * 4. Repeatedly call update(...) for logging the passed values.
  * 5. Call quit().
- */
+ */ //development will start here (necessary change to create branch?)
 
 #ifndef STATS_OUT_H_
 #define STATS_OUT_H_
