@@ -14,14 +14,14 @@ class DirectedEdge: public Edge {
 public:
 	DirectedEdge(boost::shared_ptr<Identifier> id,
 	             boost::shared_ptr<Vector3d> position,
-				 boost::shared_ptr<RobotData> v1,
-				 boost::shared_ptr<RobotData> v2) : Edge (id, position, v1, v2) {};
+				 boost::shared_ptr<RobotIdentifier> v1,
+				 boost::shared_ptr<RobotIdentifier> v2) : Edge (id, position, v1, v2) {};
 
-	boost::shared_ptr<RobotData> source() const {
+	boost::shared_ptr<RobotIdentifier> source() const {
 		return getRobot1();
 	}
 
-	boost::shared_ptr<RobotData> target() const {
+	boost::shared_ptr<RobotIdentifier> target() const {
 		return getRobot2();
 	}
 };

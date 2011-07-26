@@ -137,7 +137,7 @@ public:
 	}
 
 	void set_remove_edge_request_handler(
-		boost::shared_ptr<ColorChangeRequestHandler> request_handler) {
+		boost::shared_ptr<RemoveEdgeRequestHandler> request_handler) {
 		remove_edge_request_handler_ = request_handler;
 	}
 
