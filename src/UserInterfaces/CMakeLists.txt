@@ -11,6 +11,12 @@ set(RSSMAIN_SRCS
 	glut_visualizer.cc
 )
 
+# find all gui source files
+set(RSSMAIN_GUI_SRCS
+    robot_swarm_simulator_gui.cc
+	glut_visualizer.cc
+)
+
 # find/configure boost (statically linked for release builds)
 if(CMAKE_BUILD_TYPE MATCHES Release)
 	set(Boost_USE_STATIC_LIBS TRUE)
@@ -74,6 +80,34 @@ else(APPLE)
 	endif(CMAKE_BUILD_TYPE MATCHES Release)
 endif(APPLE)
 
+# find/configure QT
+# TODO packaging of QT libraries for release builds
+find_package(Qt4 REQUIRED)
+
+set(QT_USE_OPENGL TRUE)    
+include(${QT_USE_FILE})
+
+# generate executable of the above source files and link it
+add_executable(RobotSwarmSimulatorGui ${RSSMAIN_GUI_SRCS})
+target_link_libraries(RobotSwarmSimulatorGui
+    RSSimulator
+    ${Boost_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${GLUT_glut_LIBRARY}
+    ${LUA_LIBRARIES}
+    ${CGAL_LIBRARIES}
+    ${LAPACK_LIBRARIES}
+    ${QT_LIBRARIES}
+    luabind
+)
+
+# add executable to install target
+install(TARGETS RobotSwarmSimulatorGui
+        RUNTIME DESTINATION bin
+                COMPONENT mainprogram
+)
+
+
 # generate executable of the above source files and link it
 add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
 target_link_libraries(RobotSwarmSimulator
@@ -83,6 +117,7 @@ target_link_libraries(RobotSwarmSimulator
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
 	${LAPACK_LIBRARIES}
+    ${QT_LIBRARIES}
 	luabind
 )
 

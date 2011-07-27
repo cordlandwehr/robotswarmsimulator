@@ -1,0 +1,11 @@
+<RCC>
+  <qresource>
+    <file>icons/double.png</file>
+    <file>icons/half.png</file>
+    <file>icons/minus.png</file>
+    <file>icons/next.png</file>
+    <file>icons/pause.png</file>
+    <file>icons/play.png</file>
+    <file>icons/plus.png</file>
+  </qresource>
+</RCC>
