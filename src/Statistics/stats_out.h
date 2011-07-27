@@ -10,7 +10,7 @@
  * 2. output_<timestamp>_<subsetid>.plt
  * While the gnuplot-file contains header-information for latter
  * displaying the statistical data with GNUPlot, the output-file
- * simply writes one row for a vector of values, each seperated by at
+ * simply writes one row ufor a vector of values, each seperated by at
  * least one space. To give these 'columns' a name one might pass
  * an information-vector of same length to the open(...)-function.
  * The names are written as a comment-line at the beginning of the file.
@@ -28,7 +28,7 @@
  * 3. Call open(...) for each instance and pass the column-titles.
  * 4. Repeatedly call update(...) for logging the passed values.
  * 5. Call quit().
- */ //development will start here (necessary change to create branch?)
+ */
 
 #ifndef STATS_OUT_H_
 #define STATS_OUT_H_

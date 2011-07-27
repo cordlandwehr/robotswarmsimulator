@@ -102,18 +102,8 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 	const WorldInformation & world_information = time_point.world_information();
 	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug)  << "StatsControl::update(...) with WorldInformation.time==" <<  world_information.time();
 
-	/**
-	 * TODO(craupach): This should not happen here!!
-	 * calculate visibility graph
-	 *
-	 * Hint(kurras): It is not neccessary for *statistics* to compute the visibilty graph
-	 * for each event. It would sufficient to compute it for the last event of
-	 * each unique time, as done below for the calc_indata-update.
-	 * But since this data is shared via time_point with other software components that
-	 * I don't know, I did not modify this.
-	 */
 	boost::shared_ptr<StatisticsDataObject> data(new StatisticsDataObject());
-	calculate_visibility_graph(world_information, data);
+	//fill the statistics data object here, if you like
 	time_point.set_statistics_data_object(data);
 
 	if (stats_calc_indata_.world_info_.get() == NULL) {
@@ -190,7 +180,7 @@ void StatsControl::do_datadump(const WorldInformation& world_information, boost:
 					names.push_back("robot_acc_y");
 					names.push_back("robot_acc_z");
 				}
-
+ 
 				// open outfile and stream the fieldnames
 				stats_datadump_->open(names, false);
 			}
@@ -223,12 +213,6 @@ void StatsControl::do_datadump(const WorldInformation& world_information, boost:
 }
 
 void StatsControl::quit() {
-	// clear all subsets
-	for (unsigned int i=0; i<cur_subsets_.size(); i++)
-		cur_subsets_[i].clear();
-
-	// clear the vector of subsets itself
-	cur_subsets_.clear();
 
 	// quit all StatsOut
 	for (unsigned int i=0; i<stats_out_.size(); i++)
@@ -258,25 +242,10 @@ void StatsControl::calculate() {
 	if (!stats_cfg_.is_any_subset())
 		return;
 
-	// the most recent RobotData-instances in the subsets have changed,
-	// so recalculate all of them.
-	update_subsets();
-
-	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "number of subsets: " << cur_subsets_.size() << std::endl;
-	for(unsigned int i=0; i<cur_subsets_.size(); i++) {
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "size of subset " << i << " is " << cur_subsets_[i].size();
-	}
-
-
-	// for each subset perform the calculation
-	// with the respective StatsOut-instance.
-	// asserts that stats_calc_indata_ contains valid information
-	for(unsigned int i=0; i<cur_subsets_.size(); i++)
-		stats_calc_.calculate(stats_calc_indata_, cur_subsets_[i], stats_out_[i], i);
 }
 
 
-void StatsControl::update_subsets() {
+/*void StatsControl::update_subsets() {
 
 	// clear all subsets
 	for (unsigned int i=0; i<cur_subsets_.size(); i++)
@@ -369,12 +338,12 @@ void StatsControl::update_subsets() {
 		cur_subsets_.push_back(actslaves);
 	if (stats_cfg_.is_subset_inactslaves())
 		cur_subsets_.push_back(inactslaves);
-}
+}*/
 
 
-void StatsControl::calculate_visibility_graph(const WorldInformation& world_info,
+/*void StatsControl::calculate_visibility_graph(const WorldInformation& world_info,
                                               boost::shared_ptr<StatisticsDataObject> data){
-	std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots;
+	/*std::vector<boost::shared_ptr<RobotIdentifier> > visible_robots;
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 
 	// init the graph
@@ -412,4 +381,4 @@ void StatsControl::calculate_visibility_graph(const WorldInformation& world_info
 
 	// fill in data object
 	data->set_visibility_graph(vis_graph, vis_graph_is_connected, components);
-}
+}*/
