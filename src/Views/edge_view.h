@@ -8,6 +8,8 @@
 #ifndef EDGE_VIEW_H_
 #define EDGE_VIEW_H_
 
+#include "view.h"
+
 /**
  * \class EdgeView
  * \brief Robots connected by edges are visible

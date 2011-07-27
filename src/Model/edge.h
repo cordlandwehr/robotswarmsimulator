@@ -9,7 +9,6 @@
 #define EDGE_H_
 
 #include "world_object.h"
-#include "robot_data.h"
 #include "robot_identifier.h"
 
 class RobotData;
@@ -24,13 +23,11 @@ public:
 		;
 	}
 
-	boost::shared_ptr<RobotIdentifier> getRobot1() const {
-		return robot1_;
-	}
+	virtual ~Edge();
 
-	boost::shared_ptr<RobotIdentifier> getRobot2() const {
-		return robot2_;
-	}
+	boost::shared_ptr<RobotIdentifier> getRobot1() const;
+
+	boost::shared_ptr<RobotIdentifier> getRobot2() const;
 
 private:
 	boost::shared_ptr<RobotIdentifier> robot1_;

@@ -38,6 +38,7 @@ enum RobotType { MASTER, SLAVE, kRobotTypeCount };
 class Robot;
 class MarkerInformation;
 class View;
+class Message;
 class RobotData : public WorldObject{
 public:
 	RobotData(boost::shared_ptr<Identifier> id,
@@ -211,7 +212,7 @@ public:
 	/**
 	 * Returns constant set of edges
 	 */
-	const std::vector<boost::shared_ptr<EdgeIdentifier> >& get_edges() {
+	const std::vector<boost::shared_ptr<EdgeIdentifier> >& get_edges() const{
 		return edges_;
 	}
 

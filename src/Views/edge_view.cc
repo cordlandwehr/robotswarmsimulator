@@ -17,25 +17,25 @@
 
 #include <boost/foreach.hpp>
 
-FullView::FullView() {
+EdgeView::EdgeView() {
 }
 
-FullView::~FullView() {
+EdgeView::~EdgeView() {
 }
 
-std::vector<View::RobotRef> FullView::get_visible_robots(const RobotData& robot) const {
+std::vector<View::RobotRef> EdgeView::get_visible_robots(const RobotData& robot) const {
 	std::vector<View::RobotRef> result;
-	const std::vector<boost::shared_ptr<Edge> > edges = robot.get_edges();
-	BOOST_FOREACH(const boost::shared_ptr<Edge>& e, edges) {
-		result.push_back(e->getRobot1());
-		result.push_back(e->getRobot2());
-	}
+//	const std::vector<boost::shared_ptr<EdgeIdentifier> > edges = robot.get_edges();
+//	BOOST_FOREACH(const boost::shared_ptr<EdgeIdentifier>& e, edges) {
+//		result.push_back(e->getRobot1());
+//		result.push_back(e->getRobot2());
+//	}
 	//remove self
-	result.erase(std::find(result.begin(), result.end(), boost::static_pointer_cast<RobotIdentifier>(robot.id())));
+//	result.erase(std::find(result.begin(), result.end(), boost::static_pointer_cast<RobotIdentifier>(robot.id())));
 	return result;
 }
 
-std::vector<View::EdgeRef> FullView::get_visible_robots(const RobotData& robot) const {
-	std::vector<View::RobotRef> result = robot.get_edges();
+std::vector<View::EdgeRef> EdgeView::get_visible_edges(const RobotData& robot) const {
+	std::vector<View::EdgeRef> result = robot.get_edges();
 	return result;
 }

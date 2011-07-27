@@ -23,35 +23,26 @@ public:
 	{
 		;
 	}
+	virtual ~Message();
 
 	/**
 	 * Adds data to marker_information of this message (wrapper)
 	 */
-	void add_data(const std::string& var_name, const boost::any& insert_data) {
-		marker_information().add_data(var_name, insert_data);
-	}
+	void add_data(const std::string& var_name, const boost::any& insert_data);
 
 	/**
 	 * Removes data from marker_information of this message (wrapper)
 	 */
-	void remove_data(const std::string& var_name){
-		marker_information().remove_data(var_name);
-	}
+	void remove_data(const std::string& var_name);
 
 	/**
 	 * Returns data from marker_information of this message (wrapper)
 	 */
-	const boost::any get_data(const std::string& var_name){
-		return marker_information().get_data(var_name);
-	}
+	const boost::any get_data(const std::string& var_name);
 
-	boost::shared_ptr<RobotData> sender() const {
-		return sender_;
-	}
+	boost::shared_ptr<RobotData> sender() const;
 
-	boost::shared_ptr<RobotData> receiver() const {
-		return receiver_;
-	}
+	boost::shared_ptr<RobotData> receiver() const;
 
 private:
 	boost::shared_ptr<RobotData> sender_;
