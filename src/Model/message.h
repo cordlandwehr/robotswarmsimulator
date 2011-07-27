@@ -2,7 +2,7 @@
 //  message.h
 //  Robot Swarm Simulator
 //
-//  Created by Jonas Knoll on 21.07.11.
+//  Created by Jonas on 21.07.11.
 //
 
 #ifndef MESSAGE_H_

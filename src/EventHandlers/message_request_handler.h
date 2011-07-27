@@ -2,7 +2,7 @@
  * message_request_handler.h
  *
  *  Created on: 22.07.2011
- *      Author: Jonas Knoll
+ *      Author: Jonas
  *
  *  TODO: add message_request_handler.cc
  */

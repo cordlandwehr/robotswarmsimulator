@@ -97,6 +97,9 @@ const Box& View::resolve_box_ref(BoxRef box) const {
 const Sphere& View::resolve_sphere_ref(SphereRef sphere) const {
 	return static_cast<const Sphere&>(resolve_obstacle_ref(sphere));
 }
+const Edge& View::resolve_edge_ref(EdgeRef edge) const {
+	return *(world_information().edges())[edge->id()];
+}
 
 const Obstacle& View::resolve_obstacle_ref_safe(ObstacleRef obstacle) const {
 	const Obstacle& result = resolve_obstacle_ref(obstacle);
@@ -123,6 +126,11 @@ const Sphere& View::resolve_sphere_ref_safe(SphereRef sphere) const {
 	validate_identifier(result, sphere);
 	return result;
 }
+const Edge& View::resolve_edge_ref_safe(EdgeRef edge) const {
+	const Edge& result = resolve_edge_ref(edge);
+	validate_identifier(result, edge);
+	return result;
+}
 
 void View::init(const boost::shared_ptr<WorldInformation>& world_information) {
 	world_information_ = world_information;
@@ -145,6 +153,12 @@ const std::vector<View::ObstacleRef> View::get_visible_obstacles(const Robot& ca
 
 const std::vector<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
 	std::vector<View::MarkerRef> result(get_visible_markers(resolve_robot_ref(caller.id())));
+	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	return result;
+}
+
+const std::vector<View::EdgeRef> View::get_visible_edges(const Robot& caller) const {
+	std::vector<View::EdgeRef> result(get_visible_edges(resolve_robot_ref(caller.id())));
 	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
 	return result;
 }
@@ -231,6 +245,10 @@ std::vector<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robo
 
 std::vector<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_visible_markers"));
+}
+
+std::vector<View::EdgeRef> View::get_visible_edges(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_visible_edges"));
 }
 
 Vector3d View::get_own_position(const RobotData& robot) const {

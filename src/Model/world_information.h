@@ -18,6 +18,7 @@ class RobotIdentifier;
 class WorldObject;
 class RobotData;
 class Obstacle;
+class Edge;
 
 
 /**
@@ -107,6 +108,30 @@ public:
 	 * \param Vector of robot datas to add to the world.
 	 */
 	void set_robot_data(std::vector<boost::shared_ptr<RobotData> > new_robot_data);
+
+	/**
+	 * Returns a constant reference to the set of the edges.
+	 * \return Constant reference to the set of the edges.
+	 */
+	const std::vector<boost::shared_ptr<Edge> >& edges() const;
+
+	/**
+	 * Returns a (non-constant) reference to the set of edges.
+	 * \return reference to the set of edges.
+	 */
+	std::vector<boost::shared_ptr<Edge> >& edges();
+
+	/**
+	 * Adds a new edge to the end of the current edge vector.
+	 * \param Shared pointer to the new edge.
+	 */
+	void add_edge(boost::shared_ptr<Edge> new_edge);
+
+	/**
+	 * Sets the vector of edges in the world.
+	 * \param Vector of edges to add to the world.
+	 */
+	void set_edge_data(std::vector<boost::shared_ptr<Edge> > new_edges);
 
 	/**
 	 * Returns the time (measured in steps) when this world info object was created.
@@ -204,6 +229,11 @@ private:
 	* Set of robot datas of robots in the world
 	*/
 	std::vector< boost::shared_ptr<RobotData> > robot_data_;
+
+	/**
+	 * Set of edges in the world
+	 */
+	std::vector< boost::shared_ptr<Edge> > edges_;
 
 	/**
 	 * Time (measured in steps) of creation of this world information

@@ -104,6 +104,23 @@ void WorldInformation::set_robot_data(std::vector<boost::shared_ptr<RobotData> >
 	robot_data_ = new_robot_data;
 }
 
+const std::vector<boost::shared_ptr<Edge> >& WorldInformation::edges() const {
+	return edges_;
+}
+
+std::vector<boost::shared_ptr<Edge> >& WorldInformation::edges() {
+	return edges_;
+}
+
+void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
+	assert(new_edge->id()->id() == markers_.size());
+	edges_.push_back(new_edge);
+}
+
+void WorldInformation::set_edge_data(std::vector<boost::shared_ptr<Edge> > new_edges) {
+	edges_ = new_edges;
+}
+
 int WorldInformation::time() const {
 	return time_;
 }

@@ -2,7 +2,7 @@
 //  directed_edge.h
 //  Robot Swarm Simulator
 //
-//  Created by Jonas Knoll on 19.07.11.
+//  Created by Jonas on 19.07.11.
 //
 
 #ifndef DIRECTED_EDGE_H_
