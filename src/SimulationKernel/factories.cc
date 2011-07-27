@@ -31,6 +31,7 @@
 #include "../ViewModels/self_view.h"
 #include "../ViewModels/clone_view.h"
 #include "../ViewModels/radial_view.h"
+#include "../ViewModels/local_graph_view.h"
 
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"

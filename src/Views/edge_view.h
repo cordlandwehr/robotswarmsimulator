@@ -18,14 +18,14 @@
  *
  */
 
-class EdgeView {
+class EdgeView : public virtual View {
 public:
 	EdgeView();
 	virtual ~EdgeView();
 
 protected:
-	virtual std::vector<RobotRef> get_visible_robots(const RobotData& robot) const;
-	virtual std::vector<EdgeRef> get_visible_edges(const RobotData& robot) const;
+	virtual std::vector<View::RobotRef> get_visible_robots(const RobotData& robot) const;
+	virtual std::vector<View::EdgeRef> get_visible_edges(const RobotData& robot) const;
 };
 
 #endif /* EDGE_VIEW_H_ */
