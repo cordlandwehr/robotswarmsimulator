@@ -344,6 +344,8 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for radial view.");
 		}
+	} else if(view_type == "LOCAL_GRAPH_VIEW"){
+		view_factory.reset(new ViewFactory<LocalGraphView>);
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to global view.";
 		view_factory.reset(new ViewFactory<GlobalView>);
