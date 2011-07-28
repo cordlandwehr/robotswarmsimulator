@@ -51,9 +51,9 @@ public:
 		 */
 		void set_default_color(float r, float g, float b, float alpha);
 
-		void set_extrapolate(double ext) {
-			extrapolate_ = ext;
-		}
+// 		void set_extrapolate(double ext) {
+// 			extrapolate_ = ext;
+// 		}
 
 		void set_robot_size(double s) { robot_size_ = s; }
 private:
@@ -77,7 +77,7 @@ private:
 	 */
 	unsigned int compiled_list_;
 
-	double extrapolate_;
+/*	double extrapolate_;*/
 };
 
 #endif /* ROBOT_RENDERER_H_ */

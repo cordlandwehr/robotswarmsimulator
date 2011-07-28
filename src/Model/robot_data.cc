@@ -75,15 +75,15 @@ void RobotData::set_velocity(boost::shared_ptr<Vector3d> new_velocity) {
 	velocity_ = new_velocity;
 }
 
-boost::shared_ptr<Vector3d> RobotData::extrapolated_position(double timesteps) const {
+boost::shared_ptr<Vector3d> RobotData::extrapolated_position() const {
 	boost::shared_ptr<Vector3d> next_position(new Vector3d());
-	// the next lines compute the new position by formula: s(t) = v*t + 1/2 * a * t^2
+	// the next position is simply the old position (previously, this function took acceleration and timesteps into account)
 	next_position->insert_element(kXCoord,
-	                              position()(0) + timesteps * velocity()(0) + 0.5*acceleration()(0)*timesteps*timesteps);
+	                              position()(0));
 	next_position->insert_element(kYCoord,
-	                              position()(1) + timesteps * velocity()(1) + 0.5*acceleration()(1)*timesteps*timesteps);
+	                              position()(1));
 	next_position->insert_element(kZCoord,
-	                              position()(2) + timesteps * velocity()(2) + 0.5*acceleration()(2)*timesteps*timesteps);
+	                              position()(2));
 	return next_position;
 }
 

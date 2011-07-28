@@ -120,7 +120,7 @@ void CogCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & mark
 	int num_objects = 0;
 
 	BOOST_FOREACH( boost::shared_ptr<RobotData> it_robot_data, robot_data ) {
-		boost::shared_ptr<Vector3d> pos = it_robot_data->extrapolated_position(extrapolate);
+		boost::shared_ptr<Vector3d> pos = it_robot_data->extrapolated_position();
 
 		center += (*pos);
 		num_objects++;

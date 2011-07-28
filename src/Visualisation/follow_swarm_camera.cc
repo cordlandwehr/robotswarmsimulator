@@ -45,7 +45,7 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 	std::vector< boost::shared_ptr<RobotData> >::const_iterator it_robot_data;
 	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
-		boost::shared_ptr<Vector3d> pos = (*it_robot_data)->extrapolated_position(extrapolate);
+		boost::shared_ptr<Vector3d> pos = (*it_robot_data)->extrapolated_position();
 		center += (*pos);
 	}
 
@@ -76,9 +76,9 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 
 	// Don't forget the robots
 	for(it_robot_data = robot_datas.begin(); it_robot_data < robot_datas.end(); it_robot_data++){
-		float current_width  = fabsf(center(0) - (*(*it_robot_data)->extrapolated_position(extrapolate))(0));
-		float current_height = fabsf(center(1) - (*(*it_robot_data)->extrapolated_position(extrapolate))(1));
-		float current_depth  = fabsf(center(2) - (*(*it_robot_data)->extrapolated_position(extrapolate))(2));
+		float current_width  = fabsf(center(0) - (*(*it_robot_data)->extrapolated_position())(0));
+		float current_height = fabsf(center(1) - (*(*it_robot_data)->extrapolated_position())(1));
+		float current_depth  = fabsf(center(2) - (*(*it_robot_data)->extrapolated_position())(2));
 
 		// Check if the current width value is greater than the max width stored.
 		if(current_width  > max_width)	max_width  = current_width;

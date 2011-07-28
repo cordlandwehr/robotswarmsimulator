@@ -337,7 +337,6 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	}
 
 
-	robot_renderer_->set_extrapolate( extrapolate_ );
 	// draw all robots
 	robot_renderer_->set_robot_size(max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale));
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
@@ -475,8 +474,8 @@ void SimulationRenderer::draw_visibility_graph(const StatisticsDataObject& data)
 		// get color from component table so that each component has its own color
 		// add 0 or 1 so that the first component is not green to indicate the graph is not connected
 		for (boost::tie(i, end) = boost::edges(*(data.vis_graph_ptr())); i != end; ++i) {
-			source_pos=*world_info_->robot_data()[boost::source(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
-			target_pos=*world_info_->robot_data()[boost::target(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
+			source_pos=*world_info_->robot_data()[boost::source(*i,data.vis_graph())]->extrapolated_position();
+			target_pos=*world_info_->robot_data()[boost::target(*i,data.vis_graph())]->extrapolated_position();
 			draw_line(source_pos,target_pos, data.components().at(boost::source(*i,data.vis_graph()))+data.vis_graph_is_connected());
 		}
 	}

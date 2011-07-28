@@ -77,7 +77,7 @@ void EventHandler::handle_event(shared_ptr<Event> event,
 shared_ptr<WorldInformation> EventHandler::handle_look_event(
     shared_ptr<LookEvent> look_event) {
 	// produce extrapolated world information
-	shared_ptr<WorldInformation> new_world_information =
+	shared_ptr<WorldInformation> new_world_information = 
 		extrapolate_old_world_information(look_event->time());
 
 	// update robot control with the extrapolated world information
@@ -218,21 +218,21 @@ shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(
 	// set the time
 	new_world_information->set_time(time);
 
-	// compute the time difference between old and new world_information
-	int time_difference = time - old_world_information.time();
-
-	// extrapolate all robots
-	BOOST_FOREACH(shared_ptr<RobotData> old_robot,
-	              old_world_information.robot_data()) {
-		RobotData &new_robot =
-		    new_world_information->get_according_robot_data(
-		        boost::dynamic_pointer_cast<RobotIdentifier> (
-		            old_robot->id()));
-		new_robot.set_position(
-		    old_robot->extrapolated_position(time_difference));
-		new_robot.set_velocity(
-		    old_robot->extrapolated_velocity(time_difference));
-	}
+// 	// compute the time difference between old and new world_information
+// 	int time_difference = time - old_world_information.time();
+// 
+// 	// extrapolate all robots
+// 	BOOST_FOREACH(shared_ptr<RobotData> old_robot,
+// 	              old_world_information.robot_data()) {
+// 		RobotData &new_robot =
+// 		    new_world_information->get_according_robot_data(
+// 		        boost::dynamic_pointer_cast<RobotIdentifier> (
+// 		            old_robot->id()));
+// 		new_robot.set_position(
+// 		    old_robot->extrapolated_position(time_difference));
+// 		new_robot.set_velocity(
+// 		    old_robot->extrapolated_velocity(time_difference));
+// 	}
 
 	return new_world_information;
 }

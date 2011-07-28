@@ -67,7 +67,7 @@ void RobotRenderer::init() {
 }
 
 void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) const{
-	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position(extrapolate_);
+	boost::shared_ptr<Vector3d> rob_pos = robot->extrapolated_position();
 
 	if (renderer_->render_cog()) {
 		glBegin(GL_LINES);
@@ -82,26 +82,26 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 		glTranslatef((*rob_pos)(0), (*rob_pos)(1), (*rob_pos)(2) );
 
 	glBegin(GL_LINES);
-	if (renderer_->render_velocity()){
+// 	if (renderer_->render_velocity()){
+// 
+// 		Vector3d vel = *robot->extrapolated_velocity(extrapolate_);
+// 		glColor3fv(kVelColor);
+// 		glVertex3f(0 ,0, 0 );
+// 		glVertex3f( kScaleVecs * vel(0),
+// 				    kScaleVecs *  vel(1),
+// 					kScaleVecs *  vel(2) );
+// 
+// 	}
 
-		Vector3d vel = *robot->extrapolated_velocity(extrapolate_);
-		glColor3fv(kVelColor);
-		glVertex3f(0 ,0, 0 );
-		glVertex3f( kScaleVecs * vel(0),
-				    kScaleVecs *  vel(1),
-					kScaleVecs *  vel(2) );
-
-	}
-
-	if (renderer_->render_acceleration()){
-
-		Vector3d acc = robot->acceleration();
-		glColor3fv(kAccelColor);
-		glVertex3f(0 , 0, 0 );
-		glVertex3f( kScaleVecs * acc(0),
-					kScaleVecs * acc(1),
-					kScaleVecs * acc(2) );
-	}
+// 	if (renderer_->render_acceleration()){
+// 
+// 		Vector3d acc = robot->acceleration();
+// 		glColor3fv(kAccelColor);
+// 		glVertex3f(0 , 0, 0 );
+// 		glVertex3f( kScaleVecs * acc(0),
+// 					kScaleVecs * acc(1),
+// 					kScaleVecs * acc(2) );
+// 	}
 
 	if (renderer_->render_local_coord_system()){
 

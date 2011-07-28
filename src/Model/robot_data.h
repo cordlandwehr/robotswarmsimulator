@@ -102,7 +102,7 @@ public:
 	 * \param double for additional timesteps
 	 * \return Vector3d for coordinates
 	 */
-	boost::shared_ptr<Vector3d> extrapolated_position(double timesteps) const;
+	boost::shared_ptr<Vector3d> extrapolated_position() const;
 
 	/**
 	 * Returns velocity of the robot at the moment some timesteps in the future.
