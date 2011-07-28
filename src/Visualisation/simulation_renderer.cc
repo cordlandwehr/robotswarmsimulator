@@ -323,14 +323,14 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 		draw_cog();
 	}
 
-	if (render_visibility_graph_){
-		if(time_point->statistics_data_object_ptr()) {
-			draw_visibility_graph(time_point->statistics_data_object());
-		} else {
-			// TODO(craupach) Console output warning
-			std::cout << "no valid statistics object" << std::endl;
-		}
-	}
+// 	if (render_visibility_graph_){
+// 		if(time_point->statistics_data_object_ptr()) {
+// 			draw_visibility_graph(time_point->statistics_data_object());
+// 		} else {
+// 			// TODO(craupach) Console output warning
+// 			std::cout << "no valid statistics object" << std::endl;
+// 		}
+// 	}
 
 	if (render_help_){
 		draw_help();
@@ -466,21 +466,21 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 	return 1;
 }
 
-void SimulationRenderer::draw_visibility_graph(const StatisticsDataObject& data){
-	//in vis graph, ids of vertices correspond to ids of robots
-	if (data.vis_graph_ptr()){
-		boost::graph_traits< boost::adjacency_list <> >::edge_iterator i, end;
-		Vector3d source_pos, target_pos;
-		// iterate through the edges and draw lines
-		// get color from component table so that each component has its own color
-		// add 0 or 1 so that the first component is not green to indicate the graph is not connected
-		for (boost::tie(i, end) = boost::edges(*(data.vis_graph_ptr())); i != end; ++i) {
-			source_pos=*world_info_->robot_data()[boost::source(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
-			target_pos=*world_info_->robot_data()[boost::target(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
-			draw_line(source_pos,target_pos, data.components().at(boost::source(*i,data.vis_graph()))+data.vis_graph_is_connected());
-		}
-	}
-}
+// void SimulationRenderer::draw_visibility_graph(const StatisticsDataObject& data){
+// 	//in vis graph, ids of vertices correspond to ids of robots
+// 	if (data.vis_graph_ptr()){
+// 		boost::graph_traits< boost::adjacency_list <> >::edge_iterator i, end;
+// 		Vector3d source_pos, target_pos;
+// 		// iterate through the edges and draw lines
+// 		// get color from component table so that each component has its own color
+// 		// add 0 or 1 so that the first component is not green to indicate the graph is not connected
+// 		for (boost::tie(i, end) = boost::edges(*(data.vis_graph_ptr())); i != end; ++i) {
+// 			source_pos=*world_info_->robot_data()[boost::source(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
+// 			target_pos=*world_info_->robot_data()[boost::target(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
+// 			draw_line(source_pos,target_pos, data.components().at(boost::source(*i,data.vis_graph()))+data.vis_graph_is_connected());
+// 		}
+// 	}
+// }
 
 void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 	glBegin(GL_LINES);

@@ -135,11 +135,11 @@ void StatsCalc::calculate(StatsCalcInData & data,
 		data.prev_miniball_radius[subset_id] = mb.radius();
 	}
 
-	if (stats_cfg_->is_visgraph_connected()) {
-		values.push_back(data.visib_->vis_graph_is_connected());
-		if (push_names)
-			names.push_back("visgraph_connected");
-	}
+// 	if (stats_cfg_->is_visgraph_connected()) {
+// 		values.push_back(data.visib_->vis_graph_is_connected());
+// 		if (push_names)
+// 			names.push_back("visgraph_connected");
+// 	}
 
 	if (stats_cfg_->is_max_mindist()) {
 		double max_minDist = 0.0;

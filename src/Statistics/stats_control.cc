@@ -102,9 +102,9 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 	const WorldInformation & world_information = time_point.world_information();
 	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug)  << "StatsControl::update(...) with WorldInformation.time==" <<  world_information.time();
 
-	boost::shared_ptr<StatisticsDataObject> data(new StatisticsDataObject());
+	/*boost::shared_ptr<StatisticsDataObject> data(new StatisticsDataObject());*/
 	//fill the statistics data object here, if you like
-	time_point.set_statistics_data_object(data);
+	/*time_point.set_statistics_data_object(data);*/
 
 	if (stats_calc_indata_.world_info_.get() == NULL) {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "no current world_info, so set it to given";
@@ -118,7 +118,7 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 		// there's already a world_info_ for the same time, so overwrite it with the current latter one
 		// but wait if more updates for the same world-time will follow.
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
-		stats_calc_indata_.visib_ = data;
+		//stats_calc_indata_.visib_ = data;
 
 	} else if (stats_calc_indata_.world_info_.get()->time() < world_information.time()) {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "existing current world_info for earlier time, so do the calculation on it";
@@ -132,11 +132,11 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 		// Move the world_info_ to prev_world_info_
 		// (any existing prev_world_info_-content will be freed through the shared_ptr's destructor)
 		stats_calc_indata_.prev_world_info_ = stats_calc_indata_.world_info_;
-		stats_calc_indata_.prev_visib_ = stats_calc_indata_.visib_;
+		//stats_calc_indata_.prev_visib_ = stats_calc_indata_.visib_;
 
 		// Set the new world_information from this update-call as the new world_info_
 		stats_calc_indata_.world_info_ = boost::shared_ptr<WorldInformation>(new WorldInformation(world_information));
-		stats_calc_indata_.visib_ = data;
+		//stats_calc_indata_.visib_ = data;
 
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "Error in StatsControl::update(...): unhandled case that must not occur.";

@@ -45,7 +45,7 @@ struct StatsCalcInData {
 	 */
 	boost::shared_ptr<WorldInformation> world_info_;
 
-	boost::shared_ptr<StatisticsDataObject> visib_;
+	//boost::shared_ptr<StatisticsDataObject> visib_;
 
 	/**
 	 * After performing the calculations on world_info_ it is moved to prev_world_info_ for
@@ -54,7 +54,7 @@ struct StatsCalcInData {
 	 */
 	boost::shared_ptr<WorldInformation> prev_world_info_;
 
-	boost::shared_ptr<StatisticsDataObject> prev_visib_;
+	//boost::shared_ptr<StatisticsDataObject> prev_visib_;
 
 	// SAVED PRECALCULATED VALUES
 	// for all subsets in one vector.

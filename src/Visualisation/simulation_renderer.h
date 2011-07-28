@@ -34,7 +34,7 @@ class Sphere;
 class RobotData;
 class Camera;
 class RobotRenderer;
-class StatisticsDataObject;
+//class StatisticsDataObject;
 
 
 class SimulationRenderer : public Visualizer {
@@ -342,7 +342,7 @@ private:
 	 * draw visibility graph (which robots can see others)
 	 */
 
-	void draw_visibility_graph(const StatisticsDataObject& data);
+	//void draw_visibility_graph(const StatisticsDataObject& data);
 
 	void setup_projection();
 
