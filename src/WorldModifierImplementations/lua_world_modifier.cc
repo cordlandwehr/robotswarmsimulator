@@ -6,13 +6,23 @@
 //
 
 #include <boost/foreach.hpp>
+#include <boost/bind.hpp>
 
+#include <luabind/object.hpp>
+#include <luabind/operator.hpp>
+
+#include "../ComputationalGeometry/misc_algorithms.h"
+#include "../ComputationalGeometry/ch_algorithms.h"
+#include "../ComputationalGeometry/point_algorithms.h"
+#include "../ComputationalGeometry/points_sepplane.h"
 #include "../Model/world_information.h"
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
 #include "../Requests/position_request.h"
 #include "../Utilities/console_output.h"
 #include "../Utilities/vector_arithmetics.h"
+
+#include "../Wrapper/vector_wrapper.h"
 
 #include "lua_world_modifier.h"
 
@@ -55,7 +65,24 @@ LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_infor
 }
 
 void LuaWorldModifier::register_lua_methods() {
-	//register view methods to lua
+	// register Vector3d class
+    luabind::module(lua_state_.get())
+	[
+         luabind::class_<LuaWrapper::Vector3dWrapper>("Vector3d")
+         .def(luabind::constructor<>())
+         .def(luabind::constructor<double, double, double>())
+         .def(luabind::const_self + luabind::other<LuaWrapper::Vector3dWrapper>())
+         .def(luabind::const_self - luabind::other<LuaWrapper::Vector3dWrapper>())
+         .def(luabind::const_self * luabind::other<LuaWrapper::Vector3dWrapper>())
+         .def(luabind::const_self == luabind::other<LuaWrapper::Vector3dWrapper>())
+         .def(luabind::const_self * double())
+         .def(double() * luabind::const_self)
+         .def(luabind::const_self / double())
+         .def(luabind::tostring(luabind::self))
+         .def_readwrite("x", &LuaWrapper::Vector3dWrapper::x)
+         .def_readwrite("y", &LuaWrapper::Vector3dWrapper::y)
+         .def_readwrite("z", &LuaWrapper::Vector3dWrapper::z)
+    ];
 }
 
 void LuaWorldModifier::report_errors(int status) {
