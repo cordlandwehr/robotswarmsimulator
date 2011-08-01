@@ -26,7 +26,7 @@ bool RemoveEdgeRequestHandler::handle_request_reliable(
 	RobotData& rd1 = world_information->get_according_robot_data(e->getRobot1());
 	RobotData& rd2 = world_information->get_according_robot_data(e->getRobot2());
 
-	//remove requested edge from world_information and from adjacency list of robots
+	// remove requested edge from world_information and from adjacency list of robots
 	rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
 	rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
 
