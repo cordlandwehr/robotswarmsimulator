@@ -120,6 +120,10 @@ void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edg
 	edges_ = new_edges;
 }
 
+bool WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
+	return edges_.erase(edge->id()->id());
+}
+
 int WorldInformation::time() const {
 	return time_;
 }

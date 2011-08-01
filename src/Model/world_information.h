@@ -124,16 +124,23 @@ public:
 	std::map<std::size_t, boost::shared_ptr<Edge> >& edges();
 
 	/**
-	 * Adds a new edge to the end of the current edge vector.
+	 * Adds a new edge to the end of the current edge map.
 	 * \param Shared pointer to the new edge.
 	 */
 	void add_edge(boost::shared_ptr<Edge> new_edge);
 
 	/**
-	 * Sets the vector of edges in the world.
-	 * \param Vector of edges to add to the world.
+	 * Sets the map of edges in the world.
+	 * \param Map of edges to add to the world.
 	 */
 	void set_edge_data(std::map<std::size_t, boost::shared_ptr<Edge> > new_edges);
+
+	/**
+	 * Removes edge from edge map.
+	 * \param Shared pointer to edge
+	 * \return True if edge was removed, false otherwise
+	 */
+	bool remove_edge(boost::shared_ptr<Edge> edge);
 
 	/**
 	 * Returns the time (measured in steps) when this world info object was created.
