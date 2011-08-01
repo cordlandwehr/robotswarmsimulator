@@ -11,14 +11,15 @@
 
 class EdgeIdentifier : public Identifier {
 public:
-	explicit EdgeIdentifier(std::size_t id);
+	explicit EdgeIdentifier();
 	~EdgeIdentifier();
 
 	virtual boost::shared_ptr<Identifier> clone() const {
 		return boost::shared_ptr<Identifier>(new EdgeIdentifier(*this));
 	}
 
-
+private:
+	static std::size_t edge_id_counter_;
 };
 
 

@@ -98,7 +98,7 @@ const Sphere& View::resolve_sphere_ref(SphereRef sphere) const {
 	return static_cast<const Sphere&>(resolve_obstacle_ref(sphere));
 }
 const Edge& View::resolve_edge_ref(EdgeRef edge) const {
-	return *(world_information().edges())[edge->id()];
+	return *(world_information().get_according_edge(edge));
 }
 
 const Obstacle& View::resolve_obstacle_ref_safe(ObstacleRef obstacle) const {

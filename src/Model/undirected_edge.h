@@ -9,17 +9,13 @@
 #define UNDIRECTED_EDGE_H_
 
 #include "edge.h"
-#include "world_object.h"
-#include "robot_identifier.h"
 
 class Edge;
 
 class UndirectedEdge : public Edge {
 public:
-	UndirectedEdge(boost::shared_ptr<Identifier> id,
-	               boost::shared_ptr<Vector3d> position,
-	               boost::shared_ptr<RobotIdentifier> v1,
-	               boost::shared_ptr<RobotIdentifier> v2) : Edge(id, position, v1, v2) {};
+	UndirectedEdge(boost::shared_ptr<RobotIdentifier> v1,
+	               boost::shared_ptr<RobotIdentifier> v2) : Edge(v1, v2) {};
 	virtual ~UndirectedEdge();
 };
 

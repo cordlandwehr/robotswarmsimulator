@@ -9,16 +9,18 @@
 #define EDGE_H_
 
 #include "world_object.h"
-#include "robot_identifier.h"
+#include "edge_identifier.h"
+#include "../Utilities/vector_arithmetics.h"
 
-class RobotData;
+class Identifier;
+class RobotIdentifier;
+class EdgeIdentifier;
 
 class Edge : public WorldObject {
 public:
-	Edge(boost::shared_ptr<Identifier> id,
-	     boost::shared_ptr<Vector3d> position,
-	     boost::shared_ptr<RobotIdentifier> r1,
-	     boost::shared_ptr<RobotIdentifier> r2) : WorldObject(id, position), robot1_(r1), robot2_(r2)
+	Edge(boost::shared_ptr<RobotIdentifier> r1,
+	     boost::shared_ptr<RobotIdentifier> r2)
+	: WorldObject(boost::shared_ptr<Identifier>(new EdgeIdentifier()), boost::shared_ptr<Vector3d>(new Vector3d())), robot1_(r1), robot2_(r2)
 	{
 		;
 	}

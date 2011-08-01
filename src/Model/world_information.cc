@@ -104,20 +104,19 @@ void WorldInformation::set_robot_data(std::vector<boost::shared_ptr<RobotData> >
 	robot_data_ = new_robot_data;
 }
 
-const std::vector<boost::shared_ptr<Edge> >& WorldInformation::edges() const {
+const std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() const {
 	return edges_;
 }
 
-std::vector<boost::shared_ptr<Edge> >& WorldInformation::edges() {
+std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() {
 	return edges_;
 }
 
 void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
-	assert(new_edge->id()->id() == markers_.size());
-	edges_.push_back(new_edge);
+	edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(new_edge->id()->id(), new_edge));
 }
 
-void WorldInformation::set_edge_data(std::vector<boost::shared_ptr<Edge> > new_edges) {
+void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edge> > new_edges) {
 	edges_ = new_edges;
 }
 
@@ -153,4 +152,16 @@ boost::shared_ptr<const RobotData> WorldInformation::get_according_robot_data_pt
 boost::shared_ptr<RobotData> WorldInformation::get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) {
 	assert(id->id() < robot_data_.size());
 	return robot_data_[id->id()];
+}
+
+boost::shared_ptr<const Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it = edges_.find(id->id());
+	assert(it != edges_.end());
+	return it->second;
+}
+
+boost::shared_ptr<Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) {
+	std::map<std::size_t, boost::shared_ptr<Edge> >::iterator it = edges_.find(id->id());
+	assert(it != edges_.end());
+	return it->second;
 }

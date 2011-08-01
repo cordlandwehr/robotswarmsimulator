@@ -9,12 +9,14 @@
 #define WORLD_INFORMATION_H_
 
 #include <vector>
+#include <map>
 #include <boost/smart_ptr.hpp>
 
 
 class Identifier;
 class MarkerIdentifier;
 class RobotIdentifier;
+class EdgeIdentifier;
 class WorldObject;
 class RobotData;
 class Obstacle;
@@ -113,13 +115,13 @@ public:
 	 * Returns a constant reference to the set of the edges.
 	 * \return Constant reference to the set of the edges.
 	 */
-	const std::vector<boost::shared_ptr<Edge> >& edges() const;
+	const std::map<std::size_t, boost::shared_ptr<Edge> >& edges() const;
 
 	/**
 	 * Returns a (non-constant) reference to the set of edges.
 	 * \return reference to the set of edges.
 	 */
-	std::vector<boost::shared_ptr<Edge> >& edges();
+	std::map<std::size_t, boost::shared_ptr<Edge> >& edges();
 
 	/**
 	 * Adds a new edge to the end of the current edge vector.
@@ -131,7 +133,7 @@ public:
 	 * Sets the vector of edges in the world.
 	 * \param Vector of edges to add to the world.
 	 */
-	void set_edge_data(std::vector<boost::shared_ptr<Edge> > new_edges);
+	void set_edge_data(std::map<std::size_t, boost::shared_ptr<Edge> > new_edges);
 
 	/**
 	 * Returns the time (measured in steps) when this world info object was created.
@@ -214,6 +216,28 @@ public:
 	 */
 	boost::shared_ptr<RobotData> get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id);
 
+	/**
+	 * \brief Returns a constant reference to edge object with given id.
+	 *
+	 * This method assumes, that the edge object with the given id is saved at position id->id() in the edge
+	 * vector.
+	 *
+	 * \return Constant reference to corresponding edge object.
+	 */
+	boost::shared_ptr<const Edge> get_according_edge(boost::shared_ptr<EdgeIdentifier> id) const;
+
+	/**
+	 * Return (non-constant) reference to according edge of given robot ID.
+	 *
+	 * This method assumes, that the according reference to the
+	 * edge with ID i is saved at position i in
+	 * the edge-vector.
+	 *
+	 * \param reference to identifier of edge which shall be returned.
+	 * \return Mutable reference to according edge of given robot ID.
+	 */
+	boost::shared_ptr<Edge> get_according_edge(boost::shared_ptr<EdgeIdentifier> id);
+
 private:
 	/**
 	 * Set of markers in the world
@@ -233,7 +257,7 @@ private:
 	/**
 	 * Set of edges in the world
 	 */
-	std::vector< boost::shared_ptr<Edge> > edges_;
+	std::map<std::size_t, boost::shared_ptr<Edge> > edges_;
 
 	/**
 	 * Time (measured in steps) of creation of this world information
