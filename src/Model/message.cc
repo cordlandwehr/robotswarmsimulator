@@ -22,10 +22,10 @@ const boost::any Message::get_data(const std::string& var_name){
 	return marker_information().get_data(var_name);
 }
 
-boost::shared_ptr<RobotData> Message::sender() const {
+boost::shared_ptr<RobotIdentifier> Message::sender() const {
 	return sender_;
 }
 
-boost::shared_ptr<RobotData> Message::receiver() const {
+boost::shared_ptr<RobotIdentifier> Message::receiver() const {
 	return receiver_;
 }
