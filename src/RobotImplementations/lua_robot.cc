@@ -37,49 +37,16 @@
 #include "../ComputationalGeometry/point_algorithms.h"
 #include "../ComputationalGeometry/points_sepplane.h"
 #include "../Wrapper/distribution_generator_wrapper.h"
-#include <Wrapper/lua_distribution_generator.h>
+#include "../Wrapper/lua_distribution_generator.h"
+#include "../Wrapper/coordinate_system_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
+#include "../Wrapper/marker_information_wrapper.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
 	Robot* robot; //needed as "caller" in most view methods
 	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
 	std::set<boost::shared_ptr<Request> > requests;
-
-
-
-	/**
-	 * Wrapper for MarkerInformation. Allows lua scripts to work with MarkerInformation objects.
-	 * @see MarkerInformation
-	 */
-
-	class MarkerInformationWrapper {
-	public:
-		MarkerInformationWrapper() : marker_information_() {;}
-		MarkerInformationWrapper(const MarkerInformation& marker_information) : marker_information_(marker_information) {;}
-
-		void add_data(const std::string& var_name, const luabind::object& object) {
-			marker_information_.add_data(var_name, object);
-		}
-
-		luabind::object get_data(const std::string& var_name) {
-			return boost::any_cast<luabind::object>(marker_information_.get_data(var_name));
-		}
-
-		const MarkerInformation& marker_information() const {
-			return marker_information_;
-		}
-	private:
-		MarkerInformation marker_information_;
-	};
-
-	struct CoordinateSystemWrapper {
-		CoordinateSystemWrapper() {;}
-		CoordinateSystemWrapper(LuaWrapper::Vector3dWrapper x_axis, LuaWrapper::Vector3dWrapper y_axis, LuaWrapper::Vector3dWrapper z_axis) : x_axis(x_axis), y_axis(y_axis), z_axis(z_axis) {;}
-		LuaWrapper::Vector3dWrapper x_axis;
-		LuaWrapper::Vector3dWrapper y_axis;
-		LuaWrapper::Vector3dWrapper z_axis;
-	};
 
 	/**
 	 * Wrapper for RobotType. Allows lua scripts to work with RobotType constants (access using e.g. RobotType.MASTER).
@@ -117,15 +84,15 @@ namespace {
 		return result;
 	}
 
-	const MarkerInformationWrapper transform(const MarkerInformation& marker) {
-		return MarkerInformationWrapper(marker);
+	const LuaWrapper::MarkerInformationWrapper transform(const MarkerInformation& marker) {
+		return LuaWrapper::MarkerInformationWrapper(marker);
 	}
 
-	const CoordinateSystemWrapper transform(const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >& cs) {
-		return CoordinateSystemWrapper(LuaWrapper::transform(*boost::get<0>(cs)), LuaWrapper::transform(*boost::get<1>(cs)), LuaWrapper::transform(*boost::get<2>(cs)));
+	const LuaWrapper::CoordinateSystemWrapper transform(const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >& cs) {
+		return LuaWrapper::CoordinateSystemWrapper(LuaWrapper::transform(*boost::get<0>(cs)), LuaWrapper::transform(*boost::get<1>(cs)), LuaWrapper::transform(*boost::get<2>(cs)));
 	}
 
-	const MarkerInformation transform(const MarkerInformationWrapper& marker) {
+	const MarkerInformation transform(const LuaWrapper::MarkerInformationWrapper& marker) {
 		return marker.marker_information();
 	}
 
@@ -172,7 +139,7 @@ namespace {
 	 * @see View.get_marker_information()
 	 */
 
-	const MarkerInformationWrapper get_marker_information(std::size_t index) {
+	const LuaWrapper::MarkerInformationWrapper get_marker_information(std::size_t index) {
 		return transform(view->get_marker_information(*robot, resolve<Identifier>(index)));
 	}
 
@@ -212,7 +179,7 @@ namespace {
 	 * @see View.get_robot_coordinate_system_axis()
 	 */
 
-	const CoordinateSystemWrapper get_robot_coordinate_system_axis(std::size_t index) {
+	const LuaWrapper::CoordinateSystemWrapper get_robot_coordinate_system_axis(std::size_t index) {
 		return transform(view->get_robot_coordinate_system_axis(*robot, resolve<RobotIdentifier>(index)));
 	}
 
@@ -365,7 +332,7 @@ namespace {
 	 * @param Requested MarkerInformation
 	 */
 
-	void add_marker_request(MarkerInformationWrapper marker) {
+	void add_marker_request(LuaWrapper::MarkerInformationWrapper marker) {
 		boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(transform(marker)));
 		requests.insert(boost::shared_ptr<Request>(new MarkerRequest(*robot, new_marker)));
 	}
@@ -501,17 +468,17 @@ void LuaRobot::register_lua_methods() {
 			 .def("get_value_uniform_on_sphere", &DistributionGenerator::get_value_uniform_on_sphere, luabind::copy_table(luabind::result))
 			 .def("get_value_uniform_on_sphere_3d", &LuaWrapper::get_value_uniform_on_sphere_3d),
 
-		 luabind::class_<MarkerInformationWrapper>("MarkerInformation")
+		 luabind::class_<LuaWrapper::MarkerInformationWrapper>("MarkerInformation")
 			 .def(luabind::constructor<>())
-			 .def("add_data", &MarkerInformationWrapper::add_data)
-			 .def("get_data", &MarkerInformationWrapper::get_data),
+			 .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
+			 .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data),
 
-		 luabind::class_<CoordinateSystemWrapper>("CoordinateSystem")
+		 luabind::class_<LuaWrapper::CoordinateSystemWrapper>("CoordinateSystem")
 			 .def(luabind::constructor<>())
 			 .def(luabind::constructor<LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper>())
-			 .def_readwrite("x_axis", &CoordinateSystemWrapper::x_axis)
-			 .def_readwrite("y_axis", &CoordinateSystemWrapper::y_axis)
-			 .def_readwrite("z_axis", &CoordinateSystemWrapper::z_axis),
+			 .def_readwrite("x_axis", &LuaWrapper::CoordinateSystemWrapper::x_axis)
+			 .def_readwrite("y_axis", &LuaWrapper::CoordinateSystemWrapper::y_axis)
+			 .def_readwrite("z_axis", &LuaWrapper::CoordinateSystemWrapper::z_axis),
 
 		 luabind::class_<RobotTypeWrapper>("RobotType")
 			 .enum_("constants")

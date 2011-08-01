@@ -22,7 +22,9 @@
 #include "../Utilities/console_output.h"
 #include "../Utilities/vector_arithmetics.h"
 
+#include "../Wrapper/coordinate_system_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
+#include "../Wrapper/marker_information_wrapper.h"
 
 #include "lua_world_modifier.h"
 
@@ -65,9 +67,21 @@ LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_infor
 }
 
 void LuaWorldModifier::register_lua_methods() {
-	// register Vector3d class
+	// register helper classes
     luabind::module(lua_state_.get())
 	[
+         luabind::class_<LuaWrapper::CoordinateSystemWrapper>("CoordinateSystem")
+         .def(luabind::constructor<>())
+         .def(luabind::constructor<LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper>())
+         .def_readwrite("x_axis", &LuaWrapper::CoordinateSystemWrapper::x_axis)
+         .def_readwrite("y_axis", &LuaWrapper::CoordinateSystemWrapper::y_axis)
+         .def_readwrite("z_axis", &LuaWrapper::CoordinateSystemWrapper::z_axis),
+     
+         luabind::class_<LuaWrapper::MarkerInformationWrapper>("MarkerInformation")
+         .def(luabind::constructor<>())
+         .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
+         .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data),
+     
          luabind::class_<LuaWrapper::Vector3dWrapper>("Vector3d")
          .def(luabind::constructor<>())
          .def(luabind::constructor<double, double, double>())
