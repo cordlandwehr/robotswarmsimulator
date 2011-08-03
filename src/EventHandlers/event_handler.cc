@@ -34,6 +34,9 @@
 #include "../Requests/velocity_request.h"
 #include "../Requests/marker_change_request.h"
 #include "../Requests/color_change_request.h"
+#include "../Requests/message_request.h"
+#include "../Requests/insert_edge_request.h"
+#include "../Requests/remove_edge_request.h"
 
 #include "../SimulationControl/history.h"
 #include "../SimulationControl/time_point.h"
@@ -198,6 +201,36 @@ shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(
 				        color_change_request);
 			} else {
 				std::cerr << "No Color Change Request Handler Set" << std::endl;
+			}
+		} else if(shared_ptr<const MessageRequest> message_request =
+				 boost::dynamic_pointer_cast<const MessageRequest>(request)) {
+			if(message_request_handler_) {
+				handled_as_expected =
+						message_request_handler_->handle_request(
+				        new_world_information,
+				        message_request);
+			} else {
+				std::cerr << "No Message Request Handler Set" << std::endl;
+			}
+		} else if(shared_ptr<const InsertEdgeRequest> insert_edge_request =
+				 boost::dynamic_pointer_cast<const InsertEdgeRequest>(request)) {
+			if(insert_edge_request_handler_) {
+				handled_as_expected =
+						insert_edge_request_handler_->handle_request(
+				        new_world_information,
+				        insert_edge_request);
+			} else {
+				std::cerr << "No Insert Edge Request Handler Set" << std::endl;
+			}
+		} else if(shared_ptr<const RemoveEdgeRequest> remove_edge_request =
+				 boost::dynamic_pointer_cast<const RemoveEdgeRequest>(request)) {
+			if(remove_edge_request_handler_) {
+				handled_as_expected =
+						remove_edge_request_handler_->handle_request(
+				        new_world_information,
+				        remove_edge_request);
+			} else {
+				std::cerr << "No Remove Edge Request Handler Set" << std::endl;
 			}
 		} else {
 			throw std::invalid_argument("Illegal type of request.");

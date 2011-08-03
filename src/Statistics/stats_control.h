@@ -107,7 +107,7 @@ private:
 	 */
 	std::vector<boost::shared_ptr<StatsOut> > stats_out_;
 
-	/**
+	/*/**
 	 * all the subsets under inspection - up to 9, but only those
 	 * that were requested. They appear in order:
 	 *
@@ -117,7 +117,7 @@ private:
 	 *
 	 * the inner vector holds shared pointers to the robots' data of that subset
 	 */
-	std::vector<std::vector<boost::shared_ptr<RobotData> > > cur_subsets_;
+	/*std::vector<std::vector<boost::shared_ptr<RobotData> > > cur_subsets_;*/
 
 	/**
 	 * whether or not the statistics-module is initialized.
@@ -126,10 +126,10 @@ private:
 	 */
 	bool stats_initialized_;
 
-	/**
+	/*/**
 	 * updates all the subsets in cur_subsets_
 	 */
-	void update_subsets();
+	/*void update_subsets();*/
 
 	/**
 	 * performs a calculation. That includes any update of the
@@ -141,7 +141,8 @@ private:
 	 */
 	void do_datadump(const WorldInformation& world_information, boost::shared_ptr<Event> event);
 
-	/**
+	
+	/*/**
 	 * calculates the visibility graph for the given world information
 	 * TODO(craupach) doing it here does not actually makes much sense with regard to the structure of
 	 * the statistics module. Should be moved appropriately!!
@@ -158,8 +159,8 @@ private:
 	 * if graph is connected, returns 0, if it is not, it returns 1
 
 	 */
-	void calculate_visibility_graph(const WorldInformation& world_info,
-			boost::shared_ptr<StatisticsDataObject> data);
+	/*void calculate_visibility_graph(const WorldInformation& world_info,
+			boost::shared_ptr<StatisticsDataObject> data);*/
 };
 
 #endif /* STATS_CONTROL_H_ */

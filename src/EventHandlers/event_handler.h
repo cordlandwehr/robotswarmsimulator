@@ -17,6 +17,9 @@
 #include "../EventHandlers/type_change_request_handler.h"
 #include "../EventHandlers/marker_change_request_handler.h"
 #include "../EventHandlers/color_change_request_handler.h"
+#include "../EventHandlers/message_request_handler.h"
+#include "../EventHandlers/insert_edge_request_handler.h"
+#include "../EventHandlers/remove_edge_request_handler.h"
 
 // forward declarations
 class Event;
@@ -177,6 +180,9 @@ private:
 	boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler_;
 	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
 	boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler_;
+	boost::shared_ptr<MessageRequestHandler> message_request_handler_;
+	boost::shared_ptr<InsertEdgeRequestHandler> insert_edge_request_handler_;
+	boost::shared_ptr<RemoveEdgeRequestHandler> remove_edge_request_handler_;
 
 	std::vector<boost::shared_ptr<SimulationListener> > listeners_;
 	boost::shared_ptr<History> history_;

@@ -327,7 +327,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	if (algorithm.rfind(".lua") == algorithm.size()-4) {
 		// robot file is located relatively to main project file
 		path robot_file = path(project_filename_).parent_path() / robot_filename_;
-		algorithm = (robot_file.parent_path() / algorithm).file_string();
+		algorithm = (robot_file.parent_path() / algorithm).string();
 	}
 
 	//if no exception is thrown up to this point, values read correctly
@@ -450,7 +450,7 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 		project_file.close();
 
 	} else {
-		throw UnsupportedOperationException("Unable to open file: " + file.file_string() + ".");
+		throw UnsupportedOperationException("Unable to open file: " + file.string() + ".");
 	}
 }
 
@@ -518,7 +518,7 @@ void Parser::save_robot_file(const WorldInformation& world_info) {
 
 		robot_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open robot file: " + file.file_string() + "!");
+		throw UnsupportedOperationException("Unable to open robot file: " + file.string() + "!");
 	}
 }
 
@@ -619,7 +619,7 @@ void Parser::save_obstacle_file(const WorldInformation& world_info) {
 
 		obstacle_file.close();
 	} else {
-		throw UnsupportedOperationException("Unable to open obstacle file: " + file.file_string() + "!");
+		throw UnsupportedOperationException("Unable to open obstacle file: " + file.string() + "!");
 	}
 }
 
