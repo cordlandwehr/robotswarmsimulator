@@ -1,3 +1,10 @@
+/*
+ * simple_graph_fixture.h
+ *
+ *  Created on: 03.08.2011
+ *      Author: Jonas
+ */
+
 #ifndef SIMPLE_GRAPH_FIXTURE_H_
 #define SIMPLE_GRAPH_FIXTURE_H_
 
