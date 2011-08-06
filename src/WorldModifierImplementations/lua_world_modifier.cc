@@ -111,6 +111,7 @@ void LuaWorldModifier::register_lua_methods() {
     [
       luabind::namespace_("WorldInformation")
       [
+	luabind::def("get_marker_information", &WorldInformationWrapper::get_marker_information),
 	luabind::def("get_markers", &WorldInformationWrapper::get_markers, luabind::copy_table(luabind::result)),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
 	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
