@@ -71,5 +71,10 @@ endif(APPLE)
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
+find_package(Threads REQUIRED)
+
 # generate library of the above source files
 add_library(RSSimulator STATIC ${RSSLIB_SRCS})
+target_link_libraries(RSSimulator
+	${CMAKE_THREAD_LIBS_INIT}
+)

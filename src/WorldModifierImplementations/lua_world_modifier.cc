@@ -25,6 +25,7 @@
 #include "../Wrapper/coordinate_system_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
 #include "../Wrapper/marker_information_wrapper.h"
+#include "../Wrapper/world_information_wrapper.h"
 
 #include "lua_world_modifier.h"
 
@@ -53,7 +54,11 @@ std::string LuaWorldModifier::get_algorithm_id() const{
 
 std::set< boost::shared_ptr<Request> > 
 LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_information) {
-    std::set< boost::shared_ptr<Request> > requests;
+  // load cuurent WorldInformation object into wrapper
+  LuaWrapper::WorldInformationWrapper::set_world_information(world_information);
+  
+  // create result set for possibly generate requests
+  std::set< boost::shared_ptr<Request> > requests;
     
     try {
 		luabind::call_function<void>(lua_state_.get(), "main");
@@ -67,35 +72,48 @@ LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_infor
 }
 
 void LuaWorldModifier::register_lua_methods() {
-	// register helper classes
+    // Lua wrappers have their own namespace
+    using namespace LuaWrapper;
+    // register helper classes
     luabind::module(lua_state_.get())
 	[
-         luabind::class_<LuaWrapper::CoordinateSystemWrapper>("CoordinateSystem")
+         luabind::class_<CoordinateSystemWrapper>("CoordinateSystem")
          .def(luabind::constructor<>())
-         .def(luabind::constructor<LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper>())
-         .def_readwrite("x_axis", &LuaWrapper::CoordinateSystemWrapper::x_axis)
-         .def_readwrite("y_axis", &LuaWrapper::CoordinateSystemWrapper::y_axis)
-         .def_readwrite("z_axis", &LuaWrapper::CoordinateSystemWrapper::z_axis),
+         .def(luabind::constructor<Vector3dWrapper, Vector3dWrapper, Vector3dWrapper>())
+         .def_readwrite("x_axis", &CoordinateSystemWrapper::x_axis)
+         .def_readwrite("y_axis", &CoordinateSystemWrapper::y_axis)
+         .def_readwrite("z_axis", &CoordinateSystemWrapper::z_axis),
      
-         luabind::class_<LuaWrapper::MarkerInformationWrapper>("MarkerInformation")
+         luabind::class_<MarkerInformationWrapper>("MarkerInformation")
          .def(luabind::constructor<>())
-         .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
-         .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data),
+         .def("add_data", &MarkerInformationWrapper::add_data)
+         .def("get_data", &MarkerInformationWrapper::get_data),
      
-         luabind::class_<LuaWrapper::Vector3dWrapper>("Vector3d")
+         luabind::class_<Vector3dWrapper>("Vector3d")
          .def(luabind::constructor<>())
          .def(luabind::constructor<double, double, double>())
-         .def(luabind::const_self + luabind::other<LuaWrapper::Vector3dWrapper>())
-         .def(luabind::const_self - luabind::other<LuaWrapper::Vector3dWrapper>())
-         .def(luabind::const_self * luabind::other<LuaWrapper::Vector3dWrapper>())
-         .def(luabind::const_self == luabind::other<LuaWrapper::Vector3dWrapper>())
+         .def(luabind::const_self + luabind::other<Vector3dWrapper>())
+         .def(luabind::const_self - luabind::other<Vector3dWrapper>())
+         .def(luabind::const_self * luabind::other<Vector3dWrapper>())
+         .def(luabind::const_self == luabind::other<Vector3dWrapper>())
          .def(luabind::const_self * double())
          .def(double() * luabind::const_self)
          .def(luabind::const_self / double())
          .def(luabind::tostring(luabind::self))
-         .def_readwrite("x", &LuaWrapper::Vector3dWrapper::x)
-         .def_readwrite("y", &LuaWrapper::Vector3dWrapper::y)
-         .def_readwrite("z", &LuaWrapper::Vector3dWrapper::z)
+         .def_readwrite("x", &Vector3dWrapper::x)
+         .def_readwrite("y", &Vector3dWrapper::y)
+         .def_readwrite("z", &Vector3dWrapper::z)
+    ];
+    
+    // register world information
+    luabind::module(lua_state_.get())
+    [
+      luabind::namespace_("WorldInformation")
+      [
+	luabind::def("get_markers", &WorldInformationWrapper::get_markers, luabind::copy_table(luabind::result)),
+	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
+	luabind::def("get_time", &WorldInformationWrapper::get_time)
+      ]
     ];
 }
 

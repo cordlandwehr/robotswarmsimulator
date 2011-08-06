@@ -10,12 +10,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <iostream>
-/*
-/**
- * A StatisticsDataObject holds all data that should be passed from statistics to visualisation.
- * At the moment this is only the visibility graph.
- * This should be made more general in the future!
- */
+
 // class StatisticsDataObject {
 // public:
 // 	StatisticsDataObject() {}

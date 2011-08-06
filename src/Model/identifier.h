@@ -10,6 +10,9 @@
 #include <cstddef>
 #include <boost/shared_ptr.hpp>
 
+// forward declaration for cross namepsace friendship (awww...)
+namespace LuaWrapper{class WorldInformationWrapper;}
+
 class Identifier {
 public:
 	virtual ~Identifier();
@@ -31,6 +34,7 @@ private:
 	// TODO(craupach) this class has many many friends
 	friend class View;
 	friend class WorldInformation;
+	friend class LuaWrapper::WorldInformationWrapper;
 	friend class Parser;
 	friend class write_obstacle_1;
 	friend class SimulationRenderer;

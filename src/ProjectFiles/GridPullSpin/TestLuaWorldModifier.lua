@@ -1,7 +1,11 @@
 function main()
-	x = Vector3d(1, 2, 3)
-	y = Vector3d(9, 8, 7)
-	z = x - y
-	m = MarkerInformation()
-	print("\nLua Script: 'Hello World!'", z.x, z.y, z.z)
+	t = WorldInformation.get_robots()
+	for i=1,#t do
+	  print(t[i])
+	end
+	t = WorldInformation.get_markers()
+	for i=1,#t do
+	  print(t[i])
+	end
+	print("\nLua Script: 'Hello World!'", t)
 end
