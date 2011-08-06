@@ -25,6 +25,7 @@
 #include "../Wrapper/coordinate_system_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
 #include "../Wrapper/marker_information_wrapper.h"
+#include "../Wrapper/stats_calc_wrapper.h"
 #include "../Wrapper/world_information_wrapper.h"
 
 #include "lua_world_modifier.h"

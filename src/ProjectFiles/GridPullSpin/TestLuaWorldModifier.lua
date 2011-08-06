@@ -1,11 +1,11 @@
 function main()
 	t = WorldInformation.get_robots()
 	for i=1,#t do
-	  print(t[i])
+	  print("ID: "..t[i])
 	end
-	t = WorldInformation.get_markers()
+	t = WorldInformation.get_robots()
 	for i=1,#t do
-	  print(t[i])
+	  print("ID: "..t[i])
 	end
 	print("\nLua Script: 'Hello World!'", t)
 end
