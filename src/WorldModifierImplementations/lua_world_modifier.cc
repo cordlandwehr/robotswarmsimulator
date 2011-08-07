@@ -57,10 +57,7 @@ std::set< boost::shared_ptr<Request> >
 LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_information) {
   // load cuurent WorldInformation object into wrapper
   LuaWrapper::WorldInformationWrapper::set_world_information(world_information);
-  
-  // create result set for possibly generate requests
-  std::set< boost::shared_ptr<Request> > requests;
-    
+     
     try {
 		luabind::call_function<void>(lua_state_.get(), "main");
 	}
@@ -69,7 +66,7 @@ LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_infor
 	    std::cerr << error_msg << std::endl;
 	}
     
-    return requests;
+    return LuaWrapper::WorldInformationWrapper::get_request_set();  
 }
 
 void LuaWorldModifier::register_lua_methods() {
@@ -113,6 +110,7 @@ void LuaWorldModifier::register_lua_methods() {
     [
       luabind::namespace_("WorldInformation")
       [
+	luabind::def("add_marker_request", &WorldInformationWrapper::add_marker_request),
 	luabind::def("get_marker_information", &WorldInformationWrapper::get_marker_information),
 	luabind::def("get_markers", &WorldInformationWrapper::get_markers, luabind::copy_table(luabind::result)),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),

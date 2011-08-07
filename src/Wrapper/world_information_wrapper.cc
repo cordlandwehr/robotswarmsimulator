@@ -12,6 +12,7 @@
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
 #include "../Model/marker_identifier.h"
+#include "../Requests/marker_request.h"
 
 #include <boost/foreach.hpp>
 
@@ -24,6 +25,7 @@ WorldInformationWrapper::WorldInformationWrapper ()
 
 // initialization of static members
 boost::shared_ptr<WorldInformation> WorldInformationWrapper::world_information_;
+std::set< boost::shared_ptr<Request> > WorldInformationWrapper::request_set_;
 std::map< std::size_t, boost::shared_ptr<MarkerIdentifier> > WorldInformationWrapper::marker_identifiers_; 
 std::map< std::size_t, boost::shared_ptr<RobotIdentifier> > WorldInformationWrapper::robot_identifiers_; 
 
@@ -39,7 +41,28 @@ WorldInformationWrapper::set_world_information (const boost::shared_ptr <
 {
   marker_identifiers_.clear();
   robot_identifiers_.clear();
+  request_set_.clear();
   world_information_ = world_information;
+}
+
+std::set< boost::shared_ptr<Request> >
+WorldInformationWrapper::get_request_set() {
+  return request_set_;
+}
+
+void WorldInformationWrapper::add_marker_request(std::size_t id, MarkerInformationWrapper marker) {
+  // get identifier
+  std::map< std::size_t, boost::shared_ptr<RobotIdentifier> >::iterator it;
+  it = robot_identifiers_.find(id);
+  // if not existant, stop right here
+  if (it == robot_identifiers_.end()) return;
+  // get correct robot
+  RobotData &rd = world_information_->get_according_robot_data(it->second);
+  // create MarkerRequest
+  boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+  // TODO: Remove this evil shit (const_cast)!
+  boost::shared_ptr<Request> request(new MarkerRequest(const_cast<Robot&>(rd.robot()), new_marker));
+  request_set_.insert(request);
 }
 
 const MarkerInformationWrapper
