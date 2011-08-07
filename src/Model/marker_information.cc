@@ -30,3 +30,17 @@ const boost::any MarkerInformation::get_data(const std::string& var_name) {
 		return map_iterator->second;
 	}
 }
+
+const std::vector<std::string> MarkerInformation::get_keys() {
+  // create result set
+  std::vector<std::string> result;
+  
+  // iterate over map and add keys to set
+  std::map<std::string, boost::any>::const_iterator it;
+  for (it = data_.begin(); it != data_.end(); it++) {
+    result.push_back(it->first);
+  }
+   
+  // return set
+  return result;
+}

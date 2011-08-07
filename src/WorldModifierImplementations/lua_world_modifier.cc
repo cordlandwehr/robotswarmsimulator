@@ -88,7 +88,9 @@ void LuaWorldModifier::register_lua_methods() {
          luabind::class_<MarkerInformationWrapper>("MarkerInformation")
          .def(luabind::constructor<>())
          .def("add_data", &MarkerInformationWrapper::add_data)
-         .def("get_data", &MarkerInformationWrapper::get_data),
+         .def("get_data", &MarkerInformationWrapper::get_data)
+	 .def("get_keys", &MarkerInformationWrapper::get_keys, luabind::copy_table(luabind::result))
+	 .def("remove_data", &MarkerInformationWrapper::remove_data),
      
          luabind::class_<Vector3dWrapper>("Vector3d")
          .def(luabind::constructor<>())

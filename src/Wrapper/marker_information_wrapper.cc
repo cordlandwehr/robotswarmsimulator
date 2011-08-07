@@ -15,6 +15,14 @@ namespace LuaWrapper{
     luabind::object MarkerInformationWrapper::get_data(const std::string& var_name) {
         return boost::any_cast<luabind::object>(marker_information_.get_data(var_name));
     }
+   
+    const std::vector<std::string> MarkerInformationWrapper::get_keys() {
+      return marker_information_.get_keys();
+    }
+    
+    void MarkerInformationWrapper::remove_data(const std::string& var_name) {
+	marker_information_.remove_data(var_name);
+    }
     
     const MarkerInformation& MarkerInformationWrapper::marker_information() const {
         return marker_information_;

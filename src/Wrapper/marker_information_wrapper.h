@@ -9,6 +9,7 @@
 #define MARKER_INFORMATION_WRAPPER_H_
 
 #include <string>
+#include <vector>
 #include <luabind/object.hpp>
 
 #include "../Model/marker_information.h"
@@ -20,7 +21,9 @@ namespace LuaWrapper {
         MarkerInformationWrapper(const MarkerInformation& marker_information) : marker_information_(marker_information) {;}
         
         void add_data(const std::string& var_name, const luabind::object& object);        
-        luabind::object get_data(const std::string& var_name);        
+        luabind::object get_data(const std::string& var_name);   
+	const std::vector<std::string> get_keys();
+	void remove_data(const std::string& var_name);
         const MarkerInformation& marker_information() const;
         
     private:
