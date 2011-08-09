@@ -5,7 +5,7 @@
  *      Author: Sascha Brandt
  */
 
-#include "GeneratorWizard.h"
+#include "generator_wizard.h"
 
 GeneratorWizard::GeneratorWizard(QWidget *parent) : QWizard(parent) {
 	_ui.setupUi(this);

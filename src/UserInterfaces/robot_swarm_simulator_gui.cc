@@ -11,7 +11,7 @@
  */
 
 #include <QtGui/QApplication>
-#include <Gui/RSSMainWindow.h>
+#include <Gui/rss_main_window.h>
 
 int main(int argc, char** argv) {
 	QApplication a(argc, argv);
@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
 
 	RSSMainWindow w;
 
+	w.init();
 	w.show();
 	return a.exec();
 }

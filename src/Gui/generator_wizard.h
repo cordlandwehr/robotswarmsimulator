@@ -9,7 +9,7 @@
 #define GENERATORWIZARD_H_
 
 #include <QtGui/QWizard>
-#include "ui_GeneratorWizard.h"
+#include "ui_generator_wizard.h"
 
 class GeneratorWizard : public QWizard {
 	Q_OBJECT

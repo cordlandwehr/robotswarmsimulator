@@ -14,7 +14,6 @@ set(RSSMAIN_SRCS
 # find all gui source files
 set(RSSMAIN_GUI_SRCS
     robot_swarm_simulator_gui.cc
-	glut_visualizer.cc
 )
 
 # find/configure boost (statically linked for release builds)
@@ -82,9 +81,9 @@ endif(APPLE)
 
 # find/configure QT
 # TODO packaging of QT libraries for release builds
+set(QT_USE_QTOPENGL TRUE)    
 find_package(Qt4 REQUIRED)
 
-set(QT_USE_OPENGL TRUE)    
 include(${QT_USE_FILE})
 
 # generate executable of the above source files and link it
@@ -97,7 +96,7 @@ target_link_libraries(RobotSwarmSimulatorGui
     ${LUA_LIBRARIES}
     ${CGAL_LIBRARIES}
     ${LAPACK_LIBRARIES}
-    ${QT_LIBRARIES}
+    ${QT_LIBRARIES}	
     luabind
 )
 

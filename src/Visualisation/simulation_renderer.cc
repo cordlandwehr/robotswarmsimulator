@@ -117,7 +117,8 @@ void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true),
+  swap_buffers_(true) {
 
 	render_visibility_graph_=false;
 
@@ -370,7 +371,9 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	}
 
 	glFlush();
-	glutSwapBuffers();
+
+	if(swap_buffers_)
+		glutSwapBuffers();
 
 
 }

@@ -68,8 +68,8 @@ endif(APPLE)
 include_directories(${luabind_SOURCE_DIR})
 
 # find/configure Qt4
+set(QT_USE_QTOPENGL TRUE)
 find_package(Qt4 REQUIRED)
-set(QT_USE_OPENGL TRUE)
 
 include(${QT_USE_FILE})
 

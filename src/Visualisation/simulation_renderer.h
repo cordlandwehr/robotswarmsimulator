@@ -304,6 +304,13 @@ public:
       */
      void set_cog_cam_pos(Vector3d & pos);
 
+     /**
+      *
+      */
+     void set_swap_buffers(bool swap_buffers) {
+    	 swap_buffers_ = swap_buffers;
+     }
+
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**
@@ -487,6 +494,11 @@ private:
 	 *
 	 */
 	int actuall_skybox_;
+
+	/**
+	 * Specifies whether glutSwapBuffers is called after each call to draw.
+	 */
+	bool swap_buffers_;
 
 	/**
 	 * The Robot Renderer used for drawing the Robots
