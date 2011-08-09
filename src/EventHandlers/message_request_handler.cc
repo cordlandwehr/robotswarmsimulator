@@ -31,9 +31,9 @@ bool MessageRequestHandler::handle_request_reliable(
 	RobotData& rd_sender = world_information->get_according_robot_data(m->sender());
 	RobotData& rd_receiver = world_information->get_according_robot_data(m->receiver());
 
-	// check if there exists an edge from sender to receiver
+	// check if there exists an edge from sender to receiver in the step before
 	bool edge_exists = false;
-	std::vector<boost::shared_ptr<EdgeIdentifier> > edges = rd_sender.get_edges();
+	std::vector<boost::shared_ptr<EdgeIdentifier> > edges = history_.get_newest().world_information().get_according_robot_data(m->sender()).get_edges();
 	BOOST_FOREACH(const boost::shared_ptr<EdgeIdentifier>& ei, edges) {
 		boost::shared_ptr<Edge> e = world_information->get_according_edge(ei);
 
