@@ -21,6 +21,8 @@
 #include "../EventHandlers/insert_edge_request_handler.h"
 #include "../EventHandlers/remove_edge_request_handler.h"
 
+#include "../Events/handle_requests_event.h"
+
 // forward declarations
 class Event;
 class ComputeEvent;

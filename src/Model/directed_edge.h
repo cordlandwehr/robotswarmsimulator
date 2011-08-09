@@ -12,8 +12,8 @@
 
 class DirectedEdge : public Edge {
 public:
-	DirectedEdge(boost::shared_ptr<RobotIdentifier> v1,
-				 boost::shared_ptr<RobotIdentifier> v2) : Edge(v1, v2) {};
+	DirectedEdge(boost::shared_ptr<RobotIdentifier> source,
+				 boost::shared_ptr<RobotIdentifier> target) : Edge(source, target) {};
 	virtual ~DirectedEdge();
 
 	boost::shared_ptr<RobotIdentifier> source() const;
