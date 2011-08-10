@@ -14,9 +14,11 @@
 #include "../Model/world_object.h"
 #include "../Model/edge.h"
 #include "../Model/directed_edge.h"
-
+#include "../Model/robot.h"
 
 #include <boost/foreach.hpp>
+
+class Robot;
 
 EdgeView::EdgeView() {
 }
@@ -32,13 +34,13 @@ std::vector<View::RobotRef> EdgeView::get_visible_robots(const RobotData& robot)
 		boost::shared_ptr<const Edge> e = wi.get_according_edge(ei);
 		// Check if edge is directed
 		if(boost::shared_ptr<const DirectedEdge> d_edge = boost::dynamic_pointer_cast<const DirectedEdge> (e)) {
-			if(d_edge->source() == robot.id() && d_edge->target() != robot.id()){
+			if(d_edge->source() == robot.robot().id() && d_edge->target() != robot.robot().id()){
 				result.push_back(d_edge->target());
 			}
 		} else {
-			if(e->getRobot1() != robot.id())
+			if(e->getRobot1() != robot.robot().id())
 				result.push_back(e->getRobot1());
-			else if(e->getRobot2() != robot.id())
+			else if(e->getRobot2() != robot.robot().id())
 				result.push_back(e->getRobot2());
 		}
 	}

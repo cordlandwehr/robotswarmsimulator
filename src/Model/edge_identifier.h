@@ -12,6 +12,9 @@
 class EdgeIdentifier : public Identifier {
 public:
 	explicit EdgeIdentifier();
+
+	EdgeIdentifier(const EdgeIdentifier& rhs) : Identifier(rhs) {};
+
 	~EdgeIdentifier();
 
 	virtual boost::shared_ptr<Identifier> clone() const {

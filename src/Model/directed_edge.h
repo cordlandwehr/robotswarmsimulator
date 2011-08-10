@@ -14,10 +14,15 @@ class DirectedEdge : public Edge {
 public:
 	DirectedEdge(boost::shared_ptr<RobotIdentifier> source,
 				 boost::shared_ptr<RobotIdentifier> target) : Edge(source, target) {};
+
+	DirectedEdge(const DirectedEdge& rhs) : Edge(rhs) {};
+
 	virtual ~DirectedEdge();
 
 	boost::shared_ptr<RobotIdentifier> source() const;
 	boost::shared_ptr<RobotIdentifier> target() const;
+
+	virtual boost::shared_ptr<WorldObject> clone() const;
 };
 
 #endif /* DIRECTED_EDGE_H_ */

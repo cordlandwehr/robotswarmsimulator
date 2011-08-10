@@ -17,3 +17,7 @@ boost::shared_ptr<RobotIdentifier> Edge::getRobot1() const {
 boost::shared_ptr<RobotIdentifier> Edge::getRobot2() const {
 	return robot2_;
 }
+
+boost::shared_ptr<WorldObject> Edge::clone() const {
+	return boost::shared_ptr<WorldObject>(new Edge(*this));
+}

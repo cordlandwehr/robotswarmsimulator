@@ -50,6 +50,10 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 			this->robot_data_.push_back(boost::shared_ptr<RobotData>());
 		}
 	}
+
+	for(std::map<size_t, boost::shared_ptr<Edge> >::const_iterator it = rhs.edges_.begin(); it != rhs.edges_.end(); it++){
+		this->edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(it->first, boost::static_pointer_cast<Edge>(it->second->clone())));
+	}
 }
 
 const std::vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() const {

@@ -25,11 +25,15 @@ public:
 		;
 	}
 
+	Edge(const Edge& rhs) : WorldObject(rhs), robot1_(rhs.robot1_), robot2_(rhs.robot2_) {};
+
 	virtual ~Edge();
 
 	boost::shared_ptr<RobotIdentifier> getRobot1() const;
 
 	boost::shared_ptr<RobotIdentifier> getRobot2() const;
+
+	virtual boost::shared_ptr<WorldObject> clone() const;
 
 private:
 	boost::shared_ptr<RobotIdentifier> robot1_;

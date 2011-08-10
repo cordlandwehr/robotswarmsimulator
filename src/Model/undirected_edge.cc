@@ -9,3 +9,7 @@
 
 UndirectedEdge::~UndirectedEdge(){
 }
+
+boost::shared_ptr<WorldObject> UndirectedEdge::clone() const {
+	return boost::shared_ptr<WorldObject>(new UndirectedEdge(*this));
+}

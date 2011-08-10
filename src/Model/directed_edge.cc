@@ -17,3 +17,7 @@ boost::shared_ptr<RobotIdentifier> DirectedEdge::source() const {
 boost::shared_ptr<RobotIdentifier> DirectedEdge::target() const {
 	return Edge::getRobot2();
 }
+
+boost::shared_ptr<WorldObject> DirectedEdge::clone() const {
+	return boost::shared_ptr<WorldObject>(new DirectedEdge(*this));
+}

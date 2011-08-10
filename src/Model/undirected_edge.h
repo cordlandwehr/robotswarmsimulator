@@ -16,7 +16,12 @@ class UndirectedEdge : public Edge {
 public:
 	UndirectedEdge(boost::shared_ptr<RobotIdentifier> v1,
 	               boost::shared_ptr<RobotIdentifier> v2) : Edge(v1, v2) {};
+
+	UndirectedEdge(const UndirectedEdge& rhs) : Edge(rhs) {};
+
 	virtual ~UndirectedEdge();
+
+	virtual boost::shared_ptr<WorldObject> clone() const;
 };
 
 #endif /* UNDIRECTED_EDGE_H_ */

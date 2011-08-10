@@ -12,11 +12,13 @@
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
 #include "../Requests/message_request.h"
+#include "../SimulationControl/time_point.h"
 
 #include <boost/foreach.hpp>
 
 class RobotIdentifier;
 class Identifier;
+class TimePoint;
 
 
 bool MessageRequestHandler::handle_request_reliable(
