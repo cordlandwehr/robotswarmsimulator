@@ -27,11 +27,11 @@ void StatsCalc::init(StatsConfig* stats_cfg) {
 	this->stats_cfg_ = stats_cfg;
 }
 
-void StatsCalc::calculate(StatsCalcInData & data,
-		boost::shared_ptr<StatsOut> & stats_out) {
+void StatsCalc::calculate(const StatsCalcInData & data,
+		const boost::shared_ptr<StatsOut> & stats_out) {
 
-	if (DEBUG)
-		std::cout << "DEBUG: >>>> stats_calc::calculate(...)" << std::endl;
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) <<"stats_calc::calculate(...)";
+
 
 	const boost::shared_ptr<WorldInformation> graph = data.world_info_;
 	const std::vector<boost::shared_ptr<RobotData> >& nodes = data.world_info_->robot_data();
@@ -49,6 +49,6 @@ int StatsCalc::calculateDegree(const std::vector<boost::shared_ptr<RobotData> >&
 			degree = degreeOfCurrentNode;
 		}
 	}
-	std::cout << "OUTPUT: >>>> stats_calc::calculated degree " << degree << "." << std::endl;
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated degree " << degree << ".";
 	return degree;
 }

@@ -74,8 +74,8 @@ public:
 	/**
 	 * \brief performs all calculations for the given data and subset
 	 */
-	void calculate(StatsCalcInData &data,
-			boost::shared_ptr<StatsOut> & stats_out);
+	void calculate(const StatsCalcInData &data,
+			const boost::shared_ptr<StatsOut> & stats_out);
 
 	int calculateDegree(const std::vector<boost::shared_ptr<RobotData> >& nodes);
 
