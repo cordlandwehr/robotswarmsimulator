@@ -18,6 +18,7 @@
 #include "../Views/origin_view.h"
 #include "../Views/time_view.h"
 #include "../Views/edge_view.h"
+#include "../Views/message_view.h"
 
 /**
  * \class LocalGraphView
@@ -36,7 +37,8 @@ class LocalGraphView: public virtual CoordinateSystemView,
 		public virtual RobotLastRequestSuccessfulView,
 		public virtual RobotTypeView,
 		public virtual OriginView,
-		public virtual TimeView {
+		public virtual TimeView,
+		public virtual MessageView{
 public:
 	LocalGraphView();
 	virtual ~LocalGraphView();

@@ -37,10 +37,10 @@ bool MessageRequestHandler::handle_request_reliable(
 	bool edge_exists = false;
 	std::vector<boost::shared_ptr<EdgeIdentifier> > edges = history_.get_newest().world_information().get_according_robot_data(m->sender()).get_edges();
 	BOOST_FOREACH(const boost::shared_ptr<EdgeIdentifier>& ei, edges) {
-		boost::shared_ptr<Edge> e = world_information->get_according_edge(ei);
+		boost::shared_ptr<const Edge> e = history_.get_newest().world_information().get_according_edge(ei);
 
 		// check if edge is directed or undirected
-		if(boost::shared_ptr<DirectedEdge> de = boost::dynamic_pointer_cast<DirectedEdge> (e)){
+		if(boost::shared_ptr<const DirectedEdge> de = boost::dynamic_pointer_cast<const DirectedEdge> (e)){
 			if(de->target()->id() == m->receiver()->id()){
 				edge_exists = true;
 			}

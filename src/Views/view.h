@@ -107,6 +107,21 @@ public:
 	 */
 	const std::vector<EdgeRef> get_visible_edges(const Robot& caller) const;
 
+	//-- Robot--
+	/**
+	 * Returns the first message of the robot and deletes it from queue.
+	 * @param Robot to get message from
+	 * @return first message of robot
+	 */
+	const boost::shared_ptr<Message> get_message(const Robot& robot);
+
+	/**
+	 * Returns the number of messages the robot has in it's queue
+	 * @param Robot to get number of messages from
+	 * @return number of messages the robot has
+	 */
+	const std::size_t get_number_of_messages(const Robot& robot) const;
+
 	//-- WorldObject--
 	/**
 	 * Queries for the position of a WorldObject identified by an given Identifier.
@@ -258,6 +273,8 @@ protected:
 	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
 	virtual std::vector<MarkerRef> get_visible_markers(const RobotData& robot) const;
 	virtual std::vector<EdgeRef> get_visible_edges(const RobotData& robot) const;
+	virtual boost::shared_ptr<Message> get_message(const RobotData& robot);
+	virtual std::size_t get_number_of_messages(const RobotData& robot) const;
 
 
 	//Following methods are called by the non virtual method get_position. Which of the four methods
@@ -343,6 +360,7 @@ private:
 	//E.g. it resolves a given RobotRef to a RobotData object.
 	const Obstacle& resolve_obstacle_ref(ObstacleRef obstacle) const;
 	const RobotData& resolve_robot_ref(RobotRef robot) const;
+	RobotData& resolve_robot_ref_non_const(RobotRef robot);
 	const WorldObject& resolve_marker_ref(MarkerRef marker) const;
 	const Box& resolve_box_ref(BoxRef box) const;
 	const Sphere& resolve_sphere_ref(SphereRef sphere) const;

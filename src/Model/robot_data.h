@@ -183,7 +183,7 @@ public:
 	/**
 	 * Returns first message from queue
 	 */
-	boost::shared_ptr<Message> get_message() {
+	boost::shared_ptr<Message> get_message() const {
 		return messages_.front();
 	}
 
@@ -192,6 +192,13 @@ public:
 	 */
 	void pop_front_message() {
 		messages_.pop_front();
+	}
+
+	/**
+	 * Returns number of messages in queue
+	 */
+	std::size_t get_number_of_messages() const {
+		return messages_.size();
 	}
 
 	/**

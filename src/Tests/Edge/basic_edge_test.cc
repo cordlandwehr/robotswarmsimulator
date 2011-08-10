@@ -14,9 +14,6 @@
 #include "../../RobotImplementations/simple_robot.h"
 
 #include "../../EventHandlers/event_handler.h"
-#include "../../EventHandlers/vector_request_handler.h"
-#include "../../EventHandlers/marker_request_handler.h"
-#include "../../EventHandlers/type_change_request_handler.h"
 #include "../../EventHandlers/insert_edge_request_handler.h"
 #include "../../EventHandlers/remove_edge_request_handler.h"
 
@@ -32,10 +29,6 @@
 #include "../../Views/view_factory.h"
 
 #include "../Fixtures/simple_graph_fixture.h"
-
-
-
-using namespace std;
 
 BOOST_AUTO_TEST_CASE(basic_edge_test){
 	// generate robot 0
