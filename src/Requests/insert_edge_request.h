@@ -9,7 +9,7 @@
 #define INSERT_EDGE_REQUEST_H_
 
 #include "request.h"
-#include "../Model/Edge.h"
+#include "../Model/edge.h"
 
 
 class InsertEdgeRequest : public Request {

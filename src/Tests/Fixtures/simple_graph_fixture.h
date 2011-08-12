@@ -20,7 +20,7 @@
 #include "../../Model/robot_data.h"
 #include "../../Model/robot.h"
 #include "../../Model/robot_identifier.h"
-#include "../../Model/Edge.h"
+#include "../../Model/edge.h"
 #include "../../Model/directed_edge.h"
 #include "../../Model/undirected_edge.h"
 
