@@ -50,6 +50,10 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 			this->robot_data_.push_back(boost::shared_ptr<RobotData>());
 		}
 	}
+
+	for(std::map<size_t, boost::shared_ptr<Edge> >::const_iterator it = rhs.edges_.begin(); it != rhs.edges_.end(); it++){
+		this->edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(it->first, boost::static_pointer_cast<Edge>(it->second->clone())));
+	}
 }
 
 const std::vector<boost::shared_ptr<WorldObject> >& WorldInformation::markers() const {
@@ -104,6 +108,26 @@ void WorldInformation::set_robot_data(std::vector<boost::shared_ptr<RobotData> >
 	robot_data_ = new_robot_data;
 }
 
+const std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() const {
+	return edges_;
+}
+
+std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() {
+	return edges_;
+}
+
+void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
+	edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(new_edge->id()->id(), new_edge));
+}
+
+void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edge> > new_edges) {
+	edges_ = new_edges;
+}
+
+bool WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
+	return edges_.erase(edge->id()->id());
+}
+
 int WorldInformation::time() const {
 	return time_;
 }
@@ -136,4 +160,16 @@ boost::shared_ptr<const RobotData> WorldInformation::get_according_robot_data_pt
 boost::shared_ptr<RobotData> WorldInformation::get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) {
 	assert(id->id() < robot_data_.size());
 	return robot_data_[id->id()];
+}
+
+boost::shared_ptr<const Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it = edges_.find(id->id());
+	assert(it != edges_.end());
+	return it->second;
+}
+
+boost::shared_ptr<Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) {
+	std::map<std::size_t, boost::shared_ptr<Edge> >::iterator it = edges_.find(id->id());
+	assert(it != edges_.end());
+	return it->second;
 }

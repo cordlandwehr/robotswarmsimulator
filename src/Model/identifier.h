@@ -39,6 +39,7 @@ private:
 	friend class write_obstacle_1;
 	friend class SimulationRenderer;
 	friend class StatsControl;
+	friend class MessageRequestHandler;
 };
 
 #endif /* IDENTIFIER_H_ */

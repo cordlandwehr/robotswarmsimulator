@@ -21,6 +21,8 @@
 #include "../EventHandlers/insert_edge_request_handler.h"
 #include "../EventHandlers/remove_edge_request_handler.h"
 
+#include "../Events/handle_requests_event.h"
+
 // forward declarations
 class Event;
 class ComputeEvent;
@@ -125,6 +127,21 @@ public:
 	void set_color_change_request_handler(
 	    boost::shared_ptr<ColorChangeRequestHandler> request_handler) {
 		color_change_request_handler_ = request_handler;
+	}
+
+	void set_message_request_handler(
+		boost::shared_ptr<MessageRequestHandler> request_handler) {
+		message_request_handler_ = request_handler;
+	}
+
+	void set_insert_edge_request_handler(
+		boost::shared_ptr<InsertEdgeRequestHandler> request_handler) {
+		insert_edge_request_handler_ = request_handler;
+	}
+
+	void set_remove_edge_request_handler(
+		boost::shared_ptr<RemoveEdgeRequestHandler> request_handler) {
+		remove_edge_request_handler_ = request_handler;
 	}
 
 private:

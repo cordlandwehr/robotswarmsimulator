@@ -2,7 +2,7 @@
  * message_request.h
  *
  *  Created on: 22.07.2011
- *      Author: Jonas Knoll
+ *      Author: Jonas
  */
 
 #ifndef MESSAGE_REQUEST_H_

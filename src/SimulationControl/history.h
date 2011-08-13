@@ -14,6 +14,8 @@
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include "time_point.h"
+
 class TimePoint;
 
 /**
