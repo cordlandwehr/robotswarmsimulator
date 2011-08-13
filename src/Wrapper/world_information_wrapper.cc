@@ -15,6 +15,7 @@
 #include "../Requests/marker_request.h"
 
 #include <boost/foreach.hpp>
+#include <boost/graph/graph_concepts.hpp>
 
 namespace LuaWrapper {
  
@@ -26,6 +27,7 @@ WorldInformationWrapper::WorldInformationWrapper ()
 // initialization of static members
 boost::shared_ptr<WorldInformation> WorldInformationWrapper::world_information_;
 std::set< boost::shared_ptr<Request> > WorldInformationWrapper::request_set_;
+std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> > WorldInformationWrapper::edge_identifiers_;
 std::map< std::size_t, boost::shared_ptr<MarkerIdentifier> > WorldInformationWrapper::marker_identifiers_; 
 std::map< std::size_t, boost::shared_ptr<RobotIdentifier> > WorldInformationWrapper::robot_identifiers_; 
 
@@ -50,6 +52,33 @@ WorldInformationWrapper::get_request_set() {
   return request_set_;
 }
 
+void
+WorldInformationWrapper::add_edge(std::size_t source, std::size_t target) {
+  MarkerInformationWrapper marker;
+  add_edge(source, target, marker);
+} 
+
+void
+WorldInformationWrapper::add_edge(std::size_t source, std::size_t target,
+				  MarkerInformationWrapper marker) {
+  std::map< std::size_t, boost::shared_ptr<RobotIdentifier> >::iterator it;
+  // check for source identifier
+  it = robot_identifiers_.find(source);
+  if (it == robot_identifiers_.end()) return;
+  boost::shared_ptr<RobotIdentifier> source_robot = it->second;  
+  // check for target identifier
+  it = robot_identifiers_.find(target);
+  if (it == robot_identifiers_.end()) return;
+  boost::shared_ptr<RobotIdentifier> target_robot = it->second;  
+  // create new edge
+  boost::shared_ptr<Edge> edge(new Edge(source_robot, target_robot));
+  // TODO: The following line copies alot of data back and forth...
+  boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+  edge->set_marker_information(new_marker);
+  // add edge
+  world_information_->add_edge(edge);
+}  
+
 void WorldInformationWrapper::add_marker_request(std::size_t id, MarkerInformationWrapper marker) {
   // get identifier
   std::map< std::size_t, boost::shared_ptr<RobotIdentifier> >::iterator it;
@@ -63,6 +92,59 @@ void WorldInformationWrapper::add_marker_request(std::size_t id, MarkerInformati
   // TODO: Remove this evil shit (const_cast)!
   boost::shared_ptr<Request> request(new MarkerRequest(const_cast<Robot&>(rd.robot()), new_marker));
   request_set_.insert(request);
+}
+
+const std::vector<std::size_t> 
+WorldInformationWrapper::get_adjacent_edges(std::size_t id) {
+  std::vector<std::size_t> result;
+  boost::shared_ptr<const RobotData> robot;
+  
+  robot = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]);
+  
+  BOOST_FOREACH (boost::shared_ptr<EdgeIdentifier> edge_identifier, robot->get_edges()) {
+    std::size_t edge_id = edge_identifier->id();
+    edge_identifiers_[edge_id] = edge_identifier;
+    result.push_back(edge_id);
+  }
+
+  return result;
+}
+
+const std::pair<std::size_t, std::size_t>
+WorldInformationWrapper::get_edge_anchors(std::size_t id) {
+  // TODO: Map access should be checked! And pointer handling (looks wrong) ...
+  boost::shared_ptr<const Edge> edge = world_information_->get_according_edge(edge_identifiers_[id]);
+  // get robot IDs and add/update map
+  std::pair<std::size_t, std::size_t> robot_pair(edge->getRobot1()->id(), edge->getRobot2()->id());
+  robot_identifiers_[edge->getRobot1()->id()] = edge->getRobot1();
+  robot_identifiers_[edge->getRobot2()->id()] = edge->getRobot2();
+  // return STL pair
+  return robot_pair;
+}
+
+const MarkerInformationWrapper
+WorldInformationWrapper::get_edge_information(std::size_t id) {
+  // TODO: Map access should be checked! And pointer handling (looks wrong) ...
+  boost::shared_ptr<const Edge> edge = world_information_->get_according_edge(edge_identifiers_[id]);
+  MarkerInformationWrapper marker_information(edge->marker_information());
+  return marker_information;
+}
+
+const std::vector < std::size_t >
+WorldInformationWrapper::get_edges() {
+  std::vector<std::size_t> result;
+  
+  std::map< std::size_t, boost::shared_ptr<Edge> >::iterator it;
+ 
+  for(it = world_information_->edges().begin(); 
+      it != world_information_->edges().end(); 
+      it++) {
+    std::size_t id = it->second->id()->id();
+    edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(it->second->id());
+    result.push_back(id);
+  }
+  
+  return result;
 }
 
 const MarkerInformationWrapper
@@ -114,7 +196,21 @@ int
 WorldInformationWrapper::get_time ()
 {
   return world_information_->time();
-}  
+}
+
+void
+WorldInformationWrapper::remove_edge(std::size_t id) {
+  // get identifier
+  std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> >::iterator it;
+  it = edge_identifiers_.find(id);
+  // if not existant, stop right here
+  if (it == edge_identifiers_.end()) return;
+  // get corresponding edge object
+  boost::shared_ptr<Edge> edge = world_information_->get_according_edge(it->second);
+  // remove map entry and edge
+  edge_identifiers_.erase(it);
+  world_information_->remove_edge(edge);
+}
   
 }
 
