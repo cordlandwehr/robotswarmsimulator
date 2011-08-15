@@ -30,7 +30,7 @@ void StatsCalc::init(StatsConfig* stats_cfg) {
 void StatsCalc::calculate(const StatsCalcInData & data,
 		const boost::shared_ptr<StatsOut> & stats_out) {
 
-	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) <<"stats_calc::calculate(...)";
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculate(...)";
 
 
 	const boost::shared_ptr<WorldInformation> graph = data.world_info_;
