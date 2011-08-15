@@ -21,7 +21,9 @@ const unsigned kCopyCount = 127;
 
 BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
-	/*boost::shared_ptr<WorldInformation> graph (new WorldInformation());
+	boost::shared_ptr<WorldInformation> graph (new WorldInformation());
+
+	std::vector<boost::shared_ptr<RobotIdentifier> > IDs;
 
 	boost::shared_ptr<Vector3d> pos(new Vector3d());
 	pos->insert_element(kXCoord,0.0);
@@ -31,6 +33,7 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	//create 1000 Nodes and NodeDatas
 	for(unsigned i = 0; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
+		IDs.push_back(id);
 		//TODO: undefined behavior here, since robot is deleted after each forloop run.
 		boost::shared_ptr<Robot> node(new SimpleRobot(id));
 		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, *node));
@@ -42,15 +45,20 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	//create edge between consecutive nodes (gives a line)
 	const std::vector<boost::shared_ptr<RobotData> >& nodes = graph->robot_data();
 	for(int i=1; i<nodes.size();i++){
-		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
-		boost::shared_ptr<RobotData> node1 = nodes[i-1];
-		boost::shared_ptr<RobotData> node2 = nodes[i];
+		boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[i-1];
+		boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[i];
 
 		//create edge
-		boost::shared_ptr<Edge> e (new UndirectedEdge(id,pos,node1,node2));
-		//add edge to nodes
-		node1->add_edge(e);
-		node2->add_edge(e);
+		boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
+
+		RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
+		RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
+
+		// add requested edge to world_information and to adjacency list of robots
+		rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
+		rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
+
+		graph->add_edge(e);
 	}
 
 	//get StatsCalc class
@@ -61,15 +69,19 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
 
 	//add one directed edge to the second node
-	boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(nodes.size()));
-	boost::shared_ptr<RobotData> node1 = nodes[1];
-	boost::shared_ptr<RobotData> node2 = nodes[4];
+	boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[1];
+	boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[4];
 
 	//create edge
-	boost::shared_ptr<Edge> e (new Edge(id,pos,node1,node2));
-	//add edge to nodes
-	node1->add_edge(e);
+	boost::shared_ptr<Edge> e (new Edge(nodeID1,nodeID2));
+
+	RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
+
+	// add requested edge to world_information and to adjacency list of robots
+	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
+
+	graph->add_edge(e);
 
 	//degree has to be 3
-	BOOST_CHECK_EQUAL(stats_calc_.calculateDegree(nodes), 3);*/
+	BOOST_CHECK_EQUAL(stats_calc_.calculateDegree(nodes), 3);
 }
