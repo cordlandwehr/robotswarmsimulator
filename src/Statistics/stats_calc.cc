@@ -49,7 +49,7 @@ int StatsCalc::calculateDegree(const std::vector<boost::shared_ptr<RobotData> >&
 			degree = degreeOfCurrentNode;
 		}
 	}
-	std::cout << "OUTPUT: >>>> stats_calc::calculated degree " << degree << "." << std::endl;
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated degree " << degree << ".";
 	return degree;
 }
 
@@ -86,7 +86,7 @@ int StatsCalc::calculateMaximalDefect(const boost::shared_ptr<WorldInformation> 
 				maxDefect = countDefects;
 			}
 		}
-		std::cout << "OUTPUT: >>>> stats_calc::calculated maximal defect " << maxDefect << "." << std::endl;
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated maximal defect " << maxDefect << ".";
 		return maxDefect;
 }
 
@@ -110,6 +110,6 @@ int StatsCalc::calculateTotalDefects(const boost::shared_ptr<WorldInformation> g
 		it++;
 	}
 
-	std::cout << "OUTPUT: >>>> stats_calc::calculated total defect " << countDefects << "." << std::endl;
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated total defect " << countDefects << ".";
 	return countDefects;
 }
