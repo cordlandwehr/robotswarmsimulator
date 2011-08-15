@@ -37,6 +37,8 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 		//TODO: undefined behavior here, since robot is deleted after each forloop run.
 		boost::shared_ptr<Robot> node(new SimpleRobot(id));
 		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, *node));
+
+		nodeData->set_color(i);
 		graph->add_robot_data(nodeData);
 	}
 
@@ -67,6 +69,10 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	//degree has to be 2
 	BOOST_CHECK_EQUAL(stats_calc_.calculateDegree(nodes), 2);
 
+	//max number of defects is 0
+	BOOST_CHECK_EQUAL(stats_calc_.calculateMaximalDefect(graph),0);
+	//total number of defects is 0
+	BOOST_CHECK_EQUAL(stats_calc_.calculateTotalDefects(graph),0);
 
 	//add one directed edge to the second node
 	boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[1];
@@ -84,4 +90,20 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
 	//degree has to be 3
 	BOOST_CHECK_EQUAL(stats_calc_.calculateDegree(nodes), 3);
+
+
+	boost::shared_ptr<RobotData> node7 = nodes[7];
+
+	boost::shared_ptr<RobotData> node10 = nodes[10];
+	boost::shared_ptr<RobotData> node12 = nodes[12];
+
+	node7->set_color(8);
+
+	node10->set_color(11);
+	node12->set_color(11);
+
+	//max number of defects is 2
+	BOOST_CHECK_EQUAL(stats_calc_.calculateMaximalDefect(graph),2);
+	//total number of defects is 3
+	BOOST_CHECK_EQUAL(stats_calc_.calculateTotalDefects(graph),3);
 }
