@@ -1,11 +1,9 @@
 /**
- * \class	StatsCalc
- * \author	Sven Kurras
+ * \class	stats_calc
+ * \author	Tobias Isenberg
  * \brief	performs all the statistical calculations
  *
- * The calculation-overhead is implemented in StatsControl.
- * The StatsCalc-class implements the pure calculation for a given
- * subset and worldinformation.
+ * The stats_calc-class implements the pure calculation for a given worldinformation.
  * Therefore it receives from StatsControl an updated
  * struct StatsCalcInData with all information needed.
  */
@@ -14,13 +12,13 @@
 
 /**
  * StatsCalcInData
- * \author	Sven Kurras
+ * \author	Tobias Isenberg
  * \brief	holds information on current and last worldinformation
  *
  * This struct is filled by the StatsControl with the latest worldinformation
- * for a given point in time. Then it is sent to StatsCalc as input for performing
+ * for a given point in time. Then it is sent to stats_calc as input for performing
  * all calculations. Some of them might need to access the previous worldinformation,
- * so the previous one is saved here, too. Additionally the StatsCalc might perform
+ * so the previous one is saved here, too. Additionally the stats_calc might perform
  * some time-consuming operations whose result shouldn't be recalculated when
  * accessing the previous worldinformation, so these results are also saved here.
  */
@@ -35,7 +33,7 @@
 
 #include "stats_config.h"
 #include "stats_out.h"
-#include "statistics_data_object.h"
+//#include "statistics_data_object.h"
 
 struct StatsCalcInData {
 
@@ -45,8 +43,6 @@ struct StatsCalcInData {
 	 */
 	boost::shared_ptr<WorldInformation> world_info_;
 
-	boost::shared_ptr<StatisticsDataObject> visib_;
-
 	/**
 	 * After performing the calculations on world_info_ it is moved to prev_world_info_ for
 	 * latter additional calculations on the differences to future world_info_.
@@ -54,25 +50,10 @@ struct StatsCalcInData {
 	 */
 	boost::shared_ptr<WorldInformation> prev_world_info_;
 
-	boost::shared_ptr<StatisticsDataObject> prev_visib_;
 
 	// SAVED PRECALCULATED VALUES
 	// for all subsets in one vector.
-
-	/**
-	 * the positions-vector of each subset
-	 */
-	std::vector<boost::shared_ptr<std::vector<Vector3d> > > prev_positions;
-
-	/**
-	 * the miniball's center of each subset
-	 */
-	std::vector<boost::shared_ptr<Vector3d> > prev_miniball_center;
-
-	/**
-	 * the miniball's radius of each subset
-	 */
-	std::vector<double> prev_miniball_radius;
+	/*none so far*/
 };
 
 // END STRUCT-DEFINTION
@@ -93,10 +74,10 @@ public:
 	/**
 	 * \brief performs all calculations for the given data and subset
 	 */
-	void calculate(StatsCalcInData &data,
-			std::vector<boost::shared_ptr<RobotData> > & subset,
-			boost::shared_ptr<StatsOut> & stats_out,
-			unsigned int subset_id);
+	void calculate(const StatsCalcInData &data,
+			const boost::shared_ptr<StatsOut> & stats_out);
+
+	int calculateDegree(const std::vector<boost::shared_ptr<RobotData> >& nodes);
 
 private:
 	/**
