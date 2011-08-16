@@ -12,9 +12,6 @@
 
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
-#include "../ComputationalGeometry/miniball.h"
-#include "../ComputationalGeometry/miniball.cc"
-#include "../ComputationalGeometry/miniball_b.cc"
 #include "../Utilities/vector_arithmetics.h"
 #include "../Views/view.h"
 

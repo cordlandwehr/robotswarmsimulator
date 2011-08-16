@@ -29,10 +29,6 @@ find_package(Lua51 REQUIRED)
 reverse_link_preference_in_release()
 include_directories(${LUA_INCLUDE_DIR})
 
-# find/configure CGAL
-find_package(CGAL)
-include(${CGAL_USE_FILE})
-
 # find/configure LAPACK
 if(APPLE)
 	#find_library(LAPACK_LIBRARIES Accelerate)

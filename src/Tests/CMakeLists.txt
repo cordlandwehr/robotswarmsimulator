@@ -19,10 +19,6 @@ include_directories(${LUA_INCLUDE_DIR})
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
-# find/configure CGAL
-find_package(CGAL)
-include(${CGAL_USE_FILE})
-
 # find/configure LAPACK
 if(APPLE)
 	find_library(LAPACK_LIBRARIES Accelerate)
@@ -53,7 +49,6 @@ target_link_libraries(RSSUnitTests
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
-	${CGAL_LIBRARIES}
 	${LAPACK_LIBRARIES}
 	luabind
 )

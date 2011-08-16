@@ -28,7 +28,6 @@ class Obstacle;
 class Box;
 class Sphere;
 class WorldInformation;
-class DistributionGenerator;
 
 /**
  * \class View
@@ -58,12 +57,6 @@ protected:
 public:
 	View();
 	virtual ~View();
-
-	/**
-	* @param DistributionGenerator used for random_shuffle calls in get_visible_* methods.
-	*/
-
-	static void set_distribution_generator(boost::shared_ptr<DistributionGenerator> generator);
 
 	/**
 	 * Although init is trivial, it is nice to have a default constructor in virtual
@@ -102,6 +95,7 @@ public:
 	//-- WorldObject--
 	/**
 	 * Queries for the position of a WorldObject identified by an given Identifier.
+	 * Note: as of August 16th 2011, the absolute position is returned (asetzer)
 	 * @param The Robot which is asking..
 	 * @param Identifier for a WorldObject
 	 * @return Position
@@ -379,7 +373,6 @@ private:
 
 private:
 	boost::shared_ptr<WorldInformation> world_information_;
-	static boost::shared_ptr<DistributionGenerator> generator_;
 
 };
 

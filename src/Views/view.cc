@@ -17,15 +17,6 @@
 #include "../Model/sphere.h"
 #include "../Model/world_information.h"
 #include "../Utilities/unsupported_operation_exception.h"
-#include "../Utilities/distribution_generator.h"
-#include "../ComputationalGeometry/coord_converter.h"
-
-boost::shared_ptr<DistributionGenerator> View::generator_ = boost::shared_ptr<DistributionGenerator>();
-
-void View::set_distribution_generator(boost::shared_ptr<DistributionGenerator> generator) {
-	generator_ = generator;
-	generator_->init_uniform(0, std::numeric_limits<int>::max());
-}
 
 View::View() {
 }
@@ -131,21 +122,21 @@ void View::init(const boost::shared_ptr<WorldInformation>& world_information) {
 
 const std::vector<View::RobotRef> View::get_visible_robots(const Robot& caller) const {
 	std::vector<View::RobotRef> result(get_visible_robots(resolve_robot_ref(caller.id())));
-	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	//std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
 	return result;
 }
 
 
 const std::vector<View::ObstacleRef> View::get_visible_obstacles(const Robot& caller) const {
 	std::vector<View::ObstacleRef> result(get_visible_obstacles(resolve_robot_ref(caller.id())));
-	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	//std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
 	return result;
 }
 
 
 const std::vector<View::MarkerRef> View::get_visible_markers(const Robot& caller) const {
 	std::vector<View::MarkerRef> result(get_visible_markers(resolve_robot_ref(caller.id())));
-	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	//std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
 	return result;
 }
 
@@ -155,7 +146,8 @@ const Vector3d View::get_position(const Robot& caller, WorldObjectRef world_obje
 			                                             &View::get_obstacle_position, &View::get_marker_position,
 	                                                     caller, world_object);
 	const RobotData& robot_data = resolve_robot_ref(caller.id());
-	return *CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
+	return position_global_coords;
+	//return *CoordConverter::global_to_local(position_global_coords, robot_data.position(), robot_data.coordinate_system_axis());
 }
 
 const MarkerInformation View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {

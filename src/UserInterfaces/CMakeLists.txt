@@ -38,11 +38,6 @@ include_directories(${LUA_INCLUDE_DIR})
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
-# find/configure CGAL
-# TODO(peter) packaging of CGAL libraries for release builds
-find_package(CGAL REQUIRED)
-include(${CGAL_USE_FILE})
-
 # find/configure LAPACK
 # TODO(peter) packaging of LAPACK libraries for release builds
 if(APPLE)
@@ -87,7 +82,6 @@ target_link_libraries(RobotSwarmSimulator
 	${OPENGL_LIBRARIES}
 	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
-	${CGAL_LIBRARIES}
 	${LAPACK_LIBRARIES}
 	luabind
 )

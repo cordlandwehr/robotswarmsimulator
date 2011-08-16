@@ -32,11 +32,6 @@
 #include "../Requests/velocity_request.h"
 #include "../Requests/color_change_request.h"
 #include "../Views/view.h"
-#include "../ComputationalGeometry/misc_algorithms.h"
-#include "../ComputationalGeometry/ch_algorithms.h"
-#include "../ComputationalGeometry/point_algorithms.h"
-#include "../ComputationalGeometry/points_sepplane.h"
-#include "../Wrapper/distribution_generator_wrapper.h"
 #include <Wrapper/lua_distribution_generator.h>
 #include "../Wrapper/vector_wrapper.h"
 
@@ -393,48 +388,6 @@ namespace {
 		return 0; //own id always at pos 0 in queried_identifiers
 	}
 
-	//TODO: doxy
-	const bool is_point_in_smallest_bbox(std::vector<LuaWrapper::Vector3dWrapper> point_list, const LuaWrapper::Vector3dWrapper& testpoint) {
-		return MiscAlgorithms::is_point_in_smallest_bbox(transform(point_list), transform(testpoint));
-	}
-
-	/**
-	 * Sorts vectors by euclidean norm, distance to zero
-	 * @return sorted point_list
-	 */
-	const std::vector<std::size_t> sort_robots_by_distance(std::vector<std::size_t> index_list) {
-		using boost::bind;
-
-		std::vector< std::pair<Vector3d,std::size_t> > point_list;
-		point_list.resize(index_list.size());
-		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(std::make_pair<Vector3d, std::size_t>, bind(static_cast<const Vector3d(*)(const LuaWrapper::Vector3dWrapper&)>(&LuaWrapper::transform), bind(get_position, 1)), _1));
-
-		MiscAlgorithms::sort_pointslist_by_distance(point_list, 2);
-
-		std::vector<std::size_t> result;
-		result.resize(point_list.size());
-		std::transform(point_list.begin(), point_list.end(), result.begin(), bind(&std::pair<Vector3d,std::size_t>::second,_1));
-
-		return result;
-	}
-
-	const std::vector<LuaWrapper::Vector3dWrapper> calculate_shim_plane(std::vector<std::size_t> index_list){
-		using boost::bind;
-
-		std::vector<Vector3d > point_list;
-		point_list.resize(index_list.size());
-		std::transform(index_list.begin(), index_list.end(), point_list.begin(), bind(static_cast<const Vector3d(*)(const LuaWrapper::Vector3dWrapper&)>(&LuaWrapper::transform), bind(get_position, _1)));
-
-		boost::tuple<Vector3d,Vector3d> vec = MiscAlgorithms::calculate_shim_plane(point_list);
-
-		std::vector<LuaWrapper::Vector3dWrapper> ret_vec ;
-		ret_vec.push_back(LuaWrapper::transform(vec.get<0>() ));
-		ret_vec.push_back(LuaWrapper::transform(vec.get<1>() ));
-
-		return ret_vec;
-	}
-
-
 }
 
 void LuaRobot::report_errors(int status) {
@@ -498,7 +451,7 @@ void LuaRobot::register_lua_methods() {
 			 .def("get_value_geometric", &DistributionGenerator::get_value_geometric)
 			 .def("get_value_uniform_real", &DistributionGenerator::get_value_uniform_real)
 			 .def("get_value_uniform_on_sphere", &DistributionGenerator::get_value_uniform_on_sphere, luabind::copy_table(luabind::result))
-			 .def("get_value_uniform_on_sphere_3d", &LuaWrapper::get_value_uniform_on_sphere_3d),
+			 ,
 
 		 luabind::class_<MarkerInformationWrapper>("MarkerInformation")
 			 .def(luabind::constructor<>())
@@ -589,23 +542,8 @@ void LuaRobot::register_lua_methods() {
 
 		// some functions to access global number generator from lua.
 		luabind::def("gen_init_uniform", &LuaWrapper::lua_generator_init_uniform),
-		luabind::def("gen_get_uniform", &LuaWrapper::lua_generator_get_uniform),
+		luabind::def("gen_get_uniform", &LuaWrapper::lua_generator_get_uniform)
 
-	    luabind::namespace_("Geometry")
-		 [
-			 luabind::def("is_point_in_smallest_bbox", &is_point_in_smallest_bbox, luabind::copy_table(_1)),
-			 luabind::def("compute_distance", (const double (*) (const LuaWrapper::Vector3dWrapper&, const LuaWrapper::Vector3dWrapper&))&LuaWrapper::compute_distance),
-			 luabind::def("compute_distance", (const double (*) (const LuaWrapper::Vector3dWrapper&, const LuaWrapper::Vector3dWrapper&, int))&LuaWrapper::compute_distance),
-			 luabind::def("compute_cog", &LuaWrapper::compute_COG, luabind::copy_table(_1)),
-			 luabind::def("compute_cminiball", &LuaWrapper::compute_CMinBall, luabind::copy_table(_1)),
-			 luabind::def("sort_vectors_by_length", &LuaWrapper::sort_points_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
-			 luabind::def("sort_robots_by_distance", &sort_robots_by_distance, luabind::copy_table(luabind::result) + luabind::copy_table(_1)),
-			 luabind::def("separate_point_from_points", &LuaWrapper::separate_point_from_points, luabind::copy_table(_2)),
-			 luabind::def("point_contained_in_convex_hull_of_points", &LuaWrapper::point_contained_in_convex_hull_of_points, luabind::copy_table(_2)),
-			 luabind::def("compute_cog_of_ch_of_points", &LuaWrapper::compute_cog_of_ch_of_points, luabind::copy_table(_1)),
-			 luabind::def("random_point_in_ch", (const LuaWrapper::Vector3dWrapper (*) (const std::vector<LuaWrapper::Vector3dWrapper>&, int))&LuaWrapper::random_point_in_ch),
-			 luabind::def("calculate_shim_plane",&calculate_shim_plane,  luabind::copy_table(luabind::result) + luabind::copy_table(_1) )
-		 ]
 	];
 
 }
