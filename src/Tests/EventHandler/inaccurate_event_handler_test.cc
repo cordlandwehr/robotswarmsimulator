@@ -25,7 +25,6 @@
 
 #include "../../SimulationKernel/uniform_robot_control.h"
 
-#include "../../ComputationalGeometry/coord_converter.h"
 #include "../../Utilities/vector_arithmetics.h"
 #include "../../Utilities/VectorModifiers/vector_randomizer.h"
 
@@ -42,7 +41,6 @@
  *   - the inaccuracy conforms to the respective inaccuracy parameters
  */
 BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldFixture) {
-	using CoordConverter::local_to_global;
 
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
@@ -74,8 +72,9 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
 	for (int i=1; i<=nr_requests; i++) {
 		// get global target point
 		RobotData robot_data_before = history->get_newest().world_information().get_according_robot_data(robot_a->id());
-		boost::shared_ptr<Vector3d> target_point = local_to_global(*requested_vector, robot_data_before.position(),
-																   robot_data_before.coordinate_system_axis());
+		boost::shared_ptr<Vector3d> target_point = requested_vector; //TODO asetzer if anything is defunc, THIS change might be the reason
+		//= local_to_global(*requested_vector, robot_data_before.position(),
+		//														   robot_data_before.coordinate_system_axis());
 
 		// handle event
 		boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(i));
@@ -119,7 +118,6 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_position_test, SimpleWorldF
  *   - the inaccuracy conforms to the respective inaccuracy parameters
  */
 BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWorldFixture) {
-	using CoordConverter::local_to_global;
 
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
@@ -146,8 +144,9 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
 
 	// get requested vector in global coordinates
 	boost::numeric::ublas::zero_vector<double> zero(3);
-	boost::shared_ptr<Vector3d> global_req_vector = local_to_global(*requested_vector, zero,
-																	robot_data_b->coordinate_system_axis());
+	boost::shared_ptr<Vector3d> global_req_vector = requested_vector;//TODO asetzer if anything is defunc, THIS change might be the reason
+	//local_to_global(*requested_vector, zero,
+	//																robot_data_b->coordinate_system_axis());
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;
@@ -194,7 +193,6 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_acceleration_test, SimpleWo
  *   - the inaccuracy conforms to the respective inaccuracy parameters
  */
 BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldFixture) {
-	using CoordConverter::local_to_global;
 
 	// setup of event handler
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
@@ -221,8 +219,9 @@ BOOST_FIXTURE_TEST_CASE(inaccurat_event_handler_test_velocity_test, SimpleWorldF
 
 	// get requested vector in global coordinates
 	boost::numeric::ublas::zero_vector<double> zero(3);
-	boost::shared_ptr<Vector3d> global_req_vector = local_to_global(*requested_vector, zero,
-																	robot_data_b->coordinate_system_axis());
+	boost::shared_ptr<Vector3d> global_req_vector = requested_vector; //TODO asetzer if anything is defunc, THIS change might be the reason
+	//local_to_global(*requested_vector, zero,
+							//										robot_data_b->coordinate_system_axis());
 
 	// construction and handling of several handle_requests_event
 	int nr_requests = 25000;
