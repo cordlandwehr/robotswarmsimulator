@@ -23,7 +23,9 @@ RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_
                                              status_(rhs.status_),
                                              last_request_successful_(rhs.last_request_successful_),
                                              view_(rhs.view_),
-                                             color_(rhs.color_) {
+                                             color_(rhs.color_),
+                                             edges_(rhs.edges_),
+                                             messages_(rhs.messages_){
 	if(rhs.acceleration_) {
 		this->acceleration_.reset(new Vector3d(*rhs.acceleration_));
 	}

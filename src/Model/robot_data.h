@@ -12,10 +12,10 @@
 #include <boost/tuple/tuple.hpp>
 #include "../Utilities/vector_arithmetics.h"
 #include "edge.h"
+#include "edge_identifier.h"
 #include "undirected_edge.h"
 #include "directed_edge.h"
 #include "message.h"
-#include <set>
 #include <deque>
 
 
@@ -38,6 +38,7 @@ enum RobotType { MASTER, SLAVE, kRobotTypeCount };
 class Robot;
 class MarkerInformation;
 class View;
+class Message;
 class RobotData : public WorldObject{
 public:
 	RobotData(boost::shared_ptr<Identifier> id,
@@ -182,7 +183,7 @@ public:
 	/**
 	 * Returns first message from queue
 	 */
-	boost::shared_ptr<Message> get_message() {
+	boost::shared_ptr<Message> get_message() const {
 		return messages_.front();
 	}
 
@@ -194,24 +195,31 @@ public:
 	}
 
 	/**
+	 * Returns number of messages in queue
+	 */
+	std::size_t get_number_of_messages() const {
+		return messages_.size();
+	}
+
+	/**
 	 * Adds edge to adjacency list
 	 */
-	void add_edge(boost::shared_ptr<Edge> e) {
-		edges_.insert(e);
+	void add_edge(boost::shared_ptr<EdgeIdentifier> e) {
+		edges_.push_back(e);
 	}
 
 	/**
 	 * Removes edge from adjacency list
 	 * TODO: Same shared_ptr needed -> check some other way?!?
 	 */
-	void remove_edge(boost::shared_ptr<Edge> e) {
-		edges_.erase(e);
+	void remove_edge(boost::shared_ptr<EdgeIdentifier> e) {
+		edges_.erase(std::find(edges_.begin(), edges_.end(), e));
 	}
 
 	/**
 	 * Returns constant set of edges
 	 */
-	const std::set<boost::shared_ptr<Edge> >& get_edges() {
+	const std::vector<boost::shared_ptr<EdgeIdentifier> >& get_edges() const{
 		return edges_;
 	}
 
@@ -238,7 +246,7 @@ private:
 	boost::weak_ptr<View> view_;
 	unsigned short int color_;
 
-	std::set<boost::shared_ptr<Edge> > edges_;
+	std::vector<boost::shared_ptr<EdgeIdentifier> > edges_;
 	std::deque<boost::shared_ptr<Message> > messages_;
 };
 

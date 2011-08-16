@@ -79,6 +79,9 @@ public:
 
 	int calculateDegree(const std::vector<boost::shared_ptr<RobotData> >& nodes);
 
+	int calculateMaximalDefect(const boost::shared_ptr<WorldInformation> graph);
+
+	int calculateTotalDefects(const boost::shared_ptr<WorldInformation> graph);
 private:
 	/**
 	 * pointer to the stats_cfg stored in StatsControl

@@ -2,7 +2,7 @@
 //  message.h
 //  Robot Swarm Simulator
 //
-//  Created by Jonas Knoll on 21.07.11.
+//  Created by Jonas on 21.07.11.
 //
 
 #ifndef MESSAGE_H_
@@ -12,50 +12,41 @@
 #include "robot_data.h"
 #include "identifier.h"
 
-class RobotData;
+class RobotIdentifier;
 
 class Message : public WorldObject {
 public:
 	Message(boost::shared_ptr<Identifier> id,
 	        boost::shared_ptr<Vector3d> position,
-	        boost::shared_ptr<RobotData> sender,
-	        boost::shared_ptr<RobotData> receiver) : WorldObject(id, position), sender_(sender), receiver_(receiver)
+	        boost::shared_ptr<RobotIdentifier> sender,
+	        boost::shared_ptr<RobotIdentifier> receiver) : WorldObject(id, position), sender_(sender), receiver_(receiver)
 	{
 		;
 	}
+	virtual ~Message();
 
 	/**
 	 * Adds data to marker_information of this message (wrapper)
 	 */
-	void add_data(const std::string& var_name, const boost::any& insert_data) {
-		marker_information().add_data(var_name, insert_data);
-	}
+	void add_data(const std::string& var_name, const boost::any& insert_data);
 
 	/**
 	 * Removes data from marker_information of this message (wrapper)
 	 */
-	void remove_data(const std::string& var_name){
-		marker_information().remove_data(var_name);
-	}
+	void remove_data(const std::string& var_name);
 
 	/**
 	 * Returns data from marker_information of this message (wrapper)
 	 */
-	const boost::any get_data(const std::string& var_name){
-		return marker_information().get_data(var_name);
-	}
+	const boost::any get_data(const std::string& var_name);
 
-	boost::shared_ptr<RobotData> sender() const {
-		return sender_;
-	}
+	boost::shared_ptr<RobotIdentifier> sender() const;
 
-	boost::shared_ptr<RobotData> receiver() const {
-		return receiver_;
-	}
+	boost::shared_ptr<RobotIdentifier> receiver() const;
 
 private:
-	boost::shared_ptr<RobotData> sender_;
-	boost::shared_ptr<RobotData> receiver_;
+	boost::shared_ptr<RobotIdentifier> sender_;
+	boost::shared_ptr<RobotIdentifier> receiver_;
 };
 
 #endif /* MESSAGE_H_ */

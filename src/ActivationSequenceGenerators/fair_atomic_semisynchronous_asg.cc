@@ -14,8 +14,9 @@
 using std::vector;
 
 void FairAtomicSemisynchronousASG::initialize(
-    const History& history,
-    const vector<boost::shared_ptr<Robot> >& robots) {
+	    const History& history,
+	    const std::vector<boost::shared_ptr<Robot> >& robots,
+	    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers) {
 	// extract robots from robot data
 	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		robots_.push_back(robot);

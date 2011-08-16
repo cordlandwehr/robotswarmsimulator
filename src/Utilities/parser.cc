@@ -4,6 +4,8 @@
 #include <boost/foreach.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/algorithm/string.hpp>
+
 
 //include for enums of RobotType and RobotStatus
 #include "../Model/robot_data.h"
@@ -135,6 +137,28 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 	if (robot_filename_.rfind(".robot")!=string::npos)
 		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
 
+	string temp_world_modifiers = get_string_value_from_map(variables_and_values, "WORLD_MODIFIERS");
+
+//	boost::is_any_of(",");
+
+	std::vector<std::string> temp_split_world_modifiers;
+
+	boost::split(temp_split_world_modifiers, temp_world_modifiers, boost::is_any_of(","));
+    
+    using boost::filesystem::path;
+
+	for(int i = 0; i < temp_split_world_modifiers.size(); i++){
+		std::string temp_string = temp_split_world_modifiers[i]; //TODO: Is there a memory leak?
+		boost::trim(temp_string);
+        
+        if (temp_string.rfind(".lua") == temp_string.size()-4) {
+            // robot file is located relatively to main project file
+            path modifier_file = path(project_filename_).parent_path() / robot_filename_;
+            temp_string = (modifier_file.parent_path() / temp_string).file_string();
+        }
+        
+		world_modifiers_.push_back(temp_string);
+	}
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
@@ -723,6 +747,14 @@ vector<double>& Parser::obstacle_radius() {
 vector<Vector3d>& Parser::obstacle_size() {
 	return initiale_obstacle_size_;
 }
+
+
+/*** GET-method for world modfiers ***/
+vector<string>& Parser::world_modifiers() {
+	return world_modifiers_;
+}
+
+
 int Parser::dumpnumber() {
 	return dumpnumber_;
 }

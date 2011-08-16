@@ -14,6 +14,8 @@
 #include <boost/any.hpp>
 #include <boost/smart_ptr.hpp>
 
+#include "../Model/world_modifier.h"
+
 class EventHandler;
 class ActivationSequenceGenerator;
 class AbstractViewFactory;
@@ -64,6 +66,12 @@ namespace Factory {
 	 * Algorithm may be a class or a lua-file.
 	 */
 	boost::shared_ptr<Robot> robot_factory(boost::shared_ptr<RobotIdentifier> id, const std::string &algorithm);
+
+	/**
+	 * Creates world modifier from given string
+	 * String may be a class or a lua-file.
+	 */
+	boost::shared_ptr<WorldModifier> world_modifier_factory(const std::string &str);
 }
 
 #endif /* FACTORIES_H_ */

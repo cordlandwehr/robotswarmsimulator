@@ -94,7 +94,7 @@ void SimulationKernel::init(const string& project_filename,
 
 	// create ASG
 	asg_ = Factory::asg_factory(params);
-	asg_->initialize(*history_, robots_);
+	asg_->initialize(*history_, robots_, world_modifiers_);
 
 	// create EventHandler.
 	event_handler_ = Factory::event_handler_factory(params, history_, robot_control);
@@ -307,6 +307,22 @@ void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> par
 	initial_world_information->set_marker_data(markers_vector);
 }
 
+void SimulationKernel::create_world_modifiers(boost::shared_ptr<Parser> parser) {
+	boost::shared_ptr<WorldModifier> temp_world_modifier;
+	std::string temp_world_modifier_name;
+
+	vector<string>& temp_world_modifiers = parser->world_modifiers();
+
+	for (int i = 0; i < temp_world_modifiers.size(); i++) {
+		temp_world_modifier_name = temp_world_modifiers[i];
+		temp_world_modifier = Factory::world_modifier_factory(temp_world_modifier_name);
+
+
+
+		world_modifiers_.push_back(temp_world_modifier);
+	}
+}
+
 boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_information(
 		boost::shared_ptr<Parser> parser) {
 
@@ -318,6 +334,9 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 
 	//create obstacles and marker and add to initial world information
 	create_obstacles_and_marker(parser, initial_world_information);
+
+	//create world modifiers and add to initial world information
+	create_world_modifiers(parser);
 
 	//set time of initial world information
 	initial_world_information->set_time(0);

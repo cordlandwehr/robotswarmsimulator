@@ -28,6 +28,7 @@ class Obstacle;
 class Box;
 class Sphere;
 class WorldInformation;
+class EdgeIdentifier;
 
 /**
  * \class View
@@ -52,6 +53,7 @@ protected:
 	typedef boost::shared_ptr<SphereIdentifier> SphereRef;
 	typedef boost::shared_ptr<MarkerIdentifier> MarkerRef;
 	typedef boost::shared_ptr<Identifier> WorldObjectRef;
+	typedef boost::shared_ptr<EdgeIdentifier> EdgeRef;
 
 
 public:
@@ -91,6 +93,27 @@ public:
 
 	const std::vector<MarkerRef> get_visible_markers(const Robot& caller) const;
 
+	/**
+	 * Returns the set of edges visible for the calling Robot.
+	 * @param Robot that should take a look-around
+	 * @return set of edges visible
+	 */
+	const std::vector<EdgeRef> get_visible_edges(const Robot& caller) const;
+
+	//-- Robot--
+	/**
+	 * Returns the first message of the robot and deletes it from queue.
+	 * @param Robot to get message from
+	 * @return first message of robot
+	 */
+	const boost::shared_ptr<Message> get_message(const Robot& robot);
+
+	/**
+	 * Returns the number of messages the robot has in it's queue
+	 * @param Robot to get number of messages from
+	 * @return number of messages the robot has
+	 */
+	const std::size_t get_number_of_messages(const Robot& robot) const;
 
 	//-- WorldObject--
 	/**
@@ -243,6 +266,9 @@ protected:
 	virtual std::vector<RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
 	virtual std::vector<MarkerRef> get_visible_markers(const RobotData& robot) const;
+	virtual std::vector<EdgeRef> get_visible_edges(const RobotData& robot) const;
+	virtual boost::shared_ptr<Message> get_message(const RobotData& robot);
+	virtual std::size_t get_number_of_messages(const RobotData& robot) const;
 
 
 	//Following methods are called by the non virtual method get_position. Which of the four methods
@@ -328,9 +354,11 @@ private:
 	//E.g. it resolves a given RobotRef to a RobotData object.
 	const Obstacle& resolve_obstacle_ref(ObstacleRef obstacle) const;
 	const RobotData& resolve_robot_ref(RobotRef robot) const;
+	RobotData& resolve_robot_ref_non_const(RobotRef robot);
 	const WorldObject& resolve_marker_ref(MarkerRef marker) const;
 	const Box& resolve_box_ref(BoxRef box) const;
 	const Sphere& resolve_sphere_ref(SphereRef sphere) const;
+	const Edge& resolve_edge_ref(EdgeRef edge) const;
 
 	//Same as resolving methods above, but also checks if the given *Ref is valid.
 	//To do so it compares the Identifier of the resolved data object with the given Identifier pointerwise.
@@ -339,6 +367,7 @@ private:
 	const WorldObject& resolve_marker_ref_safe(MarkerRef marker) const;
 	const Box& resolve_box_ref_safe(BoxRef box) const;
 	const Sphere& resolve_sphere_ref_safe(SphereRef sphere) const;
+	const Edge& resolve_edge_ref_safe(EdgeRef edge) const;
 
 	/**
 	 * Helper methods to check if the given Identifier points to the same data object

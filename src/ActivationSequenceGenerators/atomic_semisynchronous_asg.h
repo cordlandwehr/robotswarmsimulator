@@ -36,8 +36,10 @@ public:
 	/**
 	 * Initializes the ASG.
 	 */
-	void initialize(const History& history,
-	                const std::vector<boost::shared_ptr<Robot> >& robots);
+	void initialize(
+		    const History& history,
+		    const std::vector<boost::shared_ptr<Robot> >& robots,
+		    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers = *new std::vector<boost::shared_ptr<WorldModifier> >());
 
 	/**
 	 * Returns the next event.

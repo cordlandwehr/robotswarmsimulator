@@ -79,6 +79,9 @@ const Obstacle& View::resolve_obstacle_ref(ObstacleRef obstacle) const {
 const RobotData& View::resolve_robot_ref(RobotRef robot) const {
 	return *(world_information().robot_data())[robot->id()];
 }
+RobotData& View::resolve_robot_ref_non_const(RobotRef robot) {
+	return *(world_information().robot_data())[robot->id()];
+}
 const WorldObject& View::resolve_marker_ref(MarkerRef marker) const {
 	return *(world_information().markers())[marker->id()];
 }
@@ -87,6 +90,9 @@ const Box& View::resolve_box_ref(BoxRef box) const {
 }
 const Sphere& View::resolve_sphere_ref(SphereRef sphere) const {
 	return static_cast<const Sphere&>(resolve_obstacle_ref(sphere));
+}
+const Edge& View::resolve_edge_ref(EdgeRef edge) const {
+	return *(world_information().get_according_edge(edge));
 }
 
 const Obstacle& View::resolve_obstacle_ref_safe(ObstacleRef obstacle) const {
@@ -114,6 +120,11 @@ const Sphere& View::resolve_sphere_ref_safe(SphereRef sphere) const {
 	validate_identifier(result, sphere);
 	return result;
 }
+const Edge& View::resolve_edge_ref_safe(EdgeRef edge) const {
+	const Edge& result = resolve_edge_ref(edge);
+	validate_identifier(result, edge);
+	return result;
+}
 
 void View::init(const boost::shared_ptr<WorldInformation>& world_information) {
 	world_information_ = world_information;
@@ -138,6 +149,20 @@ const std::vector<View::MarkerRef> View::get_visible_markers(const Robot& caller
 	std::vector<View::MarkerRef> result(get_visible_markers(resolve_robot_ref(caller.id())));
 	//std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
 	return result;
+}
+
+const std::vector<View::EdgeRef> View::get_visible_edges(const Robot& caller) const {
+	std::vector<View::EdgeRef> result(get_visible_edges(resolve_robot_ref(caller.id())));
+	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	return result;
+}
+
+const boost::shared_ptr<Message> View::get_message(const Robot& caller) {
+	return get_message(resolve_robot_ref_non_const(caller.id()));
+}
+
+const std::size_t View::get_number_of_messages(const Robot& caller) const {
+	return get_number_of_messages(resolve_robot_ref(caller.id()));
 }
 
 const Vector3d View::get_position(const Robot& caller, WorldObjectRef world_object) const {
@@ -223,6 +248,18 @@ std::vector<View::ObstacleRef> View::get_visible_obstacles(const RobotData& robo
 
 std::vector<View::MarkerRef> View::get_visible_markers(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_visible_markers"));
+}
+
+std::vector<View::EdgeRef> View::get_visible_edges(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_visible_edges"));
+}
+
+boost::shared_ptr<Message> View::get_message(const RobotData& robot) {
+	throw UnsupportedOperationException(get_error_message("get_message"));
+}
+
+std::size_t View::get_number_of_messages(const RobotData& robot) const {
+	throw UnsupportedOperationException(get_error_message("get_number_of_messages"));
 }
 
 Vector3d View::get_own_position(const RobotData& robot) const {

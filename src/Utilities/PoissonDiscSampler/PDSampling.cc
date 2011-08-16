@@ -4,6 +4,7 @@
 #include "math.h"
 
 #include <string.h>
+#include <stdio.h>
 #include <map>
 #include <stdio.h>
 
@@ -13,6 +14,7 @@
 #include "RangeList.h"
 #include "ScallopedSector.h"
 #include "WeightedDiscretePDF.h"
+
 
 #include "quasisampler_prototype.h"
 

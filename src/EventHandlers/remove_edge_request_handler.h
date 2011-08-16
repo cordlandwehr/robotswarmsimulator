@@ -2,7 +2,7 @@
  * remove_edge_request_handler.h
  *
  *  Created on: 22.07.2011
- *      Author: Jonas Knoll
+ *      Author: Jonas
  *
  *  TODO: add remove_edge_request_handler.cc
  */

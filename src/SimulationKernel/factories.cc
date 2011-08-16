@@ -17,6 +17,7 @@
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
+#include "../ActivationSequenceGenerators/synchronous_asg_wm.h"
 #include "../ActivationSequenceGenerators/fair_atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/atomic_semisynchronous_asg.h"
 #include "../ActivationSequenceGenerators/asynchronous_asg.h"
@@ -31,6 +32,7 @@
 #include "../ViewModels/self_view.h"
 #include "../ViewModels/clone_view.h"
 #include "../ViewModels/radial_view.h"
+#include "../ViewModels/local_graph_view.h"
 
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
@@ -58,6 +60,8 @@
 #include "../SimulationKernel/robot_type_robot_control.h"
 #include "../Model/world_information.h"
 #include "../Model/robot_data.h"
+#include "../WorldModifierImplementations/test_world_modifier.h"
+#include "../WorldModifierImplementations/lua_world_modifier.h"
 
 #include <iostream>
 
@@ -265,7 +269,10 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
 	// setup of activation sequence generator
 	if(asg_type == "SYNCHRONOUS") {
-			asg.reset(new SynchronousASG());
+        asg.reset(new SynchronousASG());
+	} else if(asg_type == "SYNCHRONOUS_WM") {
+        // TODO: Load/read actual world modifiers?
+        asg.reset(new SynchronousASGWM());
 	} else if(asg_type == "ATOMIC_SEMISYNCHRONOUS") {
 		try {
 			unsigned int seed = boost::lexical_cast<unsigned int>(params["ATOMIC_SEMISYNC_ASG_SEED"]);
@@ -336,6 +343,8 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<st
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for radial view.");
 		}
+	} else if(view_type == "LOCAL_GRAPH_VIEW"){
+		view_factory.reset(new ViewFactory<LocalGraphView>);
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to global view.";
 		view_factory.reset(new ViewFactory<GlobalView>);
@@ -357,9 +366,29 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
 		robot.reset(new SimpleRobot(id));
 	} else {
-		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
+		throw UnsupportedOperationException("Tried to create unknown robot type: "+algorithm);
 	}
 	return robot;
+}
+
+boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::string &str) {
+	boost::shared_ptr<WorldModifier> world_modifier;
+
+	// check if the algorithm is a lua file
+	std::string subfix;
+	if(str.size() >= 4)
+		subfix = str.substr(str.size() - 4, 4);
+
+	if(subfix == ".lua") {
+		world_modifier.reset(new LuaWorldModifier(str));
+	}
+	else if(str == "TestWorldModifier" || str == "NONE") {
+		world_modifier.reset(new TestWorldModifier());
+	} else {
+		throw UnsupportedOperationException("Tried to create unknown world modifier type: " + str);
+	}
+
+	return world_modifier;
 }
 
 boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {

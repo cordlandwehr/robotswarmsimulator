@@ -9,6 +9,7 @@
 
 #include <boost/smart_ptr.hpp>
 #include <boost/any.hpp>
+#include <vector>
 #include <string>
 #include <map>
 
@@ -44,7 +45,12 @@ public:
 	 * \return	Data stored in data-map for given variable.
 	 */
 	const boost::any get_data(const std::string& var_name);
-
+	
+	/**
+	 * This method return the name set of stored variables.
+	 * \return	Set of variable names.
+	 */
+	const std::vector<std::string> get_keys();
 
 private:
 	/**

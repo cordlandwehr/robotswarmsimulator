@@ -2,7 +2,7 @@
 //  directed_edge.h
 //  Robot Swarm Simulator
 //
-//  Created by Jonas Knoll on 19.07.11.
+//  Created by Jonas on 19.07.11.
 //
 
 #ifndef DIRECTED_EDGE_H_
@@ -10,20 +10,19 @@
 
 #include "edge.h"
 
-class DirectedEdge: public Edge {
+class DirectedEdge : public Edge {
 public:
-	DirectedEdge(boost::shared_ptr<Identifier> id,
-	             boost::shared_ptr<Vector3d> position,
-				 boost::shared_ptr<RobotData> v1,
-				 boost::shared_ptr<RobotData> v2) : Edge (id, position, v1, v2) {};
+	DirectedEdge(boost::shared_ptr<RobotIdentifier> source,
+				 boost::shared_ptr<RobotIdentifier> target) : Edge(source, target) {};
 
-	boost::shared_ptr<RobotData> source() const {
-		return getRobot1();
-	}
+	DirectedEdge(const DirectedEdge& rhs) : Edge(rhs) {};
 
-	boost::shared_ptr<RobotData> target() const {
-		return getRobot2();
-	}
+	virtual ~DirectedEdge();
+
+	boost::shared_ptr<RobotIdentifier> source() const;
+	boost::shared_ptr<RobotIdentifier> target() const;
+
+	virtual boost::shared_ptr<WorldObject> clone() const;
 };
 
 #endif /* DIRECTED_EDGE_H_ */

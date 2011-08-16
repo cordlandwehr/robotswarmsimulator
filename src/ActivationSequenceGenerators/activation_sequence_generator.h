@@ -15,6 +15,7 @@
 #include "../Model/world_information.h"
 #include "../Events/look_event.h"
 #include "../SimulationKernel/simulation_listener.h"
+#include "../Model/world_modifier.h"
 
 
 // forward declarations
@@ -42,7 +43,8 @@ public:
 	 */
 	virtual void initialize(
 	    const History& history,
-	    const std::vector<boost::shared_ptr<Robot> >& robots) = 0;
+	    const std::vector<boost::shared_ptr<Robot> >& robots,
+	    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers) = 0;
 
 	/**
 	 * Returns the next event.

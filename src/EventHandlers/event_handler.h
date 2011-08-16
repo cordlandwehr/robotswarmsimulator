@@ -21,11 +21,14 @@
 #include "../EventHandlers/insert_edge_request_handler.h"
 #include "../EventHandlers/remove_edge_request_handler.h"
 
+#include "../Events/handle_requests_event.h"
+
 // forward declarations
 class Event;
 class ComputeEvent;
 class LookEvent;
 class HandleRequestsEvent;
+class WorldModifierEvent;
 
 class Request;
 class AccelerationRequest;
@@ -126,6 +129,21 @@ public:
 		color_change_request_handler_ = request_handler;
 	}
 
+	void set_message_request_handler(
+		boost::shared_ptr<MessageRequestHandler> request_handler) {
+		message_request_handler_ = request_handler;
+	}
+
+	void set_insert_edge_request_handler(
+		boost::shared_ptr<InsertEdgeRequestHandler> request_handler) {
+		insert_edge_request_handler_ = request_handler;
+	}
+
+	void set_remove_edge_request_handler(
+		boost::shared_ptr<RemoveEdgeRequestHandler> request_handler) {
+		remove_edge_request_handler_ = request_handler;
+	}
+
 private:
 	/**
 	 * handles the given look event by delegating it to RobotControl
@@ -147,6 +165,15 @@ private:
 	 */
 	boost::shared_ptr<WorldInformation> handle_handle_requests_event(
 	    boost::shared_ptr<HandleRequestsEvent> handle_requests_event);
+    
+    /**
+     * handles the given WorldModifierEvent by doing the following
+     * 1. execute all WolrModifiers and collect generated requests
+     * 2. create anonymous HandleRequests event and process it
+     * 3. adding the new WorldInformation object to the history
+     */
+    boost::shared_ptr<WorldInformation> handle_world_modifier_event(
+        boost::shared_ptr<WorldModifierEvent> world_modifier_event);
 
 	/**
 	 * informs all listeners after each event
