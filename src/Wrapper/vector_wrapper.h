@@ -14,6 +14,12 @@
 #ifndef VECTOR_WRAPPER_H_
 #define VECTOR_WRAPPER_H_
 
+#include <vector>
+#include <iostream> 																													
+
+#include "../Utilities/vector_arithmetics.h"
+
+
 namespace LuaWrapper {
 
 /**
@@ -65,37 +71,19 @@ struct Vector3dWrapper {
 };
 
 /**
- * transformas a vector wrapper into a vector
+ * transforms a vector wrapper into a vector
  */
-const Vector3d transform(const LuaWrapper::Vector3dWrapper& vec) {
-	Vector3d result;
-	result.insert_element(kXCoord, vec.x);
-	result.insert_element(kYCoord, vec.y);
-	result.insert_element(kZCoord, vec.z);
-	return result;
-}
+const Vector3d transform(const LuaWrapper::Vector3dWrapper& vec);
 
 /**
  * transforms a vector of vector wrappers into a vector of vectors
  */
-const std::vector<Vector3d> transform(const std::vector<LuaWrapper::Vector3dWrapper>& vec) {
-	std::vector<Vector3d> result;
-	result.resize(vec.size());
-	std::transform(vec.begin(), vec.end(), result.begin(), boost::bind(static_cast<const Vector3d(*)(const LuaWrapper::Vector3dWrapper&)>(&transform),_1));
-	return result;
-}
+const std::vector<Vector3d> transform(const std::vector<LuaWrapper::Vector3dWrapper>& vec);
 
 
-const LuaWrapper::Vector3dWrapper transform(const Vector3d& vec) {
-	return LuaWrapper::Vector3dWrapper(vec(0), vec(1), vec(2));
-}
+const LuaWrapper::Vector3dWrapper transform(const Vector3d& vec);
 
-const std::vector<LuaWrapper::Vector3dWrapper> transform(const std::vector<Vector3d>& vec) {
-	std::vector<LuaWrapper::Vector3dWrapper> result;
-	result.resize(vec.size());
-	std::transform(vec.begin(), vec.end(), result.begin(), boost::bind(static_cast<const LuaWrapper::Vector3dWrapper(*)(const Vector3d&)>(&transform),_1));
-	return result;
-}
+const std::vector<LuaWrapper::Vector3dWrapper> transform(const std::vector<Vector3d>& vec);
 
 
 

@@ -7,16 +7,13 @@
 
 #include <boost/bind.hpp>
 
-#include "../ComputationalGeometry/misc_algorithms.h"
-#include "../ComputationalGeometry/ch_algorithms.h"
-#include "../ComputationalGeometry/point_algorithms.h"
-#include "../ComputationalGeometry/points_sepplane.h"
+
 
 #include "vector_wrapper.h"
 
 namespace LuaWrapper {
     /**
-     * transformas a vector wrapper into a vector
+     * transforms a vector wrapper into a vector
      */
     const Vector3d transform(const LuaWrapper::Vector3dWrapper& vec) {
         Vector3d result;
@@ -59,63 +56,7 @@ namespace LuaWrapper {
         return vector3d_distance(transform(v), transform(w));
     }
     
-    /**
-     * Computes distance between two Vectors by p-norm
-     * @param v is the first vector
-     * @param w is the second vector
-     * @param p is value of norm
-     * @return distance
-     */
-    const double compute_distance(const LuaWrapper::Vector3dWrapper& v, const LuaWrapper::Vector3dWrapper& w, int p) {
-        return vector3d_distance(transform(v), transform(w), p);
-    }
-    
-    /**
-     * Computes center of given points.
-     * @param point_list is vector of points
-     * @return the center of gravity
-     */
-    const LuaWrapper::Vector3dWrapper compute_COG(std::vector<LuaWrapper::Vector3dWrapper> point_list) {
-        return transform(PointAlgorithms::compute_COG(transform(point_list)));
-    }
-    
-    /**
-     * Computes center of the miniball around the given points.
-     * @param point_list is vector of points
-     * @return the center of the miniball around the given points
-     */
-    const LuaWrapper::Vector3dWrapper compute_CMinBall(std::vector<LuaWrapper::Vector3dWrapper> point_list) {
-        return transform(PointAlgorithms::compute_CMinBall(transform(point_list)));
-    }
-    
-    /**
-     * Sort vectors by euclidean norm, distance to zero
-     * @return sorted point_list
-     */
-    const std::vector<LuaWrapper::Vector3dWrapper> sort_points_by_distance(std::vector<LuaWrapper::Vector3dWrapper> point_list) {
-        std::vector<Vector3d> vec = transform(point_list);
-        MiscAlgorithms::sort_points_by_distance(vec, 2);
-        return transform(vec);
-    }
-    
-    /**
-     * Wrapper around separate_point_from_points().
-     */
-    const LuaWrapper::Vector3dWrapper separate_point_from_points(const LuaWrapper::Vector3dWrapper& v, const std::vector<LuaWrapper::Vector3dWrapper>& w, double epsilon) {
-        return transform(::separate_point_from_points(transform(v), transform(w), epsilon));
-    }
-    
-    const LuaWrapper::Vector3dWrapper compute_cog_of_ch_of_points(const std::vector<LuaWrapper::Vector3dWrapper>& points) {
-        return transform(CHAlgorithms::compute_cog_of_ch_of_points(transform(points)));
-    }
-    
-    const bool point_contained_in_convex_hull_of_points(const LuaWrapper::Vector3dWrapper& point, const std::vector<LuaWrapper::Vector3dWrapper> points) {
-        return CHAlgorithms::point_contained_in_convex_hull_of_points(transform(point), transform(points));
-    }
-    
-    const LuaWrapper::Vector3dWrapper random_point_in_ch(const std::vector<LuaWrapper::Vector3dWrapper> points, int seed) {
-        return transform(CHAlgorithms::random_point_in_ch(transform(points), seed));
-    }
-    
+ 
+   
     
 }

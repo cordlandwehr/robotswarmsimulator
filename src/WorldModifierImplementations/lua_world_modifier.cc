@@ -11,10 +11,6 @@
 #include <luabind/object.hpp>
 #include <luabind/operator.hpp>
 
-#include "../ComputationalGeometry/misc_algorithms.h"
-#include "../ComputationalGeometry/ch_algorithms.h"
-#include "../ComputationalGeometry/point_algorithms.h"
-#include "../ComputationalGeometry/points_sepplane.h"
 #include "../Model/world_information.h"
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"

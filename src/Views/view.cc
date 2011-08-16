@@ -153,7 +153,8 @@ const std::vector<View::MarkerRef> View::get_visible_markers(const Robot& caller
 
 const std::vector<View::EdgeRef> View::get_visible_edges(const Robot& caller) const {
 	std::vector<View::EdgeRef> result(get_visible_edges(resolve_robot_ref(caller.id())));
-	std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	//std::random_shuffle(result.begin(), result.end(), (generator_->get_value_uniform() % boost::lambda::_1));
+	//TODO asetzer: if we need the random shuffle (probably a good idea), we need to reimplement it)
 	return result;
 }
 
