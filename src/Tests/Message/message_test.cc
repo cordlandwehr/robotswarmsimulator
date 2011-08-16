@@ -23,8 +23,6 @@
 
 #include "../../SimulationKernel/uniform_robot_control.h"
 
-#include "../Utilities/distribution_generator.h"
-
 #include "../../Views/abstract_view_factory.h"
 #include "../../Views/view.h"
 #include "../../Views/view_factory.h"
@@ -39,7 +37,7 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	EventHandler event_handler(history, robot_control);
 
 	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(0));
-	View::set_distribution_generator(generator);
+	//View::set_distribution_generator(generator);
 
 	boost::shared_ptr<MessageRequestHandler> message_request_handler(new MessageRequestHandler(5, 0.0, *history));
 	event_handler.set_message_request_handler(message_request_handler);
