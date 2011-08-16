@@ -11,9 +11,6 @@
 #include "float.h"
 
 #include "../Model/robot_data.h"
-//#include "../Model/robot_identifier.h"
-//#include "../Utilities/vector_arithmetics.h"
-//#include "../Views/view.h"
 
 StatsCalc::StatsCalc() {
 

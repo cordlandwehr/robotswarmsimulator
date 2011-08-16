@@ -21,7 +21,6 @@
 #include "../Requests/velocity_request.h"
 #include "../Requests/acceleration_request.h"
 
-#include "../ComputationalGeometry/coord_converter.h"
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 
@@ -38,8 +37,8 @@ bool VectorRequestHandler::handle_request_reliable(
     const shared_ptr<RobotIdentifier>& robot_id = vector_request->robot().id();
     RobotData& robot_data =
         world_information->get_according_robot_data(robot_id);
-	Vector3d global_vector = extract_global_vector(*vector_request,
-	                                               robot_data);
+	Vector3d global_vector = vector_request->requested_vector();
+	//extract_global_vector(*vector_request, robot_data); //TODO asetzer: if anything crashes, this change was probably wrong
 	const Vector3d& reference_vector = extract_ref_vector(*vector_request,
 	                                                      robot_data);
 
@@ -70,23 +69,6 @@ void VectorRequestHandler::update_vector(const VectorRequest& request,
 		throw std::invalid_argument("VectorRequestHandler: unknown vector request; can not update robot's vector");
 }
 
-Vector3d VectorRequestHandler::extract_global_vector(
-    const VectorRequest& request,
-    const RobotData& robot_data) {
-	using CoordConverter::local_to_global;
-
-    const Vector3d& local_vector(request.requested_vector());
-	Vector3d position(robot_data.position());
-	if (typeid(request) == typeid(VelocityRequest)
-	    || typeid(request) == typeid(AccelerationRequest)) {
-		position = boost::numeric::ublas::zero_vector<double>(3);
-	}
-	shared_ptr<Vector3d> global_vector = local_to_global(
-	    local_vector,
-	    position,
-	    robot_data.coordinate_system_axis());
-	return *global_vector;
-}
 
 const Vector3d& VectorRequestHandler::extract_ref_vector(
     const VectorRequest& request,

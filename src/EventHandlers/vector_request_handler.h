@@ -76,15 +76,6 @@ private:
                        const Vector3d& vector);
 
 	/**
-	 * \brief Returns a vector that matches the global version of the vector in the given request.
-	 *
-	 * The provided robot data is used to for information needed to transform
-	 * the local requested vector into the global coordinate system.
-	 */
-	static Vector3d extract_global_vector(const VectorRequest& request,
-	                                      const RobotData& robot_data);
-
-	/**
 	 * \brief Extracts the reference vector for the given request from the robot data.
 	 *
 	 * The reference vector matches the robot's original value of the data

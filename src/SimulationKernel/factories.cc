@@ -52,14 +52,6 @@
 #include "../Model/robot_identifier.h"
 #include "../RobotImplementations/lua_robot.h"
 #include "../RobotImplementations/simple_robot.h"
-#include "../RobotImplementations/velocity_cog_robot.h"
-#include "../RobotImplementations/acceleration_cog_robot.h"
-#include "../RobotImplementations/tp_algorithm_robot.h"
-#include "../RobotImplementations/rndjmp_robot.h"
-#include "../RobotImplementations/pot_robot.h"
-#include "../RobotImplementations/pull_spin_robot.h"
-#include "../RobotImplementations/grid_pull_spin_robot.h"
-#include "../RobotImplementations/ch_robot.h"
 
 #include "../SimulationKernel/robot_control.h"
 #include "../SimulationKernel/uniform_robot_control.h"
@@ -364,32 +356,6 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 		robot.reset(new LuaRobot(id, algorithm));
 	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
 		robot.reset(new SimpleRobot(id));
-	} else if(algorithm == "COGRobot" || algorithm == "TPAlgorithmCOG") {
-		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cog));
-	} else if(algorithm == "VelocityCOGRobot") {
-		robot.reset(new VelocityCOGRobot(id));
-	} else if(algorithm == "AccelerationCOGRobot") {
-	    robot.reset(new AccelerationCOGRobot(id));
-	} else if(algorithm == "MiniballRobot" || algorithm == "TPAlgorithmCMinball") {
-	    robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cminball));
-	} else if (algorithm == "TPAlgorithmCBox") {
-		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::cbox));
-	} else if(algorithm.substr(0,11) == "RndJmpRobot") {
-		robot.reset(robot, new RndJmpRobot(id, algorithm.substr(11)));
-	} else if(algorithm.substr(0,8) == "PotRobot") {
-		robot.reset(new PotRobot(id, algorithm.substr(8)));
-	} else if (algorithm == "PullSpinRobot") {
-		robot.reset(new PullSpinRobot(id));
-    } else if (algorithm == "GridPullSpinRobot") {
-        robot.reset(new GridPullSpinRobot(id));
-	} else if (algorithm == "TPAlgorithmMaxline") {
-		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::maxline));
-	} else if (algorithm == "TPAlgorithmMidfar") {
-		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::midfar));
-	} else if (algorithm == "TPAlgorithmMedian") {
-		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::median));
-	} else if (algorithm == "TPAlgorithmRMinRect") {
-		robot.reset(new TPAlgorithmRobot(id, TPAlgorithmRobot::rminrect));
 	} else {
 		throw UnsupportedOperationException("Tried to create unkown robot type: "+algorithm);
 	}
@@ -410,9 +376,7 @@ boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::str
 	}
 
 	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(seed));
-	View::set_distribution_generator(generator);
-
-
+	
 	std::string robot_type = params["ROBOT_CONTROL"];
 	boost::shared_ptr<RobotControl> control;
 
