@@ -313,7 +313,7 @@ void SimulationKernel::create_world_modifiers(boost::shared_ptr<Parser> parser) 
 
 	vector<string>& temp_world_modifiers = parser->world_modifiers();
 
-	for (int i = 0; i < temp_world_modifiers.size(); i++) {
+	for (std::size_t i = 0; i < temp_world_modifiers.size(); i++) {
 		temp_world_modifier_name = temp_world_modifiers[i];
 		temp_world_modifier = Factory::world_modifier_factory(temp_world_modifier_name);
 

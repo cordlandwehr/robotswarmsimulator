@@ -39,7 +39,7 @@ void StatsCalc::calculate(const StatsCalcInData & data,
 
 int StatsCalc::calculateDegree(const std::vector<boost::shared_ptr<RobotData> >& nodes){
 	int degree = 0;
-	for(int i=0; i<nodes.size();i++){
+	for(std::size_t i=0; i<nodes.size();i++){
 		boost::shared_ptr<RobotData> currentNode = nodes[i];
 		int degreeOfCurrentNode = (currentNode->get_edges()).size();
 		if(degree < degreeOfCurrentNode){
@@ -56,7 +56,7 @@ int StatsCalc::calculateMaximalDefect(const boost::shared_ptr<WorldInformation> 
 	const std::vector<boost::shared_ptr<RobotData> >& nodes = graph->robot_data();
 
 	int maxDefect = 0;
-		for(int i=0; i<nodes.size();i++){
+		for(std::size_t i=0; i<nodes.size();i++){
 			boost::shared_ptr<RobotData> currentNode = nodes[i];
 			int degreeOfCurrentNode = (currentNode->get_edges()).size();
 			std::vector<boost::shared_ptr<EdgeIdentifier> > edges = currentNode->get_edges();

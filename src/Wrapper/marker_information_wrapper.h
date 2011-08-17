@@ -24,7 +24,7 @@ namespace LuaWrapper {
         luabind::object get_data(const std::string& var_name);   
 	const std::vector<std::string> get_keys();
 	void remove_data(const std::string& var_name);
-        const MarkerInformation& marker_information() const;
+        MarkerInformation marker_information() const; // copy per value (workaround to stop Lua GC from crashing)
         
     private:
         MarkerInformation marker_information_;

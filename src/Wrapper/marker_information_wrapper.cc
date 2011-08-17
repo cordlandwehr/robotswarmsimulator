@@ -24,7 +24,7 @@ namespace LuaWrapper{
 	marker_information_.remove_data(var_name);
     }
     
-    const MarkerInformation& MarkerInformationWrapper::marker_information() const {
+    MarkerInformation MarkerInformationWrapper::marker_information() const {
         return marker_information_;
     }
 }
