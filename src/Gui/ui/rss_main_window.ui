@@ -377,7 +377,7 @@
  <connections>
   <connection>
    <sender>action_quit</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>RSSMainWindow</receiver>
    <slot>close()</slot>
    <hints>

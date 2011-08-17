@@ -27,6 +27,9 @@ public:
 	boost::shared_ptr<SimulationControl> simulation_control() {
 		return simulation_control_;
 	}
+	boost::shared_ptr<SimulationRenderer> simulation_renderer() {
+		return simulation_renderer_;
+	}
 
 protected:
 	virtual void initializeGL();
@@ -36,12 +39,14 @@ protected:
 	virtual void timerEvent(QTimerEvent * event);
 
 	virtual void keyPressEvent( QKeyEvent *event );
+	virtual void mouseMoveEvent( QMouseEvent * event );
+	virtual void mousePressEvent( QMouseEvent * event );
+	virtual void mouseReleaseEvent( QMouseEvent * event );
 
 private:
 
 	boost::shared_ptr<SimulationControl> simulation_control_;
 	boost::shared_ptr<SimulationRenderer> simulation_renderer_;
-	bool has_simulation_control_;
 };
 
 #endif /* RSS_GL_WIDGET_H_ */

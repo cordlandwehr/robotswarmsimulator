@@ -30,6 +30,7 @@ private slots:
 	void updateSimulationSpeed(int op);
 	void stepSimulation();
 	void updateSimulation();
+	void setCameraMode(int mode);
 
 private:
 	enum {
@@ -38,12 +39,18 @@ private:
 		HALF_SPEED,
 		DOUBLE_SPEED
 	};
+	enum {
+		CAM_FOLLOW=0,
+		CAM_FREE,
+		CAM_COG
+	};
 
 	Ui::RSSMainWindow ui_;
 	OpenProjectDialog *open_dialog_;
 	GeneratorWizard *generator_wizard_;
 	RSSGLWidget *rss_gl_widget_;
-	QSignalMapper *signal_mapper_;
+	QSignalMapper *speed_signal_mapper_;
+	QSignalMapper *cam_signal_mapper_;
 };
 
 #endif /* RSS_MAIN_WINDOW_H_ */
