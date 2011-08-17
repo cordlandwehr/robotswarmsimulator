@@ -14,6 +14,7 @@
 #include "../Model/marker_identifier.h"
 #include "../Requests/marker_request.h"
 
+#include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
 #include <boost/graph/graph_concepts.hpp>
 
@@ -53,14 +54,14 @@ WorldInformationWrapper::get_request_set() {
 }
 
 void
-WorldInformationWrapper::add_edge(std::size_t source, std::size_t target) {
+WorldInformationWrapper::add_edge(std::size_t source, std::size_t target, const std::string &type) {
   MarkerInformationWrapper marker;
-  add_edge(source, target, marker);
+  add_edge(source, target, marker, type);
 } 
 
 void
 WorldInformationWrapper::add_edge(std::size_t source, std::size_t target,
-				  MarkerInformationWrapper marker) {
+				  MarkerInformationWrapper marker, const std::string &type) {
   std::map< std::size_t, boost::shared_ptr<RobotIdentifier> >::iterator it;
   // check for source identifier
   it = robot_identifiers_.find(source);
@@ -71,7 +72,14 @@ WorldInformationWrapper::add_edge(std::size_t source, std::size_t target,
   if (it == robot_identifiers_.end()) return;
   boost::shared_ptr<RobotIdentifier> target_robot = it->second;  
   // create new edge
-  boost::shared_ptr<Edge> edge(new Edge(source_robot, target_robot));
+  std::string t(type);
+  boost::to_lower(t);
+  boost::shared_ptr<Edge> edge;
+  if (t == "directed") {
+    edge.reset(new DirectedEdge(source_robot, target_robot));
+  } else {
+    edge.reset(new UndirectedEdge(source_robot, target_robot));
+  }
   // TODO: The following line copies alot of data back and forth...
   boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
   edge->set_marker_information(new_marker);
@@ -131,15 +139,26 @@ WorldInformationWrapper::get_edge_information(std::size_t id) {
 }
 
 const std::vector < std::size_t >
-WorldInformationWrapper::get_edges() {
+WorldInformationWrapper::get_edges(const std::string &filter) {
   std::vector<std::size_t> result;
   
   std::map< std::size_t, boost::shared_ptr<Edge> >::iterator it;
+  
+  
  
   for(it = world_information_->edges().begin(); 
       it != world_information_->edges().end(); 
       it++) {
     std::size_t id = it->second->id()->id();
+  
+    // apply filter
+    std::string f(filter);
+    boost::to_lower(f);
+    if ((f == "directed" && !boost::dynamic_pointer_cast<DirectedEdge>(it->second)) 
+      || (f == "undirected" && !boost::dynamic_pointer_cast<UndirectedEdge>(it->second))) {
+      continue;
+    }
+  
     edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(it->second->id());
     result.push_back(id);
   }

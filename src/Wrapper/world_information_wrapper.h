@@ -49,7 +49,7 @@ public:
    * \param source	ID of the source robot.
    * \param target	ID of the target robot.
    */
-  static void add_edge(std::size_t source, std::size_t target);
+  static void add_edge(std::size_t source, std::size_t target, const std::string &type);
   
   /** Adds an edge with given MarkerInformation.
    * 
@@ -57,7 +57,7 @@ public:
    * \param target	ID of the target robot.
    * \param marker	Wrapped MarkerInformation object.
    */
-  static void add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker);
+  static void add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
   
   /**
    * Creates a MarkerRequest to be processed directly after the script.
@@ -70,7 +70,7 @@ public:
    * \param marker	Wrapped MarkerInformation object.
    */
   static void add_marker_request(std::size_t id, MarkerInformationWrapper marker);
-  
+ 
   /**
    * Returns outgoing edges od a given robot.
    * 
@@ -100,7 +100,7 @@ public:
    * 
    * \returns		Vector of integer edge IDs.
    */
-  static const std::vector<std::size_t> get_edges();
+  static const std::vector<std::size_t> get_edges(const std::string &filter);
   
   /**
    * Returns MarkerInformation object for a given marker.

@@ -107,8 +107,8 @@ void LuaWorldModifier::register_lua_methods() {
       luabind::namespace_("WorldInformation")
       [
 	luabind::def("add_marker_request", &WorldInformationWrapper::add_marker_request),
-	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, MarkerInformationWrapper)) &WorldInformationWrapper::add_edge),
-	luabind::def("add_edge", (void(*)(std::size_t, std::size_t)) &WorldInformationWrapper::add_edge),
+	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, MarkerInformationWrapper, const std::string&)) &WorldInformationWrapper::add_edge),
+	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, const std::string&)) &WorldInformationWrapper::add_edge),
 	luabind::def("get_adjacent_edges", &WorldInformationWrapper::get_adjacent_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_edge_anchors", &WorldInformationWrapper::get_edge_anchors),
 	luabind::def("get_edge_information", &WorldInformationWrapper::get_edge_information),
