@@ -23,73 +23,73 @@
      <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuProject">
+   <widget class="QMenu" name="menu_project">
     <property name="title">
      <string>&amp;Project</string>
     </property>
-    <addaction name="action_New"/>
-    <addaction name="actionOpen"/>
+    <addaction name="action_new_project"/>
+    <addaction name="action_open_project"/>
     <addaction name="separator"/>
-    <addaction name="action_Quit"/>
+    <addaction name="action_quit"/>
    </widget>
-   <widget class="QMenu" name="menuConfig">
+   <widget class="QMenu" name="menu_config">
     <property name="title">
      <string>&amp;Config</string>
     </property>
-    <addaction name="actionEdit_Config"/>
-    <addaction name="actionSave_Config"/>
+    <addaction name="action_edit_config"/>
+    <addaction name="action_save_config"/>
    </widget>
    <widget class="QMenu" name="menu_Simulation">
     <property name="title">
      <string>&amp;Simulation</string>
     </property>
-    <addaction name="action_Start_Stop_Simulation"/>
-    <addaction name="actionNext_Step"/>
-    <addaction name="actionIncrease_Speed"/>
-    <addaction name="actionDecrease_Speed"/>
-    <addaction name="actionDouble_Speed"/>
-    <addaction name="actionHalf_Speed"/>
+    <addaction name="action_start_stop_simulation"/>
+    <addaction name="action_next_step"/>
+    <addaction name="action_increase_speed"/>
+    <addaction name="action_decrease_speed"/>
+    <addaction name="action_double_speed"/>
+    <addaction name="action_half_speed"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="action_Help"/>
-    <addaction name="action_About"/>
+    <addaction name="action_help"/>
+    <addaction name="action_about"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menuCamera_Mode">
+    <widget class="QMenu" name="menu_camera_mode">
      <property name="title">
       <string>Camera Mode</string>
      </property>
-     <addaction name="actionFree"/>
-     <addaction name="actionFollow_Swarm"/>
-     <addaction name="actionCenter_of_Gravity_2"/>
+     <addaction name="action_free_cam"/>
+     <addaction name="action_follow_swarm_cam"/>
+     <addaction name="action_center_of_gravity_cam"/>
     </widget>
-    <addaction name="menuCamera_Mode"/>
-    <addaction name="actionMouse_Spinning"/>
+    <addaction name="menu_camera_mode"/>
+    <addaction name="action_view_mouse_spinning"/>
     <addaction name="separator"/>
-    <addaction name="actionVelocity_Vectors"/>
-    <addaction name="actionAcceleration_Vectors"/>
+    <addaction name="action_view_vel_vectors"/>
+    <addaction name="action_view_acc_vectors"/>
     <addaction name="separator"/>
-    <addaction name="actionGlobal_Coordinate_System"/>
-    <addaction name="actionLocal_Coordinate_System"/>
+    <addaction name="action_view_global_cS"/>
+    <addaction name="action_view_local_cS"/>
     <addaction name="separator"/>
-    <addaction name="actionCenter_of_Gravity"/>
-    <addaction name="actionSCC_of_Visibility_Graph"/>
-    <addaction name="actionSkybox"/>
+    <addaction name="action_view_center_of_gravity"/>
+    <addaction name="action_view_scc_of_visibility_graph"/>
+    <addaction name="action_view_sky_box"/>
    </widget>
-   <addaction name="menuProject"/>
-   <addaction name="menuConfig"/>
+   <addaction name="menu_project"/>
+   <addaction name="menu_config"/>
    <addaction name="menu_Simulation"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
+  <widget class="QToolBar" name="toolbar_project">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -102,11 +102,11 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_New"/>
-   <addaction name="actionOpen"/>
-   <addaction name="action_Quit"/>
+   <addaction name="action_new_project"/>
+   <addaction name="action_open_project"/>
+   <addaction name="action_quit"/>
   </widget>
-  <widget class="QToolBar" name="toolBar_2">
+  <widget class="QToolBar" name="toolbar_simulation">
    <property name="windowTitle">
     <string>toolBar_2</string>
    </property>
@@ -116,14 +116,14 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_Start_Stop_Simulation"/>
-   <addaction name="actionNext_Step"/>
-   <addaction name="actionHalf_Speed"/>
-   <addaction name="actionDecrease_Speed"/>
-   <addaction name="actionIncrease_Speed"/>
-   <addaction name="actionDouble_Speed"/>
+   <addaction name="action_start_stop_simulation"/>
+   <addaction name="action_next_step"/>
+   <addaction name="action_half_speed"/>
+   <addaction name="action_decrease_speed"/>
+   <addaction name="action_increase_speed"/>
+   <addaction name="action_double_speed"/>
   </widget>
-  <action name="actionOpen">
+  <action name="action_open_project">
    <property name="text">
     <string>&amp;Open</string>
    </property>
@@ -131,17 +131,17 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionEdit_Config">
+  <action name="action_edit_config">
    <property name="text">
     <string>&amp;Edit Config</string>
    </property>
   </action>
-  <action name="actionSave_Config">
+  <action name="action_save_config">
    <property name="text">
     <string>&amp;Save Config</string>
    </property>
   </action>
-  <action name="action_New">
+  <action name="action_new_project">
    <property name="text">
     <string>&amp;New</string>
    </property>
@@ -149,22 +149,22 @@
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="action_Help">
+  <action name="action_help">
    <property name="text">
     <string>&amp;Help</string>
    </property>
   </action>
-  <action name="action_About">
+  <action name="action_about">
    <property name="text">
     <string>&amp;About</string>
    </property>
   </action>
-  <action name="action_Quit">
+  <action name="action_quit">
    <property name="text">
     <string>&amp;Quit</string>
    </property>
   </action>
-  <action name="action_Start_Stop_Simulation">
+  <action name="action_start_stop_simulation">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -180,7 +180,7 @@
     <string>Start/Stop</string>
    </property>
   </action>
-  <action name="actionIncrease_Speed">
+  <action name="action_increase_speed">
    <property name="icon">
     <iconset resource="../../../resources/qt_resources.qrc">
      <normaloff>:/icons/plus.png</normaloff>:/icons/plus.png</iconset>
@@ -192,7 +192,7 @@
     <string>+</string>
    </property>
   </action>
-  <action name="actionDecrease_Speed">
+  <action name="action_decrease_speed">
    <property name="icon">
     <iconset resource="../../../resources/qt_resources.qrc">
      <normaloff>:/icons/minus.png</normaloff>:/icons/minus.png</iconset>
@@ -204,7 +204,7 @@
     <string>-</string>
    </property>
   </action>
-  <action name="actionDouble_Speed">
+  <action name="action_double_speed">
    <property name="icon">
     <iconset resource="../../../resources/qt_resources.qrc">
      <normaloff>:/icons/double.png</normaloff>:/icons/double.png</iconset>
@@ -216,7 +216,7 @@
     <string>*</string>
    </property>
   </action>
-  <action name="actionHalf_Speed">
+  <action name="action_half_speed">
    <property name="icon">
     <iconset resource="../../../resources/qt_resources.qrc">
      <normaloff>:/icons/half.png</normaloff>:/icons/half.png</iconset>
@@ -228,7 +228,7 @@
     <string>/</string>
    </property>
   </action>
-  <action name="actionCenter_of_Gravity">
+  <action name="action_view_center_of_gravity">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -242,7 +242,7 @@
     <string>Show the center of gravity of the swarm.</string>
    </property>
   </action>
-  <action name="actionVelocity_Vectors">
+  <action name="action_view_vel_vectors">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -256,7 +256,7 @@
     <string>Show velocity vectors.</string>
    </property>
   </action>
-  <action name="actionAcceleration_Vectors">
+  <action name="action_view_acc_vectors">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -270,7 +270,7 @@
     <string>Show acceleration vectors.</string>
    </property>
   </action>
-  <action name="actionGlobal_Coordinate_System">
+  <action name="action_view_global_cS">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -284,7 +284,7 @@
     <string>Show global coordinates system.</string>
    </property>
   </action>
-  <action name="actionLocal_Coordinate_System">
+  <action name="action_view_local_cS">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -298,7 +298,7 @@
     <string>Show local coordinates systems.</string>
    </property>
   </action>
-  <action name="actionMouse_Spinning">
+  <action name="action_view_mouse_spinning">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -309,7 +309,7 @@
     <string>Use to switch to mouse spinning mode and use your mouse to rotate the view. Note that this is not supported in every camera mode.</string>
    </property>
   </action>
-  <action name="actionSkybox">
+  <action name="action_view_sky_box">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -320,7 +320,7 @@
     <string>Switch skybox.</string>
    </property>
   </action>
-  <action name="actionSCC_of_Visibility_Graph">
+  <action name="action_view_scc_of_visibility_graph">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -334,7 +334,7 @@
     <string>Show strongly connected componends of visibility graph. Each strongly connected component is drawn in another color. Only undirected edges of visibility graph are drawn.</string>
    </property>
   </action>
-  <action name="actionFree">
+  <action name="action_free_cam">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -342,7 +342,7 @@
     <string>Free</string>
    </property>
   </action>
-  <action name="actionFollow_Swarm">
+  <action name="action_follow_swarm_cam">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -353,7 +353,7 @@
     <string>Follow Swarm</string>
    </property>
   </action>
-  <action name="actionCenter_of_Gravity_2">
+  <action name="action_center_of_gravity_cam">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -361,7 +361,7 @@
     <string>Center of Gravity</string>
    </property>
   </action>
-  <action name="actionNext_Step">
+  <action name="action_next_step">
    <property name="icon">
     <iconset resource="../../../resources/qt_resources.qrc">
      <normaloff>:/icons/next.png</normaloff>:/icons/next.png</iconset>
@@ -376,7 +376,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>action_Quit</sender>
+   <sender>action_quit</sender>
    <signal>activated()</signal>
    <receiver>RSSMainWindow</receiver>
    <slot>close()</slot>

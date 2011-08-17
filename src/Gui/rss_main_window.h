@@ -9,6 +9,7 @@
 #define RSS_MAIN_WINDOW_H_
 
 #include <QtGui/QMainWindow>
+#include <QtCore/QSignalMapper>
 #include "ui_rss_main_window.h"
 
 class OpenProjectDialog;
@@ -25,14 +26,24 @@ public:
 	void init();
 
 private slots:
-	void updateSimulation();
 	void toggleSimulation();
+	void updateSimulationSpeed(int op);
+	void stepSimulation();
+	void updateSimulation();
 
 private:
+	enum {
+		INCREASE_SPEED,
+		DECREASE_SPEED,
+		HALF_SPEED,
+		DOUBLE_SPEED
+	};
+
 	Ui::RSSMainWindow ui_;
 	OpenProjectDialog *open_dialog_;
 	GeneratorWizard *generator_wizard_;
 	RSSGLWidget *rss_gl_widget_;
+	QSignalMapper *signal_mapper_;
 };
 
 #endif /* RSS_MAIN_WINDOW_H_ */

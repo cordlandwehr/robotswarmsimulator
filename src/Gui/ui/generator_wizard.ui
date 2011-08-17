@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>New Project</string>
   </property>
-  <widget class="QWizardPage" name="wizardPage1"/>
-  <widget class="QWizardPage" name="wizardPage2"/>
+  <widget class="QWizardPage" name="wizard_page_1"/>
+  <widget class="QWizardPage" name="wizard_page_2"/>
  </widget>
  <resources/>
  <connections/>

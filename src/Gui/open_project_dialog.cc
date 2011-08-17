@@ -13,12 +13,12 @@ OpenProjectDialog::OpenProjectDialog(QWidget *parent) : QDialog(parent), data_()
 	ui_.setupUi(this);
 
 	// connect signals/slots
-	connect(ui_.ProjectFileButton, SIGNAL(clicked()), this, SLOT(openFile()) );
-	connect(ui_.OutputDirButton, SIGNAL(clicked()), this, SLOT(openPath()) );
+	connect(ui_.button_file, SIGNAL(clicked()), this, SLOT(openFile()) );
+	connect(ui_.button_out, SIGNAL(clicked()), this, SLOT(openPath()) );
 
-	ui_.lineEdit_3->setValidator(new QIntValidator(0, INT_MAX, ui_.lineEdit_3));
-	ui_.lineEdit_4->setValidator(new QIntValidator(0, INT_MAX, ui_.lineEdit_4));
-	ui_.lineEdit_5->setValidator(new QIntValidator(0, INT_MAX, ui_.lineEdit_5));
+	ui_.lineedit_history_length->setValidator(new QIntValidator(0, INT_MAX, ui_.lineedit_history_length));
+	ui_.lineedit_luaseed->setValidator(new QIntValidator(0, INT_MAX, ui_.lineedit_luaseed));
+	ui_.lineedit_steps->setValidator(new QIntValidator(0, INT_MAX, ui_.lineedit_steps));
 }
 
 OpenProjectDialog::~OpenProjectDialog() {
@@ -26,22 +26,22 @@ OpenProjectDialog::~OpenProjectDialog() {
 
 
 void OpenProjectDialog::openFile() {
-	ui_.ProjectFileText->setText(QFileDialog::getOpenFileName(this,
+	ui_.lineedit_file->setText(QFileDialog::getOpenFileName(this,
 			"Open project file", "",
 			tr("Project Files (*.swarm)")));
 }
 
 void OpenProjectDialog::openPath() {
-	ui_.OutputDirText->setText(QFileDialog::getExistingDirectory());
+	ui_.lineedit_out->setText(QFileDialog::getExistingDirectory());
 }
 
 void OpenProjectDialog::accept() {
-	data_.project_file = ui_.ProjectFileText->text().toStdString();
-	data_.output = ui_.OutputDirText->text().toStdString();
-	data_.history_length = ui_.lineEdit_4->text().toUInt();
-	data_.dry = ui_.checkBox->isChecked();
-	data_.steps = ui_.lineEdit_3->text().toUInt();
-	data_.luaseed = ui_.lineEdit_5->text().toUInt();
-	data_.run_until_no_multiplicity = ui_.checkBox_2->isChecked();
+	data_.project_file = ui_.lineedit_file->text().toStdString();
+	data_.output = ui_.lineedit_out->text().toStdString();
+	data_.history_length = ui_.lineedit_history_length->text().toUInt();
+	data_.dry = ui_.checkbox_dry->isChecked();
+	data_.steps = ui_.lineedit_steps->text().toUInt();
+	data_.luaseed = ui_.lineedit_luaseed->text().toUInt();
+	data_.run_until_no_multiplicity = ui_.checkbox_no_multiplicity->isChecked();
 	QDialog::accept();
 }

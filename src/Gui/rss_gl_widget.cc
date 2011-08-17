@@ -5,6 +5,8 @@
  *      Author: Sascha Brandt
  */
 
+#include <QKeyEvent>
+
 #include "rss_gl_widget.h"
 
 
@@ -13,6 +15,8 @@ RSSGLWidget::RSSGLWidget(QWidget *parent) : QGLWidget(parent),
 	simulation_renderer_.reset(new SimulationRenderer());
 	simulation_renderer_->init();
 	simulation_renderer_->set_swap_buffers(false);
+	setFocusPolicy(Qt::StrongFocus);
+
 	startTimer(50);
 }
 
@@ -58,6 +62,47 @@ void RSSGLWidget::timerEvent(QTimerEvent * event) {
 	updateGL();
 }
 
-void RSSGLWidget::keyPressEvent( QKeyEvent *e ) {
-
+void RSSGLWidget::keyPressEvent( QKeyEvent *event ) {
+	switch (event->key()) {
+		case Qt::Key_Left:
+			simulation_renderer_->camera()->strafe_left();
+			break;
+		case Qt::Key_Right:
+			simulation_renderer_->camera()->strafe_right();
+			break;
+		case Qt::Key_Up:
+			simulation_renderer_->camera()->move_forward();
+			break;
+		case Qt::Key_Down:
+			simulation_renderer_->camera()->move_backward();
+			break;
+		case Qt::Key_Space: // pause simulation
+			simulation_control_->pause_processing_time(!simulation_control_->is_processing_time_paused());
+			break;
+		case Qt::Key_S:
+			// simulate one more step
+			if(simulation_control_->is_single_step_mode()) {
+				simulation_control_->do_single_step();
+			} else {
+				simulation_control_->enter_single_step_mode();
+			}
+			break;
+		case Qt::Key_Plus:
+			simulation_control_->increase_processing_time_linearly();
+			break;
+		case Qt::Key_Minus:
+			simulation_control_->decrease_processing_time_linearly();
+			break;
+		case Qt::Key_multiply:
+			simulation_control_->increase_processing_time_exp();
+			break;
+		case Qt::Key_division:
+			simulation_control_->decrease_processing_time_exp();
+			break;
+		case Qt::Key_D:
+			simulation_control_->dump_simulation();
+			break;
+		default:
+			QGLWidget::keyPressEvent(event);
+	}
 }

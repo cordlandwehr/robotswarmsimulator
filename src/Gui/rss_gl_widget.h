@@ -29,15 +29,16 @@ public:
 	}
 
 protected:
-  virtual void initializeGL();
-  virtual void resizeGL( int width, int height );
-  virtual void paintGL();
+	virtual void initializeGL();
+	virtual void resizeGL( int width, int height );
+	virtual void paintGL();
 
-  virtual void timerEvent(QTimerEvent * event);
+	virtual void timerEvent(QTimerEvent * event);
 
-  virtual void keyPressEvent( QKeyEvent *e );
+	virtual void keyPressEvent( QKeyEvent *event );
 
 private:
+
 	boost::shared_ptr<SimulationControl> simulation_control_;
 	boost::shared_ptr<SimulationRenderer> simulation_renderer_;
 	bool has_simulation_control_;

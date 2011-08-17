@@ -42,26 +42,67 @@ RSSMainWindow::~RSSMainWindow() {
 void RSSMainWindow::init() {
 	open_dialog_ = new OpenProjectDialog(this);
 	generator_wizard_ = new GeneratorWizard(this);
-	rss_gl_widget_ = new RSSGLWidget();
+	rss_gl_widget_ = new RSSGLWidget(this);
+	signal_mapper_ = new QSignalMapper(this);
 
 	this->setCentralWidget(rss_gl_widget_);
 
 	// connect signals/slots
-	connect(ui_.actionOpen, SIGNAL(activated()), open_dialog_, SLOT(show()));
-	connect(ui_.action_New, SIGNAL(activated()), generator_wizard_, SLOT(show()));
+	connect(ui_.action_open_project, SIGNAL(activated()), open_dialog_, SLOT(show()));
+	connect(ui_.action_new_project, SIGNAL(activated()), generator_wizard_, SLOT(show()));
 	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(updateSimulation()));
-	connect(ui_.action_Start_Stop_Simulation, SIGNAL(activated()), this, SLOT(toggleSimulation()));
+	connect(ui_.action_start_stop_simulation, SIGNAL(activated()), this, SLOT(toggleSimulation()));
+	connect(ui_.action_next_step, SIGNAL(activated()), this, SLOT(stepSimulation()));
+	connect(ui_.action_increase_speed, SIGNAL(activated()), signal_mapper_, SLOT(map()));
+	connect(ui_.action_decrease_speed, SIGNAL(activated()), signal_mapper_, SLOT(map()));
+	connect(ui_.action_half_speed, SIGNAL(activated()), signal_mapper_, SLOT(map()));
+	connect(ui_.action_double_speed, SIGNAL(activated()), signal_mapper_, SLOT(map()));
+
+	// map signals
+	signal_mapper_->setMapping(ui_.action_increase_speed, INCREASE_SPEED);
+	signal_mapper_->setMapping(ui_.action_decrease_speed, DECREASE_SPEED);
+	signal_mapper_->setMapping(ui_.action_half_speed, HALF_SPEED);
+	signal_mapper_->setMapping(ui_.action_double_speed, DOUBLE_SPEED);
 
 	// setup icons
 	QCommonStyle style;
-	ui_.action_New->setIcon(style.standardIcon(QStyle::SP_FileIcon));
-	ui_.actionOpen->setIcon(style.standardIcon(QStyle::SP_DirOpenIcon));
-	ui_.action_Quit->setIcon(style.standardIcon(QStyle::SP_DialogCloseButton));
+	ui_.action_new_project->setIcon(style.standardIcon(QStyle::SP_FileIcon));
+	ui_.action_open_project->setIcon(style.standardIcon(QStyle::SP_DirOpenIcon));
+	ui_.action_quit->setIcon(style.standardIcon(QStyle::SP_DialogCloseButton));
 }
 
 void RSSMainWindow::toggleSimulation() {
 	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
-	simulation_control_->pause_processing_time(!ui_.action_Start_Stop_Simulation->isChecked());
+	simulation_control_->pause_processing_time(!ui_.action_start_stop_simulation->isChecked());
+}
+
+void RSSMainWindow::updateSimulationSpeed(int op) {
+	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
+	switch(op) {
+	case INCREASE_SPEED:
+		simulation_control_->increase_processing_time_linearly();
+		break;
+	case DECREASE_SPEED:
+		simulation_control_->decrease_processing_time_linearly();
+		break;
+	case DOUBLE_SPEED:
+		simulation_control_->increase_processing_time_exp();
+		break;
+	case HALF_SPEED:
+		simulation_control_->decrease_processing_time_exp();
+		break;
+	}
+}
+
+void RSSMainWindow::stepSimulation() {
+	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
+
+	ui_.action_start_stop_simulation->setChecked(false);
+	if(simulation_control_->is_single_step_mode()) {
+		simulation_control_->do_single_step();
+	} else {
+		simulation_control_->enter_single_step_mode();
+	}
 }
 
 void RSSMainWindow::updateSimulation() {
