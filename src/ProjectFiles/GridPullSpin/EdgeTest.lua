@@ -45,11 +45,11 @@ function main()
 	WorldInformation.add_edge(ida, idb, "undirected")
       elseif (i % 4 == 2) then
 	marker = MarkerInformation()
-	marker:add_data("test_key", 23)
+	--marker:add_data("test_key", 23)
 	WorldInformation.add_edge(ida, idb, marker, "directed")
       else
 	marker = MarkerInformation()
-	marker:add_data("test_key", 42)
+	--marker:add_data("test_key", 42)
 	WorldInformation.add_edge(ida, idb, marker, "undirected")
       end
     end

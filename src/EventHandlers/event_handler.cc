@@ -51,6 +51,7 @@ using boost::shared_ptr;
 
 void EventHandler::handle_event(shared_ptr<Event> event,
                                 TimePoint& time_point) {
+   
 	// check that it is not for a past time
 	int time_difference = event->time() - time_of_last_event_;
 	if(time_difference < 0) {
@@ -80,7 +81,7 @@ void EventHandler::handle_event(shared_ptr<Event> event,
 	} else {
 		throw std::invalid_argument("Illegal type of event.");
 	}
-
+	
 	// update all simulation listeners
 	update_listeners(time_point, event);
 }
@@ -281,7 +282,8 @@ shared_ptr<WorldInformation> EventHandler::handle_world_modifier_event(
     }
     
     // process anonymous handle request event, return modified world
-    return handle_handle_requests_event(handle_request_event);
+    //return handle_handle_requests_event(handle_request_event);
+    return new_world_information;
 }
 
 shared_ptr<WorldInformation> EventHandler::extrapolate_old_world_information(

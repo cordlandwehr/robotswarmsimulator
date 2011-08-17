@@ -161,6 +161,23 @@ public:
    * \param world_information	The new WorldInformation object.
    */
   static void set_world_information(const boost::shared_ptr<WorldInformation> &world_information);
+  
+   /**
+   * Sets MarkerInformation object for a given edge.
+   * 
+   * \param id		The id of the edge.
+   * \param marker	The wrapper MarkerInformation object.
+   */
+  static void set_edge_information(std::size_t id, MarkerInformationWrapper marker);
+  
+  
+  /**
+   * Sets MarkerInformation object for a given robot.
+   * 
+   * \param id		The id of the robot.
+   * \param marker	The wrapper MarkerInformation object.
+   */
+  static void set_robot_information(std::size_t id, MarkerInformationWrapper marker);
 
 private:
   /**

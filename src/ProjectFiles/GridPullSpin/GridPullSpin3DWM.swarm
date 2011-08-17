@@ -1,7 +1,7 @@
 PROJECT_NAME="New generated Project"
 ROBOT_FILENAME="RandomGrid3D.robot"
 OBSTACLE_FILENAME="empty.obstacle"
-WORLD_MODIFIERS="TestWorldModifier, EdgeTest.lua"
+WORLD_MODIFIERS="TestWorldModifier, EdgeTest.lua, MarkerInformationTest.lua"
 
 ASG="SYNCHRONOUS_WM"
 COMPASS_MODEL="NO_COMPASS"

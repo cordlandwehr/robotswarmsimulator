@@ -230,6 +230,34 @@ WorldInformationWrapper::remove_edge(std::size_t id) {
   edge_identifiers_.erase(it);
   world_information_->remove_edge(edge);
 }
+
+void 
+WorldInformationWrapper::set_edge_information(std::size_t id, MarkerInformationWrapper marker) {
+  // get identifier
+  std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> >::iterator it;
+  it = edge_identifiers_.find(id);
+  // if not existant, stop right here
+  if (it == edge_identifiers_.end()) return;
+  // get correct robot and create MarkerInformation object
+  boost::shared_ptr<Edge> eid = world_information_->get_according_edge(it->second);
+  boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+  // set new MarkerInforamtion
+  eid->set_marker_information(new_marker);
+}
+
+void 
+WorldInformationWrapper::set_robot_information(std::size_t id, MarkerInformationWrapper marker) {
+  // get identifier
+  std::map< std::size_t, boost::shared_ptr<RobotIdentifier> >::iterator it;
+  it = robot_identifiers_.find(id);
+  // if not existant, stop right here
+  if (it == robot_identifiers_.end()) return;
+  // get correct robot and create MarkerInformation object
+  boost::shared_ptr<RobotData> rid = world_information_->get_according_robot_data_ptr(it->second);
+  boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+  // set new MarkerInforamtion
+  rid->set_marker_information(new_marker);
+}
   
 }
 
