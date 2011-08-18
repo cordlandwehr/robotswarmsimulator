@@ -96,8 +96,7 @@ bool CollisionPositionRequestHandler::handle_request_reliable(
 	if (collision_result) {
 		ConsoleOutput::log(ConsoleOutput::EventHandler, ConsoleOutput::debug)
 			<< "Detected collision at time "
-		    << world_information->time()
-		    << std::endl;
+		    << world_information->time();
 	}
 
 	// re-add current robot to the collision tree

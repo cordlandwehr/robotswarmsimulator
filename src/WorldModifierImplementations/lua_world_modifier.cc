@@ -18,6 +18,7 @@
 #include "../Utilities/console_output.h"
 #include "../Utilities/vector_arithmetics.h"
 
+#include "../Wrapper/console_output_wrapper.h"
 #include "../Wrapper/coordinate_system_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
 #include "../Wrapper/marker_information_wrapper.h"
@@ -53,6 +54,7 @@ std::set< boost::shared_ptr<Request> >
 LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_information) {
   // load cuurent WorldInformation object into wrapper
   LuaWrapper::WorldInformationWrapper::set_world_information(world_information);
+  LuaWrapper::MarkerInformationWrapper::set_lua_state(lua_state_);
      
     try {
 		luabind::call_function<void>(lua_state_.get(), "main");
@@ -68,7 +70,7 @@ LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_infor
 void LuaWorldModifier::register_lua_methods() {
     // Lua wrappers have their own namespace
     using namespace LuaWrapper;
-    // register helper classes
+    // register helper functions/classes
     luabind::module(lua_state_.get())
 	[
          luabind::class_<CoordinateSystemWrapper>("CoordinateSystem")
@@ -77,6 +79,9 @@ void LuaWorldModifier::register_lua_methods() {
          .def_readwrite("x_axis", &CoordinateSystemWrapper::x_axis)
          .def_readwrite("y_axis", &CoordinateSystemWrapper::y_axis)
          .def_readwrite("z_axis", &CoordinateSystemWrapper::z_axis),
+         
+         luabind::def("log", (void(*)(const std::string&)) &ConsoleOutputWrapper::log),
+         luabind::def("log", (void(*)(const std::string&, const std::string&)) &ConsoleOutputWrapper::log),
      
          luabind::class_<MarkerInformationWrapper>("MarkerInformation")
          .def(luabind::constructor<>())
