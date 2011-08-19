@@ -9,7 +9,7 @@
 #define REMOVE_MESSAGE_REQUEST_H_
 
 #include "request.h"
-#include "../Model/Message.h"
+#include "../Model/message.h"
 
 
 class RemoveMessageRequest : public Request {
