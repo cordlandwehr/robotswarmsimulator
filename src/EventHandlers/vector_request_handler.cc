@@ -38,8 +38,7 @@
 #include "../Requests/request.h"
 #include "../Requests/vector_request.h"
 #include "../Requests/position_request.h"
-#include "../Requests/velocity_request.h"
-#include "../Requests/acceleration_request.h"
+
 
 #include "../Utilities/vector_arithmetics.h"
 #include "../Utilities/VectorModifiers/vector_modifier.h"
@@ -81,10 +80,6 @@ void VectorRequestHandler::update_vector(const VectorRequest& request,
 	shared_ptr<Vector3d> vector_ptr(new Vector3d(vector));
 	if (typeid(request) == typeid(PositionRequest))
 		robot_data.set_position(vector_ptr);
-	else if (typeid(request) == typeid(VelocityRequest))
-		robot_data.set_velocity(vector_ptr);
-	else if (typeid(request) == typeid(AccelerationRequest))
-		robot_data.set_acceleration(vector_ptr);
 	else
 		throw std::invalid_argument("VectorRequestHandler: unknown vector request; can not update robot's vector");
 }
@@ -95,10 +90,6 @@ const Vector3d& VectorRequestHandler::extract_ref_vector(
     const RobotData& robot_data) {
 	if (typeid(request) == typeid(PositionRequest))
 		return robot_data.position();
-	else if (typeid(request) == typeid(VelocityRequest))
-		return robot_data.velocity();
-	else if (typeid(request) == typeid(AccelerationRequest))
-		return robot_data.acceleration();
 	else
 		throw std::invalid_argument("VectorRequestHandler: unknown vector request, can not extract reference vector");
 }
