@@ -34,7 +34,6 @@
 #include "../../EventHandlers/event_handler.h"
 #include "../../EventHandlers/vector_request_handler.h"
 #include "../../EventHandlers/marker_request_handler.h"
-#include "../../EventHandlers/type_change_request_handler.h"
 
 #include "../../Requests/position_request.h"
 
@@ -74,8 +73,6 @@ BOOST_FIXTURE_TEST_CASE(full_event_handler_test_position_test, SimpleWorldFixtur
 	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(5, 0.0, *history));
 	event_handler.set_marker_request_handler(request_handler_marker);
 
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(5, 0.0, *history));
-	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// construction of position request
 	boost::shared_ptr<Vector3d> new_position(new Vector3d);
@@ -213,20 +210,12 @@ BOOST_FIXTURE_TEST_CASE(full_event_handler_test_local_coordinate_system, SimpleW
 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<View>());
 	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 	EventHandler event_handler(history, robot_control);
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(5, 0.0, *history));
-	event_handler.set_acceleration_request_handler(request_handler_acc);
-
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(5, 0.0, *history));
-	event_handler.set_velocity_request_handler(request_handler_vel);
 
 	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(5, 0.0, *history));
 	event_handler.set_position_request_handler(request_handler_pos);
 
 	boost::shared_ptr<MarkerRequestHandler> request_handler_marker(new MarkerRequestHandler(5, 0.0, *history));
 	event_handler.set_marker_request_handler(request_handler_marker);
-
-	boost::shared_ptr<TypeChangeRequestHandler> request_handler_type(new TypeChangeRequestHandler(5, 0.0, *history));
-	event_handler.set_type_change_request_handler(request_handler_type);
 
 	// build a coordinate axes for a robot with unit distance 2
 	boost::shared_ptr<Vector3d> x_axis(new Vector3d());

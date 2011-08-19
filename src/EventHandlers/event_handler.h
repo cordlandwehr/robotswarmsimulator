@@ -37,9 +37,7 @@
 
 #include "../EventHandlers/vector_request_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
-#include "../EventHandlers/type_change_request_handler.h"
 #include "../EventHandlers/marker_change_request_handler.h"
-#include "../EventHandlers/color_change_request_handler.h"
 #include "../EventHandlers/message_request_handler.h"
 #include "../EventHandlers/insert_edge_request_handler.h"
 #include "../EventHandlers/remove_edge_request_handler.h"
@@ -134,22 +132,9 @@ public:
 		marker_request_handler_ = marker_request_handler;
 	}
 
-	/**
-	 * setter for type change request handler
-	 */
-	void set_type_change_request_handler(
-	    boost::shared_ptr<TypeChangeRequestHandler> request_handler) {
-		type_change_request_handler_ = request_handler;
-	}
-
 	void set_marker_change_request_handler(
 	    boost::shared_ptr<MarkerChangeRequestHandler> request_handler) {
 		marker_change_request_handler_ = request_handler;
-	}
-
-	void set_color_change_request_handler(
-	    boost::shared_ptr<ColorChangeRequestHandler> request_handler) {
-		color_change_request_handler_ = request_handler;
 	}
 
 	void set_message_request_handler(
@@ -217,9 +202,7 @@ private:
 	boost::shared_ptr<VectorRequestHandler> velocity_request_handler_;
 	boost::shared_ptr<VectorRequestHandler> acceleration_request_handler_;
 	boost::shared_ptr<MarkerRequestHandler> marker_request_handler_;
-	boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler_;
 	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
-	boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler_;
 	boost::shared_ptr<MessageRequestHandler> message_request_handler_;
 	boost::shared_ptr<InsertEdgeRequestHandler> insert_edge_request_handler_;
 	boost::shared_ptr<RemoveEdgeRequestHandler> remove_edge_request_handler_;

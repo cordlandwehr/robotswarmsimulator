@@ -62,11 +62,9 @@
 
 #include "../EventHandlers/event_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
-#include "../EventHandlers/type_change_request_handler.h"
 #include "../EventHandlers/vector_request_handler.h"
 #include "../EventHandlers/marker_change_request_handler.h"
 #include "../EventHandlers/collision_position_request_handler.h"
-#include "../EventHandlers/color_change_request_handler.h"
 
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
@@ -158,20 +156,6 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 			}
 	}
 
-	// 2. Type Change Request Handler
-	std::string type_change_request_handler_type = boost::any_cast<std::string> (params["TYPE_CHANGE_REQUEST_HANDLER_TYPE"]);
-	if(type_change_request_handler_type == "STANDARD") {
-		try {
-			// build the type change request handler
-			double discard_probability = boost::lexical_cast<double> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_TYPE_CHANGE_REQUEST_HANDLER_SEED"]);
-			boost::shared_ptr<TypeChangeRequestHandler> type_change_request_handler(new TypeChangeRequestHandler(seed, discard_probability, *history));
-			event_handler->set_type_change_request_handler(type_change_request_handler);
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for standard type change request handler");
-		}
-	}
-
 	// 3. Position Request Handler
 	std::string position_request_handler_type = boost::any_cast<std::string> (params["POSITION_REQUEST_HANDLER_TYPE"]);
 	if(position_request_handler_type == "VECTOR") {
@@ -189,73 +173,6 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for vector position request handler");
 		}
-	} else if (position_request_handler_type == "COLLISION") {
-		try {
-			// get parameters for the collision position request handler
-			std::string collision_strategy = params["COLLISION_POSITION_REQUEST_HANDLER_STRATEGY"];
-			CollisionPositionRequestHandler::CollisionStrategy strategy;
-			if (collision_strategy == "STOP")
-				strategy = CollisionPositionRequestHandler::STOP;
-			else if (collision_strategy == "TOUCH")
-				strategy = CollisionPositionRequestHandler::TOUCH;
-			else {
-				strategy = CollisionPositionRequestHandler::STOP;
-				ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::warning)  << "Unknown collision strategy, falling back to STOP strategy.";
-			}
-
-			double clearance = boost::lexical_cast<double>(params["COLLISION_POSITION_REQUEST_HANDLER_CLEARANCE"]);
-			double discard_probability = boost::lexical_cast<double> (params["COLLISION_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["COLLISION_POSITION_REQUEST_HANDLER_SEED"]);
-
-			// build the collision position request handler
-			boost::shared_ptr<CollisionPositionRequestHandler> collisionpos_request_handler(
-				new CollisionPositionRequestHandler(strategy, clearance, seed, discard_probability, *history)
-			);
-
-			// set up vector modifiers
-			create_vector_modifiers_from_string(collisionpos_request_handler,
-					                            params["COLLISION_POSITION_REQUEST_HANDLER_MODIFIER"]);
-
-			event_handler->set_position_request_handler(collisionpos_request_handler);
-		} catch (const boost::bad_lexical_cast&) {
-			throw UnsupportedOperationException("Failed reading parameters for collision position request handler");
-		}
-	}
-
-	// 4. Velocity Request Handler
-	std::string velocity_request_handler_type = boost::any_cast<std::string> (params["VELOCITY_REQUEST_HANDLER_TYPE"]);
-	if(velocity_request_handler_type == "VECTOR") {
-		try {
-			// build the vector request handler
-			double discard_probability = boost::lexical_cast<double> (params["VECTOR_VELOCITY_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_VELOCITY_REQUEST_HANDLER_SEED"]);
-			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
-
-			// set up vector modifiers
-			create_vector_modifiers_from_string(vector_request_handler,
-					                            params["VECTOR_VELOCITY_REQUEST_HANDLER_MODIFIER"]);
-			event_handler->set_velocity_request_handler(vector_request_handler);
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for vector velocity request handler");
-		}
-	}
-
-	// 5. Acceleration Request Handler
-	std::string acceleration_request_handler_type = boost::any_cast<std::string> (params["ACCELERATION_REQUEST_HANDLER_TYPE"]);
-	if(acceleration_request_handler_type == "VECTOR") {
-		try {
-			// build the vector request handler
-			double discard_probability = boost::lexical_cast<double> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_ACCELERATION_REQUEST_HANDLER_SEED"]);
-			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
-
-			// set up vector modifiers
-			create_vector_modifiers_from_string(vector_request_handler,
-					                            params["VECTOR_ACCELERATION_REQUEST_HANDLER_MODIFIER"]);
-			event_handler->set_acceleration_request_handler(vector_request_handler);
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for vector acceleration request handler");
-		}
 	}
 
 	// 6. Marker Change Request Handler
@@ -270,20 +187,6 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
 		}
-	}
-
-	// 7. Color Change Request Handler
-	std::string color_change_request_handler_type = boost::any_cast<std::string >(params["COLOR_CHANGE_REQUEST_HANDLER_TYPE"]);
-	if(color_change_request_handler_type == "STANDARD"){
-		try {
-				// build the type change request handler
-				double discard_probability = 0.0;
-				unsigned int seed = 1;
-				boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler(new ColorChangeRequestHandler(seed, discard_probability, *history));
-				event_handler->set_color_change_request_handler(color_change_request_handler);
-			} catch(const boost::bad_lexical_cast& ) {
-				throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
-			}
 	}
 
 	return event_handler;
