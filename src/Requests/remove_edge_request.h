@@ -1,5 +1,5 @@
 /*
- * message_request.h
+ * remove_edge_request.h
  *
  *  Created on: 22.07.2011
  *      Author: Jonas

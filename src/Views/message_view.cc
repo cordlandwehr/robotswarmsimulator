@@ -13,10 +13,8 @@ MessageView::MessageView() {
 MessageView::~MessageView() {
 }
 
-boost::shared_ptr<Message> MessageView::get_message(RobotData& robot) {
-	boost::shared_ptr<Message> m = robot.get_message();
-	if(robot.get_number_of_messages()>0)
-		robot.pop_front_message();
+boost::shared_ptr<MessageIdentifier> MessageView::get_message(const RobotData& robot, std::size_t index) const {
+	boost::shared_ptr<MessageIdentifier> m = robot.get_message(index);
 	return m;
 }
 

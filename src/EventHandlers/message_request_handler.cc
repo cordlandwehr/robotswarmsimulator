@@ -9,6 +9,7 @@
 
 #include "../Model/identifier.h"
 #include "../Model/robot_identifier.h"
+#include "../Model/message_identifier.h"
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
 #include "../Requests/message_request.h"
@@ -17,6 +18,7 @@
 #include <boost/foreach.hpp>
 
 class RobotIdentifier;
+class MessageIdentifier;
 class Identifier;
 class TimePoint;
 
@@ -53,7 +55,8 @@ bool MessageRequestHandler::handle_request_reliable(
 
 	if(edge_exists){
 		// put message in queue
-		rd_receiver.push_back_message(m);
+		rd_receiver.push_back_message(boost::dynamic_pointer_cast<MessageIdentifier>(m->id()));
+		world_information->add_message(m);
 		return true;
 	} else {
 		return false;

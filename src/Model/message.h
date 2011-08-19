@@ -16,10 +16,9 @@ class RobotIdentifier;
 
 class Message : public WorldObject {
 public:
-	Message(boost::shared_ptr<Identifier> id,
-	        boost::shared_ptr<Vector3d> position,
-	        boost::shared_ptr<RobotIdentifier> sender,
-	        boost::shared_ptr<RobotIdentifier> receiver) : WorldObject(id, position), sender_(sender), receiver_(receiver)
+	Message(boost::shared_ptr<RobotIdentifier> sender,
+	        boost::shared_ptr<RobotIdentifier> receiver)
+	: WorldObject(boost::shared_ptr<Identifier>(new EdgeIdentifier()), boost::shared_ptr<Vector3d>(new Vector3d())), sender_(sender), receiver_(receiver)
 	{
 		;
 	}

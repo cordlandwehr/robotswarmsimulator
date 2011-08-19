@@ -17,6 +17,7 @@ class Identifier;
 class MarkerIdentifier;
 class RobotIdentifier;
 class EdgeIdentifier;
+class MessageIdentifier;
 class WorldObject;
 class RobotData;
 class Obstacle;

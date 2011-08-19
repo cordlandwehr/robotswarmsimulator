@@ -89,9 +89,10 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	const RobotData& rd_c = history->get_newest().world_information().get_according_robot_data(robot_c->id());
 
 	BOOST_CHECK_EQUAL(rd_a.get_number_of_messages(), 1);
-	BOOST_CHECK_EQUAL(rd_a.get_message()->id(), message_ba_id);
+	BOOST_CHECK_EQUAL(rd_a.get_message(0), message_ba_id);
 	BOOST_CHECK_EQUAL(rd_b.get_number_of_messages(), 0);
 	BOOST_CHECK_EQUAL(rd_c.get_number_of_messages(), 1);
-	BOOST_CHECK_EQUAL(rd_c.get_message()->id(), message_bc_id);
+	BOOST_CHECK_EQUAL(rd_c.get_message(0), message_bc_id);
 	BOOST_CHECK_EQUAL(rd_c.last_request_successful(), false);
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().messages().size(), 2);
 }

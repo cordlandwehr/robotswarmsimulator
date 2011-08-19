@@ -2,6 +2,7 @@
 #include "identifier.h"
 #include "marker_identifier.h"
 #include "robot_identifier.h"
+#include "message_identifier.h"
 #include "world_object.h"
 #include "robot_data.h"
 #include "obstacle.h"
@@ -53,6 +54,10 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 
 	for(std::map<size_t, boost::shared_ptr<Edge> >::const_iterator it = rhs.edges_.begin(); it != rhs.edges_.end(); it++){
 		this->edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(it->first, boost::static_pointer_cast<Edge>(it->second->clone())));
+	}
+
+	for(std::map<size_t, boost::shared_ptr<Message> >::const_iterator it = rhs.messages_.begin(); it != rhs.messages_.end(); it++){
+		this->messages_.insert(std::pair<std::size_t, boost::shared_ptr<Message> >(it->first, boost::static_pointer_cast<Message>(it->second->clone())));
 	}
 }
 
@@ -136,7 +141,7 @@ std::map<std::size_t, boost::shared_ptr<Message> >& WorldInformation::messages()
 	return messages_;
 }
 
-void WorldInformation::add_message(boost::shared_ptr<Edge> new_message) {
+void WorldInformation::add_message(boost::shared_ptr<Message> new_message) {
 	messages_.insert(std::pair<std::size_t, boost::shared_ptr<Message> >(new_message->id()->id(), new_message));
 }
 
@@ -144,7 +149,7 @@ void WorldInformation::set_message_data(std::map<std::size_t, boost::shared_ptr<
 	messages_ = new_messages;
 }
 
-bool WorldInformation::remove_message(boost::shared_ptr<Edge> message){
+bool WorldInformation::remove_message(boost::shared_ptr<Message> message){
 	return messages_.erase(message->id()->id());
 }
 
