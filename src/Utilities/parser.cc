@@ -173,14 +173,14 @@ void Parser::init_variables(map<string,string> variables_and_values) {
     
     using boost::filesystem::path;
 
-	for(int i = 0; i < temp_split_world_modifiers.size(); i++){
+	for(std::size_t i = 0; i < temp_split_world_modifiers.size(); i++){
 		std::string temp_string = temp_split_world_modifiers[i]; //TODO: Is there a memory leak?
 		boost::trim(temp_string);
         
         if (temp_string.rfind(".lua") == temp_string.size()-4) {
             // robot file is located relatively to main project file
             path modifier_file = path(project_filename_).parent_path() / robot_filename_;
-            temp_string = (modifier_file.parent_path() / temp_string).file_string();
+            temp_string = (modifier_file.parent_path() / temp_string).string();
         }
         
 		world_modifiers_.push_back(temp_string);

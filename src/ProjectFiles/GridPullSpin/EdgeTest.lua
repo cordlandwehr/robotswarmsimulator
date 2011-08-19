@@ -12,30 +12,32 @@ function print_edges()
     end
   end
   
-  output = "Edge overview:\nDirected edges: #%d\nUndirected edges: #%d\nAll edges: #%d\n\nWith keys: #%d\n"
-  print(output:format(#directed_edges, #undirected_edges, #edges, counter))
+  log("debug", "[EdgeTest.lua] Edge overview:")
+  log("debug", "[EdgeTest.lua] Directed edges: #" .. #directed_edges)
+  log("debug", "[EdgeTest.lua] Undirected edges: #" .. #undirected_edges)
+  log("debug", "[EdgeTest.lua] #" .. counter .. " of #" .. #edges .. " edges have keys.")
 end
 
 function main()
   -- say who I am ;-)
-  print("\nEdgeTest.lua:\n")
+  log("debug", "Running EdgeTest.lua ...")
   
   bots = WorldInformation.get_robots()
   edges = WorldInformation.get_edges("all")
   
   if #edges > 0 then
-    print("There are edges... \n")
+    log("debug", "[EdgeTest.lua] Detected edges...")
     print_edges()
-    print("...attempting removal\n")
+    log("debug", "[EdgeTest.lua] ...attempting removal.")
     for i = 1, #edges do
       id = edges[i]
       WorldInformation.remove_edge(id)
     end
     print_edges()
   else
-    print("There are no edges...\n")
+    log("debug", "[EdgeTest.lua] Detected NO edges...")
     print_edges()
-    print("...creating list (using different edge types).\n")
+    log("debug", "[EdgeTest.lua] ...creating list (using different edge types).")
     for i = 1, (#bots-1) do
       ida = bots[i]
       idb = bots[i+1]
@@ -45,11 +47,11 @@ function main()
 	WorldInformation.add_edge(ida, idb, "undirected")
       elseif (i % 4 == 2) then
 	marker = MarkerInformation()
-	--marker:add_data("test_key", 23)
+	marker:add_data("test_key", "muh")
 	WorldInformation.add_edge(ida, idb, marker, "directed")
       else
 	marker = MarkerInformation()
-	--marker:add_data("test_key", 42)
+	marker:add_data("test_key", 42)
 	WorldInformation.add_edge(ida, idb, marker, "undirected")
       end
     end

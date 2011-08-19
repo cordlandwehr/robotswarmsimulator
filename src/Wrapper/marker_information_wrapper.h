@@ -8,6 +8,8 @@
 #ifndef MARKER_INFORMATION_WRAPPER_H_
 #define MARKER_INFORMATION_WRAPPER_H_
 
+#include <boost/shared_ptr.hpp>
+
 #include <string>
 #include <vector>
 #include <luabind/object.hpp>
@@ -25,9 +27,12 @@ namespace LuaWrapper {
 	const std::vector<std::string> get_keys();
 	void remove_data(const std::string& var_name);
         const MarkerInformation& marker_information() const;
-        
+        static void set_lua_state(boost::shared_ptr<lua_State> state);
+	
     private:
         MarkerInformation marker_information_;
+	static boost::shared_ptr<lua_State> lua_state_;
+	
     };
 }
 

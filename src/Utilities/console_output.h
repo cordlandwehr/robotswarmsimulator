@@ -58,7 +58,8 @@ public:
 		Parser,
 		Kernel,
 		View,
-		ComputationalGeometry
+		ComputationalGeometry,
+		Lua
 	};
 
 	enum Level {

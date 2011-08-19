@@ -102,6 +102,7 @@ std::string ConsoleOutput::get_prefix(Module talking_module) {
 	case Parser: prefix = "[PARSER] "; break;
 	case Kernel: prefix = "[KERNEL] "; break;
 	case View: prefix = "[VIEW] "; break;
+	case Lua: prefix = "[LUA] "; break;
 	default : prefix = ""; break;
 	}
 	return prefix;

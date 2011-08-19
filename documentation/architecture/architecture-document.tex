@@ -1,0 +1,187 @@
+\documentclass[a4paper,10pt]{book}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{ae,aecompl}
+    
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+\makeindex             % used for the subject index
+                       % please use the style sprmidx.sty with
+                       % your makeindex program
+
+%packages
+\usepackage[all,arc,curve,color,frame]{xy}
+\usepackage{amsmath, amssymb, amsxtra, ulsy}
+\usepackage{algpseudocode}		% For Pseudocode
+\usepackage{algorithmicx}
+\usepackage[ruled]{algorithm}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{pdflscape} % for landscape
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\definecolor{SourceGrau}{gray}{0.95}
+\usepackage{subfig}
+\usepackage{enumerate}
+\usepackage{xspace}
+\usepackage{rotating}
+\usepackage{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GLOBAL NEWCOMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcommand{\RSSshort}{{\sf RSS}\xspace}
+\newcommand{\RSS}{{\sf RobotSwarmSimulator}\xspace}
+
+
+% provides a nicer ''C++''
+\makeatletter
+\DeclareRobustCommand{\Cpp}
+{\valign{\vfil\hbox{##}\vfil\cr
+   \textsf{C\kern-.0em}\cr
+   \textsf{++}\cr}\xspace%
+}
+\makeatother
+
+\newcommand{\Lua}{{\sf Lua}\xspace}
+
+% Needed for using hyperref and referencing algorithms
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Robot Operations
+\newcommand{\LCM}{{\sf LCM}\xspace}
+\newcommand{\UM}{{\sf UM}\xspace}
+\newcommand{\LCMp}{{\sf LCM\textsuperscript{+}}\xspace}
+\newcommand{\UMp}{{\sf UM\textsuperscript{+}}\xspace}
+\newcommand{\LCMmin}{{\sf LCM\textsuperscript{min}}\xspace} %TODO maybe set it to sub
+
+\newcommand{\Look}{{\sf Look}\xspace}
+\newcommand{\Compute}{{\sf Compute}\xspace}
+\newcommand{\Move}{{\sf Move}\xspace}
+\newcommand{\Update}{{\sf Update}\xspace}
+\newcommand{\HandleRequests}{{\sf HandleRequests}\xspace}
+
+% Compass-models
+\newcommand{\Invaffin}{{\sf Invaffin}\xspace}
+\newcommand{\NoCompass}{{\sf No Compass}\xspace}
+\newcommand{\FullCompass}{{\sf Full Compass}\xspace}
+\newcommand{\HalfCompass}{{\sf Half Compass}\xspace}
+\newcommand{\DirectionsOnly}{{\sf Directions Only}\xspace}
+
+% time models
+\newcommand{\synchronousTM}{{\sf synchronous}\xspace}
+\newcommand{\asynchronousTM}{{\sf asynchronous}\xspace}
+\newcommand{\semisynchronousTM}{{\sf semi-synchronous}\xspace}
+\newcommand{\atomicsemisynchronousTM}{{\sf atomic semi-synchronous}\xspace}
+
+% THEOREM ENVIRONMENTS
+% already provided:
+% * theorem
+% * corollary
+% * fact
+% * lemma
+% * definition
+% * assumption
+% * claim
+% * proof
+% * design question
+% * resolution
+% * design todo
+% * \qed (for ending proof)
+\newtheorem{fact}{Fact}
+\newtheorem{consequence}{Consequence}
+\newtheorem{assumption}{Assumption}
+\newtheorem{designQuestion}{Design Question}
+\newtheorem{resolution}{Resolution}
+\newtheorem{designTodo}{Design TODO}
+
+% Notations for documention implementation details
+\newcommand{\swsim}{\textsc{Swarm--Simulator}\xspace}
+
+\newcommand{\module}[1]{\textsc{#1}}
+\newcommand{\class}[1]{\texttt{#1}}
+\newcommand{\attribute}[1]{\texttt{#1}}
+\newcommand{\method}[1]{\texttt{#1}}
+
+\newcommand{\abstrClass}[1]{\textnormal{$\langle$\class{#1}$\rangle$}}
+\newcommand{\listCnt}[1]{\textnormal{List$\langle$\class{#1}$\rangle$}}
+\newcommand{\setCnt}[1]{\textnormal{Set$\langle$\class{#1}$\rangle$}}
+
+
+\lstset{
+	basicstyle=\small\ttfamily,						% kleine Schrift, Typewriter
+%	basicstyle=\scriptsize\ttfamily,
+	numbers=left,													% Zeilennummern auf der linken Seite
+	tabsize=2,														% Tabs brauchen 2 Leerzeichen
+	numberstyle=\tiny,										% Zeilennummern sind winzig
+	frame=single,													% einfacher Rahmen um den Code
+	aboveskip=1em,												% Abstand zwischen Code(rahmen) und dem Text darüber
+	breaklines=true,											% Überlange Zeilen werden umgebrochen
+	breakautoindent=true, 								% Bei Zeilenumbruch einrücken
+	breakindent=2em,
+	lineskip=-0.1em,  										% definiert den Zeilenabstand
+	showstringspaces=false,								% keine Leerzeichen in Strings anzeigen
+	extendedchars=true, 									% Erweiterte Symbole
+	keywordstyle=\color{Maroon},					% ein bischen bunt kann nicht schaden
+  commentstyle=\color{Blue}, 
+  stringstyle=\color{Green},
+  backgroundcolor=\color{SourceGrau},
+  columns=flexible,											% Zeichen stehen enger beieinander
+  xleftmargin=1cm,											% Rand nach links
+  xrightmargin=1cm											% Rand nach rechts
+}
+
+
+
+
+% Title Page
+\title{\centering \Large Architecture Document\\[1cm] \Huge The RobotSwarmSimulator}
+\author{Participants of the project group "`Schlaue Schwärme"\\ University of Paderborn, 2008--2009}
+
+
+\begin{document}
+	\frontmatter
+	\maketitle
+
+
+	\chapter*{About this Document}
+	This document gives a basic overview over the design and implementation of the \RSS. We aim to give some insight into why we made specific design choices and how the \RSS was developed. In addition we include a reference over the most important classes and interfaces in the \RSS.
+
+	\section*{License}
+
+	\begin{verbatim}
+	Copyright (C)  2009  Alexander Klaas
+	Copyright (C)  2009  Andreas Cord-Landwehr
+	Copyright (C)  2009  Christoph Raupach
+	Copyright (C)  2009  Christoph Weddemann
+	Copyright (C)  2009  Daniel Warner
+	Copyright (C)  2009  Daniel Wonisch
+	Copyright (C)  2009  Kamil Swierkot
+	Copyright (C)  2009  Marcus Märtens
+	Copyright (C)  2009  Martina Hüllmann
+	Copyright (C)  2009  Peter Kling
+	Copyright (C)  2009  Sven Kurras
+
+	Permission is granted to copy, distribute and/or modify this document
+	under the terms of the GNU Free Documentation License, Version 1.3
+	or any later version published by the Free Software Foundation;
+	with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+	A copy of the license is included in the section entitled "GNU
+	Free Documentation License". 
+	\end{verbatim}
+
+	\tableofcontents
+
+	\mainmatter
+	\input{chapter_whatitis.tex}
+	\input{chapter_reference.tex}
+	\input{bibliography.tex}
+
+\end{document}          
