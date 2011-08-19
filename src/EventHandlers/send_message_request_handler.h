@@ -1,5 +1,5 @@
 /*
- * message_request_handler.h
+ * send_message_request_handler.h
  *
  *  Created on: 22.07.2011
  *      Author: Jonas
@@ -7,21 +7,21 @@
  *  TODO: add message_request_handler.cc
  */
 
-#ifndef MESSAGE_REQUEST_HANDLER_H_
-#define MESSAGE_REQUEST_HANDLER_H_
+#ifndef SEND_MESSAGE_REQUEST_HANDLER_H_
+#define SEND_MESSAGE_REQUEST_HANDLER_H_
 
 #include "../EventHandlers/request_handler.h"
 
 /**
  * \brief Handles MarkerChangeRequests by changing the specified marker as requested.
  */
-class MessageRequestHandler : public RequestHandler {
+class SendMessageRequestHandler : public RequestHandler {
 public:
-		MessageRequestHandler(unsigned int seed, double discard_probability,
+		SendMessageRequestHandler(unsigned int seed, double discard_probability,
 	                          const History& history)
 	: RequestHandler(seed, discard_probability, history) { }
 
-	virtual ~MessageRequestHandler() { }
+	virtual ~SendMessageRequestHandler() { }
 
 protected:
 	/**

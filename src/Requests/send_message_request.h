@@ -1,20 +1,20 @@
 /*
- * message_request.h
+ * send_message_request.h
  *
  *  Created on: 22.07.2011
  *      Author: Jonas
  */
 
-#ifndef MESSAGE_REQUEST_H_
-#define MESSAGE_REQUEST_H_
+#ifndef SEND_MESSAGE_REQUEST_H_
+#define SEND_MESSAGE_REQUEST_H_
 
 #include "request.h"
 #include "../Model/message.h"
 
 
-class MessageRequest : public Request {
+class SendMessageRequest : public Request {
 public:
-	MessageRequest(Robot & robot, boost::shared_ptr<Message> m) :
+	SendMessageRequest(Robot & robot, boost::shared_ptr<Message> m) :
 	    Request(robot),
 	    requested_message_(m) {}
 
@@ -25,4 +25,4 @@ private:
 };
 
 
-#endif /* MESSAGE_REQUEST_H_ */
+#endif /* SEND_MESSAGE_REQUEST_H_ */

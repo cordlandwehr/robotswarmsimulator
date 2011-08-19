@@ -113,9 +113,6 @@ const Obstacle& View::resolve_obstacle_ref(ObstacleRef obstacle) const {
 const RobotData& View::resolve_robot_ref(RobotRef robot) const {
 	return *(world_information().robot_data())[robot->id()];
 }
-RobotData& View::resolve_robot_ref_non_const(RobotRef robot) {
-	return *(world_information().robot_data())[robot->id()];
-}
 const WorldObject& View::resolve_marker_ref(MarkerRef marker) const {
 	return *(world_information().markers())[marker->id()];
 }
@@ -191,8 +188,8 @@ const std::vector<View::EdgeRef> View::get_visible_edges(const Robot& caller) co
 	return result;
 }
 
-const boost::shared_ptr<Message> View::get_message(const Robot& caller) {
-	return get_message(resolve_robot_ref_non_const(caller.id()));
+const boost::shared_ptr<MessageIdentifier> View::get_message(const Robot& caller, std::size_t index) const {
+	return get_message(resolve_robot_ref(caller.id()), index);
 }
 
 const std::size_t View::get_number_of_messages(const Robot& caller) const {
@@ -288,7 +285,7 @@ std::vector<View::EdgeRef> View::get_visible_edges(const RobotData& robot) const
 	throw UnsupportedOperationException(get_error_message("get_visible_edges"));
 }
 
-boost::shared_ptr<Message> View::get_message(const RobotData& robot) {
+boost::shared_ptr<MessageIdentifier> View::get_message(const RobotData& robot, std::size_t index) const {
 	throw UnsupportedOperationException(get_error_message("get_message"));
 }
 

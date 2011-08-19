@@ -29,3 +29,7 @@ boost::shared_ptr<RobotIdentifier> Message::sender() const {
 boost::shared_ptr<RobotIdentifier> Message::receiver() const {
 	return receiver_;
 }
+
+boost::shared_ptr<WorldObject> Message::clone() const {
+	return boost::shared_ptr<WorldObject>(new Message(*this));
+}

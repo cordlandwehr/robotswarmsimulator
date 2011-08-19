@@ -1,32 +1,34 @@
 /*
- * message_request_handler.cc
+ * send_message_request_handler.cc
  *
  *  Created on: 27.07.2011
  *      Author: Jonas
  */
 
-#include "message_request_handler.h"
+#include "send_message_request_handler.h"
 
 #include "../Model/identifier.h"
 #include "../Model/robot_identifier.h"
+#include "../Model/message_identifier.h"
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
-#include "../Requests/message_request.h"
+#include "../Requests/send_message_request.h"
 #include "../SimulationControl/time_point.h"
 
 #include <boost/foreach.hpp>
 
 class RobotIdentifier;
+class MessageIdentifier;
 class Identifier;
 class TimePoint;
 
 
-bool MessageRequestHandler::handle_request_reliable(
+bool SendMessageRequestHandler::handle_request_reliable(
     boost::shared_ptr<WorldInformation> world_information,
     boost::shared_ptr<const Request> request) {
 
-	boost::shared_ptr<const MessageRequest> message_request =
-		    boost::dynamic_pointer_cast<const MessageRequest>(request);
+	boost::shared_ptr<const SendMessageRequest> message_request =
+		    boost::dynamic_pointer_cast<const SendMessageRequest>(request);
 
 	boost::shared_ptr<Message> m = message_request->requested_message();
 
@@ -53,7 +55,8 @@ bool MessageRequestHandler::handle_request_reliable(
 
 	if(edge_exists){
 		// put message in queue
-		rd_receiver.push_back_message(m);
+		rd_receiver.push_back_message(boost::dynamic_pointer_cast<MessageIdentifier>(m->id()));
+		world_information->add_message(m);
 		return true;
 	} else {
 		return false;

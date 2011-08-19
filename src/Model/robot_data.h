@@ -64,7 +64,8 @@ enum RobotType { MASTER, SLAVE, kRobotTypeCount };
 class Robot;
 class MarkerInformation;
 class View;
-class Message;
+class MessageIdentifier;
+
 class RobotData : public WorldObject{
 public:
 	RobotData(boost::shared_ptr<Identifier> id,
@@ -202,22 +203,23 @@ public:
 	/**
 	 * Adds message so end of message queue
 	 */
-	void push_back_message(boost::shared_ptr<Message> m) {
-		messages_.push_back(m);
+	void push_back_message(boost::shared_ptr<MessageIdentifier> id) {
+		messages_.push_back(id);
 	}
 
 	/**
-	 * Returns first message from queue
+	 * Returns message from queue at position of index
 	 */
-	boost::shared_ptr<Message> get_message() const {
+	boost::shared_ptr<MessageIdentifier> get_message(std::size_t index) const {
 		return messages_.front();
 	}
 
 	/**
-	 * Removes first message from queue
+	 * Removes message from queue at position of index
 	 */
-	void pop_front_message() {
-		messages_.pop_front();
+	void remove_message(std::size_t index) {
+		assert(messages_.size() >= index);
+		messages_.erase(messages_.begin()+index);
 	}
 
 	/**
@@ -273,7 +275,7 @@ private:
 	unsigned short int color_;
 
 	std::vector<boost::shared_ptr<EdgeIdentifier> > edges_;
-	std::deque<boost::shared_ptr<Message> > messages_;
+	std::deque<boost::shared_ptr<MessageIdentifier> > messages_;
 };
 
 #endif /* ROBOT_DATA_H_ */
