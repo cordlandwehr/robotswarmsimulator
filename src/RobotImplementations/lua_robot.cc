@@ -50,12 +50,8 @@
 #include "../Model/box_identifier.h"
 #include "../Model/sphere_identifier.h"
 #include "../Model/marker_information.h"
-#include "../Requests/acceleration_request.h"
 #include "../Requests/marker_request.h"
 #include "../Requests/position_request.h"
-#include "../Requests/type_change_request.h"
-#include "../Requests/velocity_request.h"
-#include "../Requests/color_change_request.h"
 #include "../Views/view.h"
 #include "../Wrapper/lua_distribution_generator.h"
 #include "../Wrapper/coordinate_system_wrapper.h"
@@ -319,11 +315,6 @@ namespace {
 	 * @param Requested acceleration vector
 	 */
 
-	void add_acceleration_request(LuaWrapper::Vector3dWrapper requested_vector) {
-		boost::shared_ptr<Vector3d> new_acc(new Vector3d(transform(requested_vector)));
-		requests.insert(boost::shared_ptr<Request>(new AccelerationRequest(*robot, new_acc)));
-	}
-
 	/**
 	 * Adds a PositionRequest which is send to the simulation as return value of
 	 * the compute method.
@@ -336,17 +327,6 @@ namespace {
 	}
 
 	/**
-	 * Adds a VelocityRequest which is send to the simulation as return value of
-	 * the compute method.
-	 * @param Requested velocity vector
-	 */
-
-	void add_velocity_request(LuaWrapper::Vector3dWrapper requested_vector) {
-		boost::shared_ptr<Vector3d> new_vel(new Vector3d(transform(requested_vector)));
-		requests.insert(boost::shared_ptr<Request>(new VelocityRequest(*robot, new_vel)));
-	}
-
-	/**
 	 * Adds a MarkerRequest which is send to the simulation as return value of
 	 * the compute method.
 	 * @param Requested MarkerInformation
@@ -355,20 +335,6 @@ namespace {
 	void add_marker_request(LuaWrapper::MarkerInformationWrapper marker) {
 		boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(transform(marker)));
 		requests.insert(boost::shared_ptr<Request>(new MarkerRequest(*robot, new_marker)));
-	}
-
-	/**
-	 * Adds a TypeChangeRequest which is send to the simulation as return value of
-	 * the compute method.
-	 * @param Requested RobotType
-	 */
-
-	void add_type_change_request(unsigned type) {
-		requests.insert(boost::shared_ptr<Request>(new TypeChangeRequest(*robot, static_cast<RobotType>(type))));
-	}
-
-	void add_color_change_request(unsigned short int color){
-		requests.insert(boost::shared_ptr<Request>(new ColorChangeRequest(*robot,color)));
 	}
 
 	/**
@@ -496,12 +462,8 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("get_time", &get_time),
 			 luabind::def("is_sphere_identifier", &is_sphere_identifier),
 			 luabind::def("is_box_identifier", &is_box_identifier),
-			 luabind::def("add_acceleration_request", &add_acceleration_request),
 			 luabind::def("add_position_request", &add_position_request),
-			 luabind::def("add_velocity_request", &add_velocity_request),
-			 luabind::def("add_type_change_request", &add_type_change_request),
 			 luabind::def("add_marker_request", &add_marker_request),
-			 luabind::def("add_color_change_request", &add_color_change_request),
 			 luabind::def("get_own_identifier", &get_own_identifier)
 	    ],
 
@@ -525,12 +487,8 @@ void LuaRobot::register_lua_methods() {
 		luabind::def("get_time", &get_time),
 		luabind::def("is_sphere_identifier", &is_sphere_identifier),
 		luabind::def("is_box_identifier", &is_box_identifier),
-		luabind::def("add_acceleration_request", &add_acceleration_request),
 		luabind::def("add_position_request", &add_position_request),
-		luabind::def("add_velocity_request", &add_velocity_request),
-		luabind::def("add_type_change_request", &add_type_change_request),
 		luabind::def("add_marker_request", &add_marker_request),
-		luabind::def("add_color_change_request", &add_color_change_request),
 		luabind::def("get_own_identifier", &get_own_identifier),
 
 		// some functions to access global number generator from lua.

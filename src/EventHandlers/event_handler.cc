@@ -48,14 +48,9 @@
 #include "../Events/look_event.h"
 #include "../Events/world_modifier_event.h"
 
-#include "../Requests/acceleration_request.h"
 #include "../Requests/marker_request.h"
 #include "../Requests/position_request.h"
 #include "../Requests/request.h"
-#include "../Requests/type_change_request.h"
-#include "../Requests/velocity_request.h"
-#include "../Requests/marker_change_request.h"
-#include "../Requests/color_change_request.h"
 #include "../Requests/send_message_request.h"
 #include "../Requests/remove_message_request.h"
 #include "../Requests/insert_edge_request.h"
@@ -165,16 +160,6 @@ shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(
 			} else {
 				std::cerr << "No Position Request Handler Set" << std::endl;
 			}
-		} else if(shared_ptr<const AccelerationRequest> acceleration_request =
-		          boost::dynamic_pointer_cast<const AccelerationRequest> (request)) {
-			if(acceleration_request_handler_) {
-				handled_as_expected =
-				    acceleration_request_handler_->handle_request(
-				        new_world_information,
-				        acceleration_request);
-			} else {
-				std::cerr << "No Acceleration Request Handler Set" << std::endl;
-			}
 		} else if(shared_ptr<const MarkerRequest> marker_request =
 		          boost::dynamic_pointer_cast<const MarkerRequest> (request)) {
 			if(marker_request_handler_) {
@@ -184,47 +169,6 @@ shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(
 				        marker_request);
 			} else {
 				std::cerr << "No Marker Request Handler Set" << std::endl;
-			}
-		} else if(shared_ptr<const TypeChangeRequest> type_change_request =
-		          boost::dynamic_pointer_cast<const TypeChangeRequest>(request)) {
-			if(type_change_request_handler_) {
-				handled_as_expected =
-				    type_change_request_handler_->handle_request(
-				        new_world_information,
-				        type_change_request);
-			} else {
-				std::cerr << "No Type Change Request Handler Set" << std::endl;
-			}
-		} else if(shared_ptr<const VelocityRequest> velocity_request =
-		          boost::dynamic_pointer_cast<const VelocityRequest> (request)) {
-			if(velocity_request_handler_) {
-				handled_as_expected =
-				    velocity_request_handler_->handle_request(
-				        new_world_information,
-				        velocity_request);
-			} else {
-				std::cerr << "No Velocity Request Handler Set" << std::endl;
-			}
-		} else if(shared_ptr<const MarkerChangeRequest> marker_change_request =
-		          boost::dynamic_pointer_cast<const MarkerChangeRequest> (request)) {
-			if (marker_change_request_handler_) {
-				handled_as_expected =
-				    marker_change_request_handler_->handle_request(
-				        new_world_information,
-				        marker_change_request);
-			} else {
-				std::cerr << "No Marker Change Request Handler Set" << std::endl;
-			}
-
-		} else if(shared_ptr<const ColorChangeRequest> color_change_request =
-				 boost::dynamic_pointer_cast<const ColorChangeRequest>(request)) {
-			if(color_change_request_handler_) {
-				handled_as_expected =
-				    color_change_request_handler_->handle_request(
-				        new_world_information,
-				        color_change_request);
-			} else {
-				std::cerr << "No Color Change Request Handler Set" << std::endl;
 			}
 		} else if(shared_ptr<const SendMessageRequest> send_message_request =
 				 boost::dynamic_pointer_cast<const SendMessageRequest>(request)) {

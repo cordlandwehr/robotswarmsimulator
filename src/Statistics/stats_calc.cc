@@ -41,10 +41,6 @@ StatsCalc::~StatsCalc() {
 
 }
 
-void StatsCalc::init(StatsConfig* stats_cfg) {
-	this->stats_cfg_ = stats_cfg;
-}
-
 void StatsCalc::calculate(const StatsCalcInData & data,
 		const boost::shared_ptr<StatsOut> & stats_out) {
 
