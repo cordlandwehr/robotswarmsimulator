@@ -207,6 +207,20 @@ WorldInformationWrapper::get_time ()
   return world_information_->time();
 }
 
+bool
+WorldInformationWrapper::is_directed(std::size_t id) {
+  // check the given ID
+  check_mapping(edge_identifiers_, id);
+  // look up edge and try cast
+  boost::shared_ptr<Edge> edge = world_information_->get_according_edge(edge_identifiers_[id]);
+  return boost::dynamic_pointer_cast<DirectedEdge>(edge);
+}
+
+bool
+WorldInformationWrapper::is_undirected(std::size_t id) {
+  return !is_directed(id);
+}
+
 void
 WorldInformationWrapper::remove_edge(std::size_t id) {
   // check the given ID

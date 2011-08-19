@@ -140,6 +140,22 @@ public:
   static int get_time();
   
   /**
+   * Checks whether an edge is directed.
+   * 
+   * \param id 		Id of the edge to be checked.
+   * \returns		Boolean (true = edge is directed).
+   */
+  static bool is_directed(std::size_t);
+  
+   /**
+   * Checks whether an edge is undirected.
+   * 
+   * \param id 		Id of the edge to be checked.
+   * \returns		Boolean (true = edge is undirected).
+   */
+  static bool is_undirected(std::size_t);
+  
+  /**
    * Removes a given edge.
    * 
    * The removal is executed immediately. No Request is generated.

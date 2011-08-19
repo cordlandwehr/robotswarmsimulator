@@ -120,6 +120,8 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
 	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
 	luabind::def("get_time", &WorldInformationWrapper::get_time),
+	luabind::def("is_directed", &WorldInformationWrapper::is_directed),
+	luabind::def("is_undirected", &WorldInformationWrapper::is_undirected),
 	luabind::def("remove_edge", &WorldInformationWrapper::remove_edge),
 	luabind::def("set_edge_information", &WorldInformationWrapper::set_edge_information),
 	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information)
