@@ -46,7 +46,6 @@
 #include "../Model/robot_data.h"
 #include "../Model/robot.h"
 #include "../Model/robot_identifier.h"
-#include "../Model/obstacle_identifier.h"
 #include "../Model/box_identifier.h"
 #include "../Model/sphere_identifier.h"
 #include "../Model/marker_identifier.h"
@@ -136,7 +135,7 @@ void SimulationKernel::init(const string& project_filename,
 		// workaround for visibility-graph in --dry-mode:
 		// create and register always a statistics object,
 		// but here we do not initialize it => no output
-		stats_.reset(new StatsControl());
+		//stats_.reset(new StatsControl()); //TODO changed by asetzer on August 19th (should work anyway)
 	}
 
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
@@ -234,105 +233,6 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 }
 
-void SimulationKernel::create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information) {
-
-	//some temporary variables
-	boost::shared_ptr<BoxIdentifier> tmp_box_identifier;
-	boost::shared_ptr<SphereIdentifier> tmp_sphere_identifier;
-	boost::shared_ptr<MarkerIdentifier> tmp_marker_identifier;
-
-	boost::shared_ptr<Sphere> tmp_sphere;
-	boost::shared_ptr<Box> tmp_box;
-	boost::shared_ptr<WorldObject> tmp_marker;
-
-	boost::shared_ptr<Vector3d> tmp_pos;
-	boost::shared_ptr<MarkerInformation> tmp_marker_information;
-
-	std::vector<boost::shared_ptr<Obstacle> > obstacles_vector;
-	std::vector<boost::shared_ptr<WorldObject> > markers_vector;
-
-	//get initial obstacle information read from input file
-	std::vector<string> obstacle_types = parser->obstacle_types();
-	std::vector<Vector3d> obstacle_positions = parser->obstacle_positions();
-	std::vector<string> obstacle_marker_information = parser->obstacle_marker_information();
-	std::vector<double> obstacle_radius = parser->obstacle_radius();
-	std::vector<Vector3d> obstacle_size = parser->obstacle_size();
-
-	//count number of markers
-	unsigned num_of_marker = 0;
-	unsigned num_of_obstacles = 0;
-
-	obstacles_vector.reserve(obstacle_types.size());
-	markers_vector.reserve(obstacle_types.size());
-
-	//iterate through all obstacles
-	for(unsigned i=0; i<obstacle_types.size(); ++i) {
-
-		//get position
-		tmp_pos.reset(new Vector3d());
-		tmp_pos->insert_element(kXCoord, obstacle_positions[i](0));
-		tmp_pos->insert_element(kYCoord, obstacle_positions[i](1));
-		tmp_pos->insert_element(kZCoord, obstacle_positions[i](2));
-
-		//get marker information
-		tmp_marker_information.reset(new MarkerInformation());
-		//TODO(martinah) Maybe adapt variable name "MarkerInfoFromInputFile"
-		tmp_marker_information->add_data("MarkerInfoFromInputFile", obstacle_marker_information[i]);
-
-		//get type of obstacle
-		if(!obstacle_types[i].compare("box")) {
-
-			//create according identifier
-			tmp_box_identifier.reset(new BoxIdentifier(num_of_obstacles++));
-
-			tmp_box.reset(new Box(
-					tmp_box_identifier,
-					tmp_pos,
-					tmp_marker_information,
-					obstacle_size[i](2),	//z-length = depth
-					obstacle_size[i](0),	//x-length = width
-					obstacle_size[i](1)		//y-length = height
-					));
-
-			//add obstacle to vector of obstacles
-			obstacles_vector.push_back(tmp_box);
-
-		} else if(!obstacle_types[i].compare("sphere")) {
-
-			//create according identifier
-			tmp_sphere_identifier.reset(new SphereIdentifier(num_of_obstacles++));
-
-			tmp_sphere.reset(new Sphere(
-					tmp_sphere_identifier,
-					tmp_pos,
-					tmp_marker_information,
-					obstacle_radius[i]
-					));
-
-			//add obstacle to vector of obstacles
-			obstacles_vector.push_back(tmp_sphere);
-
-		} else if(!obstacle_types[i].compare("marker")) {
-
-			//create according identifier
-			tmp_marker_identifier.reset(new MarkerIdentifier(num_of_marker++));
-
-			tmp_marker.reset(new WorldObject(
-						tmp_marker_identifier,
-						tmp_pos,
-						tmp_marker_information
-						));
-
-			//add marker to vector of markers
-			markers_vector.push_back(tmp_marker);
-
-
-		}
-	}
-	//add vector of obstacles to the world information
-	initial_world_information->set_obstacle_data(obstacles_vector);
-	initial_world_information->set_marker_data(markers_vector);
-}
 
 void SimulationKernel::create_world_modifiers(boost::shared_ptr<Parser> parser) {
 	boost::shared_ptr<WorldModifier> temp_world_modifier;
@@ -358,9 +258,6 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 
 	//create robots and add to initial world information
 	create_robots(parser, initial_world_information);
-
-	//create obstacles and marker and add to initial world information
-	create_obstacles_and_marker(parser, initial_world_information);
 
 	//create world modifiers and add to initial world information
 	create_world_modifiers(parser);
@@ -428,7 +325,6 @@ void SimulationKernel::dump_simulation() {
 	std::string dumpnumber = boost::lexical_cast<std::string>(parser_->dumpnumber());
 	parser_->set_project_filename(("dump_" + dumpnumber).c_str());
 	parser_->set_robot_filename(("dump_" + dumpnumber).c_str());
-	parser_->set_obstacle_filename(("dump_" + dumpnumber).c_str());
 	parser_->save_projectfiles(("dump_" + dumpnumber).c_str(), history_->get_newest().world_information());
 }
 

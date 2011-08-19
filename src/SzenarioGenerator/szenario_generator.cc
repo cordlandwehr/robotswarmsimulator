@@ -284,7 +284,6 @@ void ScenarioGenerator::add_play_acc_request_handler() {
 void ScenarioGenerator::write_to_file() {
 
 	// setup parser for writing with previously set values.
-	parser_->set_obstacle_filename(*obstacleFileName_);
 	parser_->set_robot_filename(*robotFileName_);
 
 	parser_->parameter_map()["PROJECT_NAME"] = *projectName_;

@@ -25,7 +25,7 @@
 
 /**
  * \class	SimulationKernel
- * \author	Martina Hüllmann
+ * \author	Martina Hüllmann, modified by Alexander Setzer
  * \brief	Class for reading and saving project files.
  *
  */
@@ -63,7 +63,6 @@ class Parser {
 	//test cases for loading project files
 	friend class LoadMainProjectFileTest;
 	friend class load_robot_file_1;
-	friend class load_obstacle_file_1;
 
 	//test cases for saving project files
 	friend class save_main_project_file_1;
@@ -85,12 +84,6 @@ public:
 	 * @param compass_model string
 	 */
 	void set_compass_model(const std::string& compass_model);
-
-	/**
-	 * Set-method for obstacle filename
-	 * @param obstacle_filename string
-	 */
-	void set_obstacle_filename(const std::string& obstacle_filename);
 
 	/**
 	 * Set-method for project_name
@@ -124,7 +117,7 @@ public:
 
 	/**
 	 * This method loads the data written in the given project files
-	 * (main project file, robot file, obstacle file)
+	 * (main project file, robot file)
 	 * and initializes the according variables.
 	 * \param Name of the main project file.
 	 */
@@ -132,7 +125,7 @@ public:
 
 	/**
 	 * This method saves the data to the predefined project files
-	 * (main project file, robot file, obstacle file)
+	 * (main project file, robot file)
 	 * \param Name of the main project file.
 	 */
 	void save_projectfiles(const std::string& project_filename, const WorldInformation& world_info);
@@ -198,31 +191,6 @@ public:
 	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& robot_coordinate_systems();
 
 	/**
-	 * \return reference to vector of Obstacle types.
-	 */
-	std::vector<std::string>& obstacle_types();
-
-	/**
-	 * \return reference to vector of Obstacle positions.
-	 */
-	std::vector<Vector3d>& obstacle_positions();
-
-	/**
-	 * \return reference to vector of Obstacle Marker information
-	 */
-	std::vector<std::string>& obstacle_marker_information();
-
-	/**
-	 * \return reference to vector of Obstacle radius.
-	 */
-	std::vector<double>& obstacle_radius();
-
-	/**
-	 * \return reference to vector of Obstacle size.
-	 */
-	std::vector<Vector3d>& obstacle_size();
-
-	/**
 	 * \return reference to vector of world modifier.
 	 */
 	std::vector<std::string>& world_modifiers();
@@ -244,7 +212,6 @@ private:
 	std::map<std::string, std::string> parameter_map_;
 
 	std::string robot_filename_;
-	std::string obstacle_filename_;
 	std::vector<std::string> world_modifiers_;
 	int dumpnumber_;
 
@@ -267,14 +234,6 @@ private:
 	std::vector<std::string> initiale_robot_colors_;
 	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d> > initiale_robot_coordinate_systems_;
 
-	////////////////////////////////////////////////////////
-	// OBSTACLE DATA
-	////////////////////////////////////////////////////////
-	std::vector<std::string> initiale_obstacle_types_;
-	std::vector<Vector3d> initiale_obstacle_positions_;
-	std::vector<std::string> initiale_obstacle_marker_information_;
-	std::vector<double> initiale_obstacle_radius_;
-	std::vector<Vector3d> initiale_obstacle_size_;
 
 
 	/**
@@ -288,7 +247,7 @@ private:
 	/**
 	 * This method loads the data written in the main project file
 	 * and initializes the following variables:
-	 * asg_, compass_model_, event_handler_, obstacle_filename_,
+	 * asg_, compass_model_, event_handler_,
 	 * project_name_, robot_filename_, statistics_module_
 	 * \param Name of the main project file.
 	 */
@@ -305,11 +264,6 @@ private:
 	 * This method loads the data written in the robot file.
 	 */
 	void load_robot_file();
-
-	/**
-	 * This method loads the data written in the obstacle file.
-	 */
-	void load_obstacle_file();
 
 	/**
 	 * This method loads an obstacle or a robot file.
@@ -375,13 +329,6 @@ private:
 	void init_robot_values_for_line(const std::string& line, int line_number);
 
 	/**
-	 * This methods reads the in the given line and initializes the according variables.
-	 * \param line Line containing information for one obstacle
-	 * \param line_number number of given line in file
-	 */
-	void init_obstacle_values_for_line(const std::string& line, int line_number);
-
-	/**
 	 * This methods returns the next value in the given line (beginning at given postion).
 	 * \param line 	Line with values
 	 * \param pos	Position from where to get next value
@@ -427,7 +374,8 @@ private:
 	 * \param Name of the main project file.
 	 */
 	void save_main_project_file(const std::string& project_filename);
-
+	
+	
 	/**
 	 * This method saves information about the robots.
 	 * \Param world_info needed to get the current sets of robots
@@ -441,25 +389,7 @@ private:
 	 */
 	std::string write_robot(boost::shared_ptr<RobotData> robot_data);
 
-	/**
-	 * This method saves information about the obstacles
-	 * Param world_info needed to get the current sets of obstacles
-	 */
-	void save_obstacle_file(const WorldInformation& world_info);
 
-	/**
-	 * This method constructs a line for the obstacle_file which describes
-	 * the current obstacle
-	 * \param Pointer to the obstacle
-	 */
-	std::string write_obstacle(boost::shared_ptr<Obstacle> current_obstacle);
-
-	/**
-	 * This method constructs a line for the obstacle_file which describes
-	 * the current marker
-	 * \param Pointer to the marker
-	 */
-	std::string write_marker(boost::shared_ptr<WorldObject> marker);
 };
 
 #endif /* PARSER_H_ */

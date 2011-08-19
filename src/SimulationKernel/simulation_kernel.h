@@ -26,7 +26,7 @@
 
 /**
  * \class	SimulationKernel
- * \author	Martina Hüllmann
+ * \author	Martina Hüllmann, modified by Alexander Setzer
  * \brief	The central module of the Swarm–Simulator. Manages the data
  * 			and the progress of the simulated world.
  *
@@ -72,7 +72,6 @@ class ActivationSequenceGenerator;
 class SimulationKernel {
 	friend class save_main_project_file_1;
 	friend class save_robot_file_1;
-	friend class write_obstacle_1;
 	friend class write_robot_1;
 	friend class simkernel_init;
 
@@ -249,11 +248,6 @@ private:
 	 * This method creates the robots using the information read from the robot input file.
 	 */
 	void create_robots(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
-
-	/**
-	 * This method creates the obstacles using the information read from the obstacles input file.
-	 */
-	void create_obstacles_and_marker(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
 
 	/**
 	 * This method creates the world modifiers using the information read from the project file.
