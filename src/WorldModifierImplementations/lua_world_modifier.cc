@@ -111,18 +111,17 @@ void LuaWorldModifier::register_lua_methods() {
     [
       luabind::namespace_("WorldInformation")
       [
-	//luabind::def("add_marker_request", &WorldInformationWrapper::add_marker_request),
 	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, MarkerInformationWrapper, const std::string&)) &WorldInformationWrapper::add_edge),
 	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, const std::string&)) &WorldInformationWrapper::add_edge),
-	luabind::def("get_adjacent_edges", &WorldInformationWrapper::get_adjacent_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_edge_anchors", &WorldInformationWrapper::get_edge_anchors),
 	luabind::def("get_edge_information", &WorldInformationWrapper::get_edge_information),
-	luabind::def("get_edges", &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
-	luabind::def("get_marker_information", &WorldInformationWrapper::get_marker_information),
-	luabind::def("get_markers", &WorldInformationWrapper::get_markers, luabind::copy_table(luabind::result)),
+	luabind::def("get_edges", (const std::vector<std::size_t>(*)(const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
+	luabind::def("get_edges", (const std::vector<std::size_t>(*)(std::size_t, const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
 	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
 	luabind::def("get_time", &WorldInformationWrapper::get_time),
+	luabind::def("is_directed", &WorldInformationWrapper::is_directed),
+	luabind::def("is_undirected", &WorldInformationWrapper::is_undirected),
 	luabind::def("remove_edge", &WorldInformationWrapper::remove_edge),
 	luabind::def("set_edge_information", &WorldInformationWrapper::set_edge_information),
 	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information)
