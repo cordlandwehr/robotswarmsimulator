@@ -113,10 +113,10 @@ void LuaWorldModifier::register_lua_methods() {
       [
 	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, MarkerInformationWrapper, const std::string&)) &WorldInformationWrapper::add_edge),
 	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, const std::string&)) &WorldInformationWrapper::add_edge),
-	luabind::def("get_adjacent_edges", &WorldInformationWrapper::get_adjacent_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_edge_anchors", &WorldInformationWrapper::get_edge_anchors),
 	luabind::def("get_edge_information", &WorldInformationWrapper::get_edge_information),
-	luabind::def("get_edges", &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
+	luabind::def("get_edges", (const std::vector<std::size_t>(*)(const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
+	luabind::def("get_edges", (const std::vector<std::size_t>(*)(std::size_t, const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
 	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
 	luabind::def("get_time", &WorldInformationWrapper::get_time),

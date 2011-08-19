@@ -28,6 +28,7 @@ WorldInformationWrapper::WorldInformationWrapper () {}
 boost::shared_ptr<WorldInformation> WorldInformationWrapper::world_information_;
 std::set< boost::shared_ptr<Request> > WorldInformationWrapper::request_set_;
 std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> > WorldInformationWrapper::edge_identifiers_;
+std::map< std::size_t, boost::shared_ptr<MessageIdentifier> > WorldInformationWrapper::message_identifiers_;
 std::map< std::size_t, boost::shared_ptr<RobotIdentifier> > WorldInformationWrapper::robot_identifiers_; 
 
 WorldInformationWrapper::~WorldInformationWrapper () {}
@@ -72,23 +73,6 @@ WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared
   if (it == map.end()) {
     throw std::invalid_argument("The given ID is unknown to the Lua Wrapper. Possible reasons: The ID does not exists. The ID has not been looked up before.");
   }
-}
-
-const std::vector<std::size_t> 
-WorldInformationWrapper::get_adjacent_edges(std::size_t id) {
-  // check given ID
-  check_mapping(robot_identifiers_, id);
-  // create separate vector for results, look up corresponsing robot
-  std::vector<std::size_t> result;
-  boost::shared_ptr<const RobotData> robot;
-  robot = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]);
-  // add integer representations of edge IDs to result vector, update mapping in the process
-  BOOST_FOREACH (boost::shared_ptr<EdgeIdentifier> edge_identifier, robot->get_edges()) {
-    std::size_t edge_id = edge_identifier->id();
-    edge_identifiers_[edge_id] = edge_identifier;
-    result.push_back(edge_id);
-  }
-  return result;
 }
 
 const std::pair<std::size_t, std::size_t>
@@ -138,6 +122,33 @@ WorldInformationWrapper::get_edges(const std::string &filter) {
     // update mapping and store integer id in result vector
     edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(it->second->id());
     result.push_back(id);
+  }
+  return result;
+}
+
+const std::vector<std::size_t> 
+WorldInformationWrapper::get_edges(std::size_t id, const std::string &filter) {
+  // check given ID
+  check_mapping(robot_identifiers_, id);
+  // create separate vector for results, look up corresponsing robot
+  std::vector<std::size_t> result;
+  boost::shared_ptr<const RobotData> robot;
+  robot = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]);
+  // add integer representations of edge IDs to result vector, update mapping in the process
+  BOOST_FOREACH (boost::shared_ptr<EdgeIdentifier> edge_identifier, robot->get_edges()) {
+    std::size_t edge_id = edge_identifier->id();
+    // apply filter
+    std::string filter_lower(filter);
+    boost::to_lower(filter_lower);
+    boost::shared_ptr<Edge> edge = world_information_->get_according_edge(edge_identifier);
+    if ((filter_lower == "directed" && !boost::dynamic_pointer_cast<DirectedEdge>(edge)) 
+      || (filter_lower == "undirected" && !boost::dynamic_pointer_cast<UndirectedEdge>(edge))) {
+      // element was filtered out
+      continue;
+    }
+    // add ID to result vector and update mapping
+    edge_identifiers_[edge_id] = edge_identifier;
+    result.push_back(edge_id);
   }
   return result;
 }
@@ -233,6 +244,7 @@ void
 WorldInformationWrapper::set_world_information (const boost::shared_ptr <WorldInformation> &world_information) {
   // clear mappings
   edge_identifiers_.clear();
+  message_identifiers_.clear();
   robot_identifiers_.clear();
   request_set_.clear();
   // store pointer to new WorldInformation object

@@ -19,6 +19,10 @@
 #include "../Requests/request.h"
 #include "../Wrapper/marker_information_wrapper.h"
 
+#include "../Model/edge_identifier.h"
+#include "../Model/message_identifier.h"
+#include "../Model/robot_identifier.h"
+
 namespace LuaWrapper {
 
 /**
@@ -58,15 +62,7 @@ public:
    * \param marker	Wrapped MarkerInformation object.
    */
   static void add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
- 
-  /**
-   * Returns outgoing edges od a given robot.
-   * 
-   * \param id		ID of the robot.
-   * \returns		Vector of integer edges IDs.
-   */
-  static const std::vector<std::size_t> get_adjacent_edges(std::size_t id);
-  
+   
   /**
    * Returns robot IDs for a given edge.
    * 
@@ -89,6 +85,14 @@ public:
    * \returns		Vector of integer edge IDs.
    */
   static const std::vector<std::size_t> get_edges(const std::string &filter);
+  
+  /**
+   * Returns outgoing edges od a given robot.
+   * 
+   * \param id		ID of the robot.
+   * \returns		Vector of integer edges IDs.
+   */
+  static const std::vector<std::size_t> get_edges(std::size_t id, const std::string &filter);
       
   /**
    * Return ID of first message in queue of a given robot.
@@ -180,12 +184,20 @@ private:
    */
   static std::set< boost::shared_ptr<Request> > request_set_;
   
+ 
   /**
    * \var 		Map of references to queried EdgeIdentifier objects
    * 			(to be cleared each time a new WorldInformation object
    * 			is set).
    */
   static std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> > edge_identifiers_;
+  
+  /**
+   * \var 		Map of references to queried MessageIdentifier objects
+   * 			(to be cleared each time a new WorldInformation object
+   * 			is set).
+   */
+  static std::map< std::size_t, boost::shared_ptr<MessageIdentifier> > message_identifiers_;
     
   /**
    * \var 		Map of references to queried RobotIdentifier objects
