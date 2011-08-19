@@ -21,6 +21,7 @@ class WorldObject;
 class RobotData;
 class Obstacle;
 class Edge;
+class Message;
 
 
 /**
@@ -143,6 +144,37 @@ public:
 	bool remove_edge(boost::shared_ptr<Edge> edge);
 
 	/**
+	 * Returns a constant reference to the set of the messages.
+	 * \return Constant reference to the set of the messages.
+	 */
+	const std::map<std::size_t, boost::shared_ptr<Message> >& messages() const;
+
+	/**
+	 * Returns a (non-constant) reference to the set of messages.
+	 * \return reference to the set of messages.
+	 */
+	std::map<std::size_t, boost::shared_ptr<Message> >& messages();
+
+	/**
+	 * Adds a new message to the end of the current message map.
+	 * \param Shared pointer to the new message.
+	 */
+	void add_message(boost::shared_ptr<Message> new_message);
+
+	/**
+	 * Sets the map of messages in the world.
+	 * \param Map of messages to add to the world.
+	 */
+	void set_message_data(std::map<std::size_t, boost::shared_ptr<Message> > new_messages);
+
+	/**
+	 * Removes message from message map.
+	 * \param Shared pointer to message
+	 * \return True if message was removed, false otherwise
+	 */
+	bool remove_message(boost::shared_ptr<Message> message);
+
+	/**
 	 * Returns the time (measured in steps) when this world info object was created.
 	 * \return Time (measured in steps) when this world info object was created.
 	 */
@@ -226,24 +258,32 @@ public:
 	/**
 	 * \brief Returns a constant reference to edge object with given id.
 	 *
-	 * This method assumes, that the edge object with the given id is saved at position id->id() in the edge
-	 * vector.
-	 *
 	 * \return Constant reference to corresponding edge object.
 	 */
 	boost::shared_ptr<const Edge> get_according_edge(boost::shared_ptr<EdgeIdentifier> id) const;
 
 	/**
-	 * Return (non-constant) reference to according edge of given robot ID.
-	 *
-	 * This method assumes, that the according reference to the
-	 * edge with ID i is saved at position i in
-	 * the edge-vector.
+	 * Return (non-constant) reference to according edge of given edge ID.
 	 *
 	 * \param reference to identifier of edge which shall be returned.
-	 * \return Mutable reference to according edge of given robot ID.
+	 * \return Mutable reference to according edge of given edge ID.
 	 */
 	boost::shared_ptr<Edge> get_according_edge(boost::shared_ptr<EdgeIdentifier> id);
+
+	/**
+	 * \brief Returns a constant reference to message object with given id.
+	 *
+	 * \return Constant reference to corresponding message object.
+	 */
+	boost::shared_ptr<const Message> get_according_message(boost::shared_ptr<MessageIdentifier> id) const;
+
+	/**
+	 * Return (non-constant) reference to according message of given message ID.
+	 *
+	 * \param reference to identifier of message which shall be returned.
+	 * \return Mutable reference to according message of given message ID.
+	 */
+	boost::shared_ptr<Message> get_according_message(boost::shared_ptr<MessageIdentifier> id);
 
 private:
 	/**
@@ -265,6 +305,11 @@ private:
 	 * Set of edges in the world
 	 */
 	std::map<std::size_t, boost::shared_ptr<Edge> > edges_;
+
+	/**
+	 * Set of messages in the world
+	 */
+	std::map<std::size_t, boost::shared_ptr<Message> > messages_;
 
 	/**
 	 * Time (measured in steps) of creation of this world information

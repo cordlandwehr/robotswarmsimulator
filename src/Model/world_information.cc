@@ -128,6 +128,26 @@ bool WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
 	return edges_.erase(edge->id()->id());
 }
 
+const std::map<std::size_t, boost::shared_ptr<Message> >& WorldInformation::messages() const {
+	return messages_;
+}
+
+std::map<std::size_t, boost::shared_ptr<Message> >& WorldInformation::messages() {
+	return messages_;
+}
+
+void WorldInformation::add_message(boost::shared_ptr<Edge> new_message) {
+	messages_.insert(std::pair<std::size_t, boost::shared_ptr<Message> >(new_message->id()->id(), new_message));
+}
+
+void WorldInformation::set_message_data(std::map<std::size_t, boost::shared_ptr<Message> > new_messages) {
+	messages_ = new_messages;
+}
+
+bool WorldInformation::remove_message(boost::shared_ptr<Edge> message){
+	return messages_.erase(message->id()->id());
+}
+
 int WorldInformation::time() const {
 	return time_;
 }
@@ -171,5 +191,17 @@ boost::shared_ptr<const Edge> WorldInformation::get_according_edge(boost::shared
 boost::shared_ptr<Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) {
 	std::map<std::size_t, boost::shared_ptr<Edge> >::iterator it = edges_.find(id->id());
 	assert(it != edges_.end());
+	return it->second;
+}
+
+boost::shared_ptr<const Message> WorldInformation::get_according_message(boost::shared_ptr<MessageIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it = messages_.find(id->id());
+	assert(it != messages_.end());
+	return it->second;
+}
+
+boost::shared_ptr<Message> WorldInformation::get_according_message(boost::shared_ptr<MessageIdentifier> id) {
+	std::map<std::size_t, boost::shared_ptr<Message> >::iterator it = messages_.find(id->id());
+	assert(it != messages_.end());
 	return it->second;
 }
