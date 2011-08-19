@@ -37,7 +37,6 @@
 
 #include "../EventHandlers/vector_request_handler.h"
 #include "../EventHandlers/marker_request_handler.h"
-#include "../EventHandlers/marker_change_request_handler.h"
 #include "../EventHandlers/message_request_handler.h"
 #include "../EventHandlers/insert_edge_request_handler.h"
 #include "../EventHandlers/remove_edge_request_handler.h"
@@ -109,32 +108,11 @@ public:
 	}
 
 	/**
-	 * setter for velocity request handler
-	 */
-	void set_velocity_request_handler(
-	    boost::shared_ptr<VectorRequestHandler> velocity_request_handler) {
-		velocity_request_handler_ = velocity_request_handler;
-	}
-
-	/**
-	 * setter for acceleration request handler
-	 */
-	void set_acceleration_request_handler(
-	    boost::shared_ptr<VectorRequestHandler> acceleration_request_handler) {
-		acceleration_request_handler_ = acceleration_request_handler;
-	}
-
-	/**
 	 * setter for marker request handler
 	 */
 	void set_marker_request_handler(
 	    boost::shared_ptr<MarkerRequestHandler> marker_request_handler) {
 		marker_request_handler_ = marker_request_handler;
-	}
-
-	void set_marker_change_request_handler(
-	    boost::shared_ptr<MarkerChangeRequestHandler> request_handler) {
-		marker_change_request_handler_ = request_handler;
 	}
 
 	void set_message_request_handler(
@@ -199,10 +177,7 @@ private:
 	 * Request Handlers. One for each type of request.
 	 */
 	boost::shared_ptr<VectorRequestHandler> position_request_handler_;
-	boost::shared_ptr<VectorRequestHandler> velocity_request_handler_;
-	boost::shared_ptr<VectorRequestHandler> acceleration_request_handler_;
 	boost::shared_ptr<MarkerRequestHandler> marker_request_handler_;
-	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
 	boost::shared_ptr<MessageRequestHandler> message_request_handler_;
 	boost::shared_ptr<InsertEdgeRequestHandler> insert_edge_request_handler_;
 	boost::shared_ptr<RemoveEdgeRequestHandler> remove_edge_request_handler_;

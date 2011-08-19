@@ -34,7 +34,6 @@
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 
 #include "../EventHandlers/event_handler.h"
-#include "../EventHandlers/marker_request_handler.h"
 
 #include "robot_control.h"
 #include "../Views/abstract_view_factory.h"
@@ -105,6 +104,7 @@ void SimulationKernel::init(const string& project_filename,
 	parser_.reset(new Parser());
 	parser_->load_projectfiles(project_filename);
 	std::map<std::string, std::string> &params = parser_->parameter_map();
+	boost::program_options::variables_map &params_boost = parser_->parameter_map_boost();
 	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Generated parameter map";
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser_);
@@ -147,9 +147,10 @@ void SimulationKernel::init(const string& project_filename,
 		stats_->update(*initial_time_point, foo);
 	}
 
-	camera_position_ = params["CAMERA_POSITION"];
-	camera_direction_ = params["CAMERA_DIRECTION"];
-	camera_type_ = params["CAMERA_TYPE"];
+	//TODO asetzer: camera positions hardcoded as a temporary solution
+	camera_position_ = "0,0,0";
+	camera_direction_ = "1,0,0";
+	camera_type_ ="FOLLOW";
 }
 
 

@@ -61,12 +61,6 @@ BOOST_FIXTURE_TEST_CASE(full_event_handler_test_position_test, SimpleWorldFixtur
 	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 	EventHandler event_handler(history, robot_control);
 
-	boost::shared_ptr<VectorRequestHandler> request_handler_acc(new VectorRequestHandler(5, 0.0, *history));
-	event_handler.set_acceleration_request_handler(request_handler_acc);
-
-	boost::shared_ptr<VectorRequestHandler> request_handler_vel(new VectorRequestHandler(5, 0.0, *history));
-	event_handler.set_velocity_request_handler(request_handler_vel);
-
 	boost::shared_ptr<VectorRequestHandler> request_handler_pos(new VectorRequestHandler(5, 0.0, *history));
 	event_handler.set_position_request_handler(request_handler_pos);
 

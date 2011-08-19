@@ -31,7 +31,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/algorithm/string.hpp>
-
+#include <boost/program_options/parsers.hpp>
+#include <boost/program_options/options_description.hpp>
 
 //include for enums of RobotType and RobotStatus
 #include "../Model/robot_data.h"
@@ -181,11 +182,25 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 }
 
 void Parser::load_main_project_file(const string& project_filename) {
-	string line;
-	std::ifstream project_file;
+	
 	project_filename_ = project_filename;
 	string main_project_filename = project_filename_ + ".swarm";
+	
+	boost::program_options::options_description desc("Main project file options");
+	desc.add_options()
+    ("PROJECT_NAME", boost::program_options::value<string>(), "set project name")
+	("ROBOT_FILENAME", boost::program_options::value<string>(), "set robot file name")
+	("WORLD_MODIFIERS", boost::program_options::value< vector<string> >(), "set world modifiers")	
+	("ASG", boost::program_options::value<string>(), "set activation sequence generator")
+	;
+	
+	std::ifstream in( project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
+	boost::program_options::store(boost::program_options::parse_config_file(in, desc), parameter_map_boost_);
+	boost::program_options::notify(parameter_map_boost_);
+	
 
+	string line;
+	std::ifstream project_file;
 	project_file.open(main_project_filename.c_str());
 	if(project_file.is_open()) {
 		string var_name;

@@ -39,6 +39,7 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/program_options/variables_map.hpp>
 
 #include <string>
 #include <sstream>
@@ -78,6 +79,13 @@ public:
 	 * Exact Types of boost::any objects can be looked up in Specification Document
 	 */
 	std::map<std::string, std::string>& parameter_map() { return parameter_map_;};
+	
+	/**
+	 * Returns a map which stores all parameters as boost::any.
+	 * Parameter Names exactly as in Specification Document
+	 * Exact Types of boost::any objects can be looked up in Specification Document
+	 */
+	boost::program_options::variables_map& parameter_map_boost() { return parameter_map_boost_;};	
 
 	/**
 	 * Set-method for compass model
@@ -210,6 +218,7 @@ private:
 
 	// parameter map
 	std::map<std::string, std::string> parameter_map_;
+	boost::program_options::variables_map parameter_map_boost_;
 
 	std::string robot_filename_;
 	std::vector<std::string> world_modifiers_;

@@ -61,10 +61,7 @@
 #include "../ViewModels/local_graph_view.h"
 
 #include "../EventHandlers/event_handler.h"
-#include "../EventHandlers/marker_request_handler.h"
 #include "../EventHandlers/vector_request_handler.h"
-#include "../EventHandlers/marker_change_request_handler.h"
-#include "../EventHandlers/collision_position_request_handler.h"
 
 #include "../Utilities/VectorModifiers/vector_modifier.h"
 #include "../Utilities/VectorModifiers/vector_difference_trimmer.h"
@@ -81,7 +78,6 @@
 
 #include "../SimulationKernel/robot_control.h"
 #include "../SimulationKernel/uniform_robot_control.h"
-#include "../SimulationKernel/robot_type_robot_control.h"
 #include "../Model/world_information.h"
 #include "../Model/robot_data.h"
 #include "../WorldModifierImplementations/test_world_modifier.h"
@@ -142,52 +138,27 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 
 	// create the request handlers from the parameters
 
-	// 1. Marker Request Handler
-	std::string marker_request_handler_type = params["MARKER_REQUEST_HANDLER_TYPE"];
-	if(marker_request_handler_type == "STANDARD") {
-			try {
-				// build the marker request handler
-				double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_REQUEST_HANDLER_DISCARD_PROB"]);
-				unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_MARKER_REQUEST_HANDLER_SEED"]);
-				boost::shared_ptr<MarkerRequestHandler> marker_request_handler(new MarkerRequestHandler(seed, discard_probability, *history));
-				event_handler->set_marker_request_handler(marker_request_handler);
-			} catch(const boost::bad_lexical_cast& ) {
-				throw UnsupportedOperationException("Failed reading parameters for standard marker request handler");
-			}
-	}
 
 	// 3. Position Request Handler
-	std::string position_request_handler_type = boost::any_cast<std::string> (params["POSITION_REQUEST_HANDLER_TYPE"]);
-	if(position_request_handler_type == "VECTOR") {
-		try {
+	//std::string position_request_handler_type = boost::any_cast<std::string> (params["POSITION_REQUEST_HANDLER_TYPE"]);
+	//if(position_request_handler_type == "VECTOR") {
+		//try {
 			// build the vector request handler
-			double discard_probability = boost::lexical_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
+			double discard_probability = 0; // boost::lexical_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
+			unsigned int seed = 0;// boost::lexical_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
 			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
 
+			/*
 			// set up vector modifiers
 			create_vector_modifiers_from_string(vector_request_handler,
 					                            params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
-
+			*/
 			event_handler->set_position_request_handler(vector_request_handler);
-		} catch(const boost::bad_lexical_cast& ) {
+		/*} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for vector position request handler");
-		}
-	}
+		}*/
+	//}
 
-	// 6. Marker Change Request Handler
-	std::string marker_change_request_handler_type = boost::any_cast<std::string> (params["MARKER_CHANGE_REQUEST_HANDLER_TYPE"]);
-	if(marker_change_request_handler_type == "STANDARD") {
-		try {
-			// build the type change request handler
-			double discard_probability = boost::lexical_cast<double> (params["STANDARD_MARKER_CHANGE_REQUEST_HANDLER_DISCARD_PROB"]);
-			unsigned int seed = boost::lexical_cast<unsigned int> (params["STANDARD_MARKER_CHANGE_REQUEST_HANDLER_SEED"]);
-			boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler(new MarkerChangeRequestHandler(seed, discard_probability, *history));
-			event_handler->set_marker_change_request_handler(marker_change_request_handler);
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for standard marker change request handler");
-		}
-	}
 
 	return event_handler;
 }
@@ -321,7 +292,9 @@ boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::stri
 }
 
 boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {
-	//init View
+	//TODO asetzer change it so that not params, but the actual seed is given as a parameter
+  
+  //init View
 	unsigned int seed;
 	if(params.find("VIEW_SEED") != params.end()) {
 		try {
@@ -336,20 +309,9 @@ boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::str
 	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(seed));
 	View::set_distribution_generator(generator);
 	
-	std::string robot_type = params["ROBOT_CONTROL"];
 	boost::shared_ptr<RobotControl> control;
-
-	if(robot_type == "UNIFORM_ROBOT_CONTROL") {
-		control.reset(new UniformRobotControl(view_factory_factory(params), history_length, initial_world_information));
-	} else if(robot_type == "ROBOT_TYPE_ROBOT_CONTROL") {
-		boost::array<boost::shared_ptr<AbstractViewFactory>,kRobotTypeCount> view_factories;
-		view_factories[MASTER] = view_factory_factory(params, "MASTER_");
-		view_factories[SLAVE] = view_factory_factory(params, "SLAVE_");
-
-		control.reset(new RobotTypeRobotControl(view_factories, history_length, initial_world_information));
-	} else {
-		throw UnsupportedOperationException("No RobotControl specified!");
-	}
+	
+	control.reset(new UniformRobotControl(view_factory_factory(params), history_length, initial_world_information));
 
 	return control;
 }

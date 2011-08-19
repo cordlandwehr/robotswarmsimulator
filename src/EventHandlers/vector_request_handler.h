@@ -52,6 +52,8 @@ class RobotData;
  *
  * If there is need for more sophisticated request handling, one may still subclass VectorRequestHandler and overwrite
  * the 'handle_request_reliable' method.
+ * 
+ * //TODO asetzer (August 19th): this is way to complecated - I suggest a complete rewrite
  */
 class VectorRequestHandler : public RequestHandler {
 	friend class LoadMainProjectFileTest;

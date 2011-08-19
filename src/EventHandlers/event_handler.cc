@@ -51,7 +51,6 @@
 #include "../Requests/marker_request.h"
 #include "../Requests/position_request.h"
 #include "../Requests/request.h"
-#include "../Requests/marker_change_request.h"
 #include "../Requests/message_request.h"
 #include "../Requests/insert_edge_request.h"
 #include "../Requests/remove_edge_request.h"
@@ -169,16 +168,6 @@ shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(
 				        marker_request);
 			} else {
 				std::cerr << "No Marker Request Handler Set" << std::endl;
-			}
-		} else if(shared_ptr<const MarkerChangeRequest> marker_change_request =
-		          boost::dynamic_pointer_cast<const MarkerChangeRequest> (request)) {
-			if (marker_change_request_handler_) {
-				handled_as_expected =
-				    marker_change_request_handler_->handle_request(
-				        new_world_information,
-				        marker_change_request);
-			} else {
-				std::cerr << "No Marker Change Request Handler Set" << std::endl;
 			}
 		} else if(shared_ptr<const MessageRequest> message_request =
 				 boost::dynamic_pointer_cast<const MessageRequest>(request)) {
