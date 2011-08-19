@@ -33,7 +33,7 @@
 #include "../Requests/velocity_request.h"
 #include "../Requests/marker_change_request.h"
 #include "../Requests/color_change_request.h"
-#include "../Requests/message_request.h"
+#include "../Requests/send_message_request.h"
 #include "../Requests/insert_edge_request.h"
 #include "../Requests/remove_edge_request.h"
 
@@ -194,15 +194,15 @@ shared_ptr<WorldInformation> EventHandler::handle_handle_requests_event(
 			} else {
 				std::cerr << "No Color Change Request Handler Set" << std::endl;
 			}
-		} else if(shared_ptr<const MessageRequest> message_request =
-				 boost::dynamic_pointer_cast<const MessageRequest>(request)) {
-			if(message_request_handler_) {
+		} else if(shared_ptr<const SendMessageRequest> send_message_request =
+				 boost::dynamic_pointer_cast<const SendMessageRequest>(request)) {
+			if(send_message_request_handler_) {
 				handled_as_expected =
-						message_request_handler_->handle_request(
+						send_message_request_handler_->handle_request(
 				        new_world_information,
-				        message_request);
+				        send_message_request);
 			} else {
-				std::cerr << "No Message Request Handler Set" << std::endl;
+				std::cerr << "No Send Message Request Handler Set" << std::endl;
 			}
 		} else if(shared_ptr<const InsertEdgeRequest> insert_edge_request =
 				 boost::dynamic_pointer_cast<const InsertEdgeRequest>(request)) {
