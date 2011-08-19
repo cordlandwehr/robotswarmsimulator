@@ -1,9 +1,0 @@
-#/bin/sh
-
-for FILE in "line100.csv" "line50.csv" "cross.csv" "random.csv" "random200.csv"
-do
-	for ID in 1 2 3 4
-	do
-		sed 's/'ALGNAME'/'PotRobot$ID'/g' ../formations/$FILE > formations/$FILE'_'$ID.robot
-	done
-done
