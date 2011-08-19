@@ -50,6 +50,7 @@ class Obstacle;
 class Box;
 class Sphere;
 class WorldInformation;
+class DistributionGenerator;
 class EdgeIdentifier;
 
 /**
@@ -81,6 +82,12 @@ protected:
 public:
 	View();
 	virtual ~View();
+	
+	/**
+	* @param DistributionGenerator used for random_shuffle calls in get_visible_* methods.
+	*/
+	static void set_distribution_generator(boost::shared_ptr<DistributionGenerator> generator);
+	
 
 	/**
 	 * Although init is trivial, it is nice to have a default constructor in virtual
@@ -424,6 +431,7 @@ private:
 
 private:
 	boost::shared_ptr<WorldInformation> world_information_;
+	static boost::shared_ptr<DistributionGenerator> generator_;
 
 };
 

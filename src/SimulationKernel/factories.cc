@@ -431,6 +431,7 @@ boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::str
 	}
 
 	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(seed));
+	View::set_distribution_generator(generator);
 	
 	std::string robot_type = params["ROBOT_CONTROL"];
 	boost::shared_ptr<RobotControl> control;

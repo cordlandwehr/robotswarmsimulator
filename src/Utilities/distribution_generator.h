@@ -29,7 +29,6 @@
 #ifndef DISTRIBUTION_GENERATOR_H_
 #define DISTRIBUTION_GENERATOR_H_
 
-#include "distribution_generator.h"
 
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/mersenne_twister.hpp>

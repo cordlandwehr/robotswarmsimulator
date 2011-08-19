@@ -1,6 +1,0 @@
-alias run=../../../../build/src/UserInterfaces/RobotSwarmSimulator
-alias runprj='run --project-file'
-alias rungenerate_simanneal='run --generate --robots 50 --algorithm SimAnnealRobot --swarmfile simanneal --robotfile simanneal --obstaclefile noobstacles --add-pos-handler --distr-pos 50'
-alias rungenerate_cog='run --generate --robots 50 --algorithm COGRobot --swarmfile cog --robotfile cog --obstaclefile noobstacles --add-pos-handler --distr-pos 50 --distr-coord'
-alias rungenerate_rnd='run --generate --robots 50 --algorithm RndJmpRobot --swarmfile rnd --robotfile rnd --obstaclefile noobstacles --add-pos-handler --distr-pos 50'
-

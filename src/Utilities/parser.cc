@@ -42,7 +42,6 @@ using namespace std;
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() :  robot_filename_("rssfile"),
-					obstacle_filename_("rssfile"),
 					dumpnumber_(0) {
 	//initialize Parser with default values
 	init();
@@ -95,9 +94,6 @@ string Parser::get_default_value(const string& var) {
 
 	//variable has a default value
 	if(!var.compare("ROBOT_FILENAME")) {
-		return project_filename_;
-	}
-	else if (!var.compare("OBSTACLE_FILENAME")) {
 		return project_filename_;
 	}
 	else {
@@ -155,9 +151,6 @@ void Parser::init_variables(map<string,string> variables_and_values) {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
 	// if ".obstacle" exists at end of filename: erase it!
-	obstacle_filename_ = get_string_value_from_map(variables_and_values, "OBSTACLE_FILENAME");
-	if (obstacle_filename_.rfind(".obstacle")!=string::npos)
-		obstacle_filename_.erase (obstacle_filename_.rfind(".obstacle"),9);
 	// if ".robot" exists at end of filename: erase it!
 	robot_filename_ = get_string_value_from_map(variables_and_values, "ROBOT_FILENAME");
 	if (robot_filename_.rfind(".robot")!=string::npos)
@@ -371,55 +364,9 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	initiale_robot_coordinate_systems_.push_back(tmp);
 }
 
-void Parser::init_obstacle_values_for_line(const string& line, int line_number) {
-
-	//continue with next line if this is a comment-line, eg. begins with '#'
-	if (line.substr(0,1).compare("#")==0)
-		return;
-
-	//begin at beginning of line
-	position_in_line_ = 0;
-
-	//The order of these initializations is important!
-	string type = get_next_value_in_line(line, line_number, false);
-	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
-	string marker_info = get_next_value_in_line(line, line_number, false);
-
-	//if object is a sphere or a marker, size will equal to the zero-vector,
-	//otherwise the values of this vector will be set later.
-	Vector3d size;
-	size.insert_element(kXCoord, 0);
-	size.insert_element(kYCoord, 0);
-	size.insert_element(kZCoord, 0);
-
-	//if object is a box or a  marker, radius will equal to zero,
-	//otherwise the radius will be set later.
-	double radius = 0;
-
-	//depending on type get either radius or width, height and depth
-	if(type.compare("box") == 0) {
-		//get last three values from line
-		size = get_next_vector3d_in_line(line, line_number, true);
-	} else if(type.compare("sphere") == 0) {
-		//get only next value, which denotes the radius the sphere
-		radius = get_next_double_value_in_line(line, line_number, false);
-	}
-
-	//if no exception is thrown up to this point, values read correctly
-	//=> add values to global variables
-	initiale_obstacle_types_.push_back(type);
-	initiale_obstacle_positions_.push_back(position);
-	initiale_obstacle_marker_information_.push_back(marker_info);
-	initiale_obstacle_radius_.push_back(radius);
-	initiale_obstacle_size_.push_back(size);
-}
 
 void Parser::load_robot_file() {
 	load_robot_or_obstacle_file(true);
-}
-
-void Parser::load_obstacle_file() {
-	load_robot_or_obstacle_file(false);
 }
 
 void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
@@ -434,12 +381,6 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 			filename = robot_filename_;
 		else
 			filename = robot_filename_ + ".robot";
-	}
-	else {
-		if (obstacle_filename_.rfind(".csv")!=string::npos)
-			filename = obstacle_filename_;
-		else
-			filename = obstacle_filename_ + ".obstacle";
 	}
 	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
 	using boost::filesystem::path;
@@ -467,9 +408,6 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 				if(load_robot_file) {
 					//initialize values of robot of this line
 					init_robot_values_for_line(line, ++line_number);
-				} else {
-					//initialize values of obstacle of this line
-					init_obstacle_values_for_line(line, ++line_number);
 				}
 			}
 		}
@@ -483,7 +421,6 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 void Parser::load_projectfiles(const string& project_filename) {
 	load_main_project_file(project_filename);
 	load_robot_file();
-	load_obstacle_file();
 }
 
 void Parser::save_main_project_file(const string& project_filename) {
@@ -492,7 +429,6 @@ void Parser::save_main_project_file(const string& project_filename) {
 	if(project_file.is_open()) {
 		// Save the map. Should contain all variables.
 		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
-		project_file << "OBSTACLE_FILENAME=\"" << obstacle_filename_ << "\"" << endl;
 
 		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
 		while(param_map_iter != parameter_map_.end()) {
@@ -608,107 +544,13 @@ string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	}
 
-void Parser::save_obstacle_file(const WorldInformation& world_info) {
-	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
-	using boost::filesystem::path;
-	path file = path(project_filename_).parent_path() / (obstacle_filename_ + ".obstacle");
-
-	boost::filesystem::ofstream obstacle_file;
-	obstacle_file.open(file);
-
-	if(obstacle_file.is_open()) {
-		//write obstacle header
-		obstacle_file << "\"type\",";
-		obstacle_file << "\"x-position\",";
-		obstacle_file << "\"y-position\",";
-		obstacle_file << "\"z-position\",";
-		obstacle_file << "\"marker-info\",";
-		obstacle_file << "\"size-info\",";
-		obstacle_file << "\"\",";
-		obstacle_file << "\"\"" << endl;
-
-		//fetching obstacles from the actual world-information through history-reference
-		vector<boost::shared_ptr<Obstacle> > obstacles = world_info.obstacles();
-
-		//iterate over all obstacles to parse them obstacle by obstacle
-		for (vector<boost::shared_ptr<Obstacle> >::iterator it = obstacles.begin(); it!=obstacles.end(); ++it) {
-			obstacle_file << write_obstacle(*it);
-		}
-
-		//fetching marker-informations from actual world-information through history-reference
-		vector<boost::shared_ptr<WorldObject> > markers = world_info.markers();
-
-		//iterate over all markers
-		for (vector<boost::shared_ptr<WorldObject> >::iterator it = markers.begin(); it!=markers.end(); ++it) {
-			obstacle_file << write_marker(*it);
-		}
-
-		obstacle_file.close();
-	} else {
-		throw UnsupportedOperationException("Unable to open obstacle file: " + file.string() + "!");
-	}
-}
-
-string Parser::write_obstacle(boost::shared_ptr<Obstacle> current_obstacle) {
-
-	stringstream output;
-
-	//check by dynamic typecast if the obstacle is a sphere or a box.
-	//See event_handler.cc for details to this technique
-	if(boost::shared_ptr<Box> box_obstacle = boost::dynamic_pointer_cast<Box>(current_obstacle)) {
-		output << "\"box\",";
-
-		output << box_obstacle->position()(kXCoord) << ",";
-		output << box_obstacle->position()(kYCoord) << ",";
-		output << box_obstacle->position()(kZCoord) << ",";
-
-		//TODO(mmarcus) include marker-information
-		output << box_obstacle->width() << ",";
-		output << box_obstacle->height() << ",";
-		output << box_obstacle->depth() << endl;
-	} else if(boost::shared_ptr<Sphere> sphere_obstacle = boost::dynamic_pointer_cast<Sphere>(current_obstacle)) {
-		output << "\"sphere\",";
-
-		output << sphere_obstacle->position()(kXCoord) << ",";
-		output << sphere_obstacle->position()(kYCoord) << ",";
-		output << sphere_obstacle->position()(kZCoord) << ",";
-
-		//TODO(mmarcus) include marker-information
-		output << sphere_obstacle->radius() << ",\"\",\"\"" << endl;
-	} else {
-		throw UnsupportedOperationException("Illegal type of obstacle found.");
-	}
-
-	return output.str();
-}
-
-string Parser::write_marker(boost::shared_ptr<WorldObject> marker) {
-
-	stringstream output;
-
-	output << "\"marker\",";
-
-	output << marker->position()(kXCoord) << ",";
-	output << marker->position()(kYCoord) << ",";
-	output << marker->position()(kZCoord) << ",";
-	//TODO(mmarcus) include marker-information
-	output << "\"\",\"\",\"\"" << endl;
-
-	return output.str();
-}
 
 void Parser::save_projectfiles(const string& project_filename, const WorldInformation& world_info) {
 	save_main_project_file(project_filename);
 	save_robot_file(world_info);
-	save_obstacle_file(world_info);
 }
 
 
-
-/*** SET-methods for main projectfile variables ***/
-void Parser::set_obstacle_filename(const string& obstacle_filename) {
-	obstacle_filename_ = obstacle_filename;
-}
 
 void Parser::set_robot_filename(const string& robot_filename) {
 	robot_filename_ = robot_filename;
@@ -755,25 +597,6 @@ vector<string>& Parser::robot_colors() {
 vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& Parser::robot_coordinate_systems() {
 	return initiale_robot_coordinate_systems_;
 }
-
-
-/*** GET-methods for obstacle data ***/
-vector<string>& Parser::obstacle_types() {
-	return initiale_obstacle_types_;
-}
-vector<Vector3d>& Parser::obstacle_positions() {
-	return initiale_obstacle_positions_;
-}
-vector<string>& Parser::obstacle_marker_information() {
-	return initiale_obstacle_marker_information_;
-}
-vector<double>& Parser::obstacle_radius() {
-	return initiale_obstacle_radius_;
-}
-vector<Vector3d>& Parser::obstacle_size() {
-	return initiale_obstacle_size_;
-}
-
 
 /*** GET-method for world modfiers ***/
 vector<string>& Parser::world_modifiers() {
