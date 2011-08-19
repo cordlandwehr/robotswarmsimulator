@@ -50,8 +50,8 @@
 
 #include "../Model/world_information.h"
 #include "../SimulationKernel/simulation_listener.h"
+#include "../Utilities/console_output.h"
 
-#include "stats_config.h"
 #include "stats_out.h"
 //#include "statistics_data_object.h"
 
@@ -87,11 +87,6 @@ public:
 	virtual ~StatsCalc();
 
 	/**
-	 * \brief initializes from the given configuration
-	 */
-	void init(StatsConfig* stats_cfg);
-
-	/**
 	 * \brief performs all calculations for the given data and subset
 	 */
 	void calculate(const StatsCalcInData &data,
@@ -103,10 +98,6 @@ public:
 
 	int calculateTotalDefects(const boost::shared_ptr<WorldInformation> graph);
 private:
-	/**
-	 * pointer to the stats_cfg stored in StatsControl
-	 */
-	StatsConfig* stats_cfg_;
 };
 
 #endif /* STATS_CALC_H_ */

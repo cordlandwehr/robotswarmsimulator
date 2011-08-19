@@ -69,7 +69,6 @@
 #include "../SimulationKernel/simulation_listener.h"
 #include "../Utilities/parser.h"
 
-#include "stats_config.h"
 #include "stats_calc.h"
 
 class StatisticsDataObject;
@@ -110,11 +109,6 @@ private:
 	boost::shared_ptr<StatsOut> stats_datadump_;
 
 	/**
-	 * the configuration-instance to use
-	 */
-	StatsConfig stats_cfg_;
-
-	/**
 	 * the calculation-instance to use
 	 */
 	StatsCalc stats_calc_;
@@ -125,9 +119,9 @@ private:
 	StatsCalcInData stats_calc_indata_;
 
 	/**
-	 * the log-output-instances one for each subset
+	 * the log-output-instance
 	 */
-	std::vector<boost::shared_ptr<StatsOut> > stats_out_;
+	boost::shared_ptr<StatsOut> stats_out_;
 
 	/*/**
 	 * all the subsets under inspection - up to 9, but only those

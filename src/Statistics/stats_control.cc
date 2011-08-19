@@ -49,14 +49,7 @@ void StatsControl::init(std::map<std::string, std::string> &params, std::string 
 		quit();
 	}
 
-	// initialize StatsConfig
-	stats_cfg_.init(params);
-
-	// abort if nothing to calculate
-	if (!stats_cfg_.is_any_subset())
-		return;
-
-	//TODO (cola) test what happens if does not exist
+	//TODO asetzer check whether this is still needed
 	// sets and creates output dir
 	if (output_dir.compare("")!=0 && !boost::filesystem::exists(output_dir)) {
 		boost::filesystem::create_directory( output_dir );
@@ -65,25 +58,8 @@ void StatsControl::init(std::map<std::string, std::string> &params, std::string 
 		                                                                   << " was created.";
 	}
 
-	// create a StatsOut-instance for each subset
-	if (stats_cfg_.is_subset_all())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ALL", output_dir)));
-	if (stats_cfg_.is_subset_actall())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTALL", output_dir)));
-	if (stats_cfg_.is_subset_inactall())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTALL", output_dir)));
-	if (stats_cfg_.is_subset_masters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("MASTERS", output_dir)));
-	if (stats_cfg_.is_subset_actmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTMASTERS", output_dir)));
-	if (stats_cfg_.is_subset_inactmasters())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTMASTERS", output_dir)));
-	if (stats_cfg_.is_subset_slaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("SLAVES", output_dir)));
-	if (stats_cfg_.is_subset_actslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("ACTSLAVES", output_dir)));
-	if (stats_cfg_.is_subset_inactslaves())
-		stats_out_.push_back(boost::shared_ptr<StatsOut>(new StatsOut("INACTSLAVES", output_dir)));
+	stats_out_ =boost::shared_ptr<StatsOut>(new StatsOut("ALL", output_dir));
+
 
 	// create data-prefix for all StatsOut-instances
 	// by calling the respective static function
@@ -94,21 +70,16 @@ void StatsControl::init(std::map<std::string, std::string> &params, std::string 
 	stats_calc_indata_.prev_world_info_.reset();
 	stats_calc_indata_.world_info_.reset();
 
-	// initialize StatsCalc
-	stats_calc_.init(&stats_cfg_);
-
-	// create datadump-instance
-	switch(stats_cfg_.datadump_level()) {
-		case StatsConfig::DATADUMP_NONE :
-			break;
-
+	//asetzer dunno what this means
+	/*// create datadump-instance
+	
 		case StatsConfig::DATADUMP_FULL :
 			stats_datadump_ = boost::shared_ptr<StatsOut>(new StatsOut("DATADUMP_FULL", output_dir));
 			break;
 
 		default :
 			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "In Stats_control.init(...): unspecified datadump_level()==" << stats_cfg_.datadump_level();
-	}
+	}*/
 }
 
 void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event) {
@@ -155,9 +126,10 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "Error in StatsControl::update(...): unhandled case that must not occur.";
 	}
 
-	if (stats_cfg_.datadump_level() != StatsConfig::DATADUMP_NONE) {
+	//TODO asetzer check if this is right
+	/*if (stats_cfg_.datadump_level() != StatsConfig::DATADUMP_NONE) {
 		do_datadump(world_information, event);
-	}
+	}*/
 
 	// some debug output
 	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "now world_info_.time()==" << stats_calc_indata_.world_info_.get()->time();
@@ -173,8 +145,8 @@ void StatsControl::do_datadump(const WorldInformation& world_information, boost:
 	std::vector<std::string> names;
 	std::vector<double> values;
 
-	switch(stats_cfg_.datadump_level()) {
-		case StatsConfig::DATADUMP_FULL :
+	//switch(stats_cfg_.datadump_level()) {
+	//	case StatsConfig::DATADUMP_FULL :
 			if (!stats_datadump_->is_open()) {
 				// prepare the fieldnames
 				names.push_back("eventtime");
@@ -222,17 +194,13 @@ void StatsControl::do_datadump(const WorldInformation& world_information, boost:
 			}
 
 			stats_datadump_->update(world_information.time(), values);
-	}
+	//}
 }
 
 void StatsControl::quit() {
 
-	// quit all StatsOut
-	for (unsigned int i=0; i<stats_out_.size(); i++)
-		stats_out_[i]->quit();
-
-	// clear the vector of StatsOuts
-	stats_out_.clear();
+	stats_out_->quit();
+	//stats_out_ = NULL; //TODO asetzer check how this is right
 
 	// quit the datadump - if any
 	if (stats_datadump_.get() != NULL)
@@ -252,8 +220,6 @@ void StatsControl::calculate() {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::error) << "StatsControl::calculate(...) called without any previous StatsControl::init(...)";
 	}
 
-	if (!stats_cfg_.is_any_subset())
-		return;
 
 	//start here with calling the appropriate lua script
 	
