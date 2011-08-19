@@ -58,18 +58,6 @@ public:
    * \param marker	Wrapped MarkerInformation object.
    */
   static void add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
-  
-  /**
-   * Creates a MarkerRequest to be processed directly after the script.
-   * 
-   * The generated MarkerRequest is cached in a set of Request until the Lua
-   * script finishes. Thereafter all cached requests are executed directly.
-   * 
-   * \param id		ID of the robot whose MarkerInformation object is
-   * 			to be replaced.
-   * \param marker	Wrapped MarkerInformation object.
-   */
-  static void add_marker_request(std::size_t id, MarkerInformationWrapper marker);
  
   /**
    * Returns outgoing edges od a given robot.
@@ -101,21 +89,22 @@ public:
    * \returns		Vector of integer edge IDs.
    */
   static const std::vector<std::size_t> get_edges(const std::string &filter);
+      
+  /**
+   * Return ID of first message in queue of a given robot.
+   * 
+   * \param id		ID of the robot.
+   * \returns		ID of the message.
+   */
+  static std::size_t get_message_id(std::size_t id);
   
   /**
-   * Returns MarkerInformation object for a given marker.
+   * Returns number of messages in queue for a given robot.
    * 
-   * \param id		ID of the marker.
-   * \returns		Wrapped MarkerInformation object.
+   * \param id		ID of the robot.
+   * \returns 		Number of messages.
    */
-  static const MarkerInformationWrapper get_marker_information(std::size_t id);
-  
-  /**
-   * Returns set of markes.
-   * 
-   * \returns		Vector of integer marker IDs.
-   */
-  static const std::vector<std::size_t> get_markers();
+  static std::size_t get_number_of_messages(std::size_t id);
   
   /**
    * Returns the cached request set.
@@ -197,14 +186,7 @@ private:
    * 			is set).
    */
   static std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> > edge_identifiers_;
-  
-  /**
-   * \var 		Map of references to queried MarkerIdentifier objects
-   * 			(to be cleared each time a new WorldInformation object
-   * 			is set).
-   */
-  static std::map< std::size_t, boost::shared_ptr<MarkerIdentifier> > marker_identifiers_;
-  
+    
   /**
    * \var 		Map of references to queried RobotIdentifier objects
    * 			(to be cleared each time a new WorldInformation object
@@ -212,6 +194,17 @@ private:
    */
   static std::map< std::size_t, boost::shared_ptr<RobotIdentifier> > robot_identifiers_;
  
+  /**
+   * Checks reference map.
+   * 
+   * Checks for a given pair of a reference map and a key (ID), whether the 
+   * key exists. Throws an exception if the key does not exist.
+   * 
+   * \param map		Map to be checked.
+   * \param key		Key (ID) to be looked up.
+   */
+  template<typename T>
+  static void check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key);
 };
   
 }
