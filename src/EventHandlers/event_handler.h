@@ -18,6 +18,7 @@
 #include "../EventHandlers/marker_change_request_handler.h"
 #include "../EventHandlers/color_change_request_handler.h"
 #include "../EventHandlers/send_message_request_handler.h"
+#include "../EventHandlers/remove_message_request_handler.h"
 #include "../EventHandlers/insert_edge_request_handler.h"
 #include "../EventHandlers/remove_edge_request_handler.h"
 
@@ -133,6 +134,11 @@ public:
 		send_message_request_handler_ = request_handler;
 	}
 
+	void set_remove_message_request_handler(
+		boost::shared_ptr<RemoveMessageRequestHandler> request_handler) {
+		remove_message_request_handler_ = request_handler;
+	}
+
 	void set_insert_edge_request_handler(
 		boost::shared_ptr<InsertEdgeRequestHandler> request_handler) {
 		insert_edge_request_handler_ = request_handler;
@@ -188,6 +194,7 @@ private:
 	boost::shared_ptr<MarkerChangeRequestHandler> marker_change_request_handler_;
 	boost::shared_ptr<ColorChangeRequestHandler> color_change_request_handler_;
 	boost::shared_ptr<SendMessageRequestHandler> send_message_request_handler_;
+	boost::shared_ptr<RemoveMessageRequestHandler> remove_message_request_handler_;
 	boost::shared_ptr<InsertEdgeRequestHandler> insert_edge_request_handler_;
 	boost::shared_ptr<RemoveEdgeRequestHandler> remove_edge_request_handler_;
 

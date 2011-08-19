@@ -17,9 +17,11 @@
 #include "../../EventHandlers/event_handler.h"
 #include "../../EventHandlers/remove_edge_request_handler.h"
 #include "../../EventHandlers/send_message_request_handler.h"
+#include "../../EventHandlers/remove_message_request_handler.h"
 
 #include "../../Requests/remove_edge_request.h"
 #include "../../Requests/send_message_request.h"
+#include "../../Requests/remove_message_request.h"
 
 #include "../../SimulationKernel/uniform_robot_control.h"
 
@@ -43,6 +45,9 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 
 	boost::shared_ptr<SendMessageRequestHandler> send_message_request_handler(new SendMessageRequestHandler(5, 0.0, *history));
 	event_handler.set_send_message_request_handler(send_message_request_handler);
+
+	boost::shared_ptr<RemoveMessageRequestHandler> remove_message_request_handler(new RemoveMessageRequestHandler(5, 0.0, *history));
+	event_handler.set_remove_message_request_handler(remove_message_request_handler);
 
 	boost::shared_ptr<RemoveEdgeRequestHandler> request_handler_remove_edge(new RemoveEdgeRequestHandler(5, 0.0, *history));
 	event_handler.set_remove_edge_request_handler(request_handler_remove_edge);
@@ -85,10 +90,24 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	const RobotData& rd_c = history->get_newest().world_information().get_according_robot_data(robot_c->id());
 
 	BOOST_CHECK_EQUAL(rd_a.get_number_of_messages(), 1);
-//	BOOST_CHECK_EQUAL(rd_a.get_message(0), message_ba_id);
+	BOOST_CHECK_EQUAL(rd_a.get_message(0), message_ba->id());
 	BOOST_CHECK_EQUAL(rd_b.get_number_of_messages(), 0);
 	BOOST_CHECK_EQUAL(rd_c.get_number_of_messages(), 1);
-//	BOOST_CHECK_EQUAL(rd_c.get_message(0), message_bc_id);
+	BOOST_CHECK_EQUAL(rd_c.get_message(0), message_bc->id());
 	BOOST_CHECK_EQUAL(rd_c.last_request_successful(), false);
 	BOOST_CHECK_EQUAL(history->get_newest().world_information().messages().size(), 2);
+
+	// generate new request
+	boost::shared_ptr<RemoveMessageRequest> remove_message_request_ba(new RemoveMessageRequest(*robot_a, boost::dynamic_pointer_cast<MessageIdentifier>(message_ba->id())));
+	handle_requests_event.reset(new HandleRequestsEvent(2));
+	handle_requests_event->add_to_requests(remove_message_request_ba);
+
+	// handling the event
+	time_point.reset(new TimePoint());
+	event_handler.handle_event(handle_requests_event, *time_point);
+	history->insert(time_point);
+
+	const RobotData& rd_a2 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
+
+	BOOST_CHECK_EQUAL(rd_a2.get_number_of_messages(), 0);
 }

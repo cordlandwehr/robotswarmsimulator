@@ -193,7 +193,7 @@ public:
 	 */
 	void remove_message(std::size_t index) {
 		assert(messages_.size() >= index);
-		messages_.erase(messages_.begin()+(index-1));
+		messages_.erase(messages_.begin()+index);
 	}
 
 	/**

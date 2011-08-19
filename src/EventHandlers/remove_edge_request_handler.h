@@ -3,8 +3,6 @@
  *
  *  Created on: 22.07.2011
  *      Author: Jonas
- *
- *  TODO: add remove_edge_request_handler.cc
  */
 
 #ifndef REMOVE_EDGE_REQUEST_HANDLER_H_
