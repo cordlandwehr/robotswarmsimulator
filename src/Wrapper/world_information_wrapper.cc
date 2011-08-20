@@ -33,13 +33,13 @@ std::map< std::size_t, boost::shared_ptr<RobotIdentifier> > WorldInformationWrap
 
 WorldInformationWrapper::~WorldInformationWrapper () {}
 
-void
+std::size_t
 WorldInformationWrapper::add_edge(std::size_t source, std::size_t target, const std::string &type) {
   MarkerInformationWrapper marker;
-  add_edge(source, target, marker, type);
+  return add_edge(source, target, marker, type);
 } 
 
-void
+std::size_t
 WorldInformationWrapper::add_edge(std::size_t source, std::size_t target,
 				  MarkerInformationWrapper marker, const std::string &type) {
   // check the given IDs
@@ -62,6 +62,10 @@ WorldInformationWrapper::add_edge(std::size_t source, std::size_t target,
   edge->set_marker_information(new_marker);
   // add edge to world
   world_information_->add_edge(edge);
+  // get, map and return ID of new edge
+  std::size_t id = edge->id()->id();
+  edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id());
+  return id;
 }  
 
 template<typename T> void 
@@ -82,9 +86,6 @@ WorldInformationWrapper::get_edge_anchors(std::size_t id) {
   // look up edge and robot IDs
   boost::shared_ptr<const Edge> edge = world_information_->get_according_edge(edge_identifiers_[id]);
   std::pair<std::size_t, std::size_t> robot_pair(edge->getRobot1()->id(), edge->getRobot2()->id());
-  // update mapping
-  robot_identifiers_[edge->getRobot1()->id()] = edge->getRobot1();
-  robot_identifiers_[edge->getRobot2()->id()] = edge->getRobot2();
   // return STL pair
   return robot_pair;
 }
@@ -119,8 +120,7 @@ WorldInformationWrapper::get_edges(const std::string &filter) {
       // element was filtered out
       continue;
     }
-    // update mapping and store integer id in result vector
-    edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(it->second->id());
+    // store integer id in result vector
     result.push_back(id);
   }
   return result;
@@ -146,30 +146,24 @@ WorldInformationWrapper::get_edges(std::size_t id, const std::string &filter) {
       // element was filtered out
       continue;
     }
-    // add ID to result vector and update mapping
-    edge_identifiers_[edge_id] = edge_identifier;
+    // add ID to result vector
     result.push_back(edge_id);
   }
   return result;
 }
 
-std::size_t
-WorldInformationWrapper::get_message_id(std::size_t id, std::size_t index) {
-  // check the given ID
-  check_mapping(robot_identifiers_, id);
-  // look up robot and return ID of first message
-  boost::shared_ptr<RobotData> rd = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]);
-  boost::shared_ptr<MessageIdentifier> msg_id = rd->get_message(index);
-  return msg_id->id();
+const std::vector<std::size_t>
+WorldInformationWrapper::get_messages() {
+  // store IDs in separate result vector
+  std::vector<std::size_t> result;
+  return result;
 }
 
-std::size_t
-WorldInformationWrapper::get_number_of_messages(std::size_t id) {
-  // check the given ID
-  check_mapping(robot_identifiers_, id);
-  // look up robot and return number of messages
-  boost::shared_ptr<RobotData> rd = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]); 
-  return rd->get_number_of_messages();
+const std::vector<std::size_t>
+WorldInformationWrapper::get_messages(std::size_t id) {
+  // store IDs in separate result vector
+  std::vector<std::size_t> result;
+  return result;
 }
 
 std::set< boost::shared_ptr<Request> >
@@ -195,7 +189,6 @@ WorldInformationWrapper::get_robots () {
   // add integer representations of IDs to result vector, update mapping in the process
   BOOST_FOREACH (boost::shared_ptr<RobotData> robot, world_information_->robot_data()) {
     std::size_t id = robot->id()->id();
-    robot_identifiers_[id] = boost::dynamic_pointer_cast<RobotIdentifier>(robot->id());
     result.push_back(id);
   }
   return result;
@@ -256,13 +249,40 @@ WorldInformationWrapper::set_robot_information(std::size_t id, MarkerInformation
 
 void
 WorldInformationWrapper::set_world_information (const boost::shared_ptr <WorldInformation> &world_information) {
-  // clear mappings
+  // store pointer to new WorldInformation object
+  world_information_ = world_information;
+  // update/clear mappings
+  update_mappings();
+  request_set_.clear();
+}
+
+void
+WorldInformationWrapper::update_mappings() {
+  // clear existing mappings
   edge_identifiers_.clear();
   message_identifiers_.clear();
   robot_identifiers_.clear();
-  request_set_.clear();
-  // store pointer to new WorldInformation object
-  world_information_ = world_information;
+  // look up edges
+  std::map< std::size_t, boost::shared_ptr<Edge> >::iterator eit;
+  for(eit = world_information_->edges().begin(); 
+      eit != world_information_->edges().end(); 
+      eit++) {
+    std::size_t id = eit->second->id()->id();
+    edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(eit->second->id());
+  }
+  // look up messages
+  std::map< std::size_t, boost::shared_ptr<Message> >::iterator mit;
+  for(mit = world_information_->messages().begin(); 
+      mit != world_information_->messages().end(); 
+      mit++) {
+    std::size_t id = mit->second->id()->id();
+    message_identifiers_[id] = boost::dynamic_pointer_cast<MessageIdentifier>(mit->second->id());
+  }
+  // look up robots
+  BOOST_FOREACH(boost::shared_ptr<RobotData> robot, world_information_->robot_data()) {
+    std::size_t id = robot->id()->id();
+    robot_identifiers_[id] = boost::dynamic_pointer_cast<RobotIdentifier>(robot->id());
+  }
 }
   
 }

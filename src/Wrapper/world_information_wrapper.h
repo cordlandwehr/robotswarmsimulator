@@ -53,7 +53,7 @@ public:
    * \param source	ID of the source robot.
    * \param target	ID of the target robot.
    */
-  static void add_edge(std::size_t source, std::size_t target, const std::string &type);
+  static std::size_t add_edge(std::size_t source, std::size_t target, const std::string &type);
   
   /** Adds an edge with given MarkerInformation.
    * 
@@ -61,7 +61,7 @@ public:
    * \param target	ID of the target robot.
    * \param marker	Wrapped MarkerInformation object.
    */
-  static void add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
+  static std::size_t add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
    
   /**
    * Returns robot IDs for a given edge.
@@ -95,21 +95,20 @@ public:
   static const std::vector<std::size_t> get_edges(std::size_t id, const std::string &filter);
       
   /**
-   * Return ID of first message in queue of a given robot.
+   * Returns set of messages.
    * 
-   * \param id		ID of the robot.
    * \returns		ID of the message.
    */
-  static std::size_t get_message_id(std::size_t id, std::size_t index);
+  static const std::vector<std::size_t> get_messages();
   
   /**
-   * Returns number of messages in queue for a given robot.
-   * 
+   * Returns set of messages of a given robot.
+   *
    * \param id		ID of the robot.
-   * \returns 		Number of messages.
+   * \returns		Vector of integer IDS.
    */
-  static std::size_t get_number_of_messages(std::size_t id);
-  
+  static const std::vector<std::size_t> get_messages(std::size_t);
+    
   /**
    * Returns the cached request set.
    * 
@@ -233,6 +232,13 @@ private:
    */
   template<typename T>
   static void check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key);
+  
+  /**
+   * Updates references maps.
+   * 
+   * Creates mappings from integer representations to Identifier objects.
+   */
+  static void update_mappings();
 };
   
 }
