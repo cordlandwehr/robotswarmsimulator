@@ -39,6 +39,7 @@
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
+#include <boost/algorithm/string.hpp>
 
 
 #include <luabind/object.hpp>
@@ -46,11 +47,17 @@
 
 #include "../Model/robot_identifier.h"
 #include "../Model/marker_identifier.h"
+#include "../Model/edge_identifier.h"
+#include "../Model/message_identifier.h"
 #include "../Model/obstacle_identifier.h"
 #include "../Model/box_identifier.h"
 #include "../Model/sphere_identifier.h"
 #include "../Model/marker_information.h"
 #include "../Requests/marker_request.h"
+#include "../Requests/insert_edge_request.h"
+#include "../Requests/remove_edge_request.h"
+#include "../Requests/remove_message_request.h"
+#include "../Requests/send_message_request.h"
 #include "../Requests/position_request.h"
 #include "../Views/view.h"
 #include "../Wrapper/lua_distribution_generator.h"
@@ -61,68 +68,110 @@
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
 	Robot* robot; //needed as "caller" in most view methods
-	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
+	
+	std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> > edge_identifiers_;
+	std::map< std::size_t, boost::shared_ptr<MessageIdentifier> > message_identifiers_;
+	std::map< std::size_t, boost::shared_ptr<RobotIdentifier> > robot_identifiers_;
+	
 	std::set<boost::shared_ptr<Request> > requests;
-
-	template<typename T>
-	const boost::shared_ptr<T> resolve(std::size_t identifier_index) {
-		boost::shared_ptr<T> result = boost::dynamic_pointer_cast<T>(queried_identifiers[identifier_index]);
-		if(!result) {
-			throw std::invalid_argument("Invalid type: Index " + boost::lexical_cast<std::string>(identifier_index) + " does not point to " + typeid(T).name() + ".");
-		}
-		return result;
+	
+   /**
+   * Checks reference map.
+   * 
+   * Checks for a given pair of a reference map and a key (ID), whether the 
+   * key exists. Throws an exception if the key does not exist.
+   * 
+   * \param map		Map to be checked.
+   * \param key		Key (ID) to be looked up.
+   */
+	template<typename T> void 
+	check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key) {
+	  // get iterator for given key
+	  typename std::map<std::size_t, boost::shared_ptr<T> >::const_iterator it;
+	  it = map.find(key);
+	  // check entry
+	  if (it == map.end()) {
+	    throw std::invalid_argument("The given ID is unknown to the Lua Wrapper. Possible reasons: The ID does not exists. The ID has not been looked up before.");
+	  }
 	}
-
-	template<typename T>
-	const std::vector<std::size_t> transform(const std::vector<boost::shared_ptr<T> >& set) {
-		std::size_t begin_index = queried_identifiers.size();
-		queried_identifiers.insert(queried_identifiers.end(), set.begin(), set.end());
-		std::vector<std::size_t> result(set.size());
-		std::for_each(result.begin(), result.end(), boost::lambda::_1 = boost::lambda::var(begin_index)++);
-		return result;
+	
+	const std::vector<std::size_t> get_ids(const std::vector< boost::shared_ptr<EdgeIdentifier> > ids) {
+	  std::vector<std::size_t> result;
+	  BOOST_FOREACH(boost::shared_ptr<EdgeIdentifier> ident, ids) {
+	    std::size_t id = view->get_id(*robot, ident);
+	    edge_identifiers_[id] = ident;
+	    result.push_back(id);
+	  }
+	  return result;
 	}
-
-	const LuaWrapper::MarkerInformationWrapper transform(const MarkerInformation& marker) {
-		return LuaWrapper::MarkerInformationWrapper(marker);
+	
+	const std::size_t get_id(const boost::shared_ptr<MessageIdentifier> ident) {
+	  std::size_t id = view->get_id(*robot, ident);
+	  message_identifiers_[id] = ident;
+	  return id;
 	}
-
-	const LuaWrapper::CoordinateSystemWrapper transform(const boost::tuple<boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d>,boost::shared_ptr<Vector3d> >& cs) {
-		return LuaWrapper::CoordinateSystemWrapper(LuaWrapper::transform(*boost::get<0>(cs)), LuaWrapper::transform(*boost::get<1>(cs)), LuaWrapper::transform(*boost::get<2>(cs)));
-	}
-
-	const MarkerInformation transform(const LuaWrapper::MarkerInformationWrapper& marker) {
-		return marker.marker_information();
+		
+	const std::vector<std::size_t> get_ids(const std::vector< boost::shared_ptr<RobotIdentifier> > ids) {
+	  std::vector<std::size_t> result;
+	  BOOST_FOREACH(boost::shared_ptr<RobotIdentifier> ident, ids) {
+	    std::size_t id = view->get_id(*robot, ident);
+	    robot_identifiers_[id] = ident;
+	    result.push_back(id);
+	  }
+	  return result;
 	}
 
 	/**
 	 * @see View.get_visible_robots()
 	 * @return Array of identifiers
 	 */
-
 	const std::vector<std::size_t> get_visible_robots() {
-		return transform(view->get_visible_robots(*robot));
+	    return get_ids(view->get_visible_robots(*robot));
 	}
 	
-	/**
-	 * @param Identifier
-	 * @return Position of the object identified by the given identifier.
-	 * @see View.get_position()
-	 */
-
-	const LuaWrapper::Vector3dWrapper get_position(std::size_t index) {
-		return LuaWrapper::transform(view->get_position(*robot, resolve<Identifier>(index)));
+	const std::vector<std::size_t> get_visible_edges() {
+	    return get_ids(view->get_visible_edges(*robot));
 	}
-
+	
+	const std::size_t get_number_of_messages() {
+	  return view->get_number_of_messages(*robot);
+	}
+	
+	const std::size_t get_message(std::size_t index) {
+	  return get_id(view->get_message(*robot, index));
+	}
+	
 	/**
 	 * @param Identifier
 	 * @return MarkerInformation of the object identified by the given identifier.
 	 * @see View.get_marker_information()
 	 */
 
-	const LuaWrapper::MarkerInformationWrapper get_marker_information(std::size_t index) {
-		return transform(view->get_marker_information(*robot, resolve<Identifier>(index)));
+	const LuaWrapper::MarkerInformationWrapper get_marker_information(boost::shared_ptr<Identifier> id) {
+		return LuaWrapper::MarkerInformationWrapper(view->get_marker_information(*robot, id));
 	}
 	
+	const LuaWrapper::MarkerInformationWrapper get_edge_information(std::size_t id) {
+	  // check the given ID
+	  check_mapping(edge_identifiers_, id);
+	  // delegate call to view
+	  return get_marker_information(edge_identifiers_[id]);
+	}
+
+	const LuaWrapper::MarkerInformationWrapper get_message_information(std::size_t id) {
+	  // check the given ID
+	  check_mapping(message_identifiers_, id);
+	  // delegate call to view
+	  return get_marker_information(message_identifiers_[id]);
+	}
+	
+	const LuaWrapper::MarkerInformationWrapper get_robot_information(std::size_t id) {
+	  // check the given ID
+	  check_mapping(robot_identifiers_, id);
+	  // delegate call to view
+	  return get_marker_information(robot_identifiers_[id]);
+	}
+		
 	/**
 	 * @param (Robot-)Identifier
 	 * @return Returns whether last (already performed) request has been successful (i.e. was handled in exactly the way
@@ -130,8 +179,11 @@ namespace {
 	 * @see View.get_robot_last_request_successful()
 	 */
 	
-	const unsigned get_robot_last_request_successful(std::size_t index) {
-		return view->get_robot_last_request_successful(*robot, resolve<RobotIdentifier>(index));
+	const unsigned get_robot_last_request_successful(std::size_t id) {
+	  // check the given id
+	  check_mapping(robot_identifiers_, id);
+	  // delagte to view
+	  return view->get_robot_last_request_successful(*robot, robot_identifiers_[id]);
 	}
 	
 	/**
@@ -143,11 +195,60 @@ namespace {
 		return view->get_time();
 	}
 
-	/**
-	 * Checks if the given Identifier is a SphereIdentifier
-	 * @param Identifier
-	 * @return true if given Identifier is a SphereIdentifier; false otherwise
-	 */
+
+
+	void add_insert_edge_request(std::size_t tail, std::size_t head, LuaWrapper::MarkerInformationWrapper marker, const std::string& type) {
+	  // check the given IDs
+	  check_mapping(robot_identifiers_, tail);
+	  check_mapping(robot_identifiers_, head);
+	    // get robot IDs
+	    boost::shared_ptr<RobotIdentifier> source_robot = robot_identifiers_[tail];
+	    boost::shared_ptr<RobotIdentifier> target_robot = robot_identifiers_[head]; 
+	    // create new edge (decide type depending on given string)
+	    std::string type_lower(type);
+	    boost::to_lower(type_lower);
+	    boost::shared_ptr<Edge> edge;
+	    if (type_lower == "directed") {
+	      edge.reset(new DirectedEdge(source_robot, target_robot));
+	    } else {
+	      edge.reset(new UndirectedEdge(source_robot, target_robot));
+	    }
+	    // create and assign new MarkerInforamtion object
+	    boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+	    edge->set_marker_information(new_marker);
+	    // create request
+	    requests.insert(boost::shared_ptr<Request>(new InsertEdgeRequest(*robot, edge)));
+	}
+	
+	void add_insert_edge_request(std::size_t tail, std::size_t head, const std::string& type) {
+	  LuaWrapper::MarkerInformationWrapper marker;
+	  add_insert_edge_request(tail, head, marker, type);
+	}
+	
+	void add_remove_edge_request(std::size_t id) {
+	  // check the given ID
+	  check_mapping(edge_identifiers_, id);
+	  // create request
+	  // TODO: How to get the actual edge?!
+	}
+	
+	void add_send_message_request(std::size_t id, LuaWrapper::MarkerInformationWrapper marker) {
+	  // check the given ID
+	  check_mapping(robot_identifiers_, id);
+	  // cerate new Message
+	  boost::shared_ptr<Message> message(new Message(robot->id(), robot_identifiers_[id]));
+	  boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+	  message->set_marker_information(new_marker);
+	  // create request
+	  requests.insert(boost::shared_ptr<Request>(new SendMessageRequest(*robot, message)));
+	}
+	
+	void add_remove_message_request(std::size_t id) {
+	  // check the given ID
+	  check_mapping(message_identifiers_, id);
+	  // create request
+	  requests.insert(boost::shared_ptr<Request>(new RemoveMessageRequest(*robot, message_identifiers_[id])));
+	}
 	
 	/**
 	 * Adds a PositionRequest which is send to the simulation as return value of
@@ -167,7 +268,7 @@ namespace {
 	 */
 
 	void add_marker_request(LuaWrapper::MarkerInformationWrapper marker) {
-		boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(transform(marker)));
+		boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
 		requests.insert(boost::shared_ptr<Request>(new MarkerRequest(*robot, new_marker)));
 	}
 
@@ -177,7 +278,7 @@ namespace {
 	 */
 
 	const unsigned get_own_identifier() {
-		return 0; //own id always at pos 0 in queried_identifiers
+		return view->get_id(*robot, robot->id());
 	}
 
 }
@@ -255,14 +356,23 @@ void LuaRobot::register_lua_methods() {
 		// TODO (cola) still commented out, cause this will cause trouble on the next upstream ;)
 		luabind::namespace_("View")
 		[
-			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
-			 luabind::def("get_position", &get_position),
-			 luabind::def("get_marker_information", &get_marker_information),
-			 luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
-			 luabind::def("get_time", &get_time),
+			 luabind::def("add_insert_edge_request", (void(*)(std::size_t, std::size_t, LuaWrapper::MarkerInformationWrapper, const std::string&)) &add_insert_edge_request),
+			 luabind::def("add_insert_edge_request", (void(*)(std::size_t, std::size_t, const std::string&)) &add_insert_edge_request),
 			 luabind::def("add_position_request", &add_position_request),
 			 luabind::def("add_marker_request", &add_marker_request),
-			 luabind::def("get_own_id", &get_own_identifier)
+			 luabind::def("add_send_message_request", &add_send_message_request),
+			 luabind::def("add_remove_edge_request", &add_remove_edge_request),
+			 luabind::def("add_remove_message_request", &add_remove_message_request),
+			 luabind::def("get_edge_information", &get_edge_information),
+			 luabind::def("get_visible_edges", &get_visible_edges, luabind::copy_table(luabind::result)), 
+			 luabind::def("get_message", &get_message),
+			 luabind::def("get_message_information", &get_message_information),
+			 luabind::def("get_number_of_messages", &get_number_of_messages),
+			 luabind::def("get_own_id", &get_own_identifier),
+			 luabind::def("get_robot_information", &get_robot_information),
+			 luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
+			 luabind::def("get_time", &get_time),
+			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result))
 	    ]
 	];
 
@@ -271,9 +381,12 @@ void LuaRobot::register_lua_methods() {
 std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	view = view_;
 	robot = this;
+	
+	edge_identifiers_.clear();
+	message_identifiers_.clear();
+	robot_identifiers_.clear();
+	
 	requests.clear();
-	queried_identifiers.clear();
-	queried_identifiers.push_back(id());
 
 	try {
 		luabind::call_function<void>(lua_state_.get(), "main");
