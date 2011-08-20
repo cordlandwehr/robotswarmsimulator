@@ -55,7 +55,7 @@ BOOST_FIXTURE_TEST_CASE(EventHandlerFactoryTest, SimpleWorldFixture) {
 
 	// should be constructed normally
 	boost::shared_ptr<EventHandler> event_handler;
-	BOOST_CHECK_NO_THROW(event_handler = Factory::event_handler_factory(parameter_map, history, robot_control));
+	//BOOST_CHECK_NO_THROW(event_handler = Factory::event_handler_factory(parameter_map, history, robot_control));
 	BOOST_CHECK(event_handler);
 	BOOST_CHECK(event_handler->marker_request_handler_);
 	//BOOST_CHECK_EQUAL(1.0, event_handler->marker_request_handler_->discard_probability_);
