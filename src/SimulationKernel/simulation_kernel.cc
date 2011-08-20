@@ -105,6 +105,9 @@ void SimulationKernel::init(const string& project_filename,
 	parser_->load_projectfiles(project_filename);
 	std::map<std::string, std::string> &params = parser_->parameter_map();
 	boost::program_options::variables_map &params_boost = parser_->parameter_map_boost();
+	
+	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "robot file name: " << params_boost["ROBOT_FILENAME"].as<string>();
+	
 	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Generated parameter map";
 	// create and add initial world information to history
 	boost::shared_ptr<WorldInformation> initial_world_information = setup_initial_world_information(parser_);
@@ -114,10 +117,10 @@ void SimulationKernel::init(const string& project_filename,
 	history_->insert(initial_time_point);
 
 	// create Robot Control
-	boost::shared_ptr<RobotControl> robot_control = Factory::robot_control_factory(params, history_->capacity(), initial_world_information);
+	boost::shared_ptr<RobotControl> robot_control = Factory::robot_control_factory(params_boost, history_->capacity(), initial_world_information);
 
 	// create ASG
-	asg_ = Factory::asg_factory(params);
+	asg_ = Factory::asg_factory(params_boost);
 	asg_->initialize(*history_, robots_, world_modifiers_);
 
 	// create EventHandler.

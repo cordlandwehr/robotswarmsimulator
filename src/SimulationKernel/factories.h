@@ -33,6 +33,7 @@
 #include <cstddef>
 #include <boost/any.hpp>
 #include <boost/smart_ptr.hpp>
+#include <boost/program_options/variables_map.hpp>
 
 #include "../Model/world_modifier.h"
 
@@ -65,21 +66,21 @@ namespace Factory {
 	 * Returns shared pointer to created activation sequence generator
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(std::map<std::string, std::string> &params);
+	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(boost::program_options::variables_map &params);
 
 	/**
 	 * Creates ViewFactory from parameters given in the param map.
 	 * Returns shared pointer to ViewFactory
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<AbstractViewFactory> view_factory_factory(std::map<std::string, std::string> &params, const std::string& prefix = "");
+	boost::shared_ptr<AbstractViewFactory> view_factory_factory(boost::program_options::variables_map &params, const std::string& prefix = "");
 
 	/**
 	 * Creates RobotControl from parameters given in the param map.
 	 * Returns shared pointer to RobotControl
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<RobotControl> robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information);
+	boost::shared_ptr<RobotControl> robot_control_factory(boost::program_options::variables_map params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information);
 
 	/**
 	 * Creates robot from given algorithm

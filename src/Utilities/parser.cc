@@ -96,15 +96,14 @@ string Parser::get_default_value(const string& var) {
 	//variable has a default value
 	if(!var.compare("ROBOT_FILENAME")) {
 		return project_filename_;
-	}
-	else {
+	} else {
 		return "NO_DEFAULT_VALUE";
 	}
 }
 
 string Parser::get_var_value(const string& line, const string& name) {
-	size_t pos_of_first_quote_sign = line.find_first_of("\"");
-	size_t pos_of_last_quote_sign = line.find_last_of("\"");
+	size_t pos_of_first_quote_sign = line.find_first_of("=") + 1; //line.find_first_of("\"");
+	size_t pos_of_last_quote_sign = line.length(); // line.find_last_of("\"");
 
 	//check if value is correctly quoted and value exists
 	if(pos_of_first_quote_sign == string::npos || pos_of_last_quote_sign == string::npos) {
@@ -115,12 +114,12 @@ string Parser::get_var_value(const string& line, const string& name) {
 		}
 		else {
 			throw UnsupportedOperationException("Syntax error in main project file. Either variable value in line "
-				"\""+line+"\" is not quote correctly or value is not defined.");
+				"\""+line+"\" is not quite correct or value is not defined.");
 		}
 	}
 
-	return line.substr(pos_of_first_quote_sign+1,
-			           pos_of_last_quote_sign-pos_of_first_quote_sign-1);
+	return line.substr(pos_of_first_quote_sign/*+1*/,
+			           pos_of_last_quote_sign-pos_of_first_quote_sign/*-1*/);
 
 }
 
@@ -185,16 +184,18 @@ void Parser::load_main_project_file(const string& project_filename) {
 	
 	project_filename_ = project_filename;
 	string main_project_filename = project_filename_ + ".swarm";
-	
+		
 	boost::program_options::options_description desc("Main project file options");
 	desc.add_options()
     ("PROJECT_NAME", boost::program_options::value<string>(), "set project name")
 	("ROBOT_FILENAME", boost::program_options::value<string>(), "set robot file name")
 	("WORLD_MODIFIERS", boost::program_options::value< vector<string> >(), "set world modifiers")	
-	("ASG", boost::program_options::value<string>(), "set activation sequence generator")
+	("ASG", boost::program_options::value<string>()->default_value("SYNCHRONOUS_WM"), "set activation sequence generator")
+	("VIEW", boost::program_options::value<string>()->default_value("LOCAL_GRAPH_VIEW"), "set view to use")
 	;
 	
-	std::ifstream in( project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
+
+	std::ifstream in( main_project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
 	boost::program_options::store(boost::program_options::parse_config_file(in, desc), parameter_map_boost_);
 	boost::program_options::notify(parameter_map_boost_);
 	
