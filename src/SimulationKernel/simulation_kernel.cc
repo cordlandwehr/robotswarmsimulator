@@ -103,10 +103,8 @@ void SimulationKernel::init(const string& project_filename,
 	// create Parser, load project file and get map
 	parser_.reset(new Parser());
 	parser_->load_projectfiles(project_filename);
-	std::map<std::string, std::string> &params = parser_->parameter_map();
+	//std::map<std::string, std::string> &params = parser_->parameter_map();
 	boost::program_options::variables_map &params_boost = parser_->parameter_map_boost();
-	
-	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "robot file name: " << params_boost["ROBOT_FILENAME"].as<string>();
 	
 	ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Generated parameter map";
 	// create and add initial world information to history
@@ -124,12 +122,12 @@ void SimulationKernel::init(const string& project_filename,
 	asg_->initialize(*history_, robots_, world_modifiers_);
 
 	// create EventHandler.
-	event_handler_ = Factory::event_handler_factory(params, history_, robot_control);
+	event_handler_ = Factory::event_handler_factory(history_, robot_control);
 
 	// create and initialize statistics module;
 	if (create_statistics==true) {
 		stats_.reset(new StatsControl());
-		stats_->init(params, output_dir);
+		stats_->init(output_dir);
 	} else {
 		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Output disabled.";
 
@@ -190,9 +188,6 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 	std::string temp_robot_algorithm;
 
 	boost::shared_ptr<Vector3d> temp_robot_position;
-	boost::shared_ptr<Vector3d> temp_robot_velocity;
-	boost::shared_ptr<Vector3d> temp_robot_acceleration;
-
 
 	boost::tuple <boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > temp_robot_axes;
 
@@ -210,24 +205,8 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 		temp_robot = Factory::robot_factory(temp_robot_identifier, temp_robot_algorithm);
 
 		temp_robot_position.reset(new Vector3d(parser->robot_positions()[i]));
-		temp_robot_velocity.reset(new Vector3d(parser->robot_velocities()[i]));
-		temp_robot_acceleration.reset(new Vector3d(parser->robot_accelerations()[i]));
 
 		temp_robot_data.reset(new RobotData(temp_robot_identifier, temp_robot_position, *temp_robot));
-
-		temp_robot_data->set_velocity(temp_robot_velocity);
-		temp_robot_data->set_acceleration(temp_robot_acceleration);
-
-		temp_robot_data->set_type(robot_type_map_[boost::to_upper_copy(parser->robot_types()[i])]);
-		temp_robot_data->set_status(robot_status_map_[boost::to_upper_copy(parser->robot_stati()[i])]);
-
-		temp_robot_data->set_color(boost::lexical_cast<int>(parser->robot_colors()[i]));
-
-		boost::get<0>(temp_robot_axes).reset(new Vector3d(boost::get<0>(parser->robot_coordinate_systems()[i])));
-		boost::get<1>(temp_robot_axes).reset(new Vector3d(boost::get<1>(parser->robot_coordinate_systems()[i])));
-		boost::get<2>(temp_robot_axes).reset(new Vector3d(boost::get<2>(parser->robot_coordinate_systems()[i])));
-
-		temp_robot_data->set_coordinate_system_axis(temp_robot_axes);
 
 		robots_.push_back(temp_robot);
 		initial_world_information->add_robot_data(temp_robot_data);

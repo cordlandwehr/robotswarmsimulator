@@ -131,8 +131,7 @@ void create_vector_modifiers_from_string(boost::shared_ptr<VectorRequestHandler>
 }
 
 
-boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::string, std::string> &params,
-                                                               boost::shared_ptr<History> history,
+boost::shared_ptr<EventHandler> Factory::event_handler_factory(boost::shared_ptr<History> history,
                                                                boost::shared_ptr<RobotControl> robot_control) {
 	boost::shared_ptr<EventHandler> event_handler(new EventHandler(history, robot_control));
 

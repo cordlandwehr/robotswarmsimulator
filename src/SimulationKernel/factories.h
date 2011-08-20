@@ -57,8 +57,7 @@ namespace Factory {
 	 * Returns shared pointer to created event handler
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<EventHandler> event_handler_factory(std::map<std::string, std::string> &params,
-	                                                      boost::shared_ptr<History> history,
+	boost::shared_ptr<EventHandler> event_handler_factory(boost::shared_ptr<History> history,
 														  boost::shared_ptr<RobotControl> robot_control);
 
 	/**

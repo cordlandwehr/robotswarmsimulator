@@ -78,7 +78,7 @@ public:
 	 * Parameter Names exactly as in Specification Document
 	 * Exact Types of boost::any objects can be looked up in Specification Document
 	 */
-	std::map<std::string, std::string>& parameter_map() { return parameter_map_;};
+	std::map<std::string, std::string>& parameter_map();
 	
 	/**
 	 * Returns a map which stores all parameters as boost::any.
@@ -86,12 +86,6 @@ public:
 	 * Exact Types of boost::any objects can be looked up in Specification Document
 	 */
 	boost::program_options::variables_map& parameter_map_boost() { return parameter_map_boost_;};	
-
-	/**
-	 * Set-method for compass model
-	 * @param compass_model string
-	 */
-	void set_compass_model(const std::string& compass_model);
 
 	/**
 	 * Set-method for project_name
@@ -110,12 +104,6 @@ public:
 	 * @param statistics template string
 	 */
 	void set_statistics_template(const std::string& statistics_template);
-
-	/**
-	 * Set-method for statistics_subsets
-	 * @param statistics subsets string
-	 */
-	void set_statistics_subsets(const std::string& statistics_subsets);
 
 	/**
 	 * Set-method for project filename
@@ -138,15 +126,6 @@ public:
 	 */
 	void save_projectfiles(const std::string& project_filename, const WorldInformation& world_info);
 
-	/**
-	 * This method sets default variables and values.
-	 */
-	void init();
-
-	/**
-	 * \return constant reference to the string describing the type of the Compass Model in the parser
-	 */
-	const std::string& compass_model() const;
 
 	/**
 	 * \return constant reference to the string describing the Robot Filename.
@@ -159,26 +138,6 @@ public:
 	std::vector<Vector3d>& robot_positions();
 
 	/**
-	 * \return reference to vector of Robot Velocites.
-	 */
-	std::vector<Vector3d>& robot_velocities();
-
-	/**
-	 * \return reference to vector of Robot Accelerations.
-	 */
-	std::vector<Vector3d>& robot_accelerations();
-
-	/**
-	 * \return reference to vector of Robot Types.
-	 */
-	std::vector<std::string>& robot_types();
-
-	/**
-	 * \return reference to vector of Robot Stati.
-	 */
-	std::vector<std::string>& robot_stati();
-
-	/**
 	 * \return reference to vector of Robot Marker Information.
 	 */
 	std::vector<std::string>& robot_marker_information();
@@ -187,16 +146,6 @@ public:
 	 * \return reference to vector of Robot algorithms.
 	 */
 	std::vector<std::string>& robot_algorithms();
-
-	/**
-	 * \return reference to vector of Robot color.
-	 */
-	std::vector<std::string>& robot_colors();
-
-	/**
-	 * \return reference to 3-tuple of Robot coordinate axis.
-	 */
-	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& robot_coordinate_systems();
 
 	/**
 	 * \return reference to vector of world modifier.
@@ -234,24 +183,8 @@ private:
 	// ROBOT DATA
 	////////////////////////////////////////////////////////
 	std::vector<Vector3d> initiale_robot_positions_;
-	std::vector<Vector3d> initiale_robot_velocities_;
-	std::vector<Vector3d> initiale_robot_accelerations_;
-	std::vector<std::string> initiale_robot_types_;
-	std::vector<std::string> initiale_robot_stati_;
 	std::vector<std::string> initiale_robot_marker_information_;
 	std::vector<std::string> initiale_robot_algorithms_;
-	std::vector<std::string> initiale_robot_colors_;
-	std::vector<boost::tuple<Vector3d, Vector3d, Vector3d> > initiale_robot_coordinate_systems_;
-
-
-
-	/**
-	 * This method returns the default value of the given variable, if the given variable has a default value,
-	 * otherwise "" will be returned.
-	 * \param var Variable which default value will be returned.
-	 * \return Default value of given variable, if given variable has a default value, otherwise "".
-	 */
-	std::string get_default_value(const std::string& var);
 
 	/**
 	 * This method loads the data written in the main project file
@@ -259,6 +192,7 @@ private:
 	 * asg_, compass_model_, event_handler_,
 	 * project_name_, robot_filename_, statistics_module_
 	 * \param Name of the main project file.
+	 * \return a map which stores all parameters as boost::any. 
 	 */
 	void load_main_project_file(const std::string& project_filename);
 
@@ -289,22 +223,6 @@ private:
 	bool is_comment(const std::string& line);
 
 	/**
-	 * This methods returns the variable contained in the given line.
-	 * Excepts, that the given line contains an assignment.
-	 */
-	std::string get_var_name(const std::string& line);
-
-	/**
-	 * This methods returns the value of the assignment in this line.
-	 * Returns default value of variable, if variable has a default value and
-	 * variable name isn't set in input file.
-	 * \param line Line from file containing an assignment.
-	 * \param name Variable name in line.
-	 */
-	std::string get_var_value(const std::string& line, const std::string& name);
-
-
-	/**
 	 * This methods initializes all necessary variables with the values saved
 	 * in the given map.
 	 *
@@ -312,7 +230,7 @@ private:
 	 *
 	 * TODO(martinah) use a constant reference to map as input parameter
 	 */
-	void init_variables(std::map<std::string,std::string> variables_and_values);
+	void init_variables();
 
 	/**
 	 * This methods returns the (string) value of the variable according to var_name saved in the given map.
@@ -323,7 +241,7 @@ private:
 	 * \return 	If var_name exists in the map, return (string) value of var_name saved in the map.
 	 * 			If var_name doesn't exist in the map, but var_name has a default value, return this default_value.
 	 */
-	std::string get_string_value_from_map(std::map<std::string,std::string> variables_and_values, const std::string& var_name);
+	std::string get_string_value_from_map(const boost::program_options::variables_map& variables_and_values, const std::string& var_name);
 
 	/**
 	 * Checks whether the given string contains an assignment.
