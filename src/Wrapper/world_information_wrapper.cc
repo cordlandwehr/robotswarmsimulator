@@ -339,10 +339,13 @@ WorldInformationWrapper::set_robot_information(std::size_t id, MarkerInformation
 
 void
 WorldInformationWrapper::set_world_information (const boost::shared_ptr <WorldInformation> &world_information) {
-  // store pointer to new WorldInformation object
-  world_information_ = world_information;
-  // update/clear mappings
-  update_mappings();
+  // rebuild mapping only if the WorldInformation object changes
+  if (world_information_ != world_information) {
+    // store pointer to new WorldInformation object
+    world_information_ = world_information;
+    // update/clear mappings
+    update_mappings();
+  }
   request_set_.clear();
 }
 

@@ -64,24 +64,6 @@ namespace {
 	std::deque<boost::shared_ptr<Identifier> > queried_identifiers;
 	std::set<boost::shared_ptr<Request> > requests;
 
-	/**
-	 * Wrapper for RobotType. Allows lua scripts to work with RobotType constants (access using e.g. RobotType.MASTER).
-	 * @see RobotType
-	 */
-
-	struct RobotTypeWrapper {
-
-	};
-
-	/**
-	 * Wrapper for RobotStatus. Allows lua scripts to work with RobotType constants (access using e.g. RobotStatus.READY).
-	 * @see RobotStatus
-	 */
-
-	struct RobotStatusWrapper {
-
-	};
-
 	template<typename T>
 	const boost::shared_ptr<T> resolve(std::size_t identifier_index) {
 		boost::shared_ptr<T> result = boost::dynamic_pointer_cast<T>(queried_identifiers[identifier_index]);
@@ -120,25 +102,7 @@ namespace {
 	const std::vector<std::size_t> get_visible_robots() {
 		return transform(view->get_visible_robots(*robot));
 	}
-
-	/**
-	 * @see View.get_visible_obstacles()
-	 * @return Array of identifiers
-	 */
-
-	const std::vector<std::size_t> get_visible_obstacles() {
-		return transform(view->get_visible_obstacles(*robot));
-	}
-
-
-	/**
-	 * @see View.get_visible_markers()
-	 * @return Array of identifiers
-	 */
-	const std::vector<std::size_t> get_visible_markers() {
-		return transform(view->get_visible_markers(*robot));
-	}
-
+	
 	/**
 	 * @param Identifier
 	 * @return Position of the object identified by the given identifier.
@@ -158,128 +122,18 @@ namespace {
 	const LuaWrapper::MarkerInformationWrapper get_marker_information(std::size_t index) {
 		return transform(view->get_marker_information(*robot, resolve<Identifier>(index)));
 	}
-
-	/**
-	 * @param Identifier
-	 * @return Id of the object identified by the given identifier.
-	 * @see View.get_id()
-	 */
-
-	const std::size_t get_id(std::size_t index) {
-		return view->get_id(*robot, resolve<Identifier>(index));
-	}
-
-	/**
-	 * @param (Robot-)Identifier
-	 * @return Acceleration of the robot identified by the given identifier.
-	 * @see View.get_robot_acceleration()
-	 */
-
-	const LuaWrapper::Vector3dWrapper get_robot_acceleration(std::size_t index) {
-		return LuaWrapper::transform(view->get_robot_acceleration(*robot, resolve<RobotIdentifier>(index)));
-	}
-
-	/**
-	 * @param (Robot-)Identifier
-	 * @return Coordinate system origin of the robot identified by the given identifier.
-	 * @see View.get_robot_coordinate_system_origin()
-	 */
-
-	const LuaWrapper::Vector3dWrapper get_robot_coordinate_system_origin(std::size_t index) {
-		return LuaWrapper::transform(view->get_robot_coordinate_system_origin(*robot, resolve<RobotIdentifier>(index)));
-	}
-
-	/**
-	 * @param (Robot-)Identifier
-	 * @return CoordinateSystem of the robot identified by the given identifier.
-	 * @see View.get_robot_coordinate_system_axis()
-	 */
-
-	const LuaWrapper::CoordinateSystemWrapper get_robot_coordinate_system_axis(std::size_t index) {
-		return transform(view->get_robot_coordinate_system_axis(*robot, resolve<RobotIdentifier>(index)));
-	}
-
-	/**
-	 * @param (Robot-)Identifier
-	 * @return RobotType of the robot identified by the given identifier.
-	 * @see View.get_robot_type()
-	 */
-
-	const unsigned get_robot_type(std::size_t index) {
-		return view->get_robot_type(*robot, resolve<RobotIdentifier>(index));
-	}
-
-	/**
-	 * @param (Robot-)Identifier
-	 * @return RobotStatus of the robot identified by the given identifier.
-	 * @see View.get_robot_status()
-	 */
-
-	const unsigned get_robot_status(std::size_t index) {
-		return view->get_robot_status(*robot, resolve<RobotIdentifier>(index));
-	}
-
+	
 	/**
 	 * @param (Robot-)Identifier
 	 * @return Returns whether last (already performed) request has been successful (i.e. was handled in exactly the way
 	 *         the issuer requested) for the robot with the given identifier.
 	 * @see View.get_robot_last_request_successful()
 	 */
-
+	
 	const unsigned get_robot_last_request_successful(std::size_t index) {
 		return view->get_robot_last_request_successful(*robot, resolve<RobotIdentifier>(index));
 	}
-
-	/**
-	 * @param (Obstacle-)Identifier
-	 * @return true if point is in given obstacle; false otherwise
-	 * @see View.is_point_in_obstacle()
-	 */
-
-	const bool is_point_in_obstacle(std::size_t index, LuaWrapper::Vector3dWrapper point) {
-		return view->is_point_in_obstacle(resolve<ObstacleIdentifier>(index), LuaWrapper::transform(point));
-	}
-
-	/**
-	 * @param (Box-)Identifier
-	 * @return Depth of the Box identified by the given identifier.
-	 * @see View.get_box_depth()
-	 */
-
-	const double get_box_depth(std::size_t index) {
-		return view->get_box_depth(resolve<BoxIdentifier>(index));
-	}
-
-	/**
-	 * @param (Box-)Identifier
-	 * @return Width of the Box identified by the given identifier.
-	 * @see View.get_box_width()
-	 */
-
-	const double get_box_width(std::size_t index) {
-		return view->get_box_width(resolve<BoxIdentifier>(index));
-	}
-
-	/**
-	 * @param (Box-)Identifier
-	 * @return Height of the Box identified by the given identifier.
-	 * @see View.get_box_height()
-	 */
-
-	const double get_box_height(std::size_t index) {
-		return view->get_box_height(resolve<BoxIdentifier>(index));
-	}
-
-	/**
-	 * @param (Sphere-)Identifier
-	 * @return Radius of the Sphere identified by the given identifier.
-	 * @see View.get_sphere_radius()
-	 */
-
-	const double get_sphere_radius(std::size_t index) {
-		return view->get_sphere_radius(resolve<SphereIdentifier>(index));
-	}
-
+	
 	/**
 	 * @return time of view
 	 * @see View.get_time()
@@ -294,27 +148,7 @@ namespace {
 	 * @param Identifier
 	 * @return true if given Identifier is a SphereIdentifier; false otherwise
 	 */
-
-	const bool is_sphere_identifier(std::size_t index) {
-		return boost::dynamic_pointer_cast<SphereIdentifier>(resolve<Identifier>(index));
-	}
-
-	/**
-	 * Checks if the given Identifier is a BoxIdentifier
-	 * @param Identifier
-	 * @return true if given Identifier is a BoxIdentifier; false otherwise
-	 */
-
-	const bool is_box_identifier(std::size_t index) {
-		return boost::dynamic_pointer_cast<BoxIdentifier>(resolve<Identifier>(index));
-	}
-
-	/**
-	 * Adds a AccelerationRequest which is send to the simulation as return value of
-	 * the compute method.
-	 * @param Requested acceleration vector
-	 */
-
+	
 	/**
 	 * Adds a PositionRequest which is send to the simulation as return value of
 	 * the compute method.
@@ -416,85 +250,20 @@ void LuaRobot::register_lua_methods() {
 			 .def(luabind::constructor<>())
 			 .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
 			 .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data),
-
-		 luabind::class_<LuaWrapper::CoordinateSystemWrapper>("CoordinateSystem")
-			 .def(luabind::constructor<>())
-			 .def(luabind::constructor<LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper, LuaWrapper::Vector3dWrapper>())
-			 .def_readwrite("x_axis", &LuaWrapper::CoordinateSystemWrapper::x_axis)
-			 .def_readwrite("y_axis", &LuaWrapper::CoordinateSystemWrapper::y_axis)
-			 .def_readwrite("z_axis", &LuaWrapper::CoordinateSystemWrapper::z_axis),
-
-		 luabind::class_<RobotTypeWrapper>("RobotType")
-			 .enum_("constants")
-			 [
-				  luabind::value("MASTER", MASTER),
-				  luabind::value("SLAVE", SLAVE)
-			 ],
-
- 		 luabind::class_<RobotStatusWrapper>("RobotStatus")
-			 .enum_("constants")
-			 [
-			 	  luabind::value("SLEEPING", SLEEPING),
-			 	  luabind::value("READY", READY)
-			 ],
-
+		   
 		// now our view-functions
 		// TODO (cola) still commented out, cause this will cause trouble on the next upstream ;)
 		luabind::namespace_("View")
 		[
 			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
-			 luabind::def("get_visible_obstacles", &get_visible_obstacles, luabind::copy_table(luabind::result)),
-			 luabind::def("get_visible_markers", &get_visible_markers, luabind::copy_table(luabind::result)),
 			 luabind::def("get_position", &get_position),
 			 luabind::def("get_marker_information", &get_marker_information),
-			 luabind::def("get_id", &get_id),
-			 luabind::def("get_robot_acceleration", &get_robot_acceleration),
-			 luabind::def("get_robot_coordinate_system_origin", &get_robot_coordinate_system_origin),
-			 luabind::def("get_robot_coordinate_system_axis", &get_robot_coordinate_system_axis),
-			 luabind::def("get_robot_type", &get_robot_type),
-			 luabind::def("get_robot_status", &get_robot_status),
 			 luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
-			 luabind::def("is_point_in_obstacle", &is_point_in_obstacle),
-			 luabind::def("get_box_depth", &get_box_depth),
-			 luabind::def("get_box_width", &get_box_width),
-			 luabind::def("get_box_height", &get_box_height),
-			 luabind::def("get_sphere_radius", &get_sphere_radius),
 			 luabind::def("get_time", &get_time),
-			 luabind::def("is_sphere_identifier", &is_sphere_identifier),
-			 luabind::def("is_box_identifier", &is_box_identifier),
 			 luabind::def("add_position_request", &add_position_request),
 			 luabind::def("add_marker_request", &add_marker_request),
-			 luabind::def("get_own_identifier", &get_own_identifier)
-	    ],
-
-		luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
-		luabind::def("get_visible_obstacles", &get_visible_obstacles, luabind::copy_table(luabind::result)),
-		luabind::def("get_visible_markers", &get_visible_markers, luabind::copy_table(luabind::result)),
-		luabind::def("get_position", &get_position),
-		luabind::def("get_marker_information", &get_marker_information),
-		luabind::def("get_id", &get_id),
-		luabind::def("get_robot_acceleration", &get_robot_acceleration),
-		luabind::def("get_robot_coordinate_system_origin", &get_robot_coordinate_system_origin),
-		luabind::def("get_robot_coordinate_system_axis", &get_robot_coordinate_system_axis),
-		luabind::def("get_robot_type", &get_robot_type),
-		luabind::def("get_robot_status", &get_robot_status),
-		luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
-		luabind::def("is_point_in_obstacle", &is_point_in_obstacle),
-		luabind::def("get_box_depth", &get_box_depth),
-		luabind::def("get_box_width", &get_box_width),
-		luabind::def("get_box_height", &get_box_height),
-		luabind::def("get_sphere_radius", &get_sphere_radius),
-		luabind::def("get_time", &get_time),
-		luabind::def("is_sphere_identifier", &is_sphere_identifier),
-		luabind::def("is_box_identifier", &is_box_identifier),
-		luabind::def("add_position_request", &add_position_request),
-		luabind::def("add_marker_request", &add_marker_request),
-		luabind::def("get_own_identifier", &get_own_identifier),
-
-		// some functions to access global number generator from lua.
-		luabind::def("gen_init_uniform", &LuaWrapper::lua_generator_init_uniform),
-		luabind::def("gen_get_uniform", &LuaWrapper::lua_generator_get_uniform)
-
+			 luabind::def("get_own_id", &get_own_identifier)
+	    ]
 	];
 
 }

@@ -128,7 +128,7 @@ public:
    * \returns		Vector of integer IDS.
    */
   static const std::vector<std::size_t> get_messages(std::size_t);
-  
+    
   /**
    * Return receiver ID of a given message.
    * 
