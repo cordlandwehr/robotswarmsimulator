@@ -36,6 +36,7 @@
 
 //include for enums of RobotType and RobotStatus
 #include "../Model/robot_data.h"
+#include "console_output.h"
 
 using namespace std;
 
@@ -43,91 +44,31 @@ using namespace std;
 // some default values are set, especially for output
 // please cf. User's Guide
 Parser::Parser() :  robot_filename_("rssfile"),
-					dumpnumber_(0) {
-	//initialize Parser with default values
-	init();
-
-}
+					dumpnumber_(0) { }
 
 Parser::~Parser() {
 
 }
 
-void Parser::init() {
-	//define default values
-	parameter_map_["COMPASS_MODEL"] = "FULL_COMPASS";
-	parameter_map_["ASG"] = "SYNCHRONOUS";
-	parameter_map_["STATISTICS_TEMPLATE"] = "ALL";
-	parameter_map_["STATISTICS_SUBSETS"] = "{ALL}";
-	parameter_map_["ROBOT_CONTROL"] = "UNIFORM_ROBOT_CONTROL";
-	parameter_map_["CAMERA_POSITION"] = "0,0,0";
-	parameter_map_["CAMERA_DIRECTION"] = "1,0,0";
-	parameter_map_["CAMERA_TYPE"] = "FOLLOW";
+std::map<std::string, std::string>& Parser::parameter_map() {
+  //this might be called from classes like SzenarioGenerator which are no longer used
+	ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) << "Accessing deprecated parameter_map (this should not happen, only from deprecated classes)" << endl;
+	return parameter_map_; 
 }
 
-bool Parser::is_comment(const string& line) {
-	return line.empty() || line.at(0)=='#';
-}
 
-bool Parser::contains_assignment(const string& line) {
-	const std::size_t pos_of_equal_sign = line.find_first_of("=");
-	return pos_of_equal_sign != string::npos;
-}
-
-string Parser::get_var_name(const string& line) {
-	const std::size_t pos_of_equal_sign = line.find_first_of("=");
-
-	//check if equal sign exists in line
-	if(pos_of_equal_sign == string::npos) {
-		throw UnsupportedOperationException("Syntax error in main project file. Line \""+line+"\" doesn't contain a "
-				"valid assignment.");
-	}
-
-	//extract variable name from line
-	string var_name = line.substr(0,pos_of_equal_sign);
-
-	//get rid of unwanted leading and trailing spaces
-	boost::trim(var_name);
-	return var_name;
-}
-
-string Parser::get_default_value(const string& var) {
-
-	//variable has a default value
-	if(!var.compare("ROBOT_FILENAME")) {
-		return project_filename_;
-	}
-	else {
-		return "NO_DEFAULT_VALUE";
-	}
-}
-
-string Parser::get_var_value(const string& line, const string& name) {
-	size_t pos_of_first_quote_sign = line.find_first_of("\"");
-	size_t pos_of_last_quote_sign = line.find_last_of("\"");
-
-	//check if value is correctly quoted and value exists
-	if(pos_of_first_quote_sign == string::npos || pos_of_last_quote_sign == string::npos) {
-		//get default value, if one exists
-		string default_value = get_default_value(name);
-		if(default_value.compare("NO_DEFAULT_VALUE")) {
-			return default_value;
-		}
-		else {
-			throw UnsupportedOperationException("Syntax error in main project file. Either variable value in line "
-				"\""+line+"\" is not quote correctly or value is not defined.");
-		}
-	}
-
-	return line.substr(pos_of_first_quote_sign+1,
-			           pos_of_last_quote_sign-pos_of_first_quote_sign-1);
-
-}
-
-string Parser::get_string_value_from_map(map<string,string> variables_and_values,
+string Parser::get_string_value_from_map(const boost::program_options::variables_map& variables_and_values,
 													const string& var_name) {
 	//get iterator to value to be searched for
-	map<string,string>::const_iterator map_iterator = variables_and_values.find(var_name);
+	if (parameter_map_boost_.count(var_name)) {
+	  return parameter_map_boost_[var_name].as<std::string>();
+	} else {
+		//variable hasn't a default value and hasn't been initialized
+		throw UnsupportedOperationException("Variable according to "+var_name+" has not been initialized and"
+			" no default value for this variable exists.");	  
+	}
+	
+	/*map<string,string>::const_iterator map_iterator = variables_and_values.find(var_name);
 
 	//check if var_name exists in given map
 	if(map_iterator == variables_and_values.end()) {
@@ -145,26 +86,21 @@ string Parser::get_string_value_from_map(map<string,string> variables_and_values
 	} else {
 		//return value of var_name
 		return variables_and_values.find(var_name)->second;
-	}
+	}*/
 }
 
-void Parser::init_variables(map<string,string> variables_and_values) {
+void Parser::init_variables() {
 
 	//Variable names saved in the map are specified in the "Projectfiles Specification"-document
 	// if ".obstacle" exists at end of filename: erase it!
 	// if ".robot" exists at end of filename: erase it!
-	robot_filename_ = get_string_value_from_map(variables_and_values, "ROBOT_FILENAME");
+	robot_filename_ = parameter_map_boost()["ROBOT_FILENAME"].as<string>();
+	
 	if (robot_filename_.rfind(".robot")!=string::npos)
 		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
 
-	string temp_world_modifiers = get_string_value_from_map(variables_and_values, "WORLD_MODIFIERS");
-
-//	boost::is_any_of(",");
-
-	std::vector<std::string> temp_split_world_modifiers;
-
-	boost::split(temp_split_world_modifiers, temp_world_modifiers, boost::is_any_of(","));
-    
+	std::vector<string> temp_split_world_modifiers = parameter_map_boost()["WORLD_MODIFIERS"].as<std::vector<string> >();
+   
     using boost::filesystem::path;
 
 	for(std::size_t i = 0; i < temp_split_world_modifiers.size(); i++){
@@ -185,53 +121,24 @@ void Parser::load_main_project_file(const string& project_filename) {
 	
 	project_filename_ = project_filename;
 	string main_project_filename = project_filename_ + ".swarm";
-	
+		
 	boost::program_options::options_description desc("Main project file options");
 	desc.add_options()
     ("PROJECT_NAME", boost::program_options::value<string>(), "set project name")
 	("ROBOT_FILENAME", boost::program_options::value<string>(), "set robot file name")
 	("WORLD_MODIFIERS", boost::program_options::value< vector<string> >(), "set world modifiers")	
-	("ASG", boost::program_options::value<string>(), "set activation sequence generator")
+	("ASG", boost::program_options::value<string>()->default_value("SYNCHRONOUS_WM"), "set activation sequence generator")
+	("VIEW", boost::program_options::value<string>()->default_value("LOCAL_GRAPH_VIEW"), "set view to use")
 	;
 	
-	std::ifstream in( project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
+
+	std::ifstream in( main_project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
 	boost::program_options::store(boost::program_options::parse_config_file(in, desc), parameter_map_boost_);
 	boost::program_options::notify(parameter_map_boost_);
-	
 
-	string line;
-	std::ifstream project_file;
-	project_file.open(main_project_filename.c_str());
-	if(project_file.is_open()) {
-		string var_name;
-		string var_value;
-		while(!project_file.eof()) {
-			//read file line by line
-			getline(project_file, line);
+	//initialize variables
+	init_variables();
 
-			//check whether current line isn't a comment and contains an assignment
-			if(!is_comment(line) && contains_assignment(line)) {
-				//get variable name
-				var_name = get_var_name(line);
-
-				//get variable value
-				var_value = get_var_value(line, var_name);
-
-				//insert variable and value into map
-				parameter_map_[var_name] = var_value;
-			}
-		}
-		project_file.close();
-
-		//up to now: read all variables and its values from project file and
-		//inserted them into a map
-
-		//initialize variables
-		init_variables(parameter_map_);
-
-	} else {
-		throw UnsupportedOperationException("Unable to open project file: "+main_project_filename);
-	}
 }
 
 string Parser::get_next_value_in_line(const string& line, int line_number, bool last_value) {
@@ -367,16 +274,9 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	//if no exception is thrown up to this point, values read correctly
 	//=> add values to global variables
 	initiale_robot_positions_.push_back(position);
-	initiale_robot_velocities_.push_back(velocity);
-	initiale_robot_accelerations_.push_back(acceleration);
-	initiale_robot_types_.push_back(type);
-	initiale_robot_stati_.push_back(status);
 	initiale_robot_marker_information_.push_back(marker_info);
 	initiale_robot_algorithms_.push_back(algorithm);
-	initiale_robot_colors_.push_back(color);
 
-	boost::tuple<Vector3d, Vector3d, Vector3d> tmp(x_axis, y_axis, z_axis);
-	initiale_robot_coordinate_systems_.push_back(tmp);
 }
 
 
@@ -587,30 +487,11 @@ const string& Parser::robot_filename() const {
 vector<Vector3d>& Parser::robot_positions() {
 	return initiale_robot_positions_;
 }
-vector<Vector3d>& Parser::robot_velocities() {
-	return initiale_robot_velocities_;
-}
-
-vector<Vector3d>& Parser::robot_accelerations() {
-	return initiale_robot_accelerations_;
-}
-vector<string>& Parser::robot_types() {
-	return initiale_robot_types_;
-}
-vector<string>& Parser::robot_stati() {
-	return initiale_robot_stati_;
-}
 vector<string>& Parser::robot_marker_information() {
 	return initiale_robot_marker_information_;
 }
 vector<string>& Parser::robot_algorithms() {
 	return initiale_robot_algorithms_;
-}
-vector<string>& Parser::robot_colors() {
-	return initiale_robot_colors_;
-}
-vector<boost::tuple<Vector3d, Vector3d, Vector3d > >& Parser::robot_coordinate_systems() {
-	return initiale_robot_coordinate_systems_;
 }
 
 /*** GET-method for world modfiers ***/

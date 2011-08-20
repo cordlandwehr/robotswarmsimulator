@@ -41,6 +41,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/array.hpp>
 
+#include <iostream>
+
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
 #include "../ActivationSequenceGenerators/synchronous_asg_wm.h"
@@ -82,8 +84,6 @@
 #include "../Model/robot_data.h"
 #include "../WorldModifierImplementations/test_world_modifier.h"
 #include "../WorldModifierImplementations/lua_world_modifier.h"
-
-#include <iostream>
 
 /**
  * creates vector modfiers from the given string and adds them to the handler
@@ -131,8 +131,7 @@ void create_vector_modifiers_from_string(boost::shared_ptr<VectorRequestHandler>
 }
 
 
-boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::string, std::string> &params,
-                                                               boost::shared_ptr<History> history,
+boost::shared_ptr<EventHandler> Factory::event_handler_factory(boost::shared_ptr<History> history,
                                                                boost::shared_ptr<RobotControl> robot_control) {
 	boost::shared_ptr<EventHandler> event_handler(new EventHandler(history, robot_control));
 
@@ -163,9 +162,9 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(std::map<std::str
 	return event_handler;
 }
 
-boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std::string, std::string> &params) {
+boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(boost::program_options::variables_map &params) {
 
-	std::string asg_type = params["ASG"];
+	std::string asg_type = params["ASG"].as<std::string>();
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
 	// setup of activation sequence generator
 	if(asg_type == "SYNCHRONOUS") {
@@ -175,23 +174,23 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
         asg.reset(new SynchronousASGWM());
 	} else if(asg_type == "ATOMIC_SEMISYNCHRONOUS") {
 		try {
-			unsigned int seed = boost::lexical_cast<unsigned int>(params["ATOMIC_SEMISYNC_ASG_SEED"]);
+			unsigned int seed = params["ATOMIC_SEMISYNC_ASG_SEED"].as<unsigned int>();
 			asg.reset(new AtomicSemisynchronousASG(seed));
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for atomic semisynchronous asg.");
 		}
 	} else if(asg_type == "FAIR_ATOMIC_SEMISYNCHRONOUS") {
 		try {
-			unsigned int seed = boost::lexical_cast<unsigned int>(params["FAIR_ATOMIC_SEMISYNC_ASG_SEED"]);
+			unsigned int seed = params["FAIR_ATOMIC_SEMISYNC_ASG_SEED"].as<unsigned int>();
 			asg.reset(new FairAtomicSemisynchronousASG(seed));
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for fair atomic semisynchronous asg.");
 		}
 	} else if(asg_type == "ASYNCHRONOUS") {
 		try {
-			unsigned int seed = boost::lexical_cast<unsigned int>(params["ASYNC_ASG_SEED"]);
-			double participation_probability = boost::lexical_cast<double>(params["ASYNC_ASG_PART_P"]);
-			double p = boost::lexical_cast<double>(params["ASYNC_ASG_TIME_P"]);
+			unsigned int seed = params["ASYNC_ASG_SEED"].as<unsigned int>();
+			double participation_probability = params["ASYNC_ASG_PART_P"].as<double>();
+			double p = params["ASYNC_ASG_TIME_P"].as<double>();
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for asynchronous asg.");
@@ -203,51 +202,30 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(std::map<std
 	return asg;
 }
 
-boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(std::map<std::string, std::string> &params, const std::string& prefix) {
-
-	std::string view_type = params[prefix + "VIEW"];
+boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(boost::program_options::variables_map &params, const std::string& prefix) {
+	std::string view_type;
+  
+	if (params.count(prefix + "VIEW")) {
+		try {
+		  view_type = params[prefix + "VIEW"].as<std::string>();
+		} catch(const boost::bad_lexical_cast& ) {
+			throw UnsupportedOperationException("Failed reading view parameter.");
+		}	  
+	} else {
+	  ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to local graph view.";
+	  view_type = "LOCAL_GRAPH_VIEW"; //default value
+	}
+	  
 	view_type.erase(0,prefix.length()); //erase prefix
 	boost::shared_ptr<AbstractViewFactory> view_factory;
 
 	if(view_type == "GLOBAL_VIEW") {
 		view_factory.reset(new ViewFactory<GlobalView>);
-	} else if(view_type == "COG_VIEW") {
-		view_factory.reset(new ViewFactory<CogView>);
-	} else if(view_type == "SELF_VIEW") {
-		view_factory.reset(new ViewFactory<SelfView>);
-	} else if(view_type == "CHAIN_VIEW") {
-		try {
-			unsigned int number = boost::lexical_cast<unsigned int>(params[prefix+"CHAIN_VIEW_NUM_ROBOTS"]);
-			view_factory.reset(new ParametrizedViewFactory<ChainView, unsigned int>(number));
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for chain view.");
-		}
-	} else if(view_type == "ONE_POINT_FORMATION_VIEW") {
-		try {
-			double radius = boost::lexical_cast<double>(params[prefix+"ONE_POINT_FORMATION_VIEW_RADIUS"]);
-			view_factory.reset(new ParametrizedViewFactory<OnePointFormationView, double>(radius));
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for one point formation view.");
-		}
-	} else if(view_type == "CLONE_VIEW") {
-		try {
-			double radius = boost::lexical_cast<double>(params[prefix+"CLONE_VIEW_RADIUS"]);
-			view_factory.reset(new ParametrizedViewFactory<CloneView, double>(radius));
-		} catch(const boost::bad_lexical_cast& ) {
-			throw UnsupportedOperationException("Failed reading parameters for clone view.");
-		}
-	} else if(view_type == "RADIAL_VIEW") {
-		try {
-			double radius = boost::lexical_cast<double>(params[prefix+"RADIAL_VIEW_RADIUS"]);
-			view_factory.reset(new ParametrizedViewFactory<RadialView, double>(radius));
-		} catch(const boost::bad_lexical_cast&) {
-			throw UnsupportedOperationException("Failed reading parameters for radial view.");
-		}
 	} else if(view_type == "LOCAL_GRAPH_VIEW"){
 		view_factory.reset(new ViewFactory<LocalGraphView>);
 	} else {
-		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to global view.";
-		view_factory.reset(new ViewFactory<GlobalView>);
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::info) << "No View specified! Defaulting to local graph view.";
+		view_factory.reset(new ViewFactory<LocalGraphView>);
 	}
 
 	return view_factory;
@@ -291,14 +269,14 @@ boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::stri
 	return world_modifier;
 }
 
-boost::shared_ptr<RobotControl> Factory::robot_control_factory(std::map<std::string, std::string> &params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {
+boost::shared_ptr<RobotControl> Factory::robot_control_factory(boost::program_options::variables_map params, std::size_t history_length, const boost::shared_ptr<WorldInformation>& initial_world_information) {
 	//TODO asetzer change it so that not params, but the actual seed is given as a parameter
   
   //init View
 	unsigned int seed;
-	if(params.find("VIEW_SEED") != params.end()) {
+	if(params.count("VIEW_SEED")) {
 		try {
-			seed = boost::lexical_cast<unsigned int> (params["VIEW_SEED"]);
+			seed = params["VIEW_SEED"].as<unsigned int>();
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading seed for view.");
 		}

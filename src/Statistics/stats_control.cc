@@ -40,7 +40,7 @@ StatsControl::~StatsControl() {
 	}
 }
 
-void StatsControl::init(std::map<std::string, std::string> &params, std::string output_dir) {
+void StatsControl::init(std::string output_dir) {
 
 	if (stats_initialized_) {
 		// log warning, because no quit was called before this init
@@ -63,8 +63,8 @@ void StatsControl::init(std::map<std::string, std::string> &params, std::string 
 
 	// create data-prefix for all StatsOut-instances
 	// by calling the respective static function
-	std::string prefix = params["STATISTICS_FILEID"];
-	StatsOut::create_prefixes(prefix);
+	//std::string prefix = params["STATISTICS_FILEID"]; //TODO asetzer: think about whether we need this or comparable functionality
+	//StatsOut::create_prefixes(prefix);
 
 	// initialize stats_calc_indata_
 	stats_calc_indata_.prev_world_info_.reset();
