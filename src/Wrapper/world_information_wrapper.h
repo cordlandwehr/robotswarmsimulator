@@ -52,25 +52,29 @@ public:
    * 
    * \param source	ID of the source robot.
    * \param target	ID of the target robot.
+   * \returns		ID of the new edge.
    */
-  static void add_edge(std::size_t source, std::size_t target, const std::string &type);
+  static std::size_t add_edge(std::size_t source, std::size_t target, const std::string &type);
   
   /** Adds an edge with given MarkerInformation.
    * 
    * \param source	ID of the source robot.
    * \param target	ID of the target robot.
    * \param marker	Wrapped MarkerInformation object.
+   * \returns		ID of the new edge.
    */
-  static void add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
-   
+  static std::size_t add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
+
   /**
-   * Returns robot IDs for a given edge.
+   * Creates an message with the given WorldInformation.
    * 
-   * \param id		ID of the edge.
-   * \returns		Pair of robot IDs (in the order [ID1, ID2]). 
+   * \param sender	ID of the sender.
+   * \param receiver	ID of the receiver.
+   * \param marker	Wrapper MarkerInformation object.
+   * \returns		ID of the new message.
    */
-  static const std::pair<std::size_t, std::size_t> get_edge_anchors(std::size_t id);
-  
+  static std::size_t add_message(std::size_t sender, std::size_t receiver, MarkerInformationWrapper marker);
+    
   /**
    * Returns MarkerInformation object for a given edge.
    * 
@@ -93,23 +97,46 @@ public:
    * \returns		Vector of integer edges IDs.
    */
   static const std::vector<std::size_t> get_edges(std::size_t id, const std::string &filter);
-      
+    
   /**
-   * Return ID of first message in queue of a given robot.
+   * Returns head of a given edge.
    * 
-   * \param id		ID of the robot.
+   * \param id		ID of the edge.
+   * \returns		ID of the head (robot):
+   */
+  static std::size_t get_head(std::size_t id);
+  
+  /**
+   * Returns the MarkerInformation for a given message.
+   * 
+   * \param id		ID of the message.
+   * \returns		Wrapped MarkerInformation object.
+   */
+  static const MarkerInformationWrapper get_message_information(std::size_t id);
+  
+  /**
+   * Returns set of messages.
+   * 
    * \returns		ID of the message.
    */
-  static std::size_t get_message_id(std::size_t id, std::size_t index);
+  static const std::vector<std::size_t> get_messages();
   
   /**
-   * Returns number of messages in queue for a given robot.
-   * 
+   * Returns set of messages of a given robot.
+   *
    * \param id		ID of the robot.
-   * \returns 		Number of messages.
+   * \returns		Vector of integer IDS.
    */
-  static std::size_t get_number_of_messages(std::size_t id);
+  static const std::vector<std::size_t> get_messages(std::size_t);
   
+  /**
+   * Return receiver ID of a given message.
+   * 
+   * \param id		ID of the message.
+   * \returns		ID of the receiver (robot).
+   */
+  static std::size_t get_receiver(std::size_t id);
+    
   /**
    * Returns the cached request set.
    * 
@@ -131,6 +158,22 @@ public:
    * \returns		Vector of integer robot IDs.
    */
   static const std::vector<std::size_t> get_robots();
+  
+  /**
+   * Return sender ID of a given message.
+   * 
+   * \param id		ID of the message.
+   * \returns		ID of the sender (robot).
+   */
+  static std::size_t get_sender(std::size_t id);
+  
+  /**
+   * Returns tail of a given edge.
+   * 
+   * \param id		ID of the edge.
+   * \returns		ID of the tail (robot):
+   */
+  static std::size_t get_tail(std::size_t id);
   
   /**
    * Returns the timestamp stored in the WorldInformation object.
@@ -163,6 +206,15 @@ public:
    * \param id		The id of the edge to be removed.
    */
   static void remove_edge(std::size_t id);
+  
+  /**
+   * Removes a given message.
+   * 
+   * The removal is executed immediately. No Request is generated.
+   * 
+   * \param id		The id of the message to be removed.
+   */
+  static void remove_message(std::size_t id);  
   
   /**
    * (Re)set WorldInformation object to be used by the wrapper.
@@ -233,6 +285,13 @@ private:
    */
   template<typename T>
   static void check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key);
+  
+  /**
+   * Updates references maps.
+   * 
+   * Creates mappings from integer representations to Identifier objects.
+   */
+  static void update_mappings();
 };
   
 }

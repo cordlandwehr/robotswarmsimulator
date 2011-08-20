@@ -7,6 +7,7 @@
 
 #include "marker_information_wrapper.h"
 #include <lua.h>
+#include <stdexcept>
 
 namespace LuaWrapper{
     boost::shared_ptr<lua_State> MarkerInformationWrapper::lua_state_;
@@ -27,7 +28,7 @@ namespace LuaWrapper{
 	    marker_information_.add_data(var_name, luabind::object_cast<std::string>(object));
 	    break;
 	  default:
-	    // TODO: Warning and/or exception.
+	    throw std::invalid_argument("The Lua wrapper for MarkerInformation objects only supports boolean, number and string values.");
 	    break;
 	}
     }

@@ -111,18 +111,26 @@ void LuaWorldModifier::register_lua_methods() {
     [
       luabind::namespace_("WorldInformation")
       [
-	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, MarkerInformationWrapper, const std::string&)) &WorldInformationWrapper::add_edge),
-	luabind::def("add_edge", (void(*)(std::size_t, std::size_t, const std::string&)) &WorldInformationWrapper::add_edge),
-	luabind::def("get_edge_anchors", &WorldInformationWrapper::get_edge_anchors),
+	luabind::def("add_edge", (std::size_t(*)(std::size_t, std::size_t, MarkerInformationWrapper, const std::string&)) &WorldInformationWrapper::add_edge),
+	luabind::def("add_edge", (std::size_t(*)(std::size_t, std::size_t, const std::string&)) &WorldInformationWrapper::add_edge),
+	luabind::def("add_message", &WorldInformationWrapper::add_message),
 	luabind::def("get_edge_information", &WorldInformationWrapper::get_edge_information),
 	luabind::def("get_edges", (const std::vector<std::size_t>(*)(const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_edges", (const std::vector<std::size_t>(*)(std::size_t, const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
+	luabind::def("get_head", &WorldInformationWrapper::get_head),
+	luabind::def("get_message_information", &WorldInformationWrapper::get_message_information),
+	luabind::def("get_messages", (const std::vector<std::size_t>(*)()) &WorldInformationWrapper::get_messages, luabind::copy_table(luabind::result)),
+	luabind::def("get_messages", (const std::vector<std::size_t>(*)(std::size_t)) &WorldInformationWrapper::get_messages, luabind::copy_table(luabind::result)),
+	luabind::def("get_receiver", &WorldInformationWrapper::get_receiver),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
 	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
+	luabind::def("get_sender", &WorldInformationWrapper::get_sender),
+	luabind::def("get_tail", &WorldInformationWrapper::get_tail),
 	luabind::def("get_time", &WorldInformationWrapper::get_time),
 	luabind::def("is_directed", &WorldInformationWrapper::is_directed),
 	luabind::def("is_undirected", &WorldInformationWrapper::is_undirected),
 	luabind::def("remove_edge", &WorldInformationWrapper::remove_edge),
+	luabind::def("remove_message", &WorldInformationWrapper::remove_message),
 	luabind::def("set_edge_information", &WorldInformationWrapper::set_edge_information),
 	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information)
       ]
