@@ -66,7 +66,25 @@ WorldInformationWrapper::add_edge(std::size_t source, std::size_t target,
   std::size_t id = edge->id()->id();
   edge_identifiers_[id] = boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id());
   return id;
-}  
+}
+
+std::size_t
+WorldInformationWrapper::add_message(std::size_t sender, std::size_t receiver, MarkerInformationWrapper marker) {
+  // check the given IDs
+  check_mapping(robot_identifiers_, sender);
+  check_mapping(robot_identifiers_, receiver);
+  // create message
+  boost::shared_ptr<Message> message(new Message(robot_identifiers_[sender], robot_identifiers_[receiver]));
+  // create and assign MarkerInforamtion object
+  boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
+  message->set_marker_information(new_marker);
+  // add message
+  world_information_->add_message(message);
+  // get, map and return ID od new message
+  std::size_t id = message->id()->id();
+  message_identifiers_[id] = boost::dynamic_pointer_cast<MessageIdentifier>(message->id());
+  return id;
+}
 
 template<typename T> void 
 WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key) {
@@ -152,18 +170,62 @@ WorldInformationWrapper::get_edges(std::size_t id, const std::string &filter) {
   return result;
 }
 
+const MarkerInformationWrapper
+WorldInformationWrapper::get_message_information(std::size_t id) {
+  // check the given ID
+  check_mapping(message_identifiers_, id);
+  // look up message
+  boost::shared_ptr<Message> message = world_information_->get_according_message(message_identifiers_[id]);
+  // create and return new MarkerInforamtionWrapper object
+  MarkerInformationWrapper marker_information(message->marker_information());
+  return marker_information;
+}
+
 const std::vector<std::size_t>
 WorldInformationWrapper::get_messages() {
   // store IDs in separate result vector
   std::vector<std::size_t> result;
+  // copy keys of local mapping (we do not need the message objects at this
+  // point, thus we can safe some calls)
+  std::map< std::size_t, boost::shared_ptr<MessageIdentifier> >::const_iterator it;
+  for (it = message_identifiers_.begin();
+       it != message_identifiers_.end();
+       it++) {
+    result.push_back(it->first);
+  }
+  // return result vector
   return result;
 }
 
 const std::vector<std::size_t>
 WorldInformationWrapper::get_messages(std::size_t id) {
+  // check the given ID
+  check_mapping(robot_identifiers_, id);
   // store IDs in separate result vector
   std::vector<std::size_t> result;
+  // copy keys of local mapping (we do not need the message objects at this
+  // point, thus we can safe some calls)
+  std::map< std::size_t, boost::shared_ptr<Message> >::const_iterator it;
+  for (it = world_information_->messages().begin();
+       it !=  world_information_->messages().end();
+       it++) {
+    // check whether message belongs to given robot
+    if (it->second->receiver()->id() != id) {
+      continue;
+    }
+    result.push_back(it->first);
+  }
   return result;
+}
+
+std::size_t
+WorldInformationWrapper::get_receiver(std::size_t id) {
+  // check the given ID
+  check_mapping(message_identifiers_, id);
+  // look up message
+  boost::shared_ptr<Message> message;
+  message = world_information_->get_according_message(message_identifiers_[id]);
+  return message->receiver()->id();
 }
 
 std::set< boost::shared_ptr<Request> >
@@ -192,6 +254,16 @@ WorldInformationWrapper::get_robots () {
     result.push_back(id);
   }
   return result;
+}
+
+std::size_t
+WorldInformationWrapper::get_sender(std::size_t id) {
+  // check the given ID
+  check_mapping(message_identifiers_, id);
+  // look up message
+  boost::shared_ptr<Message> message;
+  message = world_information_->get_according_message(message_identifiers_[id]);
+  return message->sender()->id();
 }
 
 int
@@ -223,6 +295,17 @@ WorldInformationWrapper::remove_edge(std::size_t id) {
   // remove map entry and edge
   edge_identifiers_.erase(id);
   world_information_->remove_edge(edge);
+}
+
+void
+WorldInformationWrapper::remove_message(std::size_t id) {
+  // check the given ID
+  check_mapping(message_identifiers_, id);
+  // look up message object
+  boost::shared_ptr<Message> message = world_information_->get_according_message(message_identifiers_[id]);
+  // remove map entry and edge
+  message_identifiers_.erase(id);
+  world_information_->remove_message(message);
 }
 
 void 

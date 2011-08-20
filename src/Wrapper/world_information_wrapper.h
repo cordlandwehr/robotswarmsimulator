@@ -52,6 +52,7 @@ public:
    * 
    * \param source	ID of the source robot.
    * \param target	ID of the target robot.
+   * \returns		ID of the new edge.
    */
   static std::size_t add_edge(std::size_t source, std::size_t target, const std::string &type);
   
@@ -60,9 +61,20 @@ public:
    * \param source	ID of the source robot.
    * \param target	ID of the target robot.
    * \param marker	Wrapped MarkerInformation object.
+   * \returns		ID of the new edge.
    */
   static std::size_t add_edge(std::size_t source, std::size_t target, MarkerInformationWrapper marker, const std::string &type);
-   
+
+  /**
+   * Creates an message with the given WorldInformation.
+   * 
+   * \param sender	ID of the sender.
+   * \param receiver	ID of the receiver.
+   * \param marker	Wrapper MarkerInformation object.
+   * \returns		ID of the new message.
+   */
+  static std::size_t add_message(std::size_t sender, std::size_t receiver, MarkerInformationWrapper marker);
+  
   /**
    * Returns robot IDs for a given edge.
    * 
@@ -93,7 +105,15 @@ public:
    * \returns		Vector of integer edges IDs.
    */
   static const std::vector<std::size_t> get_edges(std::size_t id, const std::string &filter);
-      
+  
+  /**
+   * Returns the MarkerInformation for a given message.
+   * 
+   * \param id		ID of the message.
+   * \returns		Wrapped MarkerInformation object.
+   */
+  static const MarkerInformationWrapper get_message_information(std::size_t id);
+  
   /**
    * Returns set of messages.
    * 
@@ -108,6 +128,14 @@ public:
    * \returns		Vector of integer IDS.
    */
   static const std::vector<std::size_t> get_messages(std::size_t);
+  
+  /**
+   * Return receiver ID of a given message.
+   * 
+   * \param id		ID of the message.
+   * \returns		ID of the receiver (robot).
+   */
+  static std::size_t get_receiver(std::size_t);
     
   /**
    * Returns the cached request set.
@@ -130,6 +158,14 @@ public:
    * \returns		Vector of integer robot IDs.
    */
   static const std::vector<std::size_t> get_robots();
+  
+  /**
+   * Return sender ID of a given message.
+   * 
+   * \param id		ID of the message.
+   * \returns		ID of the sender (robot).
+   */
+  static std::size_t get_sender(std::size_t);
   
   /**
    * Returns the timestamp stored in the WorldInformation object.
@@ -162,6 +198,15 @@ public:
    * \param id		The id of the edge to be removed.
    */
   static void remove_edge(std::size_t id);
+  
+  /**
+   * Removes a given message.
+   * 
+   * The removal is executed immediately. No Request is generated.
+   * 
+   * \param id		The id of the message to be removed.
+   */
+  static void remove_message(std::size_t id);  
   
   /**
    * (Re)set WorldInformation object to be used by the wrapper.
