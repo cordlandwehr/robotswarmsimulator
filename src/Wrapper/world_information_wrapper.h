@@ -74,15 +74,7 @@ public:
    * \returns		ID of the new message.
    */
   static std::size_t add_message(std::size_t sender, std::size_t receiver, MarkerInformationWrapper marker);
-  
-  /**
-   * Returns robot IDs for a given edge.
-   * 
-   * \param id		ID of the edge.
-   * \returns		Pair of robot IDs (in the order [ID1, ID2]). 
-   */
-  static const std::pair<std::size_t, std::size_t> get_edge_anchors(std::size_t id);
-  
+    
   /**
    * Returns MarkerInformation object for a given edge.
    * 
@@ -105,6 +97,14 @@ public:
    * \returns		Vector of integer edges IDs.
    */
   static const std::vector<std::size_t> get_edges(std::size_t id, const std::string &filter);
+    
+  /**
+   * Returns head of a given edge.
+   * 
+   * \param id		ID of the edge.
+   * \returns		ID of the head (robot):
+   */
+  static std::size_t get_head(std::size_t id);
   
   /**
    * Returns the MarkerInformation for a given message.
@@ -135,7 +135,7 @@ public:
    * \param id		ID of the message.
    * \returns		ID of the receiver (robot).
    */
-  static std::size_t get_receiver(std::size_t);
+  static std::size_t get_receiver(std::size_t id);
     
   /**
    * Returns the cached request set.
@@ -165,7 +165,15 @@ public:
    * \param id		ID of the message.
    * \returns		ID of the sender (robot).
    */
-  static std::size_t get_sender(std::size_t);
+  static std::size_t get_sender(std::size_t id);
+  
+  /**
+   * Returns tail of a given edge.
+   * 
+   * \param id		ID of the edge.
+   * \returns		ID of the tail (robot):
+   */
+  static std::size_t get_tail(std::size_t id);
   
   /**
    * Returns the timestamp stored in the WorldInformation object.
