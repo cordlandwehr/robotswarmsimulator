@@ -158,7 +158,7 @@ private:
 							  COLOR_REQUEST_HANDLER};
 
 	/**
-	 * Set of robots in the world
+	 * Map of robots in the world
 	 */
 	std::vector< boost::shared_ptr<Robot> > robots_;
 

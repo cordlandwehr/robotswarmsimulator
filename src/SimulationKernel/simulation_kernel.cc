@@ -189,17 +189,16 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 	boost::shared_ptr<Vector3d> temp_robot_position;
 
-	boost::tuple <boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d>, boost::shared_ptr<Vector3d> > temp_robot_axes;
-
 	// counting robots by their position vectors
 	vector<Vector3d>::size_type robot_count;
-	robot_count = parser->robot_positions().size();
+	robot_count = parser->robot_ids().size();
 
 	// running through all robots in robotfile
 	for (vector<Vector3d>::size_type i = 0; i < robot_count; i++) {
 		//TODO(mmarcus) Identifiers are NOT the identifiers of the project file!
 		//need to work over parser...
-		temp_robot_identifier.reset(new RobotIdentifier(i));
+		temp_robot_identifier.reset(new RobotIdentifier(parser->robot_ids()[i]));
+		
 		temp_robot_algorithm = parser->robot_algorithms()[i];
 
 		temp_robot = Factory::robot_factory(temp_robot_identifier, temp_robot_algorithm);

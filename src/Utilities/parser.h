@@ -133,6 +133,11 @@ public:
 	const std::string& robot_filename() const;
 
 	/**
+	 * \return reference to vector of Robot IDs.
+	 */
+	std::vector<int>& robot_ids();	
+	
+	/**
 	 * \return reference to vector of Robot Positions.
 	 */
 	std::vector<Vector3d>& robot_positions();
@@ -182,6 +187,7 @@ private:
 	////////////////////////////////////////////////////////
 	// ROBOT DATA
 	////////////////////////////////////////////////////////
+	std::vector<int> initiale_robot_ids_;
 	std::vector<Vector3d> initiale_robot_positions_;
 	std::vector<std::string> initiale_robot_marker_information_;
 	std::vector<std::string> initiale_robot_algorithms_;
