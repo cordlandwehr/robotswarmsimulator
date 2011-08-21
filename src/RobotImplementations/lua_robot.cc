@@ -64,6 +64,7 @@
 #include "../Wrapper/coordinate_system_wrapper.h"
 #include "../Wrapper/vector_wrapper.h"
 #include "../Wrapper/marker_information_wrapper.h"
+#include "../Wrapper/console_output_wrapper.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
@@ -351,6 +352,9 @@ void LuaRobot::register_lua_methods() {
 			 .def(luabind::constructor<>())
 			 .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
 			 .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data),
+		   
+		  luabind::def("log", (void(*)(const std::string&)) &ConsoleOutputWrapper::log),
+		  luabind::def("log", (void(*)(const std::string&, const std::string&)) &ConsoleOutputWrapper::log),
 		   
 		// now our view-functions
 		// TODO (cola) still commented out, cause this will cause trouble on the next upstream ;)
