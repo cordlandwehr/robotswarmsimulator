@@ -43,6 +43,8 @@
 #include <boost/thread/thread.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 
+//TODO: What header files are really necessary?
+#include <boost/graph/graph_concepts.hpp>
 
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
@@ -51,11 +53,14 @@
 #include <SzenarioGenerator/formation_generator.h>
 #include <Utilities/console_output.h>
 #include <Wrapper/lua_distribution_generator.h>
+//#include <Wrapper/boost_graph_wrapper.h>
 
 #include "aiee.h"
 
 
 int main(int argc, char** argv) {
+    //boost::function_requires< boost::VertexListGraphConcept<WorldInformation> >();
+    //boost::function_requires< boost::WritablePropertyMapConcept<WorldInformation, boost::graph_traits<WorldInformation>::vertex_descriptor > >();
 	namespace po = boost::program_options;
 
 	// declaration of program options
