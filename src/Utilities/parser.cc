@@ -143,18 +143,20 @@ void Parser::load_main_project_file(const string& project_filename) {
 
 string Parser::get_next_value_in_line(const string& line, int line_number, bool last_value) {
 	//character that seperates values in line
-	char seperator = ',';
+	char separator = ',';
 	string value;
 
-	size_t pos_of_next_seperator = line.find_first_of(seperator, position_in_line_);
+	size_t pos_of_next_separator = line.find_first_of(separator, position_in_line_);
 
 	//check if there exists a next seperator
-	if(pos_of_next_seperator == string::npos) {
+	if(pos_of_next_separator == string::npos) {
 
 		if(last_value) {
 			//value to read is last value => return end of line beginning at given position
 			value = line.substr(position_in_line_,line.size()-position_in_line_);
 			position_in_line_ += value.size()+1;
+			//Just to be sure: get rid of leading and trailing spaces
+			value = remove_quotes_and_leading_and_trailing_spaces(value);
 			return value;
 		} else {
 			//if value to read is not supposed to be the last value, an error occured
@@ -166,11 +168,11 @@ string Parser::get_next_value_in_line(const string& line, int line_number, bool 
 		}
 	}
 
-	value = line.substr(position_in_line_,pos_of_next_seperator-position_in_line_);
+	value = line.substr(position_in_line_,pos_of_next_separator-position_in_line_);
 	position_in_line_ += value.size()+1;
 
 	//Just to be sure: get rid of leading and trailing spaces
-	//(if the input file is correct, then value doesn't contain any leading or trailing spaces)
+	//(if the input file is correct, then value doesn't contain any leading or trailing spaces) //TODO ???
 	value = remove_quotes_and_leading_and_trailing_spaces(value);
 
 	return value;
@@ -250,18 +252,10 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	position_in_line_ = 0;
 
 	//The order of these initializations is important!
-	get_next_double_value_in_line(line, line_number, false); // value not needed atm
+	int id = get_next_double_value_in_line(line, line_number, false);
 	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
-	string type = get_next_value_in_line(line, line_number, false);
-	Vector3d velocity = get_next_vector3d_in_line(line, line_number, false);
-	Vector3d acceleration = get_next_vector3d_in_line(line, line_number, false);
-	string status = get_next_value_in_line(line, line_number, false);
 	string marker_info = get_next_value_in_line(line, line_number, false);
-	string algorithm = get_next_value_in_line(line, line_number, false);
-	string color = get_next_value_in_line(line, line_number, false);
-	Vector3d x_axis = get_next_vector3d_in_line(line, line_number, false);
-	Vector3d y_axis = get_next_vector3d_in_line(line, line_number, false);
-	Vector3d z_axis = get_next_vector3d_in_line(line, line_number, true);
+	string algorithm = get_next_value_in_line(line, line_number, true);
 
 	// if algorithm has suffix '.lua', it is a filename that is to be interpreted relatively to the robot project file
 	using boost::filesystem::path;
@@ -273,6 +267,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 
 	//if no exception is thrown up to this point, values read correctly
 	//=> add values to global variables
+	initiale_robot_ids_.push_back(id);
 	initiale_robot_positions_.push_back(position);
 	initiale_robot_marker_information_.push_back(marker_info);
 	initiale_robot_algorithms_.push_back(algorithm);
@@ -484,6 +479,10 @@ const string& Parser::robot_filename() const {
 }
 
 /*** GET-methods for robot data ***/
+vector<int>& Parser::robot_ids() {
+	return initiale_robot_ids_;
+}
+
 vector<Vector3d>& Parser::robot_positions() {
 	return initiale_robot_positions_;
 }

@@ -23,12 +23,14 @@ bool RemoveEdgeRequestHandler::handle_request_reliable(
 
 	boost::shared_ptr<Edge> e = edge_request->requested_edge();
 
-	RobotData& rd1 = world_information->get_according_robot_data(e->getRobot1());
+	//asetzer: temporarily moved to world_information::remove_edge
+	//TODO jknoll: check whether this is Okay
+	/*RobotData& rd1 = world_information->get_according_robot_data(e->getRobot1());
 	RobotData& rd2 = world_information->get_according_robot_data(e->getRobot2());
 
 	// remove requested edge from world_information and from adjacency list of robots
 	rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-	rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
+	rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));*/
 
 	return world_information->remove_edge(e);
 }

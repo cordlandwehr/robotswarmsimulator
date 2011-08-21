@@ -23,12 +23,14 @@ bool InsertEdgeRequestHandler::handle_request_reliable(
 
 	boost::shared_ptr<Edge> e = edge_request->requested_edge();
 
-	RobotData& rd1 = world_information->get_according_robot_data(e->getRobot1());
+	//asetzer: temporarily moved to world_information::add_edge
+	//TODO jknoll: check whether this is Okay
+	/*RobotData& rd1 = world_information->get_according_robot_data(e->getRobot1());
 	RobotData& rd2 = world_information->get_according_robot_data(e->getRobot2());
 
 	// add requested edge to world_information and to adjacency list of robots
 	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-	rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
+	rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));*/
 
 	world_information->add_edge(e);
 
