@@ -33,6 +33,8 @@
 
 #include "../Model/robot_data.h"
 
+
+// TODO: @Tobias: What is this? 
 void StatsCalc::calculate(const StatsCalcInData & data,
 		const boost::shared_ptr<StatsOut> & stats_out) {
 

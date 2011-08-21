@@ -8,9 +8,7 @@
 #ifndef STATS_CALC_WRAPPER_H
 #define STATS_CALC_WRAPPER_H
 
-#include <boost/shared_ptr.hpp>
-
-#include "../Statistics/stats_calc.h"
+#include <vector>
 
 namespace LuaWrapper {
 
@@ -21,10 +19,30 @@ public:
   StatsCalcWrapper ();
   virtual ~ StatsCalcWrapper ();
   
-  static void set_stats_calc(const boost::shared_ptr<StatsCalc> stats_calc);
+  /**
+   * Calculates maximal degree for the given set of robots.
+   * 
+   * \param ids		IDs of the robots.
+   * \returns		Maximal degree.
+   */
+  static int calculate_degree(const std::vector<std::size_t>& ids);
+  
+  /**
+   * Calculates maximal defect.
+   * 
+   * \returns 		Maximal defect.
+   */
+  static int calculate_maximal_defect();
+  
+  /**
+   * Calculates total defects.
+   * 
+   * \returns 		Total defects.
+   */
+  static int calculate_total_defects();
   
 private:
-  static boost::shared_ptr<StatsCalc> stats_calc_;
+  typedef WorldInformationWrapper WI;
 };
  
 }

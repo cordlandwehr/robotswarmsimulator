@@ -241,6 +241,8 @@ public:
   static void set_robot_information(std::size_t id, MarkerInformationWrapper marker);
 
 private:
+  friend class StatsCalcWrapper;
+  
   /**
    * \var		Pointer to the current WorldInformation object.
    */
@@ -285,7 +287,7 @@ private:
    */
   template<typename T>
   static void check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key);
-  
+   
   /**
    * Updates references maps.
    * 

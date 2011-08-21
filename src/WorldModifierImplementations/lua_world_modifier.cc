@@ -135,6 +135,17 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information)
       ]
     ];
+    
+    // register stats calc
+    luabind::module(lua_state_.get())
+    [
+      luabind::namespace_("Statistics")
+      [
+	luabind::def("calculate_degree", &StatsCalcWrapper::calculate_degree),
+	luabind::def("calculate_maximal_defect", &StatsCalcWrapper::calculate_maximal_defect),
+	luabind::def("calculate_total_defects", &StatsCalcWrapper::calculate_total_defects)
+      ]
+    ];
 }
 
 void LuaWorldModifier::report_errors(int status) {
