@@ -55,8 +55,11 @@ bool SendMessageRequestHandler::handle_request_reliable(
 
 	if(edge_exists){
 		// put message in queue
-		rd_receiver.push_back_message(boost::dynamic_pointer_cast<MessageIdentifier>(m->id()));
+		//asetzer: temporarily moved to world_information::add_message
+		//TODO jknoll: check whether this is Okay		
+		//rd_receiver.push_back_message(boost::dynamic_pointer_cast<MessageIdentifier>(m->id()));
 		world_information->add_message(m);
+		
 		return true;
 	} else {
 		return false;
