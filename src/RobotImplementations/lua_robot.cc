@@ -279,7 +279,9 @@ namespace {
 	 */
 
 	const unsigned get_own_identifier() {
-		return view->get_id(*robot, robot->id());
+		std::size_t id = view->get_id(*robot, robot->id());
+		robot_identifiers_[id] = robot->id();
+		return id;
 	}
 
 }
