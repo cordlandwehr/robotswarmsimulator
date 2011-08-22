@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(basic_edge_test){
 	RobotData rd1 (rid1, boost::shared_ptr<Vector3d>(new Vector3d()), r1);
 
 	// generate edge 0-1
-	Edge e (rid0, rid1);
+	UndirectedEdge e (rid0, rid1);
 
 	// check for adding and removing edge from robot
 	BOOST_CHECK_EQUAL(rd0.get_edges().size(), 0);

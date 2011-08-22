@@ -96,13 +96,13 @@ struct SimpleGraphFixture {
 		// create two Edges
 		edge_ab.reset(new DirectedEdge(id_b, id_a));
 		initial_world_information->add_edge(edge_ab);
-		robot_data_a->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
-		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
+//		robot_data_a->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
+//		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
 
-		edge_bc.reset(new Edge(id_b, id_c));
+		edge_bc.reset(new UndirectedEdge(id_b, id_c));
 		initial_world_information->add_edge(edge_bc);
-		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
-		robot_data_c->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
+//		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
+//		robot_data_c->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
 
 		// velocity and acceleration needed for event step
 		// create velocity for robot a: (0,0,0)
