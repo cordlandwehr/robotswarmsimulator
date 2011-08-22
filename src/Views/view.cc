@@ -419,6 +419,10 @@ double View::get_sphere_radius(const Sphere& sphere) const {
 	throw UnsupportedOperationException(get_error_message("get_sphere_radius"));
 }
 
+const bool View::is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const {
+	throw UnsupportedOperationException(get_error_message("is_edge_directed"));
+}
+
 const WorldInformation& View::world_information() const {
 	return *world_information_;
 }

@@ -28,6 +28,7 @@ public:
 protected:
 	virtual std::vector<View::RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::vector<View::EdgeRef> get_visible_edges(const RobotData& robot) const;
+	virtual bool is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const;
 };
 
 #endif /* EDGE_VIEW_H_ */

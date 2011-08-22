@@ -48,6 +48,28 @@ std::vector<View::RobotRef> EdgeView::get_visible_robots(const RobotData& robot)
 }
 
 std::vector<View::EdgeRef> EdgeView::get_visible_edges(const RobotData& robot) const {
-	std::vector<View::EdgeRef> result = robot.get_edges();
+	std::vector<View::EdgeRef> all_edges = robot.get_edges();
+	std::vector<View::EdgeRef> result;
+	BOOST_FOREACH(View::EdgeRef e_id, all_edges){
+		boost::shared_ptr<const Edge> e = world_information().get_according_edge(e_id);
+		// check if edge is directed or undirected
+		if(boost::shared_ptr<const DirectedEdge> de = boost::dynamic_pointer_cast<const DirectedEdge>(e)){
+			// check if robot is source of directed edge
+			if(de->source() == robot.id())
+				result.push_back(e_id);
+		} else {
+			result.push_back(e_id);
+		}
+	}
 	return result;
+}
+
+bool EdgeView::is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const {
+	boost::shared_ptr<const Edge> e = world_information().get_according_edge(e_id);
+	// check if edge is directed or undirected
+	if(boost::dynamic_pointer_cast<const DirectedEdge>(e)){
+		return true;
+	} else {
+		return false;
+	}
 }

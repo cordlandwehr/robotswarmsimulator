@@ -27,6 +27,8 @@
 #include "robot_data.h"
 #include "robot.h"
 #include <math.h>
+#include <boost/foreach.hpp>
+#include "../Views/view.h"
 
 class View;
 
@@ -145,4 +147,9 @@ const Robot& RobotData::robot() const {
 
 boost::shared_ptr<WorldObject> RobotData::clone() const {
 	return boost::shared_ptr<WorldObject>(new RobotData(*this));
+}
+
+const std::vector<boost::shared_ptr<EdgeIdentifier> >& RobotData::get_outgoing_edges() const{
+	assert(view_.expired() == false);
+	return view_.lock()->get_visible_edges(this->robot());
 }

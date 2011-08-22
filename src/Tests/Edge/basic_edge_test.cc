@@ -78,8 +78,7 @@ BOOST_FIXTURE_TEST_CASE(edge_view_test, SimpleGraphFixture) {
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_neighbors()[0], id_b);
 
 	// checking edge view edges
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges().size(), 1);
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges()[0], edge_ab->id());
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges().size(), 0);
 
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b.robot()).get_edges().size(), 2);
 
@@ -125,6 +124,16 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 	event_handler.handle_event(look_event, *time_point);
 	history->insert(time_point);
 
+	/*
+	 * Graph should now look like this
+	 *
+	 *     _____
+	 *    |     |
+	 *    |     V
+	 *    a <-- b <-> c
+	 *
+	 */
+
 	// checking edge view neighbors
 	const RobotData& rd_a = history->get_newest().world_information().get_according_robot_data(robot_a->id());
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_neighbors().size(), 1);
@@ -138,8 +147,8 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_neighbors()[0], id_b);
 
 	// checking edge view edges
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges().size(), 2);
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b.robot()).get_edges().size(), 3);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges().size(), 1);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b.robot()).get_edges().size(), 2);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges().size(), 1);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges()[0], edge_bc->id());
 
@@ -164,6 +173,15 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 	event_handler.handle_event(look_event, *time_point);
 	history->insert(time_point);
 
+	/*
+	 * Graph should now look like this
+	 *
+	 *     _____
+	 *    |     |
+	 *    |     V
+	 *    a <-- b     c
+	 */
+
 	// checking edge view neighbors
 	const RobotData& rd_a_2 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a_2.robot()).get_neighbors().size(), 1);
@@ -177,7 +195,7 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c_2.robot()).get_neighbors().size(), 0);
 
 	// checking edge view edges
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a_2.robot()).get_edges().size(), 2);
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b_2.robot()).get_edges().size(), 2);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a_2.robot()).get_edges().size(), 1);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b_2.robot()).get_edges().size(), 1);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c_2.robot()).get_edges().size(), 0);
 }

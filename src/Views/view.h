@@ -272,6 +272,14 @@ public:
 	 */
 	const double get_sphere_radius(SphereRef sphere) const;
 
+	//-- Edge --
+	/**
+	 * Queries if the edge identified by e is a directed edge.
+	 * @param e queried edge
+	 * @return true if edge is directed, false otherwise
+	 */
+	const bool is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const;
+
 	//-- WorldInformation --
 	/**
 	 * Queries the time of the WorldInformation this object provides view to.

@@ -251,6 +251,11 @@ public:
 		return edges_;
 	}
 
+	/**
+	 * Returns constant vector of outgoing edges.
+	 * Outgoing edges are all undirected edges and directed edges with this robot as source.
+	 */
+	const std::vector<boost::shared_ptr<EdgeIdentifier> >& get_outgoing_edges() const;
 
 private:
 	/**
