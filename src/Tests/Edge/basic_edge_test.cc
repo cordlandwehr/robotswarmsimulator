@@ -22,7 +22,7 @@
 
 #include "../../SimulationKernel/uniform_robot_control.h"
 
-//#include "../Utilities/distribution_generator.h"
+#include "../Utilities/distribution_generator.h"
 
 #include "../../Views/abstract_view_factory.h"
 #include "../../Views/view.h"
@@ -63,8 +63,8 @@ BOOST_FIXTURE_TEST_CASE(edge_view_test, SimpleGraphFixture) {
 
 	EventHandler event_handler(history, robot_control);
 
-	//boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(0));
-	//View::set_distribution_generator(generator);
+	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(0));
+	View::set_distribution_generator(generator);
 
 	// checking edge view neighbors
 	const RobotData& rd_a = history->get_newest().world_information().get_according_robot_data(robot_a->id());
@@ -94,8 +94,8 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 
 	EventHandler event_handler(history, robot_control);
 
-	//boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(0));
-	//View::set_distribution_generator(generator);
+	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(0));
+	View::set_distribution_generator(generator);
 
 	boost::shared_ptr<InsertEdgeRequestHandler> request_handler_insert_edge(new InsertEdgeRequestHandler(5, 0.0, *history));
 	event_handler.set_insert_edge_request_handler(request_handler_insert_edge);

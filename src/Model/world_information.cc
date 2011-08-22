@@ -145,16 +145,13 @@ std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() {
 }
 
 void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
-	//TODO jknoll: check whether this is right (moved here from the request handler by asetzer)
-  
 	RobotData& rd1 = get_according_robot_data(new_edge->getRobot1());
 	RobotData& rd2 = get_according_robot_data(new_edge->getRobot2());
 
 	// add requested edge to world_information and to adjacency list of robots
 	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
 	rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
-    
-  
+
 	edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(new_edge->id()->id(), new_edge));
 }
 
@@ -163,14 +160,13 @@ void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edg
 }
 
 bool WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
-	//TODO jknoll: check whether this is right (moved here from the request handler by asetzer)
 	RobotData& rd1 = get_according_robot_data(edge->getRobot1());
 	RobotData& rd2 = get_according_robot_data(edge->getRobot2());
 
 	// remove requested edge from world_information and from adjacency list of robots
 	rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));
 	rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));  
-  
+
 	return edges_.erase(edge->id()->id());
 }
 
@@ -183,7 +179,6 @@ std::map<std::size_t, boost::shared_ptr<Message> >& WorldInformation::messages()
 }
 
 void WorldInformation::add_message(boost::shared_ptr<Message> new_message) {
-	//TODO jknoll: check whether this is right (moved here from the request handler by asetzer)
 	RobotData& rd_receiver = get_according_robot_data(new_message->receiver());
 	rd_receiver.push_back_message(boost::dynamic_pointer_cast<MessageIdentifier>(new_message->id()));  
   
@@ -195,9 +190,7 @@ void WorldInformation::set_message_data(std::map<std::size_t, boost::shared_ptr<
 }
 
 bool WorldInformation::remove_message(boost::shared_ptr<Message> message){
-	//TODO jknoll: check whether this is alright (copied here from the request handler by asetzer)
-  
-	//check whether ths message is still in the receiver's queue
+	//check whether the message is still in the receiver's queue
 	RobotData& rd = get_according_robot_data(message->receiver());
 	for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
 		if(rd.get_message(i) == message->id()){
