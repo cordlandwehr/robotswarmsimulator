@@ -44,6 +44,7 @@ class ObstacleIdentifier;
 class MarkerIdentifier;
 class BoxIdentifier;
 class SphereIdentifier;
+class MessageIdentifier;
 class Robot;
 class MarkerInformation;
 class Obstacle;
@@ -77,6 +78,7 @@ protected:
 	typedef boost::shared_ptr<MarkerIdentifier> MarkerRef;
 	typedef boost::shared_ptr<Identifier> WorldObjectRef;
 	typedef boost::shared_ptr<EdgeIdentifier> EdgeRef;
+	typedef boost::shared_ptr<MessageIdentifier> MessageRef;
 
 
 public:
@@ -275,10 +277,32 @@ public:
 	//-- Edge --
 	/**
 	 * Queries if the edge identified by e is a directed edge.
-	 * @param e queried edge
+	 * @param e_id identifier of queried edge
 	 * @return true if edge is directed, false otherwise
 	 */
-	const bool is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const;
+	const bool is_edge_directed(EdgeRef e_id) const;
+
+	/**
+	 * Queries the source robot of the edge identified by e_id.
+	 * @param e_id identifier of querried edge
+	 * @return identifier of source robot of edge
+	 */
+	const RobotRef get_edge_source(EdgeRef e_id) const;
+
+	/**
+	 * Queries the target robot of the edge identified by e_id.
+	 * @param e_id identifier of querried edge
+	 * @return identifier of target robot of edge
+	 */
+	const RobotRef get_edge_target(EdgeRef e_id) const;
+
+	//-- Message --
+	/**
+	 * Queries the sender of the message identified by m_id.
+	 * @param m_id message to get sender of
+	 * @return identifier of sender or null if sender not a visible neighbor
+	 */
+	const RobotRef get_sender(MessageRef m_id) const;
 
 	//-- WorldInformation --
 	/**
@@ -304,8 +328,13 @@ protected:
 	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
 	virtual std::vector<MarkerRef> get_visible_markers(const RobotData& robot) const;
 	virtual std::vector<EdgeRef> get_visible_edges(const RobotData& robot) const;
-	virtual boost::shared_ptr<MessageIdentifier> get_message(const RobotData& robot, std::size_t index) const;
+
+	virtual MessageRef get_message(const RobotData& robot, std::size_t index) const;
 	virtual std::size_t get_number_of_messages(const RobotData& robot) const;
+	virtual RobotRef get_sender(const Message& message) const;
+	virtual RobotRef get_edge_source(const Edge& edge) const;
+	virtual RobotRef get_edge_target(const Edge& edge) const;
+	virtual bool is_edge_directed(const Edge& edge) const;
 
 
 	//Following methods are called by the non virtual method get_position. Which of the four methods
@@ -395,6 +424,7 @@ private:
 	const Box& resolve_box_ref(BoxRef box) const;
 	const Sphere& resolve_sphere_ref(SphereRef sphere) const;
 	const Edge& resolve_edge_ref(EdgeRef edge) const;
+	const Message& resolve_message_ref(MessageRef message) const;
 
 	//Same as resolving methods above, but also checks if the given *Ref is valid.
 	//To do so it compares the Identifier of the resolved data object with the given Identifier pointerwise.
@@ -404,6 +434,7 @@ private:
 	const Box& resolve_box_ref_safe(BoxRef box) const;
 	const Sphere& resolve_sphere_ref_safe(SphereRef sphere) const;
 	const Edge& resolve_edge_ref_safe(EdgeRef edge) const;
+	const Message& resolve_message_ref_safe(MessageRef message) const;
 
 	/**
 	 * Helper methods to check if the given Identifier points to the same data object

@@ -84,6 +84,13 @@ BOOST_FIXTURE_TEST_CASE(edge_view_test, SimpleGraphFixture) {
 
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges().size(), 1);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges()[0], edge_bc->id());
+
+	// checking other edge view methods
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).is_edge_directed(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id())), true);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).is_edge_directed(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id())), false);
+
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edge_source(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id())), boost::dynamic_pointer_cast<DirectedEdge>(edge_ab)->source());
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edge_target(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id())), boost::dynamic_pointer_cast<DirectedEdge>(edge_ab)->target());
 }
 
 BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {

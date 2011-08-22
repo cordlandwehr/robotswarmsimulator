@@ -18,6 +18,7 @@ public:
 protected:
 	virtual boost::shared_ptr<MessageIdentifier> get_message(const RobotData& robot, std::size_t index) const;
 	virtual std::size_t get_number_of_messages(const RobotData& robot) const;
+	virtual boost::shared_ptr<RobotIdentifier> get_sender(const Message& message) const;
 };
 
 #endif /* MESSAGE_VIEW_H_ */

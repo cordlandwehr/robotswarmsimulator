@@ -34,13 +34,13 @@ std::vector<View::RobotRef> EdgeView::get_visible_robots(const RobotData& robot)
 		boost::shared_ptr<const Edge> e = wi.get_according_edge(ei);
 		// Check if edge is directed
 		if(boost::shared_ptr<const DirectedEdge> d_edge = boost::dynamic_pointer_cast<const DirectedEdge> (e)) {
-			if(d_edge->source() == robot.robot().id() && d_edge->target() != robot.robot().id()){
+			if(d_edge->source()->id() == robot.robot().id()->id() && d_edge->target()->id() != robot.robot().id()->id()){
 				result.push_back(d_edge->target());
 			}
 		} else {
-			if(e->getRobot1() != robot.robot().id())
+			if(e->getRobot1()->id() != robot.robot().id()->id())
 				result.push_back(e->getRobot1());
-			else if(e->getRobot2() != robot.robot().id())
+			else if(e->getRobot2()->id() != robot.robot().id()->id())
 				result.push_back(e->getRobot2());
 		}
 	}
@@ -55,7 +55,7 @@ std::vector<View::EdgeRef> EdgeView::get_visible_edges(const RobotData& robot) c
 		// check if edge is directed or undirected
 		if(boost::shared_ptr<const DirectedEdge> de = boost::dynamic_pointer_cast<const DirectedEdge>(e)){
 			// check if robot is source of directed edge
-			if(de->source() == robot.id())
+			if(de->source()->id() == robot.id()->id())
 				result.push_back(e_id);
 		} else {
 			result.push_back(e_id);
@@ -64,12 +64,28 @@ std::vector<View::EdgeRef> EdgeView::get_visible_edges(const RobotData& robot) c
 	return result;
 }
 
-bool EdgeView::is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const {
-	boost::shared_ptr<const Edge> e = world_information().get_according_edge(e_id);
-	// check if edge is directed or undirected
-	if(boost::dynamic_pointer_cast<const DirectedEdge>(e)){
+bool EdgeView::is_edge_directed(const Edge& edge) const {
+	if(typeid(edge) == typeid(DirectedEdge)){
 		return true;
 	} else {
 		return false;
+	}
+}
+
+View::RobotRef EdgeView::get_edge_source(const Edge& edge) const{
+	if(typeid(edge) == typeid(DirectedEdge)) {
+		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
+		return de.source();
+	} else {
+		return edge.getRobot1();
+	}
+}
+
+View::RobotRef EdgeView::get_edge_target(const Edge& edge) const{
+	if(typeid(edge) == typeid(DirectedEdge)) {
+		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
+		return de.target();
+	} else {
+		return edge.getRobot2();
 	}
 }

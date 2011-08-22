@@ -55,6 +55,22 @@ public:
 		return view_->get_visible_edges(*this);
 	}
 
+	bool is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const {
+		return view_->is_edge_directed(e_id);
+	}
+
+	boost::shared_ptr<RobotIdentifier> get_edge_source(boost::shared_ptr<EdgeIdentifier> e_id) const {
+		return view_->get_edge_source(e_id);
+	}
+
+	boost::shared_ptr<RobotIdentifier> get_edge_target(boost::shared_ptr<EdgeIdentifier> e_id) const {
+		return view_->get_edge_target(e_id);
+	}
+
+	boost::shared_ptr<RobotIdentifier> get_sender(boost::shared_ptr<MessageIdentifier> m) const {
+		return view_->get_sender(m);
+	}
+
 	virtual std::string get_algorithm_id () const {
 		return "SimpleRobot";
 	}
