@@ -34,6 +34,8 @@
  * \brief Main program used to load a project file, setup the simulation and start it.
  */
 
+
+
 #include <string>
 #include <cstdio>
 
@@ -53,14 +55,17 @@
 #include <SzenarioGenerator/formation_generator.h>
 #include <Utilities/console_output.h>
 #include <Wrapper/lua_distribution_generator.h>
-//#include <Wrapper/boost_graph_wrapper.h>
+#include <Wrapper/boost_graph_wrapper.h>
+
 
 #include "aiee.h"
 
 
 int main(int argc, char** argv) {
-    //boost::function_requires< boost::VertexListGraphConcept<WorldInformation> >();
+   //boost::function_requires< boost::VertexListGraphConcept<WorldInformation> >();
+	//boost::function_requires< boost::VertexAndEdgeListGraphConcept<WorldInformation> >();
     //boost::function_requires< boost::WritablePropertyMapConcept<WorldInformation, boost::graph_traits<WorldInformation>::vertex_descriptor > >();
+	//boost::function_requires< boost::LvaluePropertyMapConcept<WorldInformation, boost::graph_traits<WorldInformation>::vertex_descriptor> >();
 	namespace po = boost::program_options;
 
 	// declaration of program options

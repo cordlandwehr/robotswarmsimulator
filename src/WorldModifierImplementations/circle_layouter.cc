@@ -10,22 +10,44 @@ std::string CircleLayouter::get_algorithm_id() const{
 
 std::set< boost::shared_ptr<Request> >
 CircleLayouter::compute(const boost::shared_ptr<WorldInformation> &world_information) {
-	//TODO (xynodes): call circle_layout
+    const double pi = boost::math::constants::pi<double>();
 
-	WorldInformation& wi = *world_information;
 
-	boost::minstd_rand gen;
-	typedef boost::square_topology<> Topology;
-	Topology topology(gen, 50.0);
-	std::vector<Topology::point_difference_type> displacements(wi.robot_data().size());
-	boost::rectangle_topology<> rect_top(gen, 0, 0, 50, 50);
+	std::vector<boost::shared_ptr<RobotData> > nodes =world_information->robot_data();
 
-	//std::cout << "starting layout .." << std::endl;
+    int n = nodes.size();
+    int i = 0;
+    double two_pi_over_n = 2. * pi / n;
+    double radius = 20.0;
 
-	//boost::circle_graph_layout(wi, wi, 10.0);
-	boost::random_graph_layout(wi, wi, rect_top);
+	std::vector<boost::shared_ptr<RobotData> >::iterator myIterator;
+	for(myIterator = nodes.begin();
+			myIterator != nodes.end();
+			myIterator++)
+	{
+	    Vector3d position = (*myIterator)->position();
 
-	//std::cout << "layout finished .." << std::endl;
+	    position[0] = radius * std::cos(i * two_pi_over_n);
+	    position[1] = radius * std::sin(i * two_pi_over_n);
+	    position[2] = 0;
+
+	    boost::shared_ptr<Vector3d> position_ptr(new Vector3d(position));
+
+	    (*myIterator)->set_position(position_ptr);
+	    i++;
+	}
+
+
+
+
+
+
+
+    /*BGL_FORALL_VERTICES_T(v, g, WorldInformation) {
+      position[v][0] = radius * std::cos(i * two_pi_over_n);
+      position[v][1] = radius * std::sin(i * two_pi_over_n);
+      ++i;
+    }*/
 
 
 	std::set< boost::shared_ptr<Request> > result;

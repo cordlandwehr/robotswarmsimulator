@@ -84,6 +84,7 @@
 #include "../WorldModifierImplementations/lua_world_modifier.h"
 #include "../WorldModifierImplementations/circle_layouter.h"
 #include "../WorldModifierImplementations/random_layouter.h"
+#include "../WorldModifierImplementations/force_directed_layouter.h"
 
 #include <iostream>
 
@@ -292,6 +293,9 @@ boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::stri
 	}
 	else if(str == "RandomLayouter"){
 		world_modifier.reset(new RandomLayouter());
+	}
+	else if(str == "ForceDirectedLayouter"){
+		world_modifier.reset(new ForceDirectedLayouter());
 	}
 	else {
 		throw UnsupportedOperationException("Tried to create unknown world modifier type: " + str);
