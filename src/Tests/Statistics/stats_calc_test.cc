@@ -67,12 +67,12 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	StatsCalc stats_calc_;
 
 	//degree has to be 2
-	BOOST_CHECK_EQUAL(stats_calc_.calculateDegree(nodes), 2);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_degree(graph), 2);
 
 	//max number of defects is 0
-	BOOST_CHECK_EQUAL(stats_calc_.calculateMaximalDefect(graph),0);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_maximal_defect(graph),0);
 	//total number of defects is 0
-	BOOST_CHECK_EQUAL(stats_calc_.calculateTotalDefects(graph),0);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_total_defects(graph),0);
 
 	//add one directed edge to the second node
 	boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[1];
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	graph->add_edge(e);
 
 	//degree has to be 3
-	BOOST_CHECK_EQUAL(stats_calc_.calculateDegree(nodes), 3);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_degree(graph), 3);
 
 
 	boost::shared_ptr<RobotData> node7 = nodes[7];
@@ -97,13 +97,25 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	boost::shared_ptr<RobotData> node10 = nodes[10];
 	boost::shared_ptr<RobotData> node12 = nodes[12];
 
+	//boost::shared_ptr<RobotIdentifier> node10ID = (node10->robot()).id();
+	//boost::shared_ptr<RobotIdentifier> node12ID = (node12->robot()).id();
+	const std::vector<boost::shared_ptr<EdgeIdentifier> > null;
+	//node1 is 1 hop away from node 4
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(graph, IDs[1], IDs[4], null),1);
+
+	//ignore edge 1->4
+	//so hop distance is 3
+	std::vector<boost::shared_ptr<EdgeIdentifier> > ignore_one_edge;
+	ignore_one_edge.push_back(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(graph, IDs[1], IDs[4], ignore_one_edge),3);
+
 	node7->set_color(8);
 
 	node10->set_color(11);
 	node12->set_color(11);
 
 	//max number of defects is 2
-	BOOST_CHECK_EQUAL(stats_calc_.calculateMaximalDefect(graph),2);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_maximal_defect(graph),2);
 	//total number of defects is 3
-	BOOST_CHECK_EQUAL(stats_calc_.calculateTotalDefects(graph),3);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_total_defects(graph),3);
 }

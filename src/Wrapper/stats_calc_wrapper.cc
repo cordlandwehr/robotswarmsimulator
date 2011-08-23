@@ -34,17 +34,17 @@ StatsCalcWrapper::calculate_degree(const std::vector<std::size_t>& ids) {
     robots.push_back(WI::world_information_->get_according_robot_data_ptr(robot_id));
   }
   // call StatsCalc method and return result
-  return StatsCalc::calculateDegree(robots);
+  return StatsCalc::calculate_degree(WI::world_information_);
 }
 
 int
 StatsCalcWrapper::calculate_maximal_defect() {
-  return StatsCalc::calculateMaximalDefect(WI::world_information_);
+  return StatsCalc::calculate_maximal_defect(WI::world_information_);
 }
 
 int
 StatsCalcWrapper::calculate_total_defects() {
-  return StatsCalc::calculateTotalDefects(WI::world_information_);
+  return StatsCalc::calculate_total_defects(WI::world_information_);
 }
   
 }

@@ -83,17 +83,17 @@ public:
 
 	static const bool DEBUG = false;
 
-	/**
-	 * \brief performs all calculations for the given data and subset
-	 */
-	static void calculate(const StatsCalcInData &data,
-			const boost::shared_ptr<StatsOut> & stats_out);
 
-	static int calculateDegree(const std::vector<boost::shared_ptr<RobotData> >& nodes);
+	static int calculate_degree(const boost::shared_ptr<WorldInformation> graph);
 
-	static int calculateMaximalDefect(const boost::shared_ptr<WorldInformation> graph);
+	static int calculate_maximal_defect(const boost::shared_ptr<WorldInformation> graph);
 
-	static int calculateTotalDefects(const boost::shared_ptr<WorldInformation> graph);
+	static int calculate_total_defects(const boost::shared_ptr<WorldInformation> graph);
+
+	static std::size_t calculate_hop_distance(const boost::shared_ptr<WorldInformation> graph,
+				 	 	 	 	 	 	 	 boost::shared_ptr<RobotIdentifier> start,
+				 	 	 	 	 	 	 	 boost::shared_ptr<RobotIdentifier> target,
+				 	 	 	 	 	 	 	 const std::vector< boost::shared_ptr<EdgeIdentifier> >& ignore);
 private:
 };
 
