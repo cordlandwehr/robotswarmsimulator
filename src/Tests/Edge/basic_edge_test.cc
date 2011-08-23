@@ -155,7 +155,7 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 
 	// checking edge view edges
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges().size(), 1);
-	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges()[0], edge_ab->id());
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges()[0], new_edge->id());
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b.robot()).get_edges().size(), 2);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges().size(), 1);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges()[0], edge_bc->id());
@@ -204,6 +204,8 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 
 	// checking edge view edges
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a_2.robot()).get_edges().size(), 1);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a_2.robot()).get_edges()[0], new_edge->id());
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b_2.robot()).get_edges().size(), 1);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b_2.robot()).get_edges()[0], edge_ab->id());
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c_2.robot()).get_edges().size(), 0);
 }
