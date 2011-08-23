@@ -239,7 +239,16 @@ namespace {
 		return view->get_time();
 	}
 
+	bool is_directed(std::size_t id) {
+	  // check the given ID
+	  check_mapping(edge_identifiers_, id);
+	  // look up edge adn call view
+	  return view->is_edge_directed(edge_identifiers_[id]);
+	}
 
+	bool is_undirected(std::size_t id) {
+	  return !is_directed(id);
+	}
 
 	void add_insert_edge_request(std::size_t tail, std::size_t head, LuaWrapper::MarkerInformationWrapper marker, const std::string& type) {
 	  // check the given IDs
@@ -426,7 +435,9 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("get_sender", &get_sender),
 			 luabind::def("get_tail", &get_tail),
 			 luabind::def("get_time", &get_time),
-			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result))
+			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
+			 luabind::def("is_directed", &is_directed),
+			 luabind::def("is_undirected", &is_undirected)
 	    ]
 	];
 
