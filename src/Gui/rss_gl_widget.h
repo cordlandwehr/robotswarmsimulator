@@ -16,6 +16,8 @@
 #include <SimulationControl/simulation_control.h>
 #include <Visualisation/simulation_renderer.h>
 
+class RobotData;
+
 class RSSGLWidget : public QGLWidget {
 	Q_OBJECT
 
@@ -30,6 +32,9 @@ public:
 	boost::shared_ptr<SimulationRenderer> simulation_renderer() {
 		return simulation_renderer_;
 	}
+
+signals:
+	void selected_robot_changed(boost::shared_ptr<RobotData> robot_data);
 
 protected:
 	virtual void initializeGL();

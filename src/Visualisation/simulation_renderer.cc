@@ -383,8 +383,6 @@ void SimulationRenderer::mouse_func(int button, int state, int x, int y){
 				cameras_[active_camera_index_]->set_button_press_mouse(x,y);
 			}
 
-
-
 }
 
 void SimulationRenderer::mouse_motion_func( int x, int y){
@@ -868,4 +866,77 @@ void SimulationRenderer::set_marker_color(float r, float g ,float b, float alpha
 }
 
 
+boost::shared_ptr<RobotData> SimulationRenderer::pick_robot(int x, int y) const {
+
+	boost::shared_ptr<RobotData> robot_data;
+
+	GLint viewport[4];
+	GLuint select_buffer[512];
+
+	glSelectBuffer(512,select_buffer);
+	glRenderMode(GL_SELECT);
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glGetIntegerv(GL_VIEWPORT,viewport);
+	gluPickMatrix(x,viewport[3]-y, 5,5,viewport);
+	gluPerspective(90, (GLfloat)viewport[2]/(GLfloat)viewport[3], 0.1, 1000);
+	glMatrixMode(GL_MODELVIEW);
+	glInitNames();
+	glLoadIdentity();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	cameras_[active_camera_index_]->look_rot();
+	cameras_[active_camera_index_]->look_translate();
+
+	// draw robot spheres
+	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
+	for(it_robot = world_info_->robot_data().begin(); it_robot != world_info_->robot_data().end(); ++it_robot){
+		glPushName((*it_robot)->id()->id());
+		robot_renderer_->draw_robot( *it_robot );
+		glPopName();
+	}
+
+	int hits;
+
+	// restoring the original projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glFlush();
+
+	// returning to normal rendering mode
+	hits = glRenderMode(GL_RENDER);
+
+	// if there are hits process them
+	if (hits != 0) {
+		GLuint names, *ptr, min_z, *ptr_names, number_of_names;
+
+		ptr = (GLuint *) select_buffer;
+		min_z = 0xffffffff;
+		for (uint32_t i = 0; i < hits; ++i) {
+			names = *ptr;
+			ptr++;
+			if (*ptr < min_z) {
+				number_of_names = names;
+				min_z = *ptr;
+				ptr_names = ptr+2;
+			}
+
+			ptr += names+2;
+		}
+
+		if(number_of_names>0) {
+			ptr = ptr_names;
+			boost::shared_ptr<RobotIdentifier> id;
+			id.reset(new RobotIdentifier(*ptr));
+			robot_data.reset(new RobotData(world_info_->get_according_robot_data(id)));
+		}
+	}
+
+	return robot_data;
+}
 

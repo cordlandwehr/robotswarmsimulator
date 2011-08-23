@@ -17,6 +17,7 @@
 #include <Utilities/console_output.h>
 #include <SimulationControl/simulation_control.h>
 #include <Wrapper/lua_distribution_generator.h>
+#include "../Model/robot_data.h"
 
 #include "open_project_dialog.h"
 #include "generator_wizard.h"
@@ -54,9 +55,9 @@ void RSSMainWindow::init() {
 	// connect signals/slots
 	connect(ui_.action_open_project, SIGNAL(triggered()), open_dialog_, SLOT(show()));
 	connect(ui_.action_new_project, SIGNAL(triggered()), generator_wizard_, SLOT(show()));
-	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(updateSimulation()));
-	connect(ui_.action_start_stop_simulation, SIGNAL(triggered()), this, SLOT(toggleSimulation()));
-	connect(ui_.action_next_step, SIGNAL(triggered()), this, SLOT(stepSimulation()));
+	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(update_simulation()));
+	connect(ui_.action_start_stop_simulation, SIGNAL(triggered()), this, SLOT(toggle_simulation()));
+	connect(ui_.action_next_step, SIGNAL(triggered()), this, SLOT(step_simulation()));
 	connect(ui_.action_increase_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
 	connect(ui_.action_decrease_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
 	connect(ui_.action_half_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
@@ -64,8 +65,9 @@ void RSSMainWindow::init() {
 	connect(ui_.action_free_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
 	connect(ui_.action_follow_swarm_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
 	connect(ui_.action_center_of_gravity_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
-	connect(speed_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(updateSimulationSpeed(int)));
-	connect(cam_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(setCameraMode(int)));
+	connect(speed_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(update_simulation_speed(int)));
+	connect(cam_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(set_camera_mode(int)));
+	connect(rss_gl_widget_, SIGNAL(selected_robot_changed(boost::shared_ptr<RobotData>)), this, SLOT(select_robot(boost::shared_ptr<RobotData>)));
 
 	// map signals
 	speed_signal_mapper_->setMapping(ui_.action_increase_speed, INCREASE_SPEED);
@@ -83,14 +85,14 @@ void RSSMainWindow::init() {
 	ui_.action_quit->setIcon(style.standardIcon(QStyle::SP_DialogCloseButton));
 }
 
-void RSSMainWindow::toggleSimulation() {
+void RSSMainWindow::toggle_simulation() {
 	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
 	if(!simulation_control_.get())
 		return;
 	simulation_control_->pause_processing_time(!ui_.action_start_stop_simulation->isChecked());
 }
 
-void RSSMainWindow::updateSimulationSpeed(int op) {
+void RSSMainWindow::update_simulation_speed(int op) {
 	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
 	if(!simulation_control_.get())
 		return;
@@ -111,12 +113,29 @@ void RSSMainWindow::updateSimulationSpeed(int op) {
 	}
 }
 
-void RSSMainWindow::setCameraMode(int mode) {
+
+void RSSMainWindow::select_robot(boost::shared_ptr<RobotData> robot_data) {
+	if(!robot_data.get()) {
+		return;
+	}
+	ui_.inspector_tree_widget->clear();
+	QList<QTreeWidgetItem *> items;
+
+    QTreeWidgetItem *item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+    item->setText(0, tr("Position"));
+    item->setText(1, QString("(%1, %2, %3)")
+    		.arg(robot_data->position()[0])
+    		.arg(robot_data->position()[1])
+    		.arg(robot_data->position()[2]));
+
+}
+
+void RSSMainWindow::set_camera_mode(int mode) {
 	boost::shared_ptr<SimulationRenderer> simulation_renderer = rss_gl_widget_->simulation_renderer();
 	simulation_renderer->set_active_cam(mode);
 }
 
-void RSSMainWindow::stepSimulation() {
+void RSSMainWindow::step_simulation() {
 	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
 	if(!simulation_control_.get())
 		return;
@@ -129,7 +148,7 @@ void RSSMainWindow::stepSimulation() {
 	}
 }
 
-void RSSMainWindow::updateSimulation() {
+void RSSMainWindow::update_simulation() {
 	ProjectData pd = open_dialog_->projectData();
 
 	std::string tmpProjectFile = pd.project_file;

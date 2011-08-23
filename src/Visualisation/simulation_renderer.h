@@ -311,6 +311,11 @@ public:
     	 swap_buffers_ = swap_buffers;
      }
 
+	/**
+	 *
+	 */
+     boost::shared_ptr<RobotData> pick_robot(int x, int y) const;
+
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**

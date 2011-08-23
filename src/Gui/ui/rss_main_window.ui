@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
-    <height>691</height>
+    <width>948</width>
+    <height>716</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>902</width>
+     <width>948</width>
      <height>20</height>
     </rect>
    </property>
@@ -81,6 +81,8 @@
     <addaction name="action_view_center_of_gravity"/>
     <addaction name="action_view_scc_of_visibility_graph"/>
     <addaction name="action_view_sky_box"/>
+    <addaction name="separator"/>
+    <addaction name="action_show_inspector"/>
    </widget>
    <addaction name="menu_project"/>
    <addaction name="menu_config"/>
@@ -122,6 +124,50 @@
    <addaction name="action_decrease_speed"/>
    <addaction name="action_increase_speed"/>
    <addaction name="action_double_speed"/>
+  </widget>
+  <widget class="QDockWidget" name="dock_widget">
+   <property name="windowTitle">
+    <string>Object Inspector</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dock_widget_contents">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="margin">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QTreeWidget" name="inspector_tree_widget">
+       <property name="midLineWidth">
+        <number>0</number>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="animated">
+        <bool>true</bool>
+       </property>
+       <property name="columnCount">
+        <number>2</number>
+       </property>
+       <attribute name="headerDefaultSectionSize">
+        <number>100</number>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>name</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>value</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="action_open_project">
    <property name="text">
@@ -370,6 +416,11 @@
     <string>Next Step</string>
    </property>
   </action>
+  <action name="action_show_inspector">
+   <property name="text">
+    <string>Show Object Inspector</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../resources/qt_resources.qrc"/>
@@ -388,6 +439,22 @@
     <hint type="destinationlabel">
      <x>405</x>
      <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_show_inspector</sender>
+   <signal>triggered()</signal>
+   <receiver>inspector_tree_widget</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>817</x>
+     <y>386</y>
     </hint>
    </hints>
   </connection>
