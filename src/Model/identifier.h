@@ -65,6 +65,7 @@ private:
 	friend class StatsControl;
 	friend class SendMessageRequestHandler;
 	friend class EdgeView;
+	friend class RobotData;
 };
 
 #endif /* IDENTIFIER_H_ */

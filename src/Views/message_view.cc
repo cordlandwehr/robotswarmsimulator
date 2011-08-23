@@ -22,7 +22,6 @@ std::size_t MessageView::get_number_of_messages(const RobotData& robot) const {
 	return robot.get_number_of_messages();
 }
 
-
 boost::shared_ptr<RobotIdentifier> MessageView::get_sender(const Message& message) const {
 	// TODO check if sender is a visiblie neighbor
 	return message.sender();

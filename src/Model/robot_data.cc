@@ -47,7 +47,7 @@ RobotData::RobotData(boost::shared_ptr<Identifier> id,
 	;
 }
 
-RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_), 
+RobotData::RobotData(const RobotData& rhs) : WorldObject(rhs), robot_(rhs.robot_), type_(rhs.type_),
                                              status_(rhs.status_),
                                              last_request_successful_(rhs.last_request_successful_),
                                              view_(rhs.view_),
@@ -151,5 +151,6 @@ boost::shared_ptr<WorldObject> RobotData::clone() const {
 
 const std::vector<boost::shared_ptr<EdgeIdentifier> >& RobotData::get_outgoing_edges() const{
 	assert(view_.expired() == false);
-	return view_.lock()->get_visible_edges(this->robot());
+	std::vector<boost::shared_ptr<EdgeIdentifier> > result = view_.lock()->get_visible_edges(this->robot());
+	return result;
 }

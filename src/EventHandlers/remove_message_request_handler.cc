@@ -23,21 +23,6 @@ bool RemoveMessageRequestHandler::handle_request_reliable(
 
 	boost::shared_ptr<MessageIdentifier> m_id = remove_message_request->requested_message();
 	boost::shared_ptr<Message> m = world_information->get_according_message(m_id);
-	RobotData& rd = world_information->get_according_robot_data(m->receiver());
 
-	// remove requested message from world_information and robot
-	bool message_removed = false;
-	for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
-		if(rd.get_message(i) == m_id){
-			rd.remove_message(i);
-			message_removed = true;
-			break;
-		}
-	}
-
-	if(message_removed){
-		world_information->remove_message(m);
-	}
-
-	return message_removed;
+	return world_information->remove_message(m);
 }

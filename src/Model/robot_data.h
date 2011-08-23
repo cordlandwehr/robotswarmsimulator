@@ -241,9 +241,13 @@ public:
 	 * TODO: Same shared_ptr needed -> check some other way?!?
 	 */
 	void remove_edge(boost::shared_ptr<EdgeIdentifier> e) {
-		std::vector<boost::shared_ptr<EdgeIdentifier> >::iterator it = std::find(edges_.begin(), edges_.end(), e);
-		assert(it != edges_.end());
-		edges_.erase(it);
+		std::size_t id = e->id();
+		for(std::vector<boost::shared_ptr<EdgeIdentifier> >::iterator it = edges_.begin(); it!=edges_.end(); it++){
+			if((*it)->id() == id){
+				edges_.erase(it);
+				break;
+			}
+		}
 	}
 
 	/**

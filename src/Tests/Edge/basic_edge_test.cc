@@ -155,12 +155,13 @@ BOOST_FIXTURE_TEST_CASE(edge_handler_test, SimpleGraphFixture) {
 
 	// checking edge view edges
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges().size(), 1);
+	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_edges()[0], edge_ab->id());
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_b.robot()).get_edges().size(), 2);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges().size(), 1);
 	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_edges()[0], edge_bc->id());
 
 	// generate requests
-	boost::shared_ptr<RemoveEdgeRequest> remove_edge_request(new RemoveEdgeRequest(*robot_b, edge_bc));
+	boost::shared_ptr<RemoveEdgeRequest> remove_edge_request(new RemoveEdgeRequest(*robot_b, boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id())));
 
 	// construction of handle_requests_event
 	handle_requests_event.reset(new HandleRequestsEvent(3));

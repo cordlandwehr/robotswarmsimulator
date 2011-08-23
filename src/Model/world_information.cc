@@ -179,9 +179,11 @@ std::map<std::size_t, boost::shared_ptr<Message> >& WorldInformation::messages()
 }
 
 void WorldInformation::add_message(boost::shared_ptr<Message> new_message) {
+	// add message to queue of receiver
 	RobotData& rd_receiver = get_according_robot_data(new_message->receiver());
 	rd_receiver.push_back_message(boost::dynamic_pointer_cast<MessageIdentifier>(new_message->id()));  
   
+	// add message to system
 	messages_.insert(std::pair<std::size_t, boost::shared_ptr<Message> >(new_message->id()->id(), new_message));
 }
 
@@ -193,7 +195,7 @@ bool WorldInformation::remove_message(boost::shared_ptr<Message> message){
 	//check whether the message is still in the receiver's queue
 	RobotData& rd = get_according_robot_data(message->receiver());
 	for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
-		if(rd.get_message(i) == message->id()){
+		if(rd.get_message(i)->id() == message->id()->id()){
 			rd.remove_message(i);
 			break;
 		}

@@ -21,7 +21,8 @@ bool RemoveEdgeRequestHandler::handle_request_reliable(
 	boost::shared_ptr<const RemoveEdgeRequest> edge_request =
 		    boost::dynamic_pointer_cast<const RemoveEdgeRequest>(request);
 
-	boost::shared_ptr<Edge> e = edge_request->requested_edge();
+	boost::shared_ptr<EdgeIdentifier> e_id = edge_request->requested_edge();
+	boost::shared_ptr<Edge> e = world_information->get_according_edge(e_id);
 
 	//asetzer: temporarily moved to world_information::remove_edge
 	//TODO jknoll: check whether this is Okay
