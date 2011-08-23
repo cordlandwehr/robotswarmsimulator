@@ -1,12 +1,12 @@
 PROJECT_NAME=New generated Project
 ROBOT_FILENAME=nodes_testrobot.csv
 EDGE_FILENAME=nodes_testedges.csv
-WORLD_MODIFIERS=TestWorldModifier
+#WORLD_MODIFIERS=TestWorldModifier
 WORLD_MODIFIERS=EdgeTest.lua
-WORLD_MODIFIERS=MarkerInformationTest.lua
-WORLD_MODIFIERS=LuaStateTest.lua
-WORLD_MODIFIERS=MessageTest.lua
-WORLD_MODIFIERS=CalculateDefects.lua
+#WORLD_MODIFIERS=MarkerInformationTest.lua
+#WORLD_MODIFIERS=LuaStateTest.lua
+#WORLD_MODIFIERS=MessageTest.lua
+#WORLD_MODIFIERS=CalculateDefects.lua
 
 ASG=SYNCHRONOUS_WM
 VIEW=LOCAL_GRAPH_VIEW

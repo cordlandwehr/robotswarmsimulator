@@ -240,6 +240,8 @@ void SimulationKernel::create_edges(boost::shared_ptr< Parser > parser, boost::s
 		} else {
 		  temp_edge.reset(new DirectedEdge(temp_r1, temp_r2));
 		}
+		
+		initial_world_information->add_edge(temp_edge);
 	}
 
 }
