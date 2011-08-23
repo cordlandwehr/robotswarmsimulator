@@ -26,9 +26,9 @@ end
 function generate_edges()
   local handler = assert(io.open(edge_out, "w"))
   handler:write(edge_header)
-  for i = 1, n-1 do
+  for i = 1, n do
     local id = i-1
-    handler:write(edge_row:format(id, (id+1)%(n-1), 1))
+    handler:write(edge_row:format(id, (id+1)%n, 1))
   end
   handler:close() 
 end
