@@ -79,9 +79,9 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[4];
 
 	//create edge
-	boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
+	boost::shared_ptr<DirectedEdge> e (new DirectedEdge(nodeID1,nodeID2));
 
-	RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
+	RobotData& rd1 = graph->get_according_robot_data(e->source());
 
 	// add requested edge to world_information and to adjacency list of robots
 	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
@@ -97,8 +97,6 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	boost::shared_ptr<RobotData> node10 = nodes[10];
 	boost::shared_ptr<RobotData> node12 = nodes[12];
 
-	//boost::shared_ptr<RobotIdentifier> node10ID = (node10->robot()).id();
-	//boost::shared_ptr<RobotIdentifier> node12ID = (node12->robot()).id();
 	const std::vector<boost::shared_ptr<EdgeIdentifier> > null;
 	//node1 is 1 hop away from node 4
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(graph, IDs[1], IDs[4], null),1);
