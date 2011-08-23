@@ -142,6 +142,7 @@ void LuaWorldModifier::register_lua_methods() {
       luabind::namespace_("Statistics")
       [
 	luabind::def("calculate_degree", &StatsCalcWrapper::calculate_degree),
+	luabind::def("calculate_hop_distance", &StatsCalcWrapper::calculate_hop_distance),
 	luabind::def("calculate_maximal_defect", &StatsCalcWrapper::calculate_maximal_defect),
 	luabind::def("calculate_total_defects", &StatsCalcWrapper::calculate_total_defects)
       ]
