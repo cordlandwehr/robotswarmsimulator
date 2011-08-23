@@ -136,32 +136,50 @@ const Obstacle& View::resolve_obstacle_ref_safe(ObstacleRef obstacle) const {
 }
 const RobotData& View::resolve_robot_ref_safe(RobotRef robot) const {
 	const RobotData& result = resolve_robot_ref(robot);
-	validate_identifier(result, robot);
+//	validate_identifier(result, robot);
+	if(result.id()->id() != robot->id()) {
+		throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
+	}
 	return result;
 }
 const WorldObject& View::resolve_marker_ref_safe(MarkerRef marker) const {
 	const WorldObject& result = resolve_marker_ref(marker);
-	validate_identifier(result, marker);
+	//	validate_identifier(result, marker);
+	if(result.id()->id() != marker->id()) {
+		throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
+	}
 	return result;
 }
 const Box& View::resolve_box_ref_safe(BoxRef box) const {
 	const Box& result = resolve_box_ref(box);
-	validate_identifier(result, box);
+	//	validate_identifier(result, box);
+	if(result.id()->id() != box->id()) {
+		throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
+	}
 	return result;
 }
 const Sphere& View::resolve_sphere_ref_safe(SphereRef sphere) const {
 	const Sphere& result = resolve_sphere_ref(sphere);
-	validate_identifier(result, sphere);
+	//	validate_identifier(result, sphere);
+	if(result.id()->id() != sphere->id()) {
+		throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
+	}
 	return result;
 }
 const Edge& View::resolve_edge_ref_safe(EdgeRef edge) const {
 	const Edge& result = resolve_edge_ref(edge);
-	validate_identifier(result, edge);
+	//	validate_identifier(result, edge);
+	if(result.id()->id() != edge->id()) {
+		throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
+	}
 	return result;
 }
 const Message& View::resolve_message_ref_safe(MessageRef message) const {
 	const Message& result = resolve_message_ref(message);
-	validate_identifier(result, message);
+	//	validate_identifier(result, message);
+	if(result.id()->id() != message->id()) {
+		throw std::invalid_argument("Illegal identifier. Outdated? Cloned? Self-created?");
+	}
 	return result;
 }
 
