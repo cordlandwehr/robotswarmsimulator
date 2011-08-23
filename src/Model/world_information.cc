@@ -240,25 +240,41 @@ boost::shared_ptr<RobotData> WorldInformation::get_according_robot_data_ptr(boos
 }
 
 boost::shared_ptr<const Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) const {
-	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it = edges_.find(id->id());
+	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it;
+	for(it = edges_.begin(); it != edges_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
 	assert(it != edges_.end());
 	return it->second;
 }
 
 boost::shared_ptr<Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) {
-	std::map<std::size_t, boost::shared_ptr<Edge> >::iterator it = edges_.find(id->id());
+	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it;
+	for(it = edges_.begin(); it != edges_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
 	assert(it != edges_.end());
 	return it->second;
 }
 
 boost::shared_ptr<const Message> WorldInformation::get_according_message(boost::shared_ptr<MessageIdentifier> id) const {
-	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it = messages_.find(id->id());
+	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it;
+	for(it = messages_.begin(); it != messages_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
 	assert(it != messages_.end());
 	return it->second;
 }
 
 boost::shared_ptr<Message> WorldInformation::get_according_message(boost::shared_ptr<MessageIdentifier> id) {
-	std::map<std::size_t, boost::shared_ptr<Message> >::iterator it = messages_.find(id->id());
+	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it;
+	for(it = messages_.begin(); it != messages_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
 	assert(it != messages_.end());
 	return it->second;
 }
