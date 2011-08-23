@@ -35,7 +35,11 @@
 #ifndef ROBOT_DATA_H_
 #define ROBOT_DATA_H_
 
+#include "../Wrapper/boost_graph_wrapper.h"
+
 #include <boost/tuple/tuple.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
 #include "../Utilities/vector_arithmetics.h"
 #include "edge.h"
 #include "edge_identifier.h"
@@ -251,6 +255,13 @@ public:
 		return edges_;
 	}
 
+	const boost::graph_traits<BoostGraph>::vertex_descriptor& get_boost_vertex_descriptor() const{
+		return vertex_descriptor_;
+	}
+
+	void set_boost_vertex_descriptor(boost::graph_traits<BoostGraph>::vertex_descriptor vertex_descriptor){
+		vertex_descriptor_ = vertex_descriptor;
+	}
 
 private:
 	/**
@@ -276,6 +287,8 @@ private:
 
 	std::vector<boost::shared_ptr<EdgeIdentifier> > edges_;
 	std::deque<boost::shared_ptr<MessageIdentifier> > messages_;
+
+	boost::graph_traits<BoostGraph>::vertex_descriptor  vertex_descriptor_;
 };
 
 #endif /* ROBOT_DATA_H_ */

@@ -7,10 +7,9 @@
 #include "../Wrapper/boost_graph_wrapper.h"
 
 #include <boost/smart_ptr.hpp>
-#include <boost/graph/random_layout.hpp>
-#include <boost/graph/fruchterman_reingold.hpp>
 #include <boost/graph/topology.hpp>
 #include <boost/random/linear_congruential.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include "../Model/world_information.h"
 #include "../Model/world_modifier.h"

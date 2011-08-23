@@ -63,9 +63,9 @@
 
 int main(int argc, char** argv) {
    //boost::function_requires< boost::VertexListGraphConcept<WorldInformation> >();
-	boost::function_requires< boost::VertexAndEdgeListGraphConcept<WorldInformation> >();
+	//boost::function_requires< boost::VertexAndEdgeListGraphConcept<WorldInformation> >();
     //boost::function_requires< boost::WritablePropertyMapConcept<WorldInformation, boost::graph_traits<WorldInformation>::vertex_descriptor > >();
-	boost::function_requires< boost::LvaluePropertyMapConcept<std::map<boost::graph_traits<WorldInformation>::vertex_descriptor, boost::rectangle_topology<>::point_type>, boost::graph_traits<WorldInformation>::vertex_descriptor> >();
+	//boost::function_requires< boost::LvaluePropertyMapConcept<std::map<boost::graph_traits<WorldInformation>::vertex_descriptor, boost::rectangle_topology<>::point_type>, boost::graph_traits<WorldInformation>::vertex_descriptor> >();
 	namespace po = boost::program_options;
 
 	// declaration of program options
