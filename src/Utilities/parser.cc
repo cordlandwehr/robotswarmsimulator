@@ -167,6 +167,7 @@ string Parser::get_next_value_in_line(const string& line, int line_number, bool 
 			std::stringstream out;
 			out << line_number;
 			line_num = out.str();
+			
 			throw UnsupportedOperationException("Syntax error in line "+line_num+" of robot file.");
 		}
 	}
@@ -257,7 +258,7 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 	//The order of these initializations is important!
 	int id = get_next_double_value_in_line(line, line_number, false);
 	Vector3d position = get_next_vector3d_in_line(line, line_number, false);
-	//string marker_info = get_next_value_in_line(line, line_number, false); //TODO asetzer: see if we ever need this
+	string marker_info = "";//get_next_value_in_line(line, line_number, false); //TODO asetzer: see if we ever need this
 	string algorithm = get_next_value_in_line(line, line_number, true);
 
 	// if algorithm has suffix '.lua', it is a filename that is to be interpreted relatively to the robot project file
