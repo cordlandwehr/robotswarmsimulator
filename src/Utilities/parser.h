@@ -131,6 +131,11 @@ public:
 	 * \return constant reference to the string describing the Robot Filename.
 	 */
 	const std::string& robot_filename() const;
+	
+	/**
+	 * \return constant reference to the string describing the Edge Filename.
+	 */
+	const std::string& edge_filename() const;
 
 	/**
 	 * \return reference to vector of Robot IDs.
@@ -156,6 +161,21 @@ public:
 	 * \return reference to vector of world modifier.
 	 */
 	std::vector<std::string>& world_modifiers();
+	
+	/**
+	 * \return reference to vector of first edge ends
+	 */
+	std::vector<int>& edge_end1();	
+	
+	/**
+	 * \return reference to vector of second edge ends
+	 */
+	std::vector<int>& edge_end2();		
+	
+	/**
+	 * \return reference to vector of bidirectional booleans
+	 */
+	std::vector<int>& edge_bidirectional();	
 
 	/**
 	 * \returns the dumpnumber (for saving snapshots of configurations).
@@ -175,6 +195,7 @@ private:
 	boost::program_options::variables_map parameter_map_boost_;
 
 	std::string robot_filename_;
+	std::string edge_filename_;
 	std::vector<std::string> world_modifiers_;
 	int dumpnumber_;
 
@@ -191,6 +212,9 @@ private:
 	std::vector<Vector3d> initiale_robot_positions_;
 	std::vector<std::string> initiale_robot_marker_information_;
 	std::vector<std::string> initiale_robot_algorithms_;
+	std::vector<int> initiale_edge_end1_;
+	std::vector<int> initiale_edge_end2_;
+	std::vector<int> initiale_edge_bidirectional_;
 
 	/**
 	 * This method loads the data written in the main project file
@@ -213,12 +237,17 @@ private:
 	 * This method loads the data written in the robot file.
 	 */
 	void load_robot_file();
+	
+	/**
+	 * This method loads the data written in the edge file.
+	 */
+	void load_edge_file();
 
 	/**
 	 * This method loads an obstacle or a robot file.
 	 * \param load_robot_file true, if file to load is robot file
 	 */
-	void load_robot_or_obstacle_file(bool load_robot_file);
+	void load_robot_or_edge_file(bool load_robot_file);
 
 	/**
 	 * This method checks whether the given line is a comment,
@@ -260,6 +289,13 @@ private:
 	 * \param line_number number of given line in file
 	 */
 	void init_robot_values_for_line(const std::string& line, int line_number);
+	
+	/**
+	 * This methods reads the values in the given line and initializes the according variables.
+	 * \param line Line containing information for one edge
+	 * \param line_number number of given line in file
+	 */
+	void init_edge_values_for_line(const std::string& line, int line_number);
 
 	/**
 	 * This methods returns the next value in the given line (beginning at given postion).

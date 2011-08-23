@@ -213,6 +213,37 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 }
 
+void SimulationKernel::create_edges(boost::shared_ptr< Parser > parser, boost::shared_ptr< WorldInformation > initial_world_information) {
+
+	int temp_edge_end1;
+	int temp_edge_end2;
+	int temp_edge_bidirectional;
+	
+	boost::shared_ptr<RobotIdentifier> temp_r1;
+	boost::shared_ptr<RobotIdentifier> temp_r2;
+	
+	boost::shared_ptr<Edge> temp_edge;
+
+
+
+	// running through all robots in robotfile
+	for (int i = 0; i < parser->edge_end1().size(); ++i) {
+		temp_edge_end1 = parser->edge_end1()[i];
+		temp_edge_end2 = parser->edge_end2()[i];
+		temp_edge_bidirectional = parser->edge_bidirectional()[i];
+		
+		temp_r1.reset(new RobotIdentifier(temp_edge_end1));
+		temp_r2.reset(new RobotIdentifier(temp_edge_end2));
+	  
+		if (temp_edge_bidirectional) {
+		  temp_edge.reset(new UndirectedEdge(temp_r1, temp_r2));
+		} else {
+		  temp_edge.reset(new DirectedEdge(temp_r1, temp_r2));
+		}
+	}
+
+}
+
 
 void SimulationKernel::create_world_modifiers(boost::shared_ptr<Parser> parser) {
 	boost::shared_ptr<WorldModifier> temp_world_modifier;
@@ -220,7 +251,7 @@ void SimulationKernel::create_world_modifiers(boost::shared_ptr<Parser> parser) 
 
 	vector<string>& temp_world_modifiers = parser->world_modifiers();
 
-	for (int i = 0; i < temp_world_modifiers.size(); i++) {
+	for (int i = 0; i < temp_world_modifiers.size(); ++i) {
 		temp_world_modifier_name = temp_world_modifiers[i];
 		temp_world_modifier = Factory::world_modifier_factory(temp_world_modifier_name);
 
@@ -238,6 +269,9 @@ boost::shared_ptr<WorldInformation> SimulationKernel::setup_initial_world_inform
 
 	//create robots and add to initial world information
 	create_robots(parser, initial_world_information);
+
+	//create robots and add to initial world information
+	create_edges(parser, initial_world_information);
 
 	//create world modifiers and add to initial world information
 	create_world_modifiers(parser);
@@ -369,4 +403,6 @@ void SimulationKernel::last_breath() const {
 	std::cout << std::endl << "REGULARITY: " << regularity << std::endl;
 	std::cout << std::endl << "GAPS: " << gaps << std::endl;
 }
+
+
 

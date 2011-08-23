@@ -98,6 +98,8 @@ void Parser::init_variables() {
 	
 	if (robot_filename_.rfind(".robot")!=string::npos)
 		robot_filename_.erase (robot_filename_.rfind(".robot"),6);
+	
+	edge_filename_ = parameter_map_boost()["EDGE_FILENAME"].as<string>();
 
 	std::vector<string> temp_split_world_modifiers = parameter_map_boost()["WORLD_MODIFIERS"].as<std::vector<string> >();
    
@@ -126,6 +128,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 	desc.add_options()
     ("PROJECT_NAME", boost::program_options::value<string>(), "set project name")
 	("ROBOT_FILENAME", boost::program_options::value<string>(), "set robot file name")
+	("EDGE_FILENAME", boost::program_options::value<string>()->default_value(""), "set edge file name")
 	("WORLD_MODIFIERS", boost::program_options::value< vector<string> >(), "set world modifiers")	
 	("ASG", boost::program_options::value<string>()->default_value("SYNCHRONOUS_WM"), "set activation sequence generator")
 	("VIEW", boost::program_options::value<string>()->default_value("LOCAL_GRAPH_VIEW"), "set view to use")
@@ -274,24 +277,52 @@ void Parser::init_robot_values_for_line(const string& line, int line_number) {
 
 }
 
+void Parser::init_edge_values_for_line(const string& line, int line_number) {
 
-void Parser::load_robot_file() {
-	load_robot_or_obstacle_file(true);
+	//continue with next line if this is a comment-line, eg. begins with '#'
+	if (line.substr(0,1).compare("#")==0)
+		return;
+
+	//begin at beginning of line
+	position_in_line_ = 0;
+
+	//The order of these initializations is important!
+	int end1_ID = get_next_double_value_in_line(line, line_number, false);
+	int end2_ID = get_next_double_value_in_line(line, line_number, false);
+	int bidirectional = get_next_double_value_in_line(line, line_number, true);	
+
+	initiale_edge_end1_.push_back(end1_ID);
+	initiale_edge_end2_.push_back(end2_ID);
+	initiale_edge_bidirectional_.push_back(bidirectional);
+
 }
 
-void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
+void Parser::load_robot_file() {
+	load_robot_or_edge_file(true);
+}
+
+void Parser::load_edge_file() {
+	load_robot_or_edge_file(false);
+}
+
+void Parser::load_robot_or_edge_file(bool load_robot_file) {
 	string line;
 	boost::filesystem::ifstream project_file;
 
 	//depending on which file to load, specify file extension
 	string filename;
 	if(load_robot_file) {
-		// this allows ending ".csv" for robot files.
-		if (robot_filename_.rfind(".csv")!=string::npos)
-			filename = robot_filename_;
-		else
-			filename = robot_filename_ + ".robot";
+	  filename = robot_filename_;
+	  
+	  // this allows ending ".robot" for robot files.
+	  if (filename.rfind(".csv")==string::npos)
+		filename = filename + ".robot";
+	  
+	} else {
+	  filename = edge_filename_;
 	}
+
+	  
 	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
 	using boost::filesystem::path;
 	path file = path(project_filename_).parent_path() / filename;
@@ -318,6 +349,8 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 				if(load_robot_file) {
 					//initialize values of robot of this line
 					init_robot_values_for_line(line, ++line_number);
+				} else {
+					init_edge_values_for_line(line, ++line_number);
 				}
 			}
 		}
@@ -331,6 +364,8 @@ void Parser::load_robot_or_obstacle_file(bool load_robot_file) {
 void Parser::load_projectfiles(const string& project_filename) {
 	load_main_project_file(project_filename);
 	load_robot_file();
+	if (edge_filename() != "")
+	  load_edge_file();
 }
 
 void Parser::save_main_project_file(const string& project_filename) {
@@ -478,6 +513,10 @@ const string& Parser::robot_filename() const {
 	return robot_filename_;
 }
 
+const string& Parser::edge_filename() const {
+	return edge_filename_;
+}
+
 /*** GET-methods for robot data ***/
 vector<int>& Parser::robot_ids() {
 	return initiale_robot_ids_;
@@ -491,6 +530,16 @@ vector<string>& Parser::robot_marker_information() {
 }
 vector<string>& Parser::robot_algorithms() {
 	return initiale_robot_algorithms_;
+}
+
+vector<int>& Parser::edge_end1() {
+	return initiale_edge_end1_;
+}
+vector<int>& Parser::edge_end2() {
+	return initiale_edge_end2_;
+}
+vector<int>& Parser::edge_bidirectional() {
+	return initiale_edge_bidirectional_;
 }
 
 /*** GET-method for world modfiers ***/

@@ -248,6 +248,11 @@ private:
 	 * This method creates the robots using the information read from the robot input file.
 	 */
 	void create_robots(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
+	
+	/**
+	 * This method creates the edges using the information read from the robot input file.
+	 */
+	void create_edges(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information);
 
 	/**
 	 * This method creates the world modifiers using the information read from the project file.
