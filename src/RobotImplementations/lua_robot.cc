@@ -68,6 +68,7 @@
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
+	boost::shared_ptr<lua_State> lua;
 	Robot* robot; //needed as "caller" in most view methods
 	
 	std::map< std::size_t, boost::shared_ptr<EdgeIdentifier> > edge_identifiers_;
@@ -101,6 +102,12 @@ namespace {
 	  BOOST_FOREACH(boost::shared_ptr<EdgeIdentifier> ident, ids) {
 	    std::size_t id = view->get_id(*robot, ident);
 	    edge_identifiers_[id] = ident;
+	    // update robots ...
+	    boost::shared_ptr<RobotIdentifier> tail = view->get_edge_source(ident);
+	    boost::shared_ptr<RobotIdentifier> head = view->get_edge_target(ident);
+	    robot_identifiers_[view->get_id(*robot, tail)] = tail;
+	    robot_identifiers_[view->get_id(*robot, head)] = head;
+	    // store ID
 	    result.push_back(id);
 	  }
 	  return result;
@@ -109,6 +116,12 @@ namespace {
 	const std::size_t get_id(const boost::shared_ptr<MessageIdentifier> ident) {
 	  std::size_t id = view->get_id(*robot, ident);
 	  message_identifiers_[id] = ident;
+	  // update sender robot (if visible)
+	  boost::shared_ptr<RobotIdentifier> sender = view->get_sender(ident);
+	  if (sender) {
+	    robot_identifiers_[view->get_id(*robot, sender)] = sender;
+	  }
+	  // return integer ID
 	  return id;
 	}
 		
@@ -187,6 +200,36 @@ namespace {
 	  return view->get_robot_last_request_successful(*robot, robot_identifiers_[id]);
 	}
 	
+	
+	std::size_t get_tail(std::size_t id) {
+	  // check the given ID
+	  check_mapping(edge_identifiers_, id);
+	  // return robot ID
+	  return view->get_id(*robot, view->get_edge_source(edge_identifiers_[id]));
+	}
+	
+	std::size_t get_head(std::size_t id) {
+	 // check the given ID
+	 check_mapping(edge_identifiers_, id);
+	 // return robot ID
+	 return view->get_id(*robot, view->get_edge_target(edge_identifiers_[id]));
+	}
+	
+	luabind::object get_sender(std::size_t id) {
+	  // check the given ID
+	  check_mapping(message_identifiers_, id);
+	  // get and check Robotidentifier
+	  boost::shared_ptr<RobotIdentifier> sender = view->get_sender(message_identifiers_[id]);
+	  if (sender) {
+	    // view returned an existing ID (the sender is visible), return integer ID
+	    std::size_t sender_id = view->get_id(*robot, sender);
+	    return luabind::object(lua.get(), sender_id);
+	  } else {
+	    // view returned NULL pointer (the seder is invisible), return NIL
+	    return luabind::object();
+	  }
+	}
+	
 	/**
 	 * @return time of view
 	 * @see View.get_time()
@@ -230,7 +273,7 @@ namespace {
 	  // check the given ID
 	  check_mapping(edge_identifiers_, id);
 	  // create request
-	  // TODO: How to get the actual edge?!
+	  requests.insert(boost::shared_ptr<Request>(new RemoveEdgeRequest(*robot, edge_identifiers_[id])));
 	}
 	
 	void add_send_message_request(std::size_t id, LuaWrapper::MarkerInformationWrapper marker) {
@@ -370,6 +413,7 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("add_remove_edge_request", &add_remove_edge_request),
 			 luabind::def("add_remove_message_request", &add_remove_message_request),
 			 luabind::def("get_edge_information", &get_edge_information),
+			 luabind::def("get_head", &get_head),
 			 luabind::def("get_visible_edges", &get_visible_edges, luabind::copy_table(luabind::result)), 
 			 luabind::def("get_message", &get_message),
 			 luabind::def("get_message_information", &get_message_information),
@@ -377,6 +421,8 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("get_own_id", &get_own_identifier),
 			 luabind::def("get_robot_information", &get_robot_information),
 			 luabind::def("get_robot_last_request_successful", &get_robot_last_request_successful),
+			 luabind::def("get_sender", &get_sender),
+			 luabind::def("get_tail", &get_tail),
 			 luabind::def("get_time", &get_time),
 			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result))
 	    ]
@@ -386,6 +432,7 @@ void LuaRobot::register_lua_methods() {
 
 std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	view = view_;
+	lua = lua_state_;
 	robot = this;
 	
 	edge_identifiers_.clear();
