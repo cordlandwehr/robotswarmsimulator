@@ -241,7 +241,9 @@ public:
 	 * TODO: Same shared_ptr needed -> check some other way?!?
 	 */
 	void remove_edge(boost::shared_ptr<EdgeIdentifier> e) {
-		edges_.erase(std::find(edges_.begin(), edges_.end(), e));
+		std::vector<boost::shared_ptr<EdgeIdentifier> >::iterator it = std::find(edges_.begin(), edges_.end(), e);
+		assert(it != edges_.end());
+		edges_.erase(it);
 	}
 
 	/**
@@ -251,6 +253,11 @@ public:
 		return edges_;
 	}
 
+	/**
+	 * Returns constant vector of outgoing edges.
+	 * Outgoing edges are all undirected edges and directed edges with this robot as source.
+	 */
+	const std::vector<boost::shared_ptr<EdgeIdentifier> >& get_outgoing_edges() const;
 
 private:
 	/**

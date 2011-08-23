@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[4];
 
 	//create edge
-	boost::shared_ptr<Edge> e (new Edge(nodeID1,nodeID2));
+	boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
 
 	RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
 

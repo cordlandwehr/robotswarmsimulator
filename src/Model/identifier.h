@@ -64,6 +64,7 @@ private:
 	friend class SimulationRenderer;
 	friend class StatsControl;
 	friend class SendMessageRequestHandler;
+	friend class EdgeView;
 };
 
 #endif /* IDENTIFIER_H_ */

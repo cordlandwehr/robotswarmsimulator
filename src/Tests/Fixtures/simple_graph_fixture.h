@@ -55,6 +55,22 @@ public:
 		return view_->get_visible_edges(*this);
 	}
 
+	bool is_edge_directed(boost::shared_ptr<EdgeIdentifier> e_id) const {
+		return view_->is_edge_directed(e_id);
+	}
+
+	boost::shared_ptr<RobotIdentifier> get_edge_source(boost::shared_ptr<EdgeIdentifier> e_id) const {
+		return view_->get_edge_source(e_id);
+	}
+
+	boost::shared_ptr<RobotIdentifier> get_edge_target(boost::shared_ptr<EdgeIdentifier> e_id) const {
+		return view_->get_edge_target(e_id);
+	}
+
+	boost::shared_ptr<RobotIdentifier> get_sender(boost::shared_ptr<MessageIdentifier> m) const {
+		return view_->get_sender(m);
+	}
+
 	virtual std::string get_algorithm_id () const {
 		return "SimpleRobot";
 	}
@@ -96,13 +112,13 @@ struct SimpleGraphFixture {
 		// create two Edges
 		edge_ab.reset(new DirectedEdge(id_b, id_a));
 		initial_world_information->add_edge(edge_ab);
-		robot_data_a->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
-		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
+//		robot_data_a->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
+//		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_ab->id()));
 
-		edge_bc.reset(new Edge(id_b, id_c));
+		edge_bc.reset(new UndirectedEdge(id_b, id_c));
 		initial_world_information->add_edge(edge_bc);
-		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
-		robot_data_c->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
+//		robot_data_b->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
+//		robot_data_c->add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id()));
 
 		// velocity and acceleration needed for event step
 		// create velocity for robot a: (0,0,0)

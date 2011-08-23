@@ -125,6 +125,9 @@ const Sphere& View::resolve_sphere_ref(SphereRef sphere) const {
 const Edge& View::resolve_edge_ref(EdgeRef edge) const {
 	return *(world_information().get_according_edge(edge));
 }
+const Message& View::resolve_message_ref(MessageRef message) const {
+	return *(world_information().get_according_message(message));
+}
 
 const Obstacle& View::resolve_obstacle_ref_safe(ObstacleRef obstacle) const {
 	const Obstacle& result = resolve_obstacle_ref(obstacle);
@@ -154,6 +157,11 @@ const Sphere& View::resolve_sphere_ref_safe(SphereRef sphere) const {
 const Edge& View::resolve_edge_ref_safe(EdgeRef edge) const {
 	const Edge& result = resolve_edge_ref(edge);
 	validate_identifier(result, edge);
+	return result;
+}
+const Message& View::resolve_message_ref_safe(MessageRef message) const {
+	const Message& result = resolve_message_ref(message);
+	validate_identifier(result, message);
 	return result;
 }
 
@@ -267,6 +275,22 @@ const double View::get_box_height(BoxRef box) const {
 
 const double View::get_sphere_radius(SphereRef sphere) const {
 	return get_sphere_radius(resolve_sphere_ref_safe(sphere));
+}
+
+const bool View::is_edge_directed(EdgeRef edge) const {
+	return is_edge_directed(resolve_edge_ref_safe(edge));
+}
+
+const View::RobotRef View::get_edge_source(EdgeRef edge) const {
+	return get_edge_source(resolve_edge_ref_safe(edge));
+}
+
+const View::RobotRef View::get_edge_target(EdgeRef edge) const {
+	return get_edge_target(resolve_edge_ref_safe(edge));
+}
+
+const View::RobotRef View::get_sender(MessageRef message) const {
+	return get_sender(resolve_message_ref_safe(message));
 }
 
 std::vector<View::RobotRef> View::get_visible_robots(const RobotData& robot) const {
@@ -417,6 +441,22 @@ double View::get_box_height(const Box& box) const {
 
 double View::get_sphere_radius(const Sphere& sphere) const {
 	throw UnsupportedOperationException(get_error_message("get_sphere_radius"));
+}
+
+bool View::is_edge_directed(const Edge& edge) const {
+	throw UnsupportedOperationException(get_error_message("is_edge_directed"));
+}
+
+View::RobotRef View::get_edge_source(const Edge& robot) const{
+	throw UnsupportedOperationException(get_error_message("get_edge_source"));
+}
+
+View::RobotRef View::get_edge_target(const Edge& edge) const{
+	throw UnsupportedOperationException(get_error_message("get_edge_target"));
+}
+
+View::RobotRef View::get_sender(const Message& message) const{
+	throw UnsupportedOperationException(get_error_message("get_sender"));
 }
 
 const WorldInformation& View::world_information() const {
