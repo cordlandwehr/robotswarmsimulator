@@ -45,3 +45,9 @@ MarkerInformation MarkerInformationView::get_obstacles_marker_information(const 
 MarkerInformation MarkerInformationView::get_markers_marker_information(const WorldObject& marker) const {
 	return marker.marker_information();
 }
+MarkerInformation MarkerInformationView::get_edge_marker_information(const Edge& edge) const {
+	return edge.marker_information();
+}
+MarkerInformation MarkerInformationView::get_message_marker_information(const Message& message) const {
+	return message.marker_information();
+}

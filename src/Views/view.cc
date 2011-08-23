@@ -76,6 +76,8 @@ T View::delegate_function(boost::function<T (const View*, const RobotData&)> own
 		                  boost::function<T (const View*, const RobotData&)> other_robot_fun,
 						  boost::function<T (const View*, const Obstacle&)> obstacle_fun,
 						  boost::function<T (const View*, const WorldObject&)> marker_fun,
+						  boost::function<T (const View*, const Edge&)> edge_fun,
+						  boost::function<T (const View*, const Message&)> message_fun,
 						  const Robot& caller, WorldObjectRef world_object) const {
 	if(RobotRef ref = boost::dynamic_pointer_cast<RobotIdentifier>(world_object)) {
 		if(is_own_identifier(caller, ref)) {
@@ -87,6 +89,10 @@ T View::delegate_function(boost::function<T (const View*, const RobotData&)> own
 		return obstacle_fun(this, resolve_obstacle_ref_safe(ref));
 	} else if(MarkerRef ref = boost::dynamic_pointer_cast<MarkerIdentifier>(world_object)) {
 		return marker_fun(this, resolve_marker_ref_safe(ref));
+	} else if(EdgeRef ref = boost::dynamic_pointer_cast<EdgeIdentifier>(world_object)) {
+		return edge_fun(this, resolve_edge_ref_safe(ref));
+	} else if(MessageRef ref = boost::dynamic_pointer_cast<MessageIdentifier>(world_object)) {
+		return message_fun(this, resolve_message_ref_safe(ref));
 	} else {
 		throw std::invalid_argument("Illegal type of world_object.");
 	}
@@ -226,6 +232,7 @@ const Vector3d View::get_position(const Robot& caller, WorldObjectRef world_obje
 	Vector3d position_global_coords;
 	position_global_coords = delegate_function<Vector3d>(&View::get_own_position, &View::get_robot_position,
 			                                             &View::get_obstacle_position, &View::get_marker_position,
+			                                             &View::get_edge_position, &View::get_message_position,
 	                                                     caller, world_object);
 	// const RobotData& robot_data = resolve_robot_ref(caller.id());
 	return position_global_coords;
@@ -235,12 +242,14 @@ const Vector3d View::get_position(const Robot& caller, WorldObjectRef world_obje
 const MarkerInformation View::get_marker_information(const Robot& caller, WorldObjectRef world_object) const {
 	return delegate_function<MarkerInformation>(&View::get_own_marker_information, &View::get_robots_marker_information,
 			                                           &View::get_obstacles_marker_information, &View::get_markers_marker_information,
+			                                           &View::get_edge_marker_information, &View::get_message_marker_information,
 			                                           caller, world_object);
 }
 
 const std::size_t View::get_id(const Robot& caller, WorldObjectRef world_object) const {
 	return delegate_function<std::size_t>(&View::get_own_id, &View::get_robot_id,
 	                                      &View::get_obstacle_id, &View::get_marker_id,
+	                                      &View::get_edge_id, &View::get_message_id,
 	                                      caller, world_object);
 }
 
@@ -351,6 +360,14 @@ Vector3d View::get_marker_position(const WorldObject& marker) const {
 	throw UnsupportedOperationException(get_error_message("get_obstacle_position"));
 }
 
+Vector3d View::get_edge_position(const Edge& edge) const {
+	throw UnsupportedOperationException(get_error_message("get_edge_position"));
+}
+
+Vector3d View::get_message_position(const Message& messsage) const {
+	throw UnsupportedOperationException(get_error_message("get_message_position"));
+}
+
 MarkerInformation View::get_own_marker_information(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_own_marker_information"));
 }
@@ -367,6 +384,14 @@ MarkerInformation View::get_markers_marker_information(const WorldObject& marker
 	throw UnsupportedOperationException(get_error_message("get_markers_marker_information"));
 }
 
+MarkerInformation View::get_edge_marker_information(const Edge& edge) const {
+	throw UnsupportedOperationException(get_error_message("get_edge_marker_information"));
+}
+
+MarkerInformation View::get_message_marker_information(const Message& message) const {
+	throw UnsupportedOperationException(get_error_message("get_message_marker_information"));
+}
+
 std::size_t View::get_own_id(const RobotData& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_own_id"));
 }
@@ -381,6 +406,14 @@ std::size_t View::get_obstacle_id(const Obstacle& robot) const {
 
 std::size_t View::get_marker_id(const WorldObject& robot) const {
 	throw UnsupportedOperationException(get_error_message("get_marker_id"));
+}
+
+std::size_t View::get_edge_id(const Edge& edge) const {
+	throw UnsupportedOperationException(get_error_message("get_edge_id"));
+}
+
+std::size_t View::get_message_id(const Message& message) const {
+	throw UnsupportedOperationException(get_error_message("get_message_id"));
 }
 
 Vector3d View::get_own_acceleration(const RobotData& robot) const {

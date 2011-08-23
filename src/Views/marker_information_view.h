@@ -38,6 +38,8 @@ protected:
 	virtual MarkerInformation get_robots_marker_information(const RobotData& robot) const;
 	virtual MarkerInformation get_obstacles_marker_information(const Obstacle& obstacle) const;
 	virtual MarkerInformation get_markers_marker_information(const WorldObject& marker) const;
+	virtual MarkerInformation get_edge_marker_information(const Edge& edge) const;
+	virtual MarkerInformation get_message_marker_information(const Message& message) const;
 };
 
 #endif /* MARKER_INFORMATION_VIEW_H_ */

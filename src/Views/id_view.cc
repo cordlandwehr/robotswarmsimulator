@@ -46,3 +46,9 @@ std::size_t IdView::get_obstacle_id(const Obstacle& obstacle) const {
 std::size_t IdView::get_marker_id(const WorldObject& marker) const {
 	return get_id(marker.id());
 }
+std::size_t IdView::get_edge_id(const Edge& edge) const {
+	return get_id(edge.id());
+}
+std::size_t IdView::get_message_id(const Message& message) const {
+	return get_id(message.id());
+}

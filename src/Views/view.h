@@ -348,6 +348,8 @@ protected:
 	virtual Vector3d get_robot_position(const RobotData& robot) const;
 	virtual Vector3d get_obstacle_position(const Obstacle& obstacle) const;
 	virtual Vector3d get_marker_position(const WorldObject& marker) const;
+	virtual Vector3d get_edge_position(const Edge& edge) const;
+	virtual Vector3d get_message_position(const Message& message) const;
 
 	//Pretty much the same concept as in View::get_own_position besides this methods are called by
 	//View::get_marker_information.
@@ -355,6 +357,8 @@ protected:
 	virtual MarkerInformation get_robots_marker_information(const RobotData& robot) const;
 	virtual MarkerInformation get_obstacles_marker_information(const Obstacle& obstacle) const;
 	virtual MarkerInformation get_markers_marker_information(const WorldObject& marker) const;
+	virtual MarkerInformation get_edge_marker_information(const Edge& edge) const;
+	virtual MarkerInformation get_message_marker_information(const Message& message) const;
 
 	//Pretty much the same concept as in View::get_own_position besides this methods are called by
 	//View::get_id.
@@ -362,6 +366,8 @@ protected:
 	virtual std::size_t get_robot_id(const RobotData& robot) const;
 	virtual std::size_t get_obstacle_id(const Obstacle& obstacle) const;
 	virtual std::size_t get_marker_id(const WorldObject& marker) const;
+	virtual std::size_t get_edge_id(const Edge& edge) const;
+	virtual std::size_t get_message_id(const Message& message) const;
 
 	//Following two methods are called by get_robot_acceleration. If the given RobotRef is referencing the
 	//calling Robot then get_own_acceleration is called, otherwise get_others_acceleration.
@@ -457,6 +463,7 @@ private:
 	template<typename T>
 	T delegate_function(boost::function<T (const View*, const RobotData&)> own_robot_fun, boost::function<T (const View*, const RobotData&)> other_robot_fun,
 						boost::function<T (const View*, const Obstacle&)> obstacle_fun, boost::function<T (const View*, const WorldObject&)> marker_fun,
+						boost::function<T (const View*, const Edge&)> edge_fun, boost::function<T (const View*, const Message&)> message_fun,
 						const Robot& caller, WorldObjectRef world_object) const;
 	/**
 	 * Same as above except that this method only decides between two methods as needed

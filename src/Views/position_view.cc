@@ -43,3 +43,9 @@ Vector3d PositionView::get_obstacle_position(const Obstacle& obstacle) const {
 Vector3d PositionView::get_marker_position(const WorldObject& marker) const {
 	return marker.position();
 }
+Vector3d PositionView::get_edge_position(const Edge& edge) const {
+	return edge.position();
+}
+Vector3d PositionView::get_message_position(const Message& message) const {
+	return message.position();
+}

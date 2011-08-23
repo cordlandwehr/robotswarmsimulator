@@ -38,6 +38,8 @@ protected:
 	virtual Vector3d get_robot_position(const RobotData& robot) const;
 	virtual Vector3d get_obstacle_position(const Obstacle& obstacle) const;
 	virtual Vector3d get_marker_position(const WorldObject& marker) const;
+	virtual Vector3d get_edge_position(const Edge& edge) const;
+	virtual Vector3d get_message_position(const Message& message) const;
 };
 
 #endif /* POSITION_VIEW_H_ */

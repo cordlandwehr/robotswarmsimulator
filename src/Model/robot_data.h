@@ -216,10 +216,15 @@ public:
 
 	/**
 	 * Removes message from queue at position of index
+	 * @return true if remove was successful (index in range), false otherwise
 	 */
-	void remove_message(std::size_t index) {
-		assert(messages_.size() >= index);
-		messages_.erase(messages_.begin()+index);
+	bool remove_message(std::size_t index) {
+		if(messages_.size() >= index){
+			messages_.erase(messages_.begin()+index);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -238,16 +243,17 @@ public:
 
 	/**
 	 * Removes edge from adjacency list
-	 * TODO: Same shared_ptr needed -> check some other way?!?
+	 * @return true if remove was successful (edge in list), false otherwise
 	 */
-	void remove_edge(boost::shared_ptr<EdgeIdentifier> e) {
+	bool remove_edge(boost::shared_ptr<EdgeIdentifier> e) {
 		std::size_t id = e->id();
 		for(std::vector<boost::shared_ptr<EdgeIdentifier> >::iterator it = edges_.begin(); it!=edges_.end(); it++){
 			if((*it)->id() == id){
 				edges_.erase(it);
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**

@@ -37,6 +37,8 @@ protected:
 	virtual std::size_t get_robot_id(const RobotData& robot) const;
 	virtual std::size_t get_obstacle_id(const Obstacle& obstacle) const;
 	virtual std::size_t get_marker_id(const WorldObject& marker) const;
+	virtual std::size_t get_edge_id(const Edge& edge) const;
+	virtual std::size_t get_message_id(const Message& message) const;
 };
 
 #endif /* ID_VIEW_H_ */
