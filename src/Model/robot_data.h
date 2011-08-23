@@ -211,7 +211,8 @@ public:
 	 * Returns message from queue at position of index
 	 */
 	boost::shared_ptr<MessageIdentifier> get_message(std::size_t index) const {
-		return messages_.front();
+		assert(index < messages_.size());
+		return messages_[index];
 	}
 
 	/**
