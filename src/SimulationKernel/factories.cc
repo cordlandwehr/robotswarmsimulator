@@ -146,6 +146,11 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(boost::shared_ptr
 			double discard_probability = 0; // boost::lexical_cast<double> (params["VECTOR_POSITION_REQUEST_HANDLER_DISCARD_PROB"]);
 			unsigned int seed = 0;// boost::lexical_cast<unsigned int> (params["VECTOR_POSITION_REQUEST_HANDLER_SEED"]);
 			boost::shared_ptr<VectorRequestHandler> vector_request_handler(new VectorRequestHandler(seed, discard_probability, *history));
+			boost::shared_ptr<InsertEdgeRequestHandler> insert_edge_request_handler(new InsertEdgeRequestHandler(seed, discard_probability, *history));
+			boost::shared_ptr<MarkerRequestHandler> marker_request_handler(new MarkerRequestHandler(seed, discard_probability, *history));
+			boost::shared_ptr<RemoveEdgeRequestHandler> remove_edge_request_handler(new RemoveEdgeRequestHandler(seed, discard_probability, *history));
+			boost::shared_ptr<RemoveMessageRequestHandler> remove_message_request_handler(new RemoveMessageRequestHandler(seed, discard_probability, *history));
+			boost::shared_ptr<SendMessageRequestHandler> send_message_request_handler(new SendMessageRequestHandler(seed, discard_probability, *history));
 
 			/*
 			// set up vector modifiers
@@ -153,6 +158,11 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(boost::shared_ptr
 					                            params["VECTOR_POSITION_REQUEST_HANDLER_MODIFIER"]);
 			*/
 			event_handler->set_position_request_handler(vector_request_handler);
+			event_handler->set_insert_edge_request_handler(insert_edge_request_handler);
+			event_handler->set_marker_request_handler(marker_request_handler);
+			event_handler->set_remove_edge_request_handler(remove_edge_request_handler);
+			event_handler->set_remove_message_request_handler(remove_message_request_handler);
+			event_handler->set_send_message_request_handler(send_message_request_handler);
 		/*} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for vector position request handler");
 		}*/
