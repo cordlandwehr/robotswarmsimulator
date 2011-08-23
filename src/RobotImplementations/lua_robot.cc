@@ -394,9 +394,11 @@ void LuaRobot::register_lua_methods() {
 			 ,
 
 		 luabind::class_<LuaWrapper::MarkerInformationWrapper>("MarkerInformation")
-			 .def(luabind::constructor<>())
-			 .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
-			 .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data),
+		      .def(luabind::constructor<>())
+		      .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
+		      .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data)
+		      .def("get_keys", &LuaWrapper::MarkerInformationWrapper::get_keys, luabind::copy_table(luabind::result))
+		      .def("remove_data", &LuaWrapper::MarkerInformationWrapper::remove_data),
 		   
 		  luabind::def("log", (void(*)(const std::string&)) &ConsoleOutputWrapper::log),
 		  luabind::def("log", (void(*)(const std::string&, const std::string&)) &ConsoleOutputWrapper::log),
@@ -434,6 +436,8 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	view = view_;
 	lua = lua_state_;
 	robot = this;
+	
+	LuaWrapper::MarkerInformationWrapper::set_lua_state(lua_state_);
 	
 	edge_identifiers_.clear();
 	message_identifiers_.clear();

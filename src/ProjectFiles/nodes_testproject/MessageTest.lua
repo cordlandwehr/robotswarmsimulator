@@ -45,6 +45,7 @@ function main()
     sender = math.random(#bots)
     receiver = math.random(#bots)
     marker = MarkerInformation()
+    marker:add_data("test", 42)
     WorldInformation.add_message(bots[sender], bots[receiver], marker)
   end
   print_messages()
