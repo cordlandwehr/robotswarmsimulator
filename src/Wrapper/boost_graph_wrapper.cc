@@ -80,6 +80,13 @@ namespace boost {
 		  return g.edges().size();
 	  }
 
+	  void put(lvalue_position_property_map& map, property_traits<lvalue_position_property_map>::key_type& key, property_traits<lvalue_position_property_map>::value_type value){
+		  map[key] = value;
+	  }
+	  property_traits<lvalue_position_property_map>::reference get(lvalue_position_property_map map, property_traits<lvalue_position_property_map>::key_type key){
+		  return map[key];
+	  }
+
 	  void put(WorldInformation& map, boost::graph_traits<WorldInformation>::vertex_descriptor& key, boost::rectangle_topology<>::point_type& value ){
 
 		//std::cout << value[0] << " " << value[1] << std::endl;

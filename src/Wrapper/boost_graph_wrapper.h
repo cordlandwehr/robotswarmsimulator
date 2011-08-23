@@ -112,17 +112,26 @@ namespace boost {
 	  ////////////////////////////////////////////////
 	  //  Adaptation for WritablePropertyMapConcept
 	  /////////////////////////////////////////////////
+	  typedef std::map<boost::graph_traits<WorldInformation>::vertex_descriptor, boost::rectangle_topology<>::point_type> lvalue_position_property_map;
+
+	  struct my_property_map_tag:
+		  virtual lvalue_property_map_tag{};
+
 	  template <>
-	  struct property_traits<WorldInformation>{
+	  struct property_traits<lvalue_position_property_map>{
 		typedef graph_traits< WorldInformation >::vertex_descriptor key_type;
-		typedef writable_property_map_tag category;
+		typedef my_property_map_tag category;
 		typedef rectangle_topology<>::point_type value_type;
+		typedef rectangle_topology<>::point_type& reference;
 	  };
+
+	  void put(lvalue_position_property_map& map, property_traits<lvalue_position_property_map>::key_type& key, property_traits<lvalue_position_property_map>::value_type value);
+
+	  property_traits<lvalue_position_property_map>::reference get(lvalue_position_property_map map, property_traits<lvalue_position_property_map>::key_type key);
 
 	  void put(WorldInformation& map, boost::graph_traits<WorldInformation>::vertex_descriptor& key, boost::rectangle_topology<>::point_type value );
 	  void put(WorldInformation& map, boost::shared_ptr<RobotData>& key, boost::convex_topology<2u>::point value);
 	  boost::rectangle_topology<>::point_type& get(const WorldInformation& pmap, boost::shared_ptr<RobotData>& key);
-
 
 
 }

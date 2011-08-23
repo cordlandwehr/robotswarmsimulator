@@ -46,6 +46,8 @@ class Obstacle;
 class Edge;
 class Message;
 
+struct NotDefined {};
+
 
 /**
  * This class encapsulates information (as e.g. robot position, obstacles, ...) about the simulated world.
@@ -58,10 +60,14 @@ class Message;
  */
 class WorldInformation {
 
+
+
 public:
 	WorldInformation();
 	~WorldInformation();
 	WorldInformation(const WorldInformation& rhs);
+
+	typedef NotDefined vertex_property_type;
 
 	/**
 	 * Returns a constant reference to the set of the markers.
