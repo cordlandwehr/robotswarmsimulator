@@ -8,12 +8,6 @@ include_directories("${rsslib_BINARY_DIR}")
 # find all source files
 set(RSSMAIN_SRCS
 	robot_swarm_simulator_cmdline.cc
-	glut_visualizer.cc
-)
-
-# find all gui source files
-set(RSSMAIN_GUI_SRCS
-    robot_swarm_simulator_gui.cc
 )
 
 # find/configure boost (statically linked for release builds)
@@ -85,27 +79,6 @@ set(QT_USE_QTOPENGL TRUE)
 find_package(Qt4 REQUIRED)
 
 include(${QT_USE_FILE})
-
-# generate executable of the above source files and link it
-add_executable(RobotSwarmSimulatorGui ${RSSMAIN_GUI_SRCS})
-target_link_libraries(RobotSwarmSimulatorGui
-    RSSimulator
-    ${Boost_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${GLUT_glut_LIBRARY}
-    ${LUA_LIBRARIES}
-    ${CGAL_LIBRARIES}
-    ${LAPACK_LIBRARIES}
-    ${QT_LIBRARIES}	
-    luabind
-)
-
-# add executable to install target
-install(TARGETS RobotSwarmSimulatorGui
-        RUNTIME DESTINATION bin
-                COMPONENT mainprogram
-)
-
 
 # generate executable of the above source files and link it
 add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})

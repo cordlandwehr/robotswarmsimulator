@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <ui version="4.0">
  <class>GeneratorWizard</class>
  <widget class="QWizard" name="GeneratorWizard">
@@ -6,16 +6,1327 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>361</width>
-    <height>332</height>
+    <width>388</width>
+    <height>415</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Project</string>
   </property>
-  <widget class="QWizardPage" name="wizard_page_1"/>
-  <widget class="QWizardPage" name="wizard_page_2"/>
+  <widget class="QWizardPage" name="wizard_page_1">
+   <layout class="QGridLayout" name="gridLayout_8">
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupbox_files">
+      <property name="title">
+       <string>Files</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_swarm_file">
+         <property name="text">
+          <string>Swarm file:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_swarm_file</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineedit_swarm_file">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the swarmfile that shall be generated. Default is &lt;span style=" font-style:italic;">newrandom&lt;/span>. Filename without extension is expected.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>newrandom</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_robot_file">
+         <property name="text">
+          <string>Robot file:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_robot_file</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineedit_robot_file">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the robotfile that shall be generated. Default is &lt;span style=" font-style:italic;">newrandom&lt;/span>. Filename without extension is expected.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>newrandom</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_obstacle_file">
+         <property name="text">
+          <string>Obstacle file:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_obstacle_file</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineedit_obstacle_file">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the obstaclefile that shall be generated. Default is &lt;span style=" font-style:italic;">newrandom&lt;/span>. Filename without extension is expected.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>newrandom</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_algorithm">
+         <property name="text">
+          <string>Algorithm:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_algorithm</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lineedit_algorithm">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the algorithm the robots should use. If not set the algorithm &lt;span style=" font-style:italic;">SimpleRobot &lt;/span>is used. This is only a stub without any functionality. Also the name of a Lua-file can be given. The extension .lua is mandatory for lua-files.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>SimpleRobot</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupbox_initial">
+      <property name="title">
+       <string>Initial</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_seed">
+         <property name="text">
+          <string>Seed:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_seed</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineedit_seed">
+         <property name="toolTip">
+          <string>Sets the seed for the random number generator for robot generation. If not set the seed is 1. An unsigned integer value is expected.</string>
+         </property>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_robots">
+         <property name="text">
+          <string>Robots:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_robots</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineedit_robots">
+         <property name="toolTip">
+          <string>The number of robots to be generated. The default number is 100. An unsigned integer value is expected.</string>
+         </property>
+         <property name="text">
+          <string>100</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QGroupBox" name="groupbox_cs">
+      <property name="title">
+       <string>Coordinate System</string>
+      </property>
+      <layout class="QGridLayout" columnstretch="2,0,0,0" name="gridLayout_5">
+       <property name="horizontalSpacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_cs_rot">
+         <property name="text">
+          <string>Rotate:</string>
+         </property>
+         <property name="buddy">
+          <cstring>checkbox_cs_rot_x</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="checkbox_cs_rot_x">
+         <property name="toolTip">
+          <string>This option will rotate the x-axis of any robot coordinate-system uniformly at random.</string>
+         </property>
+         <property name="text">
+          <string>x</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="checkbox_cs_rot_y">
+         <property name="toolTip">
+          <string>This option will rotate the y-axis of any robot coordinate-system uniformly at random.</string>
+         </property>
+         <property name="text">
+          <string>y</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QCheckBox" name="checkbox_cs_rot_z">
+         <property name="toolTip">
+          <string>This option will rotate the z-axis of any robot coordinate-system uniformly at random.</string>
+         </property>
+         <property name="text">
+          <string>z</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_cs_scale">
+         <property name="text">
+          <string>Scale:</string>
+         </property>
+         <property name="buddy">
+          <cstring>checkbox_cs_scale_x</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="checkbox_cs_scale_x">
+         <property name="toolTip">
+          <string>This option will scale the x-axis of any robot coordinate-system using a randomly chosen factor from the interval (0,1].</string>
+         </property>
+         <property name="text">
+          <string>x</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="checkbox_cs_scale_y">
+         <property name="toolTip">
+          <string>This option will scale the y-axis of any robot coordinate-system using a randomly chosen factor from the interval (0,1].</string>
+         </property>
+         <property name="text">
+          <string>y</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QCheckBox" name="checkbox_cs_scale_z">
+         <property name="toolTip">
+          <string>This option will scale the z-axis of any robot coordinate-system using a randomly chosen factor from the interval (0,1].</string>
+         </property>
+         <property name="text">
+          <string>z</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupbox_request_handler">
+      <property name="title">
+       <string>Request Handler</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="checkbox_pos_rh">
+         <property name="toolTip">
+          <string>Causes the generated files to contain a position request handler with reasonable default values. If you need a more sophisticated position request handler, you have to edit the generated .swarm file yourself.</string>
+         </property>
+         <property name="text">
+          <string>position request handler</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkbox_vel_rh">
+         <property name="toolTip">
+          <string>Causes the generated files to contain a velocity request handler with reasonable default values. If you need a more sophisticated velocity request handler, you have to edit the generated .swarm file yourself.</string>
+         </property>
+         <property name="text">
+          <string>velocity request handler</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkbox_acc_rh">
+         <property name="toolTip">
+          <string>Causes the generated files to contain a acceleration request handler with reasonable default values. If you need a more acceleration request handler, you have to edit the generated .swarm file yourself.</string>
+         </property>
+         <property name="text">
+          <string>acceleration request handler</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QGroupBox" name="groupbox_vel_acc">
+      <property name="title">
+       <string>Velocity/Acceleration</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_min_vel">
+         <property name="text">
+          <string>Min. Vel.:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_min_vel</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineedit_min_vel">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum absolute value. This parameter defaults to 0.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_max_vel">
+         <property name="text">
+          <string>Max. Vel.:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_max_vel</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineedit_max_vel">
+         <property name="toolTip">
+          <string>The robots will be generated with a velocity distributed uniformly in a sphere with the given maximum absolute value. This parameter defaults to 0.</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_min_acc">
+         <property name="text">
+          <string>Min. Acc.:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_min_acc</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineedit_min_acc">
+         <property name="toolTip">
+          <string>The robots will be generated with a acceleration distributed uniformly in a sphere with the given minimum absolute value. This parameter defaults to 0.</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_max_acc">
+         <property name="text">
+          <string>Max. Acc.:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineedit_max_acc</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lineedit_max_acc">
+         <property name="toolTip">
+          <string>The robots will be generated with a acceleration distributed uniformly in a sphere with the given maximum absolute value. This parameter defaults to 0.</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="wizard_page_2">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QGroupBox" name="groupbox_distribution">
+      <property name="sizePolicy">
+       <sizepolicy vsizetype="Expanding" hsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>Distribution</string>
+      </property>
+      <layout class="QGridLayout" columnstretch="1,1" name="gridLayout_4">
+       <property name="horizontalSpacing">
+        <number>6</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="radiobutton_no_distr">
+         <property name="toolTip">
+          <string>All robots are at position zero.</string>
+         </property>
+         <property name="text">
+          <string>No Distribution</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QRadioButton" name="radiobutton_circle">
+         <property name="toolTip">
+          <string>Will generate robots distributed on a circle.</string>
+         </property>
+         <property name="text">
+          <string>Circle</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QFrame" name="frame_circle">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" stretch="1,1,1,1" name="horizontalLayout_2">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_radius_circ">
+            <property name="text">
+             <string>Radius:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_radius_circ</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_radius_circ">
+            <property name="toolTip">
+             <string>The radius of the circle.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_angle">
+            <property name="text">
+             <string>Angle:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_angle_circ</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_angle_circ">
+            <property name="toolTip">
+             <string>Defines the angle between two robots on the circle. Defaults to 15.</string>
+            </property>
+            <property name="text">
+             <string>15</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QRadioButton" name="radiobutton_sphere">
+         <property name="toolTip">
+          <string>Will generate robots positioned uniform on a sphere.</string>
+         </property>
+         <property name="text">
+          <string>Sphere</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QFrame" name="frame_sphere">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" stretch="1,1" name="horizontalLayout_3">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_radius_sphere">
+            <property name="text">
+             <string>Radius:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_radius_sphere</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_radius_sphere">
+            <property name="toolTip">
+             <string>The radius of the sphere.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QRadioButton" name="radiobutton_cube">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Distributes the position of robots uniformly at random in the cube [-diameter/2,+diameter/2]&lt;span style=" vertical-align:super;">3&lt;/span>.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>Cube</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QFrame" name="frame_cube">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" stretch="1,1" name="horizontalLayout_4">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_diam_cube">
+            <property name="text">
+             <string>Diameter:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_diam_cube</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_diam_cube">
+            <property name="toolTip">
+             <string>The diameter of the cube.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QRadioButton" name="radiobutton_gauss">
+         <property name="toolTip">
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Distributes the positions of robots using a gaussian distribution in the cube [0,diameter]&lt;span style=" vertical-align:super;">3&lt;/span>. Using the options mean-/sigma-vel/acc, one may also activate the gaussian distribution of velocities and acceleration vectors.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text">
+          <string>Gaussian</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QFrame" name="frame_gauss_1">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" stretch="1,1" name="horizontalLayout_5">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_diam_gauss">
+            <property name="text">
+             <string>Diameter:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_diam_gauss</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_diam_gauss">
+            <property name="toolTip">
+             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">The diameter of the cube.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="2">
+        <widget class="QFrame" name="frame_gauss_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" columnstretch="1,1,1,1" name="gridLayout_3">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="horizontalSpacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_mean_pos">
+            <property name="text">
+             <string>Mean Pos.:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_mean_pos</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineedit_mean_pos">
+            <property name="toolTip">
+             <string>Mean value for the gaussian distribution of positions.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_sigma_pos">
+            <property name="text">
+             <string>Sigma Pos.:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_sigma_pos</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="lineedit_sigma_pos">
+            <property name="toolTip">
+             <string>Sigmal value for the gaussian distribution of positions.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_mean_vel">
+            <property name="text">
+             <string>Mean Vel.:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_mean_vel</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_sigma_vel">
+            <property name="text">
+             <string>Sigma Vel.:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_sigma_vel</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_mean_acc">
+            <property name="text">
+             <string>Mean Acc.:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_mean_acc</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_sigma_acc">
+            <property name="text">
+             <string>Sigma Acc.:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_sigma_acc</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineedit_mean_vel">
+            <property name="toolTip">
+             <string>Mean value for the gaussian distribution of velocities.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineedit_mean_acc">
+            <property name="toolTip">
+             <string>Mean value for the gaussian distribution of accelerations.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="lineedit_sigma_acc">
+            <property name="toolTip">
+             <string>Sigmal value for the gaussian distribution of accelerations.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineedit_sigma_vel">
+            <property name="toolTip">
+             <string>Sigmal value for the gaussian distribution of velocities.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="Line" name="line">
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="2">
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="wizard_page_3">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <item>
+     <widget class="QGroupBox" name="groupbox_formation">
+      <property name="sizePolicy">
+       <sizepolicy vsizetype="Expanding" hsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Initial Formation</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QRadioButton" name="radiobutton_no_formation">
+         <property name="toolTip">
+          <string>No initial Formation.</string>
+         </property>
+         <property name="text">
+          <string>No Formation</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radiobutton_rnd_walk">
+         <property name="toolTip">
+          <string>Activates a random walk formation generator. That is, the initial formation is achieved by letting each robot do a random walk.</string>
+         </property>
+         <property name="text">
+          <string>Random Walk</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_rnd_walk">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" columnstretch="1,1,1,1" name="gridLayout_7">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_rnd_steps">
+            <property name="text">
+             <string>Steps:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_rnd_steps</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineedit_rnd_steps">
+            <property name="toolTip">
+             <string>Number of steps each robot does in the random walk generator.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_rnd_min_dist">
+            <property name="text">
+             <string>Min. Distance:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_rnd_min_dist</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineedit_rnd_min_dist">
+            <property name="toolTip">
+             <string>Minimum distance of each random step in the random walk generator.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_rnd_max_dist">
+            <property name="text">
+             <string>Max. Distance:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_rnd_max_dist</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineedit_rnd_max_dist">
+            <property name="toolTip">
+             <string>Maximum distance of a random step in the random walk generator.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radiobutton_cluster">
+         <property name="toolTip">
+          <string>Activates a generator that generates clusters of robots.</string>
+         </property>
+         <property name="text">
+          <string>Cluster</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_cluster">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" columnstretch="1,1,1,1" name="gridLayout_6">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_cluster_num">
+            <property name="text">
+             <string>Clusters:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_cluster_num</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineedit_cluster_num">
+            <property name="toolTip">
+             <string>Number of clusters to be generated by the cluster generator.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_cluster_sigma">
+            <property name="text">
+             <string>Sigma:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_cluster_sigma</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="lineedit_cluster_sigma">
+            <property name="toolTip">
+             <string>Sets the sigma value for the gaussian distribution of robot positions around each cluster center in the cluster generator.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_cluster_min_dist">
+            <property name="text">
+             <string>Min. Distance:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_cluster_min_dist</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineedit_cluster_min_dist">
+            <property name="toolTip">
+             <string>Minmum distance of each cluster center to the origin for the cluster generator.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_cluster_max_dist">
+            <property name="text">
+             <string>Max. Distance:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_cluster_max_dist</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineedit_cluster_max_dist">
+            <property name="toolTip">
+             <string>Maximum distance of each cluster center to the origin for the cluster generator.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radiobutton_poisson">
+         <property name="toolTip">
+          <string>Activates the poisson disc formation generator. This allows to generate random positioned robots with a surrounding clearance for each robot.</string>
+         </property>
+         <property name="text">
+          <string>Poisson Disc</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_poisson">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" stretch="1,1,1,1" name="horizontalLayout_6">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_poisson_spread">
+            <property name="text">
+             <string>Spread:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_poisson_spread</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_poisson_spread">
+            <property name="toolTip">
+             <string>Controls the spreading of robots in the poisson disc generator.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_poisson_diam">
+            <property name="text">
+             <string>Diameter:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>lineedit_poisson_diam</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineedit_poisson_diam">
+            <property name="toolTip">
+             <string>Controls the diameter of the clearance around a robot in the poisson disc generator.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>radiobutton_circle</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_circle</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_sphere</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_sphere</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_cube</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_cube</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>77</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_gauss</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_gauss_1</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_gauss</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_gauss_2</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_rnd_walk</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_rnd_walk</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_cluster</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_cluster</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>156</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiobutton_poisson</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_poisson</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>244</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>144</x>
+     <y>265</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

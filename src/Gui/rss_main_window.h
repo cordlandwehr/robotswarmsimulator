@@ -28,6 +28,8 @@ public:
 
 	void init();
 
+	RSSGLWidget * rss_gl_widget() { return rss_gl_widget_; }
+
 private slots:
 	void toggle_simulation();
 	void update_simulation_speed(int op);

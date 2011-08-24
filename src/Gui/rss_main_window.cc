@@ -11,6 +11,7 @@
 #include <QBitmap>
 #include <QResource>
 #include <QDir>
+#include <QActionGroup>
 
 #include <boost/shared_ptr.hpp>
 
@@ -51,6 +52,12 @@ void RSSMainWindow::init() {
 	cam_signal_mapper_ = new QSignalMapper(this);
 
 	this->setCentralWidget(rss_gl_widget_);
+
+	// action groups
+	QActionGroup* action_group = new QActionGroup(this);
+	action_group->addAction(ui_.action_free_cam);
+	action_group->addAction(ui_.action_follow_swarm_cam);
+	action_group->addAction(ui_.action_center_of_gravity_cam);
 
 	// connect signals/slots
 	connect(ui_.action_open_project, SIGNAL(triggered()), open_dialog_, SLOT(show()));
