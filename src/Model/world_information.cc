@@ -65,15 +65,19 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 		}
 	}
 
-	this->robot_data_.reserve(rhs.robot_data_.size());
-	BOOST_FOREACH(const boost::shared_ptr<RobotData>& robot, rhs.robot_data_) {
-		if(robot) {
-			this->robot_data_.push_back(boost::static_pointer_cast<RobotData>(robot->clone()));
-		}
-		else {
-			this->robot_data_.push_back(boost::shared_ptr<RobotData>());
-		}
+	//this->robot_data_.reserve(rhs.robot_data_.size());
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = rhs.robot_data_.begin(); it != rhs.robot_data_.end(); ++it) {
+		this->robot_data_[it->first] = boost::static_pointer_cast<RobotData>(it->second->clone());
 	}
+	  
+	/*BOOST_FOREACH(const boost::shared_ptr<RobotData>& robot, rhs.robot_data_) {
+		if(robot) {
+			this->robot_data_[robot->id()->id()] = boost::static_pointer_cast<RobotData>(robot->clone());
+		}
+		//else { //TODO asetzer what sense does this make?
+		//	this->robot_data_.push_back(boost::shared_ptr<RobotData>());
+		//}
+	}*/
 
 	for(std::map<size_t, boost::shared_ptr<Edge> >::const_iterator it = rhs.edges_.begin(); it != rhs.edges_.end(); it++){
 		this->edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(it->first, boost::static_pointer_cast<Edge>(it->second->clone())));
@@ -119,20 +123,30 @@ void WorldInformation::set_obstacle_data(std::vector<boost::shared_ptr<Obstacle>
 	obstacles_ = new_obstacles;
 }
 
-const std::vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
-	return robot_data_;
+const std::vector<boost::shared_ptr<RobotData> > WorldInformation::robot_data() const {
+  	std::vector< boost::shared_ptr<RobotData> > robot_data_vector;
+	robot_data_vector.reserve(robot_data_.size());	
+	for (std::map< int, boost::shared_ptr<RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
+	  robot_data_vector.push_back(it->second);
+	}
+	return robot_data_vector;
 }
 
-std::vector<boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
-	return robot_data_;
+std::vector<boost::shared_ptr<RobotData> > WorldInformation::robot_data() {
+  	std::vector< boost::shared_ptr<RobotData> > robot_data_vector;
+	robot_data_vector.reserve(robot_data_.size());	
+	for (std::map< int, boost::shared_ptr<RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
+	  robot_data_vector.push_back(it->second);
+	}
+	return robot_data_vector;
 }
 
 void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {
-	assert(new_robot_data->id()->id() == robot_data_.size());
-	robot_data_.push_back(new_robot_data);
+	//assert(new_robot_data->id()->id() == robot_data_.size());
+	robot_data_[new_robot_data->id()->id()] = new_robot_data;
 }
 
-void WorldInformation::set_robot_data(std::vector<boost::shared_ptr<RobotData> > new_robot_data) {
+void WorldInformation::set_robot_data(std::map<int, boost::shared_ptr<RobotData> > new_robot_data) {
 	robot_data_ = new_robot_data;
 }
 
@@ -220,23 +234,19 @@ WorldObject& WorldInformation::get_according_marker(const MarkerIdentifier& id) 
 }
 
 const RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) const {
-	assert(id->id() < robot_data_.size());
-	return *(robot_data_[id->id()]);
+	return *(robot_data_.at(id->id()));
 }
 
 RobotData& WorldInformation::get_according_robot_data(boost::shared_ptr<RobotIdentifier> id) {
-	assert(id->id() < robot_data_.size());
-	return *(robot_data_[id->id()]);
+	return *(robot_data_.at(id->id()));
 }
 
 boost::shared_ptr<const RobotData> WorldInformation::get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) const {
-	assert(id->id() < robot_data_.size());
-	return robot_data_[id->id()];
+	return robot_data_.at(id->id());
 }
 
 boost::shared_ptr<RobotData> WorldInformation::get_according_robot_data_ptr(boost::shared_ptr<RobotIdentifier> id) {
-	assert(id->id() < robot_data_.size());
-	return robot_data_[id->id()];
+	return robot_data_.at(id->id());
 }
 
 boost::shared_ptr<const Edge> WorldInformation::get_according_edge(boost::shared_ptr<EdgeIdentifier> id) const {

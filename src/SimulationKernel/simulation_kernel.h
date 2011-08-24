@@ -83,7 +83,7 @@ public:
 	 * Returns a constant reference to the set of the robots.
 	 * \return Constant reference to the set of the robots.
 	 */
-	const std::vector<boost::shared_ptr<Robot> >& robots() const;
+	const std::map< int, boost::shared_ptr<Robot> >& robots() const;
 
 	/**
 	 * Returns a constant reference to History of WorldInformations.
@@ -160,7 +160,7 @@ private:
 	/**
 	 * Map of robots in the world
 	 */
-	std::vector< boost::shared_ptr<Robot> > robots_;
+	 std::map< int, boost::shared_ptr<Robot> > robots_;
 
 	/**
 	 * Set of world modifiers

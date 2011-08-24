@@ -178,33 +178,38 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(boost::progr
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
 	// setup of activation sequence generator
 	if(asg_type == "SYNCHRONOUS") {
-        asg.reset(new SynchronousASG());
+	  throw UnsupportedOperationException("SYNCHRONOUS ASG is no longer supported. Use SYNCHRONOUS_WM instead.");
+        //asg.reset(new SynchronousASG());
 	} else if(asg_type == "SYNCHRONOUS_WM") {
         // TODO: Load/read actual world modifiers?
         asg.reset(new SynchronousASGWM());
 	} else if(asg_type == "ATOMIC_SEMISYNCHRONOUS") {
-		try {
+		throw UnsupportedOperationException("ATOMIC_SEMISYNCHRONOUS ASG is currently not supported.");
+		
+		/*try {
 			unsigned int seed = params["ATOMIC_SEMISYNC_ASG_SEED"].as<unsigned int>();
 			asg.reset(new AtomicSemisynchronousASG(seed));
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for atomic semisynchronous asg.");
-		}
+		}*/
 	} else if(asg_type == "FAIR_ATOMIC_SEMISYNCHRONOUS") {
-		try {
+		throw UnsupportedOperationException("FAIR_ATOMIC_SEMISYNCHRONOUS ASG is currently not supported.");
+		/*try {
 			unsigned int seed = params["FAIR_ATOMIC_SEMISYNC_ASG_SEED"].as<unsigned int>();
 			asg.reset(new FairAtomicSemisynchronousASG(seed));
 		} catch(const boost::bad_lexical_cast&) {
 			throw UnsupportedOperationException("Failed reading parameters for fair atomic semisynchronous asg.");
-		}
+		}*/
 	} else if(asg_type == "ASYNCHRONOUS") {
-		try {
+		throw UnsupportedOperationException("ASYNCHRONOUS ASG is currently not supported.");
+		/*try {
 			unsigned int seed = params["ASYNC_ASG_SEED"].as<unsigned int>();
 			double participation_probability = params["ASYNC_ASG_PART_P"].as<double>();
 			double p = params["ASYNC_ASG_TIME_P"].as<double>();
 			asg.reset(new AsynchronousASG(seed, participation_probability, p));
 		} catch(const boost::bad_lexical_cast& ) {
 			throw UnsupportedOperationException("Failed reading parameters for asynchronous asg.");
-		}
+		}*/
 	} else {
 		throw UnsupportedOperationException("No ASG specified!");
 	}

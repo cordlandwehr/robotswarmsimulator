@@ -127,7 +127,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 	std::map<boost::shared_ptr<RobotData>, bool> node_visited;
 	std::map<boost::shared_ptr<RobotData>, int> hops_to_node;
 
-	std::vector<boost::shared_ptr<RobotData> >& all_robots = graph->robot_data();
+	std::vector<boost::shared_ptr<RobotData> > all_robots = graph->robot_data();
 	for(int i=0; i<all_robots.size();i++){
 		node_visited[all_robots[i]]=false;
 	}
