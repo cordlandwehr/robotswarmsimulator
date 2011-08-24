@@ -32,7 +32,7 @@ ForceDirectedLayouter::compute(const boost::shared_ptr<WorldInformation> &world_
 	Topology topology(gen, 1000.0);
 	fruchterman_reingold_force_directed_layout(*g, get(vertex_position, *g), topology);
 
-	Layouter::apply_positions(*world_information, *g);
+	Layouter::apply_positions(*g);
 
 	std::set< boost::shared_ptr<Request> > result;
 	return result;

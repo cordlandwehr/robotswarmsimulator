@@ -42,7 +42,7 @@ boost::shared_ptr<BoostGraph> Layouter::transform_into_boost_graph(const WorldIn
 }
 
 
-void Layouter::apply_positions(WorldInformation& world_information, const BoostGraph& g){
+void Layouter::apply_positions(const BoostGraph& g){
 
 	BGL_FORALL_VERTICES_T(v, g, BoostGraph) {
 		boost::shared_ptr<RobotData> robot = get(vertex_robot, g)[v];

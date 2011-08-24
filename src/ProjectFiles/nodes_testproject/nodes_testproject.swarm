@@ -1,6 +1,6 @@
 PROJECT_NAME="New generated Project"
 ROBOT_FILENAME="nodes_testrobot.robot"
-WORLD_MODIFIERS="TestWorldModifier, EdgeTest.lua, MarkerInformationTest.lua, ForceDirectedLayouter"
+WORLD_MODIFIERS="TestWorldModifier, EdgeTest.lua, MarkerInformationTest.lua, CircleLayouter"
 
 ASG="SYNCHRONOUS_WM"
 #COMPASS_MODEL="NO_COMPASS"

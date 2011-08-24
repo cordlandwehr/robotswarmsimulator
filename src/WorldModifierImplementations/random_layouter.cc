@@ -27,7 +27,7 @@ RandomLayouter::compute(const boost::shared_ptr<WorldInformation> &world_informa
 	boost::rectangle_topology<> rect_top(gen, 0, 0, 50, 50);
 	boost::random_graph_layout(*g, get(vertex_position, *g), rect_top);
 
-	Layouter::apply_positions(*world_information, *g);
+	Layouter::apply_positions(*g);
 
 	std::set< boost::shared_ptr<Request> > result;
 	return result;

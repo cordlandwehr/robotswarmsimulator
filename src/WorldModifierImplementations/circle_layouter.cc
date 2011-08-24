@@ -21,7 +21,7 @@ std::set< boost::shared_ptr<Request> >
 CircleLayouter::compute(const boost::shared_ptr<WorldInformation> &world_information) {
 	boost::shared_ptr<BoostGraph> g = Layouter::transform_into_boost_graph(*world_information);
 	boost::circle_graph_layout(*g, get(vertex_position, *g), 20.0);
-	Layouter::apply_positions(*world_information, *g);
+	Layouter::apply_positions(*g);
 
 	std::set< boost::shared_ptr<Request> > result;
 	return result;
