@@ -35,19 +35,20 @@
 #ifndef ROBOT_DATA_H_
 #define ROBOT_DATA_H_
 
-#include "../Wrapper/boost_graph_wrapper.h"
+#include <deque>
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
+
 #include "../Utilities/vector_arithmetics.h"
+#include "../Wrapper/boost_graph_wrapper.h"
+
 #include "edge.h"
 #include "edge_identifier.h"
 #include "undirected_edge.h"
 #include "directed_edge.h"
 #include "message.h"
-#include <deque>
-
 
 #include "world_object.h"
 

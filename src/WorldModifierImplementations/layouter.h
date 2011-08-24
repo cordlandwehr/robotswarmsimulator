@@ -18,6 +18,7 @@ class WorldInformation;
 
 class Layouter : public WorldModifier{
 public:
+
 	static boost::shared_ptr<BoostGraph> transform_into_boost_graph(const WorldInformation& world_information);
 
 	static void apply_positions(WorldInformation& world_information, const BoostGraph& boost_graph);

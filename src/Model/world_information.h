@@ -3,7 +3,7 @@
 
 	Copyright (C) 2009-2010  Peter Kling <kronos@uni-paderborn.de>
 	Copyright (C) 2009-2010  Daniel Wonisch <dwonisch@campus.uni-paderborn.de>
-	Copyright (C) 2009-2010  Martina HÃ¼llmann <martinah@uni-paderborn.de>
+	Copyright (C) 2009-2010  Martina Hüllmann <martinah@uni-paderborn.de>
 	Copyright (C) 2009-2010  Christoph Raupach <craupach@gmail.com>
 
 	RobotSwarmSimulator is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 /**
  * \class	WorldInformation
- * \author	Martina HÃ¼llmann
+ * \author	Martina Hüllmann
  * \brief	Each WorldInformation instance corresponds
  * 			to the state of the simulated world at a
  * 			specific simulation step.
@@ -46,8 +46,6 @@ class Obstacle;
 class Edge;
 class Message;
 
-struct NotDefined {};
-
 
 /**
  * This class encapsulates information (as e.g. robot position, obstacles, ...) about the simulated world.
@@ -60,14 +58,10 @@ struct NotDefined {};
  */
 class WorldInformation {
 
-
-
 public:
 	WorldInformation();
 	~WorldInformation();
 	WorldInformation(const WorldInformation& rhs);
-
-	typedef NotDefined vertex_property_type;
 
 	/**
 	 * Returns a constant reference to the set of the markers.
