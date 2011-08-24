@@ -407,6 +407,7 @@ void LuaRobot::register_lua_methods() {
 		      .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
 		      .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data)
 		      .def("get_keys", &LuaWrapper::MarkerInformationWrapper::get_keys, luabind::copy_table(luabind::result))
+		      .def("has_key", &LuaWrapper::MarkerInformationWrapper::has_key)
 		      .def("remove_data", &LuaWrapper::MarkerInformationWrapper::remove_data),
 		   
 		  luabind::def("log", (void(*)(const std::string&)) &ConsoleOutputWrapper::log),

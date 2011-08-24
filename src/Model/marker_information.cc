@@ -65,3 +65,9 @@ const std::vector<std::string> MarkerInformation::get_keys() {
   // return set
   return result;
 }
+
+bool MarkerInformation::has_key(const std::string& key) {
+  std::map<std::string, boost::any>::const_iterator it;
+  it = data_.find(key);
+  return (it != data_.end());
+}

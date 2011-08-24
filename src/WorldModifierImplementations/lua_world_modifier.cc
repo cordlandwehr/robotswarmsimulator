@@ -88,6 +88,7 @@ void LuaWorldModifier::register_lua_methods() {
          .def("add_data", &MarkerInformationWrapper::add_data)
          .def("get_data", &MarkerInformationWrapper::get_data)
 	 .def("get_keys", &MarkerInformationWrapper::get_keys, luabind::copy_table(luabind::result))
+	 .def("has_key", &MarkerInformationWrapper::has_key)
 	 .def("remove_data", &MarkerInformationWrapper::remove_data),
      
          luabind::class_<Vector3dWrapper>("Vector3d")
@@ -141,8 +142,8 @@ void LuaWorldModifier::register_lua_methods() {
     [
       luabind::namespace_("Statistics")
       [
-	luabind::def("calculate_degree", &StatsCalcWrapper::calculate_degree),
-	luabind::def("calculate_hop_distance", &StatsCalcWrapper::calculate_hop_distance),
+	luabind::def("calculate_degree", &StatsCalcWrapper::calculate_degree, luabind::copy_table(_1)),
+	luabind::def("calculate_hop_distance", &StatsCalcWrapper::calculate_hop_distance, luabind::copy_table(_3)),
 	luabind::def("calculate_maximal_defect", &StatsCalcWrapper::calculate_maximal_defect),
 	luabind::def("calculate_total_defects", &StatsCalcWrapper::calculate_total_defects)
       ]
