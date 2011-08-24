@@ -1,20 +1,24 @@
+//
+//  force_directed_layouter.h
+//  Robot Swarm Simulator
+//
+//  Created by xynodes on 24.08.11.
+//
+
 #ifndef FORCE_DIRECTED_LAYOUTER_H_
 #define FORCE_DIRECTED_LAYOUTER_H_
 
 #include <string>
 #include <set>
 
+#include <boost/smart_ptr.hpp>
+
+#include "layouter.h"
 #include "../Wrapper/boost_graph_wrapper.h"
 
-#include <boost/smart_ptr.hpp>
-#include <boost/graph/topology.hpp>
-#include <boost/random/linear_congruential.hpp>
-#include <boost/graph/adjacency_list.hpp>
+class WorldInformation;
 
-#include "../Model/world_information.h"
-#include "../Model/world_modifier.h"
-
-class ForceDirectedLayouter : public WorldModifier {
+class ForceDirectedLayouter : public Layouter {
 public:
 	ForceDirectedLayouter();
 

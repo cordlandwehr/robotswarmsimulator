@@ -1,36 +1,24 @@
+//
+//  circle_layouter.h
+//  Robot Swarm Simulator
+//
+//  Created by xynodes on 24.08.11.
+//
+
 #ifndef CIRCLE_LAYOUTER_H_
 #define CIRCLE_LAYOUTER_H_
-
 
 #include <string>
 #include <set>
 
+#include <boost/smart_ptr.hpp>
 
-
+#include "layouter.h"
 #include "../Wrapper/boost_graph_wrapper.h"
 
-#include <boost/config/no_tr1/cmath.hpp>
-#include <boost/math/constants/constants.hpp>
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/iteration_macros.hpp>
-#include <boost/graph/topology.hpp>
-#include <boost/static_assert.hpp>
+class WorldInformation;
 
-#include <boost/smart_ptr.hpp>
-#include <boost/graph/circle_layout.hpp>
-#include <boost/graph/topology.hpp>
-#include <boost/random/linear_congruential.hpp>
-
-
-#include "../Model/world_information.h"
-#include "../Model/world_modifier.h"
-
-
-
-
-
-
-class CircleLayouter : public WorldModifier {
+class CircleLayouter : public Layouter {
 public:
 	CircleLayouter();
 
@@ -40,8 +28,5 @@ public:
     compute(const boost::shared_ptr<WorldInformation> &world_information);
 
 };
-
-
-
 
 #endif /* CIRCLE_LAYOUTER_H_ */

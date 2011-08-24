@@ -1,4 +1,13 @@
+//
+//  circle_layouter.cc
+//  Robot Swarm Simulator
+//
+//  Created by xynodes on 24.08.11.
+//
+
 #include "circle_layouter.h"
+
+#include <boost/graph/circle_layout.hpp>
 
 CircleLayouter::CircleLayouter(){
 
@@ -10,40 +19,9 @@ std::string CircleLayouter::get_algorithm_id() const{
 
 std::set< boost::shared_ptr<Request> >
 CircleLayouter::compute(const boost::shared_ptr<WorldInformation> &world_information) {
-//    const double pi = boost::math::constants::pi<double>();
-//
-//
-//	std::vector<boost::shared_ptr<RobotData> > nodes =world_information->robot_data();
-//
-//    int n = nodes.size();
-//    int i = 0;
-//    double two_pi_over_n = 2. * pi / n;
-//    double radius = 20.0;
-//
-//	std::vector<boost::shared_ptr<RobotData> >::iterator myIterator;
-//	for(myIterator = nodes.begin();
-//			myIterator != nodes.end();
-//			myIterator++)
-//	{
-//	    Vector3d position = (*myIterator)->position();
-//
-//	    position[0] = radius * std::cos(i * two_pi_over_n);
-//	    position[1] = radius * std::sin(i * two_pi_over_n);
-//	    position[2] = 0;
-//
-//	    boost::shared_ptr<Vector3d> position_ptr(new Vector3d(position));
-//
-//	    (*myIterator)->set_position(position_ptr);
-//	    i++;
-//	}
-
-
-
-
-
-
-
-
+	boost::shared_ptr<BoostGraph> g = Layouter::transform_into_boost_graph(*world_information);
+	boost::circle_graph_layout(*g, get(vertex_position, *g), 20.0);
+	Layouter::apply_positions(*world_information, *g);
 
 	std::set< boost::shared_ptr<Request> > result;
 	return result;
