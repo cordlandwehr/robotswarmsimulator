@@ -35,15 +35,20 @@
 #ifndef ROBOT_DATA_H_
 #define ROBOT_DATA_H_
 
+#include <deque>
+
 #include <boost/tuple/tuple.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
+
 #include "../Utilities/vector_arithmetics.h"
+#include "../Wrapper/boost_graph_wrapper.h"
+
 #include "edge.h"
 #include "edge_identifier.h"
 #include "undirected_edge.h"
 #include "directed_edge.h"
 #include "message.h"
-#include <deque>
-
 
 #include "world_object.h"
 
@@ -269,6 +274,13 @@ public:
 	 * Outgoing edges are all undirected edges and directed edges with this robot as source.
 	 */
 	const std::vector<boost::shared_ptr<EdgeIdentifier> >& get_outgoing_edges() const;
+	const boost::graph_traits<BoostGraph>::vertex_descriptor& get_boost_vertex_descriptor() const{
+		return vertex_descriptor_;
+	}
+
+	void set_boost_vertex_descriptor(boost::graph_traits<BoostGraph>::vertex_descriptor vertex_descriptor){
+		vertex_descriptor_ = vertex_descriptor;
+	}
 
 private:
 	/**
@@ -294,6 +306,8 @@ private:
 
 	std::vector<boost::shared_ptr<EdgeIdentifier> > edges_;
 	std::deque<boost::shared_ptr<MessageIdentifier> > messages_;
+
+	boost::graph_traits<BoostGraph>::vertex_descriptor  vertex_descriptor_;
 };
 
 #endif /* ROBOT_DATA_H_ */

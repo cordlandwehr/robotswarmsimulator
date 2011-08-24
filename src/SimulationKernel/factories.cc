@@ -84,6 +84,9 @@
 #include "../Model/robot_data.h"
 #include "../WorldModifierImplementations/test_world_modifier.h"
 #include "../WorldModifierImplementations/lua_world_modifier.h"
+#include "../WorldModifierImplementations/circle_layouter.h"
+#include "../WorldModifierImplementations/random_layouter.h"
+#include "../WorldModifierImplementations/force_directed_layouter.h"
 
 /**
  * creates vector modfiers from the given string and adds them to the handler
@@ -272,7 +275,17 @@ boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::stri
 	}
 	else if(str == "TestWorldModifier" || str == "NONE") {
 		world_modifier.reset(new TestWorldModifier());
-	} else {
+	}
+	else if(str == "CircleLayouter"){
+		world_modifier.reset(new CircleLayouter());
+	}
+	else if(str == "RandomLayouter"){
+		world_modifier.reset(new RandomLayouter());
+	}
+	else if(str == "ForceDirectedLayouter"){
+		world_modifier.reset(new ForceDirectedLayouter());
+	}
+	else {
 		throw UnsupportedOperationException("Tried to create unknown world modifier type: " + str);
 	}
 
