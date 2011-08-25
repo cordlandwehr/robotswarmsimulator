@@ -13,9 +13,10 @@ OpenProjectDialog::OpenProjectDialog(QWidget *parent) : QDialog(parent), data_()
 	ui_.setupUi(this);
 
 	// connect signals/slots
-	connect(ui_.button_file, SIGNAL(clicked()), this, SLOT(openFile()) );
-	connect(ui_.button_out, SIGNAL(clicked()), this, SLOT(openPath()) );
+	connect(ui_.button_file, SIGNAL(clicked()), this, SLOT(open_file()) );
+	connect(ui_.button_out, SIGNAL(clicked()), this, SLOT(open_path()) );
 
+	// create validators
 	ui_.lineedit_history_length->setValidator(new QIntValidator(0, INT_MAX, ui_.lineedit_history_length));
 	ui_.lineedit_luaseed->setValidator(new QIntValidator(0, INT_MAX, ui_.lineedit_luaseed));
 	ui_.lineedit_steps->setValidator(new QIntValidator(0, INT_MAX, ui_.lineedit_steps));
@@ -25,13 +26,13 @@ OpenProjectDialog::~OpenProjectDialog() {
 }
 
 
-void OpenProjectDialog::openFile() {
+void OpenProjectDialog::open_file() {
 	ui_.lineedit_file->setText(QFileDialog::getOpenFileName(this,
 			"Open project file", "",
 			tr("Project Files (*.swarm)")));
 }
 
-void OpenProjectDialog::openPath() {
+void OpenProjectDialog::open_path() {
 	ui_.lineedit_out->setText(QFileDialog::getExistingDirectory());
 }
 

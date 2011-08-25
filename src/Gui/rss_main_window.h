@@ -35,6 +35,7 @@ private slots:
 	void update_simulation_speed(int op);
 	void step_simulation();
 	void update_simulation();
+	void generate_simulation();
 	void set_camera_mode(int mode);
 	void select_robot(boost::shared_ptr<RobotData> robot_data);
 

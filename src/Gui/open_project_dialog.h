@@ -31,11 +31,11 @@ public:
 	OpenProjectDialog(QWidget *parent = 0);
 	~OpenProjectDialog();
 
-	const ProjectData& projectData() const { return data_; };
+	const ProjectData& project_data() const { return data_; };
 
 public slots:
-	void openFile();
-	void openPath();
+	void open_file();
+	void open_path();
 	void accept();
 
 private:

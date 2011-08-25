@@ -14,9 +14,12 @@
 #include <QActionGroup>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/program_options.hpp>
 
 #include <Utilities/console_output.h>
 #include <SimulationControl/simulation_control.h>
+#include <SzenarioGenerator/szenario_generator.h>
+#include <SzenarioGenerator/formation_generator.h>
 #include <Wrapper/lua_distribution_generator.h>
 #include "../Model/robot_data.h"
 
@@ -63,6 +66,7 @@ void RSSMainWindow::init() {
 	connect(ui_.action_open_project, SIGNAL(triggered()), open_dialog_, SLOT(show()));
 	connect(ui_.action_new_project, SIGNAL(triggered()), generator_wizard_, SLOT(show()));
 	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(update_simulation()));
+	connect(generator_wizard_, SIGNAL(accepted()), this, SLOT(generate_simulation()));
 	connect(ui_.action_start_stop_simulation, SIGNAL(triggered()), this, SLOT(toggle_simulation()));
 	connect(ui_.action_next_step, SIGNAL(triggered()), this, SLOT(step_simulation()));
 	connect(ui_.action_increase_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
@@ -156,7 +160,7 @@ void RSSMainWindow::step_simulation() {
 }
 
 void RSSMainWindow::update_simulation() {
-	ProjectData pd = open_dialog_->projectData();
+	ProjectData pd = open_dialog_->project_data();
 
 	std::string tmpProjectFile = pd.project_file;
 
@@ -197,4 +201,56 @@ void RSSMainWindow::update_simulation() {
 	}
 
 	rss_gl_widget_->set_simulation_control(sim_control);
+}
+
+void RSSMainWindow::generate_simulation() {
+	boost::program_options::variables_map vm = generator_wizard_->generator_data();
+
+	try {
+		// init
+		ScenarioGenerator generator(vm["seed"].as<unsigned int>());	// set seed
+		generator.init(vm);				// init distribution generator
+
+		// files
+		generator.set_worldFile(vm["swarmfile"].as<std::string>());
+		if (vm.count("robotfile"))
+			generator.set_robotFile(vm["robotfile"].as<std::string>());
+		else
+			generator.set_robotFile(vm["swarmfile"].as<std::string>());
+		if (vm.count("obstaclefile"))
+			generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
+		else
+			generator.set_obstacleFile(vm["swarmfile"].as<std::string>());
+
+		// distribute everything
+		generator.distribute();
+
+		// always start coord-system distributer
+		generator.distribute_coordsys(vm);
+
+		// sets request handler if requested
+		if (vm.count("add-pos-handler"))
+			generator.add_play_pos_request_handler();
+		if (vm.count("add-vel-handler"))
+			generator.add_play_vel_request_handler();
+		if (vm.count("add-acc-handler"))
+			generator.add_play_acc_request_handler();
+
+		// write to file
+		generator.write_to_file();
+
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Robots were generated!";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Please see file: "
+																		   << vm["swarmfile"].as<std::string>()
+																		   << ".swarm";
+	}
+	catch (std::exception& e) {
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << e.what();
+		throw;
+	}
+	catch(...) {
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.";
+		throw; //rethrow exception
+	}
+
 }

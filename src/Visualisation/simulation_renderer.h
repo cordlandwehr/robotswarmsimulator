@@ -318,6 +318,7 @@ public:
 
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
+	void draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.

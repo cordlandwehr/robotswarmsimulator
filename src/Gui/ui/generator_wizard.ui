@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>GeneratorWizard</class>
  <widget class="QWizard" name="GeneratorWizard">
@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>415</height>
+    <width>386</width>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Project</string>
+  </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ClassicStyle</enum>
   </property>
   <widget class="QWizardPage" name="wizard_page_1">
    <layout class="QGridLayout" name="gridLayout_8">
@@ -34,11 +37,11 @@
        <item row="0" column="1">
         <widget class="QLineEdit" name="lineedit_swarm_file">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the swarmfile that shall be generated. Default is &lt;span style=" font-style:italic;">newrandom&lt;/span>. Filename without extension is expected.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The name of the swarmfile that shall be generated. Default is &lt;span style=&quot; font-style:italic;&quot;&gt;newrandom&lt;/span&gt;. Filename without extension is expected.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>newrandom</string>
@@ -58,11 +61,11 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="1">
         <widget class="QLineEdit" name="lineedit_robot_file">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the robotfile that shall be generated. Default is &lt;span style=" font-style:italic;">newrandom&lt;/span>. Filename without extension is expected.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The name of the robotfile that shall be generated. Default is &lt;span style=&quot; font-style:italic;&quot;&gt;newrandom&lt;/span&gt;. Filename without extension is expected.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>newrandom</string>
@@ -82,11 +85,11 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="1">
         <widget class="QLineEdit" name="lineedit_obstacle_file">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the obstaclefile that shall be generated. Default is &lt;span style=" font-style:italic;">newrandom&lt;/span>. Filename without extension is expected.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The name of the obstaclefile that shall be generated. Default is &lt;span style=&quot; font-style:italic;&quot;&gt;newrandom&lt;/span&gt;. Filename without extension is expected.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>newrandom</string>
@@ -106,11 +109,11 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="1">
         <widget class="QLineEdit" name="lineedit_algorithm">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the algorithm the robots should use. If not set the algorithm &lt;span style=" font-style:italic;">SimpleRobot &lt;/span>is used. This is only a stub without any functionality. Also the name of a Lua-file can be given. The extension .lua is mandatory for lua-files.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The name of the algorithm the robots should use. If not set the algorithm &lt;span style=&quot; font-style:italic;&quot;&gt;SimpleRobot &lt;/span&gt;is used. This is only a stub without any functionality. Also the name of a Lua-file can be given. The extension .lua is mandatory for lua-files.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>SimpleRobot</string>
@@ -174,7 +177,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>Coordinate System</string>
       </property>
-      <layout class="QGridLayout" columnstretch="2,0,0,0" name="gridLayout_5">
+      <layout class="QGridLayout" name="gridLayout_5" columnstretch="2,0,0,0">
        <property name="horizontalSpacing">
         <number>0</number>
        </property>
@@ -332,11 +335,11 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1">
         <widget class="QLineEdit" name="lineedit_min_vel">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum absolute value. This parameter defaults to 0.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The robots will be generated with a velocity distributed uniformly in a sphere with the given minimum absolute value. This parameter defaults to 0.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>0</string>
@@ -413,7 +416,7 @@ p, li { white-space: pre-wrap; }
     <item>
      <widget class="QGroupBox" name="groupbox_distribution">
       <property name="sizePolicy">
-       <sizepolicy vsizetype="Expanding" hsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -422,9 +425,9 @@ p, li { white-space: pre-wrap; }
        <bool>false</bool>
       </property>
       <property name="title">
-       <string>Distribution</string>
+       <string>Initial Formation (Part 1)</string>
       </property>
-      <layout class="QGridLayout" columnstretch="1,1" name="gridLayout_4">
+      <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,1">
        <property name="horizontalSpacing">
         <number>6</number>
        </property>
@@ -462,7 +465,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" stretch="1,1,1,1" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -483,6 +486,9 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="lineedit_radius_circ">
             <property name="toolTip">
              <string>The radius of the circle.</string>
+            </property>
+            <property name="text">
+             <string>15</string>
             </property>
            </widget>
           </item>
@@ -533,7 +539,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" stretch="1,1" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1">
           <property name="sizeConstraint">
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
@@ -558,6 +564,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>The radius of the sphere.</string>
             </property>
+            <property name="text">
+             <string>15</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -566,11 +575,11 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="0">
         <widget class="QRadioButton" name="radiobutton_cube">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Distributes the position of robots uniformly at random in the cube [-diameter/2,+diameter/2]&lt;span style=" vertical-align:super;">3&lt;/span>.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Distributes the position of robots uniformly at random in the cube [-diameter/2,+diameter/2]&lt;span style=&quot; vertical-align:super;&quot;&gt;3&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Cube</string>
@@ -588,7 +597,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" stretch="1,1" name="horizontalLayout_4">
+         <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -610,6 +619,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>The diameter of the cube.</string>
             </property>
+            <property name="text">
+             <string>10</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -618,11 +630,11 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="0">
         <widget class="QRadioButton" name="radiobutton_gauss">
          <property name="toolTip">
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Distributes the positions of robots using a gaussian distribution in the cube [0,diameter]&lt;span style=" vertical-align:super;">3&lt;/span>. Using the options mean-/sigma-vel/acc, one may also activate the gaussian distribution of velocities and acceleration vectors.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Distributes the positions of robots using a gaussian distribution in the cube [0,diameter]&lt;span style=&quot; vertical-align:super;&quot;&gt;3&lt;/span&gt;. Using the options mean-/sigma-vel/acc, one may also activate the gaussian distribution of velocities and acceleration vectors.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Gaussian</string>
@@ -640,7 +652,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" stretch="1,1" name="horizontalLayout_5">
+         <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -660,11 +672,14 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QLineEdit" name="lineedit_diam_gauss">
             <property name="toolTip">
-             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">The diameter of the cube.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The diameter of the cube.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>10</string>
             </property>
            </widget>
           </item>
@@ -682,7 +697,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" columnstretch="1,1,1,1" name="gridLayout_3">
+         <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1,1,1">
           <property name="topMargin">
            <number>0</number>
           </property>
@@ -713,6 +728,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Mean value for the gaussian distribution of positions.</string>
             </property>
+            <property name="text">
+             <string>0.0</string>
+            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -732,6 +750,9 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="lineedit_sigma_pos">
             <property name="toolTip">
              <string>Sigmal value for the gaussian distribution of positions.</string>
+            </property>
+            <property name="text">
+             <string>0.0</string>
             </property>
            </widget>
           </item>
@@ -792,12 +813,18 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Mean value for the gaussian distribution of velocities.</string>
             </property>
+            <property name="text">
+             <string>0.0</string>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
            <widget class="QLineEdit" name="lineedit_mean_acc">
             <property name="toolTip">
              <string>Mean value for the gaussian distribution of accelerations.</string>
+            </property>
+            <property name="text">
+             <string>0.0</string>
             </property>
            </widget>
           </item>
@@ -806,12 +833,18 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Sigmal value for the gaussian distribution of accelerations.</string>
             </property>
+            <property name="text">
+             <string>0.0</string>
+            </property>
            </widget>
           </item>
           <item row="1" column="3">
            <widget class="QLineEdit" name="lineedit_sigma_vel">
             <property name="toolTip">
              <string>Sigmal value for the gaussian distribution of velocities.</string>
+            </property>
+            <property name="text">
+             <string>0.0</string>
             </property>
            </widget>
           </item>
@@ -872,35 +905,15 @@ p, li { white-space: pre-wrap; }
     <item>
      <widget class="QGroupBox" name="groupbox_formation">
       <property name="sizePolicy">
-       <sizepolicy vsizetype="Expanding" hsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Initial Formation</string>
+       <string>Initial Formation (Part 2)</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QRadioButton" name="radiobutton_no_formation">
-         <property name="toolTip">
-          <string>No initial Formation.</string>
-         </property>
-         <property name="text">
-          <string>No Formation</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QRadioButton" name="radiobutton_rnd_walk">
          <property name="toolTip">
@@ -922,7 +935,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" columnstretch="1,1,1,1" name="gridLayout_7">
+         <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,1,1,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -944,6 +957,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Number of steps each robot does in the random walk generator.</string>
             </property>
+            <property name="text">
+             <string>100</string>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
@@ -964,6 +980,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Minimum distance of each random step in the random walk generator.</string>
             </property>
+            <property name="text">
+             <string>100.0</string>
+            </property>
            </widget>
           </item>
           <item row="1" column="2">
@@ -983,6 +1002,9 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="lineedit_rnd_max_dist">
             <property name="toolTip">
              <string>Maximum distance of a random step in the random walk generator.</string>
+            </property>
+            <property name="text">
+             <string>2500.0</string>
             </property>
            </widget>
           </item>
@@ -1017,7 +1039,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" columnstretch="1,1,1,1" name="gridLayout_6">
+         <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1,1,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -1039,6 +1061,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Number of clusters to be generated by the cluster generator.</string>
             </property>
+            <property name="text">
+             <string>3</string>
+            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -1058,6 +1083,9 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="lineedit_cluster_sigma">
             <property name="toolTip">
              <string>Sets the sigma value for the gaussian distribution of robot positions around each cluster center in the cluster generator.</string>
+            </property>
+            <property name="text">
+             <string>1.0</string>
             </property>
            </widget>
           </item>
@@ -1079,6 +1107,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Minmum distance of each cluster center to the origin for the cluster generator.</string>
             </property>
+            <property name="text">
+             <string>1.0</string>
+            </property>
            </widget>
           </item>
           <item row="1" column="2">
@@ -1098,6 +1129,9 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="lineedit_cluster_max_dist">
             <property name="toolTip">
              <string>Maximum distance of each cluster center to the origin for the cluster generator.</string>
+            </property>
+            <property name="text">
+             <string>25.0</string>
             </property>
            </widget>
           </item>
@@ -1132,7 +1166,7 @@ p, li { white-space: pre-wrap; }
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" stretch="1,1,1,1" name="horizontalLayout_6">
+         <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,1,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -1154,6 +1188,9 @@ p, li { white-space: pre-wrap; }
             <property name="toolTip">
              <string>Controls the spreading of robots in the poisson disc generator.</string>
             </property>
+            <property name="text">
+             <string>0.005</string>
+            </property>
            </widget>
           </item>
           <item>
@@ -1173,6 +1210,9 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="lineedit_poisson_diam">
             <property name="toolTip">
              <string>Controls the diameter of the clearance around a robot in the poisson disc generator.</string>
+            </property>
+            <property name="text">
+             <string>0.15</string>
             </property>
            </widget>
           </item>

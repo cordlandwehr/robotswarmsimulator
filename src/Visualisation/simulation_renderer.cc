@@ -83,6 +83,9 @@ const float kCoordLineWidth = 1.0;
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
+const int kArrowSlices = 4;
+const double kArrowBase = 0.5;
+
 const double kMinScale = 1.0;
 const double kMaxScale = 25.0;
 const double kFactorScale = 0.05;
@@ -93,6 +96,7 @@ const int kTextSpacing=15;
 
 const float kMarkerPointSize = 2.0;
 
+const float kRobotRadius = 0.13;
 
 const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
@@ -364,10 +368,23 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 
 
 	// draw all robots
-	robot_renderer_->set_robot_size(max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale));
+	double robot_size = max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale);
+	robot_renderer_->set_robot_size(robot_size);
+	double robot_radius = robot_size * kRobotRadius;
+
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
+
+		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
+		for(it_edge = (*it_robot)->get_edges().begin(); it_edge != (*it_robot)->get_edges().end(); ++it_edge) {
+			boost::shared_ptr<Edge> edge = world_info->get_according_edge(*it_edge);
+			boost::shared_ptr<Vector3d> pos1 = world_info->get_according_robot_data(edge->getRobot1()).extrapolated_position();
+			boost::shared_ptr<Vector3d> pos2 = world_info->get_according_robot_data(edge->getRobot2()).extrapolated_position();
+			float d = robot_radius/vector3d_distance(*pos1, *pos2);
+			draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
+		}
+
 	}
 
 	glFlush();
@@ -509,13 +526,56 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 	glBegin(GL_LINES);
-				glColor3fv(&kRobotIdColor[colorcode % kRobotIdColorNum ][0]);
-				glVertex3f(pos1(0),pos1(1), pos1(2) );
-				glVertex3f(pos2(0), pos2(1), pos2(2) );
-			glEnd();
-
+		glColor3fv(&kRobotIdColor[colorcode % kRobotIdColorNum ][0]);
+		glVertex3f(pos1(0),pos1(1), pos1(2) );
+		glVertex3f(pos2(0), pos2(1), pos2(2) );
+	glEnd();
 
 }
+
+void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode){
+
+	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 0.9);
+
+	draw_line(pos1, pos2, colorcode);
+
+	double x = pos3(0);
+	double y = pos3(1);
+	double z = pos3(2);
+
+	double vx = pos2(0)-x;
+	double vy = pos2(1)-y;
+	double vz = pos2(2)-z;
+
+	//handle the degenerate case of z1 == z2 with an approximation
+	if(vz == 0)
+		vz = .0001;
+
+	double v = std::sqrt( vx*vx + vy*vy + vz*vz );
+	double ax = 57.2957795*std::acos( vz/v );
+	if ( vz < 0.0 )
+		ax = -ax;
+	double rx = -vy*vz;
+	double ry = vx*vz;
+
+	glPushMatrix();
+
+
+	glTranslated( x, y, z );
+	glRotated(ax, rx, ry, 0.0);
+
+	//draw a cone
+	GLUquadricObj *quadric=gluNewQuadric();
+	gluQuadricDrawStyle(quadric, GLU_LINE);
+	gluQuadricNormals(quadric, GLU_SMOOTH);
+	gluQuadricOrientation(quadric,GLU_OUTSIDE);
+	gluCylinder(quadric, kArrowBase, 0, v, kArrowSlices, 1);
+	gluDeleteQuadric(quadric);
+
+	glPopMatrix();
+
+}
+
 
 
 void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
