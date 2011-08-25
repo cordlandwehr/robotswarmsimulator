@@ -27,13 +27,17 @@ OpenProjectDialog::~OpenProjectDialog() {
 
 
 void OpenProjectDialog::open_file() {
-	ui_.lineedit_file->setText(QFileDialog::getOpenFileName(this,
+	QString file = QFileDialog::getOpenFileName(this,
 			"Open project file", "",
-			tr("Project Files (*.swarm)")));
+			tr("Project Files (*.swarm)"));
+	file = QDir::current().relativeFilePath(file);
+	ui_.lineedit_file->setText(file);
 }
 
 void OpenProjectDialog::open_path() {
-	ui_.lineedit_out->setText(QFileDialog::getExistingDirectory());
+	QString dir = QFileDialog::getExistingDirectory();
+	dir = QDir::current().relativeFilePath(dir);
+	ui_.lineedit_out->setText(dir);
 }
 
 void OpenProjectDialog::accept() {
