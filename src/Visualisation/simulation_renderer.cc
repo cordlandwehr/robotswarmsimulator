@@ -44,7 +44,7 @@
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
-#include "../OpenGL/glut_headers.h"
+#include "../OpenGL/pg_glut.h"
 
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
@@ -412,100 +412,12 @@ void SimulationRenderer::mouse_motion_func( int x, int y){
 
 }
 
-void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
-	switch(key){
-		case 'm':
-		    	use_mouse_ = !use_mouse_;
-			break;
-		case 'c':
-				if (active_camera_index_+1 == cameras_.size())
-					active_camera_index_=0;
-				else active_camera_index_++;
-			break;
-
-
-		case 'w':
-				cameras_[active_camera_index_]->move_up();
-			break;
-
-		case 's':
-				cameras_[active_camera_index_]->move_down();
-			break;
-
-
-		case 'g':
-				switch_render_cog();
-			break;
-
-		case 'v':
-				switch_render_velocity();
-			break;
-
-		case 'b':
-				switch_render_acceleration();
-			break;
-
-		case 'k':
-				switch_render_coord_system();
-			break;
-
-		case 'h':
-				render_help_=!render_help_;
-			break;
-
-		case 'l':
-				switch_render_local_coord_system();
-			break;
-		case 't':
-				actuall_skybox_ = (actuall_skybox_ +1 ) % sky_box_.size();
-			break;
-
-		case 'z':
-				render_visibility_graph_ = !render_visibility_graph_;
-			break;
-		default:
-			break;
-	}
-}
-
-
-void SimulationRenderer::keyboard_special_func(int key, int x, int y){
-	switch(key){
-		case GLUT_KEY_LEFT:
-				cameras_[active_camera_index_]->strafe_left();
-
-			break;
-		case GLUT_KEY_RIGHT:
-				cameras_[active_camera_index_]->strafe_right();
-
-			break;
-
-		case GLUT_KEY_UP:
-
-				cameras_[active_camera_index_]->move_forward();
-			break;
-
-		case GLUT_KEY_DOWN:
-				cameras_[active_camera_index_]->move_backward();
-			break;
-
-		case GLUT_KEY_F1:
-				render_about_=!render_about_;
-			break;
-
-		default:
-
-			break;
-	}
-
-}
-
-
 int SimulationRenderer::font_bitmap_string(const std::string & str) {
 	std::size_t	len= str.length();
 
 	for(std::size_t i=0;i<len;i++) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		//glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		PgGLUT::glutBitmapCharacter(str[i]);
 	}
 
 	return 1;
@@ -568,12 +480,7 @@ void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode)
 	glRotated(ax, rx, ry, 0.0);
 
 	//draw a cone
-	GLUquadricObj *quadric=gluNewQuadric();
-	gluQuadricDrawStyle(quadric, GLU_LINE);
-	gluQuadricNormals(quadric, GLU_SMOOTH);
-	gluQuadricOrientation(quadric,GLU_OUTSIDE);
-	gluCylinder(quadric, kArrowBase, 0, v, kArrowSlices, 1);
-	gluDeleteQuadric(quadric);
+	PgGLUT::glutWireCone(kArrowBase, v, kArrowSlices, 1);
 
 	glPopMatrix();
 
@@ -742,7 +649,7 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 	glPushMatrix();
 		glTranslatef(pos(0),pos(1),pos(2));
 
-		glutSolidSphere(radius, kSphereSlices, kSphereStacks);
+		PgGLUT::glutSolidSphere(radius, kSphereSlices, kSphereStacks);
 
 	glPopMatrix();
 }

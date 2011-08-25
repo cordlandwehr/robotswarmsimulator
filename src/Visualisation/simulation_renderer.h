@@ -81,8 +81,6 @@ public:
 	/**
 	 * \brief Resizes the OpenGL settings for a new window size.
 	 *
-	 * This method has to be called from the function connected to the glutReshapeFunc.
-	 *
 	 * \param width The new width of the window.
 	 * \param height The new height of the window.
 	 */
@@ -90,12 +88,11 @@ public:
 
     /**
      * These functions handle user input
-     * Two functions for keyboard input are necessary as special keys and ASCII character encodings overlap (example: d=100='left')
      */
     void mouse_func(int button, int state, int x, int y);
     void mouse_motion_func( int x, int y);
-    void keyboard_func(unsigned char key, int x, int y);
-    void keyboard_special_func(int key, int x, int y);
+    //void keyboard_func(unsigned char key, int x, int y);
+    //void keyboard_special_func(int key, int x, int y);
 
     /**
      * \brief This Method draws the whole szene.

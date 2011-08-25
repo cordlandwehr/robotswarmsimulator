@@ -2,7 +2,10 @@
 	This file is part of RobotSwarmSimulator.
 
 	Copyright (C) 2009-2010  Kamil Swierkot <kamil@campus.uni-paderborn.de>
+	Copyright (C) 2009-2010  Alexander Klaas <aklaas@uni-paderborn.de>
 	Copyright (C) 2009-2010  Peter Kling <kronos@uni-paderborn.de>
+	Copyright (C) 2009-2010  Christoph Raupach <craupach@gmail.com>
+	Copyright (C) 2009-2010  Daniel Wonisch <dwonisch@campus.uni-paderborn.de>
 
 	RobotSwarmSimulator is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,23 +22,39 @@
 */
 
 /*
- * glut_headers.h
+ * pg_glut.h
  *
- *  Created on: 21.01.2009
- *      Author: peter
+ *  Created on: 25.08.2011
+ *      Author: Sascha brandt
  */
+#include "gl_headers.h"
 
-#ifndef GLUTHEADERS_H_
-#define GLUTHEADERS_H_
+#ifndef PGGLUT_H_
+#define PGGLUT_H_
 
-#ifdef WIN32
 
-	#include <windows.h>
-#endif
-#ifdef __APPLE__
-    #include <GLUT/glut.h>
-#else
-    #include <GL/glut.h>
-#endif
+/**
+ * \brief glut independend clones of some glut functions
+ */
+namespace PgGLUT {
 
-#endif /* GLUTHEADERS_H_ */
+/**
+ * Draw a bitmap character.
+ *
+ * \note for now the font is set to Helvetica12.
+ */
+void glutBitmapCharacter( int character );
+
+/**
+ * Draw a solid sphere.
+ */
+void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
+
+/**
+ * Draw a wireframe cone.
+ */
+void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
+
+};
+
+#endif /* PGGLUT_H_ */
