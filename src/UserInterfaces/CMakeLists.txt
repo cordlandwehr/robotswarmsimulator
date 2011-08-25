@@ -22,12 +22,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 
-# find/configure glut
-reverse_link_preference_in_release()
-find_package(GLUT)
-reverse_link_preference_in_release()
-include_directories(${GLUT_INCLUDE_DIR})
-
 # find/configure Lua (statically linked for release builds)
 reverse_link_preference_in_release()
 find_package(Lua51 REQUIRED)
@@ -86,7 +80,6 @@ target_link_libraries(RobotSwarmSimulator
 	RSSimulator
 	${Boost_LIBRARIES}
 	${OPENGL_LIBRARIES}
-	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
 	${LAPACK_LIBRARIES}
     ${QT_LIBRARIES}
@@ -112,12 +105,5 @@ if(WIN32)
 		)
 	endif(NOT LUA_LIBRARIES_DLL MATCHES ".*.a$")
 	
-	if(NOT GLUT_LIBRARY_DLL MATCHES ".*.a$")
-		install(FILES ${GLUT_LIBRARY_DLL}
-		        DESTINATION bin
-		        CONFIGURATIONS Release
-		        COMPONENT glutlibraries
-		)
-	endif(NOT GLUT_LIBRARY_DLL MATCHES ".*.a$")
 endif(WIN32)
 
