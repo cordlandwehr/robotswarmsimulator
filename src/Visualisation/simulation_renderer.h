@@ -304,13 +304,6 @@ public:
       */
      void set_cog_cam_pos(Vector3d & pos);
 
-     /**
-      *
-      */
-     void set_swap_buffers(bool swap_buffers) {
-    	 swap_buffers_ = swap_buffers;
-     }
-
 	/**
 	 *
 	 */
@@ -318,6 +311,13 @@ public:
 
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
+
+	/**
+	 * Draws an arrow. The arrow tip is drawn at pos2.
+	 *
+	 * \param pos1 start of the arrow.
+	 * \param pos2 arrow tip.
+	 */
 	void draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
@@ -500,11 +500,6 @@ private:
 	 *
 	 */
 	int actuall_skybox_;
-
-	/**
-	 * Specifies whether glutSwapBuffers is called after each call to draw.
-	 */
-	bool swap_buffers_;
 
 	/**
 	 * The Robot Renderer used for drawing the Robots

@@ -16,7 +16,6 @@ RSSGLWidget::RSSGLWidget(QWidget *parent) : QGLWidget(parent),
 		simulation_control_(), simulation_renderer_() {
 	simulation_renderer_.reset(new SimulationRenderer());
 	simulation_renderer_->init();
-	simulation_renderer_->set_swap_buffers(false);
 	setFocusPolicy(Qt::StrongFocus);
 
 	startTimer(50);

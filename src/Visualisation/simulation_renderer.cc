@@ -121,8 +121,7 @@ void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true),
-  swap_buffers_(true) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
 
 	render_visibility_graph_=false;
 
@@ -367,31 +366,35 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	}
 
 
-	// draw all robots
 	double robot_size = max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale);
 	robot_renderer_->set_robot_size(robot_size);
 	double robot_radius = robot_size * kRobotRadius;
 
+	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
 
+		// draw edges
 		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
 		for(it_edge = (*it_robot)->get_edges().begin(); it_edge != (*it_robot)->get_edges().end(); ++it_edge) {
 			boost::shared_ptr<Edge> edge = world_info->get_according_edge(*it_edge);
 			boost::shared_ptr<Vector3d> pos1 = world_info->get_according_robot_data(edge->getRobot1()).extrapolated_position();
 			boost::shared_ptr<Vector3d> pos2 = world_info->get_according_robot_data(edge->getRobot2()).extrapolated_position();
+
 			float d = robot_radius/vector3d_distance(*pos1, *pos2);
-			draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
+			if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {
+				// For undirected edges only draw a line.
+				draw_line(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
+			} else {
+				// otherwise draw an arrow.
+				draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
+			}
 		}
 
 	}
 
 	glFlush();
-
-	if(swap_buffers_)
-		glutSwapBuffers();
-
 
 }
 
