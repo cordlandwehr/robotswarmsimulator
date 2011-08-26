@@ -1,0 +1,5 @@
+PROJECT_NAME=User Guide Example
+ROBOT_FILENAME=robot_circle.csv
+EDGE_FILENAME=edge_circle.csv
+ASG=SYNCHRONOUS_WM
+WORLD_MODIFIERS=example_world_modifier.lua
