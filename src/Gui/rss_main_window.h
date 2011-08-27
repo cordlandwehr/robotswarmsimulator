@@ -18,6 +18,7 @@ class OpenProjectDialog;
 class GeneratorWizard;
 class RSSGLWidget;
 class RobotData;
+class WorldObject;
 
 class RSSMainWindow : public QMainWindow {
 	Q_OBJECT
@@ -40,6 +41,7 @@ private slots:
 	void select_robot(boost::shared_ptr<RobotData> robot_data);
 
 private:
+
 	enum {
 		INCREASE_SPEED,
 		DECREASE_SPEED,
