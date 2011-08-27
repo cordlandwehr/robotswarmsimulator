@@ -95,7 +95,6 @@ install(TARGETS RobotSwarmSimulator
 # for Windows release builds, we need to pack glut and Lua
 if(WIN32)
 	string(REGEX REPLACE "\\.lib$" ".dll" LUA_LIBRARIES_DLL ${LUA_LIBRARIES})
-	string(REGEX REPLACE "\\.lib$" ".dll" GLUT_LIBRARY_DLL ${GLUT_glut_LIBRARY})
 	
 	if(NOT LUA_LIBRARIES_DLL MATCHES ".*.a$")
 		install(FILES ${LUA_LIBRARIES_DLL}
