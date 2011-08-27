@@ -1,0 +1,8 @@
+"ID","x-position","y-position","z-position","marker-info","algorithm"
+0,30.902,95.106,0.000,"weak_coloring.lua"
+1,-80.902,58.779,0.000,"weak_coloring.lua"
+2,-80.902,-58.779,0.000,"weak_coloring.lua"
+3,30.902,-95.106,0.000,"weak_coloring.lua"
+4,100.000,-0.000,0.000,"weak_coloring.lua"
+5,-10,0, 0,"random_adversary.lua"
+6,10,0,0,"random_adversary.lua"
