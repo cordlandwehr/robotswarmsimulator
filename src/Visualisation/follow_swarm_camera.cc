@@ -35,7 +35,6 @@
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
-#include "../OpenGL/glut_headers.h"
 
 #include "../Utilities/vector_arithmetics.h"
 

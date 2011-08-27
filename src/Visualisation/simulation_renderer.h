@@ -81,8 +81,6 @@ public:
 	/**
 	 * \brief Resizes the OpenGL settings for a new window size.
 	 *
-	 * This method has to be called from the function connected to the glutReshapeFunc.
-	 *
 	 * \param width The new width of the window.
 	 * \param height The new height of the window.
 	 */
@@ -90,12 +88,11 @@ public:
 
     /**
      * These functions handle user input
-     * Two functions for keyboard input are necessary as special keys and ASCII character encodings overlap (example: d=100='left')
      */
     void mouse_func(int button, int state, int x, int y);
     void mouse_motion_func( int x, int y);
-    void keyboard_func(unsigned char key, int x, int y);
-    void keyboard_special_func(int key, int x, int y);
+    //void keyboard_func(unsigned char key, int x, int y);
+    //void keyboard_special_func(int key, int x, int y);
 
     /**
      * \brief This Method draws the whole szene.
@@ -304,8 +301,21 @@ public:
       */
      void set_cog_cam_pos(Vector3d & pos);
 
+	/**
+	 *
+	 */
+     boost::shared_ptr<RobotData> pick_robot(int x, int y) const;
+
 private:
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
+
+	/**
+	 * Draws an arrow. The arrow tip is drawn at pos2.
+	 *
+	 * \param pos1 start of the arrow.
+	 * \param pos2 arrow tip.
+	 */
+	void draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.

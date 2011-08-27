@@ -53,7 +53,7 @@ public:
 	virtual void init() = 0;
 	virtual void resize(int x, int y) = 0;
 	virtual void mouse_func(int button, int state, int x, int y) = 0;
-	virtual void keyboard_func(unsigned char key, int x, int y) = 0;
+	//virtual void keyboard_func(unsigned char key, int x, int y) = 0;
 };
 
 #endif /* VISUALIZER_H_ */

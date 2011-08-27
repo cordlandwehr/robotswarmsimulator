@@ -132,4 +132,9 @@ void vector3d_set_maxlength(Vector3d& vec, double len);
  */
 void vector3d_rotate(Vector3d & tp, double rx, double ry, double rz);
 
+/**
+ * interpolates between two vectors by the given factor.
+ */
+Vector3d vector3d_interpolate(Vector3d & vec1, Vector3d & vec2, double factor);
+
 #endif /* VECTOR_ARITHMETICS_H */
