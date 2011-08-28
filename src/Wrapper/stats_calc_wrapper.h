@@ -20,12 +20,11 @@ public:
   virtual ~ StatsCalcWrapper ();
   
   /**
-   * Calculates maximal degree for the given set of robots.
+   * Calculates maximal degree of the graph.
    * 
-   * \param ids		IDs of the robots.
    * \returns		Maximal degree.
    */
-  static int calculate_degree(const std::vector<std::size_t>& ids);
+  static int calculate_degree();
   
   /**
    * Calculates hop distance between a pair of robots.
