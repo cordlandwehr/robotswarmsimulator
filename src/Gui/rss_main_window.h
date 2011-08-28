@@ -31,6 +31,10 @@ public:
 
 	RSSGLWidget * rss_gl_widget() { return rss_gl_widget_; }
 
+protected:
+
+	virtual void timerEvent(QTimerEvent * event);
+
 private slots:
 	void toggle_simulation();
 	void update_simulation_speed(int op);
@@ -41,6 +45,8 @@ private slots:
 	void selected_object_changed(boost::shared_ptr<Identifier> id);
 
 private:
+
+	void update_selected_object();
 
 	enum {
 		INCREASE_SPEED,
@@ -60,6 +66,7 @@ private:
 	RSSGLWidget *rss_gl_widget_;
 	QSignalMapper *speed_signal_mapper_;
 	QSignalMapper *cam_signal_mapper_;
+	boost::shared_ptr<Identifier> selection_id_;
 };
 
 #endif /* RSS_MAIN_WINDOW_H_ */

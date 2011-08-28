@@ -95,6 +95,8 @@ void RSSMainWindow::init() {
 	ui_.action_new_project->setIcon(style.standardIcon(QStyle::SP_FileIcon));
 	ui_.action_open_project->setIcon(style.standardIcon(QStyle::SP_DirOpenIcon));
 	ui_.action_quit->setIcon(style.standardIcon(QStyle::SP_DialogCloseButton));
+
+	startTimer(500);
 }
 
 void RSSMainWindow::toggle_simulation() {
@@ -126,14 +128,35 @@ void RSSMainWindow::update_simulation_speed(int op) {
 }
 
 
+std::string boost_any_to_string(boost::any * data) {
+	std::stringstream ss;
+	if(std::string *s = boost::any_cast<std::string>(data)) {
+		ss << *s;
+	} else if(double *d = boost::any_cast<double>(data)) {
+		ss << *d;
+	} else if(bool *b = boost::any_cast<bool>(data)) {
+		ss << *b ? "true" : "false";
+	} else {
+		ss << "<unknown type>";
+	}
+	return ss.str();
+}
+
+
+void RSSMainWindow::timerEvent(QTimerEvent * event) {
+	update_selected_object();
+}
+
 void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
+
 	ui_.inspector_tree_widget->clear();
+
+	selection_id_ = id;
 	if(!id.get()) {
 		return;
 	}
 
 	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(id);
-
 	RobotData robot_data = rss_gl_widget_->simulation_renderer()->world_info()->get_according_robot_data(r_id);
 
 	QList<QTreeWidgetItem *> items;
@@ -191,21 +214,38 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
     std::vector<std::string>::const_iterator it;
     for( it = keys.begin(); it != keys.end(); ++it ) {
     	boost::any data = robot_data.marker_information().get_data(*it);
-    	std::stringstream ss;
-    	if(std::string *s = boost::any_cast<std::string>(&data)) {
-			ss << *s;
-		} else if(double *d = boost::any_cast<double>(&data)) {
-			ss << *d;
-		} else if(bool *b = boost::any_cast<bool>(&data)) {
-			ss << *b ? "true" : "false";
-		} else {
-    		ss << "<unknown type>";
-    	}
     	item = new QTreeWidgetItem(marker_info_item);
 		item->setText(0, QString::fromStdString(*it));
-		item->setText(1, QString::fromStdString(ss.str()));
+		item->setText(1, QString::fromStdString(boost_any_to_string(&data)));
     }
 
+
+}
+
+void RSSMainWindow::update_selected_object() {
+	if(!selection_id_.get())
+		return;
+
+	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(selection_id_);
+	RobotData robot_data = rss_gl_widget_->simulation_renderer()->world_info()->get_according_robot_data(r_id);
+
+    std::vector<std::string> keys = robot_data.marker_information().get_keys();
+    std::vector<std::string>::const_iterator key_it = keys.begin();
+	QTreeWidgetItemIterator it(ui_.inspector_tree_widget);
+	while(*it) {
+		if(key_it != keys.end() && (*it)->text(0) == (*key_it).data()) {
+			// Marker information
+	    	boost::any data = robot_data.marker_information().get_data(*key_it);
+			(*it)->setText(1, QString::fromStdString(boost_any_to_string(&data)));
+			++key_it;
+		} else if((*it)->text(0) == tr("Position")) {
+			(*it)->setText(1, QString("(%1, %2, %3)")
+		    		.arg(robot_data.position()[0])
+		    		.arg(robot_data.position()[1])
+		    		.arg(robot_data.position()[2]));
+		}
+		++it;
+	}
 
 }
 
