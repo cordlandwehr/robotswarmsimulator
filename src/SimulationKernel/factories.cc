@@ -87,6 +87,7 @@
 #include "../WorldModifierImplementations/circle_layouter.h"
 #include "../WorldModifierImplementations/random_layouter.h"
 #include "../WorldModifierImplementations/force_directed_layouter.h"
+#include "../WorldModifierImplementations/default_world_modifier.h"
 
 /**
  * creates vector modfiers from the given string and adds them to the handler
@@ -270,10 +271,13 @@ boost::shared_ptr<WorldModifier> Factory::world_modifier_factory(const std::stri
 	if(str.size() >= 4)
 		subfix = str.substr(str.size() - 4, 4);
 
-	if(subfix == ".lua") {
+	if(str=="NONE"){
+		world_modifier.reset(new DefaultWorldModifier());
+	}
+	else if(subfix == ".lua") {
 		world_modifier.reset(new LuaWorldModifier(str));
 	}
-	else if(str == "TestWorldModifier" || str == "NONE") {
+	else if(str == "TestWorldModifier") {
 		world_modifier.reset(new TestWorldModifier());
 	}
 	else if(str == "CircleLayouter"){
