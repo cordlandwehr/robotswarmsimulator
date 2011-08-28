@@ -836,9 +836,9 @@ void SimulationRenderer::set_marker_color(float r, float g ,float b, float alpha
 }
 
 
-boost::shared_ptr<RobotData> SimulationRenderer::pick_robot(int x, int y) const {
+boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) const {
 
-	boost::shared_ptr<RobotData> robot_data;
+	boost::shared_ptr<Identifier> id;
 
 	GLint viewport[4];
 	GLuint select_buffer[512];
@@ -901,12 +901,10 @@ boost::shared_ptr<RobotData> SimulationRenderer::pick_robot(int x, int y) const 
 
 		if(number_of_names>0) {
 			ptr = ptr_names;
-			boost::shared_ptr<RobotIdentifier> id;
 			id.reset(new RobotIdentifier(*ptr));
-			robot_data.reset(new RobotData(world_info_->get_according_robot_data(id)));
 		}
 	}
 
-	return robot_data;
+	return id;
 }
 

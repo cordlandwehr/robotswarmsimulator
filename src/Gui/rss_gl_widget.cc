@@ -7,7 +7,7 @@
 
 #include <QKeyEvent>
 
-#include "../Model/robot_data.h"
+#include "../Model/identifier.h"
 
 #include "rss_gl_widget.h"
 
@@ -128,8 +128,8 @@ void RSSGLWidget::mouseMoveEvent( QMouseEvent * event ) {
 void RSSGLWidget::mousePressEvent( QMouseEvent * event ) {
 	simulation_renderer_->mouse_func(event->button(), event->type(), event->x(), event->y());
 
-	boost::shared_ptr<RobotData> data = simulation_renderer_->pick_robot(event->x(), event->y());
-	emit selected_robot_changed(data);
+	boost::shared_ptr<Identifier> id = simulation_renderer_->pick_object(event->x(), event->y());
+	emit selected_object_changed(id);
 }
 
 void RSSGLWidget::mouseReleaseEvent( QMouseEvent * event ) {

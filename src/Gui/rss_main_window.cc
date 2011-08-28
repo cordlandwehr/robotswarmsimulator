@@ -21,6 +21,7 @@
 #include <SzenarioGenerator/szenario_generator.h>
 #include <SzenarioGenerator/formation_generator.h>
 #include <Wrapper/lua_distribution_generator.h>
+#include "../Model/robot_identifier.h"
 #include "../Model/robot_data.h"
 
 #include "open_project_dialog.h"
@@ -78,7 +79,7 @@ void RSSMainWindow::init() {
 	connect(ui_.action_center_of_gravity_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
 	connect(speed_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(update_simulation_speed(int)));
 	connect(cam_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(set_camera_mode(int)));
-	connect(rss_gl_widget_, SIGNAL(selected_robot_changed(boost::shared_ptr<RobotData>)), this, SLOT(select_robot(boost::shared_ptr<RobotData>)));
+	connect(rss_gl_widget_, SIGNAL(selected_object_changed(boost::shared_ptr<Identifier>)), this, SLOT(selected_object_changed(boost::shared_ptr<Identifier>)));
 
 	// map signals
 	speed_signal_mapper_->setMapping(ui_.action_increase_speed, INCREASE_SPEED);
@@ -125,40 +126,45 @@ void RSSMainWindow::update_simulation_speed(int op) {
 }
 
 
-void RSSMainWindow::select_robot(boost::shared_ptr<RobotData> robot_data) {
-	if(!robot_data.get()) {
+void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
+	ui_.inspector_tree_widget->clear();
+	if(!id.get()) {
 		return;
 	}
-	ui_.inspector_tree_widget->clear();
+
+	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(id);
+
+	RobotData robot_data = rss_gl_widget_->simulation_renderer()->world_info()->get_according_robot_data(r_id);
+
 	QList<QTreeWidgetItem *> items;
 
 	// id
 	QTreeWidgetItem * item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 	item->setText(0, tr("Id"));
-	item->setText(1, QString("%1").arg(robot_data->id()->id()));
+	item->setText(1, QString("%1").arg(robot_data.id()->id()));
 
 	// type
 	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 	item->setText(0, tr("Type"));
-	item->setText(1, QString("%1").arg(robot_data->type()));
+	item->setText(1, QString("%1").arg(robot_data.type()));
 
 	// status
 	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 	item->setText(0, tr("Status"));
-	item->setText(1, QString("%1").arg(robot_data->status()));
+	item->setText(1, QString("%1").arg(robot_data.status()));
 
 	// Position
     item = new QTreeWidgetItem(ui_.inspector_tree_widget);
     item->setText(0, tr("Position"));
     item->setText(1, QString("(%1, %2, %3)")
-    		.arg(robot_data->position()[0])
-    		.arg(robot_data->position()[1])
-    		.arg(robot_data->position()[2]));
+    		.arg(robot_data.position()[0])
+    		.arg(robot_data.position()[1])
+    		.arg(robot_data.position()[2]));
 
 	// Color id
 	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 	item->setText(0, tr("Color Id"));
-	item->setText(1, QString("%1").arg(robot_data->color()));
+	item->setText(1, QString("%1").arg(robot_data.color()));
 
     /*// Velocity
     item = new QTreeWidgetItem(ui_.inspector_tree_widget);
@@ -178,13 +184,13 @@ void RSSMainWindow::select_robot(boost::shared_ptr<RobotData> robot_data) {
 
 	// Marker information
     QTreeWidgetItem * marker_info_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-        item->setText(0, tr("Marker Information"));
-    	item->setText(1, tr(""));
+    marker_info_item->setText(0, tr("Marker Information"));
+	marker_info_item->setExpanded(true);
 
-    std::vector<std::string> keys = robot_data->marker_information().get_keys();
+    std::vector<std::string> keys = robot_data.marker_information().get_keys();
     std::vector<std::string>::const_iterator it;
     for( it = keys.begin(); it != keys.end(); ++it ) {
-    	boost::any data = robot_data->marker_information().get_data(*it);
+    	boost::any data = robot_data.marker_information().get_data(*it);
     	std::stringstream ss;
     	if(std::string *s = boost::any_cast<std::string>(&data)) {
 			ss << *s;
