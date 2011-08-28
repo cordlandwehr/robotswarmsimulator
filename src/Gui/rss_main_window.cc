@@ -132,12 +132,74 @@ void RSSMainWindow::select_robot(boost::shared_ptr<RobotData> robot_data) {
 	ui_.inspector_tree_widget->clear();
 	QList<QTreeWidgetItem *> items;
 
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	// id
+	QTreeWidgetItem * item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	item->setText(0, tr("Id"));
+	item->setText(1, QString("%1").arg(robot_data->id()->id()));
+
+	// type
+	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	item->setText(0, tr("Type"));
+	item->setText(1, QString("%1").arg(robot_data->type()));
+
+	// status
+	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	item->setText(0, tr("Status"));
+	item->setText(1, QString("%1").arg(robot_data->status()));
+
+	// Position
+    item = new QTreeWidgetItem(ui_.inspector_tree_widget);
     item->setText(0, tr("Position"));
     item->setText(1, QString("(%1, %2, %3)")
     		.arg(robot_data->position()[0])
     		.arg(robot_data->position()[1])
     		.arg(robot_data->position()[2]));
+
+	// Color id
+	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	item->setText(0, tr("Color Id"));
+	item->setText(1, QString("%1").arg(robot_data->color()));
+
+    /*// Velocity
+    item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	item->setText(0, tr("Velocity"));
+	item->setText(1, QString("(%1, %2, %3)")
+			.arg(robot_data->velocity()[0])
+			.arg(robot_data->velocity()[1])
+			.arg(robot_data->velocity()[2]));
+
+	// Acceleration
+	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+	item->setText(0, tr("Acceleration"));
+	item->setText(1, QString("(%1, %2, %3)")
+			.arg(robot_data->acceleration()[0])
+			.arg(robot_data->acceleration()[1])
+			.arg(robot_data->acceleration()[2]));*/
+
+	// Marker information
+    QTreeWidgetItem * marker_info_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+        item->setText(0, tr("Marker Information"));
+    	item->setText(1, tr(""));
+
+    std::vector<std::string> keys = robot_data->marker_information().get_keys();
+    std::vector<std::string>::const_iterator it;
+    for( it = keys.begin(); it != keys.end(); ++it ) {
+    	boost::any data = robot_data->marker_information().get_data(*it);
+    	std::stringstream ss;
+    	if(std::string *s = boost::any_cast<std::string>(&data)) {
+			ss << *s;
+		} else if(double *d = boost::any_cast<double>(&data)) {
+			ss << *d;
+		} else if(bool *b = boost::any_cast<bool>(&data)) {
+			ss << *b ? "true" : "false";
+		} else {
+    		ss << "<unknown type>";
+    	}
+    	item = new QTreeWidgetItem(marker_info_item);
+		item->setText(0, QString::fromStdString(*it));
+		item->setText(1, QString::fromStdString(ss.str()));
+    }
+
 
 }
 
