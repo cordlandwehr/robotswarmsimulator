@@ -2,4 +2,4 @@ PROJECT_NAME=Weak Coloring Simple Algorithm
 ROBOT_FILENAME=robot.csv
 EDGE_FILENAME=edge.csv
 ASG=SYNCHRONOUS_WM
-WORLD_MODIFIERS=NONE
+WORLD_MODIFIERS=CalculateDefects.lua
