@@ -34,7 +34,7 @@ public:
 	}
 
 signals:
-	void selected_robot_changed(boost::shared_ptr<RobotData> robot_data);
+	void selected_object_changed(boost::shared_ptr<Identifier> id);
 
 protected:
 	virtual void initializeGL();

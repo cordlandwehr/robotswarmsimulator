@@ -17,7 +17,7 @@
 class OpenProjectDialog;
 class GeneratorWizard;
 class RSSGLWidget;
-class RobotData;
+class Identifier;
 class WorldObject;
 
 class RSSMainWindow : public QMainWindow {
@@ -38,7 +38,7 @@ private slots:
 	void update_simulation();
 	void generate_simulation();
 	void set_camera_mode(int mode);
-	void select_robot(boost::shared_ptr<RobotData> robot_data);
+	void selected_object_changed(boost::shared_ptr<Identifier> id);
 
 private:
 

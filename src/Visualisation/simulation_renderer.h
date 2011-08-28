@@ -304,9 +304,17 @@ public:
 	/**
 	 *
 	 */
-     boost::shared_ptr<RobotData> pick_robot(int x, int y) const;
+     boost::shared_ptr<Identifier> pick_object(int x, int y) const;
+
+protected:
+ 	boost::shared_ptr<WorldInformation> world_info() {
+ 		return world_info_;
+ 	}
 
 private:
+ 	friend class RSSMainWindow;
+
+
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
 
 	/**
