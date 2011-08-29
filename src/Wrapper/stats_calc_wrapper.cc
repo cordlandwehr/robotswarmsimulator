@@ -22,18 +22,7 @@ StatsCalcWrapper::StatsCalcWrapper () {}
 StatsCalcWrapper::~StatsCalcWrapper () {}
 
 int
-StatsCalcWrapper::calculate_degree(const std::vector<std::size_t>& ids) {
-  // check the given IDs
-  BOOST_FOREACH(std::size_t id, ids) {
-    WI::check_mapping(WI::robot_identifiers_, id);
-  }
-  // store RobotData objects in new vector
-  std::vector< boost::shared_ptr<RobotData> > robots;
-  BOOST_FOREACH(std::size_t id, ids) {
-    boost::shared_ptr<RobotIdentifier> robot_id = WI::robot_identifiers_[id];
-    robots.push_back(WI::world_information_->get_according_robot_data_ptr(robot_id));
-  }
-  // call StatsCalc method and return result
+StatsCalcWrapper::calculate_degree() {
   return StatsCalc::calculate_degree(WI::world_information_);
 }
 
