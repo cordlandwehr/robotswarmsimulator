@@ -32,13 +32,6 @@
     <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
-   <widget class="QMenu" name="menu_config">
-    <property name="title">
-     <string>&amp;Config</string>
-    </property>
-    <addaction name="action_edit_config"/>
-    <addaction name="action_save_config"/>
-   </widget>
    <widget class="QMenu" name="menu_Simulation">
     <property name="title">
      <string>&amp;Simulation</string>
@@ -51,6 +44,9 @@
     <addaction name="action_half_speed"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>&amp;Help</string>
     </property>
@@ -85,7 +81,6 @@
     <addaction name="action_show_inspector"/>
    </widget>
    <addaction name="menu_project"/>
-   <addaction name="menu_config"/>
    <addaction name="menu_Simulation"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Help"/>
@@ -106,7 +101,6 @@
    </attribute>
    <addaction name="action_new_project"/>
    <addaction name="action_open_project"/>
-   <addaction name="action_quit"/>
   </widget>
   <widget class="QToolBar" name="toolbar_simulation">
    <property name="windowTitle">
