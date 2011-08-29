@@ -103,6 +103,7 @@ void RSSMainWindow::toggle_simulation() {
 	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
 	if(!simulation_control_.get())
 		return;
+	simulation_control_->exit_single_step_mode();
 	simulation_control_->pause_processing_time(!ui_.action_start_stop_simulation->isChecked());
 }
 
