@@ -22,6 +22,6 @@ end
 
 
 function main()
-  calculateHopDistances()
+  --calculateHopDistances()
 
 end

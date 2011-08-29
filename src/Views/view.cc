@@ -117,7 +117,7 @@ const Obstacle& View::resolve_obstacle_ref(ObstacleRef obstacle) const {
 	return *(world_information().obstacles())[obstacle->id()];
 }
 const RobotData& View::resolve_robot_ref(RobotRef robot) const {
-	return *(world_information().robot_data())[robot->id()];
+	return *(world_information().robot_data().at(robot->id()));
 }
 const WorldObject& View::resolve_marker_ref(MarkerRef marker) const {
 	return *(world_information().markers())[marker->id()];

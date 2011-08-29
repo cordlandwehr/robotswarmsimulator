@@ -58,7 +58,6 @@
 
 #include "../../Utilities/vector_arithmetics.h"
 
-#include "../../Views/octree.h"
 #include "../../Visualisation/camera.h"
 #include "../../Visualisation/moveable_camera.h"
 #include "../../Visualisation/follow_swarm_camera.h"

@@ -68,6 +68,8 @@ private:
 	friend class RobotData;
 	friend class ActivationSequenceGenerator;
 	friend class SynchronousASGWM;
+	friend class FullView;
+	friend class StatsCalc;
 };
 
 #endif /* IDENTIFIER_H_ */

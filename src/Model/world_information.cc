@@ -45,6 +45,7 @@ WorldInformation::~WorldInformation() {
 }
 
 WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time_){
+
 	this->markers_.reserve(rhs.markers_.size());
 	BOOST_FOREACH(const boost::shared_ptr<WorldObject>& marker, rhs.markers_) {
 		if(marker) {
@@ -123,22 +124,18 @@ void WorldInformation::set_obstacle_data(std::vector<boost::shared_ptr<Obstacle>
 	obstacles_ = new_obstacles;
 }
 
-const std::vector<boost::shared_ptr<RobotData> > WorldInformation::robot_data() const {
-  	std::vector< boost::shared_ptr<RobotData> > robot_data_vector;
-	robot_data_vector.reserve(robot_data_.size());	
-	for (std::map< int, boost::shared_ptr<RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
-	  robot_data_vector.push_back(it->second);
-	}
-	return robot_data_vector;
+const std::map<int, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
+	return robot_data_;
 }
 
-std::vector<boost::shared_ptr<RobotData> > WorldInformation::robot_data() {
-  	std::vector< boost::shared_ptr<RobotData> > robot_data_vector;
-	robot_data_vector.reserve(robot_data_.size());	
-	for (std::map< int, boost::shared_ptr<RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
-	  robot_data_vector.push_back(it->second);
-	}
-	return robot_data_vector;
+void WorldInformation::robot_data_to_vector(std::vector<boost::shared_ptr<RobotData> >& vec) const {
+  for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
+	vec.push_back(it->second);
+  }  
+}
+
+std::map<int, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
+	return robot_data_;
 }
 
 void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {

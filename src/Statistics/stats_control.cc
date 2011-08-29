@@ -142,7 +142,7 @@ void StatsControl::update(TimePoint& time_point, boost::shared_ptr<Event> event)
 }
 
 void StatsControl::do_datadump(const WorldInformation& world_information, boost::shared_ptr<Event> event) {
-	std::vector<std::string> names;
+/*	std::vector<std::string> names;
 	std::vector<double> values;
 
 	//switch(stats_cfg_.datadump_level()) {
@@ -195,6 +195,7 @@ void StatsControl::do_datadump(const WorldInformation& world_information, boost:
 
 			stats_datadump_->update(world_information.time(), values);
 	//}
+	*/
 }
 
 void StatsControl::quit() {

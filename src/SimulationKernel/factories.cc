@@ -54,12 +54,7 @@
 #include "../Views/view_factory.h"
 #include "../Views/parametrized_view_factory.h"
 #include "../ViewModels/global_view.h"
-#include "../ViewModels/cog_view.h"
-#include "../ViewModels/one_point_formation_view.h"
-#include "../ViewModels/chain_view.h"
 #include "../ViewModels/self_view.h"
-#include "../ViewModels/clone_view.h"
-#include "../ViewModels/radial_view.h"
 #include "../ViewModels/local_graph_view.h"
 
 #include "../EventHandlers/event_handler.h"

@@ -286,7 +286,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	world_info_=world_info;
 
 	double max_dist = 1.0;
-	BOOST_FOREACH(boost::shared_ptr<RobotData> it_robot_data, world_info->robot_data()){
+
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info->robot_data().begin(); it != world_info->robot_data().end(); ++it) {	
+		boost::shared_ptr<RobotData> it_robot_data = it->second;
+
 		double dist = boost::numeric::ublas::norm_2( it_robot_data->position() - cameras_[active_camera_index_]->position());
 
 		if(max_dist < dist)
@@ -306,8 +309,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	glLoadIdentity();
 
 
+	std::vector<boost::shared_ptr<RobotData> > robot_data;
+	world_info->robot_data_to_vector(robot_data);
 
-	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
+	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), robot_data,extrapolate );
 	cameras_[active_camera_index_]->look_rot();
 
 	if(render_sky_box_)
@@ -365,7 +370,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	// draw all robots
 	robot_renderer_->set_robot_size(max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale));
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
-	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
+	for(it_robot = robot_data.begin(); it_robot != robot_data.end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
 	}
 
@@ -767,7 +772,8 @@ void SimulationRenderer::draw_about(){
 }
 
 void SimulationRenderer::draw_cog(){
-
+  //deactivated by asetzer on August 29th
+  /*
 	cog_.insert_element(kXCoord, 0);
 	cog_.insert_element(kYCoord, 0);
 	cog_.insert_element(kZCoord, 0);
@@ -788,7 +794,7 @@ void SimulationRenderer::draw_cog(){
 		glColor3fv(kCogColor);
 		glVertex3f( cog_(0), cog_(1), cog_(2) );
 	glEnd();
-
+*/
 }
 
 

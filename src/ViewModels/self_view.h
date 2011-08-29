@@ -28,8 +28,6 @@
 #ifndef SELF_VIEW_H_
 #define SELF_VIEW_H_
 
-#include "../Views/own_acceleration_view.h"
-#include "../Views/own_coordinate_system_view.h"
 #include "../Views/own_id_view.h"
 #include "../Views/own_marker_view.h"
 #include "../Views/own_position_view.h"
@@ -46,8 +44,7 @@
  *
  */
 
-class SelfView: public virtual OwnAccelerationView,
-		public virtual OwnCoordinateSystemView,
+class SelfView:
 		public virtual OwnIdView,
 		public virtual OwnMarkerView,
 		public virtual OwnPositionView,
