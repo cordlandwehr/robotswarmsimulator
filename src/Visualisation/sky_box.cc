@@ -29,7 +29,6 @@
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
-#include "../OpenGL/glut_headers.h"
 
 #include "texture.h"
 #include "sky_box.h"

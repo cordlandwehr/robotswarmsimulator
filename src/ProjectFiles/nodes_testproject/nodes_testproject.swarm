@@ -7,8 +7,7 @@ WORLD_MODIFIERS=MarkerInformationTest.lua
 WORLD_MODIFIERS=LuaStateTest.lua
 WORLD_MODIFIERS=MessageTest.lua
 WORLD_MODIFIERS=CalculateDefects.lua
+WORLD_MODIFIERS=CircleLayouter
 
 ASG=SYNCHRONOUS_WM
 VIEW=LOCAL_GRAPH_VIEW
-
-

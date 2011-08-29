@@ -43,14 +43,16 @@
 #include <boost/thread/thread.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 
+#include <QtGui/QApplication>
 
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
-#include <UserInterfaces/glut_visualizer.h>
 #include <SzenarioGenerator/szenario_generator.h>
 #include <SzenarioGenerator/formation_generator.h>
 #include <Utilities/console_output.h>
 #include <Wrapper/lua_distribution_generator.h>
+#include <Gui/rss_main_window.h>
+#include <Gui/rss_gl_widget.h>
 
 #include "aiee.h"
 
@@ -258,111 +260,110 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	// make sure we got a project file as input
-	if (!vm.count("project-file")) {
-		std::cout << "Usage: '" << argv[0] << " --project-file <filename>'" << std::endl;
-		std::cout << "   or: '" << argv[0] << " --help' for additional options" << std::endl;
-		return 1;
-	}
 
 	try {
-		std::string tmpProjectFile = vm["project-file"].as<std::string>();
+		if (vm.count("project-file")) {
+			std::string tmpProjectFile = vm["project-file"].as<std::string>();
 
-		// deletes ".swarm" from end of file, if used
-		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
-			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
+			// deletes ".swarm" from end of file, if used
+			if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
+				tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
-		bool run_until_no_multiplicity = vm.count("run_until_no_multiplicity");
+			bool run_until_no_multiplicity = vm.count("run_until_no_multiplicity");
 
-		// initializes the lua random number generator
-		if(vm.count("luaseed")) {
-			unsigned int luaseed = vm["luaseed"].as<unsigned int>();
-			LuaWrapper::lua_generator_set_seed(luaseed);
-		}
-
-		// checks iff statistics shall be created
-		bool create_statistics = !vm.count("dry");
-
-		// checks iff visualization should be created and checks if steps is set
-		bool create_visualization = !vm.count("blind");
-		if(!create_visualization) {
-			std::cout << "running in blind mode" << std::endl;
-
-			if(!vm.count("steps")) {
-				std::cout << "If --blind is set, --steps need to be set to prevent infinite loop" << std::endl;
-				return 1;
+			// initializes the lua random number generator
+			if(vm.count("luaseed")) {
+				unsigned int luaseed = vm["luaseed"].as<unsigned int>();
+				LuaWrapper::lua_generator_set_seed(luaseed);
 			}
 
-			if(!create_statistics) {
-				std::cout << "Warning: No Statistics and No Visualisation set" << std::endl;
-				std::cout << "If a man speaks in the forest and there is no woman there to hear it, is he still wrong?" << std::endl;
-			}
-		}
+			// checks iff statistics shall be created
+			bool create_statistics = !vm.count("dry");
 
-		// create simulation kernel
-		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-		if(!vm.count("steps")) {
-			std::cout <<  "creating simulation without limited steps" << std::endl;
-			sim_control->create_new_simulation(tmpProjectFile,
-					                           vm["history-length"].as<unsigned int>(),
-					                           vm["output"].as<std::string>(),
-					                           create_statistics,
-					                           false,
-					                           0,
-					                           run_until_no_multiplicity);
-		} else {
-			std::cout <<  "creating simulation with limited steps" << std::endl;
-			sim_control->create_new_simulation(tmpProjectFile,
-			                                   vm["history-length"].as<unsigned int>(),
-			                                   vm["output"].as<std::string>(),
-			                                   create_statistics,
-			                                   true,
-			                                   vm["steps"].as<unsigned int>(),
-			                                   run_until_no_multiplicity);
-		}
+			// checks iff visualization should be created and checks if steps is set
+			bool create_visualization = !vm.count("blind");
+			if(!create_visualization) {
+				std::cout << "running in blind mode" << std::endl;
 
-		boost::shared_ptr<GlutVisualizer> visualizer;
-		if(create_visualization) {
-			visualizer.reset(new GlutVisualizer(*sim_control));
-			visualizer->init();
-			sim_control->set_visualizer(visualizer);
-			Vector3d cam_pos = string_to_vec( sim_control->camera_position() );
-			Vector3d cam_dir = string_to_vec( sim_control->camera_direction() );
-			std::string cam_type = sim_control->camera_type();
-
-			if( cam_type.compare("FREE") == 0 ){
-				visualizer->set_free_cam_para( cam_pos, cam_dir );
-				visualizer->set_active_cam(1);
-			} else if( cam_type.compare("COG") == 0) {
-				visualizer->set_active_cam(2);
-				visualizer->set_cog_cam_pos( cam_pos );
-			}
-
-			// Start the simulation thread.
-			sim_control->start_simulation();
-
-			// enter visualization's main-loop
-			visualizer->glutMainLoop();
-		} else {
-			// start the simulation thread
-			sim_control->start_simulation();
-			// simulations should be consumed as fast as possible
-			sim_control->set_processing_time_delta(10000);
-			unsigned int history_length = vm["history-length"].as<unsigned int>();
-			while(!sim_control->is_simulation_finished()) {
-				// clean out history
-				for(unsigned int i = 0; i < history_length; i++) {
-					sim_control->process_simulation();
+				if(!vm.count("steps")) {
+					std::cout << "If --blind is set, --steps need to be set to prevent infinite loop" << std::endl;
+					return 1;
 				}
-				// wait for the simulation thread to refill history
-				boost::xtime xt;
-				boost::xtime_get(&xt, boost::TIME_UTC);
-				xt.sec += 1; // change xt to next second
-				boost::thread::sleep(xt);
+
+				if(!create_statistics) {
+					std::cout << "Warning: No Statistics and No Visualisation set" << std::endl;
+					std::cout << "If a man speaks in the forest and there is no woman there to hear it, is he still wrong?" << std::endl;
+				}
 			}
-			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Terminating simulation.\n";
-			sim_control->terminate_simulation();
-			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Simulation finished. Have a good day.\n";
+
+			// create simulation kernel
+			boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
+			if(!vm.count("steps")) {
+				std::cout <<  "creating simulation without limited steps" << std::endl;
+				sim_control->create_new_simulation(tmpProjectFile,
+												   vm["history-length"].as<unsigned int>(),
+												   vm["output"].as<std::string>(),
+												   create_statistics,
+												   false,
+												   0,
+												   run_until_no_multiplicity);
+			} else {
+				std::cout <<  "creating simulation with limited steps" << std::endl;
+				sim_control->create_new_simulation(tmpProjectFile,
+												   vm["history-length"].as<unsigned int>(),
+												   vm["output"].as<std::string>(),
+												   create_statistics,
+												   true,
+												   vm["steps"].as<unsigned int>(),
+												   run_until_no_multiplicity);
+			}
+
+			if(create_visualization) {
+
+				QApplication app(argc, argv);
+				Q_INIT_RESOURCE(qt_resources);
+
+				RSSMainWindow main_window;
+
+				main_window.init();
+				main_window.rss_gl_widget()->set_simulation_control(sim_control);
+
+				main_window.show();
+
+				return app.exec();
+
+			} else {
+				// start the simulation thread
+				sim_control->start_simulation();
+				// simulations should be consumed as fast as possible
+				sim_control->set_processing_time_delta(10000);
+				unsigned int history_length = vm["history-length"].as<unsigned int>();
+				while(!sim_control->is_simulation_finished()) {
+					// clean out history
+					for(unsigned int i = 0; i < history_length; i++) {
+						sim_control->process_simulation();
+					}
+					// wait for the simulation thread to refill history
+					boost::xtime xt;
+					boost::xtime_get(&xt, boost::TIME_UTC);
+					xt.sec += 1; // change xt to next second
+					boost::thread::sleep(xt);
+				}
+				ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Terminating simulation.\n";
+				sim_control->terminate_simulation();
+				ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Simulation finished. Have a good day.\n";
+			}
+		} else {
+
+			QApplication app(argc, argv);
+			Q_INIT_RESOURCE(qt_resources);
+
+			RSSMainWindow main_window;
+
+			main_window.init();
+			main_window.show();
+
+			return app.exec();
 		}
 
 	}

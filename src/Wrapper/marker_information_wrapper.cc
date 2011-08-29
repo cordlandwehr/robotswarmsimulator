@@ -62,6 +62,10 @@ namespace LuaWrapper{
       return marker_information_.get_keys();
     }
     
+    bool MarkerInformationWrapper::has_key(const std::string& key) {
+      return marker_information_.has_key(key);
+    }
+    
     void MarkerInformationWrapper::remove_data(const std::string& var_name) {
 	marker_information_.remove_data(var_name);
     }

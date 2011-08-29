@@ -153,3 +153,14 @@ void vector3d_rotate(Vector3d & tp, double rx, double ry, double rz) {
 	tp[1] = newY;
 	tp[2] = newZ;
 }
+
+
+Vector3d vector3d_interpolate(Vector3d & vec1, Vector3d & vec2, double factor) {
+	Vector3d out;
+
+	out[0] = factor*vec2(0)+(1-factor)*vec1(0);
+	out[1] = factor*vec2(1)+(1-factor)*vec1(1);
+	out[2] = factor*vec2(2)+(1-factor)*vec1(2);
+
+	return out;
+}

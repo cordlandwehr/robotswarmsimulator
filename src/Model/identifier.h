@@ -70,6 +70,7 @@ private:
 	friend class SynchronousASGWM;
 	friend class FullView;
 	friend class StatsCalc;
+	friend class RSSMainWindow;
 };
 
 #endif /* IDENTIFIER_H_ */

@@ -117,10 +117,10 @@ namespace {
 	  std::size_t id = view->get_id(*robot, ident);
 	  message_identifiers_[id] = ident;
 	  // update sender robot (if visible)
-	  boost::shared_ptr<RobotIdentifier> sender = view->get_sender(ident);
+	  /*boost::shared_ptr<RobotIdentifier> sender = view->get_sender(ident);
 	  if (sender) {
 	    robot_identifiers_[view->get_id(*robot, sender)] = sender;
-	  }
+	  }*/
 	  // return integer ID
 	  return id;
 	}
@@ -251,12 +251,9 @@ namespace {
 	}
 
 	void add_insert_edge_request(std::size_t tail, std::size_t head, LuaWrapper::MarkerInformationWrapper marker, const std::string& type) {
-	  // check the given IDs
-	  check_mapping(robot_identifiers_, tail);
-	  check_mapping(robot_identifiers_, head);
 	    // get robot IDs
-	    boost::shared_ptr<RobotIdentifier> source_robot = robot_identifiers_[tail];
-	    boost::shared_ptr<RobotIdentifier> target_robot = robot_identifiers_[head]; 
+	    boost::shared_ptr<RobotIdentifier> source_robot(new RobotIdentifier(tail));
+	    boost::shared_ptr<RobotIdentifier> target_robot(new RobotIdentifier(head));
 	    // create new edge (decide type depending on given string)
 	    std::string type_lower(type);
 	    boost::to_lower(type_lower);
@@ -407,6 +404,7 @@ void LuaRobot::register_lua_methods() {
 		      .def("add_data", &LuaWrapper::MarkerInformationWrapper::add_data)
 		      .def("get_data", &LuaWrapper::MarkerInformationWrapper::get_data)
 		      .def("get_keys", &LuaWrapper::MarkerInformationWrapper::get_keys, luabind::copy_table(luabind::result))
+		      .def("has_key", &LuaWrapper::MarkerInformationWrapper::has_key)
 		      .def("remove_data", &LuaWrapper::MarkerInformationWrapper::remove_data),
 		   
 		  luabind::def("log", (void(*)(const std::string&)) &ConsoleOutputWrapper::log),
@@ -455,6 +453,9 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	robot_identifiers_.clear();
 	
 	requests.clear();
+	
+	// TODO: Get rid of this workaround ...
+	get_visible_robots();
 
 	try {
 		luabind::call_function<void>(lua_state_.get(), "main");

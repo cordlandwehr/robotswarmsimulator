@@ -40,7 +40,6 @@ WorldInformation::WorldInformation() {
 
 WorldInformation::~WorldInformation() {
 	
-	
 
 }
 
@@ -161,7 +160,8 @@ void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
 
 	// add requested edge to world_information and to adjacency list of robots
 	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
-	rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
+	if(rd1.id()->id() != rd2.id()->id()) // do not add loop edges twice
+		rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
 
 	edges_.insert(std::pair<std::size_t, boost::shared_ptr<Edge> >(new_edge->id()->id(), new_edge));
 }

@@ -8,7 +8,6 @@ include_directories("${rsslib_BINARY_DIR}")
 # find all source files
 set(RSSMAIN_SRCS
 	robot_swarm_simulator_cmdline.cc
-	glut_visualizer.cc
 )
 
 # find/configure boost (statically linked for release builds)
@@ -22,12 +21,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 # find/configure OpenGL
 find_package(OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
-
-# find/configure glut
-reverse_link_preference_in_release()
-find_package(GLUT)
-reverse_link_preference_in_release()
-include_directories(${GLUT_INCLUDE_DIR})
 
 # find/configure Lua (statically linked for release builds)
 reverse_link_preference_in_release()
@@ -74,15 +67,22 @@ else(APPLE)
 	endif(CMAKE_BUILD_TYPE MATCHES Release)
 endif(APPLE)
 
+# find/configure QT
+# TODO packaging of QT libraries for release builds
+set(QT_USE_QTOPENGL TRUE)    
+find_package(Qt4 REQUIRED)
+
+include(${QT_USE_FILE})
+
 # generate executable of the above source files and link it
 add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
 target_link_libraries(RobotSwarmSimulator
 	RSSimulator
 	${Boost_LIBRARIES}
 	${OPENGL_LIBRARIES}
-	${GLUT_glut_LIBRARY}
 	${LUA_LIBRARIES}
 	${LAPACK_LIBRARIES}
+    ${QT_LIBRARIES}
 	luabind
 )
 
@@ -95,7 +95,6 @@ install(TARGETS RobotSwarmSimulator
 # for Windows release builds, we need to pack glut and Lua
 if(WIN32)
 	string(REGEX REPLACE "\\.lib$" ".dll" LUA_LIBRARIES_DLL ${LUA_LIBRARIES})
-	string(REGEX REPLACE "\\.lib$" ".dll" GLUT_LIBRARY_DLL ${GLUT_glut_LIBRARY})
 	
 	if(NOT LUA_LIBRARIES_DLL MATCHES ".*.a$")
 		install(FILES ${LUA_LIBRARIES_DLL}
@@ -105,12 +104,5 @@ if(WIN32)
 		)
 	endif(NOT LUA_LIBRARIES_DLL MATCHES ".*.a$")
 	
-	if(NOT GLUT_LIBRARY_DLL MATCHES ".*.a$")
-		install(FILES ${GLUT_LIBRARY_DLL}
-		        DESTINATION bin
-		        CONFIGURATIONS Release
-		        COMPONENT glutlibraries
-		)
-	endif(NOT GLUT_LIBRARY_DLL MATCHES ".*.a$")
 endif(WIN32)
 

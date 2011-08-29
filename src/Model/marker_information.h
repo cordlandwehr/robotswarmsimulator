@@ -72,6 +72,13 @@ public:
 	 * \return	Set of variable names.
 	 */
 	const std::vector<std::string> get_keys();
+	
+	/**
+	 * This method can be used to check whether a key is set.
+	 * \param key	Name of the key.
+	 * \returns	True if key is set.
+	 */
+	bool has_key(const std::string& key);
 
 private:
 	/**

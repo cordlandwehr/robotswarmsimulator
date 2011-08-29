@@ -25,6 +25,7 @@ namespace LuaWrapper {
         void add_data(const std::string& var_name, const luabind::object& object);        
         luabind::object get_data(const std::string& var_name);   
 	const std::vector<std::string> get_keys();
+	bool has_key(const std::string& key);
 	void remove_data(const std::string& var_name);
         const MarkerInformation& marker_information() const;
         static void set_lua_state(boost::shared_ptr<lua_State> state);

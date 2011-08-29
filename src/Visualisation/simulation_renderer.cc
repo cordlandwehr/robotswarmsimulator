@@ -44,7 +44,7 @@
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
-#include "../OpenGL/glut_headers.h"
+#include "../OpenGL/pg_glut.h"
 
 #include "../Model/world_information.h"
 #include "../Model/world_object.h"
@@ -83,6 +83,9 @@ const float kCoordLineWidth = 1.0;
 const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
+const int kArrowSlices = 4;
+const double kArrowBase = 0.5;
+
 const double kMinScale = 1.0;
 const double kMaxScale = 25.0;
 const double kFactorScale = 0.05;
@@ -93,6 +96,7 @@ const int kTextSpacing=15;
 
 const float kMarkerPointSize = 2.0;
 
+const float kRobotRadius = 0.13;
 
 const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
@@ -367,16 +371,35 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	}
 
 
+	double robot_size = max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale);
+	robot_renderer_->set_robot_size(robot_size);
+	double robot_radius = robot_size * kRobotRadius;
+
 	// draw all robots
-	robot_renderer_->set_robot_size(max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale));
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = robot_data.begin(); it_robot != robot_data.end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
+
+		// draw edges
+		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
+		for(it_edge = (*it_robot)->get_edges().begin(); it_edge != (*it_robot)->get_edges().end(); ++it_edge) {
+			boost::shared_ptr<Edge> edge = world_info->get_according_edge(*it_edge);
+			boost::shared_ptr<Vector3d> pos1 = world_info->get_according_robot_data(edge->getRobot1()).extrapolated_position();
+			boost::shared_ptr<Vector3d> pos2 = world_info->get_according_robot_data(edge->getRobot2()).extrapolated_position();
+
+			float d = robot_radius/vector3d_distance(*pos1, *pos2);
+			if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {
+				// For undirected edges only draw a line.
+				draw_line(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
+			} else {
+				// otherwise draw an arrow.
+				draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
+			}
+		}
+
 	}
 
 	glFlush();
-	glutSwapBuffers();
-
 
 }
 
@@ -384,8 +407,6 @@ void SimulationRenderer::mouse_func(int button, int state, int x, int y){
 	if(use_mouse_){
 				cameras_[active_camera_index_]->set_button_press_mouse(x,y);
 			}
-
-
 
 }
 
@@ -396,100 +417,12 @@ void SimulationRenderer::mouse_motion_func( int x, int y){
 
 }
 
-void SimulationRenderer::keyboard_func(unsigned char key, int x, int y){
-	switch(key){
-		case 'm':
-		    	use_mouse_ = !use_mouse_;
-			break;
-		case 'c':
-				if (active_camera_index_+1 == cameras_.size())
-					active_camera_index_=0;
-				else active_camera_index_++;
-			break;
-
-
-		case 'w':
-				cameras_[active_camera_index_]->move_up();
-			break;
-
-		case 's':
-				cameras_[active_camera_index_]->move_down();
-			break;
-
-
-		case 'g':
-				switch_render_cog();
-			break;
-
-		case 'v':
-				switch_render_velocity();
-			break;
-
-		case 'b':
-				switch_render_acceleration();
-			break;
-
-		case 'k':
-				switch_render_coord_system();
-			break;
-
-		case 'h':
-				render_help_=!render_help_;
-			break;
-
-		case 'l':
-				switch_render_local_coord_system();
-			break;
-		case 't':
-				actuall_skybox_ = (actuall_skybox_ +1 ) % sky_box_.size();
-			break;
-
-		case 'z':
-				render_visibility_graph_ = !render_visibility_graph_;
-			break;
-		default:
-			break;
-	}
-}
-
-
-void SimulationRenderer::keyboard_special_func(int key, int x, int y){
-	switch(key){
-		case GLUT_KEY_LEFT:
-				cameras_[active_camera_index_]->strafe_left();
-
-			break;
-		case GLUT_KEY_RIGHT:
-				cameras_[active_camera_index_]->strafe_right();
-
-			break;
-
-		case GLUT_KEY_UP:
-
-				cameras_[active_camera_index_]->move_forward();
-			break;
-
-		case GLUT_KEY_DOWN:
-				cameras_[active_camera_index_]->move_backward();
-			break;
-
-		case GLUT_KEY_F1:
-				render_about_=!render_about_;
-			break;
-
-		default:
-
-			break;
-	}
-
-}
-
-
 int SimulationRenderer::font_bitmap_string(const std::string & str) {
 	std::size_t	len= str.length();
 
 	for(std::size_t i=0;i<len;i++) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		//glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		PgGLUT::glutBitmapCharacter(str[i]);
 	}
 
 	return 1;
@@ -513,13 +446,51 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 	glBegin(GL_LINES);
-				glColor3fv(&kRobotIdColor[colorcode % kRobotIdColorNum ][0]);
-				glVertex3f(pos1(0),pos1(1), pos1(2) );
-				glVertex3f(pos2(0), pos2(1), pos2(2) );
-			glEnd();
-
+		glColor3fv(&kRobotIdColor[colorcode % kRobotIdColorNum ][0]);
+		glVertex3f(pos1(0),pos1(1), pos1(2) );
+		glVertex3f(pos2(0), pos2(1), pos2(2) );
+	glEnd();
 
 }
+
+void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode){
+
+	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 0.9);
+
+	draw_line(pos1, pos2, colorcode);
+
+	double x = pos3(0);
+	double y = pos3(1);
+	double z = pos3(2);
+
+	double vx = pos2(0)-x;
+	double vy = pos2(1)-y;
+	double vz = pos2(2)-z;
+
+	//handle the degenerate case of z1 == z2 with an approximation
+	if(vz == 0)
+		vz = .0001;
+
+	double v = std::sqrt( vx*vx + vy*vy + vz*vz );
+	double ax = 57.2957795*std::acos( vz/v );
+	if ( vz < 0.0 )
+		ax = -ax;
+	double rx = -vy*vz;
+	double ry = vx*vz;
+
+	glPushMatrix();
+
+
+	glTranslated( x, y, z );
+	glRotated(ax, rx, ry, 0.0);
+
+	//draw a cone
+	PgGLUT::glutWireCone(kArrowBase, v, kArrowSlices, 1);
+
+	glPopMatrix();
+
+}
+
 
 
 void SimulationRenderer::draw_text2d(int x, int y,  const std::string & str ) {
@@ -683,7 +654,7 @@ void SimulationRenderer::draw_sphere(const Sphere*  sphere){
 	glPushMatrix();
 		glTranslatef(pos(0),pos(1),pos(2));
 
-		glutSolidSphere(radius, kSphereSlices, kSphereStacks);
+		PgGLUT::glutSolidSphere(radius, kSphereSlices, kSphereStacks);
 
 	glPopMatrix();
 }
@@ -871,4 +842,78 @@ void SimulationRenderer::set_marker_color(float r, float g ,float b, float alpha
 }
 
 
+boost::shared_ptr<RobotData> SimulationRenderer::pick_robot(int x, int y) const {
+
+	boost::shared_ptr<RobotData> robot_data;
+
+	GLint viewport[4];
+	GLuint select_buffer[512];
+
+	glSelectBuffer(512,select_buffer);
+	glRenderMode(GL_SELECT);
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glGetIntegerv(GL_VIEWPORT,viewport);
+	gluPickMatrix(x,viewport[3]-y, 5,5,viewport);
+	gluPerspective(90, (GLfloat)viewport[2]/(GLfloat)viewport[3], 0.1, 1000);
+	glMatrixMode(GL_MODELVIEW);
+	glInitNames();
+	glLoadIdentity();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	cameras_[active_camera_index_]->look_rot();
+	cameras_[active_camera_index_]->look_translate();
+
+
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
+	  boost::shared_ptr<RobotData> robot = it->second;
+
+		glPushName(robot->id()->id());
+		robot_renderer_->draw_robot( robot );
+		glPopName();
+	}
+
+	int hits;
+
+	// restoring the original projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glFlush();
+
+	// returning to normal rendering mode
+	hits = glRenderMode(GL_RENDER);
+
+	// if there are hits process them
+	if (hits != 0) {
+		GLuint names, *ptr, min_z, *ptr_names, number_of_names;
+
+		ptr = (GLuint *) select_buffer;
+		min_z = 0xffffffff;
+		for (uint32_t i = 0; i < hits; ++i) {
+			names = *ptr;
+			ptr++;
+			if (*ptr < min_z) {
+				number_of_names = names;
+				min_z = *ptr;
+				ptr_names = ptr+2;
+			}
+
+			ptr += names+2;
+		}
+
+		if(number_of_names>0) {
+			ptr = ptr_names;
+			boost::shared_ptr<RobotIdentifier> id;
+			id.reset(new RobotIdentifier(*ptr));
+			robot_data.reset(new RobotData(world_info_->get_according_robot_data(id)));
+		}
+	}
+
+	return robot_data;
+}
 

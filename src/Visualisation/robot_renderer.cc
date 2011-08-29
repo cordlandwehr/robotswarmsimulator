@@ -34,7 +34,7 @@
 
 #include "../OpenGL/gl_headers.h"
 #include "../OpenGL/glu_headers.h"
-#include "../OpenGL/glut_headers.h"
+#include "../OpenGL/pg_glut.h"
 
 #include "../Model/robot_data.h"
 
@@ -84,7 +84,7 @@ void RobotRenderer::init() {
 	compiled_list_ = glGenLists(1);
 
 	glNewList( compiled_list_, GL_COMPILE );
-		glutSolidSphere(kRobotRadius, kRobotSlices, kRobotStacks);
+		PgGLUT::glutSolidSphere(kRobotRadius, kRobotSlices, kRobotStacks);
 	glEndList();
 }
 
