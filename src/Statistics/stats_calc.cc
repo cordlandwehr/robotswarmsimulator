@@ -61,7 +61,10 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 			boost::shared_ptr<RobotData> currentNode = nodes[i];
 			int degreeOfCurrentNode = (currentNode->get_edges()).size();
 			std::vector<boost::shared_ptr<EdgeIdentifier> > edges = currentNode->get_edges();
-			unsigned short int currentNodesOwnColor = currentNode->color();
+
+			MarkerInformation currNodeMarker = currentNode->marker_information();
+			int currentNodesOwnColor = boost::any_cast<int>(currNodeMarker.get_data("color"));
+
 			int countDefects = 0;
 			for(int j=0;j<degreeOfCurrentNode;j++){
 				boost::shared_ptr<Edge> e = graph->get_according_edge(edges[j]);
@@ -69,11 +72,14 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 				RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
 				RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
 
-				unsigned short int neighboursColor = rd1.color();
+				currNodeMarker = rd1.marker_information();
+				int neighboursColor = boost::any_cast<int>(currNodeMarker.get_data("color"));
+
 				if(neighboursColor == currentNodesOwnColor)
 					countDefects ++;
 
-				neighboursColor = rd2.color();
+				currNodeMarker = rd2.marker_information();
+				neighboursColor = boost::any_cast<int>(currNodeMarker.get_data("color"));
 				if(neighboursColor == currentNodesOwnColor)
 					countDefects ++;
 
@@ -100,8 +106,10 @@ int StatsCalc::calculate_total_defects(const boost::shared_ptr<WorldInformation>
 		RobotData& rd1 = graph->get_according_robot_data(currentEdge->getRobot1());
 		RobotData& rd2 = graph->get_according_robot_data(currentEdge->getRobot2());
 
-		unsigned short int neighboursColor1 = rd1.color();
-		unsigned short int neighboursColor2 = rd2.color();
+		MarkerInformation currNodeMarker = rd1.marker_information();
+		int neighboursColor1 = boost::any_cast<int>(currNodeMarker.get_data("color"));
+		currNodeMarker = rd2.marker_information();
+		int neighboursColor2 = boost::any_cast<int>(currNodeMarker.get_data("color"));
 		if(neighboursColor1 == neighboursColor2)
 			countDefects ++;
 

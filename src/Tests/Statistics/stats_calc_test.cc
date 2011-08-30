@@ -31,14 +31,17 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	pos->insert_element(kZCoord,0.0);
 
 	//create 1000 Nodes and NodeDatas
-	for(unsigned i = 0; i < 1000; i++) {
+	for(int i = 0; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
 		IDs.push_back(id);
 
-		boost::shared_ptr<Robot> node(new SimpleRobot(id));
-		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, *node));
+		//set the color
+		boost::shared_ptr<MarkerInformation> marker_information(new MarkerInformation());
+		marker_information->add_data("color",i);
 
-		nodeData->set_color(i);
+		boost::shared_ptr<Robot> node(new SimpleRobot(id));
+		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, marker_information, *node));
+
 		graph->add_robot_data(nodeData);
 	}
 
@@ -93,10 +96,13 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	ignore_one_edge.push_back(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(graph, IDs[1], IDs[4], ignore_one_edge),3);
 
-	node7->set_color(8);
+	(nodes[7]->marker_information()).remove_data("color");
+	(nodes[7]->marker_information()).add_data("color",8);
 
-	node10->set_color(11);
-	node12->set_color(11);
+	(nodes[10]->marker_information()).remove_data("color");
+	(nodes[10]->marker_information()).add_data("color",11);
+	(nodes[12]->marker_information()).remove_data("color");
+	(nodes[12]->marker_information()).add_data("color",11);
 
 	//max number of defects is 2
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_maximal_defect(graph),2);
