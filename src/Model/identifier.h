@@ -67,6 +67,7 @@ private:
 	friend class EdgeView;
 	friend class RobotData;
 	friend class RSSMainWindow;
+	friend class StatsCalc;
 };
 
 #endif /* IDENTIFIER_H_ */

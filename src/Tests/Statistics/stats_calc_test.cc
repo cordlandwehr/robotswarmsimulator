@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	for(unsigned i = 0; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
 		IDs.push_back(id);
-		//TODO: undefined behavior here, since robot is deleted after each forloop run.
+
 		boost::shared_ptr<Robot> node(new SimpleRobot(id));
 		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, *node));
 
@@ -52,14 +52,6 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
 		//create edge
 		boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
-
-		RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
-		RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
-
-		// add requested edge to world_information and to adjacency list of robots
-		rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-		rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-
 		graph->add_edge(e);
 	}
 
@@ -80,12 +72,6 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
 	//create edge
 	boost::shared_ptr<DirectedEdge> e (new DirectedEdge(nodeID1,nodeID2));
-
-	RobotData& rd1 = graph->get_according_robot_data(e->source());
-
-	// add requested edge to world_information and to adjacency list of robots
-	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-
 	graph->add_edge(e);
 
 	//degree has to be 3
