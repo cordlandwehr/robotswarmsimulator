@@ -160,6 +160,10 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	glEnd();
 
 	unsigned int rob_color =  robot->color() < kRobotIdColorNum ? robot->color() : 0 ;
+	if((robot->marker_information()).has_key("color"))
+		rob_color = boost::any_cast<double>((robot->marker_information()).get_data("color"));
+	//TODO : only 10 colors can be displayed right now
+	rob_color = rob_color % 10;
 	glColor3fv(&kRobotIdColor[rob_color][0]);
 	draw_robot_sphere( rob_pos );
 

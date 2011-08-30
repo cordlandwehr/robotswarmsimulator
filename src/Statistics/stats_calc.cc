@@ -63,7 +63,9 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 			std::vector<boost::shared_ptr<EdgeIdentifier> > edges = currentNode->get_edges();
 
 			MarkerInformation currNodeMarker = currentNode->marker_information();
-			int currentNodesOwnColor = boost::any_cast<int>(currNodeMarker.get_data("color"));
+			if(!currNodeMarker.has_key("color"))
+				return -1;
+			double currentNodesOwnColor = boost::any_cast<double>(currNodeMarker.get_data("color"));
 
 			int countDefects = 0;
 			for(int j=0;j<degreeOfCurrentNode;j++){
@@ -73,13 +75,17 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 				RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
 
 				currNodeMarker = rd1.marker_information();
-				int neighboursColor = boost::any_cast<int>(currNodeMarker.get_data("color"));
+				if(!currNodeMarker.has_key("color"))
+								return -1;
+				double neighboursColor = boost::any_cast<double>(currNodeMarker.get_data("color"));
 
 				if(neighboursColor == currentNodesOwnColor)
 					countDefects ++;
 
 				currNodeMarker = rd2.marker_information();
-				neighboursColor = boost::any_cast<int>(currNodeMarker.get_data("color"));
+				if(!currNodeMarker.has_key("color"))
+								return -1;
+				neighboursColor = boost::any_cast<double>(currNodeMarker.get_data("color"));
 				if(neighboursColor == currentNodesOwnColor)
 					countDefects ++;
 
@@ -107,9 +113,13 @@ int StatsCalc::calculate_total_defects(const boost::shared_ptr<WorldInformation>
 		RobotData& rd2 = graph->get_according_robot_data(currentEdge->getRobot2());
 
 		MarkerInformation currNodeMarker = rd1.marker_information();
-		int neighboursColor1 = boost::any_cast<int>(currNodeMarker.get_data("color"));
+		if(!currNodeMarker.has_key("color"))
+						return -1;
+		double neighboursColor1 = boost::any_cast<double>(currNodeMarker.get_data("color"));
 		currNodeMarker = rd2.marker_information();
-		int neighboursColor2 = boost::any_cast<int>(currNodeMarker.get_data("color"));
+		if(!currNodeMarker.has_key("color"))
+						return -1;
+		double neighboursColor2 = boost::any_cast<double>(currNodeMarker.get_data("color"));
 		if(neighboursColor1 == neighboursColor2)
 			countDefects ++;
 
