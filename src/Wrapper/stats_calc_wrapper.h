@@ -10,6 +10,8 @@
 
 #include <vector>
 
+#include "../Wrapper/world_information_wrapper.h"
+
 namespace LuaWrapper {
 
 class StatsCalcWrapper
