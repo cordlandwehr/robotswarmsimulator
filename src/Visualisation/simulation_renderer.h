@@ -350,6 +350,7 @@ private:
 	 * \param box the box
 	 */
 	void draw_box(const Box*  box);
+	void draw_box(const Vector3d& pos, float width, float height, float depth);
 
 	/**
 	 * Draws a sphere.

@@ -141,8 +141,14 @@
        <property name="columnCount">
         <number>2</number>
        </property>
+       <attribute name="headerCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
        <attribute name="headerDefaultSectionSize">
-        <number>100</number>
+        <number>150</number>
+       </attribute>
+       <attribute name="headerStretchLastSection">
+        <bool>true</bool>
        </attribute>
        <column>
         <property name="text">

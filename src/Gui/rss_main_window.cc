@@ -240,7 +240,7 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 		// Edges
 		QTreeWidgetItem * edge_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 		edge_item->setText(0, tr("Edges"));
-		edge_item->setText(1, QString("%1").arg(robot_data->get_number_of_messages()));
+		edge_item->setText(1, QString("%1").arg(robot_data->get_edges().size()));
 		edge_item->setExpanded(true);
 
 		std::vector<boost::shared_ptr<EdgeIdentifier> > edges = robot_data->get_edges();
@@ -304,11 +304,20 @@ void RSSMainWindow::update_selected_object() {
     std::vector<std::string>::const_iterator key_it = keys.begin();
 	QTreeWidgetItemIterator it(ui_.inspector_tree_widget);
 	while(*it) {
-		if(key_it != keys.end() && (*it)->text(0) == (*key_it).data()) {
-			// Marker information
-	    	boost::any m_data = data->marker_information().get_data(*key_it);
-			(*it)->setText(1, QString::fromStdString(boost_any_to_string(&m_data)));
-			++key_it;
+		if((*it)->text(0) == tr("Marker Information")) {
+
+		    std::vector<std::string> keys = data->marker_information().get_keys();
+			while(keys.size() < (*it)->childCount()) {
+				QTreeWidgetItem* child = (*it)->child((*it)->childCount()-1);
+				(*it)->removeChild(child);
+				delete child;
+			}
+		    for( std::size_t i=0; i<keys.size(); ++i ) {
+		    	boost::any m_data = data->marker_information().get_data(keys.at(i));
+				QTreeWidgetItem * item = i < (*it)->childCount() ? (*it)->child(i) : new QTreeWidgetItem(*it);
+				item->setText(0, QString::fromStdString(keys.at(i)));
+				item->setText(1, QString::fromStdString(boost_any_to_string(&m_data)));
+		    }
 		} else if((*it)->text(0) == tr("Position")) {
 			(*it)->setText(1, QString("(%1, %2, %3)")
 		    		.arg(data->position()[0])

@@ -87,7 +87,7 @@ const int kArrowSlices = 4;
 const double kArrowBase = 0.5;
 
 const double kMinScale = 1.0;
-const double kMaxScale = 25.0;
+const double kMaxScale = 100.0;
 const double kFactorScale = 0.05;
 
 const int kDefHeight = 500;
@@ -97,6 +97,10 @@ const int kTextSpacing=15;
 const float kMarkerPointSize = 2.0;
 
 const float kRobotRadius = 0.13;
+
+const float kMessageHeight = 0.02;
+const float kMessagewidth = 0.1;
+const float kMessageDepth = 0.1;
 
 const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
@@ -352,6 +356,15 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
 
+		// draw messages
+		glColor3f(0.5,0.5,0.5);
+		Vector3d pos = (*it_robot)->position();
+		pos[kYCoord] += robot_radius;
+		for(int i=0; i<(*it_robot)->get_number_of_messages(); ++i) {
+			pos[kYCoord] += robot_size * kMessageHeight*2.5;
+			draw_box(pos, robot_size * kMessagewidth, robot_size * kMessageHeight, robot_size * kMessageDepth);
+		}
+
 		// draw edges
 		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
 		for(it_edge = (*it_robot)->get_edges().begin(); it_edge != (*it_robot)->get_edges().end(); ++it_edge) {
@@ -547,54 +560,55 @@ void SimulationRenderer::draw_obstacle(const boost::shared_ptr<Obstacle> & obsta
 
 }
 void SimulationRenderer::draw_box(const Box*  box){
+	draw_box(box->position(), box->width(), box->height(), box->depth());
+}
+void SimulationRenderer::draw_box(const Vector3d& pos, float width, float height, float depth) {
 
-	float pos_x = box->position()(0);
-	float pos_y = box->position()(1);
-	float pos_z = box->position()(2);
-
-	float width = box->width()/2;
-	float height = box->height()/2;
-	float depth = box->depth()/2;
-
+	float pos_x = pos(0);
+	float pos_y = pos(1);
+	float pos_z = pos(2);
+	float half_width = width/2;
+	float half_height = height/2;
+	float half_depth = depth/2;
 
 	glBegin(GL_QUADS);	// Start Drawing The Cube
 
 		     //TOP
-			glVertex3f(pos_x+ width,pos_y+ height,pos_z-depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z-depth);
-			glVertex3f(pos_x-width,pos_y+ height,pos_z+ depth);
-			glVertex3f(pos_x +width,pos_y+ height,pos_z+ depth);
+			glVertex3f(pos_x+ half_width,pos_y+ half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width,pos_y+ half_height,pos_z+ half_depth);
+			glVertex3f(pos_x +half_width,pos_y+ half_height,pos_z+ half_depth);
 
 			// Bottom
-			glVertex3f(pos_x+ width,pos_y-height, pos_z+depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z+ depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z-depth);
-			glVertex3f(pos_x+ width,pos_y-height,pos_z-depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height, pos_z+half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z+ half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z-half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z-half_depth);
 
 			//Front
-			glVertex3f(pos_x+ width,pos_y+ height,pos_z+ depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z+ depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z+ depth);
-			glVertex3f(pos_x+ width,pos_y-height,pos_z+ depth);
+			glVertex3f(pos_x+ half_width,pos_y+ half_height,pos_z+ half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z+ half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z+ half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z+ half_depth);
 
 			//Back
-			glVertex3f(pos_x+ width,pos_y-height,pos_z-depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z-depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z-depth);
-			glVertex3f(pos_x +width,pos_y+ height,pos_z-depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z-half_depth);
+			glVertex3f(pos_x +half_width,pos_y+ half_height,pos_z-half_depth);
 
 			//Left
 
-			glVertex3f(pos_x-width, pos_y+height, pos_z+ depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z- depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z- depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z+ depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height, pos_z+ half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z- half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z- half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z+ half_depth);
 
 			//Right
-			glVertex3f(pos_x+width,pos_y+ height, pos_z- depth);
-			glVertex3f(pos_x+ width,pos_y+ height,pos_z+ depth);
-			glVertex3f(pos_x+ width,pos_y-height, pos_z+ depth);
-			glVertex3f(pos_x+ width,pos_y-height,pos_z- depth);
+			glVertex3f(pos_x+half_width,pos_y+ half_height, pos_z- half_depth);
+			glVertex3f(pos_x+ half_width,pos_y+ half_height,pos_z+ half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height, pos_z+ half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z- half_depth);
 		glEnd();
 
 

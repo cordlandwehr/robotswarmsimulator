@@ -11,6 +11,7 @@
 #include <string>
 
 #include <QtGui/QDialog>
+#include <QShowEvent>
 
 #include "ui_open_project_dialog.h"
 
@@ -38,7 +39,13 @@ public slots:
 	void open_path();
 	void accept();
 
+protected:
+	virtual void showEvent( QShowEvent * event );
+
 private:
+	void writeSettings();
+	void readSettings();
+
 	Ui::OpenProjectDialog ui_;
 	ProjectData data_;
 };

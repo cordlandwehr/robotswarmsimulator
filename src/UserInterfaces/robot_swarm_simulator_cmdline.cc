@@ -322,6 +322,9 @@ int main(int argc, char** argv) {
 
 				QApplication app(argc, argv);
 				Q_INIT_RESOURCE(qt_resources);
+				app.setApplicationName("RobotSwarmSimulator");
+				app.setOrganizationName("Uni Paderborn");
+				app.setOrganizationDomain("uni-paderborn.de");
 
 				RSSMainWindow main_window;
 
@@ -357,6 +360,9 @@ int main(int argc, char** argv) {
 
 			QApplication app(argc, argv);
 			Q_INIT_RESOURCE(qt_resources);
+			app.setApplicationName("RobotSwarmSimulator");
+			app.setOrganizationName("Uni Paderborn");
+			app.setOrganizationDomain("uni-paderborn.de");
 
 			RSSMainWindow main_window;
 
