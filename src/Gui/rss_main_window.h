@@ -13,6 +13,8 @@
 #include <QtGui/QMainWindow>
 #include <QtCore/QSignalMapper>
 #include "ui_rss_main_window.h"
+#include "ui_help_dialog.h"
+#include "ui_about_dialog.h"
 
 class OpenProjectDialog;
 class GeneratorWizard;
@@ -62,6 +64,8 @@ private:
 	};
 
 	Ui::RSSMainWindow ui_;
+	QDialog *about_dialog_;
+	QDialog *help_dialog_;
 	OpenProjectDialog *open_dialog_;
 	GeneratorWizard *generator_wizard_;
 	RSSGLWidget *rss_gl_widget_;

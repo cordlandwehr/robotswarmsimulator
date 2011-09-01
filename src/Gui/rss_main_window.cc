@@ -55,6 +55,8 @@ RSSMainWindow::~RSSMainWindow() {
 	delete rss_gl_widget_;
 	delete speed_signal_mapper_;
 	delete cam_signal_mapper_;
+	delete help_dialog_;
+	delete about_dialog_;
 }
 
 void RSSMainWindow::init() {
@@ -63,6 +65,14 @@ void RSSMainWindow::init() {
 	rss_gl_widget_ = new RSSGLWidget(this);
 	speed_signal_mapper_ = new QSignalMapper(this);
 	cam_signal_mapper_ = new QSignalMapper(this);
+	help_dialog_ = new QDialog(this);
+	about_dialog_ = new QDialog(this);
+
+	Ui::HelpDialog help_dialog;
+	help_dialog.setupUi(help_dialog_);
+
+	Ui::AboutDialog about_dialog;
+	about_dialog.setupUi(about_dialog_);
 
 	this->setCentralWidget(rss_gl_widget_);
 
@@ -75,6 +85,8 @@ void RSSMainWindow::init() {
 	// connect signals/slots
 	connect(ui_.action_open_project, SIGNAL(triggered()), open_dialog_, SLOT(show()));
 	connect(ui_.action_new_project, SIGNAL(triggered()), generator_wizard_, SLOT(show()));
+	connect(ui_.action_about, SIGNAL(triggered()), about_dialog_, SLOT(show()));
+	connect(ui_.action_help, SIGNAL(triggered()), help_dialog_, SLOT(show()));
 	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(update_simulation()));
 	connect(generator_wizard_, SIGNAL(accepted()), this, SLOT(generate_simulation()));
 	connect(ui_.action_start_stop_simulation, SIGNAL(triggered()), this, SLOT(toggle_simulation()));
@@ -167,6 +179,7 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 		return;
 	}
 	QString type = tr("Object");
+	QVariant id_data;
 
     boost::shared_ptr<WorldInformation> world_info = rss_gl_widget_->simulation_renderer()->world_info();
 
@@ -177,12 +190,15 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 	if(r_id.get()) {
 		data = world_info->get_according_robot_data_ptr(r_id);
 		type = tr("Robot");
+		id_data = QVariant::fromValue(r_id);
 	} else if(m_id.get()) {
 		data = world_info->get_according_message(m_id);
 		type = tr("Message");
+		id_data = QVariant::fromValue(m_id);
 	} else if(e_id.get()) {
 		data = world_info->get_according_edge(e_id);
 		type = tr("Edge");
+		id_data = QVariant::fromValue(e_id);
 	} else {
 		return;
 	}
@@ -193,6 +209,7 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 	QTreeWidgetItem * item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 	item->setText(0, type);
 	item->setText(1, QString("%1").arg(id->id()));
+	item->setData(0,Qt::UserRole,id_data);
 
 	// Position
     item = new QTreeWidgetItem(ui_.inspector_tree_widget);
@@ -219,25 +236,29 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
     if(r_id.get()) {
     	boost::shared_ptr<RobotData> robot_data = boost::dynamic_pointer_cast<RobotData>(data);
 
-		// Robot type
-		item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-		item->setText(0, tr("Robot Type"));
-		item->setText(1, "Robot");
+		// Edges
+		QTreeWidgetItem * edge_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+		edge_item->setText(0, tr("Messages"));
+		edge_item->setText(1, QString("%1").arg(robot_data->get_number_of_messages()));
+		edge_item->setExpanded(true);
 
-		// status
-		QString status = robot_data->status() == SLEEPING ? "sleeping"
-				: (robot_data->status() == READY ? "ready" : "unknown");
-		item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-		item->setText(0, tr("Status"));
-		item->setText(1, status);
+		std::vector<boost::shared_ptr<EdgeIdentifier> > edges = robot_data->get_edges();
+		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it;
+		for( it = edges.begin(); it != edges.end(); ++it ) {
+			QTreeWidgetItem * item = new QTreeWidgetItem(edge_item);
+			item->setText(0, tr("Edge"));
+			item->setText(1, QString("%1").arg((*it)->id()));
+			item->setData(0,Qt::UserRole,QVariant::fromValue(*it));
+		}
 
 		// Messages
 		QTreeWidgetItem * message_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 		message_item->setText(0, tr("Messages"));
 		message_item->setText(1, QString("%1").arg(robot_data->get_number_of_messages()));
+		message_item->setExpanded(true);
 
 		for( std::size_t i = 0; i < robot_data->get_number_of_messages(); ++i ) {
-			QTreeWidgetItem * item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+			QTreeWidgetItem * item = new QTreeWidgetItem(message_item);
 			item->setText(0, tr("Message"));
 			item->setText(1, QString("%1").arg(robot_data->get_message(i)->id()));
 			item->setData(0,Qt::UserRole,QVariant::fromValue(robot_data->get_message(i)));
@@ -289,7 +310,16 @@ void RSSMainWindow::update_selected_object() {
 void RSSMainWindow::tree_selection_changed(QTreeWidgetItem* item, int column) {
 	if(item->text(0) == tr("Message")) {
 		boost::shared_ptr<MessageIdentifier> id = item->data(0, Qt::UserRole).value<boost::shared_ptr<MessageIdentifier> >();
-		selected_object_changed(id);
+		if(id.get())
+			selected_object_changed(id);
+	} else if(item->text(0) == tr("Edge")) {
+		boost::shared_ptr<EdgeIdentifier> id = item->data(0, Qt::UserRole).value<boost::shared_ptr<EdgeIdentifier> >();
+		if(id.get())
+			selected_object_changed(id);
+	} else if(item->text(0) == tr("Robot")) {
+		boost::shared_ptr<RobotIdentifier> id = item->data(0, Qt::UserRole).value<boost::shared_ptr<RobotIdentifier> >();
+		if(id.get())
+			selected_object_changed(id);
 	}
 }
 
