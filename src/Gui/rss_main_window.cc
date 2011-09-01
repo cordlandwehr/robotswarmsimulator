@@ -211,6 +211,7 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 	item->setText(1, QString("%1").arg(id->id()));
 	item->setData(0,Qt::UserRole,id_data);
 
+
 	// Position
     item = new QTreeWidgetItem(ui_.inspector_tree_widget);
     item->setText(0, tr("Position"));

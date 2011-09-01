@@ -306,6 +306,7 @@ public:
 	 */
      boost::shared_ptr<Identifier> pick_object(int x, int y) const;
 
+
 protected:
  	/**
  	 *
@@ -322,6 +323,7 @@ protected:
  	}
 
 private:
+
  	friend class RSSMainWindow;
  	friend class RSSGLWidget;
 
