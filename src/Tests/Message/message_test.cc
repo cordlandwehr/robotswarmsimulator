@@ -56,6 +56,9 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	boost::shared_ptr<Message> message_ba(new Message(id_b, id_a));
 	boost::shared_ptr<SendMessageRequest> message_request_ba(new SendMessageRequest(*robot_b, message_ba));
 
+	boost::shared_ptr<Message> message_ba2(new Message(id_b, id_a));
+	boost::shared_ptr<SendMessageRequest> message_request_ba2(new SendMessageRequest(*robot_b, message_ba2));
+
 	boost::shared_ptr<Message> message_bc(new Message(id_b, id_c));
 	boost::shared_ptr<SendMessageRequest> message_request_bc(new SendMessageRequest(*robot_b, message_bc));
 
@@ -68,6 +71,7 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(1));
 	handle_requests_event->add_to_requests(remove_edge_request);
 	handle_requests_event->add_to_requests(message_request_ba);
+	handle_requests_event->add_to_requests(message_request_ba2);
 	handle_requests_event->add_to_requests(message_request_bc);
 	handle_requests_event->add_to_requests(message_request_ca);
 
@@ -89,8 +93,9 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	const RobotData& rd_b = history->get_newest().world_information().get_according_robot_data(robot_b->id());
 	const RobotData& rd_c = history->get_newest().world_information().get_according_robot_data(robot_c->id());
 
-	BOOST_CHECK_EQUAL(rd_a.get_number_of_messages(), 1);
+	BOOST_CHECK_EQUAL(rd_a.get_number_of_messages(), 2);
 	BOOST_CHECK_EQUAL(rd_a.get_message(0), message_ba->id());
+	BOOST_CHECK_EQUAL(rd_a.get_message(1), message_ba2->id());
 	// TODO make this check work somehow (get right id object)
 //	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_a.robot()).get_sender(boost::dynamic_pointer_cast<MessageIdentifier>(message_ba->id())), rd_b.id());
 	BOOST_CHECK_EQUAL(rd_b.get_number_of_messages(), 0);
@@ -98,7 +103,7 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	BOOST_CHECK_EQUAL(rd_c.get_message(0), message_bc->id());
 //	BOOST_CHECK_EQUAL(dynamic_cast<const SimpleGraphTestRobot&>(rd_c.robot()).get_sender(boost::dynamic_pointer_cast<MessageIdentifier>(message_bc->id())), rd_b.id());
 	BOOST_CHECK_EQUAL(rd_c.last_request_successful(), false);
-	BOOST_CHECK_EQUAL(history->get_newest().world_information().messages().size(), 2);
+	BOOST_CHECK_EQUAL(history->get_newest().world_information().messages().size(), 3);
 
 	// generate new request
 	boost::shared_ptr<RemoveMessageRequest> remove_message_request_ba(new RemoveMessageRequest(*robot_a, boost::dynamic_pointer_cast<MessageIdentifier>(message_ba->id())));
@@ -112,5 +117,6 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 
 	const RobotData& rd_a2 = history->get_newest().world_information().get_according_robot_data(robot_a->id());
 
-	BOOST_CHECK_EQUAL(rd_a2.get_number_of_messages(), 0);
+	BOOST_CHECK_EQUAL(rd_a2.get_number_of_messages(), 1);
+	BOOST_CHECK_EQUAL(rd_a2.get_message(0), message_ba2->id());
 }
