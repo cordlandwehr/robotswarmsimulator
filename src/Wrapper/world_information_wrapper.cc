@@ -86,10 +86,43 @@ WorldInformationWrapper::add_message(std::size_t sender, std::size_t receiver, M
   return id;
 }
 
-template<typename T> void 
-WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key) {
+// template<typename T> void 
+// WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key) {
+//   // get iterator for given key
+//   typename std::map<std::size_t, boost::shared_ptr<T> >::const_iterator it;
+//   it = map.find(key);
+//   // check entry
+//   if (it == map.end()) {
+//     throw std::invalid_argument("The given ID is unknown to the Lua Wrapper. Possible reasons: The ID does not exists. The ID has not been looked up before.");
+//   }
+// }
+
+void 
+WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<EdgeIdentifier> >& map, std::size_t key) {
   // get iterator for given key
-  typename std::map<std::size_t, boost::shared_ptr<T> >::const_iterator it;
+  std::map<std::size_t, boost::shared_ptr<EdgeIdentifier> >::const_iterator it;
+  it = map.find(key);
+  // check entry
+  if (it == map.end()) {
+    throw std::invalid_argument("The given ID is unknown to the Lua Wrapper. Possible reasons: The ID does not exists. The ID has not been looked up before.");
+  }
+}
+
+void 
+WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<MessageIdentifier> >& map, std::size_t key) {
+  // get iterator for given key
+  std::map<std::size_t, boost::shared_ptr<MessageIdentifier> >::const_iterator it;
+  it = map.find(key);
+  // check entry
+  if (it == map.end()) {
+    throw std::invalid_argument("The given ID is unknown to the Lua Wrapper. Possible reasons: The ID does not exists. The ID has not been looked up before.");
+  }
+}
+
+void 
+WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<RobotIdentifier> >& map, std::size_t key) {
+  // get iterator for given key
+  std::map<std::size_t, boost::shared_ptr<RobotIdentifier> >::const_iterator it;
   it = map.find(key);
   // check entry
   if (it == map.end()) {
