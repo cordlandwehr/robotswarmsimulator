@@ -95,6 +95,8 @@ public:
 				 	 	 	 	 	 	 	 boost::shared_ptr<RobotIdentifier> target,
 				 	 	 	 	 	 	 	 const std::vector< boost::shared_ptr<EdgeIdentifier> >& ignore);
 private:
+	static bool is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> > ignore,
+						boost::shared_ptr<EdgeIdentifier> find_this_edge);
 };
 
 #endif /* STATS_CALC_H_ */

@@ -30,6 +30,8 @@
 #include "stats_calc.h"
 
 #include "../Model/robot_data.h"
+#include "../Model/robot_identifier.h"
+#include "../Model/edge_identifier.h"
 
 #include <queue>
 
@@ -62,7 +64,12 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 			boost::shared_ptr<RobotData> currentNode = nodes[i];
 			int degreeOfCurrentNode = (currentNode->get_edges()).size();
 			std::vector<boost::shared_ptr<EdgeIdentifier> > edges = currentNode->get_edges();
-			unsigned short int currentNodesOwnColor = currentNode->color();
+
+			MarkerInformation currNodeMarker = currentNode->marker_information();
+			if(!currNodeMarker.has_key("color"))
+				return -1;
+			double currentNodesOwnColor = boost::any_cast<double>(currNodeMarker.get_data("color"));
+
 			int countDefects = 0;
 			for(int j=0;j<degreeOfCurrentNode;j++){
 				boost::shared_ptr<Edge> e = graph->get_according_edge(edges[j]);
@@ -70,11 +77,18 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 				RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
 				RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
 
-				unsigned short int neighboursColor = rd1.color();
+				currNodeMarker = rd1.marker_information();
+				if(!currNodeMarker.has_key("color"))
+								return -1;
+				double neighboursColor = boost::any_cast<double>(currNodeMarker.get_data("color"));
+
 				if(neighboursColor == currentNodesOwnColor)
 					countDefects ++;
 
-				neighboursColor = rd2.color();
+				currNodeMarker = rd2.marker_information();
+				if(!currNodeMarker.has_key("color"))
+								return -1;
+				neighboursColor = boost::any_cast<double>(currNodeMarker.get_data("color"));
 				if(neighboursColor == currentNodesOwnColor)
 					countDefects ++;
 
@@ -101,8 +115,14 @@ int StatsCalc::calculate_total_defects(const boost::shared_ptr<WorldInformation>
 		RobotData& rd1 = graph->get_according_robot_data(currentEdge->getRobot1());
 		RobotData& rd2 = graph->get_according_robot_data(currentEdge->getRobot2());
 
-		unsigned short int neighboursColor1 = rd1.color();
-		unsigned short int neighboursColor2 = rd2.color();
+		MarkerInformation currNodeMarker = rd1.marker_information();
+		if(!currNodeMarker.has_key("color"))
+						return -1;
+		double neighboursColor1 = boost::any_cast<double>(currNodeMarker.get_data("color"));
+		currNodeMarker = rd2.marker_information();
+		if(!currNodeMarker.has_key("color"))
+						return -1;
+		double neighboursColor2 = boost::any_cast<double>(currNodeMarker.get_data("color"));
 		if(neighboursColor1 == neighboursColor2)
 			countDefects ++;
 
@@ -118,7 +138,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 						 boost::shared_ptr<RobotIdentifier> target,
 						 const std::vector< boost::shared_ptr<EdgeIdentifier> >& ignore){
 
-	if(start == target){
+	if(start->id() == target->id()){
 		return 0;
 	}
 
@@ -154,13 +174,12 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 		node_queue.pop();
 
 		std::vector<boost::shared_ptr<EdgeIdentifier> > edges_of_current_nodes = current_node->get_edges();
-		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator finding_iterator;
 		int degree_of_current_node = edges_of_current_nodes.size();
 
 		for(int j=0;j<degree_of_current_node;j++){
 			boost::shared_ptr<EdgeIdentifier> current_edge_ID = edges_of_current_nodes[j];
-			finding_iterator = std::find(ignore.begin(),ignore.end(),current_edge_ID);
-			if(finding_iterator == ignore.end()){
+			bool found = is_edge_in_list(ignore, current_edge_ID);
+			if(!found){
 				boost::shared_ptr<Edge> e = graph->get_according_edge(current_edge_ID);
 
 				boost::shared_ptr<RobotData> rd1 = graph->get_according_robot_data_ptr(e->getRobot1());
@@ -187,4 +206,16 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 	}
 	return -1;
 	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance -- target not reachable.";
+}
+
+bool StatsCalc::is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> > ignore,
+					boost::shared_ptr<EdgeIdentifier> find_this_edge){
+
+	for(int i=0; i<ignore.size();i++){
+		boost::shared_ptr<EdgeIdentifier> current_ignore_edge = ignore[i];
+		if(current_ignore_edge->id() == find_this_edge->id())
+			return true;
+	}
+	return false;
+
 }

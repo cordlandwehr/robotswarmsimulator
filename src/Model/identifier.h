@@ -71,6 +71,7 @@ private:
 	friend class FullView;
 	friend class StatsCalc;
 	friend class RSSMainWindow;
+	friend class StatsCalc;
 };
 
 #endif /* IDENTIFIER_H_ */

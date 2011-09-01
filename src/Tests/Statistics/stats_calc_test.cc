@@ -31,14 +31,18 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	pos->insert_element(kZCoord,0.0);
 
 	//create 1000 Nodes and NodeDatas
-	for(unsigned i = 0; i < 1000; i++) {
+	for(int i = 0; i < 1000; i++) {
 		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
 		IDs.push_back(id);
-		//TODO: undefined behavior here, since robot is deleted after each forloop run.
-		boost::shared_ptr<Robot> node(new SimpleRobot(id));
-		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, *node));
 
-		nodeData->set_color(i);
+		//set the color
+		boost::shared_ptr<MarkerInformation> marker_information(new MarkerInformation());
+		double color = static_cast<double>(i);;
+		marker_information->add_data("color",color);
+
+		boost::shared_ptr<Robot> node(new SimpleRobot(id));
+		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, marker_information, *node));
+
 		graph->add_robot_data(nodeData);
 	}
 
@@ -56,14 +60,6 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
 		//create edge
 		boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
-
-		RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
-		RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
-
-		// add requested edge to world_information and to adjacency list of robots
-		rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-		rd2.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-
 		graph->add_edge(e);
 	}
 
@@ -84,12 +80,6 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 
 	//create edge
 	boost::shared_ptr<DirectedEdge> e (new DirectedEdge(nodeID1,nodeID2));
-
-	RobotData& rd1 = graph->get_according_robot_data(e->source());
-
-	// add requested edge to world_information and to adjacency list of robots
-	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
-
 	graph->add_edge(e);
 
 	//degree has to be 3
@@ -111,10 +101,13 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	ignore_one_edge.push_back(boost::dynamic_pointer_cast<EdgeIdentifier>(e->id()));
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(graph, IDs[1], IDs[4], ignore_one_edge),3);
 
-	node7->set_color(8);
+	(nodes[7]->marker_information()).remove_data("color");
+	(nodes[7]->marker_information()).add_data("color",8.0);
 
-	node10->set_color(11);
-	node12->set_color(11);
+	(nodes[10]->marker_information()).remove_data("color");
+	(nodes[10]->marker_information()).add_data("color",11.0);
+	(nodes[12]->marker_information()).remove_data("color");
+	(nodes[12]->marker_information()).add_data("color",11.0);
 
 	//max number of defects is 2
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_maximal_defect(graph),2);
