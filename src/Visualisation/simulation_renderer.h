@@ -307,12 +307,23 @@ public:
      boost::shared_ptr<Identifier> pick_object(int x, int y) const;
 
 protected:
+ 	/**
+ 	 *
+ 	 */
  	boost::shared_ptr<WorldInformation> world_info() {
  		return world_info_;
  	}
 
+	/**
+	 *
+	 */
+ 	unsigned int active_cam_index() {
+ 		return active_camera_index_;
+ 	}
+
 private:
  	friend class RSSMainWindow;
+ 	friend class RSSGLWidget;
 
 
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
@@ -360,16 +371,6 @@ private:
 	void draw_text3d(const Vector3d & vector, const std::string &str );
 
 	/**
-	 * Draws the help screen
-	 */
-	void draw_help();
-
-	/**
-	 * Draws the abbout screen
-	 */
-	void draw_about();
-
-	/**
 	 * Calculates the Center of Gravity
 	 */
 	void draw_cog();
@@ -378,12 +379,6 @@ private:
 	 * Drawsthe global coord system
 	 */
 	void draw_coord_system();
-
-	/**
-	 * draw visibility graph (which robots can see others)
-	 */
-
-	//void draw_visibility_graph(const StatisticsDataObject& data);
 
 	void setup_projection();
 
@@ -482,24 +477,11 @@ private:
 	 */
 	bool render_velocity_;
 
-	/**
-	 * Specifies whether the help screen should be drawn.
-	 */
-	bool render_help_;
-
-	/**
-	 * Specifies whether the about screem should be drawn.
-	 */
-	bool render_about_;
-
-
 
 	/**
 	 * Specifies whether the skybox should be drawn.
 	 */
 	bool render_sky_box_;
-
-	bool render_visibility_graph_;
 
 	/*
 	 *

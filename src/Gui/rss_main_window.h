@@ -43,6 +43,7 @@ private slots:
 	void generate_simulation();
 	void set_camera_mode(int mode);
 	void selected_object_changed(boost::shared_ptr<Identifier> id);
+	void tree_selection_changed(QTreeWidgetItem* item, int column);
 
 private:
 
@@ -55,8 +56,8 @@ private:
 		DOUBLE_SPEED
 	};
 	enum {
-		CAM_FOLLOW=0,
-		CAM_FREE,
+		CAM_FREE=0,
+		CAM_FOLLOW,
 		CAM_COG
 	};
 

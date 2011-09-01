@@ -21,12 +21,21 @@
 #include <SzenarioGenerator/szenario_generator.h>
 #include <SzenarioGenerator/formation_generator.h>
 #include <Wrapper/lua_distribution_generator.h>
+#include "../Model/world_information.h"
+#include "../Model/message_identifier.h"
+#include "../Model/message.h"
 #include "../Model/robot_identifier.h"
 #include "../Model/robot_data.h"
 
 #include "open_project_dialog.h"
 #include "generator_wizard.h"
 #include "rss_gl_widget.h"
+
+
+Q_DECLARE_METATYPE(boost::shared_ptr<Identifier>);
+Q_DECLARE_METATYPE(boost::shared_ptr<MessageIdentifier>);
+Q_DECLARE_METATYPE(boost::shared_ptr<EdgeIdentifier>);
+Q_DECLARE_METATYPE(boost::shared_ptr<RobotIdentifier>);
 
 // creates a togglable icon
 QIcon standardToggleIcon(const QStyle& style, QStyle::StandardPixmap iconOn, QStyle::StandardPixmap iconOff) {
@@ -80,6 +89,7 @@ void RSSMainWindow::init() {
 	connect(speed_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(update_simulation_speed(int)));
 	connect(cam_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(set_camera_mode(int)));
 	connect(rss_gl_widget_, SIGNAL(selected_object_changed(boost::shared_ptr<Identifier>)), this, SLOT(selected_object_changed(boost::shared_ptr<Identifier>)));
+	connect(ui_.inspector_tree_widget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(tree_selection_changed(QTreeWidgetItem*,int)));
 
 	// map signals
 	speed_signal_mapper_->setMapping(ui_.action_increase_speed, INCREASE_SPEED);
@@ -156,70 +166,83 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 	if(!id.get()) {
 		return;
 	}
+	QString type = tr("Object");
 
+    boost::shared_ptr<WorldInformation> world_info = rss_gl_widget_->simulation_renderer()->world_info();
+
+    boost::shared_ptr<WorldObject> data;
 	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(id);
-	RobotData robot_data = rss_gl_widget_->simulation_renderer()->world_info()->get_according_robot_data(r_id);
+	boost::shared_ptr<MessageIdentifier> m_id = boost::dynamic_pointer_cast<MessageIdentifier>(id);
+	boost::shared_ptr<EdgeIdentifier> e_id = boost::dynamic_pointer_cast<EdgeIdentifier>(id);
+	if(r_id.get()) {
+		data = world_info->get_according_robot_data_ptr(r_id);
+		type = tr("Robot");
+	} else if(m_id.get()) {
+		data = world_info->get_according_message(m_id);
+		type = tr("Message");
+	} else if(e_id.get()) {
+		data = world_info->get_according_edge(e_id);
+		type = tr("Edge");
+	} else {
+		return;
+	}
 
 	QList<QTreeWidgetItem *> items;
 
 	// id
 	QTreeWidgetItem * item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-	item->setText(0, tr("Id"));
-	item->setText(1, QString("%1").arg(robot_data.id()->id()));
-
-	// type
-	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-	item->setText(0, tr("Type"));
-	item->setText(1, QString("%1").arg(robot_data.type()));
-
-	// status
-	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-	item->setText(0, tr("Status"));
-	item->setText(1, QString("%1").arg(robot_data.status()));
+	item->setText(0, type);
+	item->setText(1, QString("%1").arg(id->id()));
 
 	// Position
     item = new QTreeWidgetItem(ui_.inspector_tree_widget);
     item->setText(0, tr("Position"));
     item->setText(1, QString("(%1, %2, %3)")
-    		.arg(robot_data.position()[0])
-    		.arg(robot_data.position()[1])
-    		.arg(robot_data.position()[2]));
-
-	// Color id
-	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-	item->setText(0, tr("Color Id"));
-	item->setText(1, QString("%1").arg(robot_data.color()));
-
-    /*// Velocity
-    item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-	item->setText(0, tr("Velocity"));
-	item->setText(1, QString("(%1, %2, %3)")
-			.arg(robot_data->velocity()[0])
-			.arg(robot_data->velocity()[1])
-			.arg(robot_data->velocity()[2]));
-
-	// Acceleration
-	item = new QTreeWidgetItem(ui_.inspector_tree_widget);
-	item->setText(0, tr("Acceleration"));
-	item->setText(1, QString("(%1, %2, %3)")
-			.arg(robot_data->acceleration()[0])
-			.arg(robot_data->acceleration()[1])
-			.arg(robot_data->acceleration()[2]));*/
+    		.arg(data->position()[0])
+    		.arg(data->position()[1])
+    		.arg(data->position()[2]));
 
 	// Marker information
     QTreeWidgetItem * marker_info_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
     marker_info_item->setText(0, tr("Marker Information"));
 	marker_info_item->setExpanded(true);
 
-    std::vector<std::string> keys = robot_data.marker_information().get_keys();
+    std::vector<std::string> keys = data->marker_information().get_keys();
     std::vector<std::string>::const_iterator it;
     for( it = keys.begin(); it != keys.end(); ++it ) {
-    	boost::any data = robot_data.marker_information().get_data(*it);
+    	boost::any m_data = data->marker_information().get_data(*it);
     	item = new QTreeWidgetItem(marker_info_item);
 		item->setText(0, QString::fromStdString(*it));
-		item->setText(1, QString::fromStdString(boost_any_to_string(&data)));
+		item->setText(1, QString::fromStdString(boost_any_to_string(&m_data)));
     }
 
+    if(r_id.get()) {
+    	boost::shared_ptr<RobotData> robot_data = boost::dynamic_pointer_cast<RobotData>(data);
+
+		// Robot type
+		item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+		item->setText(0, tr("Robot Type"));
+		item->setText(1, "Robot");
+
+		// status
+		QString status = robot_data->status() == SLEEPING ? "sleeping"
+				: (robot_data->status() == READY ? "ready" : "unknown");
+		item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+		item->setText(0, tr("Status"));
+		item->setText(1, status);
+
+		// Messages
+		QTreeWidgetItem * message_item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+		message_item->setText(0, tr("Messages"));
+		message_item->setText(1, QString("%1").arg(robot_data->get_number_of_messages()));
+
+		for( std::size_t i = 0; i < robot_data->get_number_of_messages(); ++i ) {
+			QTreeWidgetItem * item = new QTreeWidgetItem(ui_.inspector_tree_widget);
+			item->setText(0, tr("Message"));
+			item->setText(1, QString("%1").arg(robot_data->get_message(i)->id()));
+			item->setData(0,Qt::UserRole,QVariant::fromValue(robot_data->get_message(i)));
+		}
+    }
 
 }
 
@@ -227,27 +250,47 @@ void RSSMainWindow::update_selected_object() {
 	if(!selection_id_.get())
 		return;
 
-	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(selection_id_);
-	RobotData robot_data = rss_gl_widget_->simulation_renderer()->world_info()->get_according_robot_data(r_id);
+    boost::shared_ptr<WorldInformation> world_info = rss_gl_widget_->simulation_renderer()->world_info();
 
-    std::vector<std::string> keys = robot_data.marker_information().get_keys();
+    boost::shared_ptr<WorldObject> data;
+	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(selection_id_);
+	boost::shared_ptr<MessageIdentifier> m_id = boost::dynamic_pointer_cast<MessageIdentifier>(selection_id_);
+	boost::shared_ptr<EdgeIdentifier> e_id = boost::dynamic_pointer_cast<EdgeIdentifier>(selection_id_);
+	if(r_id.get()) {
+		data = world_info->get_according_robot_data_ptr(r_id);
+	} else if(m_id.get()) {
+		data = world_info->get_according_message(m_id);
+	} else if(e_id.get()) {
+		data = world_info->get_according_edge(e_id);
+	} else {
+		return;
+	}
+
+    std::vector<std::string> keys = data->marker_information().get_keys();
     std::vector<std::string>::const_iterator key_it = keys.begin();
 	QTreeWidgetItemIterator it(ui_.inspector_tree_widget);
 	while(*it) {
 		if(key_it != keys.end() && (*it)->text(0) == (*key_it).data()) {
 			// Marker information
-	    	boost::any data = robot_data.marker_information().get_data(*key_it);
-			(*it)->setText(1, QString::fromStdString(boost_any_to_string(&data)));
+	    	boost::any m_data = data->marker_information().get_data(*key_it);
+			(*it)->setText(1, QString::fromStdString(boost_any_to_string(&m_data)));
 			++key_it;
 		} else if((*it)->text(0) == tr("Position")) {
 			(*it)->setText(1, QString("(%1, %2, %3)")
-		    		.arg(robot_data.position()[0])
-		    		.arg(robot_data.position()[1])
-		    		.arg(robot_data.position()[2]));
+		    		.arg(data->position()[0])
+		    		.arg(data->position()[1])
+		    		.arg(data->position()[2]));
 		}
 		++it;
 	}
 
+}
+
+void RSSMainWindow::tree_selection_changed(QTreeWidgetItem* item, int column) {
+	if(item->text(0) == tr("Message")) {
+		boost::shared_ptr<MessageIdentifier> id = item->data(0, Qt::UserRole).value<boost::shared_ptr<MessageIdentifier> >();
+		selected_object_changed(id);
+	}
 }
 
 void RSSMainWindow::set_camera_mode(int mode) {

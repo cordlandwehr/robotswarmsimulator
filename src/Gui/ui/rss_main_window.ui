@@ -45,7 +45,7 @@
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="title">
      <string>&amp;Help</string>
@@ -68,14 +68,10 @@
     <addaction name="menu_camera_mode"/>
     <addaction name="action_view_mouse_spinning"/>
     <addaction name="separator"/>
-    <addaction name="action_view_vel_vectors"/>
-    <addaction name="action_view_acc_vectors"/>
-    <addaction name="separator"/>
     <addaction name="action_view_global_cS"/>
     <addaction name="action_view_local_cS"/>
     <addaction name="separator"/>
     <addaction name="action_view_center_of_gravity"/>
-    <addaction name="action_view_scc_of_visibility_graph"/>
     <addaction name="action_view_sky_box"/>
     <addaction name="separator"/>
     <addaction name="action_show_inspector"/>
@@ -190,6 +186,9 @@
    </property>
   </action>
   <action name="action_help">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Help</string>
    </property>
@@ -378,6 +377,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Free</string>
    </property>
@@ -387,7 +389,7 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Follow Swarm</string>

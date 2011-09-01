@@ -116,6 +116,9 @@ void RSSGLWidget::keyPressEvent( QKeyEvent *event ) {
 		case Qt::Key_division:
 			simulation_control_->decrease_processing_time_exp();
 			break;
+		case Qt::Key_C:
+			simulation_renderer_->set_active_cam(simulation_renderer_->active_cam_index() + 1);
+			break;
 		default:
 			QGLWidget::keyPressEvent(event);
 	}
