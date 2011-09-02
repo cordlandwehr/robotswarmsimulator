@@ -84,7 +84,7 @@ const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
 const int kArrowSlices = 4;
-const double kArrowBase = 0.5;
+const double kArrowBase = 1.0;
 
 const double kMinScale = 1.0;
 const double kMaxScale = 100.0;

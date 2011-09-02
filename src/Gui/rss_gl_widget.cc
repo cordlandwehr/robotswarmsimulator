@@ -66,69 +66,61 @@ void RSSGLWidget::timerEvent(QTimerEvent * event) {
 	updateGL();
 }
 
-void RSSGLWidget::keyPressEvent( QKeyEvent *event ) {
-	if(!simulation_control_.get())
-		return;
+void RSSGLWidget::move_camera( int direction ) {
+	switch(direction) {
+	case UP:
+		simulation_renderer_->camera()->move_up();
+		break;
+	case DOWN:
+		simulation_renderer_->camera()->move_down();
+		break;
+	case LEFT:
+		simulation_renderer_->camera()->strafe_left();
+		break;
+	case RIGHT:
+		simulation_renderer_->camera()->strafe_right();
+		break;
+	case FORWARD:
+		simulation_renderer_->camera()->move_forward();
+		break;
+	case BACKWARD:
+		simulation_renderer_->camera()->move_backward();
+		break;
+	}
+}
 
-	switch (event->key()) {
-		case Qt::Key_Left:
-		case Qt::Key_A:
-			simulation_renderer_->camera()->strafe_left();
-			break;
-		case Qt::Key_Right:
-		case Qt::Key_D:
-			simulation_renderer_->camera()->strafe_right();
-			break;
-		case Qt::Key_R:
-			simulation_renderer_->camera()->move_up();
-			break;
-		case Qt::Key_F:
-			simulation_renderer_->camera()->move_down();
-			break;
-		case Qt::Key_Up:
-		case Qt::Key_W:
-			simulation_renderer_->camera()->move_forward();
-			break;
-		case Qt::Key_Down:
-		case Qt::Key_S:
-			simulation_renderer_->camera()->move_backward();
-			break;
-		case Qt::Key_Space: // pause simulation
-			simulation_control_->pause_processing_time(!simulation_control_->is_processing_time_paused());
-			break;
-		case Qt::Key_Enter:
-			// simulate one more step
-			if(simulation_control_->is_single_step_mode()) {
-				simulation_control_->do_single_step();
-			} else {
-				simulation_control_->enter_single_step_mode();
-			}
-			break;
-		case Qt::Key_Plus:
-			simulation_control_->increase_processing_time_linearly();
-			break;
-		case Qt::Key_Minus:
-			simulation_control_->decrease_processing_time_linearly();
-			break;
-		case Qt::Key_multiply:
-			simulation_control_->increase_processing_time_exp();
-			break;
-		case Qt::Key_division:
-			simulation_control_->decrease_processing_time_exp();
-			break;
-		case Qt::Key_C:
-			simulation_renderer_->set_active_cam(simulation_renderer_->active_cam_index() + 1);
-			break;
-		default:
-			QGLWidget::keyPressEvent(event);
+void RSSGLWidget::toggle_camera_mode() {
+	set_camera_mode(simulation_renderer_->active_cam_index()+1);
+}
+
+void RSSGLWidget::set_camera_mode(int mode) {
+	simulation_renderer_->set_active_cam(mode);
+}
+
+void RSSGLWidget::set_camera_speed(int type) {
+	switch(type) {
+	case DOUBLE_SPEED:
+		simulation_renderer_->camera()->set_speed(simulation_renderer_->camera()->speed()*2);
+		break;
+	case HALF_SPEED:
+		simulation_renderer_->camera()->set_speed(simulation_renderer_->camera()->speed()*0.5);
+		break;
 	}
 }
 
 void RSSGLWidget::mouseMoveEvent( QMouseEvent * event ) {
+	if(!simulation_renderer_.get()) {
+		event->ignore();
+		return;
+	}
 	simulation_renderer_->mouse_motion_func(event->x(), event->y());
 }
 
 void RSSGLWidget::mousePressEvent( QMouseEvent * event ) {
+	if(!simulation_renderer_.get()) {
+		event->ignore();
+		return;
+	}
 	simulation_renderer_->mouse_func(event->button(), event->type(), event->x(), event->y());
 
 	boost::shared_ptr<Identifier> id = simulation_renderer_->pick_object(event->x(), event->y());
@@ -136,5 +128,19 @@ void RSSGLWidget::mousePressEvent( QMouseEvent * event ) {
 }
 
 void RSSGLWidget::mouseReleaseEvent( QMouseEvent * event ) {
+	if(!simulation_renderer_.get()) {
+		event->ignore();
+		return;
+	}
 	simulation_renderer_->mouse_func(event->button(), event->type(), event->x(), event->y());
+}
+
+
+void RSSGLWidget::wheelEvent( QWheelEvent * event ) {
+	if(!simulation_renderer_.get()) {
+		event->ignore();
+		return;
+	}
+	set_camera_speed( event->delta() > 0 ? DOUBLE_SPEED : HALF_SPEED );
+	event->accept();
 }

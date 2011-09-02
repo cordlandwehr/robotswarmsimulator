@@ -12,6 +12,7 @@
 #include <QResource>
 #include <QDir>
 #include <QActionGroup>
+#include <QSettings>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
@@ -47,24 +48,9 @@ QIcon standardToggleIcon(const QStyle& style, QStyle::StandardPixmap iconOn, QSt
 
 RSSMainWindow::RSSMainWindow(QWidget *parent) : QMainWindow(parent) {
 	ui_.setupUi(this);
-}
-
-RSSMainWindow::~RSSMainWindow() {
-	delete open_dialog_;
-	delete generator_wizard_;
-	delete rss_gl_widget_;
-	delete speed_signal_mapper_;
-	delete cam_signal_mapper_;
-	delete help_dialog_;
-	delete about_dialog_;
-}
-
-void RSSMainWindow::init() {
 	open_dialog_ = new OpenProjectDialog(this);
 	generator_wizard_ = new GeneratorWizard(this);
 	rss_gl_widget_ = new RSSGLWidget(this);
-	speed_signal_mapper_ = new QSignalMapper(this);
-	cam_signal_mapper_ = new QSignalMapper(this);
 	help_dialog_ = new QDialog(this);
 	about_dialog_ = new QDialog(this);
 
@@ -73,8 +59,61 @@ void RSSMainWindow::init() {
 
 	Ui::AboutDialog about_dialog;
 	about_dialog.setupUi(about_dialog_);
+}
+
+RSSMainWindow::~RSSMainWindow() {
+	delete open_dialog_;
+	delete generator_wizard_;
+	delete rss_gl_widget_;
+	delete help_dialog_;
+	delete about_dialog_;
+}
+
+void RSSMainWindow::init() {
+	QSignalMapper * speed_signal_mapper = new QSignalMapper(this);
+	QSignalMapper * cam_signal_mapper = new QSignalMapper(this);
+	QSignalMapper * cam_move_signal_mapper = new QSignalMapper(this);
+	QSignalMapper * cam_speed_signal_mapper = new QSignalMapper(this);
 
 	this->setCentralWidget(rss_gl_widget_);
+
+	// hidden actions
+	QAction* action_move_forward = new QAction(tr("Move Forward"), this);
+	action_move_forward->setObjectName(tr("action_move_forward"));
+	action_move_forward->setShortcut(QKeySequence(Qt::Key_W));
+	QAction* action_move_backward = new QAction(tr("Move Backward"), this);
+	action_move_backward->setObjectName(tr("action_move_backward"));
+	action_move_backward->setShortcut(QKeySequence(Qt::Key_S));
+	QAction* action_move_up = new QAction(tr("Move Up"), this);
+	action_move_up->setObjectName(tr("action_move_up"));
+	action_move_up->setShortcut(QKeySequence(Qt::Key_R));
+	QAction* action_move_down = new QAction(tr("Move Down"), this);
+	action_move_down->setObjectName(tr("action_move_down"));
+	action_move_down->setShortcut(QKeySequence(Qt::Key_F));
+	QAction* action_move_left = new QAction(tr("Move Left"), this);
+	action_move_left->setObjectName(tr("action_move_left"));
+	action_move_left->setShortcut(QKeySequence(Qt::Key_A));
+	QAction* action_move_right = new QAction(tr("Move Right"), this);
+	action_move_right->setObjectName(tr("action_move_right"));
+	action_move_right->setShortcut(QKeySequence(Qt::Key_D));
+	QAction* action_toggle_cam = new QAction(tr("Toggle Cam"), this);
+	action_toggle_cam->setObjectName(tr("action_toggle_cam"));
+	action_toggle_cam->setShortcut(QKeySequence(Qt::Key_C));
+	QAction* action_double_cam_speed = new QAction(tr("Double Cam Speed"), this);
+	action_double_cam_speed->setObjectName(tr("action_double_cam_speed"));
+	action_double_cam_speed->setShortcut(QKeySequence(Qt::Key_PageUp));
+	QAction* action_half_cam_speed = new QAction(tr("Double Cam Speed"), this);
+	action_half_cam_speed->setObjectName(tr("action_half_cam_speed"));
+	action_half_cam_speed->setShortcut(QKeySequence(Qt::Key_PageDown));
+	this->addAction(action_move_forward);
+	this->addAction(action_move_backward);
+	this->addAction(action_move_up);
+	this->addAction(action_move_down);
+	this->addAction(action_move_left);
+	this->addAction(action_move_right);
+	this->addAction(action_toggle_cam);
+	this->addAction(action_double_cam_speed);
+	this->addAction(action_half_cam_speed);
 
 	// action groups
 	QActionGroup* action_group = new QActionGroup(this);
@@ -91,32 +130,53 @@ void RSSMainWindow::init() {
 	connect(generator_wizard_, SIGNAL(accepted()), this, SLOT(generate_simulation()));
 	connect(ui_.action_start_stop_simulation, SIGNAL(triggered()), this, SLOT(toggle_simulation()));
 	connect(ui_.action_next_step, SIGNAL(triggered()), this, SLOT(step_simulation()));
-	connect(ui_.action_increase_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
-	connect(ui_.action_decrease_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
-	connect(ui_.action_half_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
-	connect(ui_.action_double_speed, SIGNAL(triggered()), speed_signal_mapper_, SLOT(map()));
-	connect(ui_.action_free_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
-	connect(ui_.action_follow_swarm_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
-	connect(ui_.action_center_of_gravity_cam, SIGNAL(triggered()), cam_signal_mapper_, SLOT(map()));
-	connect(speed_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(update_simulation_speed(int)));
-	connect(cam_signal_mapper_, SIGNAL(mapped(int)), this, SLOT(set_camera_mode(int)));
+	connect(ui_.action_increase_speed, SIGNAL(triggered()), speed_signal_mapper, SLOT(map()));
+	connect(ui_.action_decrease_speed, SIGNAL(triggered()), speed_signal_mapper, SLOT(map()));
+	connect(ui_.action_half_speed, SIGNAL(triggered()), speed_signal_mapper, SLOT(map()));
+	connect(ui_.action_double_speed, SIGNAL(triggered()), speed_signal_mapper, SLOT(map()));
+	connect(ui_.action_free_cam, SIGNAL(triggered()), cam_signal_mapper, SLOT(map()));
+	connect(ui_.action_follow_swarm_cam, SIGNAL(triggered()), cam_signal_mapper, SLOT(map()));
+	connect(ui_.action_center_of_gravity_cam, SIGNAL(triggered()), cam_signal_mapper, SLOT(map()));
+	connect(action_move_forward, SIGNAL(triggered()), cam_move_signal_mapper, SLOT(map()));
+	connect(action_move_backward, SIGNAL(triggered()), cam_move_signal_mapper, SLOT(map()));
+	connect(action_move_left, SIGNAL(triggered()), cam_move_signal_mapper, SLOT(map()));
+	connect(action_move_right, SIGNAL(triggered()), cam_move_signal_mapper, SLOT(map()));
+	connect(action_move_up, SIGNAL(triggered()), cam_move_signal_mapper, SLOT(map()));
+	connect(action_move_down, SIGNAL(triggered()), cam_move_signal_mapper, SLOT(map()));
+	connect(action_double_cam_speed, SIGNAL(triggered()), cam_speed_signal_mapper, SLOT(map()));
+	connect(action_half_cam_speed, SIGNAL(triggered()), cam_speed_signal_mapper, SLOT(map()));
+	connect(action_toggle_cam, SIGNAL(triggered()), rss_gl_widget_, SLOT(toggle_camera_mode()));
+	connect(speed_signal_mapper, SIGNAL(mapped(int)), this, SLOT(update_simulation_speed(int)));
+	connect(cam_speed_signal_mapper, SIGNAL(mapped(int)), rss_gl_widget_, SLOT(set_camera_speed(int)));
+	connect(cam_signal_mapper, SIGNAL(mapped(int)), rss_gl_widget_, SLOT(set_camera_mode(int)));
+	connect(cam_move_signal_mapper, SIGNAL(mapped(int)), rss_gl_widget_, SLOT(move_camera(int)));
 	connect(rss_gl_widget_, SIGNAL(selected_object_changed(boost::shared_ptr<Identifier>)), this, SLOT(selected_object_changed(boost::shared_ptr<Identifier>)));
 	connect(ui_.inspector_tree_widget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(tree_selection_changed(QTreeWidgetItem*,int)));
 
 	// map signals
-	speed_signal_mapper_->setMapping(ui_.action_increase_speed, INCREASE_SPEED);
-	speed_signal_mapper_->setMapping(ui_.action_decrease_speed, DECREASE_SPEED);
-	speed_signal_mapper_->setMapping(ui_.action_half_speed, HALF_SPEED);
-	speed_signal_mapper_->setMapping(ui_.action_double_speed, DOUBLE_SPEED);
-	cam_signal_mapper_->setMapping(ui_.action_free_cam, CAM_FREE);
-	cam_signal_mapper_->setMapping(ui_.action_follow_swarm_cam, CAM_FOLLOW);
-	cam_signal_mapper_->setMapping(ui_.action_center_of_gravity_cam, CAM_COG);
+	speed_signal_mapper->setMapping(ui_.action_increase_speed, INCREASE_SPEED);
+	speed_signal_mapper->setMapping(ui_.action_decrease_speed, DECREASE_SPEED);
+	speed_signal_mapper->setMapping(ui_.action_half_speed, HALF_SPEED);
+	speed_signal_mapper->setMapping(ui_.action_double_speed, DOUBLE_SPEED);
+	cam_signal_mapper->setMapping(ui_.action_free_cam, CAM_FREE);
+	cam_signal_mapper->setMapping(ui_.action_follow_swarm_cam, CAM_FOLLOW);
+	cam_signal_mapper->setMapping(ui_.action_center_of_gravity_cam, CAM_COG);
+	cam_move_signal_mapper->setMapping(action_move_forward, RSSGLWidget::FORWARD);
+	cam_move_signal_mapper->setMapping(action_move_backward, RSSGLWidget::BACKWARD);
+	cam_move_signal_mapper->setMapping(action_move_up, RSSGLWidget::UP);
+	cam_move_signal_mapper->setMapping(action_move_down, RSSGLWidget::DOWN);
+	cam_move_signal_mapper->setMapping(action_move_left, RSSGLWidget::LEFT);
+	cam_move_signal_mapper->setMapping(action_move_right, RSSGLWidget::RIGHT);
+	cam_speed_signal_mapper->setMapping(action_double_cam_speed, RSSGLWidget::DOUBLE_SPEED);
+	cam_speed_signal_mapper->setMapping(action_half_cam_speed, RSSGLWidget::HALF_SPEED);
 
 	// setup icons
 	QCommonStyle style;
 	ui_.action_new_project->setIcon(style.standardIcon(QStyle::SP_FileIcon));
 	ui_.action_open_project->setIcon(style.standardIcon(QStyle::SP_DirOpenIcon));
 	ui_.action_quit->setIcon(style.standardIcon(QStyle::SP_DialogCloseButton));
+
+	readSettings();
 
 	startTimer(500);
 }
@@ -386,11 +446,6 @@ void RSSMainWindow::tree_selection_changed(QTreeWidgetItem* item, int column) {
 	}
 }
 
-void RSSMainWindow::set_camera_mode(int mode) {
-	boost::shared_ptr<SimulationRenderer> simulation_renderer = rss_gl_widget_->simulation_renderer();
-	simulation_renderer->set_active_cam(mode);
-}
-
 void RSSMainWindow::step_simulation() {
 	boost::shared_ptr<SimulationControl> simulation_control_ = rss_gl_widget_->simulation_control();
 	if(!simulation_control_.get())
@@ -498,4 +553,50 @@ void RSSMainWindow::generate_simulation() {
 		throw; //rethrow exception
 	}
 
+}
+
+void RSSMainWindow::closeEvent(QCloseEvent *event) {
+	writeSettings();
+	event->accept();
+}
+
+void RSSMainWindow::writeSettings() {
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "RobotSwarmSimulator", "RobotSwarmSimulator");
+
+	settings.beginGroup("Keys");
+	QList<QAction*> actions = this->actions();
+	actions.append(ui_.menu_project->actions());
+	actions.append(ui_.menu_Simulation->actions());
+	actions.append(ui_.menu_Help->actions());
+	actions.append(ui_.menu_View->actions());
+	actions.append(ui_.menu_camera_mode->actions());
+
+	QList<QAction*>::iterator it;
+	for( it = actions.begin(); it != actions.end(); ++it ) {
+		if(!(*it)->objectName().isEmpty() ) {
+			QVariant shortcut = (*it)->shortcut();
+			settings.setValue((*it)->objectName(), shortcut);
+		}
+	}
+	settings.endGroup();
+}
+
+void RSSMainWindow::readSettings() {
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "RobotSwarmSimulator", "RobotSwarmSimulator");
+
+	settings.beginGroup("Keys");
+	QList<QAction*> actions = this->actions();
+	actions.append(ui_.menu_project->actions());
+	actions.append(ui_.menu_Simulation->actions());
+	actions.append(ui_.menu_Help->actions());
+	actions.append(ui_.menu_View->actions());
+
+	QList<QAction*>::iterator it;
+	for( it = actions.begin(); it != actions.end(); ++it ) {
+		if(!(*it)->objectName().isEmpty() && settings.contains((*it)->objectName())) {
+			QKeySequence shortcut = settings.value((*it)->objectName()).value<QKeySequence>();
+			(*it)->setShortcut(shortcut);
+		}
+	}
+	settings.endGroup();
 }

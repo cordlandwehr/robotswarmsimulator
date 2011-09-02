@@ -68,7 +68,7 @@ void OpenProjectDialog::showEvent( QShowEvent * event ) {
 }
 
 void OpenProjectDialog::writeSettings() {
-	QSettings settings("Uni Paderborn", "RobotSwarmSimulator");
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "RobotSwarmSimulator", "RobotSwarmSimulator");
 
 	settings.beginGroup("OpenProjectDialog");
 	settings.setValue("project_file", QString::fromStdString(data_.project_file));
@@ -82,7 +82,7 @@ void OpenProjectDialog::writeSettings() {
 }
 
 void OpenProjectDialog::readSettings() {
-	QSettings settings("Uni Paderborn", "RobotSwarmSimulator");
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "RobotSwarmSimulator", "RobotSwarmSimulator");
 
 	settings.beginGroup("OpenProjectDialog");
 	data_.project_file = settings.value("project_file").toString().toStdString();

@@ -34,8 +34,8 @@ public:
 	RSSGLWidget * rss_gl_widget() { return rss_gl_widget_; }
 
 protected:
-
 	virtual void timerEvent(QTimerEvent * event);
+	virtual void closeEvent(QCloseEvent * event);
 
 private slots:
 	void toggle_simulation();
@@ -43,9 +43,10 @@ private slots:
 	void step_simulation();
 	void update_simulation();
 	void generate_simulation();
-	void set_camera_mode(int mode);
 	void selected_object_changed(boost::shared_ptr<Identifier> id);
 	void tree_selection_changed(QTreeWidgetItem* item, int column);
+	void writeSettings();
+	void readSettings();
 
 private:
 
@@ -69,8 +70,6 @@ private:
 	OpenProjectDialog *open_dialog_;
 	GeneratorWizard *generator_wizard_;
 	RSSGLWidget *rss_gl_widget_;
-	QSignalMapper *speed_signal_mapper_;
-	QSignalMapper *cam_signal_mapper_;
 	boost::shared_ptr<Identifier> selection_id_;
 };
 
