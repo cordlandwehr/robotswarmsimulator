@@ -37,7 +37,7 @@
 /**
  * The TimePoint class encapusaltes a WorldInformation Object and statistical information for a certain
  * point in time.
- * A TimePoint in the History MUST contain a WorldInformation. It MAY contain statistical information.
+ * A TimePoint in the History MUST contain a WorldInformation.
  */
 class TimePoint {
 public:
