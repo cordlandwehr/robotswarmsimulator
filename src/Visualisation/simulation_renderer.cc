@@ -83,10 +83,10 @@ const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
 const int kArrowSlices = 4;
-const double kArrowBase = 0.5;
+const double kArrowBase = 1.0;
 
 const double kMinScale = 1.0;
-const double kMaxScale = 25.0;
+const double kMaxScale = 100.0;
 const double kFactorScale = 0.05;
 
 const int kDefHeight = 500;
@@ -96,6 +96,10 @@ const int kTextSpacing=15;
 const float kMarkerPointSize = 2.0;
 
 const float kRobotRadius = 0.13;
+
+const float kMessageHeight = 0.02;
+const float kMessagewidth = 0.1;
+const float kMessageDepth = 0.1;
 
 const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
@@ -120,19 +124,16 @@ void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
-
-	render_visibility_graph_=false;
+  render_acceleration_(false), render_velocity_(false), render_sky_box_(true) {
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer(this) );
 
 
-	cameras_[1]=boost::shared_ptr<Camera>(new MoveableCamera());
-	cameras_[0]=boost::shared_ptr<Camera>(new FollowSwarmCamera());
+	cameras_[0] = boost::shared_ptr<Camera>( new MoveableCamera() );
+	cameras_[1] = boost::shared_ptr<Camera>( new FollowSwarmCamera() );
 	cameras_[2] = boost::shared_ptr<Camera>( new CogCamera() );
 
 	active_camera_index_=0;
-
 
 
 	text_color_[0] = kTextColor[0];
@@ -168,9 +169,6 @@ void SimulationRenderer::init(){
 }
 
 void SimulationRenderer::init(int x, int y){
-	std::string str("resources/Textures/logo.bmp");
-	tex_.load(str);
-
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 
@@ -318,10 +316,6 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 
 	cameras_[active_camera_index_]->look_translate();
 
-	if (render_about_){
-			draw_about();
-	}
-
 
 	// Print time
 	draw_text2d(0,0,time);
@@ -351,19 +345,6 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 		draw_cog();
 	}
 
-// 	if (render_visibility_graph_){
-// 		if(time_point->statistics_data_object_ptr()) {
-// 			draw_visibility_graph(time_point->statistics_data_object());
-// 		} else {
-// 			// TODO(craupach) Console output warning
-// 			std::cout << "no valid statistics object" << std::endl;
-// 		}
-// 	}
-
-	if (render_help_){
-		draw_help();
-	}
-
 
 	double robot_size = max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale);
 	robot_renderer_->set_robot_size(robot_size);
@@ -373,6 +354,15 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
+
+		// draw messages
+		glColor3f(0.5,0.5,0.5);
+		Vector3d pos = (*it_robot)->position();
+		pos[kYCoord] += robot_radius;
+		for(int i=0; i<(*it_robot)->get_number_of_messages(); ++i) {
+			pos[kYCoord] += robot_size * kMessageHeight*2.5;
+			draw_box(pos, robot_size * kMessagewidth, robot_size * kMessageHeight, robot_size * kMessageDepth);
+		}
 
 		// draw edges
 		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
@@ -421,22 +411,6 @@ int SimulationRenderer::font_bitmap_string(const std::string & str) {
 
 	return 1;
 }
-
-// void SimulationRenderer::draw_visibility_graph(const StatisticsDataObject& data){
-// 	//in vis graph, ids of vertices correspond to ids of robots
-// 	if (data.vis_graph_ptr()){
-// 		boost::graph_traits< boost::adjacency_list <> >::edge_iterator i, end;
-// 		Vector3d source_pos, target_pos;
-// 		// iterate through the edges and draw lines
-// 		// get color from component table so that each component has its own color
-// 		// add 0 or 1 so that the first component is not green to indicate the graph is not connected
-// 		for (boost::tie(i, end) = boost::edges(*(data.vis_graph_ptr())); i != end; ++i) {
-// 			source_pos=*world_info_->robot_data()[boost::source(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
-// 			target_pos=*world_info_->robot_data()[boost::target(*i,data.vis_graph())]->extrapolated_position(extrapolate_);
-// 			draw_line(source_pos,target_pos, data.components().at(boost::source(*i,data.vis_graph()))+data.vis_graph_is_connected());
-// 		}
-// 	}
-// }
 
 void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 	glBegin(GL_LINES);
@@ -585,54 +559,55 @@ void SimulationRenderer::draw_obstacle(const boost::shared_ptr<Obstacle> & obsta
 
 }
 void SimulationRenderer::draw_box(const Box*  box){
+	draw_box(box->position(), box->width(), box->height(), box->depth());
+}
+void SimulationRenderer::draw_box(const Vector3d& pos, float width, float height, float depth) {
 
-	float pos_x = box->position()(0);
-	float pos_y = box->position()(1);
-	float pos_z = box->position()(2);
-
-	float width = box->width()/2;
-	float height = box->height()/2;
-	float depth = box->depth()/2;
-
+	float pos_x = pos(0);
+	float pos_y = pos(1);
+	float pos_z = pos(2);
+	float half_width = width/2;
+	float half_height = height/2;
+	float half_depth = depth/2;
 
 	glBegin(GL_QUADS);	// Start Drawing The Cube
 
 		     //TOP
-			glVertex3f(pos_x+ width,pos_y+ height,pos_z-depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z-depth);
-			glVertex3f(pos_x-width,pos_y+ height,pos_z+ depth);
-			glVertex3f(pos_x +width,pos_y+ height,pos_z+ depth);
+			glVertex3f(pos_x+ half_width,pos_y+ half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width,pos_y+ half_height,pos_z+ half_depth);
+			glVertex3f(pos_x +half_width,pos_y+ half_height,pos_z+ half_depth);
 
 			// Bottom
-			glVertex3f(pos_x+ width,pos_y-height, pos_z+depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z+ depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z-depth);
-			glVertex3f(pos_x+ width,pos_y-height,pos_z-depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height, pos_z+half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z+ half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z-half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z-half_depth);
 
 			//Front
-			glVertex3f(pos_x+ width,pos_y+ height,pos_z+ depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z+ depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z+ depth);
-			glVertex3f(pos_x+ width,pos_y-height,pos_z+ depth);
+			glVertex3f(pos_x+ half_width,pos_y+ half_height,pos_z+ half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z+ half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z+ half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z+ half_depth);
 
 			//Back
-			glVertex3f(pos_x+ width,pos_y-height,pos_z-depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z-depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z-depth);
-			glVertex3f(pos_x +width,pos_y+ height,pos_z-depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z-half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z-half_depth);
+			glVertex3f(pos_x +half_width,pos_y+ half_height,pos_z-half_depth);
 
 			//Left
 
-			glVertex3f(pos_x-width, pos_y+height, pos_z+ depth);
-			glVertex3f(pos_x-width, pos_y+height,pos_z- depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z- depth);
-			glVertex3f(pos_x-width,pos_y-height,pos_z+ depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height, pos_z+ half_depth);
+			glVertex3f(pos_x-half_width, pos_y+half_height,pos_z- half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z- half_depth);
+			glVertex3f(pos_x-half_width,pos_y-half_height,pos_z+ half_depth);
 
 			//Right
-			glVertex3f(pos_x+width,pos_y+ height, pos_z- depth);
-			glVertex3f(pos_x+ width,pos_y+ height,pos_z+ depth);
-			glVertex3f(pos_x+ width,pos_y-height, pos_z+ depth);
-			glVertex3f(pos_x+ width,pos_y-height,pos_z- depth);
+			glVertex3f(pos_x+half_width,pos_y+ half_height, pos_z- half_depth);
+			glVertex3f(pos_x+ half_width,pos_y+ half_height,pos_z+ half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height, pos_z+ half_depth);
+			glVertex3f(pos_x+ half_width,pos_y-half_height,pos_z- half_depth);
 		glEnd();
 
 
@@ -671,69 +646,6 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 		glEnd();
 
 
-}
-
-void SimulationRenderer::draw_help(){
-boost::array<std::string, 18> helptext;
-	helptext[0]="Arrow keys to navigate";
-	helptext[1]="W and S to go up and down";
-	helptext[2]="M to toggle mouse control (rotate view) (Works only in the free camera)";
-	helptext[3]="      Press mouse button and move mouse to rotate view.";
-	helptext[4]="SPACE to pause the Simulator";
-	helptext[5]="Q to exit";
-	helptext[6]="H to toggle this help screen";
-	helptext[7]="-, +, / and * to de-/increase speed";
-	helptext[8]="C to change camera";
-	helptext[9]="K/L to display global/local coordinate axes";
-	helptext[10]="B and V to display robot's acceleration and velocity";
-	helptext[11]="G to display center of gravity";
-	helptext[12]="Z to display visibility graph";
-	helptext[13]="F1 to display About screen";
-	helptext[14] = "t to switch skybox";
-	helptext[15] = "s to enter single step mode or to advance the time one step";
-	helptext[16] = "e to exit single step mode";
-	helptext[17] = "d to save current simulation";
-
-
-	for (unsigned int i=0;i<helptext.size();i++){
-		draw_text2d(10,screen_height_-50-i*kTextSpacing,helptext[i]);
-	}
-
-}
-
-void SimulationRenderer::draw_about(){
-	//render logo as textured quad
-	if( tex_.loaded() ){
-		glDisable(GL_LIGHTING);
-
-		glEnable(GL_TEXTURE_2D);
-		tex_.bind();
-		glPushMatrix();
-		glLoadIdentity();
-		glBegin(GL_QUADS);
-			   glColor3f(1,1,1);
-			   glTexCoord2f(0, 1); glVertex3f(-1, 0.44f,-1.1f);
-			   glTexCoord2f(1, 1); glVertex3f(1, 0.44f,-1.1f);
-			   glTexCoord2f(1, 0); glVertex3f(1, -0.44f,-1.1f);
-			   glTexCoord2f(0, 0); glVertex3f(-1,-0.44f,-1.1f);
-		glEnd();
-		glPopMatrix();
-		glDisable(GL_TEXTURE_2D );
-
-		glEnable( GL_LIGHTING );
-	}
-	//render text as bitmap font
-	boost::array<std::string,6> abouttext;
-
-	abouttext[0]="This RobotSwarmSimulator was developed as part of the university";
-	abouttext[1]="project group \"Schlaue Schwaerme\" by Alexander Klaas, Andreas Cord-Landwehr,";
-	abouttext[2]="Christoph Raupach, Christoph Weddemann, Daniel Warner, Daniel Wonisch,";
-	abouttext[3]="Kamil Swierkot, Marcus Maertens, Martina Huellmann, Peter Kling and Sven Kurras.";
-	abouttext[4]="The University of Paderborn, Research group \"Algorithms and Complexity\"";
-	abouttext[5]="Contact: der-schwarm@lists.uni-paderborn.de";
-	for (unsigned int i=0;i<abouttext.size();i++){
-		draw_text2d(10,screen_height_-50-i*kTextSpacing,abouttext[i]);
-	}
 }
 
 void SimulationRenderer::draw_cog(){
@@ -835,9 +747,9 @@ void SimulationRenderer::set_marker_color(float r, float g ,float b, float alpha
 }
 
 
-boost::shared_ptr<RobotData> SimulationRenderer::pick_robot(int x, int y) const {
+boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) const {
 
-	boost::shared_ptr<RobotData> robot_data;
+	boost::shared_ptr<Identifier> id;
 
 	GLint viewport[4];
 	GLuint select_buffer[512];
@@ -900,12 +812,10 @@ boost::shared_ptr<RobotData> SimulationRenderer::pick_robot(int x, int y) const 
 
 		if(number_of_names>0) {
 			ptr = ptr_names;
-			boost::shared_ptr<RobotIdentifier> id;
 			id.reset(new RobotIdentifier(*ptr));
-			robot_data.reset(new RobotData(world_info_->get_according_robot_data(id)));
 		}
 	}
 
-	return robot_data;
+	return id;
 }
 

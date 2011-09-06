@@ -137,4 +137,9 @@ void vector3d_rotate(Vector3d & tp, double rx, double ry, double rz);
  */
 Vector3d vector3d_interpolate(Vector3d & vec1, Vector3d & vec2, double factor);
 
+/**
+ * calculates the cross product of the given vectors.
+ */
+Vector3d vector3d_cross(const Vector3d & vector1, const Vector3d & vector2);
+
 #endif /* VECTOR_ARITHMETICS_H */

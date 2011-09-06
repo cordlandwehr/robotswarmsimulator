@@ -132,11 +132,11 @@ void FollowSwarmCamera::update(const std::vector<boost::shared_ptr<WorldObject> 
 void FollowSwarmCamera::look_rot() const {
 
 	Vector3d n = position_ - view_;
-	Vector3d u = Cross( up_vector_, n);
-	Vector3d v = Cross(n, u);
-	n = Normalize(n);
-	u = Normalize(u);
-	v = Normalize(v);
+	Vector3d u = vector3d_cross( up_vector_, n);
+	Vector3d v = vector3d_cross(n, u);
+	vector3d_normalize(n);
+	vector3d_normalize(u);
+	vector3d_normalize(v);
 	float mat[16];
 	mat[0] = u(0); mat[4] = u(1) ; mat[8] = u(2); mat[12] = 0;
 	mat[1] = v(0); mat[5] = v(1) ; mat[9] = v(2); mat[13] = 0;

@@ -64,8 +64,8 @@ CogCamera::CogCamera(): rot_phi_(0.0), rot_theta_(1.0), radius_(5.0) {
 }
 
 void CogCamera::strafe_camera(float speed) {
-	Vector3d strafe_vec = Cross(up_vector_,sphere_vec_);
-	strafe_vec = Normalize(strafe_vec);
+	Vector3d strafe_vec = vector3d_cross(up_vector_,sphere_vec_);
+	vector3d_normalize(strafe_vec);
 	sphere_vec_ = sphere_vec_ + speed * strafe_vec;
 	calc_sphere_vec();
 }
@@ -88,9 +88,9 @@ void CogCamera::move_backward() {
 }
 
 void CogCamera::move_camera_up_down(float speed) {
-	Vector3d strafe_vec = Cross(up_vector_,sphere_vec_);
-	Vector3d up_vec = Cross(sphere_vec_, strafe_vec);
-	up_vec = Normalize(up_vec);
+	Vector3d strafe_vec = vector3d_cross(up_vector_,sphere_vec_);
+	Vector3d up_vec = vector3d_cross(sphere_vec_, strafe_vec);
+	vector3d_normalize(up_vec);
 
 	sphere_vec_ = sphere_vec_ + speed * up_vec;
 
@@ -163,7 +163,7 @@ void CogCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & mark
 }
 
 void CogCamera::calc_sphere_vec() {
-	sphere_vec_ = Normalize(sphere_vec_);
+	vector3d_normalize(sphere_vec_);
 
 	sphere_vec_(0) = radius_ * sphere_vec_(0);
 	sphere_vec_(1) = radius_ * sphere_vec_(1);
