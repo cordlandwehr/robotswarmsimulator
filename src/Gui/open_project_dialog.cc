@@ -44,7 +44,6 @@ void OpenProjectDialog::accept() {
 	data_.project_file = ui_.lineedit_file->text().toStdString();
 	data_.output = ui_.lineedit_out->text().toStdString();
 	data_.history_length = ui_.lineedit_history_length->text().toUInt();
-	data_.dry = ui_.checkbox_dry->isChecked();
 	data_.steps = ui_.lineedit_steps->text().toUInt();
 	data_.luaseed = ui_.lineedit_luaseed->text().toUInt();
 	data_.run_until_no_multiplicity = ui_.checkbox_no_multiplicity->isChecked();

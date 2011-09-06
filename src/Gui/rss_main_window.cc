@@ -240,8 +240,6 @@ void RSSMainWindow::update_simulation() {
 		LuaWrapper::lua_generator_set_seed(pd.luaseed);
 	}
 
-	// checks iff statistics shall be created
-	bool create_statistics = !pd.dry;
 
 	// create simulation kernel
 	boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
@@ -250,7 +248,6 @@ void RSSMainWindow::update_simulation() {
 		sim_control->create_new_simulation(tmpProjectFile,
 										   pd.history_length,
 										   pd.output,
-										   create_statistics,
 										   true,
 										   pd.steps,
 										   run_until_no_multiplicity);
@@ -259,7 +256,6 @@ void RSSMainWindow::update_simulation() {
 		sim_control->create_new_simulation(tmpProjectFile,
 										   pd.history_length,
 										   pd.output,
-										   create_statistics,
 										   false,
 										   0,
 										   run_until_no_multiplicity);

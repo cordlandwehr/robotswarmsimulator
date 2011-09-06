@@ -277,8 +277,6 @@ int main(int argc, char** argv) {
 				LuaWrapper::lua_generator_set_seed(luaseed);
 			}
 
-			// checks iff statistics shall be created
-			bool create_statistics = !vm.count("dry");
 
 			// checks iff visualization should be created and checks if steps is set
 			bool create_visualization = !vm.count("blind");
@@ -289,11 +287,6 @@ int main(int argc, char** argv) {
 					std::cout << "If --blind is set, --steps need to be set to prevent infinite loop" << std::endl;
 					return 1;
 				}
-
-				if(!create_statistics) {
-					std::cout << "Warning: No Statistics and No Visualisation set" << std::endl;
-					std::cout << "If a man speaks in the forest and there is no woman there to hear it, is he still wrong?" << std::endl;
-				}
 			}
 
 			// create simulation kernel
@@ -303,7 +296,6 @@ int main(int argc, char** argv) {
 				sim_control->create_new_simulation(tmpProjectFile,
 												   vm["history-length"].as<unsigned int>(),
 												   vm["output"].as<std::string>(),
-												   create_statistics,
 												   false,
 												   0,
 												   run_until_no_multiplicity);
@@ -312,7 +304,6 @@ int main(int argc, char** argv) {
 				sim_control->create_new_simulation(tmpProjectFile,
 												   vm["history-length"].as<unsigned int>(),
 												   vm["output"].as<std::string>(),
-												   create_statistics,
 												   true,
 												   vm["steps"].as<unsigned int>(),
 												   run_until_no_multiplicity);

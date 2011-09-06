@@ -94,8 +94,7 @@ const boost::shared_ptr<History>& SimulationKernel::history() const {
 
 void SimulationKernel::init(const string& project_filename,
 		                    boost::shared_ptr<History> history,
-		                    std::string output_dir,
-		                    bool create_statistics) {
+		                    std::string output_dir) {
 
 	// set history
 	history_ = history;
@@ -124,29 +123,8 @@ void SimulationKernel::init(const string& project_filename,
 	// create EventHandler.
 	event_handler_ = Factory::event_handler_factory(history_, robot_control);
 
-	// create and initialize statistics module;
-	if (create_statistics==true) {
-		stats_.reset(new StatsControl());
-		stats_->init(output_dir);
-	} else {
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Output disabled.";
-
-		// workaround for visibility-graph in --dry-mode:
-		// create and register always a statistics object,
-		// but here we do not initialize it => no output
-		//stats_.reset(new StatsControl()); //TODO changed by asetzer on August 19th (should work anyway)
-	}
-
 	// register SimulationObservers (ViewObject, ASG, maybe StatisticObject)
 	event_handler_->register_listener(asg_);
-	if (create_statistics==true)
-		event_handler_->register_listener(stats_);
-
-	// send initial worldinformation to statistics
-	if (create_statistics==true) {
-		boost::shared_ptr<Event> foo = boost::shared_ptr<Event>();
-		stats_->update(*initial_time_point, foo);
-	}
 
 	//TODO asetzer: camera positions hardcoded as a temporary solution
 	camera_position_ = "0,0,0";
@@ -176,8 +154,6 @@ void SimulationKernel::multistep(int steps) {
 
 void SimulationKernel::quit() {
 	last_breath();
-	if (stats_!=NULL)
-		stats_->quit();
 }
 
 void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information) {

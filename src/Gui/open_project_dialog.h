@@ -18,7 +18,6 @@ struct ProjectData {
 	std::string project_file;
 	std::string output;
 	unsigned int history_length;
-	bool dry;
 	unsigned int steps;
 	unsigned int luaseed;
 	bool run_until_no_multiplicity;

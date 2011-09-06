@@ -62,7 +62,6 @@
 #include "../SimulationControl/history.h"
 #include "../SimulationControl/time_point.h"
 
-#include "../Statistics/stats_control.h"
 
 
 class EventHandler;
@@ -95,7 +94,7 @@ public:
 	/**
 	 * This method initializes the simulation kernel
 	 */
-	void init(const std::string& project_filename, boost::shared_ptr<History> history, std::string output_dir, bool create_statistics);
+	void init(const std::string& project_filename, boost::shared_ptr<History> history, std::string output_dir);
 
 	/**
 	 * Method for performing one event-based step of the simulation
@@ -191,10 +190,6 @@ private:
 	 * Robot Control
 	 */
 
-	/**
-	 * Statistics-Module
-	 */
-	boost::shared_ptr<StatsControl> stats_;
 
 	/**
 	 * Map for different types of ASG. This map is used to toggle between the

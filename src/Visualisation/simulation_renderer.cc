@@ -55,7 +55,6 @@
 #include "../Model/robot_identifier.h"
 
 #include "../SimulationControl/time_point.h"
-#include "../Statistics/statistics_data_object.h"
 
 #include "camera.h"
 #include "robot_renderer.h"
