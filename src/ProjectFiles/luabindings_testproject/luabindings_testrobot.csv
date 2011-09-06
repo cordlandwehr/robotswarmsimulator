@@ -1,0 +1,4 @@
+"ID","x-position","y-position","z-position","algorithm"
+0,0,0,0,"luabindings_testAlgorithm.lua"
+1,1,0,0,"luabindings_testAlgorithm.lua"
+2,2,0,0,"luabindings_testAlgorithm.lua"
