@@ -200,6 +200,9 @@ void RSSMainWindow::select_robot(boost::shared_ptr<RobotData> robot_data) {
 		item->setText(1, QString::fromStdString(ss.str()));
     }
 
+    if(marker_info_item->childCount() > 0){
+    	marker_info_item->setExpanded(true);
+    }
 
 }
 
