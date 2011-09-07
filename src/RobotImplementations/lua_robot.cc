@@ -193,7 +193,7 @@ namespace {
 	 * @see View.get_robot_last_request_successful()
 	 */
 	
-	const unsigned get_robot_last_request_successful(std::size_t id) {
+	const bool get_robot_last_request_successful(std::size_t id) {
 	  // check the given id
 	  check_mapping(robot_identifiers_, id);
 	  // delagte to view
