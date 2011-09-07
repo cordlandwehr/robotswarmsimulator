@@ -43,6 +43,7 @@
 #include "../Views/velocity_view.h"
 #include "../Views/origin_view.h"
 #include "../Views/time_view.h"
+#include "../Views/message_view.h"
 
 /**
  * \class GlobalView
@@ -66,7 +67,8 @@ class GlobalView: public virtual BoxView,
 		public virtual SphereView,
 		public virtual OriginView,
 		public virtual TimeView,
-		public virtual VelocityView {
+		public virtual VelocityView,
+		public virtual MessageView {
 public:
 	GlobalView();
 	virtual ~GlobalView();
