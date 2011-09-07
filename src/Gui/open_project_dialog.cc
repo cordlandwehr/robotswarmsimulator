@@ -58,7 +58,6 @@ void OpenProjectDialog::showEvent( QShowEvent * event ) {
 	ui_.lineedit_file->setText(QString::fromStdString(data_.project_file));
 	ui_.lineedit_out->setText(QString::fromStdString(data_.output));
 	ui_.lineedit_history_length->setText(QString("%1").arg(data_.history_length));
-	ui_.checkbox_dry->setChecked(data_.dry);
 	ui_.lineedit_steps->setText(QString("%1").arg(data_.steps));
 	ui_.lineedit_luaseed->setText(QString("%1").arg(data_.luaseed));
 	ui_.checkbox_no_multiplicity->setChecked(data_.run_until_no_multiplicity);
@@ -73,7 +72,6 @@ void OpenProjectDialog::writeSettings() {
 	settings.setValue("project_file", QString::fromStdString(data_.project_file));
 	settings.setValue("output", QString::fromStdString(data_.output));
 	settings.setValue("history_length", data_.history_length);
-	settings.setValue("dry", data_.dry);
 	settings.setValue("steps", data_.steps);
 	settings.setValue("luaseed", data_.luaseed);
 	settings.setValue("run_until_no_multiplicity", data_.run_until_no_multiplicity);
@@ -87,7 +85,6 @@ void OpenProjectDialog::readSettings() {
 	data_.project_file = settings.value("project_file").toString().toStdString();
 	data_.output = settings.value("output").toString().toStdString();
 	data_.history_length = settings.value("history_length", 25).toUInt();
-	data_.dry = settings.value("dry").toBool();
 	data_.steps = settings.value("steps").toUInt();
 	data_.luaseed = settings.value("luaseed").toUInt();
 	data_.run_until_no_multiplicity = settings.value("run_until_no_multiplicity").toBool();
