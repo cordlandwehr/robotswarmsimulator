@@ -36,30 +36,7 @@
 
 #include "camera.h"
 
-Vector3d  Cross(const Vector3d & vector1 ,const Vector3d & vector2) {
-	Vector3d normal = Vector3d();
-
-	// Calculate the cross product with the non communitive equation
-	normal(0) = vector1(1) * vector2(2) - vector1(2) * vector2(1);
-	normal(1) = vector1(2) * vector2(0) - vector1(0) * vector2(2);
-	normal(2) = vector1(0) * vector2(1) - vector1(1) * vector2(0);
-
-	// Return the cross product
-	return normal;
-}
-
-float Magnitude(const Vector3d & vec) {
-	return (float)std::sqrt( vec(0) * vec(0) + vec(1) * vec(1) + vec(2) * vec(2) );
-}
-
-Vector3d & Normalize( Vector3d & vector) {
-	// Get the magnitude of our normal
-	float magnitude = Magnitude(vector);
-	vector = vector / magnitude;
-	return vector;
-}
-
-Camera::Camera() {
+Camera::Camera() : speed_(0.5f) {
 	position_.insert_element(kXCoord, 0);
 	position_.insert_element(kYCoord, 0);
 	position_.insert_element(kZCoord, 0);
@@ -178,11 +155,11 @@ void Camera::look() const {
 void Camera::look_rot() const {
 	// Works like the gluLookAt function works
 	Vector3d n = position_ - view_;
-	Vector3d u = Cross( up_vector_, n);
-	Vector3d v = Cross(n, u);
-	n = Normalize(n);
-	u = Normalize(u);
-	v = Normalize(v);
+	Vector3d u = vector3d_cross( up_vector_, n);
+	Vector3d v = vector3d_cross(n, u);
+	vector3d_normalize(n);
+	vector3d_normalize(u);
+	vector3d_normalize(v);
 
 	// create matrix
 	float mat[16];

@@ -65,7 +65,6 @@ public:
 	void create_new_simulation(const std::string& configuration_filename,
 	                           std::size_t history_length,
 	                           std::string ouput_dir,
-	                           bool create_statistics,
 	                           bool limited_steps,
 	                           int number_of_steps,
 	                           bool run_until_no_multiplicity);

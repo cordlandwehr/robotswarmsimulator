@@ -29,7 +29,6 @@
 #define TIME_POINT_H_
 
 #include "../Model/world_information.h"
-#include "../Statistics/statistics_data_object.h"
 #include <boost/smart_ptr.hpp>
 
 #include <iostream>

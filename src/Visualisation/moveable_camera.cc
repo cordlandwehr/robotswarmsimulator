@@ -38,10 +38,6 @@
 
 #include "moveable_camera.h"
 
-namespace {
-const float kSpeed = 0.5f;
-}  // namespace
-
 MoveableCamera::MoveableCamera(): Camera() {
 	position_.insert_element(kXCoord, 0);
 	position_.insert_element(kYCoord, 0);
@@ -77,8 +73,8 @@ void MoveableCamera::set_view_by_mouse(int x, int y) {
 	angle_y = (float)( (down_x_ - x ) ) / 200.0f;
 	angle_z = (float)( (down_y_ - y ) ) / 200.0f;
 
-	Vector3d axis = Cross(view_ - position_, up_vector_);
-	axis = Normalize(axis);
+	Vector3d axis = vector3d_cross(view_ - position_, up_vector_);
+	vector3d_normalize(axis);
 
 	// Rotate around our perpendicular axis and along the y-axis
 	rotate_view(angle_z, axis);
@@ -106,11 +102,11 @@ void MoveableCamera::strafe_camera(float speed) {
 void MoveableCamera::move_camera_up_down(float speed) {
 	// Get the current view vector (the direction we are looking)
 	Vector3d n = position_ - view_;
-	Vector3d u = Cross( up_vector_, n);
-	Vector3d v = Cross(n, u);
-	n = Normalize(n);
-	u = Normalize(u);
-	v = Normalize(v);
+	Vector3d u = vector3d_cross( up_vector_, n);
+	Vector3d v = vector3d_cross(n, u);
+	vector3d_normalize(n);
+	vector3d_normalize(u);
+	vector3d_normalize(v);
 
 	position_(0) -= v(0) * speed;
 	position_(1) -= v(1) * speed,
@@ -124,7 +120,7 @@ void MoveableCamera::move_camera_up_down(float speed) {
 void MoveableCamera::move_camera(float speed) {
 	// Get the current view vector (the direction we are looking)
 	Vector3d vector = view_ - position_;
-	vector = Normalize(vector);
+	vector3d_normalize(vector);
 
 	position_(1) += vector(1) * speed;
 	position_(2) += vector(2) * speed;		// Add our acceleration to our position's Z
@@ -134,46 +130,47 @@ void MoveableCamera::move_camera(float speed) {
 }
 
 void MoveableCamera::move_forward() {
-	move_camera(kSpeed);
+	move_camera(speed());
 }
 
 void MoveableCamera::move_backward() {
-	move_camera(-kSpeed);
+	move_camera(-speed());
 }
 
 void MoveableCamera::move_up() {
-	move_camera_up_down(-kSpeed);
+	move_camera_up_down(-speed());
 }
 
 void MoveableCamera::move_down() {
-	move_camera_up_down(+kSpeed);
+	move_camera_up_down(+speed());
 }
 
 void MoveableCamera::strafe_left() {
-	strafe_camera(-kSpeed);
+	strafe_camera(-speed());
 }
 
 void MoveableCamera::strafe_right() {
-	strafe_camera(kSpeed);
+	strafe_camera(speed());
 }
 
 void MoveableCamera::update(const std::vector<boost::shared_ptr<WorldObject> > & marker,
 							const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
 							const std::vector<boost::shared_ptr<RobotData> >& robot_data,
 							double extrapolate) {
-	Vector3d cross = Cross(view_ - position_, up_vector_);
+	Vector3d cross = vector3d_cross(view_ - position_, up_vector_);
 
-	// Normalize the strafe vector
-	strafe_ = Normalize(cross);
+	//normalize the strafe vector
+	vector3d_normalize(cross);
+	vector3d_set(strafe_, cross);
 }
 
 void MoveableCamera::look_rot() const {
 	Vector3d n = position_ - view_;
-	Vector3d u = Cross( up_vector_, n);
-	Vector3d v = Cross(n, u);
-	n = Normalize(n);
-	u = Normalize(u);
-	v = Normalize(v);
+	Vector3d u = vector3d_cross( up_vector_, n);
+	Vector3d v = vector3d_cross(n, u);
+	vector3d_normalize(n);
+	vector3d_normalize(u);
+	vector3d_normalize(v);
 	float mat[16];
 	mat[0] = u(0); mat[4] = u(1) ; mat[8] = u(2); mat[12] = 0;
 	mat[1] = v(0); mat[5] = v(1) ; mat[9] = v(2); mat[13] = 0;

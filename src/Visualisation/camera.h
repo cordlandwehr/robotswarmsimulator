@@ -219,6 +219,15 @@ public:
 	 */
 	virtual std::string get_name();
 
+	/**
+	 * Returns speed of the camera.
+	 */
+	float set_speed(float speed) { speed_ = speed; }
+
+	/**
+	 * Returns speed of the camera.
+	 */
+	float speed() const { return speed_; }
 protected:
 
 	// The camera's position
@@ -235,10 +244,8 @@ protected:
 
 	int screen_width_;
 	int screen_height_;
-};
 
-Vector3d  Cross(const Vector3d & vector1 ,const  Vector3d & vector2);
-float Magnitude(const Vector3d & vec);
-Vector3d & Normalize(Vector3d & vector) ;
+	float speed_;
+};
 
 #endif /* CAMERA_H_ */
