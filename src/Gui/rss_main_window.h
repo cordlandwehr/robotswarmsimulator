@@ -13,7 +13,6 @@
 #include <QtGui/QMainWindow>
 #include <QtCore/QSignalMapper>
 #include "ui_rss_main_window.h"
-#include "ui_help_dialog.h"
 #include "ui_about_dialog.h"
 
 class OpenProjectDialog;
@@ -21,6 +20,7 @@ class GeneratorWizard;
 class RSSGLWidget;
 class Identifier;
 class WorldObject;
+class HelpDialog;
 
 class RSSMainWindow : public QMainWindow {
 	Q_OBJECT
@@ -47,6 +47,7 @@ private slots:
 	void tree_selection_changed(QTreeWidgetItem* item, int column);
 	void writeSettings();
 	void readSettings();
+	void update_help_window();
 
 private:
 
@@ -66,7 +67,7 @@ private:
 
 	Ui::RSSMainWindow ui_;
 	QDialog *about_dialog_;
-	QDialog *help_dialog_;
+	HelpDialog *help_dialog_;
 	OpenProjectDialog *open_dialog_;
 	GeneratorWizard *generator_wizard_;
 	RSSGLWidget *rss_gl_widget_;

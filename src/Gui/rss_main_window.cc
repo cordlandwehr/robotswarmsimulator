@@ -31,6 +31,7 @@
 #include "open_project_dialog.h"
 #include "generator_wizard.h"
 #include "rss_gl_widget.h"
+#include "help_dialog.h"
 
 
 Q_DECLARE_METATYPE(boost::shared_ptr<Identifier>);
@@ -51,11 +52,8 @@ RSSMainWindow::RSSMainWindow(QWidget *parent) : QMainWindow(parent) {
 	open_dialog_ = new OpenProjectDialog(this);
 	generator_wizard_ = new GeneratorWizard(this);
 	rss_gl_widget_ = new RSSGLWidget(this);
-	help_dialog_ = new QDialog(this);
+	help_dialog_ = new HelpDialog(this);
 	about_dialog_ = new QDialog(this);
-
-	Ui::HelpDialog help_dialog;
-	help_dialog.setupUi(help_dialog_);
 
 	Ui::AboutDialog about_dialog;
 	about_dialog.setupUi(about_dialog_);
@@ -96,13 +94,13 @@ void RSSMainWindow::init() {
 	QAction* action_move_right = new QAction(tr("Move Right"), this);
 	action_move_right->setObjectName(tr("action_move_right"));
 	action_move_right->setShortcut(QKeySequence(Qt::Key_D));
-	QAction* action_toggle_cam = new QAction(tr("Toggle Cam"), this);
+	QAction* action_toggle_cam = new QAction(tr("Toggle Camera Mode"), this);
 	action_toggle_cam->setObjectName(tr("action_toggle_cam"));
 	action_toggle_cam->setShortcut(QKeySequence(Qt::Key_C));
-	QAction* action_double_cam_speed = new QAction(tr("Double Cam Speed"), this);
+	QAction* action_double_cam_speed = new QAction(tr("Double Camera Speed"), this);
 	action_double_cam_speed->setObjectName(tr("action_double_cam_speed"));
 	action_double_cam_speed->setShortcut(QKeySequence(Qt::Key_PageUp));
-	QAction* action_half_cam_speed = new QAction(tr("Double Cam Speed"), this);
+	QAction* action_half_cam_speed = new QAction(tr("Half Camera Speed"), this);
 	action_half_cam_speed->setObjectName(tr("action_half_cam_speed"));
 	action_half_cam_speed->setShortcut(QKeySequence(Qt::Key_PageDown));
 	this->addAction(action_move_forward);
@@ -126,6 +124,7 @@ void RSSMainWindow::init() {
 	connect(ui_.action_new_project, SIGNAL(triggered()), generator_wizard_, SLOT(show()));
 	connect(ui_.action_about, SIGNAL(triggered()), about_dialog_, SLOT(show()));
 	connect(ui_.action_help, SIGNAL(triggered()), help_dialog_, SLOT(show()));
+	connect(ui_.action_help, SIGNAL(triggered()), this, SLOT(update_help_window()));
 	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(update_simulation()));
 	connect(generator_wizard_, SIGNAL(accepted()), this, SLOT(generate_simulation()));
 	connect(ui_.action_start_stop_simulation, SIGNAL(triggered()), this, SLOT(toggle_simulation()));
@@ -599,4 +598,16 @@ void RSSMainWindow::readSettings() {
 		}
 	}
 	settings.endGroup();
+}
+
+void RSSMainWindow::update_help_window() {
+	readSettings();
+
+	QList<QAction*> actions = this->actions();
+	actions.append(ui_.menu_project->actions());
+	actions.append(ui_.menu_Simulation->actions());
+	actions.append(ui_.menu_Help->actions());
+	actions.append(ui_.menu_View->actions());
+
+	help_dialog_->update_table(actions);
 }
