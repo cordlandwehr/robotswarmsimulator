@@ -40,6 +40,7 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/array.hpp>
+#include <boost/program_options.hpp>
 
 #include <iostream>
 

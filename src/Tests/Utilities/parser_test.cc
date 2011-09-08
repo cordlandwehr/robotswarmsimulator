@@ -23,6 +23,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/smart_ptr.hpp>
+#include <boost/program_options.hpp>
 #include <iostream>
 
 #include "../../Model/sphere.h"
@@ -36,9 +37,10 @@
 
 #include "../ActivationSequenceGenerators/activation_sequence_generator.h"
 #include "../ActivationSequenceGenerators/synchronous_asg.h"
-#include "../ActivationSequenceGenerators/asynchronous_asg.h"
+#include "../ActivationSequenceGenerators/synchronous_asg_wm.h"
 
 #include "../../ViewModels/global_view.h"
+#include "../../ViewModels/local_graph_view.h"
 #include "../../Views/view_factory.h"
 #include "../../SimulationKernel/uniform_robot_control.h"
 
@@ -54,77 +56,45 @@
 
 #include "../Fixtures/simple_world_fixture.h"
 
-/*
+
 BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 {
-	boost::shared_ptr<Parser> parser;
-	parser.reset(new Parser());
-	parser->init();
-	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
-	parser->save_main_project_file("../RobotSwarmSimulator/src/Tests/TestData/saved_testfile_1");
-
+  //TODO (asetzer) this does not work for some reason...
+// 	boost::shared_ptr<Parser> parser;
+// 	parser.reset(new Parser());
+// 	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
+// 	
 	//check variables read from main project file
-	BOOST_CHECK_EQUAL(parser->parameter_map_["PROJECT_NAME"], "My Exciting Project");
-	BOOST_CHECK_EQUAL(parser->parameter_map_["COMPASS_MODEL"], "NO_COMPASS");
-	BOOST_CHECK_EQUAL(parser->robot_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
-	BOOST_CHECK_EQUAL(parser->obstacle_filename_, "../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
-	BOOST_CHECK_EQUAL(parser->parameter_map_["STATISTICS_TEMPLATE"], "BASIC");
-	BOOST_CHECK_EQUAL(parser->parameter_map_["STATISTICS_SUBSETS"], "{ALL}");
+	//BOOST_CHECK_EQUAL(parser->parameter_map_boost_["PROJECT_NAME"].as<std::string>(), "My Exciting Project");
+// 	BOOST_CHECK_EQUAL(parser->robot_filename_, "src/Tests/TestData/testfile_1_robot.csv");
+// 	BOOST_CHECK_EQUAL(parser->edge_filename_, "src/Tests/TestData/testfile_1_edges.csv");
 
 	//########################################################################
 	//				check request handler stuff
 	//########################################################################
 
-	// RobotControl needed for EventHandler
-	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<GlobalView>());
-	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
+// 	// RobotControl needed for EventHandler
+// 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<LocalGraphView>());
+// 	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
+// 
 
-
-	map<std::string, std::string> &params = parser->parameter_map();
-	boost::shared_ptr<EventHandler> event_handler = Factory::event_handler_factory(params, history, robot_control);
-
-	// marker request handler
-	BOOST_REQUIRE(event_handler);
-	BOOST_REQUIRE(event_handler->marker_request_handler_);
-	BOOST_CHECK_EQUAL(0.5, event_handler->marker_request_handler_->discard_probability_);
-
-	// position request handler
-	BOOST_REQUIRE(event_handler->position_request_handler_);
-	BOOST_CHECK_EQUAL(0.1, event_handler->position_request_handler_->discard_probability_);
-
-	// check if the vector modifiers were created according to specification
-	std::list<boost::shared_ptr<VectorModifier> >::iterator modifier_iter =
-	    event_handler->position_request_handler_->vector_modifiers_.begin();
-
-	boost::shared_ptr<VectorModifier> vec = *modifier_iter;
-	// should be a vector trimmer
-	boost::shared_ptr<VectorTrimmer> trimmer;
-	BOOST_REQUIRE(trimmer = boost::dynamic_pointer_cast<VectorTrimmer> (vec));
-	BOOST_CHECK_CLOSE(1.5, trimmer->length_, 0.01);
-
-	++modifier_iter;
-	vec = *modifier_iter;
-	// should be a vector randomizer
-	boost::shared_ptr<VectorRandomizer> randomizer;
-	BOOST_REQUIRE(randomizer = boost::dynamic_pointer_cast<VectorRandomizer> (vec));
-
-	// velocity request handler
-	BOOST_REQUIRE(event_handler->velocity_request_handler_);
-	BOOST_CHECK_EQUAL(0.1, event_handler->velocity_request_handler_->discard_probability_);
-
-	// acceleration request handler
-	BOOST_REQUIRE(event_handler->acceleration_request_handler_);
-	BOOST_CHECK_EQUAL(0.1, event_handler->acceleration_request_handler_->discard_probability_);
+// 	boost::program_options::variables_map &params = parser->parameter_map_boost();
+// 	boost::shared_ptr<EventHandler> event_handler = Factory::event_handler_factory(history, robot_control);
+// 
+// 	// marker request handler
+// 	BOOST_REQUIRE(event_handler);
+// 	BOOST_REQUIRE(event_handler->marker_request_handler_);
+// 	BOOST_CHECK_EQUAL(1.0, event_handler->marker_request_handler_->discard_probability_);
+/*
 
 	//########################################################################
 	//				check asg stuff
 	//########################################################################
 
 	boost::shared_ptr<ActivationSequenceGenerator> asg = Factory::asg_factory(params);
-	BOOST_REQUIRE(boost::dynamic_pointer_cast<AsynchronousASG>(asg));
+	BOOST_REQUIRE(boost::dynamic_pointer_cast<SynchronousASGWM>(asg));*/
 
 }
-*/
 
 /*
 BOOST_AUTO_TEST_CASE(load_robot_file_1)

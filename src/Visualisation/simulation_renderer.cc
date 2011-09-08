@@ -121,7 +121,7 @@ void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(true) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false), render_sky_box_(false) {
 
 	render_visibility_graph_=false;
 
@@ -169,8 +169,8 @@ void SimulationRenderer::init(){
 }
 
 void SimulationRenderer::init(int x, int y){
-	std::string str("resources/Textures/logo.bmp");
-	tex_.load(str);
+	//std::string str("resources/Textures/logo.bmp");
+	//tex_.load(str);
 
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -225,10 +225,11 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	for(int i = 0; i < 5;i++){
+	//(asetzer) removed since it crashes
+	/*for(int i = 0; i < 5;i++){
 		sky_box_[i].reset( new SkyBox() );
 		sky_box_[i]->init( kSkyBoxTexName[i]);
-	}
+	}*/
 	actuall_skybox_ = 0;
 	robot_renderer_->init();
 	resize(x,y);
@@ -319,8 +320,9 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), robot_data,extrapolate );
 	cameras_[active_camera_index_]->look_rot();
 
-	if(render_sky_box_)
-		sky_box_[actuall_skybox_]->draw();
+	//(asetzer) crashes and we don't need it
+	//if(render_sky_box_)
+	//	sky_box_[actuall_skybox_]->draw();
 
 	cameras_[active_camera_index_]->look_translate();
 

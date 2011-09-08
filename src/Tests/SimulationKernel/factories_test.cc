@@ -40,6 +40,7 @@ BOOST_FIXTURE_TEST_CASE(EventHandlerFactoryTest, SimpleWorldFixture) {
 	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
 
 	//TODO asetzer: this unit test must be redone
+
 	
 	/*std::map<std::string, std::string> parameter_map;
 
@@ -53,15 +54,14 @@ BOOST_FIXTURE_TEST_CASE(EventHandlerFactoryTest, SimpleWorldFixture) {
 	parameter_map["TYPE_CHANGE_REQUEST_HANDLER_TYPE"] = std::string("NONE");
 	parameter_map["POSITION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
 	parameter_map["VELOCITY_REQUEST_HANDLER_TYPE"] = std::string("NONE");
-	parameter_map["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");
+	parameter_map["ACCELERATION_REQUEST_HANDLER_TYPE"] = std::string("NONE");*/
 
 	// should be constructed normally
 	boost::shared_ptr<EventHandler> event_handler;
-	BOOST_CHECK_NO_THROW(event_handler = Factory::event_handler_factory(parameter_map, history, robot_control));
+	BOOST_CHECK_NO_THROW(event_handler = Factory::event_handler_factory(history, robot_control));
 	BOOST_CHECK(event_handler);
 	BOOST_CHECK(event_handler->marker_request_handler_);
 	//BOOST_CHECK_EQUAL(1.0, event_handler->marker_request_handler_->discard_probability_);
-	*/
 }
 
 
