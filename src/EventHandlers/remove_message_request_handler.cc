@@ -24,5 +24,6 @@ bool RemoveMessageRequestHandler::handle_request_reliable(
 	boost::shared_ptr<MessageIdentifier> m_id = remove_message_request->requested_message();
 	boost::shared_ptr<Message> m = world_information->get_according_message(m_id);
 
-	return world_information->remove_message(m);
+	world_information->remove_message(m);
+	return true;
 }
