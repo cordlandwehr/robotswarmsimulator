@@ -25,7 +25,7 @@ bool RemoveEdgeRequestHandler::handle_request_reliable(
 	if(world_information->edge_exists(e_id)){
 		boost::shared_ptr<Edge> e = world_information->get_according_edge(e_id);
 
-		if(world_information->robot_exists(e->getRobot1()) && world_information->robot_exists(e->getRobot2())){
+		if(world_information->robot_exists(e->robot1()) && world_information->robot_exists(e->robot2())){
 			world_information->remove_edge(e);
 		}
 	}

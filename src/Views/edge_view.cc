@@ -38,10 +38,10 @@ std::vector<View::RobotRef> EdgeView::get_visible_robots(const RobotData& robot)
 				result.push_back(d_edge->target());
 			}
 		} else {
-			if(e->getRobot1()->id() != robot.robot().id()->id())
-				result.push_back(e->getRobot1());
-			else if(e->getRobot2()->id() != robot.robot().id()->id())
-				result.push_back(e->getRobot2());
+			if(e->robot1()->id() != robot.robot().id()->id())
+				result.push_back(e->robot1());
+			else if(e->robot2()->id() != robot.robot().id()->id())
+				result.push_back(e->robot2());
 		}
 	}
 	return result;
@@ -77,7 +77,7 @@ View::RobotRef EdgeView::get_edge_source(const Edge& edge) const{
 		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
 		return de.source();
 	} else {
-		return edge.getRobot1();
+		return edge.robot1();
 	}
 }
 
@@ -86,6 +86,6 @@ View::RobotRef EdgeView::get_edge_target(const Edge& edge) const{
 		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
 		return de.target();
 	} else {
-		return edge.getRobot2();
+		return edge.robot2();
 	}
 }

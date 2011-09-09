@@ -29,9 +29,9 @@ public:
 
 	virtual ~Edge() = 0;
 
-	boost::shared_ptr<RobotIdentifier> getRobot1() const;
+	boost::shared_ptr<RobotIdentifier> robot1() const;
 
-	boost::shared_ptr<RobotIdentifier> getRobot2() const;
+	boost::shared_ptr<RobotIdentifier> robot2() const;
 
 private:
 	boost::shared_ptr<RobotIdentifier> robot1_;

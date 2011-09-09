@@ -31,8 +31,8 @@ boost::shared_ptr<BoostGraph> Layouter::transform_into_boost_graph(const WorldIn
 
 
 	BOOST_FOREACH(EdgeItem& edge, world_information.edges()){
-		const RobotData& robot1 = world_information.get_according_robot_data(edge.second->getRobot1());
-		const RobotData& robot2 = world_information.get_according_robot_data(edge.second->getRobot2());
+		const RobotData& robot1 = world_information.get_according_robot_data(edge.second->robot1());
+		const RobotData& robot2 = world_information.get_according_robot_data(edge.second->robot2());
 
 		boost::add_edge(robot1.get_boost_vertex_descriptor(), robot2.get_boost_vertex_descriptor(), *g);
 	}

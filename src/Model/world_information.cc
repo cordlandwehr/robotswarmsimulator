@@ -145,8 +145,8 @@ std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() {
 }
 
 void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
-	RobotData& rd1 = get_according_robot_data(new_edge->getRobot1());
-	RobotData& rd2 = get_according_robot_data(new_edge->getRobot2());
+	RobotData& rd1 = get_according_robot_data(new_edge->robot1());
+	RobotData& rd2 = get_according_robot_data(new_edge->robot2());
 
 	// add requested edge to world_information and to adjacency list of robots
 	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
@@ -161,8 +161,8 @@ void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edg
 }
 
 void WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
-	RobotData& rd1 = get_according_robot_data(edge->getRobot1());
-	RobotData& rd2 = get_according_robot_data(edge->getRobot2());
+	RobotData& rd1 = get_according_robot_data(edge->robot1());
+	RobotData& rd2 = get_according_robot_data(edge->robot2());
 
 	// remove requested edge from world_information and from adjacency list of robots
 	rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));

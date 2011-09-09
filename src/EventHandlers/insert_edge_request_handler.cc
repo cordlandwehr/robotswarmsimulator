@@ -23,7 +23,7 @@ bool InsertEdgeRequestHandler::handle_request_reliable(
 
 	boost::shared_ptr<Edge> e = edge_request->requested_edge();
 
-	if(world_information->robot_exists(e->getRobot1()) && world_information->robot_exists(e->getRobot2())){
+	if(world_information->robot_exists(e->robot1()) && world_information->robot_exists(e->robot2())){
 		world_information->add_edge(e);
 		return true;
 	} else {

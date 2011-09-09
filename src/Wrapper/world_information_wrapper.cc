@@ -198,7 +198,7 @@ WorldInformationWrapper::get_head(std::size_t id) {
   check_mapping(edge_identifiers_, id);
   // look up edge and robot IDs
   boost::shared_ptr<const Edge> edge = world_information_->get_according_edge(edge_identifiers_[id]);
-  return edge->getRobot2()->id();
+  return edge->robot2()->id();
 }
 
 const MarkerInformationWrapper
@@ -303,7 +303,7 @@ WorldInformationWrapper::get_tail(std::size_t id) {
   check_mapping(edge_identifiers_, id);
   // look up edge and robot IDs
   boost::shared_ptr<const Edge> edge = world_information_->get_according_edge(edge_identifiers_[id]);
-  return edge->getRobot1()->id();
+  return edge->robot1()->id();
 }
 
 int

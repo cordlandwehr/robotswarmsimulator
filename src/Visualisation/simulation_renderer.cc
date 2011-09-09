@@ -368,8 +368,8 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
 		for(it_edge = (*it_robot)->get_edges().begin(); it_edge != (*it_robot)->get_edges().end(); ++it_edge) {
 			boost::shared_ptr<Edge> edge = world_info->get_according_edge(*it_edge);
-			boost::shared_ptr<Vector3d> pos1 = world_info->get_according_robot_data(edge->getRobot1()).extrapolated_position();
-			boost::shared_ptr<Vector3d> pos2 = world_info->get_according_robot_data(edge->getRobot2()).extrapolated_position();
+			boost::shared_ptr<Vector3d> pos1 = world_info->get_according_robot_data(edge->robot1()).extrapolated_position();
+			boost::shared_ptr<Vector3d> pos2 = world_info->get_according_robot_data(edge->robot2()).extrapolated_position();
 
 			float d = robot_radius/vector3d_distance(*pos1, *pos2);
 			if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {

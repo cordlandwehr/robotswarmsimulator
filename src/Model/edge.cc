@@ -10,10 +10,10 @@
 Edge::~Edge(){
 }
 
-boost::shared_ptr<RobotIdentifier> Edge::getRobot1() const {
+boost::shared_ptr<RobotIdentifier> Edge::robot1() const {
 	return robot1_;
 }
 
-boost::shared_ptr<RobotIdentifier> Edge::getRobot2() const {
+boost::shared_ptr<RobotIdentifier> Edge::robot2() const {
 	return robot2_;
 }

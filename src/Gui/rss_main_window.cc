@@ -328,13 +328,13 @@ void RSSMainWindow::selected_object_changed(boost::shared_ptr<Identifier> id) {
 
 		item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 		item->setText(0, tr("Source"));
-		item->setText(1, QString("%1").arg(edge->getRobot1()->id()));
-		item->setData(0,Qt::UserRole,QVariant::fromValue(edge->getRobot1()));
+		item->setText(1, QString("%1").arg(edge->robot1()->id()));
+		item->setData(0,Qt::UserRole,QVariant::fromValue(edge->robot1()));
 
 		item = new QTreeWidgetItem(ui_.inspector_tree_widget);
 		item->setText(0, tr("Target"));
-		item->setText(1, QString("%1").arg(edge->getRobot2()->id()));
-		item->setData(0,Qt::UserRole,QVariant::fromValue(edge->getRobot2()));
+		item->setText(1, QString("%1").arg(edge->robot2()->id()));
+		item->setData(0,Qt::UserRole,QVariant::fromValue(edge->robot2()));
     }
 
 }
@@ -417,12 +417,12 @@ void RSSMainWindow::update_selected_object() {
 			}
 		} else if(e_id.get() && (*it)->text(0) == tr("Source")) {
 	    	boost::shared_ptr<Edge> edge = boost::dynamic_pointer_cast<Edge>(data);
-	    	(*it)->setText(1, QString("%1").arg(edge->getRobot1()->id()));
-	    	(*it)->setData(0,Qt::UserRole,QVariant::fromValue(edge->getRobot1()));
+	    	(*it)->setText(1, QString("%1").arg(edge->robot1()->id()));
+	    	(*it)->setData(0,Qt::UserRole,QVariant::fromValue(edge->robot1()));
 		} else if(e_id.get() && (*it)->text(0) == tr("Target")) {
 	    	boost::shared_ptr<Edge> edge = boost::dynamic_pointer_cast<Edge>(data);
-	    	(*it)->setText(1, QString("%1").arg(edge->getRobot2()->id()));
-	    	(*it)->setData(0,Qt::UserRole,QVariant::fromValue(edge->getRobot2()));
+	    	(*it)->setText(1, QString("%1").arg(edge->robot2()->id()));
+	    	(*it)->setData(0,Qt::UserRole,QVariant::fromValue(edge->robot2()));
 		}
 		++it;
 	}

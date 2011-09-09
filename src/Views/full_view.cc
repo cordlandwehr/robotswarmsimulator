@@ -96,7 +96,7 @@ View::RobotRef FullView::get_edge_source(const Edge& edge) const{
 		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
 		return de.source();
 	} else {
-		return edge.getRobot1();
+		return edge.robot1();
 	}
 }
 
@@ -105,6 +105,6 @@ View::RobotRef FullView::get_edge_target(const Edge& edge) const{
 		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
 		return de.target();
 	} else {
-		return edge.getRobot2();
+		return edge.robot2();
 	}
 }
