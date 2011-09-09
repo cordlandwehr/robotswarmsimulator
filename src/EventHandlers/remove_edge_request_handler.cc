@@ -22,10 +22,12 @@ bool RemoveEdgeRequestHandler::handle_request_reliable(
 		    boost::dynamic_pointer_cast<const RemoveEdgeRequest>(request);
 
 	boost::shared_ptr<EdgeIdentifier> e_id = edge_request->requested_edge();
-	boost::shared_ptr<Edge> e = world_information->get_according_edge(e_id);
+	if(world_information->edge_exists(e_id)){
+		boost::shared_ptr<Edge> e = world_information->get_according_edge(e_id);
 
-	if(world_information->robot_exists(e->getRobot1()) && world_information->robot_exists(e->getRobot2())){
-		world_information->remove_edge(e);
+		if(world_information->robot_exists(e->getRobot1()) && world_information->robot_exists(e->getRobot2())){
+			world_information->remove_edge(e);
+		}
 	}
 
 	return true;

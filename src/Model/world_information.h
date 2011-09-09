@@ -217,6 +217,25 @@ public:
 	bool robot_exists(boost::shared_ptr<RobotIdentifier> id) const;
 
 	/**
+	 * \brief Checks whether the edge exists.
+	 *
+	 * Checks whether the edge identified by the EdgeIdentifier id exists and return true if it does.
+	 *
+	 * \return true if edge exists, false otherwise
+	 */
+	bool edge_exists(boost::shared_ptr<EdgeIdentifier> id) const;
+
+
+	/**
+	 * \brief Checks whether the message exists.
+	 *
+	 * Checks whether the message identified by the MessageIdentifier id exists and return true if it does.
+	 *
+	 * \return true if message exists, false otherwise
+	 */
+	bool message_exists(boost::shared_ptr<MessageIdentifier> id) const;
+
+	/**
 	 * \brief Returns a constant reference to marker object with given id.
 	 *
 	 * This method assumes, that the marker object with the given id is saved at position id->id() in the markers

@@ -22,8 +22,10 @@ bool RemoveMessageRequestHandler::handle_request_reliable(
 		    boost::dynamic_pointer_cast<const RemoveMessageRequest>(request);
 
 	boost::shared_ptr<MessageIdentifier> m_id = remove_message_request->requested_message();
-	boost::shared_ptr<Message> m = world_information->get_according_message(m_id);
 
-	world_information->remove_message(m);
+	if(world_information->message_exists(m_id)){
+		boost::shared_ptr<Message> m = world_information->get_according_message(m_id);
+		world_information->remove_message(m);
+	}
 	return true;
 }

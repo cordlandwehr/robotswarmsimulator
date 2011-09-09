@@ -33,25 +33,31 @@ bool SendMessageRequestHandler::handle_request_reliable(
 
 	boost::shared_ptr<Message> m = message_request->requested_message();
 
-	RobotData& rd_sender = world_information->get_according_robot_data(m->sender());
-	RobotData& rd_receiver = world_information->get_according_robot_data(m->receiver());
+	if(world_information->robot_exists(m->sender()) && world_information->robot_exists(m->receiver())){
+		RobotData& rd_sender = world_information->get_according_robot_data(m->sender());
+		RobotData& rd_receiver = world_information->get_according_robot_data(m->receiver());
 
-	std::vector<boost::shared_ptr<RobotIdentifier> > neighbors = rd_sender.robot().get_view()->get_visible_robots(rd_sender.robot());
+		std::vector<boost::shared_ptr<RobotIdentifier> > neighbors = rd_sender.robot().get_view()->get_visible_robots(rd_sender.robot());
 
-	// check if receiver is a neighbor of the sender
-	bool is_neighbor = false;
-	BOOST_FOREACH(const boost::shared_ptr<RobotIdentifier>& r, neighbors) {
-		if(r->id() == rd_receiver.id()->id()){
-			is_neighbor = true;
-			break;
+		// check if receiver is a neighbor of the sender
+		bool is_neighbor = false;
+		BOOST_FOREACH(const boost::shared_ptr<RobotIdentifier>& r, neighbors) {
+			if(r->id() == rd_receiver.id()->id()){
+				is_neighbor = true;
+				break;
+			}
 		}
-	}
 
-	if(is_neighbor){
-		// put message in queue
-		world_information->add_message(m);
-		return true;
+		if(is_neighbor){
+			// put message in queue
+			world_information->add_message(m);
+			return true;
+		} else {
+			// receiver is not a neighbor of the sender -> request fails
+			return false;
+		}
 	} else {
+		// according robots do not exist -> request fails
 		return false;
 	}
 }

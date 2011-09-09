@@ -194,14 +194,16 @@ void WorldInformation::set_message_data(std::map<std::size_t, boost::shared_ptr<
 }
 
 void WorldInformation::remove_message(boost::shared_ptr<Message> message){
-	//check whether the message is still in the receiver's queue
-	RobotData& rd = get_according_robot_data(message->receiver());
-	for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
-		if(rd.get_message(i)->id() == message->id()->id()){
-			rd.remove_message(i);
-			break;
+	if(robot_exists(message->receiver())){
+		//check whether the message is still in the receiver's queue
+		RobotData& rd = get_according_robot_data(message->receiver());
+		for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
+			if(rd.get_message(i)->id() == message->id()->id()){
+				rd.remove_message(i);
+				break;
+			}
 		}
-	}	
+	}
   
 	//now completely remove it from the system
 	messages_.erase(message->id()->id());
@@ -216,6 +218,32 @@ bool WorldInformation::robot_exists(boost::shared_ptr<RobotIdentifier> id) const
 		return true;
 	else
 		return false;
+}
+
+bool WorldInformation::edge_exists(boost::shared_ptr<EdgeIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it;
+	for(it = edges_.begin(); it != edges_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
+	if(it != edges_.end()){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool WorldInformation::message_exists(boost::shared_ptr<MessageIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it;
+	for(it = messages_.begin(); it != messages_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
+	if(it != messages_.end()){
+		return true;
+	} else {
+		return false;
+	}
 }
 
 const WorldObject& WorldInformation::get_according_marker(const MarkerIdentifier& id) const {
