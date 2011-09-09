@@ -31,3 +31,7 @@ Robot::~Robot() {
 void Robot::set_view(const boost::shared_ptr<View>& view) {
 	view_ = view;
 }
+
+const boost::shared_ptr<View> Robot::get_view() const{
+	return view_;
+}

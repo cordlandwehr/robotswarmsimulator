@@ -50,6 +50,8 @@ public:
 
 	void set_view(const boost::shared_ptr<View>& view);
 
+	const boost::shared_ptr<View> get_view() const;
+
 	virtual std::string get_algorithm_id () const = 0;
 
 	virtual std::set<boost::shared_ptr<Request> > compute() = 0;

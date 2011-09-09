@@ -52,6 +52,15 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	boost::shared_ptr<RemoveEdgeRequestHandler> request_handler_remove_edge(new RemoveEdgeRequestHandler(5, 0.0, *history));
 	event_handler.set_remove_edge_request_handler(request_handler_remove_edge);
 
+	// generate look event
+	boost::shared_ptr<LookEvent> look_event(new LookEvent(1));
+	look_event->add_to_robot_subset(robot_a);
+	look_event->add_to_robot_subset(robot_b);
+	look_event->add_to_robot_subset(robot_c);
+	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	event_handler.handle_event(look_event, *time_point);
+	history->insert(time_point);
+
 	// generate requests
 	boost::shared_ptr<Message> message_ba(new Message(id_b, id_a));
 	boost::shared_ptr<SendMessageRequest> message_request_ba(new SendMessageRequest(*robot_b, message_ba));
@@ -68,7 +77,7 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	boost::shared_ptr<RemoveEdgeRequest> remove_edge_request(new RemoveEdgeRequest(*robot_b, boost::dynamic_pointer_cast<EdgeIdentifier>(edge_bc->id())));
 
 	// construction of handle_requests_event
-	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(1));
+	boost::shared_ptr<HandleRequestsEvent> handle_requests_event(new HandleRequestsEvent(10));
 	handle_requests_event->add_to_requests(remove_edge_request);
 	handle_requests_event->add_to_requests(message_request_ba);
 	handle_requests_event->add_to_requests(message_request_ba2);
@@ -76,12 +85,12 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 	handle_requests_event->add_to_requests(message_request_ca);
 
 	// handling the event
-	boost::shared_ptr<TimePoint> time_point(new TimePoint());
+	time_point.reset(new TimePoint());
 	event_handler.handle_event(handle_requests_event, *time_point);
 	history->insert(time_point);
 
 	// generate look event
-	boost::shared_ptr<LookEvent> look_event(new LookEvent(2));
+	look_event.reset(new LookEvent(20));
 	look_event->add_to_robot_subset(robot_a);
 	look_event->add_to_robot_subset(robot_b);
 	look_event->add_to_robot_subset(robot_c);
@@ -107,7 +116,7 @@ BOOST_FIXTURE_TEST_CASE(message_handler_test, SimpleGraphFixture) {
 
 	// generate new request
 	boost::shared_ptr<RemoveMessageRequest> remove_message_request_ba(new RemoveMessageRequest(*robot_a, boost::dynamic_pointer_cast<MessageIdentifier>(message_ba->id())));
-	handle_requests_event.reset(new HandleRequestsEvent(2));
+	handle_requests_event.reset(new HandleRequestsEvent(30));
 	handle_requests_event->add_to_requests(remove_message_request_ba);
 
 	// handling the event
