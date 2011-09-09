@@ -3,7 +3,7 @@ set(CMAKE_VERBOSE_MAKEFILE false)
 
 # project name and version
 project("Robot Swarm Simulator")
-set(PROJECT_VERSION 1.0)
+set(PROJECT_VERSION 1.1)
 
 # module path
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/resources/CMake/modules)
@@ -51,22 +51,21 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 	        COMPONENT projectfiles
 	        FILES_MATCHING
 	        PATTERN *.swarm
-	        PATTERN *.robot
-	        PATTERN *.obstacle
+	        PATTERN *.csv
 	        PATTERN *.lua
 	        PATTERN .svn EXCLUDE
 	)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 
-# package Lua algorithms in src/LuaAlgorithms for release builds
-if(CMAKE_BUILD_TYPE MATCHES Release)
-	install(DIRECTORY src/LuaAlgorithms/
-	        DESTINATION LuaAlgorithms
-	        CONFIGURATIONS Release
-	        COMPONENT projectfiles
-	        PATTERN .svn EXCLUDE
-	)
-endif(CMAKE_BUILD_TYPE MATCHES Release)
+# # package Lua algorithms in src/LuaAlgorithms for release builds
+# if(CMAKE_BUILD_TYPE MATCHES Release)
+# 	install(DIRECTORY src/LuaAlgorithms/
+# 	        DESTINATION LuaAlgorithms
+# 	        CONFIGURATIONS Release
+# 	        COMPONENT projectfiles
+# 	        PATTERN .svn EXCLUDE
+# 	)
+# endif(CMAKE_BUILD_TYPE MATCHES Release)
 
 # package logo
 if(CMAKE_BUILD_TYPE MATCHES Release)

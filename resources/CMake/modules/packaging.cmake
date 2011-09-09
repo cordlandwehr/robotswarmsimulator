@@ -1,5 +1,5 @@
 # general packaging information
-set(CPACK_PACKAGE_VENDOR              "PG Schlaue Schwaerme, Universitaet Paderborn")
+set(CPACK_PACKAGE_VENDOR              "PG NODES, Universitaet Paderborn")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "TODO: DESCRIPTION_SUMMARY")
 set(CPACK_PACKAGE_VERSION             ${PROJECT_VERSION})
 set(CPACK_PACKAGE_INSTALL_DIRECTORY   ${PROJECT_NAME})
@@ -25,9 +25,6 @@ include(InstallRequiredSystemLibraries)
 # component informations
 set(CPACK_COMPONENT_MAINPROGRAM_DISPLAY_NAME "Robot Swarm Simulator")
 set(CPACK_COMPONENT_MAINPROGRAM_DESCRIPTION "The main program (and libraries).")
-set(CPACK_COMPONENT_GLUTLIBRARIES_DISPLAY_NAME "GLUT Libraries")
-set(CPACK_COMPONENT_GLUTLIBRARIES_DESCRIPTION
-    "OpenGL Utility Toolkit (dynamic libraries).")
 set(CPACK_COMPONENT_LUALIBRARIES_DISPLAY_NAME "Lua Libraries")
 set(CPACK_COMPONENT_LUALIBRARIES_DESCRIPTION "Dynamic libraries for Lua.")
 set(CPACK_COMPONENT_PROJECTFILES_DISPLAY_NAME "Project Files")
