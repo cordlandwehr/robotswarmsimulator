@@ -57,7 +57,6 @@ SimulationControl::~SimulationControl() {
 void SimulationControl::create_new_simulation(const std::string& configuration_filename,
 		                                      std::size_t history_length,
 		                                      std::string output_dir="",
-		                                      bool create_statistics=true,
 		                                      bool limited_steps=false,
 		                                      int number_of_steps=0,
 		                                      bool run_until_no_multiplicity=false) {
@@ -70,7 +69,7 @@ void SimulationControl::create_new_simulation(const std::string& configuration_f
 	// create and initialize new kernel. History should be passed here because the init method
 	// of the SimulationKernel will need it to construct EventHandler, ASG, StatisticKernel.
 	boost::shared_ptr<SimulationKernel> simulation_kernel(new SimulationKernel());
-	simulation_kernel->init(configuration_filename, history_, output_dir, create_statistics);
+	simulation_kernel->init(configuration_filename, history_, output_dir);
 
 	camera_position_ = simulation_kernel->camera_position();
 	camera_direction_ = simulation_kernel->camera_direction();
@@ -309,10 +308,3 @@ void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer)
 	visualizer_ = visualizer;
 }
 
-void SimulationControl::dump_simulation() {
-	simulation_kernel_functor_->dump_simulation();
-}
-
-void SimulationControl::SimulationKernelFunctor::dump_simulation() {
-	simulation_kernel_->dump_simulation();
-}

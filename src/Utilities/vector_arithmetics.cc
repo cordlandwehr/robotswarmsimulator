@@ -164,3 +164,16 @@ Vector3d vector3d_interpolate(Vector3d & vec1, Vector3d & vec2, double factor) {
 
 	return out;
 }
+
+
+Vector3d vector3d_cross(const Vector3d & vector1 ,const Vector3d & vector2) {
+	Vector3d normal = Vector3d();
+
+	// Calculate the cross product with the non communitive equation
+	normal(0) = vector1(1) * vector2(2) - vector1(2) * vector2(1);
+	normal(1) = vector1(2) * vector2(0) - vector1(0) * vector2(2);
+	normal(2) = vector1(0) * vector2(1) - vector1(1) * vector2(0);
+
+	// Return the cross product
+	return normal;
+}

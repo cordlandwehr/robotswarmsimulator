@@ -155,8 +155,8 @@ std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() {
 }
 
 void WorldInformation::add_edge(boost::shared_ptr<Edge> new_edge) {
-	RobotData& rd1 = get_according_robot_data(new_edge->getRobot1());
-	RobotData& rd2 = get_according_robot_data(new_edge->getRobot2());
+	RobotData& rd1 = get_according_robot_data(new_edge->robot1());
+	RobotData& rd2 = get_according_robot_data(new_edge->robot2());
 
 	// add requested edge to world_information and to adjacency list of robots
 	rd1.add_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(new_edge->id()));
@@ -170,15 +170,16 @@ void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edg
 	edges_ = new_edges;
 }
 
-bool WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
-	RobotData& rd1 = get_according_robot_data(edge->getRobot1());
-	RobotData& rd2 = get_according_robot_data(edge->getRobot2());
+void WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
+	RobotData& rd1 = get_according_robot_data(edge->robot1());
+	RobotData& rd2 = get_according_robot_data(edge->robot2());
 
 	// remove requested edge from world_information and from adjacency list of robots
 	rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));
 	rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));  
 
-	return edges_.erase(edge->id()->id());
+	// remove from world information
+	edges_.erase(edge->id()->id());
 }
 
 const std::map<std::size_t, boost::shared_ptr<Message> >& WorldInformation::messages() const {
@@ -202,22 +203,57 @@ void WorldInformation::set_message_data(std::map<std::size_t, boost::shared_ptr<
 	messages_ = new_messages;
 }
 
-bool WorldInformation::remove_message(boost::shared_ptr<Message> message){
-	//check whether the message is still in the receiver's queue
-	RobotData& rd = get_according_robot_data(message->receiver());
-	for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
-		if(rd.get_message(i)->id() == message->id()->id()){
-			rd.remove_message(i);
-			break;
+void WorldInformation::remove_message(boost::shared_ptr<Message> message){
+	if(robot_exists(message->receiver())){
+		//check whether the message is still in the receiver's queue
+		RobotData& rd = get_according_robot_data(message->receiver());
+		for(std::size_t i=0; i<rd.get_number_of_messages(); ++i){
+			if(rd.get_message(i)->id() == message->id()->id()){
+				rd.remove_message(i);
+				break;
+			}
 		}
-	}	
+	}
   
 	//now completely remove it from the system
-	return messages_.erase(message->id()->id());
+	messages_.erase(message->id()->id());
 }
 
 int WorldInformation::time() const {
 	return time_;
+}
+
+bool WorldInformation::robot_exists(boost::shared_ptr<RobotIdentifier> id) const {
+	if(id->id() < robot_data_.size())
+		return true;
+	else
+		return false;
+}
+
+bool WorldInformation::edge_exists(boost::shared_ptr<EdgeIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Edge> >::const_iterator it;
+	for(it = edges_.begin(); it != edges_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
+	if(it != edges_.end()){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool WorldInformation::message_exists(boost::shared_ptr<MessageIdentifier> id) const {
+	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it;
+	for(it = messages_.begin(); it != messages_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
+	if(it != messages_.end()){
+		return true;
+	} else {
+		return false;
+	}
 }
 
 const WorldObject& WorldInformation::get_according_marker(const MarkerIdentifier& id) const {

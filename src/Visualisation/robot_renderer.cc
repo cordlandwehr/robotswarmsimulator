@@ -104,26 +104,6 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 		glTranslatef((*rob_pos)(0), (*rob_pos)(1), (*rob_pos)(2) );
 
 	glBegin(GL_LINES);
-// 	if (renderer_->render_velocity()){
-// 
-// 		Vector3d vel = *robot->extrapolated_velocity(extrapolate_);
-// 		glColor3fv(kVelColor);
-// 		glVertex3f(0 ,0, 0 );
-// 		glVertex3f( kScaleVecs * vel(0),
-// 				    kScaleVecs *  vel(1),
-// 					kScaleVecs *  vel(2) );
-// 
-// 	}
-
-// 	if (renderer_->render_acceleration()){
-// 
-// 		Vector3d acc = robot->acceleration();
-// 		glColor3fv(kAccelColor);
-// 		glVertex3f(0 , 0, 0 );
-// 		glVertex3f( kScaleVecs * acc(0),
-// 					kScaleVecs * acc(1),
-// 					kScaleVecs * acc(2) );
-// 	}
 
 	if (renderer_->render_local_coord_system()){
 
@@ -160,10 +140,12 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	glEnd();
 
 	unsigned int rob_color =  robot->color() < kRobotIdColorNum ? robot->color() : 0 ;
-	if((robot->marker_information()).has_key("color"))
-		rob_color = boost::any_cast<double>((robot->marker_information()).get_data("color"));
-	//TODO : only 10 colors can be displayed right now
-	rob_color = rob_color % 10;
+	if(robot->marker_information().has_key("color")) {
+		boost::any color = robot->marker_information().get_data("color");
+		double * color_ptr = boost::any_cast<double>(&color);
+		if(color_ptr)
+			rob_color = *color_ptr < kRobotIdColorNum ? static_cast<unsigned int>(*color_ptr) : 0 ;
+	}
 	glColor3fv(&kRobotIdColor[rob_color][0]);
 	draw_robot_sphere( rob_pos );
 

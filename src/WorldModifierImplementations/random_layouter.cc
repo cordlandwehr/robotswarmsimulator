@@ -7,6 +7,8 @@
 
 #include "random_layouter.h"
 
+#include <math.h>
+
 #include <boost/graph/random_layout.hpp>
 
 #include "../Model/robot_data.h"
@@ -24,7 +26,9 @@ RandomLayouter::compute(const boost::shared_ptr<WorldInformation> &world_informa
 	boost::shared_ptr<BoostGraph> g = Layouter::transform_into_boost_graph(*world_information);
 
 	boost::minstd_rand gen;
-	boost::rectangle_topology<> rect_top(gen, 0, 0, 50, 50);
+	int n = world_information->robot_data().size();
+	double sideLength = sqrt(n);
+	boost::rectangle_topology<> rect_top(gen, 0, 0, sideLength, sideLength);
 	boost::random_graph_layout(*g, get(vertex_position, *g), rect_top);
 
 	Layouter::apply_positions(*g);

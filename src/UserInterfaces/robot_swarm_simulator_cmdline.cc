@@ -47,8 +47,6 @@
 
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
-#include <SzenarioGenerator/szenario_generator.h>
-#include <SzenarioGenerator/formation_generator.h>
 #include <Utilities/console_output.h>
 #include <Wrapper/lua_distribution_generator.h>
 #include <Gui/rss_main_window.h>
@@ -73,52 +71,6 @@ int main(int argc, char** argv) {
 	general_options.add_options()
 		("loglevel", po::value<std::string>()->default_value("info"), "log level");
 
-	po::options_description generation_options("Generator options");
-	generation_options.add_options()
-		("generate", "switch to generator mode")
-		("distr-pos-circle", po::value<double>(), "circle radius")
-		("distr-pos-circle-angle", po::value<double>()->default_value(15.0), "density of robots")
-		("distr-uniform-on-sphere", po::value<double>()->default_value(15.0), "sphere radius")
-		("seed", po::value<unsigned int>()->default_value(1), "seed for random number generator")
-		("robots", po::value<unsigned int>()->default_value(100), "number of robots")
-		("algorithm", po::value<std::string>()->default_value("NONE"), "name of algorithm or lua-file")
-		("swarmfile", po::value<std::string>()->default_value("newrandom"), "swarm-file for output")
-		("robotfile", "robot-file for output")
-		("obstaclefile", "obstacle-file for output")
-		("add-pos-handler", "add position request handler for testing")
-		("add-vel-handler", "add velocity request handler for testing")
-		("add-acc-handler", "add acceleration request handler for testing")
-		("distr-pos", po::value<double>()->default_value(0), "distribute position in cube [0;distr-pos]^3")
-		("distr-gauss-pos", po::value<double>(), "bounding box for gaussian distribution [0;distr-pos]^3")
-		("mean-pos", po::value<double>(), "mean for gaussian distribution (positions)")
-		("sigma-pos", po::value<double>(), "sigma for gaussian distribution (position)")
-		("mean-vel", po::value<double>(), "mean for gaussian distribution (velocities)")
-		("sigma-vel", po::value<double>(), "sigma for gaussian distribution (velocities)")
-		("mean-acc", po::value<double>(), "mean for gaussian distribution (accelerations)")
-		("sigma-acc", po::value<double>(), "sigma for gaussian distribution (accelerations)")
-		("random-walk", "random walk formation generator is used")
-		("rnd-walk-steps", po::value<unsigned int>()->default_value(100), "numer of random steps")
-		("rnd-min-distance", po::value<double>()->default_value(100.0), "minimum distance of a random step")
-		("rnd-max-distance", po::value<double>()->default_value(2500.0), "maximum distance of a random step")
-		("cluster", "cluster formation generator is used")
-		("clt-clusters", po::value<unsigned int>()->default_value(3), "number of clusters")
-		("clt-min-distance", po::value<double>()->default_value(1.0), "minimum distance of a cluster center from the origin")
-		("clt-max-distance", po::value<double>()->default_value(25.0), "maximum distance of a cluster center from the origin")
-		("clt-sigma", po::value<double>()->default_value(1.0), "sigma for gaussian distribution around the cluster centres")
-		("poisson-disc", "poisson disc formation generator is used")
-		("pd-spread", po::value<double>()->default_value(0.005), "controls the spreading of the robots. If choosen too high to few robots might be generated. (Interval: 0.0005 to 0.2)")
-		("pd-diameter", po::value<double>()->default_value(0.15), "controls the diameter of the sphere in which no other robot is generated")
-		("min-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with minimal absolute value min-vel")
-		("max-vel", po::value<double>()->default_value(0), "distribute velocity in sphere with maximal absolute value max-vel")
-		("min-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with minimal absolute value min-acc")
-		("max-acc", po::value<double>()->default_value(0), "distribute acceleration in sphere with maximal absolute value max-acc")
-		("cosys-rotate-x", "rotate x-axis of robot coordinate-systems uniformly")
-		("cosys-rotate-y", "rotate y-axis of robot coordinate-systems uniformly")
-		("cosys-rotate-z", "rotate z-axis of robot coordinate-systems uniformly")
-		("cosys-scale-x", "scale x-axis-vector of robot coordinate-systems uniformly in range (0,1]")
-		("cosys-scale-y", "scale y-axis-vector of robot coordinate-systems uniformly in range (0,1]")
-		("cosys-scale-z", "scale z-axis-vector of robot coordinate-systems uniformly in range (0,1]");
-
 	po::options_description simulation_options("Simulation options");
 	simulation_options.add_options()
 		("project-file", po::value<std::string>(), "Project file to load")
@@ -135,10 +87,10 @@ int main(int argc, char** argv) {
 	top_secret_options.add_options()("aiee", "");
 
 	po::options_description options;
-	options.add(general_options).add(generation_options).add(simulation_options).add(top_secret_options);
+	options.add(general_options).add(simulation_options).add(top_secret_options);
 
 	po::options_description options_help_list;
-	options_help_list.add(general_options).add(generation_options).add(simulation_options);
+	options_help_list.add(general_options).add(simulation_options);
 
 	// create variable map and parse options from command line
 	po::variables_map vm;
@@ -206,61 +158,6 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	/*
-	 * Generate a new szenario
-	 */
-	if (vm.count("generate")) {
-		try {
-			// init
-			ScenarioGenerator generator(vm["seed"].as<unsigned int>());	// set seed
-			generator.init(vm);				// init distribution generator
-
-			// files
-			generator.set_worldFile(vm["swarmfile"].as<std::string>());
-			if (vm.count("robotfile"))
-				generator.set_robotFile(vm["robotfile"].as<std::string>());
-			else
-				generator.set_robotFile(vm["swarmfile"].as<std::string>());
-			if (vm.count("obstaclefile"))
-				generator.set_obstacleFile(vm["obstaclefile"].as<std::string>());
-			else
-				generator.set_obstacleFile(vm["swarmfile"].as<std::string>());
-
-			// distribute everything
-			generator.distribute();
-
-			// always start coord-system distributer
-			generator.distribute_coordsys(vm);
-
-			// sets request handler if requested
-			if (vm.count("add-pos-handler"))
-				generator.add_play_pos_request_handler();
-			if (vm.count("add-vel-handler"))
-				generator.add_play_vel_request_handler();
-			if (vm.count("add-acc-handler"))
-				generator.add_play_acc_request_handler();
-
-			// write to file
-			generator.write_to_file();
-
-			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Robots were generated!";
-			ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "Please see file: "
-			                                                                   << vm["swarmfile"].as<std::string>()
-			                                                                   << ".swarm";
-		}
-		catch (std::exception& e) {
-			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << e.what();
-			throw;
-		}
-		catch(...) {
-			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.";
-			throw; //rethrow exception
-		}
-
-		return 1;
-	}
-
-
 	try {
 		if (vm.count("project-file")) {
 			std::string tmpProjectFile = vm["project-file"].as<std::string>();
@@ -277,8 +174,6 @@ int main(int argc, char** argv) {
 				LuaWrapper::lua_generator_set_seed(luaseed);
 			}
 
-			// checks iff statistics shall be created
-			bool create_statistics = !vm.count("dry");
 
 			// checks iff visualization should be created and checks if steps is set
 			bool create_visualization = !vm.count("blind");
@@ -289,22 +184,16 @@ int main(int argc, char** argv) {
 					std::cout << "If --blind is set, --steps need to be set to prevent infinite loop" << std::endl;
 					return 1;
 				}
-
-				if(!create_statistics) {
-					std::cout << "Warning: No Statistics and No Visualisation set" << std::endl;
-					std::cout << "If a man speaks in the forest and there is no woman there to hear it, is he still wrong?" << std::endl;
-				}
 			}
 
 			// create simulation kernel
 			boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
 			if(!vm.count("steps")) {
 				std::cout <<  "creating simulation without limited steps" << std::endl;
-				sim_control->create_new_simulation(tmpProjectFile,
+			sim_control->create_new_simulation(tmpProjectFile,
 												   vm["history-length"].as<unsigned int>(),
 												   vm["output"].as<std::string>(),
-												   create_statistics,
-												   false,
+											   false,
 												   0,
 												   run_until_no_multiplicity);
 			} else {
@@ -312,7 +201,6 @@ int main(int argc, char** argv) {
 				sim_control->create_new_simulation(tmpProjectFile,
 												   vm["history-length"].as<unsigned int>(),
 												   vm["output"].as<std::string>(),
-												   create_statistics,
 												   true,
 												   vm["steps"].as<unsigned int>(),
 												   run_until_no_multiplicity);
@@ -322,6 +210,9 @@ int main(int argc, char** argv) {
 
 				QApplication app(argc, argv);
 				Q_INIT_RESOURCE(qt_resources);
+				app.setApplicationName("RobotSwarmSimulator");
+				app.setOrganizationName("Uni Paderborn");
+				app.setOrganizationDomain("uni-paderborn.de");
 
 				RSSMainWindow main_window;
 
@@ -357,6 +248,9 @@ int main(int argc, char** argv) {
 
 			QApplication app(argc, argv);
 			Q_INIT_RESOURCE(qt_resources);
+			app.setApplicationName("RobotSwarmSimulator");
+			app.setOrganizationName("Uni Paderborn");
+			app.setOrganizationDomain("uni-paderborn.de");
 
 			RSSMainWindow main_window;
 
@@ -374,6 +268,7 @@ int main(int argc, char** argv) {
 	catch(...) {
 		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.\n";
 		throw; //rethrow exception
-	}
+	}	
+
 	return 0;
 }

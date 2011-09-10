@@ -60,31 +60,31 @@
 BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 {
   //TODO (asetzer) this does not work for some reason...
-// 	boost::shared_ptr<Parser> parser;
-// 	parser.reset(new Parser());
-// 	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
-// 	
+	boost::shared_ptr<Parser> parser;
+	parser.reset(new Parser());
+	parser->load_projectfiles("src/Tests/TestData/testfile_1");
+ 	
 	//check variables read from main project file
 	//BOOST_CHECK_EQUAL(parser->parameter_map_boost_["PROJECT_NAME"].as<std::string>(), "My Exciting Project");
-// 	BOOST_CHECK_EQUAL(parser->robot_filename_, "src/Tests/TestData/testfile_1_robot.csv");
-// 	BOOST_CHECK_EQUAL(parser->edge_filename_, "src/Tests/TestData/testfile_1_edges.csv");
+ 	//BOOST_CHECK_EQUAL(parser->robot_filename_, "src/Tests/TestData/testfile_1_robot.csv");
+ 	//BOOST_CHECK_EQUAL(parser->edge_filename_, "src/Tests/TestData/testfile_1_edges.csv");
 
 	//########################################################################
 	//				check request handler stuff
 	//########################################################################
 
-// 	// RobotControl needed for EventHandler
-// 	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<LocalGraphView>());
-// 	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
+ 	// RobotControl needed for EventHandler
+//  	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<LocalGraphView>());
+//  	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
+//  
 // 
-
-// 	boost::program_options::variables_map &params = parser->parameter_map_boost();
-// 	boost::shared_ptr<EventHandler> event_handler = Factory::event_handler_factory(history, robot_control);
-// 
-// 	// marker request handler
-// 	BOOST_REQUIRE(event_handler);
-// 	BOOST_REQUIRE(event_handler->marker_request_handler_);
-// 	BOOST_CHECK_EQUAL(1.0, event_handler->marker_request_handler_->discard_probability_);
+//  	boost::program_options::variables_map &params = parser->parameter_map_boost();
+//  	boost::shared_ptr<EventHandler> event_handler = Factory::event_handler_factory(history, robot_control);
+//  
+//  	// marker request handler
+//  	BOOST_REQUIRE(event_handler);
+//  	BOOST_REQUIRE(event_handler->marker_request_handler_);
+//  	BOOST_CHECK_EQUAL(1.0, event_handler->marker_request_handler_->discard_probability_);
 /*
 
 	//########################################################################

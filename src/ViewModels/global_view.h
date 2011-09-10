@@ -35,6 +35,7 @@
 #include "../Views/robot_status_view.h"
 #include "../Views/robot_last_request_successful_view.h"
 #include "../Views/time_view.h"
+#include "../Views/message_view.h"
 
 /**
  * \class GlobalView

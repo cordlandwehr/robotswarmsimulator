@@ -74,8 +74,8 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 			for(int j=0;j<degreeOfCurrentNode;j++){
 				boost::shared_ptr<Edge> e = graph->get_according_edge(edges[j]);
 
-				RobotData& rd1 = graph->get_according_robot_data(e->getRobot1());
-				RobotData& rd2 = graph->get_according_robot_data(e->getRobot2());
+				RobotData& rd1 = graph->get_according_robot_data(e->robot1());
+				RobotData& rd2 = graph->get_according_robot_data(e->robot2());
 
 				currNodeMarker = rd1.marker_information();
 				if(!currNodeMarker.has_key("color"))
@@ -112,8 +112,8 @@ int StatsCalc::calculate_total_defects(const boost::shared_ptr<WorldInformation>
 	while(it != edges.end()){
 		boost::shared_ptr<Edge> currentEdge = it->second;
 
-		RobotData& rd1 = graph->get_according_robot_data(currentEdge->getRobot1());
-		RobotData& rd2 = graph->get_according_robot_data(currentEdge->getRobot2());
+		RobotData& rd1 = graph->get_according_robot_data(currentEdge->robot1());
+		RobotData& rd2 = graph->get_according_robot_data(currentEdge->robot2());
 
 		MarkerInformation currNodeMarker = rd1.marker_information();
 		if(!currNodeMarker.has_key("color"))
@@ -182,8 +182,8 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 			if(!found){
 				boost::shared_ptr<Edge> e = graph->get_according_edge(current_edge_ID);
 
-				boost::shared_ptr<RobotData> rd1 = graph->get_according_robot_data_ptr(e->getRobot1());
-				boost::shared_ptr<RobotData> rd2 = graph->get_according_robot_data_ptr(e->getRobot2());
+				boost::shared_ptr<RobotData> rd1 = graph->get_according_robot_data_ptr(e->robot1());
+				boost::shared_ptr<RobotData> rd2 = graph->get_according_robot_data_ptr(e->robot2());
 
 				boost::shared_ptr<RobotData> child;
 				if(rd1 == current_node)

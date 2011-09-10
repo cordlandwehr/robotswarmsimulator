@@ -166,11 +166,10 @@ public:
 	void set_edge_data(std::map<std::size_t, boost::shared_ptr<Edge> > new_edges);
 
 	/**
-	 * Removes edge from edge map.
+	 * Removes edge from edge map and according robots
 	 * \param Shared pointer to edge
-	 * \return True if edge was removed, false otherwise
 	 */
-	bool remove_edge(boost::shared_ptr<Edge> edge);
+	void remove_edge(boost::shared_ptr<Edge> edge);
 
 	/**
 	 * Returns a constant reference to the set of the messages.
@@ -197,11 +196,10 @@ public:
 	void set_message_data(std::map<std::size_t, boost::shared_ptr<Message> > new_messages);
 
 	/**
-	 * Removes message from message map.
+	 * Removes message from message map and queue of according robot.
 	 * \param Shared pointer to message
-	 * \return True if message was removed, false otherwise
 	 */
-	bool remove_message(boost::shared_ptr<Message> message);
+	void remove_message(boost::shared_ptr<Message> message);
 
 	/**
 	 * Returns the time (measured in steps) when this world info object was created.
@@ -214,6 +212,34 @@ public:
 	 * \param the new time
 	 */
 	void set_time(int time) {time_ = time;}
+
+	/**
+	 * \brief Checks whether the robot exists.
+	 *
+	 * Checks whether the robot identified by the RobotIdentifier id exists and return true if it does.
+	 *
+	 * \return true if robot exists, false otherwise
+	 */
+	bool robot_exists(boost::shared_ptr<RobotIdentifier> id) const;
+
+	/**
+	 * \brief Checks whether the edge exists.
+	 *
+	 * Checks whether the edge identified by the EdgeIdentifier id exists and return true if it does.
+	 *
+	 * \return true if edge exists, false otherwise
+	 */
+	bool edge_exists(boost::shared_ptr<EdgeIdentifier> id) const;
+
+
+	/**
+	 * \brief Checks whether the message exists.
+	 *
+	 * Checks whether the message identified by the MessageIdentifier id exists and return true if it does.
+	 *
+	 * \return true if message exists, false otherwise
+	 */
+	bool message_exists(boost::shared_ptr<MessageIdentifier> id) const;
 
 	/**
 	 * \brief Returns a constant reference to marker object with given id.

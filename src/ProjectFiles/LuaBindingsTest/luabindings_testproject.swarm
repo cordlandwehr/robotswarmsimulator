@@ -1,0 +1,7 @@
+PROJECT_NAME=Luabindings Testproject
+ROBOT_FILENAME=luabindings_testrobot.csv
+EDGE_FILENAME=luabindings_testedges.csv
+WORLD_MODIFIERS=luabindings_testWorldModifier.lua
+
+ASG=SYNCHRONOUS_WM
+VIEW=LOCAL_GRAPH_VIEW

@@ -11,11 +11,11 @@ DirectedEdge::~DirectedEdge(){
 }
 
 boost::shared_ptr<RobotIdentifier> DirectedEdge::source() const {
-	return Edge::getRobot1();
+	return Edge::robot1();
 }
 
 boost::shared_ptr<RobotIdentifier> DirectedEdge::target() const {
-	return Edge::getRobot2();
+	return Edge::robot2();
 }
 
 boost::shared_ptr<WorldObject> DirectedEdge::clone() const {

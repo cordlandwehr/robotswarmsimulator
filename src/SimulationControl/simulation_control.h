@@ -65,7 +65,6 @@ public:
 	void create_new_simulation(const std::string& configuration_filename,
 	                           std::size_t history_length,
 	                           std::string ouput_dir,
-	                           bool create_statistics,
 	                           bool limited_steps,
 	                           int number_of_steps,
 	                           bool run_until_no_multiplicity);
@@ -123,11 +122,6 @@ public:
 	 */
 	void set_visualizer(boost::shared_ptr<Visualizer> visualizer);
 
-	/**
-	 * Used to tell the Functor to tell the Simkernel to save the current configuration
-	 */
-	void dump_simulation();
-
 	std::string camera_position(){ return camera_position_; }
 	std::string camera_direction(){ return camera_direction_; }
 	std::string camera_type(){ return camera_type_; }
@@ -177,11 +171,6 @@ private:
 		 * returns true iff the functor is terminated
 		 */
 		bool is_terminated() {return terminated_;};
-
-		/**
-		 * Used to tell the Simkernel to save the current configuration
-		 */
-		void dump_simulation();
 
 	private:
 		/**

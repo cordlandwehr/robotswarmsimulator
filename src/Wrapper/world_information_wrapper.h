@@ -285,9 +285,13 @@ private:
    * \param map		Map to be checked.
    * \param key		Key (ID) to be looked up.
    */
-  template<typename T>
-  static void check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key);
-   
+//   template<typename T>
+//   static void check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key);
+// TODO: Change this back to using the template!
+  static void check_mapping(const std::map<std::size_t, boost::shared_ptr<EdgeIdentifier> >& map, std::size_t key);
+  static void check_mapping(const std::map<std::size_t, boost::shared_ptr<MessageIdentifier> >& map, std::size_t key);
+  static void check_mapping(const std::map<std::size_t, boost::shared_ptr<RobotIdentifier> >& map, std::size_t key);
+
   /**
    * Updates references maps.
    * 

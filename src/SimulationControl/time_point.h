@@ -29,7 +29,6 @@
 #define TIME_POINT_H_
 
 #include "../Model/world_information.h"
-#include "../Statistics/statistics_data_object.h"
 #include <boost/smart_ptr.hpp>
 
 #include <iostream>
@@ -37,7 +36,7 @@
 /**
  * The TimePoint class encapusaltes a WorldInformation Object and statistical information for a certain
  * point in time.
- * A TimePoint in the History MUST contain a WorldInformation. It MAY contain statistical information.
+ * A TimePoint in the History MUST contain a WorldInformation.
  */
 class TimePoint {
 public:

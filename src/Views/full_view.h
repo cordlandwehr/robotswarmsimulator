@@ -47,6 +47,11 @@ protected:
 	virtual std::vector<RobotRef> get_visible_robots(const RobotData& robot) const;
 	virtual std::vector<ObstacleRef> get_visible_obstacles(const RobotData& robot) const;
 	virtual std::vector<MarkerRef> get_visible_markers(const RobotData& robot) const;
+
+	virtual std::vector<View::EdgeRef> get_visible_edges(const RobotData& robot) const;
+	virtual bool is_edge_directed(const Edge& edge) const;
+	virtual View::RobotRef get_edge_source(const Edge& edge) const;
+	virtual View::RobotRef get_edge_target(const Edge& edge) const;
 };
 
 #endif /* FULL_VIEW_H_ */

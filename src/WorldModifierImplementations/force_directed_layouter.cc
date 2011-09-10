@@ -27,10 +27,11 @@ ForceDirectedLayouter::compute(const boost::shared_ptr<WorldInformation> &world_
 	boost::shared_ptr<BoostGraph> g = Layouter::transform_into_boost_graph(*world_information);
 
 	boost::minstd_rand gen;
+	int n = world_information->robot_data().size();
+	double sideLength = 200*sqrt(n);
+	boost::rectangle_topology<> rect_top(gen, 0, 0, sideLength, sideLength);
 
-	typedef boost::square_topology<> Topology;
-	Topology topology(gen, 1000.0);
-	fruchterman_reingold_force_directed_layout(*g, get(vertex_position, *g), topology);
+	fruchterman_reingold_force_directed_layout(*g, get(vertex_position, *g), rect_top);
 
 	Layouter::apply_positions(*g);
 

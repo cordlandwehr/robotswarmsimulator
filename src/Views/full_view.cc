@@ -32,6 +32,8 @@
 #include "../Model/obstacle_identifier.h"
 #include "../Model/world_object.h"
 #include "../Model/obstacle.h"
+#include "../Model/edge.h"
+#include "../Model/directed_edge.h"
 
 
 #include <boost/foreach.hpp>
@@ -75,4 +77,41 @@ std::vector<View::ObstacleRef> FullView::get_visible_obstacles(const RobotData& 
 }
 std::vector<View::MarkerRef> FullView::get_visible_markers(const RobotData& robot) const {
 	return convert_to_set<MarkerIdentifier, WorldObject>(world_information().markers());
+}
+
+typedef std::map<std::size_t, boost::shared_ptr<Edge> > edge_map;
+
+std::vector<View::EdgeRef> FullView::get_visible_edges(const RobotData& robot) const {
+	edge_map all_edges = world_information().edges();
+	std::vector<View::EdgeRef> result;
+	BOOST_FOREACH(edge_map::value_type& e, all_edges){
+		result.push_back(boost::dynamic_pointer_cast<EdgeIdentifier>(e.second->id()));
+	}
+	return result;
+}
+
+bool FullView::is_edge_directed(const Edge& edge) const {
+	if(typeid(edge) == typeid(DirectedEdge)){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+View::RobotRef FullView::get_edge_source(const Edge& edge) const{
+	if(typeid(edge) == typeid(DirectedEdge)) {
+		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
+		return de.source();
+	} else {
+		return edge.robot1();
+	}
+}
+
+View::RobotRef FullView::get_edge_target(const Edge& edge) const{
+	if(typeid(edge) == typeid(DirectedEdge)) {
+		DirectedEdge de = dynamic_cast<const DirectedEdge&>(edge);
+		return de.target();
+	} else {
+		return edge.robot2();
+	}
 }

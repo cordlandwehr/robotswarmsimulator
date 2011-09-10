@@ -13,12 +13,14 @@
 #include <QtGui/QMainWindow>
 #include <QtCore/QSignalMapper>
 #include "ui_rss_main_window.h"
+#include "ui_about_dialog.h"
 
 class OpenProjectDialog;
 class GeneratorWizard;
 class RSSGLWidget;
-class RobotData;
+class Identifier;
 class WorldObject;
+class HelpDialog;
 
 class RSSMainWindow : public QMainWindow {
 	Q_OBJECT
@@ -31,16 +33,24 @@ public:
 
 	RSSGLWidget * rss_gl_widget() { return rss_gl_widget_; }
 
+protected:
+	virtual void timerEvent(QTimerEvent * event);
+	virtual void closeEvent(QCloseEvent * event);
+
 private slots:
 	void toggle_simulation();
 	void update_simulation_speed(int op);
 	void step_simulation();
 	void update_simulation();
-	void generate_simulation();
-	void set_camera_mode(int mode);
-	void select_robot(boost::shared_ptr<RobotData> robot_data);
+	void selected_object_changed(boost::shared_ptr<Identifier> id);
+	void tree_selection_changed(QTreeWidgetItem* item, int column);
+	void writeSettings();
+	void readSettings();
+	void update_help_window();
 
 private:
+
+	void update_selected_object();
 
 	enum {
 		INCREASE_SPEED,
@@ -49,17 +59,18 @@ private:
 		DOUBLE_SPEED
 	};
 	enum {
-		CAM_FOLLOW=0,
-		CAM_FREE,
+		CAM_FREE=0,
+		CAM_FOLLOW,
 		CAM_COG
 	};
 
 	Ui::RSSMainWindow ui_;
+	QDialog *about_dialog_;
+	HelpDialog *help_dialog_;
 	OpenProjectDialog *open_dialog_;
 	GeneratorWizard *generator_wizard_;
 	RSSGLWidget *rss_gl_widget_;
-	QSignalMapper *speed_signal_mapper_;
-	QSignalMapper *cam_signal_mapper_;
+	boost::shared_ptr<Identifier> selection_id_;
 };
 
 #endif /* RSS_MAIN_WINDOW_H_ */

@@ -22,6 +22,9 @@ class RSSGLWidget : public QGLWidget {
 	Q_OBJECT
 
 public:
+	enum { UP, DOWN, LEFT, RIGHT, FORWARD, BACKWARD };
+	enum { DOUBLE_SPEED, HALF_SPEED };
+
 	RSSGLWidget(QWidget *parent = 0);
 	~RSSGLWidget();
 
@@ -33,8 +36,14 @@ public:
 		return simulation_renderer_;
 	}
 
+public slots:
+	void move_camera(int direction);
+	void toggle_camera_mode();
+	void set_camera_mode(int mode);
+	void set_camera_speed(int type);
+
 signals:
-	void selected_robot_changed(boost::shared_ptr<RobotData> robot_data);
+	void selected_object_changed(boost::shared_ptr<Identifier> id);
 
 protected:
 	virtual void initializeGL();
@@ -43,10 +52,10 @@ protected:
 
 	virtual void timerEvent(QTimerEvent * event);
 
-	virtual void keyPressEvent( QKeyEvent *event );
 	virtual void mouseMoveEvent( QMouseEvent * event );
 	virtual void mousePressEvent( QMouseEvent * event );
 	virtual void mouseReleaseEvent( QMouseEvent * event );
+	virtual void wheelEvent( QWheelEvent * event );
 
 private:
 
