@@ -12,6 +12,7 @@
 class MessageIdentifier : public Identifier {
 public:
 	explicit MessageIdentifier();
+	explicit MessageIdentifier(std::size_t id);
 
 	MessageIdentifier(const MessageIdentifier& rhs) : Identifier(rhs) {};
 

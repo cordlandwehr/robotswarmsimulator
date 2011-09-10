@@ -12,6 +12,7 @@
 class EdgeIdentifier : public Identifier {
 public:
 	explicit EdgeIdentifier();
+	explicit EdgeIdentifier(std::size_t id);
 
 	EdgeIdentifier(const EdgeIdentifier& rhs) : Identifier(rhs) {};
 

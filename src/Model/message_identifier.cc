@@ -3,6 +3,9 @@
 MessageIdentifier::MessageIdentifier() : Identifier(message_id_counter_++) {
 }
 
+MessageIdentifier::MessageIdentifier(std::size_t id) : Identifier(id) {
+}
+
 MessageIdentifier::~MessageIdentifier() {
 }
 
