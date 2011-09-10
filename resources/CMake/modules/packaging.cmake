@@ -35,6 +35,9 @@ set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION
     "Manual and API for the simulator. You should have a look at the manual to get started.")
 set(CPACK_PACKAGE_CONTACT "pg-nodes@mail.uni-paderborn.de")
 
+# make one package
+set(CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE 1)
+
 # installs some needed shared runtime libraries on windows systems
 include(InstallRequiredSystemLibraries)
 
