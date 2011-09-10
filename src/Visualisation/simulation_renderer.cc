@@ -286,7 +286,7 @@ void SimulationRenderer::draw(){
 
 	double max_dist = 1.0;
 
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info->robot_data().begin(); it != world_info->robot_data().end(); ++it) {	
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
 		boost::shared_ptr<RobotData> it_robot_data = it->second;
 
 		double dist = boost::numeric::ublas::norm_2( it_robot_data->position() - cameras_[active_camera_index_]->position());
@@ -309,9 +309,9 @@ void SimulationRenderer::draw(){
 
 
 	std::vector<boost::shared_ptr<RobotData> > robot_data;
-	world_info->robot_data_to_vector(robot_data);
+	world_info_->robot_data_to_vector(robot_data);
 
-	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), robot_data,extrapolate );
+	cameras_[active_camera_index_]->update(world_info_->markers(), world_info_->obstacles(), robot_data, extrapolate_ );
 	cameras_[active_camera_index_]->look_rot();
 
 	//(asetzer) crashes and we don't need it

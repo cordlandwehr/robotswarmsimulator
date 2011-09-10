@@ -186,8 +186,8 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	// draw messages
 	Vector3d pos;
 	vector3d_set(pos, *rob_pos);
-	pos[kXCoord] += robot_radius/2;
-	pos[kYCoord] += robot_radius/2;
+	pos[kXCoord] -= robot_radius/2;
+	pos[kYCoord] -= robot_radius/2;
 	pos[kZCoord] -= robot_radius/2;
 	glPushName(SimulationRenderer::SELECTION_MESSAGE);
 	std::map<std::size_t, boost::shared_ptr<Message> >::const_iterator it;
@@ -216,8 +216,8 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
 	for(it_edge = robot->get_edges().begin(); it_edge != robot->get_edges().end(); ++it_edge) {
 		boost::shared_ptr<Edge> edge = renderer_->world_info()->get_according_edge(*it_edge);
-		boost::shared_ptr<Vector3d> pos1 = renderer_->world_info()->get_according_robot_data(edge->getRobot1()).extrapolated_position();
-		boost::shared_ptr<Vector3d> pos2 = renderer_->world_info()->get_according_robot_data(edge->getRobot2()).extrapolated_position();
+		boost::shared_ptr<Vector3d> pos1 = renderer_->world_info()->get_according_robot_data(edge->robot1()).extrapolated_position();
+		boost::shared_ptr<Vector3d> pos2 = renderer_->world_info()->get_according_robot_data(edge->robot2()).extrapolated_position();
 
 		glPushName((*it_edge)->id());
 

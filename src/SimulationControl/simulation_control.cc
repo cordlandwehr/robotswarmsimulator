@@ -274,30 +274,40 @@ void SimulationControl::SimulationKernelFunctor::terminate() {
 void SimulationControl::SimulationKernelFunctor::loop() {
 	int steps = 0;
 	while(!terminated_) {
-		//wait if unpaused == 0
-		unpaused_.wait();
-		unpaused_.post();
+		try{
+			//wait if unpaused == 0
+			unpaused_.wait();
+			unpaused_.post();
 
-		long curStepClock = clock();
+			long curStepClock = clock();
 
-		simulation_kernel_->step();
+			simulation_kernel_->step();
 
-		curStepClock = (clock() - curStepClock);
-		totalcalctime_ += curStepClock;
-		double avgtime = totalcalctime_ * 1000.0 / CLOCKS_PER_SEC / (steps+1);
-		double curtime = curStepClock * 1000.0 / CLOCKS_PER_SEC;
+			curStepClock = (clock() - curStepClock);
+			totalcalctime_ += curStepClock;
+			double avgtime = totalcalctime_ * 1000.0 / CLOCKS_PER_SEC / (steps+1);
+			double curtime = curStepClock * 1000.0 / CLOCKS_PER_SEC;
 
-		if(limited_steps_) {
-			ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_ << " with " << curtime << " ms (avg is " << avgtime << " ms)";
+			if(limited_steps_) {
+				ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_ << " with " << curtime << " ms (avg is " << avgtime << " ms)";
 
-			steps++;
-			if( steps > number_of_steps_) {
+				steps++;
+				if( steps > number_of_steps_) {
+					terminate();
+				}
+			}
+
+			// check for a termination condition
+			if(simulation_kernel_->terminate_condition(run_until_no_multiplicity_)) {
 				terminate();
 			}
 		}
-
-		// check for a termination condition
-		if(simulation_kernel_->terminate_condition(run_until_no_multiplicity_)) {
+		catch(std::exception& e) {
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << e.what();
+			terminate();
+		}
+		catch(...) {
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.\n";
 			terminate();
 		}
 	}

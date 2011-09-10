@@ -11,6 +11,7 @@
 #include <QBitmap>
 #include <QResource>
 #include <QDir>
+#include <QFile>
 #include <QActionGroup>
 #include <QSettings>
 
@@ -129,12 +130,12 @@ void RSSMainWindow::init() {
 
 	// connect signals/slots
 	connect(ui_.action_open_project, SIGNAL(triggered()), open_dialog_, SLOT(show()));
-	connect(ui_.action_new_project, SIGNAL(triggered()), generator_wizard_, SLOT(show()));
+	//connect(ui_.action_new_project, SIGNAL(triggered()), generator_wizard_, SLOT(show()));
 	connect(ui_.action_about, SIGNAL(triggered()), about_dialog_, SLOT(show()));
 	connect(ui_.action_help, SIGNAL(triggered()), help_dialog_, SLOT(show()));
 	connect(ui_.action_help, SIGNAL(triggered()), this, SLOT(update_help_window()));
 	connect(open_dialog_, SIGNAL(accepted()), this, SLOT(update_simulation()));
-	connect(generator_wizard_, SIGNAL(accepted()), this, SLOT(generate_simulation()));
+	//connect(generator_wizard_, SIGNAL(accepted()), this, SLOT(generate_simulation()));
 	connect(ui_.action_view_center_of_gravity, SIGNAL(triggered(bool)), rss_gl_widget_, SLOT(toggle_view_cog(bool)));
 	connect(ui_.action_view_global_cs, SIGNAL(triggered(bool)), rss_gl_widget_, SLOT(toggle_view_global_cs(bool)));
 	connect(ui_.action_view_local_cs, SIGNAL(triggered(bool)), rss_gl_widget_, SLOT(toggle_view_local_cs(bool)));
@@ -191,7 +192,7 @@ void RSSMainWindow::init() {
 
 	// setup icons
 	QCommonStyle style;
-	ui_.action_new_project->setIcon(style.standardIcon(QStyle::SP_FileIcon));
+	//ui_.action_new_project->setIcon(style.standardIcon(QStyle::SP_FileIcon));
 	ui_.action_open_project->setIcon(style.standardIcon(QStyle::SP_DirOpenIcon));
 	ui_.action_quit->setIcon(style.standardIcon(QStyle::SP_DialogCloseButton));
 
@@ -457,6 +458,12 @@ void RSSMainWindow::update_simulation() {
 
 		std::string tmpProjectFile = pd.project_file;
 
+		if(!QFile::exists(QString::fromStdString(tmpProjectFile))) {
+			ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::warning)
+				<< "The project file: '" << tmpProjectFile << "' does not exist.\n";
+			return;
+		}
+
 		// deletes ".swarm" from end of file, if used
 		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
 			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
@@ -467,28 +474,14 @@ void RSSMainWindow::update_simulation() {
 		if(pd.luaseed > 0) {
 			LuaWrapper::lua_generator_set_seed(pd.luaseed);
 		}
-
+		bool limited_steps = pd.steps > 0;
 
 		// create simulation kernel
 		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-		if(pd.steps > 0) {
-			std::cout <<  "creating simulation with limited steps" << std::endl;
-			sim_control->create_new_simulation(tmpProjectFile,
-											   pd.history_length,
-											   pd.output,
-											   true,
-											   pd.steps,
-											   run_until_no_multiplicity);
-		} else {
-			std::cout <<  "creating simulation without limited steps" << std::endl;
-			sim_control->create_new_simulation(tmpProjectFile,
-											   pd.history_length,
-											   pd.output,
-											   false,
-											   0,
-											   run_until_no_multiplicity);
-		}
-
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info)
+			<< "creating simulation " << (limited_steps ? "with" : "without") << " limited steps.\n";
+		sim_control->create_new_simulation(tmpProjectFile, pd.history_length, pd.output,
+										   limited_steps, pd.steps, run_until_no_multiplicity);
 		rss_gl_widget_->set_simulation_control(sim_control);
 	}
 	catch(std::exception& e) {
