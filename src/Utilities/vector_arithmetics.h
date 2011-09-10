@@ -142,4 +142,9 @@ Vector3d vector3d_interpolate(Vector3d & vec1, Vector3d & vec2, double factor);
  */
 Vector3d vector3d_cross(const Vector3d & vector1, const Vector3d & vector2);
 
+/**
+ * multiplies the the given vectors component wise.
+ */
+Vector3d vector3d_mul(const Vector3d & vector1, const Vector3d & vector2);
+
 #endif /* VECTOR_ARITHMETICS_H */

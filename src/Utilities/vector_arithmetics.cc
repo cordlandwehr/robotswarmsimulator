@@ -177,3 +177,13 @@ Vector3d vector3d_cross(const Vector3d & vector1 ,const Vector3d & vector2) {
 	// Return the cross product
 	return normal;
 }
+
+Vector3d vector3d_mul(const Vector3d & vector1, const Vector3d & vector2) {
+	Vector3d out;
+
+	out[0] = vector1(0)*vector2(0);
+	out[1] = vector1(1)*vector2(1);
+	out[2] = vector1(2)*vector2(2);
+
+	return out;
+}
