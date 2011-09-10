@@ -38,6 +38,8 @@
 
 #include "moveable_camera.h"
 
+const float kMouseSpeed = 4;
+
 MoveableCamera::MoveableCamera(): Camera() {
 	position_.insert_element(kXCoord, 0);
 	position_.insert_element(kYCoord, 0);
@@ -58,20 +60,20 @@ MoveableCamera::MoveableCamera(): Camera() {
 	up_vector_(1) = 1.0;
 }
 
-void MoveableCamera::set_button_press_mouse(int x, int y) {
+void MoveableCamera::set_button_press_mouse(float x, float y) {
 	down_x_=x;
 	down_y_=y;
 }
 
-void MoveableCamera::set_view_by_mouse(int x, int y) {
+void MoveableCamera::set_view_by_mouse(float x, float y) {
 	float angle_y = 0.0f;
 	float angle_z = 0.0f;
 
 	if( (x == down_x_) && (y == down_y_) ) return;
 
-	// Get the direction the mouse moved in, but bring the number down to a reasonable amount.
-	angle_y = (float)( (down_x_ - x ) ) / 200.0f;
-	angle_z = (float)( (down_y_ - y ) ) / 200.0f;
+	// Get the direction the mouse moved in.
+	angle_y = (down_x_ - x ) * kMouseSpeed;
+	angle_z = (down_y_ - y ) * kMouseSpeed;
 
 	Vector3d axis = vector3d_cross(view_ - position_, up_vector_);
 	vector3d_normalize(axis);

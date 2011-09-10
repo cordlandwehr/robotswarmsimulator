@@ -37,9 +37,9 @@ public:
 	 * \param x The new mouse position
 	 * \param y The new mouse position
 	 */
-	void set_view_by_mouse(int x, int y);
+	void set_view_by_mouse(float x, float y);
 
-	void set_button_press_mouse(int x, int y);
+	void set_button_press_mouse(float x, float y);
 
 	/**
 	 * \brief This strafes the camera left or right depending on the speed (+/-)
@@ -100,8 +100,8 @@ public:
 	void set_ortho_axis(int axis);
 
 private:
-	int down_x_;
-	int down_y_;
+	float down_x_;
+	float down_y_;
 	float zoom_;
 	int ortho_axis_;
 };

@@ -360,17 +360,15 @@ void SimulationRenderer::draw(){
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
-	if(use_mouse_){
-				cameras_[active_camera_index_]->set_button_press_mouse(x,y);
-			}
-
+	if(use_mouse_) {
+		cameras_[active_camera_index_]->set_button_press_mouse((float)x/screen_width_,(float)y/screen_height_);
+	}
 }
 
 void SimulationRenderer::mouse_motion_func( int x, int y){
-	if(use_mouse_){
-			cameras_[active_camera_index_]->set_view_by_mouse(x,y);
-		}
-
+	if(use_mouse_) {
+		cameras_[active_camera_index_]->set_view_by_mouse((float)x/screen_width_,(float)y/screen_height_);
+	}
 }
 
 int SimulationRenderer::font_bitmap_string(const std::string & str) {
@@ -393,13 +391,12 @@ void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 
 }
 
-void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode, float base){
+void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base){
 
 	double len = vector3d_distance(pos1, pos2);
-	float size = base/(len*3);
-	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 1-size*3);
+	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 1-base/len*2);
 
-	draw_line(pos1, pos2, colorcode);
+	draw_line(pos1, pos2, linecolor);
 
 	double x = pos3(0);
 	double y = pos3(1);
@@ -425,10 +422,10 @@ void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode,
 
 	glTranslated( x, y, z );
 	glRotated(ax, rx, ry, 0.0);
-	glColor3fv(&kRobotIdColor[colorcode+1 % kRobotIdColorNum ][0]);
+	glColor3fv(&kRobotIdColor[arrow_head_color % kRobotIdColorNum ][0]);
 
 	//draw a cone
-	PgGLUT::glutWireCone(size, v, kArrowSlices, 1);
+	PgGLUT::glutWireCone(base, v, kArrowSlices, 1);
 
 	glPopMatrix();
 

@@ -74,10 +74,10 @@ const float kCoordZColor[] = {0.0f,0.0f,1.0f,1.0f};
 const float kScaleVecs = 2.0;
 const float kScaleCoordVecsRev = 2.0;
 
-const float kMessageHeight = 0.1;
-const float kMessageWidth = 0.1;
-const float kMessageDepth = 0.1;
-const unsigned int kDefaultMessageColor = 2;
+const float kMessageHeight = 0.15;
+const float kMessageWidth = 0.15;
+const float kMessageDepth = 0.15;
+const unsigned int kDefaultMessageColor = 3;
 const unsigned int kSelectionColor = 6;
 
 }
@@ -222,6 +222,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 		glPushName((*it_edge)->id());
 
 		unsigned int edge_color = get_color_from_marker_information(edge, robot->color());
+		float d = robot_radius/vector3d_distance(*pos1, *pos2);
 
 		// make lines thicker when edge is selected
 		boost::shared_ptr<EdgeIdentifier> e_id = boost::dynamic_pointer_cast<EdgeIdentifier>(renderer_->selected_object());
@@ -230,18 +231,21 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 			glGetFloatv(GL_LINE_WIDTH, &lineWidth);
 			glDepthMask(false);
 			glLineWidth(lineWidth*5);
-			renderer_->draw_line(*pos1, *pos2, kSelectionColor);
+			if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {
+				renderer_->draw_line(*pos1, *pos2, kSelectionColor);
+			} else {
+				renderer_->draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), kSelectionColor, kSelectionColor, robot_radius*0.8);
+			}
 			glLineWidth(lineWidth);
 			glDepthMask(true);
 		}
 
-		float d = robot_radius/vector3d_distance(*pos1, *pos2);
 		if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {
 			// For undirected edges only draw a line.
 			renderer_->draw_line(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), edge_color);
 		} else {
 			// otherwise draw an arrow.
-			renderer_->draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), edge_color, robot_radius);
+			renderer_->draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), edge_color, edge_color+1, robot_radius*0.75);
 		}
 		glPopName();
 	}

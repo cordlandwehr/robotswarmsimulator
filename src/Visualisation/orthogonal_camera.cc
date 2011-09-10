@@ -43,20 +43,20 @@ OrthogonalCamera::OrthogonalCamera(): Camera(), zoom_(0.1), ortho_axis_(Z_AXIS) 
 OrthogonalCamera::~OrthogonalCamera() {
 }
 
-void OrthogonalCamera::set_button_press_mouse(int x, int y) {
+void OrthogonalCamera::set_button_press_mouse(float x, float y) {
 	down_x_=x;
 	down_y_=y;
 }
 
-void OrthogonalCamera::set_view_by_mouse(int x, int y) {
+void OrthogonalCamera::set_view_by_mouse(float x, float y) {
 	float move_x = 0.0f;
 	float move_y = 0.0f;
 
 	if( (x == down_x_) && (y == down_y_) ) return;
 
 	// Get the direction the mouse moved in, but bring the number down to a reasonable amount.
-	move_x = (float)( (down_x_ - x ) ) / 200.0f;
-	move_y = (float)( (down_y_ - y ) ) / 200.0f;
+	move_x = down_x_ - x;
+	move_y = down_y_ - y;
 
 	move_camera(-move_y);
 	strafe_camera(move_x);
@@ -125,6 +125,8 @@ void OrthogonalCamera::update(const std::vector<boost::shared_ptr<WorldObject> >
 							const std::vector<boost::shared_ptr<Obstacle> >& obstacles,
 							const std::vector<boost::shared_ptr<RobotData> >& robot_data,
 							double extrapolate) {
+	// use zoom factor as position for the orthogonal axis, but clamp to frustrum bounds
+	position_(ortho_axis_) = -std::max(std::min(1000.0f, 1.0f/zoom_), 0.1f);
 }
 
 void OrthogonalCamera::look_rot() const {

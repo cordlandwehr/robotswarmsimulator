@@ -88,9 +88,9 @@ public:
 	 *  \param x The new position in x direction
 	 *  \param y The new position in y direction
 	 */
-	virtual void set_view_by_mouse(int x, int y);
+	virtual void set_view_by_mouse(float x, float y);
 
-	virtual void set_button_press_mouse(int x, int y);
+	virtual void set_button_press_mouse(float x, float y);
 
 	/**
 	 * \brief This rotates the camera around a point
