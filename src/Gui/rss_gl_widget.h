@@ -24,6 +24,8 @@ class RSSGLWidget : public QGLWidget {
 public:
 	enum { UP, DOWN, LEFT, RIGHT, FORWARD, BACKWARD };
 	enum { DOUBLE_SPEED, HALF_SPEED };
+	enum { CAM_FREE=0, CAM_FOLLOW, CAM_COG, CAM_ORTHO };
+	enum { ORTHO_AXIS_X, ORTHO_AXIS_Y, ORTHO_AXIS_Z };
 
 	RSSGLWidget(QWidget *parent = 0);
 	~RSSGLWidget();
@@ -41,6 +43,10 @@ public slots:
 	void toggle_camera_mode();
 	void set_camera_mode(int mode);
 	void set_camera_speed(int type);
+	void set_orthogonal_axis(int axis);
+	void toggle_view_cog(bool enabled);
+	void toggle_view_local_cs(bool enabled);
+	void toggle_view_global_cs(bool enabled);
 
 signals:
 	void selected_object_changed(boost::shared_ptr<Identifier> id);

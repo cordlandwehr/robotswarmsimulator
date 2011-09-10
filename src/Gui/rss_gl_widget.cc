@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 
 #include "../Model/identifier.h"
+#include "../Visualisation/orthogonal_camera.h"
 
 #include "rss_gl_widget.h"
 
@@ -94,6 +95,7 @@ void RSSGLWidget::toggle_camera_mode() {
 }
 
 void RSSGLWidget::set_camera_mode(int mode) {
+	simulation_renderer_->set_projection_type( mode == CAM_ORTHO ? SimulationRenderer::PROJ_ORTHO : SimulationRenderer::PROJ_PERSP);
 	simulation_renderer_->set_active_cam(mode);
 }
 
@@ -108,8 +110,30 @@ void RSSGLWidget::set_camera_speed(int type) {
 	}
 }
 
+void RSSGLWidget::set_orthogonal_axis(int axis) {
+
+	boost::shared_ptr<OrthogonalCamera> cam = boost::dynamic_pointer_cast<OrthogonalCamera>(simulation_renderer_->camera());
+	if(!cam.get())
+		return;
+	cam->set_ortho_axis(axis);
+}
+
+
+void RSSGLWidget::toggle_view_cog(bool enabled) {
+	simulation_renderer_->set_render_cog(enabled);
+}
+
+void RSSGLWidget::toggle_view_local_cs(bool enabled) {
+	simulation_renderer_->set_render_local_coord_system(enabled);
+}
+
+void RSSGLWidget::toggle_view_global_cs(bool enabled) {
+	simulation_renderer_->set_render_coord_system(enabled);
+}
+
+
 void RSSGLWidget::mouseMoveEvent( QMouseEvent * event ) {
-	if(!simulation_renderer_.get()) {
+	if(!simulation_control_.get()) {
 		event->ignore();
 		return;
 	}
@@ -117,7 +141,7 @@ void RSSGLWidget::mouseMoveEvent( QMouseEvent * event ) {
 }
 
 void RSSGLWidget::mousePressEvent( QMouseEvent * event ) {
-	if(!simulation_renderer_.get()) {
+	if(!simulation_control_.get()) {
 		event->ignore();
 		return;
 	}
@@ -128,7 +152,7 @@ void RSSGLWidget::mousePressEvent( QMouseEvent * event ) {
 }
 
 void RSSGLWidget::mouseReleaseEvent( QMouseEvent * event ) {
-	if(!simulation_renderer_.get()) {
+	if(!simulation_control_.get()) {
 		event->ignore();
 		return;
 	}
@@ -137,7 +161,7 @@ void RSSGLWidget::mouseReleaseEvent( QMouseEvent * event ) {
 
 
 void RSSGLWidget::wheelEvent( QWheelEvent * event ) {
-	if(!simulation_renderer_.get()) {
+	if(!simulation_control_.get()) {
 		event->ignore();
 		return;
 	}
