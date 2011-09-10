@@ -449,47 +449,56 @@ void RSSMainWindow::step_simulation() {
 }
 
 void RSSMainWindow::update_simulation() {
-	selection_id_.reset();
-	ui_.inspector_tree_widget->clear();
+	try {
+		selection_id_.reset();
+		ui_.inspector_tree_widget->clear();
 
-	ProjectData pd = open_dialog_->project_data();
+		ProjectData pd = open_dialog_->project_data();
 
-	std::string tmpProjectFile = pd.project_file;
+		std::string tmpProjectFile = pd.project_file;
 
-	// deletes ".swarm" from end of file, if used
-	if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
-		tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
+		// deletes ".swarm" from end of file, if used
+		if (tmpProjectFile.rfind(".swarm")!=std::string::npos)
+			tmpProjectFile.erase (tmpProjectFile.rfind(".swarm"),6);
 
-	bool run_until_no_multiplicity = pd.run_until_no_multiplicity;
+		bool run_until_no_multiplicity = pd.run_until_no_multiplicity;
 
-	// initializes the lua random number generator
-	if(pd.luaseed > 0) {
-		LuaWrapper::lua_generator_set_seed(pd.luaseed);
+		// initializes the lua random number generator
+		if(pd.luaseed > 0) {
+			LuaWrapper::lua_generator_set_seed(pd.luaseed);
+		}
+
+
+		// create simulation kernel
+		boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
+		if(pd.steps > 0) {
+			std::cout <<  "creating simulation with limited steps" << std::endl;
+			sim_control->create_new_simulation(tmpProjectFile,
+											   pd.history_length,
+											   pd.output,
+											   true,
+											   pd.steps,
+											   run_until_no_multiplicity);
+		} else {
+			std::cout <<  "creating simulation without limited steps" << std::endl;
+			sim_control->create_new_simulation(tmpProjectFile,
+											   pd.history_length,
+											   pd.output,
+											   false,
+											   0,
+											   run_until_no_multiplicity);
+		}
+
+		rss_gl_widget_->set_simulation_control(sim_control);
 	}
-
-
-	// create simulation kernel
-	boost::shared_ptr<SimulationControl> sim_control(new SimulationControl());
-	if(pd.steps > 0) {
-		std::cout <<  "creating simulation with limited steps" << std::endl;
-		sim_control->create_new_simulation(tmpProjectFile,
-										   pd.history_length,
-										   pd.output,
-										   true,
-										   pd.steps,
-										   run_until_no_multiplicity);
-	} else {
-		std::cout <<  "creating simulation without limited steps" << std::endl;
-		sim_control->create_new_simulation(tmpProjectFile,
-										   pd.history_length,
-										   pd.output,
-										   false,
-										   0,
-										   run_until_no_multiplicity);
+	catch(std::exception& e) {
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << e.what();
 	}
-
-	rss_gl_widget_->set_simulation_control(sim_control);
+	catch(...) {
+		ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Uncaught unknown exception.\n";
+	}
 }
+
 
 void RSSMainWindow::closeEvent(QCloseEvent *event) {
 	writeSettings();

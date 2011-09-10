@@ -7,6 +7,7 @@
 
 #include <QKeyEvent>
 
+#include <Utilities/console_output.h>
 #include "../Model/identifier.h"
 #include "../Visualisation/orthogonal_camera.h"
 
@@ -30,6 +31,9 @@ RSSGLWidget::~RSSGLWidget() {
 void RSSGLWidget::set_simulation_control(boost::shared_ptr<SimulationControl> simulation_control) {
 	if(!simulation_control.get())
 		return;
+	if(simulation_control_.get()) {
+		simulation_control_->terminate_simulation();
+	}
 
 	simulation_control_ = simulation_control;
 	simulation_control_->set_visualizer(simulation_renderer_);
@@ -40,9 +44,9 @@ void RSSGLWidget::set_simulation_control(boost::shared_ptr<SimulationControl> si
 
 	if( cam_type.compare("FREE") == 0 ){
 		simulation_renderer_->set_free_cam_para( cam_pos, cam_dir );
-		simulation_renderer_->set_active_cam(1);
+		simulation_renderer_->set_active_cam(CAM_FREE);
 	} else if( cam_type.compare("COG") == 0) {
-		simulation_renderer_->set_active_cam(2);
+		simulation_renderer_->set_active_cam(CAM_COG);
 		simulation_renderer_->set_cog_cam_pos( cam_pos );
 	}
 
