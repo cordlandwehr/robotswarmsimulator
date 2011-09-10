@@ -146,6 +146,11 @@ void WorldInformation::set_robot_data(std::map<int, boost::shared_ptr<RobotData>
 	robot_data_ = new_robot_data;
 }
 
+void WorldInformation::remove_robot_data(boost::shared_ptr<RobotData> robot_data) {
+	//assert(new_robot_data->id()->id() == robot_data_.size());
+	robot_data_.erase(robot_data->id()->id());
+}
+
 const std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() const {
 	return edges_;
 }

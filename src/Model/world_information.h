@@ -140,6 +140,12 @@ public:
 	 * \param Vector of robot datas to add to the world.
 	 */
 	void set_robot_data(std::map<int, boost::shared_ptr<RobotData> > new_robot_data);
+	
+	/**
+	 * Removes a robot data from the current set of robots
+	 * \param Shared pointer to edge
+	 */
+	void remove_robot_data(boost::shared_ptr<RobotData> robot_data);	
 
 	/**
 	 * Returns a constant reference to the set of the edges.
