@@ -311,13 +311,6 @@ void SimulationKernel::setup_vectormodifier(boost::shared_ptr<VectorRequestHandl
 	}
 }
 
-void SimulationKernel::dump_simulation() {
-	// create a Parser to save actual robotconfiguration
-	std::string dumpnumber = boost::lexical_cast<std::string>(parser_->dumpnumber());
-	parser_->set_project_filename(("dump_" + dumpnumber).c_str());
-	parser_->set_robot_filename(("dump_" + dumpnumber).c_str());
-	parser_->save_projectfiles(("dump_" + dumpnumber).c_str(), history_->get_newest().world_information());
-}
 
 bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) const {
   //TODO (asetzer) If we want to use this, we need to rewrite it

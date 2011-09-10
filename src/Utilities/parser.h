@@ -119,13 +119,6 @@ public:
 	 */
 	void load_projectfiles(const std::string& project_filename);
 
-	/**
-	 * This method saves the data to the predefined project files
-	 * (main project file, robot file)
-	 * \param Name of the main project file.
-	 */
-	void save_projectfiles(const std::string& project_filename, const WorldInformation& world_info);
-
 
 	/**
 	 * \return constant reference to the string describing the Robot Filename.
@@ -335,30 +328,7 @@ private:
 	 */
 	double string_to_double(const std::string& my_string);
 
-	/**
-	 * This method saves the following variables with their current
-	 * values to the specified main project file:
-	 * asg_, compass_model_, event_handler_, obstacle_filename_,
-	 * project_name_, robot_filename_, statistics_module_
-	 * \param Name of the main project file.
-	 */
-	void save_main_project_file(const std::string& project_filename);
-	
-	
-	/**
-	 * This method saves information about the robots.
-	 * \Param world_info needed to get the current sets of robots
-	 */
-	void save_robot_file(const WorldInformation& world_info);
-
-	/**
-	 * This method constructs a line for the robot_file which describes
-	 * the current robot
-	 * \param Pointer to the robot
-	 */
-	std::string write_robot(boost::shared_ptr<RobotData> robot_data);
-
-
+// 
 };
 
 #endif /* PARSER_H_ */

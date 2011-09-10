@@ -114,11 +114,6 @@ public:
 	 */
 	void quit();
 
-	/**
-	 * Calls the Parser to save the current configuration
-	 */
-	void dump_simulation();
-
 	std::string camera_position(){ return camera_position_; }
 	std::string camera_direction(){ return camera_direction_;}
 	std::string camera_type(){return  camera_type_;}

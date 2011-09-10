@@ -42,7 +42,6 @@ private slots:
 	void update_simulation_speed(int op);
 	void step_simulation();
 	void update_simulation();
-	void generate_simulation();
 	void selected_object_changed(boost::shared_ptr<Identifier> id);
 	void tree_selection_changed(QTreeWidgetItem* item, int column);
 	void writeSettings();

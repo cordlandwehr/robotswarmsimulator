@@ -135,10 +135,32 @@ void Parser::load_main_project_file(const string& project_filename) {
 	;
 	
 
-	std::ifstream in( main_project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
-	boost::program_options::store(boost::program_options::parse_config_file(in, desc), parameter_map_boost_);
-	boost::program_options::notify(parameter_map_boost_);
+	
+	try {
+	  std::ifstream in( main_project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
+	  
+      if (!in) {
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) << "The specified project file has not been found!" << std::endl;	
+		
+		//TODO (Sascha?) Entry point for "file not found" handling
+		
+		throw;
+	  }
+	  
+	  boost::program_options::store(boost::program_options::parse_config_file(in, desc), parameter_map_boost_);
+	  boost::program_options::notify(parameter_map_boost_);	  
+	}
+	catch (std::exception& e) {
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) << e.what() << std::endl;
+		throw;
+	}
+	catch(...) {
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) <<  "Uncaught unknown exception." << std::endl;
+		throw; //rethrow exception
+	}	
 
+	ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::debug) << "Finished parsing the project file, setting up variables." << endl;
+	
 	//initialize variables
 	init_variables();
 
@@ -358,7 +380,13 @@ void Parser::load_robot_or_edge_file(bool load_robot_file) {
 		project_file.close();
 
 	} else {
+	  if (!load_robot_file) {
+		  //edge file is missing - print a warning and assume no edges are there
+		  ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) << "Edge file cannot be found. Assuming there are no edges." << endl;		  
+	  }
+	  else {
 		throw UnsupportedOperationException("Unable to open file: " + file.string() + ".");
+	  }
 	}
 }
 
@@ -369,133 +397,7 @@ void Parser::load_projectfiles(const string& project_filename) {
 	  load_edge_file();
 }
 
-void Parser::save_main_project_file(const string& project_filename) {
-	ofstream project_file;
-	project_file.open((project_filename + ".swarm").c_str());
-	if(project_file.is_open()) {
-		// Save the map. Should contain all variables.
-		project_file << "ROBOT_FILENAME=\"" << robot_filename_ << "\"" << endl;
 
-		std::map<string, string>::iterator param_map_iter = parameter_map_.begin();
-		while(param_map_iter != parameter_map_.end()) {
-			if ((*param_map_iter).first == "ROBOT_FILENAME" || (*param_map_iter).first == "OBSTACLE_FILENAME") {
-				project_file << "# Old robot/obstacle-files: ";
-			}
-			project_file << (*param_map_iter).first << "=" << "\"" << (*param_map_iter).second << "\"" << std::endl;
-			param_map_iter++;
-		}
-		project_file.close();
-		dumpnumber_++;
-	} else {
-		throw UnsupportedOperationException("Unable to open project file: " +project_filename);
-	}
-}
-
-void Parser::save_robot_file(const WorldInformation& world_info) {
-	// the robot/obstacle filenames are interpreted relatively to the location of the main project file
-	using boost::filesystem::path;
-	path file = path(project_filename_).parent_path() / (robot_filename_ + ".robot");
-
-	boost::filesystem::ofstream robot_file;
-	robot_file.open(file);
-
-	if(robot_file.is_open()) {
-		//write robot header
-		robot_file << "\"ID\",";
-		robot_file << "\"x-position\",\"y-position\",\"z-position\",";
-		robot_file << "\"type\",";
-		robot_file << "\"x-velocity\",\"y-velocity\",\"z-velocity\",";
-		robot_file << "\"x-acceleration\",\"y-acceleration\",\"z-acceleration\",";
-		robot_file << "\"status\",";
-		robot_file << "\"marker-info\",";
-		robot_file << "\"algorithm\",";
-		robot_file << "\"color\",";
-		robot_file << "\"x-axis-1\",\"x-axis-2\",\"x-axis-3\",";
-		robot_file << "\"y-axis-1\",\"y-axis-2\",\"y-axis-3\",";
-		robot_file << "\"z-axis-1\",\"z-axis-2\",\"z-axis-3\"" << endl;
-
-		//getting all RobotData from current world-information
-	//	std::vector< boost::shared_ptr<RobotData> > robots_data = sim_kernel_->history()->get_newest().robot_data();
-		std::vector< boost::shared_ptr<RobotData> > robots_data;
-		world_info.robot_data_to_vector(robots_data);
-
-		//iterate over all RobotData to parse them Robot by Robot
-		for (vector<boost::shared_ptr<RobotData> >::iterator it = robots_data.begin();
-				it!=robots_data.end(); ++it) {
-			robot_file << write_robot(*it);
-		}
-
-		robot_file.close();
-	} else {
-		throw UnsupportedOperationException("Unable to open robot file: " + file.string() + "!");
-	}
-}
-
-string Parser::write_robot(boost::shared_ptr<RobotData> robot_data) {
-
-	stringstream output;
-
-	output << robot_data->id()->id() << ",";
-
-	output << robot_data->position()(kXCoord) << ",";
-	output << robot_data->position()(kYCoord) << ",";
-	output << robot_data->position()(kZCoord) << ",";
-
-	if ( robot_data->type() == MASTER ) {
-		output << "\"MASTER\"" << ",";
-	} else if ( robot_data->type() == SLAVE ){
-		output << "\"SLAVE\"" << ",";
-	} else {
-		throw UnsupportedOperationException("Parser found some robottype that it cannot write.");
-	}
-
-	output << robot_data->velocity()(kXCoord) << ",";
-	output << robot_data->velocity()(kYCoord) << ",";
-	output << robot_data->velocity()(kZCoord) << ",";
-
-	output << robot_data->acceleration()(kXCoord) << ",";
-	output << robot_data->acceleration()(kYCoord) << ",";
-	output << robot_data->acceleration()(kZCoord) << ",";
-
-	if ( robot_data->status() == SLEEPING ) {
-		output << "\"SLEEPING\"" << ",";
-	} else if ( robot_data->status() == READY) {
-		output << "\"READY\"" << ",";
-	} else {
-		throw UnsupportedOperationException("Parser found some robotstatus that it cannot write.");
-	}
-
-	//TODO(mmarcus) include marker-information
-	output << "0,";
-
-	output << "\"" << robot_data->robot().get_algorithm_id() << "\",";
-
-	output << robot_data->color() << ",";
-
-	//x-axis
-	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(kXCoord) << ",";
-	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(kYCoord) << ",";
-	output << (*(boost::get<0>(robot_data->coordinate_system_axis())))(kZCoord) << ",";
-
-	//y-axis
-	output << (*(boost::get<1>(robot_data->coordinate_system_axis())))(kXCoord) << ",";
-	output << (*(boost::get<1>(robot_data->coordinate_system_axis())))(kYCoord) << ",";
-	output << (*(boost::get<1>(robot_data->coordinate_system_axis())))(kZCoord) << ",";
-
-	//z-axis
-	output << (*(boost::get<2>(robot_data->coordinate_system_axis())))(kXCoord) << ",";
-	output << (*(boost::get<2>(robot_data->coordinate_system_axis())))(kYCoord) << ",";
-	output << (*(boost::get<2>(robot_data->coordinate_system_axis())))(kZCoord) << endl;
-
-	return output.str();
-
-	}
-
-
-void Parser::save_projectfiles(const string& project_filename, const WorldInformation& world_info) {
-	save_main_project_file(project_filename);
-	save_robot_file(world_info);
-}
 
 
 

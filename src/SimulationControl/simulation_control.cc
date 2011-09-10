@@ -308,10 +308,3 @@ void SimulationControl::set_visualizer(boost::shared_ptr<Visualizer> visualizer)
 	visualizer_ = visualizer;
 }
 
-void SimulationControl::dump_simulation() {
-	simulation_kernel_functor_->dump_simulation();
-}
-
-void SimulationControl::SimulationKernelFunctor::dump_simulation() {
-	simulation_kernel_->dump_simulation();
-}

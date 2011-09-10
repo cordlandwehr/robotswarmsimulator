@@ -1,7 +1,0 @@
-PROJECT_NAME=My Exciting Project
-ROBOT_FILENAME=testfile_1_robots.csv
-EDGE_FILENAME=testfile_1_edges.csv
-WORLD_MODIFIERS=TestWorldModifier
-
-ASG=SYNCHRONOUS_WM
-VIEW=LOCAL_GRAPH_VIEW
