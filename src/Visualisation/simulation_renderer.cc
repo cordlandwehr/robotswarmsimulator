@@ -60,6 +60,7 @@
 #include "robot_renderer.h"
 #include "simulation_renderer.h"
 #include "cog_camera.h"
+#include "orthogonal_camera.h"
 
 
 
@@ -83,7 +84,6 @@ const int kSphereSlices = 30;
 const int kSphereStacks = 30;
 
 const int kArrowSlices = 4;
-const double kArrowBase = 1.0;
 
 const double kMinScale = 1.0;
 const double kMaxScale = 100.0;
@@ -94,12 +94,6 @@ const int kDefWidth = 500;
 const int kTextSpacing=15;
 
 const float kMarkerPointSize = 2.0;
-
-const float kRobotRadius = 0.13;
-
-const float kMessageHeight = 0.02;
-const float kMessagewidth = 0.1;
-const float kMessageDepth = 0.1;
 
 const std::string kSkyBoxTexName[] = {"resources/Textures/skybox/mountain/","resources/Textures/skybox/mars/", "resources/Textures/skybox/island/", "resources/Textures/skybox/space/","resources/Textures/skybox/work/"};
 }
@@ -132,6 +126,7 @@ SimulationRenderer::SimulationRenderer()
 	cameras_[0] = boost::shared_ptr<Camera>( new MoveableCamera() );
 	cameras_[1] = boost::shared_ptr<Camera>( new FollowSwarmCamera() );
 	cameras_[2] = boost::shared_ptr<Camera>( new CogCamera() );
+	cameras_[3] = boost::shared_ptr<Camera>( new OrthogonalCamera() );
 
 	active_camera_index_=0;
 
@@ -268,7 +263,6 @@ void SimulationRenderer::setup_projection(){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-
 	// Set the correct perspective.
 	switch ( projection_type_ ){
 		case PROJ_PERSP:
@@ -276,23 +270,23 @@ void SimulationRenderer::setup_projection(){
 			break;
 		case PROJ_ORTHO:
 				glOrtho( 0,1,0,1,0.1,1000);
-
-
 			break;
 	}
-
 
 	glMatrixMode(GL_MODELVIEW);
 }
 
 void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePoint> & time_point){
-	boost::shared_ptr<WorldInformation> world_info = time_point->world_information_ptr();
-	this->extrapolate_ = extrapolate;
-	world_info_=world_info;
+	extrapolate_ = extrapolate;
+	world_info_ = time_point->world_information_ptr();
+	draw();
+}
+
+void SimulationRenderer::draw(){
 
 	double max_dist = 1.0;
 
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info->robot_data().begin(); it != world_info->robot_data().end(); ++it) {	
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
 		boost::shared_ptr<RobotData> it_robot_data = it->second;
 
 		double dist = boost::numeric::ublas::norm_2( it_robot_data->position() - cameras_[active_camera_index_]->position());
@@ -304,7 +298,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	// We draw the time in the upper left corner
 	char buf[100];
 
-	std::sprintf(buf,"Time: %f   Camera: %s\n",extrapolate + world_info->time(), cameras_[active_camera_index_]->get_name().c_str()  );
+	std::sprintf(buf,"Time: %f   Camera: %s\n",extrapolate_ + world_info_->time(), cameras_[active_camera_index_]->get_name().c_str());
 	std::string time(buf);
 
 
@@ -315,9 +309,9 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 
 
 	std::vector<boost::shared_ptr<RobotData> > robot_data;
-	world_info->robot_data_to_vector(robot_data);
+	world_info_->robot_data_to_vector(robot_data);
 
-	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), robot_data,extrapolate );
+	cameras_[active_camera_index_]->update(world_info_->markers(), world_info_->obstacles(), robot_data, extrapolate_ );
 	cameras_[active_camera_index_]->look_rot();
 
 	//(asetzer) crashes and we don't need it
@@ -334,62 +328,30 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 		draw_coord_system();
 	}
 
-
-
-
 	// draw all obstacles
 	std::vector<boost::shared_ptr<Obstacle> >::const_iterator it_obstacle;
-	for(it_obstacle = world_info->obstacles().begin(); it_obstacle != world_info->obstacles().end() ;++it_obstacle){
+	for(it_obstacle = world_info_->obstacles().begin(); it_obstacle != world_info_->obstacles().end() ;++it_obstacle){
 
 		draw_obstacle(*it_obstacle);
 	}
 
 	// draw all markers
 	std::vector<boost::shared_ptr<WorldObject> >::const_iterator it_marker;
-	for(it_marker = world_info->markers().begin(); it_marker != world_info->markers().end(); ++it_marker){
+	for(it_marker = world_info_->markers().begin(); it_marker != world_info_->markers().end(); ++it_marker){
 		draw_marker(*it_marker);
 	}
 
 	if(render_cog_){
-
 		draw_cog();
 	}
 
-
 	double robot_size = max_dist * kFactorScale < kMinScale ? 1.0 : std::min(max_dist * kFactorScale, kMaxScale);
 	robot_renderer_->set_robot_size(robot_size);
-	double robot_radius = robot_size * kRobotRadius;
 
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
 	for(it_robot = robot_data.begin(); it_robot != robot_data.end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
-
-		// draw messages
-		glColor3f(0.5,0.5,0.5);
-		Vector3d pos = (*it_robot)->position();
-		pos[kYCoord] += robot_radius;
-		for(int i=0; i<(*it_robot)->get_number_of_messages(); ++i) {
-			pos[kYCoord] += robot_size * kMessageHeight*2.5;
-			draw_box(pos, robot_size * kMessagewidth, robot_size * kMessageHeight, robot_size * kMessageDepth);
-		}
-
-		// draw edges
-		std::vector<boost::shared_ptr<EdgeIdentifier> >::const_iterator it_edge;
-		for(it_edge = (*it_robot)->get_edges().begin(); it_edge != (*it_robot)->get_edges().end(); ++it_edge) {
-			boost::shared_ptr<Edge> edge = world_info->get_according_edge(*it_edge);
-			boost::shared_ptr<Vector3d> pos1 = world_info->get_according_robot_data(edge->robot1()).extrapolated_position();
-			boost::shared_ptr<Vector3d> pos2 = world_info->get_according_robot_data(edge->robot2()).extrapolated_position();
-
-			float d = robot_radius/vector3d_distance(*pos1, *pos2);
-			if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {
-				// For undirected edges only draw a line.
-				draw_line(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
-			} else {
-				// otherwise draw an arrow.
-				draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), (*it_robot)->color());
-			}
-		}
 
 	}
 
@@ -398,17 +360,15 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 }
 
 void SimulationRenderer::mouse_func(int button, int state, int x, int y){
-	if(use_mouse_){
-				cameras_[active_camera_index_]->set_button_press_mouse(x,y);
-			}
-
+	if(use_mouse_) {
+		cameras_[active_camera_index_]->set_button_press_mouse((float)x/screen_width_,(float)y/screen_height_);
+	}
 }
 
 void SimulationRenderer::mouse_motion_func( int x, int y){
-	if(use_mouse_){
-			cameras_[active_camera_index_]->set_view_by_mouse(x,y);
-		}
-
+	if(use_mouse_) {
+		cameras_[active_camera_index_]->set_view_by_mouse((float)x/screen_width_,(float)y/screen_height_);
+	}
 }
 
 int SimulationRenderer::font_bitmap_string(const std::string & str) {
@@ -431,11 +391,12 @@ void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 
 }
 
-void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode){
+void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base, bool wire){
 
-	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 0.9);
+	double len = vector3d_distance(pos1, pos2);
+	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 1-base/len*2);
 
-	draw_line(pos1, pos2, colorcode);
+	draw_line(pos1, pos2, linecolor);
 
 	double x = pos3(0);
 	double y = pos3(1);
@@ -461,9 +422,14 @@ void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode)
 
 	glTranslated( x, y, z );
 	glRotated(ax, rx, ry, 0.0);
+	glColor3fv(&kRobotIdColor[arrow_head_color % kRobotIdColorNum ][0]);
 
 	//draw a cone
-	PgGLUT::glutWireCone(kArrowBase, v, kArrowSlices, 1);
+	if(wire) {
+		PgGLUT::glutWireCone(base, v, kArrowSlices, 1);
+	} else {
+		PgGLUT::glutSolidCone(base, v, kArrowSlices, 1);
+	}
 
 	glPopMatrix();
 
@@ -757,10 +723,12 @@ void SimulationRenderer::set_marker_color(float r, float g ,float b, float alpha
 
 }
 
+void SimulationRenderer::set_projection_type(ProjectionType type) {
+	projection_type_ = type;
+	setup_projection();
+}
 
-boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) const {
-
-	boost::shared_ptr<Identifier> id;
+boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) {
 
 	GLint viewport[4];
 	GLuint select_buffer[512];
@@ -774,12 +742,23 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) cons
 
 	glGetIntegerv(GL_VIEWPORT,viewport);
 	gluPickMatrix(x,viewport[3]-y, 5,5,viewport);
-	gluPerspective(90, (GLfloat)viewport[2]/(GLfloat)viewport[3], 0.1, 1000);
+
+	switch ( projection_type_ ){
+		case PROJ_PERSP:
+				gluPerspective(90,(GLfloat)viewport[2]/(GLfloat)viewport[3],0.1,1000);
+			break;
+		case PROJ_ORTHO:
+				glOrtho( 0,1,0,1,0.1,1000);
+			break;
+	}
+
 	glMatrixMode(GL_MODELVIEW);
 	glInitNames();
-	glLoadIdentity();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	cameras_[active_camera_index_]->look_rot();
 	cameras_[active_camera_index_]->look_translate();
@@ -788,12 +767,8 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) cons
 	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
 	  boost::shared_ptr<RobotData> robot = it->second;
 
-		glPushName(robot->id()->id());
 		robot_renderer_->draw_robot( robot );
-		glPopName();
 	}
-
-	int hits;
 
 	// restoring the original projection matrix
 	glMatrixMode(GL_PROJECTION);
@@ -802,7 +777,7 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) cons
 	glFlush();
 
 	// returning to normal rendering mode
-	hits = glRenderMode(GL_RENDER);
+	int hits = glRenderMode(GL_RENDER);
 
 	// if there are hits process them
 	if (hits != 0) {
@@ -822,12 +797,22 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) cons
 			ptr += names+2;
 		}
 
-		if(number_of_names>0) {
+		if(number_of_names>1) {
 			ptr = ptr_names;
-			id.reset(new RobotIdentifier(*ptr));
+			switch(*ptr) {
+			case SELECTION_ROBOT:
+				selected_object_.reset(new RobotIdentifier(*(ptr+1)));
+				break;
+			case SELECTION_EDGE:
+				selected_object_.reset(new EdgeIdentifier(*(ptr+1)));
+				break;
+			case SELECTION_MESSAGE:
+				selected_object_.reset(new MessageIdentifier(*(ptr+1)));
+				break;
+			}
 		}
 	}
 
-	return id;
+	return selected_object_;
 }
 

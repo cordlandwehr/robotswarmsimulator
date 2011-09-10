@@ -65,11 +65,11 @@ void Camera::position_camera(const Vector3d & position,const Vector3d &view, con
 	up_vector_ = up_vector;
 }
 
-void Camera::set_view_by_mouse(int x, int y) {
+void Camera::set_view_by_mouse(float x, float y) {
 	// No Operation
 }
 
-void Camera::set_button_press_mouse(int x, int y) {
+void Camera::set_button_press_mouse(float x, float y) {
 	// No Operation
 }
 

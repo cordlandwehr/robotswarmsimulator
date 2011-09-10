@@ -3,6 +3,9 @@
 EdgeIdentifier::EdgeIdentifier() : Identifier(edge_id_counter_++) {
 }
 
+EdgeIdentifier::EdgeIdentifier(std::size_t id) : Identifier(id) {
+}
+
 EdgeIdentifier::~EdgeIdentifier() {
 }
 

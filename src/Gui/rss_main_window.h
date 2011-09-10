@@ -11,7 +11,9 @@
 #include <boost/smart_ptr.hpp>
 
 #include <QtGui/QMainWindow>
+#include <QtGui/QIcon>
 #include <QtCore/QSignalMapper>
+
 #include "ui_rss_main_window.h"
 #include "ui_about_dialog.h"
 
@@ -58,18 +60,13 @@ private:
 		HALF_SPEED,
 		DOUBLE_SPEED
 	};
-	enum {
-		CAM_FREE=0,
-		CAM_FOLLOW,
-		CAM_COG
-	};
 
 	Ui::RSSMainWindow ui_;
-	QDialog *about_dialog_;
-	HelpDialog *help_dialog_;
-	OpenProjectDialog *open_dialog_;
-	GeneratorWizard *generator_wizard_;
-	RSSGLWidget *rss_gl_widget_;
+	QDialog * about_dialog_;
+	HelpDialog * help_dialog_;
+	OpenProjectDialog * open_dialog_;
+	GeneratorWizard * generator_wizard_;
+	RSSGLWidget * rss_gl_widget_;
 	boost::shared_ptr<Identifier> selection_id_;
 };
 

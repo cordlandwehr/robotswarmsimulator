@@ -371,6 +371,15 @@ namespace PgGLUT {
 	void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks)
 	{
 		GLUquadricObj *quadric=gluNewQuadric();
+		gluQuadricDrawStyle(quadric, GLU_LINE);
+		gluQuadricNormals(quadric, GLU_SMOOTH);
+		gluCylinder(quadric, base, 0.0, height, slices, stacks);
+		gluDeleteQuadric(quadric);
+	}
+
+	void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint stacks)
+	{
+		GLUquadricObj *quadric=gluNewQuadric();
 		gluQuadricDrawStyle(quadric, GLU_FILL);
 		gluQuadricNormals(quadric, GLU_SMOOTH);
 		gluCylinder(quadric, base, 0.0, height, slices, stacks);

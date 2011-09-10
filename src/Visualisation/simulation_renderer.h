@@ -304,16 +304,33 @@ public:
 	/**
 	 *
 	 */
-     boost::shared_ptr<Identifier> pick_object(int x, int y) const;
+     boost::shared_ptr<Identifier> pick_object(int x, int y);
+
+ 	/**
+ 	 *
+ 	 */
+     boost::shared_ptr<Identifier> selected_object() const {
+    	 return selected_object_;
+     }
 
 
 protected:
+ 	enum ProjectionType {PROJ_PERSP,PROJ_ORTHO};
+ 	enum SelectionType { SELECTION_ROBOT, SELECTION_EDGE, SELECTION_MESSAGE };
+
  	/**
  	 *
  	 */
  	boost::shared_ptr<WorldInformation> world_info() {
  		return world_info_;
  	}
+
+ 	/**
+ 	 *
+ 	 */
+     void set_selected_object(boost::shared_ptr<Identifier> object) {
+    	 selected_object_ = object;
+     }
 
 	/**
 	 *
@@ -322,12 +339,23 @@ protected:
  		return active_camera_index_;
  	}
 
-private:
+ 	/**
+ 	 *
+ 	 */
+ 	void set_projection_type(ProjectionType type);
 
- 	friend class RSSMainWindow;
- 	friend class RSSGLWidget;
+    /**
+     * \brief This Method draws the whole szene.
+     */
+	void draw();
 
-
+	/**
+	 * Draws a line from pos1 to pos2
+	 *
+	 * \param pos1 line start
+	 * \param pos2 line end
+	 * \param colorcode line color
+	 */
 	void draw_line(Vector3d pos1, Vector3d pos2, int colorcode);
 
 	/**
@@ -336,7 +364,7 @@ private:
 	 * \param pos1 start of the arrow.
 	 * \param pos2 arrow tip.
 	 */
-	void draw_arrow(Vector3d pos1, Vector3d pos2, int colorcode);
+	void draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base=1.0, bool wire=false);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.
@@ -383,12 +411,13 @@ private:
 	 */
 	void draw_coord_system();
 
-	void setup_projection();
+private:
 
-	enum ProjectionType {
-		PROJ_PERSP,
-		PROJ_ORTHO
-	};
+ 	friend class RSSMainWindow;
+ 	friend class RSSGLWidget;
+ 	friend class RobotRenderer;
+
+	void setup_projection();
 
 	ProjectionType projection_type_  ;
 
@@ -401,7 +430,7 @@ private:
 
 	unsigned int active_camera_index_;
 
-	boost::array<boost::shared_ptr<Camera>,3> cameras_;
+	boost::array<boost::shared_ptr<Camera>,4> cameras_;
 
 	/**
 	 * The width of the screen
@@ -486,7 +515,7 @@ private:
 	 */
 	bool render_sky_box_;
 
-	/*
+	/**
 	 *
 	 */
 	int actuall_skybox_;
@@ -497,6 +526,8 @@ private:
 	boost::shared_ptr<RobotRenderer> robot_renderer_;
 
 	boost::shared_ptr<WorldInformation> world_info_;
+
+	boost::shared_ptr<Identifier> selected_object_;
 
 	Texture tex_;
 

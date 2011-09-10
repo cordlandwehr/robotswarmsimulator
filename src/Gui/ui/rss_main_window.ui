@@ -64,17 +64,12 @@
      <addaction name="action_free_cam"/>
      <addaction name="action_follow_swarm_cam"/>
      <addaction name="action_center_of_gravity_cam"/>
-    </widget>
-    <widget class="QMenu" name="menuMouse_Spinning">
-     <property name="title">
-      <string>Mouse Spinning</string>
-     </property>
+     <addaction name="action_orthogonal_cam"/>
     </widget>
     <addaction name="menu_camera_mode"/>
-    <addaction name="menuMouse_Spinning"/>
     <addaction name="separator"/>
-    <addaction name="action_view_global_cS"/>
-    <addaction name="action_view_local_cS"/>
+    <addaction name="action_view_global_cs"/>
+    <addaction name="action_view_local_cs"/>
     <addaction name="separator"/>
     <addaction name="action_view_center_of_gravity"/>
     <addaction name="action_view_sky_box"/>
@@ -184,6 +179,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_help">
@@ -337,7 +335,7 @@
     <string>Show acceleration vectors.</string>
    </property>
   </action>
-  <action name="action_view_global_cS">
+  <action name="action_view_global_cs">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -354,7 +352,7 @@
     <string>G</string>
    </property>
   </action>
-  <action name="action_view_local_cS">
+  <action name="action_view_local_cs">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -383,6 +381,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_view_scc_of_visibility_graph">
@@ -447,6 +448,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="action_orthogonal_cam">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Orthogonal</string>
    </property>
   </action>
  </widget>
