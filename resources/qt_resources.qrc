@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>icons/small_link.png</file>
     <file>Textures/logo.bmp</file>
     <file>icons/double.png</file>
     <file>icons/half.png</file>
