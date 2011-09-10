@@ -14,7 +14,7 @@
 
 #include "orthogonal_camera.h"
 
-OrthogonalCamera::OrthogonalCamera(): Camera(), zoom_(0.1) {
+OrthogonalCamera::OrthogonalCamera(): Camera(), zoom_(0.1), ortho_axis_(Z_AXIS) {
 	position_.insert_element(kXCoord, 0);
 	position_.insert_element(kYCoord, 0);
 	position_.insert_element(kZCoord, 0);
@@ -31,11 +31,13 @@ OrthogonalCamera::OrthogonalCamera(): Camera(), zoom_(0.1) {
 	view_(1) = 0.0;
 	view_(2) = -1.0;
 
-	position_(0) = -1.0;
+	position_(0) = 0.5;
 	position_(1) = -0.5;
-	position_(2) = -0.5;
+	position_(2) = -1;
 
-	up_vector_(0) = 1.0;
+	up_vector_(0) = 0.0;
+	up_vector_(1) = 1.0;
+	up_vector_(2) = 0.0;
 }
 
 OrthogonalCamera::~OrthogonalCamera() {
@@ -64,7 +66,17 @@ void OrthogonalCamera::set_view_by_mouse(int x, int y) {
 }
 
 void OrthogonalCamera::strafe_camera(float speed) {
-	position_(1) += speed;
+	switch(ortho_axis_) {
+	case X_AXIS:
+		position_(2) += speed;
+		break;
+	case Y_AXIS:
+		position_(0) -= speed;
+		break;
+	case Z_AXIS:
+		position_(0) -= speed;
+		break;
+	}
 }
 
 void OrthogonalCamera::move_camera_up_down(float speed) {
@@ -72,7 +84,17 @@ void OrthogonalCamera::move_camera_up_down(float speed) {
 }
 
 void OrthogonalCamera::move_camera(float speed) {
-	position_(0) += speed;
+	switch(ortho_axis_) {
+	case X_AXIS:
+		position_(1) += speed;
+		break;
+	case Y_AXIS:
+		position_(2) -= speed;
+		break;
+	case Z_AXIS:
+		position_(1) += speed;
+		break;
+	}
 }
 
 void OrthogonalCamera::move_forward() {
@@ -122,10 +144,62 @@ void OrthogonalCamera::look_rot() const {
 }
 
 void OrthogonalCamera::look_translate() const {
-	glTranslatef(- position_(0), - position_(1), 100 );
+	glTranslatef(- position_(0), - position_(1),  - position_(2) );
 	glScalef( zoom_, zoom_, zoom_ );
 }
 
 std::string OrthogonalCamera::get_name() {
 	return "Orthogonal Camera";
+}
+
+
+void OrthogonalCamera::set_ortho_axis(int axis) {
+	ortho_axis_ = axis;
+	switch(axis) {
+	case X_AXIS:
+		view_(0) = -1.0;
+		view_(1) = 0.0;
+		view_(2) = 0.0;
+
+		position_(0) = -1;
+		position_(1) = -0.5;
+		position_(2) = -0.5;
+
+		up_vector_(0) = 0.0;
+		up_vector_(1) = 1.0;
+		up_vector_(2) = 0.0;
+
+		zoom_ = 0.1;
+		break;
+	case Y_AXIS:
+		view_(0) = 0.0;
+		view_(1) = -1.0;
+		view_(2) = 0.0;
+
+		position_(0) = 0.5;
+		position_(1) = -1;
+		position_(2) = 0.5;
+
+		up_vector_(0) = 0.0;
+		up_vector_(1) = 0.0;
+		up_vector_(2) = -1.0;
+
+		zoom_ = 0.1;
+		break;
+	case Z_AXIS:
+		view_(0) = 0.0;
+		view_(1) = 0.0;
+		view_(2) = -1.0;
+
+		position_(0) = 0.5;
+		position_(1) = -0.5;
+		position_(2) = -1;
+
+		up_vector_(0) = 0.0;
+		up_vector_(1) = 1.0;
+		up_vector_(2) = 0.0;
+
+		zoom_ = 0.1;
+		break;
+	}
 }

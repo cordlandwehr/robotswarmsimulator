@@ -26,6 +26,8 @@
  */
 class OrthogonalCamera: public Camera {
 public:
+	enum { X_AXIS, Y_AXIS, Z_AXIS };
+
 	OrthogonalCamera();
 	virtual ~OrthogonalCamera();
 
@@ -95,10 +97,13 @@ public:
 	 */
 	virtual std::string get_name();
 
+	void set_ortho_axis(int axis);
+
 private:
 	int down_x_;
 	int down_y_;
 	float zoom_;
+	int ortho_axis_;
 };
 
 #endif /* ORTHOGONAL_CAMERA_H_ */
