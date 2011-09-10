@@ -18,7 +18,18 @@ public:
   ConsoleOutputWrapper ();
   virtual ~ ConsoleOutputWrapper ();
   
+  /**
+   * Log an info level message
+   * 
+   * \param message	String containing the message to be logged.
+   */
   static void log(const std::string& message);
+  /**
+   * Log a message with a given level.
+   * 
+   * \param level	Level of the message (debug, info, warning, error).
+   * \param message	String containing the message to be logged.
+   */
   static void log(const std::string& level, const std::string& message);
 };
 
