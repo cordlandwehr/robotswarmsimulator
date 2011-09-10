@@ -234,7 +234,7 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 			if(dynamic_cast<UndirectedEdge*>(edge.get()) != NULL) {
 				renderer_->draw_line(*pos1, *pos2, kSelectionColor);
 			} else {
-				renderer_->draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.0-d), kSelectionColor, kSelectionColor, robot_radius*0.8);
+				renderer_->draw_arrow(vector3d_interpolate(*pos1, *pos2, d), vector3d_interpolate(*pos1, *pos2, 1.2-d), kSelectionColor, kSelectionColor, robot_radius*0.8);
 			}
 			glLineWidth(lineWidth);
 			glDepthMask(true);
