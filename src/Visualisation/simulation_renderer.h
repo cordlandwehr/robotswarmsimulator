@@ -364,7 +364,7 @@ protected:
 	 * \param pos1 start of the arrow.
 	 * \param pos2 arrow tip.
 	 */
-	void draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base=1.0);
+	void draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base=1.0, bool wire=false);
 	/**
 	 * Draws an obstacle. It Determines the type of the obstacle
 	 * and calls the corresponding method.

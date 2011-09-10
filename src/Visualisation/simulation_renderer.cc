@@ -391,7 +391,7 @@ void SimulationRenderer::draw_line(Vector3d pos1, Vector3d pos2, int colorcode){
 
 }
 
-void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base){
+void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor, int arrow_head_color, float base, bool wire){
 
 	double len = vector3d_distance(pos1, pos2);
 	Vector3d pos3 = vector3d_interpolate(pos1, pos2, 1-base/len*2);
@@ -425,7 +425,11 @@ void SimulationRenderer::draw_arrow(Vector3d pos1, Vector3d pos2, int linecolor,
 	glColor3fv(&kRobotIdColor[arrow_head_color % kRobotIdColorNum ][0]);
 
 	//draw a cone
-	PgGLUT::glutWireCone(base, v, kArrowSlices, 1);
+	if(wire) {
+		PgGLUT::glutWireCone(base, v, kArrowSlices, 1);
+	} else {
+		PgGLUT::glutSolidCone(base, v, kArrowSlices, 1);
+	}
 
 	glPopMatrix();
 

@@ -55,6 +55,11 @@ void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
  */
 void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
 
+/**
+ * Draw a solid cone.
+ */
+void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
+
 };
 
 #endif /* PGGLUT_H_ */
