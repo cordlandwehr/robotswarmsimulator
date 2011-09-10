@@ -37,7 +37,8 @@
 
 
 int StatsCalc::calculate_degree(const boost::shared_ptr<WorldInformation> graph){
-	const std::vector<boost::shared_ptr<RobotData> >& nodes = graph->robot_data();
+	std::vector<boost::shared_ptr<RobotData> > nodes;
+	graph->robot_data_to_vector(nodes);
 
 	int degree = 0;
 	for(int i=0; i<nodes.size();i++){
@@ -54,7 +55,9 @@ int StatsCalc::calculate_degree(const boost::shared_ptr<WorldInformation> graph)
 
 
 int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation> graph){
-	const std::vector<boost::shared_ptr<RobotData> >& nodes = graph->robot_data();
+	std::vector<boost::shared_ptr<RobotData> > nodes;
+	graph->robot_data_to_vector(nodes);
+
 
 	int maxDefect = 0;
 		for(int i=0; i<nodes.size();i++){
@@ -144,13 +147,18 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 
 
 	//no nodes are visited at the start
-	std::map<boost::shared_ptr<RobotData>, bool> node_visited;
-	std::map<boost::shared_ptr<RobotData>, int> hops_to_node;
+	std::map<size_t, bool> node_visited;
+	std::map<size_t, int> hops_to_node;
 
-	std::vector<boost::shared_ptr<RobotData> >& all_robots = graph->robot_data();
+
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it =  graph->robot_data().begin(); it !=  graph->robot_data().end(); ++it) {	
+	  node_visited[it->first] = false;
+	}
+	
+	/*std::vector<boost::shared_ptr<RobotData> > all_robots = graph->robot_data();
 	for(int i=0; i<all_robots.size();i++){
 		node_visited[all_robots[i]]=false;
-	}
+	}*/
 
 	//initialize queue
 	std::queue<boost::shared_ptr<RobotData> > node_queue;
@@ -158,8 +166,8 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 
 	//start with start node
 	node_queue.push(current_node);
-	node_visited[current_node] = true;
-	hops_to_node[current_node] = 0;
+	node_visited[current_node->id()->id()] = true;
+	hops_to_node[current_node->id()->id()] = 0;
 
 	while(! node_queue.empty()){
 		current_node = node_queue.front();
@@ -183,14 +191,14 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 				else
 					child = rd1;
 
-				if(!node_visited[child]){
+				if(!node_visited[child->id()->id()]){
 					if(child == target_node){
-						ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance " << hops_to_node[current_node]+1 << ".";
-						return hops_to_node[current_node]+1;
+						ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance " << hops_to_node[current_node->id()->id()]+1 << ".";
+						return hops_to_node[current_node->id()->id()]+1;
 					}
 					node_queue.push(child);
-					node_visited[child] = true;
-					hops_to_node[child] = hops_to_node[current_node]+1;
+					node_visited[child->id()->id()] = true;
+					hops_to_node[child->id()->id()] = hops_to_node[current_node->id()->id()]+1;
 				}
 			}
 		}

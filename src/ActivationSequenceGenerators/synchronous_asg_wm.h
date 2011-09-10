@@ -16,6 +16,7 @@
 #include "../Model/world_information.h"
 #include "../Events/look_event.h"
 #include "../Requests/request.h"
+#include "../Model/robot_identifier.h"
 
 
 // forward declarations
@@ -38,7 +39,7 @@ public:
 		    const History& history,
 		    const std::vector<boost::shared_ptr<Robot> >& robots,
 		    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers = *new std::vector<boost::shared_ptr<WorldModifier> >());
-    
+	
 	/**
 	 * Returns the next event. Since the ASG is synchronous the sequence of events will have the form
 	 * of (look-compute-handle_requests)*. Each look and each compute event applies to every existing robot.
@@ -62,6 +63,12 @@ public:
 	 */
 	void update(TimePoint& time_point,
 			    boost::shared_ptr<Event> event);
+
+	/**
+	 * removes a robot from the list of set of robots stored in this ASG
+	 * \param robot_identifier ID of the robot to be removed
+	*/
+	void removeRobot(const RobotIdentifier& robot_identifier);
     
 private:
 	/**

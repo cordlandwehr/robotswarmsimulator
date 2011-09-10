@@ -124,7 +124,7 @@ void SimulationRenderer::set_free_cam_para(Vector3d & pos, Vector3d & at){
 
 SimulationRenderer::SimulationRenderer()
 : projection_type_(PROJ_PERSP), render_cog_(false), render_coord_system_(false),  render_local_coord_system_(false),
-  render_acceleration_(false), render_velocity_(false), render_sky_box_(true) {
+  render_acceleration_(false), render_velocity_(false), render_help_(false), render_about_(false) {
 
 	robot_renderer_ = boost::shared_ptr<RobotRenderer>( new RobotRenderer(this) );
 
@@ -169,6 +169,9 @@ void SimulationRenderer::init(){
 }
 
 void SimulationRenderer::init(int x, int y){
+	//std::string str("resources/Textures/logo.bmp");
+	//tex_.load(str);
+
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 
@@ -222,10 +225,11 @@ void SimulationRenderer::init(int x, int y){
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//Set up skybox and Robot renderer
-	for(int i = 0; i < 5;i++){
+	//(asetzer) removed since it crashes
+	/*for(int i = 0; i < 5;i++){
 		sky_box_[i].reset( new SkyBox() );
 		sky_box_[i]->init( kSkyBoxTexName[i]);
-	}
+	}*/
 	actuall_skybox_ = 0;
 	robot_renderer_->init();
 	resize(x,y);
@@ -287,7 +291,10 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	world_info_=world_info;
 
 	double max_dist = 1.0;
-	BOOST_FOREACH(boost::shared_ptr<RobotData> it_robot_data, world_info->robot_data()){
+
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info->robot_data().begin(); it != world_info->robot_data().end(); ++it) {	
+		boost::shared_ptr<RobotData> it_robot_data = it->second;
+
 		double dist = boost::numeric::ublas::norm_2( it_robot_data->position() - cameras_[active_camera_index_]->position());
 
 		if(max_dist < dist)
@@ -307,12 +314,15 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 	glLoadIdentity();
 
 
+	std::vector<boost::shared_ptr<RobotData> > robot_data;
+	world_info->robot_data_to_vector(robot_data);
 
-	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), world_info->robot_data(),extrapolate );
+	cameras_[active_camera_index_]->update(world_info->markers(), world_info->obstacles(), robot_data,extrapolate );
 	cameras_[active_camera_index_]->look_rot();
 
-	if(render_sky_box_)
-		sky_box_[actuall_skybox_]->draw();
+	//(asetzer) crashes and we don't need it
+	//if(render_sky_box_)
+	//	sky_box_[actuall_skybox_]->draw();
 
 	cameras_[active_camera_index_]->look_translate();
 
@@ -352,7 +362,7 @@ void SimulationRenderer::draw(double extrapolate, const boost::shared_ptr<TimePo
 
 	// draw all robots
 	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
-	for(it_robot = world_info->robot_data().begin(); it_robot != world_info->robot_data().end(); ++it_robot){
+	for(it_robot = robot_data.begin(); it_robot != robot_data.end(); ++it_robot){
 		robot_renderer_->draw_robot( *it_robot );
 
 		// draw messages
@@ -649,7 +659,8 @@ void SimulationRenderer::draw_marker(const boost::shared_ptr<WorldObject> & mark
 }
 
 void SimulationRenderer::draw_cog(){
-
+  //deactivated by asetzer on August 29th
+  /*
 	cog_.insert_element(kXCoord, 0);
 	cog_.insert_element(kYCoord, 0);
 	cog_.insert_element(kZCoord, 0);
@@ -670,7 +681,7 @@ void SimulationRenderer::draw_cog(){
 		glColor3fv(kCogColor);
 		glVertex3f( cog_(0), cog_(1), cog_(2) );
 	glEnd();
-
+*/
 }
 
 
@@ -773,11 +784,12 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) cons
 	cameras_[active_camera_index_]->look_rot();
 	cameras_[active_camera_index_]->look_translate();
 
-	// draw robot spheres
-	std::vector<boost::shared_ptr<RobotData> >::const_iterator it_robot;
-	for(it_robot = world_info_->robot_data().begin(); it_robot != world_info_->robot_data().end(); ++it_robot){
-		glPushName((*it_robot)->id()->id());
-		robot_renderer_->draw_robot( *it_robot );
+
+	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
+	  boost::shared_ptr<RobotData> robot = it->second;
+
+		glPushName(robot->id()->id());
+		robot_renderer_->draw_robot( robot );
 		glPopName();
 	}
 

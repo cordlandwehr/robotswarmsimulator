@@ -66,8 +66,11 @@ private:
 	friend class SendMessageRequestHandler;
 	friend class EdgeView;
 	friend class RobotData;
-	friend class RSSMainWindow;
+	friend class ActivationSequenceGenerator;
+	friend class SynchronousASGWM;
+	friend class FullView;
 	friend class StatsCalc;
+	friend class RSSMainWindow;
 };
 
 #endif /* IDENTIFIER_H_ */

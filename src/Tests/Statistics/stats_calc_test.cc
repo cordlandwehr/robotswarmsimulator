@@ -49,7 +49,11 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	BOOST_CHECK_EQUAL(graph->robot_data().size(), 1000);
 
 	//create edge between consecutive nodes (gives a line)
-	const std::vector<boost::shared_ptr<RobotData> >& nodes = graph->robot_data();
+	std::vector<boost::shared_ptr<RobotData> > nodes;
+	graph->robot_data_to_vector(nodes);
+	
+	
+	
 	for(int i=1; i<nodes.size();i++){
 		boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[i-1];
 		boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[i];

@@ -70,6 +70,7 @@ SimulationKernel::SimulationKernel() {
 	 * by boost::to_upper_copy() so it will simply not work if you use lowercase here.
 	 */
 
+	
 	// initialize Stati-map
 	  robot_status_map_["READY"] = READY;
 	  robot_status_map_["SLEEPING"] = SLEEPING;
@@ -83,7 +84,7 @@ SimulationKernel::~SimulationKernel() {
 
 }
 
-const vector<boost::shared_ptr<Robot> >& SimulationKernel::robots() const {
+const std::map<int, boost::shared_ptr<Robot> >& SimulationKernel::robots() const {
 	return robots_;
 }
 
@@ -117,8 +118,17 @@ void SimulationKernel::init(const string& project_filename,
 	boost::shared_ptr<RobotControl> robot_control = Factory::robot_control_factory(params_boost, history_->capacity(), initial_world_information);
 
 	// create ASG
+
+	//transform map into vector
+	std::vector< boost::shared_ptr<Robot> > robots_vector;
+	robots_vector.reserve(robots_.size());	
+	for (std::map< int, boost::shared_ptr<Robot> >::iterator it = robots_.begin(); it != robots_.end(); ++it) {
+	  robots_vector.push_back(it->second);
+	}
+
+	
 	asg_ = Factory::asg_factory(params_boost);
-	asg_->initialize(*history_, robots_, world_modifiers_);
+	asg_->initialize(*history_, robots_vector, world_modifiers_);
 
 	// create EventHandler.
 	event_handler_ = Factory::event_handler_factory(history_, robot_control);
@@ -183,7 +193,7 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 		temp_robot_data.reset(new RobotData(temp_robot_identifier, temp_robot_position, *temp_robot));
 
-		robots_.push_back(temp_robot);
+		robots_[parser->robot_ids()[i]] = temp_robot;
 		initial_world_information->add_robot_data(temp_robot_data);
 	}
 
@@ -310,7 +320,8 @@ void SimulationKernel::dump_simulation() {
 }
 
 bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) const {
-	bool result = false;
+  //TODO (asetzer) If we want to use this, we need to rewrite it
+	/*bool result = false;
 	if (run_until_no_multiplicity) {
 		const TimePoint& newest = history_->get_newest();
 		const WorldInformation& world_info = newest.world_information();
@@ -335,11 +346,13 @@ bool SimulationKernel::terminate_condition(bool run_until_no_multiplicity) const
 		result = result || no_multiplicity;
 	}
 
-	return result;
+	return result;*/
+	return false;
 }
 
 void SimulationKernel::last_breath() const {
-	std::cout << "Last breath start" << std::endl;
+	//asetzer: seems like this is deprecated
+	/*std::cout << "Last breath start" << std::endl;
 	const TimePoint& newest = history_->get_newest();
 	const WorldInformation& world_info = newest.world_information();
 	const std::vector<boost::shared_ptr<RobotData> >& robot_data_vec =
@@ -379,7 +392,7 @@ void SimulationKernel::last_breath() const {
 	double gaps = max_dist_x * max_dist_y - robot_data_vec.size();
 	regularity = max(regularity, max_dist_z);
 	std::cout << std::endl << "REGULARITY: " << regularity << std::endl;
-	std::cout << std::endl << "GAPS: " << gaps << std::endl;
+	std::cout << std::endl << "GAPS: " << gaps << std::endl;*/
 }
 
 

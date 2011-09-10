@@ -106,4 +106,13 @@ void SynchronousASGWM::update(TimePoint& time_point,
 	}
 }
 
+void SynchronousASGWM::removeRobot(const RobotIdentifier& robot_identifier) {
+	  for (int i = 0; i < robots_.size(); ++i) {
+		if (robots_[i]->id()->id() == robot_identifier.id()) {
+		  robots_.erase(robots_.begin() + i, robots_.begin() + i + 1); //may be a newbie workaround
+		  break;
+		}
+	  }
+	}
+
 #endif // SYNCHRONOUS_ASG_WM_CC_

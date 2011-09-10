@@ -416,7 +416,8 @@ void Parser::save_robot_file(const WorldInformation& world_info) {
 
 		//getting all RobotData from current world-information
 	//	std::vector< boost::shared_ptr<RobotData> > robots_data = sim_kernel_->history()->get_newest().robot_data();
-		std::vector< boost::shared_ptr<RobotData> > robots_data = world_info.robot_data();
+		std::vector< boost::shared_ptr<RobotData> > robots_data;
+		world_info.robot_data_to_vector(robots_data);
 
 		//iterate over all RobotData to parse them Robot by Robot
 		for (vector<boost::shared_ptr<RobotData> >::iterator it = robots_data.begin();

@@ -37,7 +37,6 @@
 #include "../../Utilities/vector_arithmetics.h"
 #include "../Fixtures/simple_world_fixture.h"
 #include "../../Views/view.h"
-#include "../../Views/spheric_view.h"
 #include "../../Views/parametrized_view_factory.h"
 
 const unsigned kCopyCount = 127;

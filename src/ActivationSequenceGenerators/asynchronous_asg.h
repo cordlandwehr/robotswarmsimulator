@@ -76,6 +76,8 @@ public:
 		    const std::vector<boost::shared_ptr<Robot> >& robots,
 		    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers = *new std::vector<boost::shared_ptr<WorldModifier> >()); //TODO: Change test cases to specify world modifiers
 
+	void removeRobot(const RobotIdentifier& robot_identifier) {}; //TODO has to be implemented
+	
 	/**
 	 * Returns the next event.
 	 * \return The next event in the sequence.
