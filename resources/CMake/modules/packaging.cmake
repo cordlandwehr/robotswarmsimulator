@@ -23,7 +23,7 @@ configure_file(${MACOSX_STARTUPSCRIPT_IN} ${MACOSX_STARTUPSCRIPT})
 include(InstallRequiredSystemLibraries)
 
 # component informations
-set(CPACK_COMPONENT_MAINPROGRAM_DISPLAY_NAME "Robot Swarm Simulator")
+set(CPACK_COMPONENT_MAINPROGRAM_DISPLAY_NAME "RobotSwarmSimulator")
 set(CPACK_COMPONENT_MAINPROGRAM_DESCRIPTION "The main program (and libraries).")
 set(CPACK_COMPONENT_LUALIBRARIES_DISPLAY_NAME "Lua Libraries")
 set(CPACK_COMPONENT_LUALIBRARIES_DESCRIPTION "Dynamic libraries for Lua.")
@@ -33,6 +33,7 @@ set(CPACK_COMPONENT_PROJECTFILES_DESCRIPTION
 set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "Documentation")
 set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION
     "Manual and API for the simulator. You should have a look at the manual to get started.")
+set(CPACK_PACKAGE_CONTACT "pg-nodes@mail.uni-paderborn.de")
 
 # installs some needed shared runtime libraries on windows systems
 include(InstallRequiredSystemLibraries)
