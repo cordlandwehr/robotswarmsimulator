@@ -106,7 +106,7 @@ struct SimpleWorldFixture {
 		pos_a->insert_element(kXCoord,0.0);
 		pos_a->insert_element(kYCoord,0.0);
 		pos_a->insert_element(kZCoord,0.0);
-		robot_data_a.reset(new RobotData(id_a, pos_a, *robot_a));
+		robot_data_a.reset(new RobotData(id_a, pos_a, robot_a));
 
 		// create position for robot b: (1,0.5,3)
 		Vector3d * pos_b_ptr = new Vector3d;
@@ -115,7 +115,7 @@ struct SimpleWorldFixture {
 		pos_b->insert_element(kXCoord,1.0);
 		pos_b->insert_element(kYCoord,0.5);
 		pos_b->insert_element(kZCoord,3.0);
-		robot_data_b.reset(new RobotData(id_b, pos_b, *robot_b));
+		robot_data_b.reset(new RobotData(id_b, pos_b, robot_b));
 
 		// create position for robot c: (1.0, 1.0, 1.0)
 		boost::shared_ptr<Vector3d> pos_c;
@@ -123,7 +123,7 @@ struct SimpleWorldFixture {
 		pos_c->insert_element(kXCoord,1.0);
 		pos_c->insert_element(kYCoord,1.0);
 		pos_c->insert_element(kZCoord,1.0);
-		robot_data_c.reset(new RobotData(id_c, pos_c, *robot_c));
+		robot_data_c.reset(new RobotData(id_c, pos_c, robot_c));
 
 
 		// set types for robots

@@ -33,7 +33,7 @@
 class View;
 
 RobotData::RobotData(boost::shared_ptr<Identifier> id,
-                     boost::shared_ptr<Vector3d> position, const Robot& robot)
+                     boost::shared_ptr<Vector3d> position, boost::shared_ptr<Robot> robot)
                      : WorldObject(id, position), robot_(robot), last_request_successful_(true), color_(0)
 {
 	;
@@ -41,7 +41,7 @@ RobotData::RobotData(boost::shared_ptr<Identifier> id,
 
 RobotData::RobotData(boost::shared_ptr<Identifier> id,
                      boost::shared_ptr<Vector3d> position,
-                     boost::shared_ptr<MarkerInformation> marker_information, const Robot& robot)
+                     boost::shared_ptr<MarkerInformation> marker_information, boost::shared_ptr<Robot> robot)
                      : WorldObject(id, position, marker_information), robot_(robot),last_request_successful_(true), color_(0)
 {
 	;
@@ -141,8 +141,12 @@ boost::weak_ptr<const View> RobotData::view()  {
 	return view_;
 }
 
-const Robot& RobotData::robot() const {
-	return robot_;
+Robot& RobotData::robot() const {
+	return (*robot_);
+}
+
+boost::shared_ptr<Robot> RobotData::robot_ptr() const {
+  return robot_;
 }
 
 boost::shared_ptr<WorldObject> RobotData::clone() const {

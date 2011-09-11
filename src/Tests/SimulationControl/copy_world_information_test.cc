@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE(copy_world_information_test, SimpleWorldFixture)
 		pos->insert_element(kXCoord,0.0);
 		pos->insert_element(kYCoord,0.0);
 		pos->insert_element(kZCoord,0.0);
-		boost::shared_ptr<RobotData> robotData(new RobotData(id, pos, *robot));
+		boost::shared_ptr<RobotData> robotData(new RobotData(id, pos, robot));
 		initial_world_information->add_robot_data(robotData);
 	}
 

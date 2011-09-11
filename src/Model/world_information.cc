@@ -138,7 +138,6 @@ std::map<int, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
 }
 
 void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {
-	//assert(new_robot_data->id()->id() == robot_data_.size());
 	robot_data_[new_robot_data->id()->id()] = new_robot_data;
 }
 

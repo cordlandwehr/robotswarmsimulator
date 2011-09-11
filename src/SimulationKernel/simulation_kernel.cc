@@ -169,7 +169,7 @@ void SimulationKernel::quit() {
 void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::shared_ptr<WorldInformation> initial_world_information) {
 
 	boost::shared_ptr<RobotData> temp_robot_data;
-	boost::shared_ptr<Robot> temp_robot;
+	//boost::shared_ptr<Robot> temp_robot;
 	boost::shared_ptr<RobotIdentifier> temp_robot_identifier;
 	std::string temp_robot_algorithm;
 
@@ -187,13 +187,13 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 		
 		temp_robot_algorithm = parser->robot_algorithms()[i];
 
-		temp_robot = Factory::robot_factory(temp_robot_identifier, temp_robot_algorithm);
+		boost::shared_ptr<Robot> temp_robot (Factory::robot_factory(temp_robot_identifier, temp_robot_algorithm));
 
 		temp_robot_position.reset(new Vector3d(parser->robot_positions()[i]));
 
-		temp_robot_data.reset(new RobotData(temp_robot_identifier, temp_robot_position, *temp_robot));
+		temp_robot_data.reset(new RobotData(temp_robot_identifier, temp_robot_position, temp_robot));
 
-		robots_[parser->robot_ids()[i]] = temp_robot;
+		robots_[parser->robot_ids()[i]] = temp_robot; //TODO to be removed
 		initial_world_information->add_robot_data(temp_robot_data);
 	}
 

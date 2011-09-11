@@ -100,9 +100,9 @@ struct SimpleGraphFixture {
 		robot_c.reset(new SimpleGraphTestRobot(id_c));
 
 		// create RobotData
-		robot_data_a.reset(new RobotData(id_a, boost::shared_ptr<Vector3d>(new Vector3d()), *robot_a));
-		robot_data_b.reset(new RobotData(id_b, boost::shared_ptr<Vector3d>(new Vector3d()), *robot_b));
-		robot_data_c.reset(new RobotData(id_c, boost::shared_ptr<Vector3d>(new Vector3d()), *robot_c));
+		robot_data_a.reset(new RobotData(id_a, boost::shared_ptr<Vector3d>(new Vector3d()), robot_a));
+		robot_data_b.reset(new RobotData(id_b, boost::shared_ptr<Vector3d>(new Vector3d()), robot_b));
+		robot_data_c.reset(new RobotData(id_c, boost::shared_ptr<Vector3d>(new Vector3d()), robot_c));
 
 		// add all robots to the world information
 		initial_world_information->add_robot_data(robot_data_a);

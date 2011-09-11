@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 		marker_information->add_data("color",color);
 
 		boost::shared_ptr<Robot> node(new SimpleRobot(id));
-		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, marker_information, *node));
+		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, marker_information, node));
 
 		graph->add_robot_data(nodeData);
 	}

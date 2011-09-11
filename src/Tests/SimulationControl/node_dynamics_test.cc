@@ -57,7 +57,8 @@ BOOST_AUTO_TEST_CASE(node_dynamics_test) {
 	
 	//new robot	
 	boost::shared_ptr<RobotIdentifier> rid6 (new RobotIdentifier(6));
-	const SimpleRobot r6 (rid6);
+	boost::shared_ptr<Robot> r6 (new SimpleRobot(rid6));
+	
 	boost::shared_ptr<RobotData> rd1(new RobotData(rid6, boost::shared_ptr<Vector3d>(new Vector3d()), r6));
 	
 	//retrieve old robot reference (robot 0)
