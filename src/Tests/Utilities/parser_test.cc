@@ -59,50 +59,48 @@
 
 BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 {
-  //TODO (asetzer) this does not work for some reason...
 	boost::shared_ptr<Parser> parser;
 	parser.reset(new Parser());
-	parser->load_projectfiles("src/Tests/TestData/testfile_1");
+	parser->load_projectfiles("../../../src/Tests/TestData/testfile_1");
  	
 	//check variables read from main project file
-	//BOOST_CHECK_EQUAL(parser->parameter_map_boost_["PROJECT_NAME"].as<std::string>(), "My Exciting Project");
- 	//BOOST_CHECK_EQUAL(parser->robot_filename_, "src/Tests/TestData/testfile_1_robot.csv");
- 	//BOOST_CHECK_EQUAL(parser->edge_filename_, "src/Tests/TestData/testfile_1_edges.csv");
+	BOOST_CHECK_EQUAL(parser->parameter_map_boost_["PROJECT_NAME"].as<std::string>(), "My Exciting Project");
+ 	BOOST_CHECK_EQUAL(parser->robot_filename_, "testfile_1_robots.csv");
+ 	BOOST_CHECK_EQUAL(parser->edge_filename_, "testfile_1_edges.csv");
 
 	//########################################################################
 	//				check request handler stuff
 	//########################################################################
 
  	// RobotControl needed for EventHandler
-//  	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<LocalGraphView>());
-//  	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
-//  
-// 
-//  	boost::program_options::variables_map &params = parser->parameter_map_boost();
-//  	boost::shared_ptr<EventHandler> event_handler = Factory::event_handler_factory(history, robot_control);
-//  
-//  	// marker request handler
-//  	BOOST_REQUIRE(event_handler);
-//  	BOOST_REQUIRE(event_handler->marker_request_handler_);
-//  	BOOST_CHECK_EQUAL(1.0, event_handler->marker_request_handler_->discard_probability_);
-/*
+  	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<LocalGraphView>());
+  	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, initial_world_information));
+ 
+
+ 	boost::program_options::variables_map &params = parser->parameter_map_boost();
+ 	boost::shared_ptr<EventHandler> event_handler = Factory::event_handler_factory(history, robot_control);
+ 
+ 	// marker request handler
+ 	BOOST_REQUIRE(event_handler);
+ 	BOOST_REQUIRE(event_handler->marker_request_handler_);
+	BOOST_CHECK_EQUAL(0.0, event_handler->marker_request_handler_->discard_probability_);
+
 
 	//########################################################################
 	//				check asg stuff
 	//########################################################################
 
-	boost::shared_ptr<ActivationSequenceGenerator> asg = Factory::asg_factory(params);
-	BOOST_REQUIRE(boost::dynamic_pointer_cast<SynchronousASGWM>(asg));*/
+	boost::shared_ptr<ActivationSequenceGenerator> asg = Factory::asg_factory(params, initial_world_information);
+	BOOST_REQUIRE(boost::dynamic_pointer_cast<SynchronousASGWM>(asg));
 
 }
 
-/*
+
 BOOST_AUTO_TEST_CASE(load_robot_file_1)
 {
 	boost::shared_ptr<Parser> parser;
 	parser.reset(new Parser());
-	parser->init();
-	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/garbled_projectfile_a");
+	parser->load_projectfiles("../../../src/Tests/TestData/testfile_2");
 
 	//////////////////////////////////////////////////////////
 	// Check data of robot 1
@@ -113,45 +111,8 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[0](1), 9.2);
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[0](2), 6.4);
 
-	//type
-	BOOST_CHECK_EQUAL(parser->initiale_robot_types_[0], "master");
-
-	//velocity
-	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[0](0), 1.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[0](1), 2.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[0](2), 3.5);
-
-	//acceleration
-	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[0](0), 1.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[0](1), 2.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[0](2), 3.5);
-
-	//status
-	BOOST_CHECK_EQUAL(parser->initiale_robot_stati_[0], "sleeping");
-
-	//status
-	BOOST_CHECK_EQUAL(parser->initiale_robot_marker_information_[0], "0");
-
 	//algorithm
-	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[0], "MASTER_ALGO");
-
-	//color
-	BOOST_CHECK_EQUAL(parser->initiale_robot_colors_[0], "0");
-
-	//x-axis
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[0])(0), 1);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[0])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[0])(2), 0);
-
-	//y-axis
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[0])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[0])(1), 1);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[0])(2), 0);
-
-	//z-axis
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[0])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[0])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[0])(2), 1);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[0], "SimpleRobot");
 
 
 	//////////////////////////////////////////////////////////
@@ -163,85 +124,30 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[1](1), 4.2);
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[1](2), 8.8);
 
-	//type
-	//BOOST_CHECK_EQUAL(parser->initiale_robot_types_[0], "slave");
-
-	//velocity
-	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[1](0), 1.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[1](1), 2.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_velocities_[1](2), 3.5);
-
-	//acceleration
-	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[1](0), 1.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[1](1), 2.5);
-	BOOST_CHECK_EQUAL(parser->initiale_robot_accelerations_[1](2), 3.5);
-
-	//status
-	BOOST_CHECK_EQUAL(parser->initiale_robot_stati_[1], "ready");
-
-	//status
-	BOOST_CHECK_EQUAL(parser->initiale_robot_marker_information_[1], "0");
-
 	//algorithm
-	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[1], "SLAVE_ALGO");
-
-	//color
-	BOOST_CHECK_EQUAL(parser->initiale_robot_colors_[1], "0");
-
-	//x-axis
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[1])(0), 1);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[1])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<0>(parser->initiale_robot_coordinate_systems_[1])(2), 0);
-
-	//y-axis
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[1])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[1])(1), 1);
-	BOOST_CHECK_EQUAL(boost::get<1>(parser->initiale_robot_coordinate_systems_[1])(2), 0);
-
-	//z-axis
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[1])(0), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[1])(1), 0);
-	BOOST_CHECK_EQUAL(boost::get<2>(parser->initiale_robot_coordinate_systems_[1])(2), 1);
+	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[1], "SimpleRobot");
 
 }
 
-*/
 
-/*
-BOOST_AUTO_TEST_CASE(load_obstacle_file_1)
+BOOST_AUTO_TEST_CASE(load_edge_file_1)
 {
 	boost::shared_ptr<Parser> parser;
 	parser.reset(new Parser());
-	parser->init();
-	parser->load_projectfiles("../RobotSwarmSimulator/src/Tests/TestData/testfile_1");
+	parser->load_projectfiles("../../../src/Tests/TestData/testfile_2");
 
-	// Check data of obstacle 1
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[0], "box");
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[0], "0");
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[0](0), 2.0);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[0](1), 3.0);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[0](2), 4.0);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_size_[0](0), 1.0);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_size_[0](1), 2.0);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_size_[0](2), 3.0);
+	// Check data of edge 1
+	BOOST_CHECK_EQUAL(parser->initiale_edge_end1_[0], 0);
+	BOOST_CHECK_EQUAL(parser->initiale_edge_end2_[0], 1);
+	BOOST_CHECK_EQUAL(parser->initiale_edge_bidirectional_[0], 0);
 
-	// Check data of obstacle 2
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[1], "sphere");
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[1], "0");
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[1](0), 3.4);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[1](1), 5.2);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[1](2), 5.1);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_radius_[1], 5.0);
-
-	// Check data of obstacle 3
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_types_[2], "marker");
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_marker_information_[2], "0");
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](0), 3.5);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](1), 1.4);
-	BOOST_CHECK_EQUAL(parser->initiale_obstacle_positions_[2](2), 5.1);
+	// Check data of edge 2
+	BOOST_CHECK_EQUAL(parser->initiale_edge_end1_[1], 1);
+	BOOST_CHECK_EQUAL(parser->initiale_edge_end2_[1], 0);
+	BOOST_CHECK_EQUAL(parser->initiale_edge_bidirectional_[1], 0);
 
 }
-*/
+
 
 /*
 BOOST_FIXTURE_TEST_CASE(save_main_project_file_1, SimpleWorldFixture)

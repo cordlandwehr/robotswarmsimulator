@@ -78,11 +78,11 @@ public:
 	SimulationKernel();
 	~SimulationKernel();
 
-	/**
+	/*/**
 	 * Returns a constant reference to the set of the robots.
 	 * \return Constant reference to the set of the robots.
 	 */
-	const std::map< int, boost::shared_ptr<Robot> >& robots() const;
+	//const std::map< int, boost::shared_ptr<Robot> >& robots() const;
 
 	/**
 	 * Returns a constant reference to History of WorldInformations.
@@ -151,10 +151,10 @@ private:
 							  MARKER_REQUEST_HANDLER,
 							  COLOR_REQUEST_HANDLER};
 
-	/**
+	/*/**
 	 * Map of robots in the world
 	 */
-	 std::map< int, boost::shared_ptr<Robot> > robots_;
+	 //std::map< int, boost::shared_ptr<Robot> > robots_;
 
 	/**
 	 * Set of world modifiers
@@ -181,10 +181,6 @@ private:
 	 */
 	boost::shared_ptr<ActivationSequenceGenerator> asg_;
 
-	/**
-	 * Robot Control
-	 */
-
 
 	/**
 	 * Map for different types of ASG. This map is used to toggle between the
@@ -197,18 +193,6 @@ private:
 	 * String defined for the Views in the projectfile and the right View class
 	 */
 	std::map<std::string, ViewType> view_map_;
-
-	/**
-	 * Map for different stati of Robots. This map is used to toggle between the
-	 * String defined for the Robotstatus in the robotfile and the enum for Robotstati
-	 */
-	std::map<std::string, RobotStatus> robot_status_map_;
-
-	/**
-	 * Map for different types of Robots. This map is used to toggle between the
-	 * String defined for the Robotstatus in the robotfile and the enum for Robottypes
-	 */
-	std::map<std::string, RobotType> robot_type_map_;
 
 	/**
 	 * Map for different types of Vector Modifiers. This map is used to toggle between the

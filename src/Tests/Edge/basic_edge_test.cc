@@ -33,12 +33,13 @@
 BOOST_AUTO_TEST_CASE(basic_edge_test){
 	// generate robot 0
 	boost::shared_ptr<RobotIdentifier> rid0 (new RobotIdentifier(0));
-	const SimpleRobot r0 (rid0);
+	boost::shared_ptr<Robot> r0(new SimpleRobot(rid0));
+	
 	RobotData rd0 (rid0, boost::shared_ptr<Vector3d>(new Vector3d()), r0);
 
 	// generate robot 1
 	boost::shared_ptr<RobotIdentifier> rid1 (new RobotIdentifier(1));
-	const SimpleRobot r1 (rid1);
+	boost::shared_ptr<Robot> r1(new SimpleRobot(rid1));
 	RobotData rd1 (rid1, boost::shared_ptr<Vector3d>(new Vector3d()), r1);
 
 	// generate edge 0-1

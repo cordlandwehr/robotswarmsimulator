@@ -65,7 +65,7 @@ namespace Factory {
 	 * Returns shared pointer to created activation sequence generator
 	 * See UserGuide for expected parameters
 	 */
-	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(boost::program_options::variables_map &params);
+	boost::shared_ptr<ActivationSequenceGenerator> asg_factory(boost::program_options::variables_map& params, boost::shared_ptr< WorldInformation > initial_world_information);
 
 	/**
 	 * Creates ViewFactory from parameters given in the param map.

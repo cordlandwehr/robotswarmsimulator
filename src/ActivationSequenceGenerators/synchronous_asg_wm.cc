@@ -27,13 +27,13 @@ using std::vector;
 
 
 void SynchronousASGWM::initialize(
-	    const History& history,
-	    const std::vector<boost::shared_ptr<Robot> >& robots,
+	    const History& history, //TODO what is this doing here?
+	    const std::vector<boost::shared_ptr<Robot> >& robots, //TODO to be removed
 	    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers){
 	// extract robots from robot data
-	BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
+	/*BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots) {
 		robots_.push_back(robot);
-	}
+	}*/
 
 	// extract world modifiers from robot data
 	BOOST_FOREACH(boost::shared_ptr<WorldModifier> world_modifier, world_modifiers) {
@@ -42,6 +42,7 @@ void SynchronousASGWM::initialize(
 }
 
 boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
+    
 	boost::shared_ptr<Event> event;
 	if(time_of_next_event_ % kNumberOfEvents == kTimeToModify) {
 		WorldModifierEvent * world_modifier_event = new WorldModifierEvent(time_of_next_event_);
@@ -64,8 +65,8 @@ boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
         
 		// add all robots. This uses the raw pointer because it is of the right type.
 		// (it is protected by a shared_ptr and I'm saving a cast)
-		BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots_) {
-			look_event->add_to_robot_subset(robot);
+		for (std::map< int, boost::shared_ptr<RobotData> >::iterator it = world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {
+			look_event->add_to_robot_subset(it->second->robot_ptr());
 		}
         
         
@@ -75,8 +76,8 @@ boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
         
 		// add all robots. This uses the raw pointer because it is of the right type.
 		// (it is protected by a shared_ptr and I'm saving a cast)
-		BOOST_FOREACH(boost::shared_ptr<Robot> robot, robots_) {
-			compute_event->add_to_robot_subset(robot);
+		for (std::map< int, boost::shared_ptr<RobotData> >::iterator it = world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {	
+			compute_event->add_to_robot_subset(it->second->robot_ptr());
 		}
         
 	} else if(time_of_next_event_ % kNumberOfEvents == kTimeToMove) {
@@ -104,15 +105,9 @@ void SynchronousASGWM::update(TimePoint& time_point,
 			unhandled_request_set_.push_back(cur_request);
 		}
 	}
+	
+	world_information = time_point.world_information_ptr();
 }
 
-void SynchronousASGWM::removeRobot(const RobotIdentifier& robot_identifier) {
-	  for (int i = 0; i < robots_.size(); ++i) {
-		if (robots_[i]->id()->id() == robot_identifier.id()) {
-		  robots_.erase(robots_.begin() + i, robots_.begin() + i + 1); //may be a newbie workaround
-		  break;
-		}
-	  }
-	}
 
 #endif // SYNCHRONOUS_ASG_WM_CC_

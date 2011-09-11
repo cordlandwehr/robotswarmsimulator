@@ -77,12 +77,6 @@ public:
 	 * \return Integer representing the next time an event will happen
 	 */
 	virtual int get_time_of_next_event() = 0;
-	
-		/**
-	 * removes a robot from the list of set of robots stored in this ASG
-	 * \param robot_identifier ID of the robot to be removed
-	*/
-	virtual void removeRobot(const RobotIdentifier& robot_identifier) = 0;
 };
 
 #endif /* ACTIVATION_SEQUENCE_GENERATOR_H_ */

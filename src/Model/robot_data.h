@@ -75,11 +75,11 @@ class RobotData : public WorldObject{
 public:
 	RobotData(boost::shared_ptr<Identifier> id,
 	          boost::shared_ptr<Vector3d> position,
-	          const Robot& robot);
+	          boost::shared_ptr<Robot> robot);
 	RobotData(boost::shared_ptr<Identifier> id,
 			  boost::shared_ptr<Vector3d> position,
 		      boost::shared_ptr<MarkerInformation> marker_information,
-		      const Robot& robot);
+		      boost::shared_ptr<Robot> robot);
 	~RobotData();
 	RobotData(const RobotData& rhs);
 
@@ -166,7 +166,13 @@ public:
 	 * Returns reference to according robot-object.
 	 * \return Reference to according robot-object.
 	 */
-	const Robot& robot() const;
+	Robot& robot() const;
+	
+	/**
+	 * Returns pointer to according robot-object.
+	 * \return pointer to according robot-object.
+	 */
+	boost::shared_ptr<Robot> robot_ptr() const;
 
 
 	unsigned short int color(){
@@ -287,7 +293,7 @@ private:
 	 * Reference to according robot.
 	 */
 	//TODO (dwonisch): Do we really need this reference?
-	const Robot& robot_;
+	boost::shared_ptr<Robot> robot_;
 	boost::shared_ptr<Vector3d> acceleration_;
 	/**
 	 * \var Triple with the three coordinate axes of the robot.

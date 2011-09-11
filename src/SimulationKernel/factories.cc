@@ -172,7 +172,7 @@ boost::shared_ptr<EventHandler> Factory::event_handler_factory(boost::shared_ptr
 	return event_handler;
 }
 
-boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(boost::program_options::variables_map &params) {
+boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(boost::program_options::variables_map &params, boost::shared_ptr<WorldInformation> initial_world_information) {
 
 	std::string asg_type = params["ASG"].as<std::string>();
 	boost::shared_ptr<ActivationSequenceGenerator> asg;
@@ -182,7 +182,7 @@ boost::shared_ptr<ActivationSequenceGenerator> Factory::asg_factory(boost::progr
         //asg.reset(new SynchronousASG());
 	} else if(asg_type == "SYNCHRONOUS_WM") {
         // TODO: Load/read actual world modifiers?
-        asg.reset(new SynchronousASGWM());
+        asg.reset(new SynchronousASGWM(initial_world_information));
 	} else if(asg_type == "ATOMIC_SEMISYNCHRONOUS") {
 		throw UnsupportedOperationException("ATOMIC_SEMISYNCHRONOUS ASG is currently not supported.");
 		

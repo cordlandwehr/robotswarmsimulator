@@ -28,7 +28,7 @@ class History;
  */
 class SynchronousASGWM : public ActivationSequenceGenerator {
 public:
-	SynchronousASGWM(): time_of_next_event_(0) {}
+	SynchronousASGWM(boost::shared_ptr<WorldInformation> initial_world_information): time_of_next_event_(0), world_information(initial_world_information)  {}
     
 	/**
 	 * initializes the synchronous ASG from the given intial world_state. Needs to be called before the
@@ -63,12 +63,6 @@ public:
 	 */
 	void update(TimePoint& time_point,
 			    boost::shared_ptr<Event> event);
-
-	/**
-	 * removes a robot from the list of set of robots stored in this ASG
-	 * \param robot_identifier ID of the robot to be removed
-	*/
-	void removeRobot(const RobotIdentifier& robot_identifier);
     
 private:
 	/**
@@ -81,15 +75,20 @@ private:
 	 */
 	std::vector<boost::shared_ptr<const Request> > unhandled_request_set_;
     
-	/**
+	/*/**
 	 * The set of all robots
 	 */
-	std::vector<boost::shared_ptr<Robot> > robots_;
+	//std::vector<boost::shared_ptr<Robot> > robots_;
 
 	/**
 	 * The set of all world modifiers
 	 */
 	std::vector<boost::shared_ptr<WorldModifier> > world_modifiers_;
+	
+	/*
+	 * The current world information.
+	*/
+	boost::shared_ptr<WorldInformation> world_information;
     
 	// constants for readability
     static const int kTimeToModify = 0;
