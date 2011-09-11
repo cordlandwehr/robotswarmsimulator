@@ -59,7 +59,6 @@
 
 BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 {
-  //TODO (asetzer) this does not work for some reason...
 	boost::shared_ptr<Parser> parser;
 	parser.reset(new Parser());
 	parser->load_projectfiles("../../../src/Tests/TestData/testfile_1");
