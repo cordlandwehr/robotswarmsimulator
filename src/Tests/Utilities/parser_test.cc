@@ -90,7 +90,7 @@ BOOST_FIXTURE_TEST_CASE(LoadMainProjectFileTest, SimpleWorldFixture)
 	//				check asg stuff
 	//########################################################################
 
-	boost::shared_ptr<ActivationSequenceGenerator> asg = Factory::asg_factory(params);
+	boost::shared_ptr<ActivationSequenceGenerator> asg = Factory::asg_factory(params, initial_world_information);
 	BOOST_REQUIRE(boost::dynamic_pointer_cast<SynchronousASGWM>(asg));
 
 }

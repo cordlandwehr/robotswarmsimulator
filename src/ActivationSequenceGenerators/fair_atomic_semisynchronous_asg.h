@@ -59,8 +59,6 @@ public:
 		    const History& history,
 		    const std::vector<boost::shared_ptr<Robot> >& robots,
 		    const std::vector<boost::shared_ptr<WorldModifier> >& world_modifiers = *new std::vector<boost::shared_ptr<WorldModifier> >());
-
-	void removeRobot(const RobotIdentifier& robot_identifier) {}; //TODO has to be implemented
 	
 	/**
 	 * Returns the next event.

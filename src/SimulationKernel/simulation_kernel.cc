@@ -65,28 +65,13 @@ using namespace std;
 double kEpsilonRadius = 0.001;
 
 SimulationKernel::SimulationKernel() {
-	/* REMARK: If you want to add some Values to the maps, make sure to use only
-	 * upper-case letters! All strings read from the projectfiles are converted to upper-case
-	 * by boost::to_upper_copy() so it will simply not work if you use lowercase here.
-	 */
 
-	
-	// initialize Stati-map
-	  robot_status_map_["READY"] = READY;
-	  robot_status_map_["SLEEPING"] = SLEEPING;
-
-	// initialize Stati-map
-	  robot_type_map_["SLAVE"] = SLAVE;
-	  robot_type_map_["MASTER"] = MASTER;
 }
 
 SimulationKernel::~SimulationKernel() {
 
 }
 
-const std::map<int, boost::shared_ptr<Robot> >& SimulationKernel::robots() const {
-	return robots_;
-}
 
 const boost::shared_ptr<History>& SimulationKernel::history() const {
 	return history_;
@@ -121,13 +106,13 @@ void SimulationKernel::init(const string& project_filename,
 
 	//transform map into vector
 	std::vector< boost::shared_ptr<Robot> > robots_vector;
-	robots_vector.reserve(robots_.size());	
-	for (std::map< int, boost::shared_ptr<Robot> >::iterator it = robots_.begin(); it != robots_.end(); ++it) {
-	  robots_vector.push_back(it->second);
+	robots_vector.reserve(initial_world_information->robot_data().size());	
+	for (std::map< int, boost::shared_ptr<RobotData> >::iterator it = initial_world_information->robot_data().begin(); it != initial_world_information->robot_data().end(); ++it) {
+	  robots_vector.push_back(it->second->robot_ptr());
 	}
 
 	
-	asg_ = Factory::asg_factory(params_boost);
+	asg_ = Factory::asg_factory(params_boost, initial_world_information);
 	asg_->initialize(*history_, robots_vector, world_modifiers_);
 
 	// create EventHandler.
@@ -193,7 +178,7 @@ void SimulationKernel::create_robots(boost::shared_ptr<Parser> parser, boost::sh
 
 		temp_robot_data.reset(new RobotData(temp_robot_identifier, temp_robot_position, temp_robot));
 
-		robots_[parser->robot_ids()[i]] = temp_robot; //TODO to be removed
+		//robots_[parser->robot_ids()[i]] = temp_robot; //TODO to be removed
 		initial_world_information->add_robot_data(temp_robot_data);
 	}
 
