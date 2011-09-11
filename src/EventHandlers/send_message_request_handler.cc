@@ -36,15 +36,18 @@ bool SendMessageRequestHandler::handle_request_reliable(
 	if(world_information->robot_exists(m->sender()) && world_information->robot_exists(m->receiver())){
 		RobotData& rd_sender = world_information->get_according_robot_data(m->sender());
 		RobotData& rd_receiver = world_information->get_according_robot_data(m->receiver());
-
-		std::vector<boost::shared_ptr<RobotIdentifier> > neighbors = rd_sender.robot().get_view()->get_visible_robots(rd_sender.robot());
-
-		// check if receiver is a neighbor of the sender
+		
+		// check if receiver is a neighbor of the sender (or sender itself)
 		bool is_neighbor = false;
-		BOOST_FOREACH(const boost::shared_ptr<RobotIdentifier>& r, neighbors) {
-			if(r->id() == rd_receiver.id()->id()){
-				is_neighbor = true;
-				break;
+		if(rd_sender.id()->id() == rd_receiver.id()->id()){
+		  is_neighbor = true;
+		} else {
+			std::vector<boost::shared_ptr<RobotIdentifier> > neighbors = rd_sender.robot().get_view()->get_visible_robots(rd_sender.robot());
+			BOOST_FOREACH(const boost::shared_ptr<RobotIdentifier>& r, neighbors) {
+				if(r->id() == rd_receiver.id()->id()){
+					is_neighbor = true;
+					break;
+				}
 			}
 		}
 
