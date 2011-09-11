@@ -136,7 +136,7 @@ public:
 	void add_robot_data(boost::shared_ptr<RobotData> new_robot_data);
 
 	/**
-	 * Sets the vector of robot data in the world.
+	 * Sets the set of robot data in the world.
 	 * \param Vector of robot datas to add to the world.
 	 */
 	void set_robot_data(std::map<int, boost::shared_ptr<RobotData> > new_robot_data);
@@ -147,7 +147,7 @@ public:
 	 * Also, all messages in this node's message queue will be removed.
 	 * \param Shared pointer to edge
 	 */
-	void remove_robot_data(boost::shared_ptr<RobotData> robot_data);	
+	void remove_robot_data(boost::shared_ptr<RobotIdentifier> robot_identifier);
 
 	/**
 	 * Returns a constant reference to the set of the edges.

@@ -146,8 +146,8 @@ void WorldInformation::set_robot_data(std::map<int, boost::shared_ptr<RobotData>
 	robot_data_ = new_robot_data;
 }
 
-void WorldInformation::remove_robot_data(boost::shared_ptr<RobotData> robot_data) {
-	size_t robot_id = robot_data->id()->id();
+void WorldInformation::remove_robot_data(boost::shared_ptr<RobotIdentifier> robot_identifier) {
+	size_t robot_id = robot_identifier->id();
 	
 	//remove the node itself	
 	robot_data_.erase(robot_id);
@@ -156,7 +156,7 @@ void WorldInformation::remove_robot_data(boost::shared_ptr<RobotData> robot_data
 	std::map< size_t, boost::shared_ptr < Edge> >::iterator it_e = edges_.begin();
 	while( it_e != edges_.end() ) {
 		std::map< size_t, boost::shared_ptr < Edge> >::iterator old_it_e = it_e++;
-		if (it_e->second->robot1()->id() == robot_id || it_e->second->robot2()->id() == robot_id) {
+		if (old_it_e->second->robot1()->id() == robot_id || old_it_e->second->robot2()->id() == robot_id) {
 			edges_.erase(old_it_e);
 		}
 	}
@@ -165,7 +165,7 @@ void WorldInformation::remove_robot_data(boost::shared_ptr<RobotData> robot_data
 	std::map< size_t, boost::shared_ptr < Message> >::iterator it_m = messages_.begin();
 	while( it_m != messages_.end() ) {
 		std::map< size_t, boost::shared_ptr < Message> >::iterator old_it_m = it_m++;
-		if (it_m->second->receiver()->id() == robot_id) {
+		if (old_it_m->second->receiver()->id() == robot_id) {
 			messages_.erase(old_it_m);
 		}
 	}	

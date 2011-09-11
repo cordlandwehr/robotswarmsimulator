@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[0](2), 6.4);
 
 	//algorithm
-	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[0], "simple_robot");
+	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[0], "SimpleRobot");
 
 
 	//////////////////////////////////////////////////////////
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(load_robot_file_1)
 	BOOST_CHECK_EQUAL(parser->initiale_robot_positions_[1](2), 8.8);
 
 	//algorithm
-	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[1], "simple_robot");
+	BOOST_CHECK_EQUAL(parser->initiale_robot_algorithms_[1], "SimpleRobot");
 
 }
 
