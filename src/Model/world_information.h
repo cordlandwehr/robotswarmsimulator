@@ -142,7 +142,9 @@ public:
 	void set_robot_data(std::map<int, boost::shared_ptr<RobotData> > new_robot_data);
 	
 	/**
-	 * Removes a robot data from the current set of robots
+	 * Removes a robot data from the current set of robots. 
+	 * All edges in connection with this robot will be removed, too.
+	 * Also, all messages in this node's message queue will be removed.
 	 * \param Shared pointer to edge
 	 */
 	void remove_robot_data(boost::shared_ptr<RobotData> robot_data);	
