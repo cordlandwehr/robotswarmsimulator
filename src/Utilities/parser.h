@@ -64,10 +64,8 @@ class Parser {
 	//test cases for loading project files
 	friend class LoadMainProjectFileTest;
 	friend class load_robot_file_1;
+	friend class load_edge_file_1;
 
-	//test cases for saving project files
-	friend class save_main_project_file_1;
-	friend class write_robot_1;
 
 public:
 	Parser();
