@@ -44,6 +44,8 @@ elseif(WIN32)
 		set(LAPACK_LIBRARIES ${LAPACK_LIBRARY} ${LAPACK_BLAS_LIBRARY} ${LAPACK_F77_LIBRARY} ${LAPACK_I77_LIBRARY})
 	endif(LAPACK_LIBRARY AND LAPACK_BLAS_LIBRARY AND LAPACK_F77_LIBRARY AND LAPACK_I77_LIBRARY)
 else(APPLE)
+	# force dynamic string support on Snow Leopard
+	set(CMAKE_CXX_FLAGS "-D_GLIBCXX_FULLY_DYNAMIC_STRING")
 	if(CMAKE_BUILD_TYPE MATCHES Release)
 		# we can't use find_package(LAPACK) here (as for non-release builds), due to a bug #354463 of the lapack .deb package. Therefor, find the correct libraries manually.
 		reverse_link_preference_in_release()
