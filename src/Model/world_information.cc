@@ -29,6 +29,7 @@
 #include "world_object.h"
 #include "robot_data.h"
 #include "obstacle.h"
+#include "../Utilities/console_output.h"
 
 #include <iostream>
 #include <boost/foreach.hpp>
@@ -138,6 +139,11 @@ std::map<int, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
 }
 
 void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_data) {
+	if (robot_data_.count(new_robot_data->id()->id())) {
+	  ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Tried to add robot with ID " << new_robot_data->id()->id() << ". There was already a robot with that ID! Skipped.";
+	  return;
+	}
+  
 	robot_data_[new_robot_data->id()->id()] = new_robot_data;
 }
 
@@ -147,6 +153,11 @@ void WorldInformation::set_robot_data(std::map<int, boost::shared_ptr<RobotData>
 
 void WorldInformation::remove_robot_data(boost::shared_ptr<RobotIdentifier> robot_identifier) {
 	size_t robot_id = robot_identifier->id();
+	
+	if (!robot_data_.count(robot_id)) {
+	  ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::error) << "Tried to remove robot with ID " << robot_id << ". There was no such robot! Skipped.";
+	  return;
+	}
 	
 	//remove the node itself	
 	robot_data_.erase(robot_id);
