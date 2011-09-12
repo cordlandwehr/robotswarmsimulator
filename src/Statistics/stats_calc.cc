@@ -43,7 +43,7 @@ int StatsCalc::calculate_degree(const boost::shared_ptr<WorldInformation> graph)
 	int degree = 0;
 	for(int i=0; i<nodes.size();i++){
 		boost::shared_ptr<RobotData> currentNode = nodes[i];
-		int degreeOfCurrentNode = (currentNode->get_outgoing_edges()).size();
+		int degreeOfCurrentNode = outgoing_edges(graph, currentNode).size();
 		if(degree < degreeOfCurrentNode){
 			degree = degreeOfCurrentNode;
 		}
@@ -173,7 +173,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 		current_node = node_queue.front();
 		node_queue.pop();
 
-		std::vector<boost::shared_ptr<EdgeIdentifier> > edges_of_current_nodes = current_node->get_outgoing_edges();
+		std::vector<boost::shared_ptr<EdgeIdentifier> > edges_of_current_nodes = outgoing_edges(graph, current_node);
 		int degree_of_current_node = edges_of_current_nodes.size();
 
 		for(int j=0;j<degree_of_current_node;j++){
@@ -218,4 +218,23 @@ bool StatsCalc::is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> >
 	}
 	return false;
 
+}
+
+std::vector<boost::shared_ptr<EdgeIdentifier> > StatsCalc::outgoing_edges(const boost::shared_ptr<WorldInformation> wi,
+															   boost::shared_ptr<RobotData> rd) {
+	std::vector<boost::shared_ptr<EdgeIdentifier> > edges = rd->get_edges();
+
+	std::vector<boost::shared_ptr<EdgeIdentifier> > outgoing_edges;
+
+	for(int i=0; i<edges.size(); i++){
+		boost::shared_ptr<Edge> e = wi->get_according_edge(edges[i]);
+		if(boost::shared_ptr<DirectedEdge> de = boost::dynamic_pointer_cast<DirectedEdge>(e)) {
+			if(de->source()->id() == rd->id()->id())
+				outgoing_edges.push_back(edges[i]);
+		} else {
+			outgoing_edges.push_back(edges[i]);
+		}
+	}
+
+	return outgoing_edges;
 }

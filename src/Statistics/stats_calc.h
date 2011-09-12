@@ -81,6 +81,9 @@ public:
 private:
 	static bool is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> > ignore,
 						boost::shared_ptr<EdgeIdentifier> find_this_edge);
+
+	static std::vector<boost::shared_ptr<EdgeIdentifier> > outgoing_edges(const boost::shared_ptr<WorldInformation> wi,
+																		boost::shared_ptr<RobotData> r);
 };
 
 #endif /* STATS_CALC_H_ */
