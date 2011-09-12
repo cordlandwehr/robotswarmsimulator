@@ -80,7 +80,7 @@ public:
    * 
    * \param id		ID of the new robot.
    */
-  static void add_robot(std::size_t id);
+  static void add_robot(std::size_t id, std::string algorithm);
   
   /**
    * Creates a new robot instance using the provided MarkerInformation.
@@ -88,7 +88,7 @@ public:
    * \param id		ID of the new robot.
    * \param maker	Wrapper MarkerInformation object.
    */
-  static void add_robot(std::size_t id, MarkerInformationWrapper marker);
+  static void add_robot(std::size_t id, std::string algorithm, MarkerInformationWrapper marker);
   
   /**
    * Returns MarkerInformation object for a given edge.

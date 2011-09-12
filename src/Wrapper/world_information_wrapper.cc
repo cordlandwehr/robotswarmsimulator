@@ -88,16 +88,26 @@ WorldInformationWrapper::add_message(std::size_t sender, std::size_t receiver, M
 }
 
 void
-WorldInformationWrapper::add_robot(std::size_t id) {
+WorldInformationWrapper::add_robot(std::size_t id, std::string algorithm) {
   // create robot with empty MarkerInforamtion object
-  add_robot(id, MarkerInformationWrapper());
+  add_robot(id, algorithm, MarkerInformationWrapper());
 }
 
 void
-WorldInformationWrapper::add_robot(std::size_t id, MarkerInformationWrapper marker) {
-  // TODO: Do something ...
+WorldInformationWrapper::add_robot(std::size_t id, std::string algorithm, MarkerInformationWrapper marker) {
+  // create new Identifier 
+  boost::shared_ptr<RobotIdentifier> identifier(new RobotIdentifier(id));
+  // create new Robot
+  boost::shared_ptr<Robot> robot(Factory::robot_factory(identifier, algorithm));
+  // create new RobotData
+  boost::shared_ptr<Vector3d> position(new Vector3d());
+  boost::shared_ptr<MarkerInformation> robot_marker(new MarkerInformation(marker.marker_information()));
+  boost::shared_ptr<RobotData> robot_data(new RobotData(identifier, position, robot_marker, robot));
+  // insert new robot into WorldInformation
+  world_information_->add_robot_data(robot_data);
+  // update mapping
+  robot_identifiers_[id] = identifier;
 }
-
 
 // template<typename T> void 
 // WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key) {
@@ -363,7 +373,12 @@ WorldInformationWrapper::remove_message(std::size_t id) {
 
 void
 WorldInformationWrapper::remove_robot(std::size_t id) {
-  // TODO: Do something ...
+  // check the given ID
+  check_mapping(robot_identifiers_, id);
+  // remove the robot form the current WorldInformation
+  world_information_->remove_robot_data(robot_identifiers_[id]);
+  // update mapping
+  robot_identifiers_.erase(id);
 }
 
 void 
