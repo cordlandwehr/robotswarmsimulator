@@ -15,6 +15,7 @@
 #include "../Requests/marker_request.h"
 #include "../Model/message.h"
 #include "../Model/message_identifier.h"
+#include "../SimulationKernel/factories.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
@@ -85,6 +86,18 @@ WorldInformationWrapper::add_message(std::size_t sender, std::size_t receiver, M
   message_identifiers_[id] = boost::dynamic_pointer_cast<MessageIdentifier>(message->id());
   return id;
 }
+
+void
+WorldInformationWrapper::add_robot(std::size_t id) {
+  // create robot with empty MarkerInforamtion object
+  add_robot(id, MarkerInformationWrapper());
+}
+
+void
+WorldInformationWrapper::add_robot(std::size_t id, MarkerInformationWrapper marker) {
+  // TODO: Do something ...
+}
+
 
 // template<typename T> void 
 // WorldInformationWrapper::check_mapping(const std::map<std::size_t, boost::shared_ptr<T> >& map, std::size_t key) {
@@ -346,6 +359,11 @@ WorldInformationWrapper::remove_message(std::size_t id) {
   // remove map entry and edge
   message_identifiers_.erase(id);
   world_information_->remove_message(message);
+}
+
+void
+WorldInformationWrapper::remove_robot(std::size_t id) {
+  // TODO: Do something ...
 }
 
 void 

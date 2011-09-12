@@ -74,7 +74,22 @@ public:
    * \returns		ID of the new message.
    */
   static std::size_t add_message(std::size_t sender, std::size_t receiver, MarkerInformationWrapper marker);
-    
+  
+  /**
+   * Creates a new robot instance with empty MarkerInformation.
+   * 
+   * \param id		ID of the new robot.
+   */
+  static void add_robot(std::size_t id);
+  
+  /**
+   * Creates a new robot instance using the provided MarkerInformation.
+   * 
+   * \param id		ID of the new robot.
+   * \param maker	Wrapper MarkerInformation object.
+   */
+  static void add_robot(std::size_t id, MarkerInformationWrapper marker);
+  
   /**
    * Returns MarkerInformation object for a given edge.
    * 
@@ -216,6 +231,15 @@ public:
    */
   static void remove_message(std::size_t id);  
   
+  /**
+   * Removes a given robot.
+   * 
+   * The removal is executed immediately. No Request is generated.
+   * 
+   * \param id		The id of the robot to be removed.
+   */
+  static void remove_robot(std::size_t id);  
+    
   /**
    * (Re)set WorldInformation object to be used by the wrapper.
    * 
