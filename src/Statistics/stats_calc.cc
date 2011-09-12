@@ -43,7 +43,7 @@ int StatsCalc::calculate_degree(const boost::shared_ptr<WorldInformation> graph)
 	int degree = 0;
 	for(int i=0; i<nodes.size();i++){
 		boost::shared_ptr<RobotData> currentNode = nodes[i];
-		int degreeOfCurrentNode = (currentNode->get_edges()).size();
+		int degreeOfCurrentNode = (currentNode->get_outgoing_edges()).size();
 		if(degree < degreeOfCurrentNode){
 			degree = degreeOfCurrentNode;
 		}
@@ -173,7 +173,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 		current_node = node_queue.front();
 		node_queue.pop();
 
-		std::vector<boost::shared_ptr<EdgeIdentifier> > edges_of_current_nodes = current_node->get_edges();
+		std::vector<boost::shared_ptr<EdgeIdentifier> > edges_of_current_nodes = current_node->get_outgoing_edges();
 		int degree_of_current_node = edges_of_current_nodes.size();
 
 		for(int j=0;j<degree_of_current_node;j++){
