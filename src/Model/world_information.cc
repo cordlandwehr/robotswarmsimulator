@@ -250,10 +250,16 @@ int WorldInformation::time() const {
 }
 
 bool WorldInformation::robot_exists(boost::shared_ptr<RobotIdentifier> id) const {
-	if(id->id() < robot_data_.size())
+	std::map<int, boost::shared_ptr<RobotData> >::const_iterator it;
+	for(it = robot_data_.begin(); it != robot_data_.end(); it++) {
+		if(it->first == id->id())
+			break;
+	}
+	if(it != robot_data_.end()){
 		return true;
-	else
+	} else {
 		return false;
+	}
 }
 
 bool WorldInformation::edge_exists(boost::shared_ptr<EdgeIdentifier> id) const {
