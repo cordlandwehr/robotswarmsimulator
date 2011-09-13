@@ -114,6 +114,11 @@ public:
 	virtual void move_camera(float speed);
 
 	/**
+	 *  Moves the camera up or down depending on the speed
+	 */
+	virtual void move_camera_up_down(float speed);
+
+	/**
 	 * This will move the camera forward
 	 */
 	virtual void move_forward();

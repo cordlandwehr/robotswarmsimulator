@@ -108,6 +108,10 @@ void Camera::strafe_camera(float speed) {
 	// Not implemented.
 }
 
+void Camera::move_camera_up_down(float speed) {
+	// Not implemented.
+}
+
 void Camera::move_camera(float speed) {
 	// Not implemented.
 }

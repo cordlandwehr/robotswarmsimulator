@@ -31,8 +31,8 @@ OrthogonalCamera::OrthogonalCamera(): Camera(), zoom_(0.1), ortho_axis_(Z_AXIS) 
 	view_(1) = 0.0;
 	view_(2) = -1.0;
 
-	position_(0) = 0.5;
-	position_(1) = -0.5;
+	position_(0) = 0;
+	position_(1) = 0;
 	position_(2) = -1;
 
 	up_vector_(0) = 0.0;
@@ -58,8 +58,8 @@ void OrthogonalCamera::set_view_by_mouse(float x, float y) {
 	move_x = down_x_ - x;
 	move_y = down_y_ - y;
 
-	move_camera(-move_y);
-	strafe_camera(move_x);
+	move_camera(-move_y/zoom_);
+	strafe_camera(move_x/zoom_);
 
 	down_x_=x;
 	down_y_=y;
@@ -146,8 +146,10 @@ void OrthogonalCamera::look_rot() const {
 }
 
 void OrthogonalCamera::look_translate() const {
-	glTranslatef(- position_(0), - position_(1),  - position_(2) );
-	glScalef( zoom_, zoom_, zoom_ );
+	glTranslatef( 	-position_(0)*(ortho_axis_!=X_AXIS?zoom_:1),
+					-position_(1)*(ortho_axis_!=Y_AXIS?zoom_:1),
+					-position_(2)*(ortho_axis_!=Z_AXIS?zoom_:1) );
+	glScalef(zoom_, zoom_, zoom_);
 }
 
 std::string OrthogonalCamera::get_name() {
@@ -164,8 +166,8 @@ void OrthogonalCamera::set_ortho_axis(int axis) {
 		view_(2) = 0.0;
 
 		position_(0) = -1;
-		position_(1) = -0.5;
-		position_(2) = -0.5;
+		position_(1) = 0;
+		position_(2) = 0;
 
 		up_vector_(0) = 0.0;
 		up_vector_(1) = 1.0;
@@ -178,9 +180,9 @@ void OrthogonalCamera::set_ortho_axis(int axis) {
 		view_(1) = -1.0;
 		view_(2) = 0.0;
 
-		position_(0) = 0.5;
+		position_(0) = 0;
 		position_(1) = -1;
-		position_(2) = 0.5;
+		position_(2) = 0;
 
 		up_vector_(0) = 0.0;
 		up_vector_(1) = 0.0;
@@ -193,8 +195,8 @@ void OrthogonalCamera::set_ortho_axis(int axis) {
 		view_(1) = 0.0;
 		view_(2) = -1.0;
 
-		position_(0) = 0.5;
-		position_(1) = -0.5;
+		position_(0) = 0;
+		position_(1) = 0;
 		position_(2) = -1;
 
 		up_vector_(0) = 0.0;
