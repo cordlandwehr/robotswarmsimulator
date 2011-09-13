@@ -115,6 +115,8 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("add_edge", (std::size_t(*)(std::size_t, std::size_t, MarkerInformationWrapper, const std::string&)) &WorldInformationWrapper::add_edge),
 	luabind::def("add_edge", (std::size_t(*)(std::size_t, std::size_t, const std::string&)) &WorldInformationWrapper::add_edge),
 	luabind::def("add_message", &WorldInformationWrapper::add_message),
+	luabind::def("add_robot", (void(*)(std::size_t, std::string)) &WorldInformationWrapper::add_robot),
+	luabind::def("add_robot", (void(*)(std::size_t, std::string, MarkerInformationWrapper)) &WorldInformationWrapper::add_robot),
 	luabind::def("get_edge_information", &WorldInformationWrapper::get_edge_information),
 	luabind::def("get_edges", (const std::vector<std::size_t>(*)(const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
 	luabind::def("get_edges", (const std::vector<std::size_t>(*)(std::size_t, const std::string&)) &WorldInformationWrapper::get_edges, luabind::copy_table(luabind::result)),
@@ -132,6 +134,7 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("is_undirected", &WorldInformationWrapper::is_undirected),
 	luabind::def("remove_edge", &WorldInformationWrapper::remove_edge),
 	luabind::def("remove_message", &WorldInformationWrapper::remove_message),
+	luabind::def("remove_robot", &WorldInformationWrapper::remove_robot),
 	luabind::def("set_edge_information", &WorldInformationWrapper::set_edge_information),
 	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information)
       ]
