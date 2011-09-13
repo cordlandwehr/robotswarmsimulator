@@ -45,6 +45,8 @@
 #include "../Model/edge.h"
 #include "../Model/world_information.h"
 
+#include "../Utilities/vector_arithmetics.h"
+
 #include "camera.h"
 #include "simulation_renderer.h"
 #include "robot_renderer.h"
@@ -137,6 +139,13 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 		boost::shared_ptr<Vector3d> x_coord = local_coord.get<0>();
 		boost::shared_ptr<Vector3d> y_coord = local_coord.get<1>();
 		boost::shared_ptr<Vector3d> z_coord = local_coord.get<2>();
+
+		// when there is no local coordinate system, use the default coordinate system
+		if(!x_coord.get() || !y_coord.get() || !z_coord.get()) {
+			x_coord.reset(new Vector3d(boost::numeric::ublas::unit_vector<double>(3, 0)));
+			y_coord.reset(new Vector3d(boost::numeric::ublas::unit_vector<double>(3, 1)));
+			z_coord.reset(new Vector3d(boost::numeric::ublas::unit_vector<double>(3, 2)));
+		}
 
 
 		glColor3fv(kCoordXColor);
