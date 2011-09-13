@@ -13,6 +13,7 @@
 
 #include "rss_gl_widget.h"
 
+const float kMouseZoomSpeed = 0.005;
 
 RSSGLWidget::RSSGLWidget(QWidget *parent) : QGLWidget(parent),
 		simulation_control_(), simulation_renderer_() {
@@ -169,6 +170,10 @@ void RSSGLWidget::wheelEvent( QWheelEvent * event ) {
 		event->ignore();
 		return;
 	}
-	set_camera_speed( event->delta() > 0 ? DOUBLE_SPEED : HALF_SPEED );
+	if(simulation_renderer_->active_cam_index() == CAM_ORTHO) {
+		simulation_renderer_->camera()->move_camera_up_down(-(float)event->delta()*kMouseZoomSpeed);
+	} else {
+		set_camera_speed( event->delta() > 0 ? DOUBLE_SPEED : HALF_SPEED );
+	}
 	event->accept();
 }

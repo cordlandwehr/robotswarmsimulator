@@ -29,6 +29,8 @@
 
 #include <cmath>
 #include <cstdio>
+#include <string>
+#include <strstream>
 
 #include <boost/tuple/tuple.hpp>
 
@@ -44,6 +46,8 @@
 #include "../Model/message_identifier.h"
 #include "../Model/edge.h"
 #include "../Model/world_information.h"
+
+#include "../Utilities/vector_arithmetics.h"
 
 #include "camera.h"
 #include "simulation_renderer.h"
@@ -82,7 +86,7 @@ const unsigned int kSelectionColor = 6;
 
 }
 
-unsigned int get_color_from_marker_information(boost::shared_ptr<WorldObject> object, unsigned int default_color=0, const std::string& color_name = "color") {
+unsigned int get_color_from_marker_information(boost::shared_ptr<WorldObject> object, unsigned int default_color=0, const std::string& color_name = ":color") {
 	if(object.get() && object->marker_information().has_key(color_name)) {
 		boost::any color = object->marker_information().get_data(color_name);
 		double * color_ptr = boost::any_cast<double>(&color);
@@ -126,9 +130,10 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	glPushMatrix();
 		glTranslatef((*rob_pos)(0), (*rob_pos)(1), (*rob_pos)(2) );
 
-	if (renderer_->render_local_coord_system()){
 
-		glBegin(GL_LINES);
+	glBegin(GL_LINES);
+
+	if (renderer_->render_local_coord_system()){
 
 		boost::tuple<boost::shared_ptr<Vector3d>,
 					 boost::shared_ptr<Vector3d>,
@@ -137,6 +142,13 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 		boost::shared_ptr<Vector3d> x_coord = local_coord.get<0>();
 		boost::shared_ptr<Vector3d> y_coord = local_coord.get<1>();
 		boost::shared_ptr<Vector3d> z_coord = local_coord.get<2>();
+
+		// when there is no local coordinate system, use the default coordinate system
+		if(!x_coord.get() || !y_coord.get() || !z_coord.get()) {
+			x_coord.reset(new Vector3d(boost::numeric::ublas::unit_vector<double>(3, 0)));
+			y_coord.reset(new Vector3d(boost::numeric::ublas::unit_vector<double>(3, 1)));
+			z_coord.reset(new Vector3d(boost::numeric::ublas::unit_vector<double>(3, 2)));
+		}
 
 
 		glColor3fv(kCoordXColor);
@@ -157,22 +169,46 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 					(*z_coord)(1) ,
 					(*z_coord)(2) );
 
+	}
 
-		glEnd();
+	for(int i=0; i<=9; ++i) {
+		std::stringstream ss;
+		ss << ":vector" << i;
+		if(robot->marker_information().has_key(ss.str())) {
+			boost::any data = robot->marker_information().get_data(ss.str());
+			std::string * vec_str_ptr = boost::any_cast<std::string>(&data);
+			if(vec_str_ptr) {
+				Vector3d vec = string_to_vec(*vec_str_ptr);
+				ss << "_color";
+				unsigned int vec_color = get_color_from_marker_information(robot, i, ss.str());
+				glColor3fv(&kRobotIdColor[vec_color][0]);
+				glVertex3f(0, 0, 0 );
+				glVertex3f( vec(0), vec(1), vec(2) );
+			}
+		}
+	}
 
+	glEnd();
+
+	double robot_size = robot_size_;
+	if(robot->marker_information().has_key(":size")) {
+		boost::any data = robot->marker_information().get_data(":size");
+		double * size_ptr = boost::any_cast<double>(&data);
+		if(size_ptr)
+			robot_size = *size_ptr;
 	}
 
 	unsigned int rob_color = get_color_from_marker_information(robot, robot->color());
 	glColor3fv(&kRobotIdColor[rob_color][0]);
 	glPushName(SimulationRenderer::SELECTION_ROBOT);
 	glPushName(robot->id()->id());
-	draw_robot_sphere( rob_pos );
+	draw_robot_sphere( rob_pos, robot_size );
 	glPopName();
 	glPopName();
 
 	glPopMatrix();
 
-	double robot_radius = robot_size_ * kRobotRadius;
+	double robot_radius = robot_size * kRobotRadius;
 
 	// draw a selection box around the robot when selected
 	boost::shared_ptr<RobotIdentifier> r_id = boost::dynamic_pointer_cast<RobotIdentifier>(renderer_->selected_object());
@@ -197,16 +233,16 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 		glColor3fv(&kRobotIdColor[msg_color][0]);
 
 		glPushName(id->id());
-		renderer_->draw_box(pos, robot_size_ * kMessageWidth, robot_size_ * kMessageHeight, robot_size_ * kMessageDepth);
+		renderer_->draw_box(pos, robot_size * kMessageWidth, robot_size * kMessageHeight, robot_size * kMessageDepth);
 
 		boost::shared_ptr<MessageIdentifier> m_id = boost::dynamic_pointer_cast<MessageIdentifier>(renderer_->selected_object());
 		if( m_id.get() && m_id->id() == id->id() ) {
 			glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 			glColor3fv(&kRobotIdColor[kSelectionColor][0]);
-			renderer_->draw_box( pos, robot_size_ * kMessageWidth * 1.01, robot_size_ * kMessageWidth * 1.01, robot_size_ * kMessageWidth * 1.01);
+			renderer_->draw_box( pos, robot_size * kMessageWidth * 1.01, robot_size * kMessageWidth * 1.01, robot_size * kMessageWidth * 1.01);
 			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 		}
-		pos[kYCoord] += robot_size_ * kMessageHeight * 1.1;
+		pos[kYCoord] += robot_size * kMessageHeight * 1.1;
 		glPopName();
 	}
 	glPopName();
@@ -259,8 +295,8 @@ void RobotRenderer::set_default_color(float r, float g, float b, float alpha){
 	default_color_[3] = alpha;
 }
 
-inline void RobotRenderer::draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const{
-	glScalef(robot_size_, robot_size_, robot_size_);
+inline void RobotRenderer::draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos, double size) const{
+	glScalef(size, size, size);
 	glCallList( compiled_list_ );
 }
 

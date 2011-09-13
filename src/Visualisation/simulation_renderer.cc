@@ -258,7 +258,7 @@ void SimulationRenderer::resize(int width, int height){
 void SimulationRenderer::setup_projection(){
 
 	// Reset the coordinate system before modifying
-	float ratio = 1.0* screen_width_ / screen_height_;
+	float ratio = (float)screen_width_ / screen_height_;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -269,7 +269,7 @@ void SimulationRenderer::setup_projection(){
 				gluPerspective(90,ratio,0.1,1000);
 			break;
 		case PROJ_ORTHO:
-				glOrtho( 0,1,0,1,0.1,1000);
+				glOrtho( -ratio/2,ratio/2,-0.5,0.5,0.1,1000);
 			break;
 	}
 
@@ -743,12 +743,13 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) {
 	glGetIntegerv(GL_VIEWPORT,viewport);
 	gluPickMatrix(x,viewport[3]-y, 5,5,viewport);
 
+	GLfloat ratio = (GLfloat)viewport[2]/(GLfloat)viewport[3];
 	switch ( projection_type_ ){
 		case PROJ_PERSP:
-				gluPerspective(90,(GLfloat)viewport[2]/(GLfloat)viewport[3],0.1,1000);
+				gluPerspective(90,ratio,0.1,1000);
 			break;
 		case PROJ_ORTHO:
-				glOrtho( 0,1,0,1,0.1,1000);
+			glOrtho( -ratio/2,ratio/2,-0.5,0.5,0.1,1000);
 			break;
 	}
 

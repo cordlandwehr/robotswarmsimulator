@@ -78,7 +78,7 @@ public:
 		void set_robot_size(double s) { robot_size_ = s; }
 private:
 
-	void draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos) const;
+	void draw_robot_sphere(const boost::shared_ptr<Vector3d> & pos, double size) const;
 
 	double robot_size_;
 

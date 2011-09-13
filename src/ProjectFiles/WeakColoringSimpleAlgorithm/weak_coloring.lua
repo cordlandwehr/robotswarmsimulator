@@ -15,7 +15,7 @@ function getLeastFrequentColor()
 	end
 	
 	local marker = View.get_robot_information(neighbor)
-	local color = marker:get_data("color")
+	local color = marker:get_data(":color")
 	
 	--log("neighbor " .. neighbor .. " has color " .. color)
 
@@ -56,13 +56,13 @@ function main()
 	if View.get_time() == 1 then
 		color = me % available_colors
 	else
-		prev_color = my_marker:get_data("color")
+		prev_color = my_marker:get_data(":color")
 		--log("node " .. me .. " has color " .. prev_color)
 		
 		color = getLeastFrequentColor()
 	end
 	
-	my_marker:add_data("color", color)
+	my_marker:add_data(":color", color)
 	
 	log("Node " .. me .. " set its color to " .. color);	
 

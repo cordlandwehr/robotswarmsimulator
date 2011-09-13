@@ -6,7 +6,7 @@ function main()
 
 	color = math.random(0,2)
 
-	my_marker:add_data("color", color)
+	my_marker:add_data(":color", color)
 
 	log("Adversary " .. me .. " set its color to " .. color);		
 

@@ -61,6 +61,13 @@ function main()
     marker:add_data("waiting_since", View.get_time())
   end
   
+  -- test special visualization marker informations
+  for i = 0, 9 do
+	marker:add_data(":vector" .. i, i .. "," .. math.random(1,10) .. ",3")
+  end
+  marker:add_data(":color", math.floor(math.random(0,9)))
+  marker:add_data(":size", math.random())
+  
   -- request update of own marker
   View.add_marker_request(marker)
 end

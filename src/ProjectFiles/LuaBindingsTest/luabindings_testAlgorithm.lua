@@ -1,16 +1,19 @@
 round = -1
+error_count = 0
 
 function eval(func, obj, val, info)
 	if info == nil then
 		if obj == val then
 			log("debug", tostring(func) .. ": passed ")
 		else
+			error_count = error_count + 1
 			log("error", tostring(func) .. ": failed (" .. tostring(obj) .. " != " .. tostring(val) .. ")")
 		end
 	else
 		if obj == val then
 			log("debug", tostring(func) .. ": passed (" .. tostring(info) .. ")")
 		else
+			error_count = error_count + 1
 			log("error", tostring(func) .. ": failed (" .. tostring(info) .. ")(" .. tostring(obj) .. " != " .. tostring(val) .. ")")
 		end
 	end
@@ -161,5 +164,6 @@ function main()
 			eval("2.add_remove_edge_request()", #edges_of_2, 1)
 		end
 	elseif round == 6 then
+		log("Finished test of robot bindings for robot " .. View.get_own_id() .. " with " .. error_count .. " errors.")
 	end
 end
