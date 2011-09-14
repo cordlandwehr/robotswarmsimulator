@@ -34,6 +34,7 @@
 #include <boost/any.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/program_options/variables_map.hpp>
+#include <boost/filesystem.hpp>
 
 #include "../Model/world_modifier.h"
 
@@ -85,13 +86,19 @@ namespace Factory {
 	 * Creates robot from given algorithm
 	 * Algorithm may be a class or a lua-file.
 	 */
-	boost::shared_ptr<Robot> robot_factory(boost::shared_ptr<RobotIdentifier> id, const std::string &algorithm);
+	boost::shared_ptr<Robot> robot_factory(boost::shared_ptr<RobotIdentifier> id, const std::string &algorithm, bool full_path = true);
 
 	/**
 	 * Creates world modifier from given string
 	 * String may be a class or a lua-file.
 	 */
 	boost::shared_ptr<WorldModifier> world_modifier_factory(const std::string &str);
+
+	/**
+	 * Variable holding the project path.
+	 * Needed to add additional lua robots at runtime
+	 */
+	extern boost::filesystem::path project_directory_path;
 }
 
 #endif /* FACTORIES_H_ */

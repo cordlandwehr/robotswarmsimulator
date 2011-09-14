@@ -456,3 +456,9 @@ int Parser::dumpnumber() {
 	return dumpnumber_;
 }
 
+
+boost::filesystem::path Parser::get_project_path(){
+	using boost::filesystem::path;
+	return path(project_filename_).parent_path();
+}
+

@@ -20,7 +20,7 @@ function eval(func, obj, val, info)
 end
 
 function main()
-	if View.get_time() > 28 then
+	if View.get_time() > 40 then
 		round = round + 1
 	end
 	
@@ -35,13 +35,13 @@ function main()
 		-- testing get_time
 		if View.get_own_id() == 0 then
 			time_0 = View.get_time()
-			eval("0.get_time()", time_0, 29, "")
+			eval("0.get_time()", time_0, 41, "")
 		elseif View.get_own_id() == 1 then
 			time_1 = View.get_time()
-			eval("1.get_time()", time_1, 29, "")
+			eval("1.get_time()", time_1, 41, "")
 		elseif View.get_own_id() == 2 then
 			time_2 = View.get_time()
-			eval("2.get_time()", time_2, 29, "")
+			eval("2.get_time()", time_2, 41, "")
 		end
 		
 		-- testing get_visible_edges

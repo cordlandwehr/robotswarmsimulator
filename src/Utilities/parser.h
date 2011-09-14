@@ -40,6 +40,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/program_options/variables_map.hpp>
+#include <boost/filesystem.hpp>
 
 #include <string>
 #include <sstream>
@@ -172,6 +173,11 @@ public:
 	 * \returns the dumpnumber (for saving snapshots of configurations).
 	 */
 	int dumpnumber();
+
+	/**
+	 * \return the project path of the beforehand loaded project
+	 */
+	boost::filesystem::path get_project_path();
 
 private:
 
