@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 		//set the color
 		boost::shared_ptr<MarkerInformation> marker_information(new MarkerInformation());
 		double color = static_cast<double>(i);;
-		marker_information->add_data("color",color);
+		marker_information->add_data(":color",color);
 
 		boost::shared_ptr<Robot> node(new SimpleRobot(id));
 		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, marker_information, node));
@@ -164,14 +164,14 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(history->get_newest().world_information_ptr(), IDs[1], IDs[4], ignore_one_edge),3);
 
 	//node 7 gets same color as node 8
-	(nodes[7]->marker_information()).remove_data("color");
-	(nodes[7]->marker_information()).add_data("color",8.0);
+	(nodes[7]->marker_information()).remove_data(":color");
+	(nodes[7]->marker_information()).add_data(":color",8.0);
 
 	//nodes 10 and 12 get same color as node 11
-	(nodes[10]->marker_information()).remove_data("color");
-	(nodes[10]->marker_information()).add_data("color",11.0);
-	(nodes[12]->marker_information()).remove_data("color");
-	(nodes[12]->marker_information()).add_data("color",11.0);
+	(nodes[10]->marker_information()).remove_data(":color");
+	(nodes[10]->marker_information()).add_data(":color",11.0);
+	(nodes[12]->marker_information()).remove_data(":color");
+	(nodes[12]->marker_information()).add_data(":color",11.0);
 
 	/**************************************************
 	 * the graph is a straight line of nodes 0 - 999  *
