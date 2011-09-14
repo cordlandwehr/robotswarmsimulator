@@ -219,7 +219,7 @@ function main()
 		eval("remove_message(0)", #all_messages, 0, "next round")
 		
 		-- testing add robot
-		WorldInformation.add_robot(3, "luabindings_testAlgorithm.lua")
+		WorldInformation.add_robot(3, Vector3d(-1, 0, 0), "luabindings_testAlgorithm.lua")
 
 		all_robots = WorldInformation.get_robots()
 		eval("add_robot(3, luabindings_testAlgorithm.lua)", #all_robots, 4, "same round")
@@ -229,7 +229,7 @@ function main()
 
 		robot_marker = MarkerInformation()
 		robot_marker:add_data("test", "test_data")
-		WorldInformation.add_robot(4, "SimpleRobot", robot_marker)
+		WorldInformation.add_robot(4, Vector3d(-2, 0, 0), "SimpleRobot", robot_marker)
 
 		all_robots = WorldInformation.get_robots()
 		eval("add_robot(4, SimpleRobot, robot_marker)", #all_robots, 5, "same round")
