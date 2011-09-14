@@ -88,21 +88,21 @@ WorldInformationWrapper::add_message(std::size_t sender, std::size_t receiver, M
 }
 
 void
-WorldInformationWrapper::add_robot(std::size_t id, std::string algorithm) {
+WorldInformationWrapper::add_robot(std::size_t id, Vector3dWrapper position, std::string algorithm) {
   // create robot with empty MarkerInforamtion object
-  add_robot(id, algorithm, MarkerInformationWrapper());
+  add_robot(id, position, algorithm, MarkerInformationWrapper());
 }
 
 void
-WorldInformationWrapper::add_robot(std::size_t id, std::string algorithm, MarkerInformationWrapper marker) {
+WorldInformationWrapper::add_robot(std::size_t id, Vector3dWrapper position, std::string algorithm, MarkerInformationWrapper marker) {
   // create new Identifier 
   boost::shared_ptr<RobotIdentifier> identifier(new RobotIdentifier(id));
   // create new Robot
   boost::shared_ptr<Robot> robot(Factory::robot_factory(identifier, algorithm, false));
   // create new RobotData
-  boost::shared_ptr<Vector3d> position(new Vector3d());
+  boost::shared_ptr<Vector3d> robot_position(new Vector3d(transform(position)));
   boost::shared_ptr<MarkerInformation> robot_marker(new MarkerInformation(marker.marker_information()));
-  boost::shared_ptr<RobotData> robot_data(new RobotData(identifier, position, robot_marker, robot));
+  boost::shared_ptr<RobotData> robot_data(new RobotData(identifier, robot_position, robot_marker, robot));
   // insert new robot into WorldInformation
   world_information_->add_robot_data(robot_data);
   // update mapping
