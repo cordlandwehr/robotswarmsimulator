@@ -18,6 +18,7 @@
 #include "../Model/world_information.h"
 #include "../Requests/request.h"
 #include "../Wrapper/marker_information_wrapper.h"
+#include "../Wrapper/vector_wrapper.h"
 
 #include "../Model/edge_identifier.h"
 #include "../Model/message_identifier.h"
@@ -80,7 +81,7 @@ public:
    * 
    * \param id		ID of the new robot.
    */
-  static void add_robot(std::size_t id, std::string algorithm);
+  static void add_robot(std::size_t id, Vector3dWrapper position, std::string algorithm);
   
   /**
    * Creates a new robot instance using the provided MarkerInformation.
@@ -88,7 +89,7 @@ public:
    * \param id		ID of the new robot.
    * \param maker	Wrapper MarkerInformation object.
    */
-  static void add_robot(std::size_t id, std::string algorithm, MarkerInformationWrapper marker);
+  static void add_robot(std::size_t id, Vector3dWrapper position, std::string algorithm, MarkerInformationWrapper marker);
   
   /**
    * Returns MarkerInformation object for a given edge.
