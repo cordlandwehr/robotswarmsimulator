@@ -242,14 +242,13 @@ function main()
 		eval("add_robot(4, SimpleRobot, robot_marker)[marker test]", robot_marker:get_data("test"), "test_data", "same round")
 		
 		-- testing remove robot
-		WorldInformation.remove_robot(3)
 		WorldInformation.remove_robot(4)
 		
 		all_robots = WorldInformation.get_robots()
-		eval("remove_robot(3 & 4)", #all_robots, 3, "same round")
+		eval("remove_robot(4)", #all_robots, 4, "same round")
 	elseif round == 9 then
 		all_robots = WorldInformation.get_robots()
-		eval("add_robot(3 & 4)", #all_robots, 3, "next round")
+		eval("add_robot(4)", #all_robots, 4, "next round")
 		
 		-- reset graph for robot test
 		WorldInformation.add_edge(1, 2, "undirected")

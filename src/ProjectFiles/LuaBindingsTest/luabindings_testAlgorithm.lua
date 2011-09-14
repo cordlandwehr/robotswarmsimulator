@@ -30,6 +30,11 @@ function main()
 			log("Testing View bindings...")
 		end
 		
+		-- testing if included robot exists
+		if View.get_own_id() == 3 then
+			log("Added robot gets executed")
+		end
+		
 		-- Graph looks like:  0 <-(0)-- 1 --(3)-- 2
 		
 		-- testing get_time
@@ -164,6 +169,6 @@ function main()
 			eval("2.add_remove_edge_request()", #edges_of_2, 1)
 		end
 	elseif round == 6 then
-		log("Finished test of robot bindings for robot " .. View.get_own_id() .. " with " .. error_count .. " errors.")
+		log("Finished test of robot bindings for robot " .. View.get_own_id() .. " with " .. error_count .. " errors. (Check for \"Added robot gets executed\" message at beginning)")
 	end
 end
