@@ -72,8 +72,12 @@ function main()
     head = WorldInformation.get_head(long_range_links[i])
     tail = WorldInformation.get_tail(long_range_links[i])
     -- calculate distance without long range links
-    dist = Statistics.calculate_hop_distance(tail, head, long_range_links)
-    dist = dist + 1
+    -- dist = Statistics.calculate_hop_distance(tail, head, long_range_links)
+    dist = math.abs(head - tail)
+ 	if dist > #robots/2 then
+		dist = #robots - dist
+	end
+	dist = dist + 1
     -- store distance
     hopdistances_round[dist] = hopdistances_round[dist] + 1
     hopdistances_overall[dist] = hopdistances_overall[dist] + 1
