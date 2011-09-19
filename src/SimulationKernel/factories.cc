@@ -85,6 +85,8 @@
 #include "../WorldModifierImplementations/force_directed_layouter.h"
 #include "../WorldModifierImplementations/default_world_modifier.h"
 
+boost::filesystem::path Factory::project_directory_path;
+
 /**
  * creates vector modfiers from the given string and adds them to the handler
  * TODO(craupach) proper error handling
@@ -246,7 +248,7 @@ boost::shared_ptr<AbstractViewFactory> Factory::view_factory_factory(boost::prog
 	return view_factory;
 }
 
-boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifier> id, const std::string& algorithm) {
+boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifier> id, const std::string& algorithm, bool full_path) {
 
 	boost::shared_ptr<Robot> robot;
 
@@ -255,7 +257,11 @@ boost::shared_ptr<Robot> Factory::robot_factory(boost::shared_ptr<RobotIdentifie
 	if(algorithm.size() >= 4)
 		subfix = algorithm.substr(algorithm.size() - 4, 4);
 	if(subfix == ".lua") {
-		robot.reset(new LuaRobot(id, algorithm));
+		if(full_path )
+			robot.reset(new LuaRobot(id, algorithm));
+		else
+			robot.reset(new LuaRobot(id, (project_directory_path / algorithm).string()));
+
 	} else if(algorithm == "SimpleRobot" || algorithm == "NONE") {
 		robot.reset(new SimpleRobot(id));
 	} else {

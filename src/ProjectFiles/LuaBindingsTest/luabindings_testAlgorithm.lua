@@ -20,7 +20,7 @@ function eval(func, obj, val, info)
 end
 
 function main()
-	if View.get_time() > 28 then
+	if View.get_time() > 40 then
 		round = round + 1
 	end
 	
@@ -30,18 +30,23 @@ function main()
 			log("Testing View bindings...")
 		end
 		
-		-- Graph looks like:  0 <-(0)-- 1 --(3)-- 2
+		-- testing if included robot exists
+		if View.get_own_id() == 3 then
+			log("Added robot gets executed")
+		end
+		
+		-- Graph looks like:  0 <-(0)-- 1 --(4)-- 2
 		
 		-- testing get_time
 		if View.get_own_id() == 0 then
 			time_0 = View.get_time()
-			eval("0.get_time()", time_0, 29, "")
+			eval("0.get_time()", time_0, 41, "")
 		elseif View.get_own_id() == 1 then
 			time_1 = View.get_time()
-			eval("1.get_time()", time_1, 29, "")
+			eval("1.get_time()", time_1, 41, "")
 		elseif View.get_own_id() == 2 then
 			time_2 = View.get_time()
-			eval("2.get_time()", time_2, 29, "")
+			eval("2.get_time()", time_2, 41, "")
 		end
 		
 		-- testing get_visible_edges
@@ -72,16 +77,16 @@ function main()
 		if View.get_own_id() == 1 then
 			eval("1.is_directed(0)", View.is_directed(0), true)
 			eval("1.is_undirected(0)", View.is_undirected(0), false)
-			eval("1.is_directed(1)", View.is_directed(3), false)
-			eval("1.is_undirected(1)", View.is_undirected(3), true)
+			eval("1.is_directed(4)", View.is_directed(4), false)
+			eval("1.is_undirected(4)", View.is_undirected(4), true)
 		end
 		
 		-- testing get_head get_tail
 		if View.get_own_id() == 1 then
 			eval("1.get_head(0)", View.get_head(0), 0)
 			eval("1.get_tail(0)", View.get_tail(0), 1)
-			eval("1.get_head(2)", View.get_head(3), 2)
-			eval("1.get_tail(2)", View.get_tail(3), 1)
+			eval("1.get_head(4)", View.get_head(4), 2)
+			eval("1.get_tail(4)", View.get_tail(4), 1)
 		end
 		
 		-- testing add_insert_message_request
@@ -110,13 +115,13 @@ function main()
 			View.add_insert_edge_request(0, 1, em, "undirected")
 		end
 	elseif round == 2 then
-		-- Graph looks like:  0 <-(0)-- 1 --(3)-- 2
-		--                      --(4)--
+		-- Graph looks like:  0 <-(0)-- 1 --(4)-- 2
+		--                      --(5)--
 		if View.get_own_id() == 0 then
 			edges_of_0 = View.get_visible_edges()
 			eval("0.add_insert_edge_request(0, 1, em, undirected)", #edges_of_0, 1)
-			em = View.get_edge_information(4)
-			eval("0.get_edge_information(4)", em:get_data("test"), "test_data")
+			em = View.get_edge_information(5)
+			eval("0.get_edge_information(5)", em:get_data("test"), "test_data")
 		elseif View.get_own_id() == 1 then
 			edges_of_1 = View.get_visible_edges()
 			eval("1.add_insert_edge_request(0, 1, em, undirected)", #edges_of_1, 3)
@@ -150,20 +155,20 @@ function main()
 		-- testing add_remove_edge_request
 		if View.get_own_id() == 1 then
 			View.get_visible_edges()
-			View.add_remove_edge_request(4)
+			View.add_remove_edge_request(5)
 		end
 	elseif round == 5 then
 		if View.get_own_id() == 0 then
 			edges_of_0 = View.get_visible_edges()
-			eval("0.add_remove_edge_request()", #edges_of_0, 0)
+			eval("0.add_remove_edge_request(5)", #edges_of_0, 0)
 		elseif View.get_own_id() == 1 then
 			edges_of_1 = View.get_visible_edges()
-			eval("1.add_remove_edge_request()", #edges_of_1, 2)
+			eval("1.add_remove_edge_request(5)", #edges_of_1, 2)
 		elseif View.get_own_id() == 2 then
 			edges_of_2 = View.get_visible_edges()
-			eval("2.add_remove_edge_request()", #edges_of_2, 1)
+			eval("2.add_remove_edge_request(5)", #edges_of_2, 1)
 		end
 	elseif round == 6 then
-		log("Finished test of robot bindings for robot " .. View.get_own_id() .. " with " .. error_count .. " errors.")
+		log("Finished test of robot bindings for robot " .. View.get_own_id() .. " with " .. error_count .. " errors. (Check for \"Added robot gets executed\" message at beginning)")
 	end
 end

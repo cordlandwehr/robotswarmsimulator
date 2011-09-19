@@ -98,7 +98,7 @@ WorldInformationWrapper::add_robot(std::size_t id, Vector3dWrapper position, std
   // create new Identifier 
   boost::shared_ptr<RobotIdentifier> identifier(new RobotIdentifier(id));
   // create new Robot
-  boost::shared_ptr<Robot> robot(Factory::robot_factory(identifier, algorithm));
+  boost::shared_ptr<Robot> robot(Factory::robot_factory(identifier, algorithm, false));
   // create new RobotData
   boost::shared_ptr<Vector3d> robot_position(new Vector3d(transform(position)));
   boost::shared_ptr<MarkerInformation> robot_marker(new MarkerInformation(marker.marker_information()));

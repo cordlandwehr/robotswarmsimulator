@@ -218,12 +218,46 @@ function main()
 		eval("remove_message(0)", #messages_of_0, 0, "next round")
 		eval("remove_message(0)", #all_messages, 0, "next round")
 		
+		-- testing add robot
+		WorldInformation.add_robot(3, Vector3d(-1, 0, 0), "luabindings_testAlgorithm.lua")
+
+		all_robots = WorldInformation.get_robots()
+		eval("add_robot(3, luabindings_testAlgorithm.lua)", #all_robots, 4, "same round")
+	elseif round == 7 then
+		all_robots = WorldInformation.get_robots()
+		eval("add_robot(no marker)", #all_robots, 4, "next round")
+
+		robot_marker = MarkerInformation()
+		robot_marker:add_data("test", "test_data")
+		WorldInformation.add_robot(4, Vector3d(-2, 0, 0), "SimpleRobot", robot_marker)
+
+		all_robots = WorldInformation.get_robots()
+		eval("add_robot(4, SimpleRobot, robot_marker)", #all_robots, 5, "same round")
+		robot_marker = WorldInformation.get_robot_information(4)
+		eval("add_robot(4, SimpleRobot, robot_marker)[marker test]", robot_marker:get_data("test"), "test_data", "same round")
+	elseif round == 8 then
+		all_robots = WorldInformation.get_robots()
+		eval("add_robot(4, SimpleRobot, robot_marker)", #all_robots, 5, "next round")
+		robot_marker = WorldInformation.get_robot_information(4)
+		eval("add_robot(4, SimpleRobot, robot_marker)[marker test]", robot_marker:get_data("test"), "test_data", "same round")
+		
+		WorldInformation.add_edge(3, 4, "undirected")
+		
+		-- testing remove robot
+		WorldInformation.remove_robot(4)
+		
+		all_robots = WorldInformation.get_robots()
+		eval("remove_robot(4)", #all_robots, 4, "same round")
+	elseif round == 9 then
+		all_robots = WorldInformation.get_robots()
+		eval("add_robot(4)", #all_robots, 4, "next round")
+		
 		-- reset graph for robot test
 		WorldInformation.add_edge(1, 2, "undirected")
 		WorldInformation.remove_edge(2)
 		
 		log("Finished WorldInformation bindings test with " .. error_count .. " errors.")
 		
-		-- Graph looks like: 0 <-(0)-- 1 --(3)-- 2
+		-- Graph looks like: 0 <-(0)-- 1 --(4)-- 2
 	end
 end

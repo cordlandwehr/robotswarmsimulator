@@ -88,6 +88,7 @@ void SimulationKernel::init(const string& project_filename,
 	// create Parser, load project file and get map
 	parser_.reset(new Parser());
 	parser_->load_projectfiles(project_filename);
+	Factory::project_directory_path = parser_->get_project_path();
 	//std::map<std::string, std::string> &params = parser_->parameter_map();
 	boost::program_options::variables_map &params_boost = parser_->parameter_map_boost();
 	
