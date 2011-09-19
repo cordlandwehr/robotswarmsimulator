@@ -1,0 +1,6 @@
+PROJECT_NAME=LayouterAndRemoveNodes
+ROBOT_FILENAME=nodes.csv
+EDGE_FILENAME=edges.csv
+ASG=SYNCHRONOUS_WM
+WORLD_MODIFIERS=CircleLayouter
+WORLD_MODIFIERS=evil_world_modifier.lua
