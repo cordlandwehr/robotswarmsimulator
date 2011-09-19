@@ -1,3 +1,4 @@
+# This project needs the simulator to be restarted to run correctly!!!
 PROJECT_NAME=Luabindings Testproject
 ROBOT_FILENAME=luabindings_testrobot.csv
 EDGE_FILENAME=luabindings_testedges.csv

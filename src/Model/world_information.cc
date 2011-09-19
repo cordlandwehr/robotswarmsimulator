@@ -159,28 +159,22 @@ void WorldInformation::remove_robot_data(boost::shared_ptr<RobotIdentifier> robo
 	  return;
 	}
 	
-	//remove the node itself	
-	robot_data_.erase(robot_id);
+	RobotData rd = get_according_robot_data(robot_identifier);
 
-	//remove any edges to or from this node
-	std::map< size_t, boost::shared_ptr < Edge> >::iterator it_e = edges_.begin();
-	while( it_e != edges_.end() ) {
-		std::map< size_t, boost::shared_ptr < Edge> >::iterator old_it_e = it_e++;
-		if (old_it_e->second->robot1()->id() == robot_id || old_it_e->second->robot2()->id() == robot_id) {
-			edges_.erase(old_it_e);
-		}
+	// remove edges to and from the deleted robot
+	std::vector<boost::shared_ptr<EdgeIdentifier> > edges = rd.get_edges();
+	for(int i=0; i<edges.size(); i++){
+		remove_edge(get_according_edge(edges[i]));
 	}
 
-	//remove message in this node's message queue
-	std::map< size_t, boost::shared_ptr < Message> >::iterator it_m = messages_.begin();
-	while( it_m != messages_.end() ) {
-		std::map< size_t, boost::shared_ptr < Message> >::iterator old_it_m = it_m++;
-		if (old_it_m->second->receiver()->id() == robot_id) {
-			messages_.erase(old_it_m);
-		}
-	}	
-	
-	
+	// remove messages of the deleted robot
+	while(rd.get_number_of_messages() > 0){
+		boost::shared_ptr<MessageIdentifier> m = rd.get_message(0);
+		remove_message(get_according_message(m));
+	}
+
+	//remove the node itself	
+	robot_data_.erase(robot_id);
 }
 
 const std::map<std::size_t, boost::shared_ptr<Edge> >& WorldInformation::edges() const {
@@ -208,12 +202,16 @@ void WorldInformation::set_edge_data(std::map<std::size_t, boost::shared_ptr<Edg
 }
 
 void WorldInformation::remove_edge(boost::shared_ptr<Edge> edge){
-	RobotData& rd1 = get_according_robot_data(edge->robot1());
-	RobotData& rd2 = get_according_robot_data(edge->robot2());
 
 	// remove requested edge from world_information and from adjacency list of robots
-	rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));
-	rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));  
+	if(robot_exists(edge->robot1())){
+		RobotData& rd1 = get_according_robot_data(edge->robot1());
+		rd1.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));
+	}
+	if(robot_exists(edge->robot2())){
+		RobotData& rd2 = get_according_robot_data(edge->robot2());
+		rd2.remove_edge(boost::dynamic_pointer_cast<EdgeIdentifier>(edge->id()));
+	}
 
 	// remove from world information
 	edges_.erase(edge->id()->id());

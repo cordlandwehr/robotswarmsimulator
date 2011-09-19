@@ -241,6 +241,8 @@ function main()
 		robot_marker = WorldInformation.get_robot_information(4)
 		eval("add_robot(4, SimpleRobot, robot_marker)[marker test]", robot_marker:get_data("test"), "test_data", "same round")
 		
+		WorldInformation.add_edge(3, 4, "undirected")
+		
 		-- testing remove robot
 		WorldInformation.remove_robot(4)
 		
@@ -256,6 +258,6 @@ function main()
 		
 		log("Finished WorldInformation bindings test with " .. error_count .. " errors.")
 		
-		-- Graph looks like: 0 <-(0)-- 1 --(3)-- 2
+		-- Graph looks like: 0 <-(0)-- 1 --(4)-- 2
 	end
 end
