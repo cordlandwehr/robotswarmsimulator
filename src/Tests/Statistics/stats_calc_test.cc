@@ -188,3 +188,64 @@ BOOST_AUTO_TEST_CASE(stats_calc_test) {
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_maximal_defect(history->get_newest().world_information_ptr()),2);
 	BOOST_CHECK_EQUAL(stats_calc_.calculate_total_defects(history->get_newest().world_information_ptr()),3);
 }
+
+BOOST_AUTO_TEST_CASE(greedy_routing_dist_test){
+	// setup graph
+	//     <----------------------------------------------------->
+	//    0 <---> 1 <---> 2 <---> 3 <---> 4 <---> 5 <---> 6 <---> 7
+	//     ------lrl-----> <-------------lrl--------------
+
+	boost::shared_ptr<WorldInformation> graph (new WorldInformation());
+
+	std::vector<boost::shared_ptr<RobotIdentifier> > rids;
+	std::vector<boost::shared_ptr<Robot> > rs;
+	std::vector<boost::shared_ptr<RobotData> > rds;
+	std::vector<boost::shared_ptr<Edge> > es;
+
+	// generate robots
+	for(int i=0; i<8; i++){
+		boost::shared_ptr<RobotIdentifier> rid (new RobotIdentifier(i));
+		rids.push_back(rid);
+		boost::shared_ptr<Robot> r (new SimpleRobot(rid));
+		rs.push_back(r);
+		boost::shared_ptr<RobotData> rd (new RobotData(rid, boost::shared_ptr<Vector3d>(new Vector3d()), r));
+		rds.push_back(rd);
+
+		graph->add_robot_data(rd);
+	}
+
+	// generate edges
+	for(int i=0; i<rds.size()-1; ++i){
+		boost::shared_ptr<Edge> e (new UndirectedEdge(rids[i], rids[i+1]));
+		graph->add_edge(e);
+	}
+	{
+		boost::shared_ptr<Edge> e (new UndirectedEdge(rids[rids.size()-1], rids[0]));
+		graph->add_edge(e);
+	}
+	boost::shared_ptr<Edge> e02_lrl (new UndirectedEdge(rids[0], rids[2]));
+	e02_lrl->marker_information().add_data("long_range_link", true);
+	boost::shared_ptr<Edge> e62_lrl (new UndirectedEdge(rids[6], rids[2]));
+	e62_lrl->marker_information().add_data("long_range_link", true);
+	graph->add_edge(e02_lrl);
+	graph->add_edge(e62_lrl);
+
+	// test StatsCalc::calculate_lrl_local_greedy_routing_distance
+	//     <----------------------------------------------------->
+	//    0 <---> 1 <---> 2 <---> 3 <---> 4 <---> 5 <---> 6 <---> 7
+	//     ------lrl-----> <-------------lrl--------------
+
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[0], rids[1], &(StatsCalc::normal_circle_dist_func)), 1);
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[0], rids[2], &(StatsCalc::normal_circle_dist_func)), 1);
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[0], rids[3], &(StatsCalc::normal_circle_dist_func)), 2);
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[0], rids[4], &(StatsCalc::normal_circle_dist_func)), 3);
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[0], rids[5], &(StatsCalc::normal_circle_dist_func)), 3);
+
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[2], rids[6], &(StatsCalc::normal_circle_dist_func)), 4);
+
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[5], rids[2], &(StatsCalc::normal_circle_dist_func)), 3);
+
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[6], rids[2], &(StatsCalc::normal_circle_dist_func)), 1);
+
+	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[7], rids[2], &(StatsCalc::normal_circle_dist_func)), 2);
+}

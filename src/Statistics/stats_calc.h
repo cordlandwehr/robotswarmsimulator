@@ -78,12 +78,44 @@ public:
 				 	 	 	 	 	 	 	 boost::shared_ptr<RobotIdentifier> start,
 				 	 	 	 	 	 	 	 boost::shared_ptr<RobotIdentifier> target,
 				 	 	 	 	 	 	 	 const std::vector< boost::shared_ptr<EdgeIdentifier> >& ignore);
+
+	/**
+	 * Calculates the local greedy routing distance between start and end in the graph.
+	 * Edges declared as long range links (long_range_link entry in MarkerInformation) will
+	 * be used in one direction only.
+	 *
+	 * \param graph		The graph as a WorldInformation
+	 * \param start 	The Identifier of the starting-node
+	 * \param end		The Identifier of the end-node
+	 * \param dist_func	A function that calculated distances between two robots in the graph
+	 */
+	static std::size_t calculate_lrl_local_greedy_routing_distance(const boost::shared_ptr<WorldInformation> graph,
+	                                                               boost::shared_ptr<RobotIdentifier> start,
+	                                                               boost::shared_ptr<RobotIdentifier> end,
+	                                                               double (*dist_func)(const boost::shared_ptr<WorldInformation>,
+	                                                            		   boost::shared_ptr<RobotIdentifier>,
+	                                                            		   boost::shared_ptr<RobotIdentifier>));
+
+	/**
+	 * Calculates hop distance in a circle where robots are sorted by ID.
+	 * This is an example function for a dist_func of calculate_lrl_local_greedy_routing_distance
+	 *
+	 * \param graph		The graph as a WorldInformation
+	 * \param start 	The Identifier of the starting-node
+	 * \param end		The Identifier of the end-node
+	 */
+	static double normal_circle_dist_func(const boost::shared_ptr<WorldInformation> graph,
+	                                      boost::shared_ptr<RobotIdentifier> start,
+	                                      boost::shared_ptr<RobotIdentifier> end);
 private:
 	static bool is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> > ignore,
 						boost::shared_ptr<EdgeIdentifier> find_this_edge);
 
 	static std::vector<boost::shared_ptr<EdgeIdentifier> > outgoing_edges(const boost::shared_ptr<WorldInformation> wi,
-																		boost::shared_ptr<RobotData> r);
+																		boost::shared_ptr<RobotData> rd);
+
+	static boost::shared_ptr<EdgeIdentifier> get_outgoing_lrl(const boost::shared_ptr<WorldInformation> wi,
+															  boost::shared_ptr<RobotData> rd);
 };
 
 #endif /* STATS_CALC_H_ */

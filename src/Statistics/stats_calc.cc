@@ -195,7 +195,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 
 				if(!node_visited[child->id()->id()]){
 					if(child == target_node){
-						ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance " << hops_to_node[current_node->id()->id()]+1 << ".";
+						ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculated hop distance " << hops_to_node[current_node->id()->id()]+1 << ".";
 						return hops_to_node[current_node->id()->id()]+1;
 					}
 					node_queue.push(child);
@@ -207,7 +207,76 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 
 	}
 	return -1;
-	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance -- target not reachable.";
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculated hop distance -- target not reachable.";
+}
+
+std::size_t StatsCalc::calculate_lrl_local_greedy_routing_distance(const boost::shared_ptr<WorldInformation> graph,
+	                                                               boost::shared_ptr<RobotIdentifier> start,
+	                                                               boost::shared_ptr<RobotIdentifier> end,
+	                                                               double (*dist_func)(const boost::shared_ptr<WorldInformation>,
+	                                                            		   	   	   	   boost::shared_ptr<RobotIdentifier>,
+	                                                            		   	   	   	   boost::shared_ptr<RobotIdentifier>)){
+	boost::shared_ptr<RobotIdentifier> current_node = start;
+	std::size_t hops = 0;
+
+	while(current_node->id() != end->id()){
+		boost::shared_ptr<RobotData> current_node_rd = graph->get_according_robot_data_ptr(current_node);
+
+		// get list of all possible next robots
+		std::vector<boost::shared_ptr<RobotIdentifier> > next_hops;
+		std::vector<boost::shared_ptr<EdgeIdentifier> > edges = outgoing_edges(graph, current_node_rd);
+		for(int i=0; i<edges.size(); ++i){
+			boost::shared_ptr<Edge> e = graph->get_according_edge(edges[i]);
+			if((!e->marker_information().has_key("long_range_link")) || (e->marker_information().has_key("long_range_link") && e->robot1()->id() == current_node->id())){
+				if(e->robot1()->id() != current_node->id()){
+					next_hops.push_back(e->robot1());
+				} else if(e->robot2()->id() != current_node->id()){
+					next_hops.push_back(e->robot2());
+				}
+			}
+		}
+
+		// calculate distances of possible next hops to end node
+		std::vector<double> dist;
+		for(int i=0; i<next_hops.size(); ++i){
+			dist.push_back(dist_func(graph, next_hops[i], end));
+		}
+
+		// find next hop closest to end node
+		double min = dist[0];
+		int min_index = 0;
+		for(int i=1; i<dist.size(); ++i){
+			if(dist[i] < min){
+				min = dist[i];
+				min_index = i;
+			}
+		}
+
+		// iterate to next node
+		current_node = next_hops[min_index];
+		hops++;
+	}
+
+	return hops;
+}
+
+double StatsCalc::normal_circle_dist_func(const boost::shared_ptr<WorldInformation> graph,
+	                                      boost::shared_ptr<RobotIdentifier> start,
+	                                      boost::shared_ptr<RobotIdentifier> end){
+	std::size_t circle_size = graph->robot_data().size();
+
+	double result;
+	if(start->id() > end->id()){
+		result = start->id() - end->id();
+	} else {
+		result = end->id() - start->id();
+	}
+
+	if(result > circle_size/2.0){
+		result = circle_size - result;
+	}
+
+	return result;
 }
 
 bool StatsCalc::is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> > ignore,
