@@ -62,7 +62,7 @@ FullView::~FullView() {
 std::vector<View::RobotRef> FullView::get_visible_robots(const RobotData& robot) const {
 	//put all RobotDatas into the set (if not the robot itself)
 	std::vector<View::RobotRef> set;
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_information().robot_data().begin(); it != world_information().robot_data().end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = world_information().robot_data().begin(); it != world_information().robot_data().end(); ++it) {
 	  if (!(it->second->id()->id()) == robot.id()->id())
 		set.push_back(View::RobotRef(new RobotIdentifier(it->second->id()->id()))); //TODO asetzer I have no idea what I am doing here... :D
 	}

@@ -140,7 +140,7 @@ void Parser::load_main_project_file(const string& project_filename) {
 	  std::ifstream in( main_project_filename.c_str() ); //asetzer: workaround, see: http://lists.boost.org/boost-users/2005/05/11740.php
 	  
       if (!in) {
-		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) << "The specified project file has not been found!" << std::endl;	
+		ConsoleOutput::log(ConsoleOutput::Parser, ConsoleOutput::error) << "The specified project file has not been found!" << std::endl;
 		
 		//TODO (Sascha?) Entry point for "file not found" handling
 		

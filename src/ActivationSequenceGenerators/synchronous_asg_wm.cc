@@ -65,7 +65,7 @@ boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
         
 		// add all robots. This uses the raw pointer because it is of the right type.
 		// (it is protected by a shared_ptr and I'm saving a cast)
-		for (std::map< int, boost::shared_ptr<RobotData> >::iterator it = world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {
+		for (std::map< std::size_t, boost::shared_ptr<RobotData> >::iterator it = world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {
 			look_event->add_to_robot_subset(it->second->robot_ptr());
 		}
         
@@ -76,7 +76,7 @@ boost::shared_ptr<Event> SynchronousASGWM::get_next_event() {
         
 		// add all robots. This uses the raw pointer because it is of the right type.
 		// (it is protected by a shared_ptr and I'm saving a cast)
-		for (std::map< int, boost::shared_ptr<RobotData> >::iterator it = world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {	
+		for (std::map< std::size_t, boost::shared_ptr<RobotData> >::iterator it = world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {
 			compute_event->add_to_robot_subset(it->second->robot_ptr());
 		}
         

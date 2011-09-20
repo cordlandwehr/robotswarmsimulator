@@ -303,7 +303,7 @@ WorldInformationWrapper::get_robots () {
   // use separate vector to store results
   std::vector<std::size_t> result;
   // add integer representations of IDs to result vector, update mapping in the process
-  for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_information_->robot_data().begin(); it != world_information_->robot_data().end(); ++it) {  
+  for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = world_information_->robot_data().begin(); it != world_information_->robot_data().end(); ++it) {
 	std::size_t id = it->second->id()->id();
     result.push_back(id);
   }
@@ -438,7 +438,7 @@ WorldInformationWrapper::update_mappings() {
     message_identifiers_[id] = boost::dynamic_pointer_cast<MessageIdentifier>(mit->second->id());
   }
   // look up robots
-  for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_information_->robot_data().begin(); it != world_information_->robot_data().end(); ++it) {  
+  for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = world_information_->robot_data().begin(); it != world_information_->robot_data().end(); ++it) {
 	boost::shared_ptr<RobotData> robot = it->second;
 
 	std::size_t id = robot->id()->id();

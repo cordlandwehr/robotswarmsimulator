@@ -115,7 +115,7 @@ public:
 	 * Returns a constant reference to the set of the robot data.
 	 * \return Constant reference to the set of the robots data.
 	 */
-	const std::map<int, boost::shared_ptr<RobotData> >& robot_data() const;
+	const std::map<std::size_t, boost::shared_ptr<RobotData> >& robot_data() const;
 	
 	/**
 	 * Returns (in the given parameter vec) the set of the robot data as a vector.
@@ -127,7 +127,7 @@ public:
 	 * Returns a (non-constant) reference to the set of robot data.
 	 * \return reference to the set of robot data.
 	 */
-	std::map<int, boost::shared_ptr<RobotData> >& robot_data();
+	std::map<std::size_t, boost::shared_ptr<RobotData> >& robot_data();
 
 	/**
 	 * Adds a new robot data at its ID position.
@@ -139,7 +139,7 @@ public:
 	 * Sets the set of robot data in the world.
 	 * \param Vector of robot datas to add to the world.
 	 */
-	void set_robot_data(std::map<int, boost::shared_ptr<RobotData> > new_robot_data);
+	void set_robot_data(std::map<std::size_t, boost::shared_ptr<RobotData> > new_robot_data);
 	
 	/**
 	 * Removes a robot data from the current set of robots. 
@@ -362,7 +362,7 @@ private:
 	/**
 	* Set of robot datas of robots in the world
 	*/
-	std::map< int, boost::shared_ptr<RobotData> > robot_data_;
+	std::map< std::size_t, boost::shared_ptr<RobotData> > robot_data_;
 
 	/**
 	 * Set of edges in the world

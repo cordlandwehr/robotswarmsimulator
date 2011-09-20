@@ -67,7 +67,7 @@ WorldInformation::WorldInformation(const WorldInformation& rhs) : time_(rhs.time
 	}
 
 	//this->robot_data_.reserve(rhs.robot_data_.size());
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = rhs.robot_data_.begin(); it != rhs.robot_data_.end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = rhs.robot_data_.begin(); it != rhs.robot_data_.end(); ++it) {
 		this->robot_data_[it->first] = boost::static_pointer_cast<RobotData>(it->second->clone());
 	}
 	  
@@ -124,17 +124,17 @@ void WorldInformation::set_obstacle_data(std::vector<boost::shared_ptr<Obstacle>
 	obstacles_ = new_obstacles;
 }
 
-const std::map<int, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
+const std::map<std::size_t, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() const {
 	return robot_data_;
 }
 
 void WorldInformation::robot_data_to_vector(std::vector<boost::shared_ptr<RobotData> >& vec) const {
-  for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
+  for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = robot_data_.begin(); it != robot_data_.end(); ++it) {
 	vec.push_back(it->second);
   }  
 }
 
-std::map<int, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
+std::map<std::size_t, boost::shared_ptr<RobotData> >& WorldInformation::robot_data() {
 	return robot_data_;
 }
 
@@ -147,7 +147,7 @@ void WorldInformation::add_robot_data(boost::shared_ptr<RobotData> new_robot_dat
 	robot_data_[new_robot_data->id()->id()] = new_robot_data;
 }
 
-void WorldInformation::set_robot_data(std::map<int, boost::shared_ptr<RobotData> > new_robot_data) {
+void WorldInformation::set_robot_data(std::map<std::size_t, boost::shared_ptr<RobotData> > new_robot_data) {
 	robot_data_ = new_robot_data;
 }
 
@@ -259,7 +259,7 @@ int WorldInformation::time() const {
 }
 
 bool WorldInformation::robot_exists(boost::shared_ptr<RobotIdentifier> id) const {
-	std::map<int, boost::shared_ptr<RobotData> >::const_iterator it;
+	std::map<std::size_t, boost::shared_ptr<RobotData> >::const_iterator it;
 	for(it = robot_data_.begin(); it != robot_data_.end(); it++) {
 		if(it->first == id->id())
 			break;

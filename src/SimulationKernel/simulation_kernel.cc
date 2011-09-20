@@ -108,7 +108,7 @@ void SimulationKernel::init(const string& project_filename,
 	//transform map into vector
 	std::vector< boost::shared_ptr<Robot> > robots_vector;
 	robots_vector.reserve(initial_world_information->robot_data().size());	
-	for (std::map< int, boost::shared_ptr<RobotData> >::iterator it = initial_world_information->robot_data().begin(); it != initial_world_information->robot_data().end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr<RobotData> >::iterator it = initial_world_information->robot_data().begin(); it != initial_world_information->robot_data().end(); ++it) {
 	  robots_vector.push_back(it->second->robot_ptr());
 	}
 

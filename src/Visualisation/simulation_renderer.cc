@@ -286,7 +286,7 @@ void SimulationRenderer::draw(){
 
 	double max_dist = 1.0;
 
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
 		boost::shared_ptr<RobotData> it_robot_data = it->second;
 
 		double dist = boost::numeric::ublas::norm_2( it_robot_data->position() - cameras_[active_camera_index_]->position());
@@ -765,7 +765,7 @@ boost::shared_ptr<Identifier> SimulationRenderer::pick_object(int x, int y) {
 	cameras_[active_camera_index_]->look_translate();
 
 
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = world_info_->robot_data().begin(); it != world_info_->robot_data().end(); ++it) {
 	  boost::shared_ptr<RobotData> robot = it->second;
 
 		robot_renderer_->draw_robot( robot );

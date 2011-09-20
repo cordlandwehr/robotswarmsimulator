@@ -153,7 +153,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 	std::map<size_t, int> hops_to_node;
 
 
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it =  graph->robot_data().begin(); it !=  graph->robot_data().end(); ++it) {	
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it =  graph->robot_data().begin(); it !=  graph->robot_data().end(); ++it) {
 	  node_visited[it->first] = false;
 	}
 	
@@ -195,7 +195,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 
 				if(!node_visited[child->id()->id()]){
 					if(child == target_node){
-						ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculated hop distance " << hops_to_node[current_node->id()->id()]+1 << ".";
+						ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance " << hops_to_node[current_node->id()->id()]+1 << ".";
 						return hops_to_node[current_node->id()->id()]+1;
 					}
 					node_queue.push(child);
@@ -207,7 +207,7 @@ std::size_t StatsCalc::calculate_hop_distance(const boost::shared_ptr<WorldInfor
 
 	}
 	return -1;
-	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculated hop distance -- target not reachable.";
+	ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::info) << "stats_calc::calculated hop distance -- target not reachable.";
 }
 
 std::size_t StatsCalc::calculate_lrl_local_greedy_routing_distance(const boost::shared_ptr<WorldInformation> graph,

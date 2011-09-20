@@ -13,7 +13,7 @@ boost::shared_ptr<BoostGraph> Layouter::transform_into_boost_graph(const WorldIn
 
 	boost::shared_ptr<BoostGraph> g (new BoostGraph());
 
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it = world_information.robot_data().begin(); it != world_information.robot_data().end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it = world_information.robot_data().begin(); it != world_information.robot_data().end(); ++it) {
 		const boost::shared_ptr<RobotData>& robot = it->second;
 
 		boost::graph_traits<BoostGraph>::vertex_descriptor  descriptor = boost::add_vertex(*g);

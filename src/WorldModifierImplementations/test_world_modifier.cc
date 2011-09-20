@@ -26,7 +26,7 @@ std::set< boost::shared_ptr<Request> >
 
 
 	
-	for (std::map< int, boost::shared_ptr < RobotData> >::const_iterator it =  world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {
+	for (std::map< std::size_t, boost::shared_ptr < RobotData> >::const_iterator it =  world_information->robot_data().begin(); it != world_information->robot_data().end(); ++it) {
 		boost::shared_ptr<RobotData> robot = it->second;
         
         Vector3d* test = new Vector3d();
