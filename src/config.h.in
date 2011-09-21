@@ -2,6 +2,8 @@
  * \file config.h
  * \brief Contains some (partly build-time generated) informations about the project. 
  */
+  
+#cmakedefine RSS_USE_QT_LIBRARIES
  
  namespace cfg {
  	/**

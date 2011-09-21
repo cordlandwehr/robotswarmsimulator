@@ -7,12 +7,20 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 # find all source files
 file(GLOB_RECURSE RSSLIB_SRCS *.cc)
-file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc)
+if(RSS_USE_QT_LIBRARIES)
+	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc)
+else(RSS_USE_QT_LIBRARIES)
+	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc Gui/*.cc)
+endif(RSS_USE_QT_LIBRARIES)
 list(REMOVE_ITEM RSSLIB_SRCS ${NON_RSSLIB_SRCS})
 
 # find all header files
 file(GLOB_RECURSE RSSLIB_HDRS *.h)
-file(GLOB_RECURSE NON_RSSLIB_HDRS testheader*.h Playground/*.h Tests/*.h UserInterfaces/*.h)
+if(RSS_USE_QT_LIBRARIES)
+	file(GLOB_RECURSE NON_RSSLIB_HDRS testheader*.h Playground/*.h Tests/*.h UserInterfaces/*.h)
+else(RSS_USE_QT_LIBRARIES)
+	file(GLOB_RECURSE NON_RSSLIB_HDRS testheader*.h Playground/*.h Tests/*.h UserInterfaces/*.h Gui/*.h)
+endif(RSS_USE_QT_LIBRARIES)
 list(REMOVE_ITEM RSSLIB_HDRS ${NON_RSSLIB_HDRS})
 
 # find/configure boost
@@ -69,21 +77,23 @@ endif(APPLE)
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
-# find/configure Qt4
-set(QT_USE_QTOPENGL TRUE)
-find_package(Qt4 REQUIRED)
-
-include(${QT_USE_FILE})
-
-file(GLOB_RECURSE RSSLIB_QT4_SRCS Gui/*.h)
-file(GLOB_RECURSE RSSLIB_QT4_UIS Gui/*.ui)
-file(GLOB_RECURSE RSSLIB_QT4_RES ${CMAKE_SOURCE_DIR}/resources/*.qrc)
-
-QT4_WRAP_UI(RSSLIB_UI_CPP ${RSSLIB_QT4_UIS})
-QT4_WRAP_CPP(RSSLIB_MOC_CPP ${RSSLIB_QT4_SRCS})
-QT4_ADD_RESOURCES(RSSLIB_RES_H ${RSSLIB_QT4_RES})
-
-list(APPEND RSSLIB_SRCS ${RSSLIB_MOC_CPP} ${RSSLIB_UI_CPP} ${RSSLIB_RES_H})
+if(RSS_USE_QT_LIBRARIES)
+	# find/configure Qt4
+	set(QT_USE_QTOPENGL TRUE)
+	find_package(Qt4 REQUIRED)
+	
+	include(${QT_USE_FILE})
+	
+	file(GLOB_RECURSE RSSLIB_QT4_SRCS Gui/*.h)
+	file(GLOB_RECURSE RSSLIB_QT4_UIS Gui/*.ui)
+	file(GLOB_RECURSE RSSLIB_QT4_RES ${CMAKE_SOURCE_DIR}/resources/*.qrc)
+	
+	QT4_WRAP_UI(RSSLIB_UI_CPP ${RSSLIB_QT4_UIS})
+	QT4_WRAP_CPP(RSSLIB_MOC_CPP ${RSSLIB_QT4_SRCS})
+	QT4_ADD_RESOURCES(RSSLIB_RES_H ${RSSLIB_QT4_RES})
+	
+	list(APPEND RSSLIB_SRCS ${RSSLIB_MOC_CPP} ${RSSLIB_UI_CPP} ${RSSLIB_RES_H})
+endif(RSS_USE_QT_LIBRARIES)
 
 find_package(Threads REQUIRED)
 

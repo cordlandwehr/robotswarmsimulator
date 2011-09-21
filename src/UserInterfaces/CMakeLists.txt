@@ -69,22 +69,35 @@ endif(APPLE)
 
 # find/configure QT
 # TODO packaging of QT libraries for release builds
-set(QT_USE_QTOPENGL TRUE)    
-find_package(Qt4 REQUIRED)
-
-include(${QT_USE_FILE})
-
-# generate executable of the above source files and link it
-add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
-target_link_libraries(RobotSwarmSimulator
-	RSSimulator
-	${Boost_LIBRARIES}
-	${OPENGL_LIBRARIES}
-	${LUA_LIBRARIES}
-	${LAPACK_LIBRARIES}
-    ${QT_LIBRARIES}
-	luabind
-)
+if(RSS_USE_QT_LIBRARIES)
+	set(QT_USE_QTOPENGL TRUE)    
+	find_package(Qt4 REQUIRED)
+	
+	include(${QT_USE_FILE})
+	
+	# generate executable of the above source files and link it
+	add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
+	target_link_libraries(RobotSwarmSimulator
+		RSSimulator
+		${Boost_LIBRARIES}
+		${OPENGL_LIBRARIES}
+		${LUA_LIBRARIES}
+		${LAPACK_LIBRARIES}
+	    ${QT_LIBRARIES}
+		luabind
+	)
+else(RSS_USE_QT_LIBRARIES)
+	# generate executable of the above source files and link it
+	add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
+	target_link_libraries(RobotSwarmSimulator
+		RSSimulator
+		${Boost_LIBRARIES}
+		${OPENGL_LIBRARIES}
+		${LUA_LIBRARIES}
+		${LAPACK_LIBRARIES}
+		luabind
+	)
+endif(RSS_USE_QT_LIBRARIES)
 
 # add executable to install target
 install(TARGETS RobotSwarmSimulator

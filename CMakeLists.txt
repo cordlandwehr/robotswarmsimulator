@@ -18,6 +18,9 @@ add_definitions(-frounding-math)
 # (this is needed for SVN to work)
 set(ECLIPSE_CDT4_GENERATE_SOURCE_PROJECT true)
 
+
+option(RSS_USE_QT_LIBRARIES "Use the Qt libraries for the visualization." ON) 
+
 # enable testing
 enable_testing()
 

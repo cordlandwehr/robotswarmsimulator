@@ -43,14 +43,16 @@
 #include <boost/thread/thread.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 
-#include <QtGui/QApplication>
-
 #include <config.h>
 #include <SimulationControl/simulation_control.h>
 #include <Utilities/console_output.h>
 #include <Wrapper/lua_distribution_generator.h>
-#include <Gui/rss_main_window.h>
-#include <Gui/rss_gl_widget.h>
+
+#ifdef RSS_USE_QT_LIBRARIES
+	#include <QtGui/QApplication>
+	#include <Gui/rss_main_window.h>
+	#include <Gui/rss_gl_widget.h>
+#endif
 
 #include "aiee.h"
 
@@ -206,6 +208,7 @@ int main(int argc, char** argv) {
 												   run_until_no_multiplicity);
 			}
 
+#ifdef RSS_USE_QT_LIBRARIES
 			if(create_visualization) {
 
 				QApplication app(argc, argv);
@@ -224,6 +227,9 @@ int main(int argc, char** argv) {
 				return app.exec();
 
 			} else {
+#else
+			{
+#endif
 				// start the simulation thread
 				sim_control->start_simulation();
 				// simulations should be consumed as fast as possible
@@ -246,6 +252,7 @@ int main(int argc, char** argv) {
 			}
 		} else {
 
+#ifdef RSS_USE_QT_LIBRARIES
 			QApplication app(argc, argv);
 			Q_INIT_RESOURCE(qt_resources);
 			app.setApplicationName("RobotSwarmSimulator");
@@ -258,6 +265,11 @@ int main(int argc, char** argv) {
 			main_window.show();
 
 			return app.exec();
+#else
+			std::cout << "Usage: '" << argv[0] << " --project-file <filename>'" << std::endl;
+			std::cout << "   or: '" << argv[0] << " --help' for additional options" << std::endl;
+			return 1;
+#endif
 		}
 
 	}
