@@ -3,3 +3,4 @@ ROBOT_FILENAME=robot_circle.csv
 EDGE_FILENAME=edge_circle.csv
 ASG=SYNCHRONOUS_WM
 WORLD_MODIFIERS=CalculateHopDistances.lua
+WORLD_MODIFIERS=CalculateGreedyHopDistances.lua

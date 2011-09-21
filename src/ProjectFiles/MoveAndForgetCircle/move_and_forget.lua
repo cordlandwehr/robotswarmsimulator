@@ -131,19 +131,19 @@ function main()
 		-- do I have an existing long range neighbor?
 		if (long_range_link) then
 			local lr_marker = View.get_edge_information(long_range_link)
-			if forget_long_range_link(lr_marker:get_data("creation_time")) then
+			--[[if forget_long_range_link(lr_marker:get_data("creation_time")) then
 				View.add_remove_edge_request(long_range_link)
 				local new_marker = MarkerInformation()
 				new_marker:add_data("long_range_link", true)
 				new_marker:add_data("creation_time", View.get_time())
 				View.add_insert_edge_request(me, me, new_marker, "undirected")
-			else
+			else]]--
 				-- log("debug", "[move_and_forget.lua][Robot #" .. me .. "] LRL: " .. View.get_head(long_range_link)) 
 				-- send message to my long range link
 				View.add_send_message_request(View.get_head(long_range_link), new_marker)
 				-- change status to wait for 'tell_neighbor' message
 				my_marker:add_data("status", "listening")
-			end
+			--end
 		else
 			-- create self loop (initialization)
 			local new_marker = MarkerInformation()

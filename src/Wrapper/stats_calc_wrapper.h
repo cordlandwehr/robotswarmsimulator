@@ -52,6 +52,16 @@ public:
    */
   static int calculate_total_defects();
   
+  /**
+   * Calculates distribution of hop distances (using a local greedy strategy) for the
+   * the first Move and Forget experiment.
+   * 
+   * \param graph		Current WorldInformation.
+   * \returns		A vector of doubles. Values: (Min, q.125, q.25, q.375, Median,
+   *			q.625, q.750, q.875, Max, Mean, SD, Skewness, Exess).
+   */
+  static const std::vector<double> evaluate_first_mf_experiment();
+  
 private:
   typedef WorldInformationWrapper WI;
 };

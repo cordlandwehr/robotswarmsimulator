@@ -1,7 +1,7 @@
 hopdistances_overall = {}
 history = {}
 
-interval = 32
+interval = 512
 interval_round = 0
 file_path = "maf_circle_stats_%s.dat"
 
@@ -34,11 +34,11 @@ function main()
   end
 
   if WorldInformation.get_time() % 8 ~= 0 then
-    log("info", "Skipping statistics in round " .. WorldInformation.get_time())
+    --log("info", "Skipping statistics in round " .. WorldInformation.get_time())
     return
   end
     
-  log("info", "Starting statistics in round " .. WorldInformation.get_time())
+  --log("info", "Starting statistics in round " .. WorldInformation.get_time())
   
   -- get long range links
   log("debug", "Getting long range links")
