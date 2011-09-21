@@ -5,8 +5,13 @@
 //  Created by Michael Knopf on 06.08.11.
 //
 
+#include <iostream>
+#include <vector>
+#include <string.h>
+
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/math/tools/rational.hpp>
 
 #include "../Model/robot_data.h"
 #include "../Model/robot_identifier.h"
@@ -67,4 +72,26 @@ StatsCalcWrapper::evaluate_first_mf_experiment() {
   return StatsCalc::evaluate_first_mf_experiment(WI::world_information_);
 }
   
+double StatsCalcWrapper::evaluate_polynomial(std::vector<double> poly, double val) {
+	return boost::math::tools::evaluate_polynomial(poly.data(), val, poly.size());
+}
+
+std::vector<unsigned long> StatsCalcWrapper::generate_primes(unsigned long min, unsigned long max) {
+	std::vector<unsigned long> primes;
+	char *sieve;
+	sieve = new char[max/8+1];
+	// Fill sieve with 1
+	memset(sieve, 0xFF, (max/8+1) * sizeof(char));
+	for(unsigned long x = 2; x <= max; x++)
+		if(sieve[x/8] & (0x01 << (x % 8))){
+			if(x>=min)
+				primes.push_back(x);
+			// Is prime. Mark multiplicates.
+			for(unsigned long j = 2*x; j <= max; j += x)
+				sieve[j/8] &= ~(0x01 << (j % 8));
+		}
+	delete[] sieve;
+	return primes;
+}
+
 }

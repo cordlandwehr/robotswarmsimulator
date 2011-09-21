@@ -65,6 +65,7 @@
 #include "../Wrapper/vector_wrapper.h"
 #include "../Wrapper/marker_information_wrapper.h"
 #include "../Wrapper/console_output_wrapper.h"
+#include "../Wrapper/stats_calc_wrapper.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
@@ -436,7 +437,12 @@ void LuaRobot::register_lua_methods() {
 			 luabind::def("get_visible_robots", &get_visible_robots, luabind::copy_table(luabind::result)),
 			 luabind::def("is_directed", &is_directed),
 			 luabind::def("is_undirected", &is_undirected)
-	    ]
+	    ],
+
+	    luabind::namespace_("Statistics")
+		[
+		  luabind::def("evaluate_polynomial", &LuaWrapper::StatsCalcWrapper::evaluate_polynomial, luabind::copy_table(_1))
+		]
 	];
 
 }

@@ -150,7 +150,9 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("calculate_hop_distance", &StatsCalcWrapper::calculate_hop_distance, luabind::copy_table(_3)),
 	luabind::def("calculate_maximal_defect", &StatsCalcWrapper::calculate_maximal_defect),
 	luabind::def("calculate_total_defects", &StatsCalcWrapper::calculate_total_defects),
-	luabind::def("evaluate_first_mf_experiment", &StatsCalcWrapper::evaluate_first_mf_experiment, luabind::copy_table(luabind::result))
+	luabind::def("evaluate_first_mf_experiment", &StatsCalcWrapper::evaluate_first_mf_experiment, luabind::copy_table(luabind::result)),
+	luabind::def("evaluate_polynomial", &StatsCalcWrapper::evaluate_polynomial, luabind::copy_table(_1)),
+	luabind::def("generate_primes", &StatsCalcWrapper::generate_primes, luabind::copy_table(luabind::result))
 	
       ]
     ];

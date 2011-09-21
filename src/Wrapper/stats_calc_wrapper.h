@@ -68,7 +68,30 @@ public:
    *			q.625, q.750, q.875, Max, Mean, SD, Skewness, Exess).
    */
   static const std::vector<double> evaluate_first_mf_experiment();
-  
+
+  /**
+   * Evaluates a polynomial at a given value.
+   *
+   * \note This is a wrapper of boost::math::tools::evaluate_polynomial
+   *
+   * \param poly The polynomial given as an vector of coefficients.
+   * \param val The value to evaluate against.
+   * \return The evaluated polynom.
+   */
+  static double evaluate_polynomial(std::vector<double> poly, double val);
+
+  /**
+   * Generates a list of prime numbers in the given interval.
+   * The 'Sieve of Eratosthenes' algorithm is used to generate the primes.
+   *
+   * \note The source code was copied from here 'http://code.activestate.com/recipes/576559-fast-prime-generator/'
+   *
+   * \param min Start of the interval.
+   * \param max End of the interval.
+   * \return A list of prime numbers.
+   */
+  static std::vector<unsigned long> generate_primes(unsigned long min, unsigned long max);
+
 private:
   typedef WorldInformationWrapper WI;
 };
