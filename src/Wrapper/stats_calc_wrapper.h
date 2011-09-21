@@ -39,6 +39,13 @@ public:
   static int calculate_hop_distance(std::size_t start, std::size_t target, std::vector<std::size_t> ignore);
   
   /**
+   * Calculates diameter of the graph but checks for the direction of the long-range links.
+   *   
+   * \returns		Diameter.
+   */
+  static int calculate_diameter_with_long_range();  
+  
+  /**
    * Calculates maximal defect.
    * 
    * \returns 		Maximal defect.

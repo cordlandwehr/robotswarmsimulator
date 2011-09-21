@@ -41,6 +41,16 @@ StatsCalcWrapper::calculate_hop_distance(std::size_t start, std::size_t target, 
   return StatsCalc::calculate_hop_distance(WI::world_information_, WI::robot_identifiers_[start], WI::robot_identifiers_[target], ignore_ptrs);
 }
 
+int
+ StatsCalcWrapper::calculate_diameter_with_long_range() {
+   
+   //not using ingnore_ptrs atm
+  std::vector< boost::shared_ptr<EdgeIdentifier> > ignore_ptrs;
+
+  return StatsCalc::calculate_diameter_and_ignore_long_range_links_in_one_dir(WI::world_information_, ignore_ptrs);   
+   
+}
+
 
 int
 StatsCalcWrapper::calculate_maximal_defect() {
