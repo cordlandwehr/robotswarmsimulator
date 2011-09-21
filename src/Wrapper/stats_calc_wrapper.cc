@@ -51,5 +51,10 @@ int
 StatsCalcWrapper::calculate_total_defects() {
   return StatsCalc::calculate_total_defects(WI::world_information_);
 }
+
+const std::vector<double>
+StatsCalcWrapper::evaluate_first_mf_experiment() {
+  return StatsCalc::evaluate_first_mf_experiment(WI::world_information_);
+}
   
 }

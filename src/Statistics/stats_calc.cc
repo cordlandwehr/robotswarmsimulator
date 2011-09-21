@@ -260,6 +260,103 @@ std::size_t StatsCalc::calculate_lrl_local_greedy_routing_distance(const boost::
 	return hops;
 }
 
+const std::vector<double> StatsCalc::evaluate_first_mf_experiment(const boost::shared_ptr<WorldInformation> graph) {
+  // vector to store all hopdistaces in
+  std::vector<std::size_t> hop_distances;
+  // iterate over all possible pairs
+  std::map< std::size_t, boost::shared_ptr<RobotData> >::iterator ita, itb;
+  for (ita = graph->robot_data().begin();
+       ita != graph->robot_data().end();
+       ++ita) {
+    for (itb = graph->robot_data().begin();
+	 itb != graph->robot_data().end();
+	 ++itb) {
+      // skip cases where source and target are the same robot
+      if (ita->first == itb->first) continue;
+      // calculate lrl greedy local hop distance
+      std::size_t distance = calculate_lrl_local_greedy_routing_distance(graph,
+									 boost::dynamic_pointer_cast<RobotIdentifier>(ita->second->id()),
+									 boost::dynamic_pointer_cast<RobotIdentifier>(itb->second->id()),
+									 &StatsCalc::normal_circle_dist_func);
+      hop_distances.push_back(distance);
+    }
+  }
+  // sort the vector (for median calculations)
+  std::sort(hop_distances.begin(), hop_distances.end());
+  // calculate min, max , quantiles and median...
+  std::size_t n = hop_distances.size();
+  double min = hop_distances.at(0);
+  double max = hop_distances.at(n-1);
+  double q125, q250, q375, median, q625, q750, q875;
+  // TODO: Do this in a nice loop?!
+  if (n % 2 == 0) {
+    median = (double)(hop_distances.at((std::size_t)(n*.5)-1)+hop_distances.at((std::size_t)(n*.5)))/2;
+  } else {
+    median = hop_distances.at(n/2);
+  }
+  if (n % 4 == 0) {
+    q250 = (double)(hop_distances.at((std::size_t)(n*.25)-1)+hop_distances.at((std::size_t)(n*.25)))/2;
+    q750 = (double)(hop_distances.at((std::size_t)(n*.75)-1)+hop_distances.at((std::size_t)(n*.75)))/2;
+  } else {
+    q250 = hop_distances.at((std::size_t)(n*.25));
+    q750 = hop_distances.at((std::size_t)(n*.75));
+  }
+  if (n % 8 == 0) {
+    q125 = (double)(hop_distances.at((std::size_t)(n*.125)-1)+hop_distances.at((std::size_t)(n*.125)))/2;
+    q375 = (double)(hop_distances.at((std::size_t)(n*.375)-1)+hop_distances.at((std::size_t)(n*.375)))/2;
+    q625 = (double)(hop_distances.at((std::size_t)(n*.625)-1)+hop_distances.at((std::size_t)(n*.625)))/2;
+    q875 = (double)(hop_distances.at((std::size_t)(n*.875)-1)+hop_distances.at((std::size_t)(n*.875)))/2;
+  } else {
+    q125 = hop_distances.at((std::size_t)(n*.125));
+    q375 = hop_distances.at((std::size_t)(n*.375));
+    q625 = hop_distances.at((std::size_t)(n*.625));
+    q875 = hop_distances.at((std::size_t)(n*.875));
+  }
+  // calculate mean
+  double mean = 0.0;
+  std::vector<std::size_t>::const_iterator it;
+  for (it = hop_distances.begin();
+       it != hop_distances.end();
+       ++it) {
+    mean += *it;
+  }
+  mean /= n;
+  // calculate SD etc.
+  double sum_of_square_diffs = 0.0;
+  double sum_of_cubic_diffs = 0.0;
+  double sum_of_4th_diffs = 0.0;
+  for (it = hop_distances.begin();
+       it != hop_distances.end();
+       ++it) {
+    // due to performance reason I do not use std::pow in this loop
+    // I hope the compiler will optimze this for me ;-)
+    sum_of_square_diffs += (*it-mean)*(*it-mean);
+    sum_of_cubic_diffs += (*it-mean)*(*it-mean)*(*it-mean);
+    sum_of_4th_diffs += (*it-mean)*(*it-mean)*(*it-mean)*(*it-mean);
+  }
+  double sd = std::sqrt(sum_of_square_diffs/(n-1));
+  double skewness = (sum_of_cubic_diffs/n) / std::sqrt(std::pow(sum_of_square_diffs/n, 3.0));
+  double excess = ((sum_of_4th_diffs/n) / std::pow(sum_of_square_diffs/n, 2.0))-3.0;
+  
+  // result vetor
+  std::vector<double> result;
+  result.push_back(min);
+  result.push_back(q125);
+  result.push_back(q250);
+  result.push_back(q375);
+  result.push_back(median);
+  result.push_back(q625);
+  result.push_back(q750);
+  result.push_back(q875);
+  result.push_back(max);
+  result.push_back(mean);
+  result.push_back(sd);
+  result.push_back(skewness);
+  result.push_back(excess);
+  // return results
+  return result;
+}
+
 double StatsCalc::normal_circle_dist_func(const boost::shared_ptr<WorldInformation> graph,
 	                                      boost::shared_ptr<RobotIdentifier> start,
 	                                      boost::shared_ptr<RobotIdentifier> end){
