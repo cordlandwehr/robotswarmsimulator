@@ -249,3 +249,112 @@ BOOST_AUTO_TEST_CASE(greedy_routing_dist_test){
 
 	BOOST_CHECK_EQUAL(StatsCalc::calculate_lrl_local_greedy_routing_distance(graph, rids[7], rids[2], &(StatsCalc::normal_circle_dist_func)), 2);
 }
+
+
+BOOST_AUTO_TEST_CASE(long_range_hop_dist_test) {
+
+	boost::shared_ptr<WorldInformation> graph (new WorldInformation());
+	boost::shared_ptr<History> history (new History(5));
+
+	std::vector<boost::shared_ptr<RobotIdentifier> > IDs;
+
+	boost::shared_ptr<Vector3d> pos(new Vector3d());
+	pos->insert_element(kXCoord,0.0);
+	pos->insert_element(kYCoord,0.0);
+	pos->insert_element(kZCoord,0.0);
+
+	//create 1000 Nodes and NodeDatas
+	for(int i = 0; i < 100; i++) {
+		boost::shared_ptr<RobotIdentifier> id(new RobotIdentifier(i));
+		IDs.push_back(id);
+
+		boost::shared_ptr<MarkerInformation> marker_information(new MarkerInformation());
+		
+		boost::shared_ptr<Robot> node(new SimpleRobot(id));
+		boost::shared_ptr<RobotData> nodeData(new RobotData(id, pos, marker_information, node));
+
+		graph->add_robot_data(nodeData);
+	}
+
+	BOOST_CHECK_EQUAL(graph->robot_data().size(), 100);
+
+	//create edge between consecutive nodes (gives a line)
+	std::vector<boost::shared_ptr<RobotData> > nodes;
+	graph->robot_data_to_vector(nodes);
+	
+
+	for(int i=1; i<nodes.size();i++){
+		boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[i-1];
+		boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[i];
+
+		//create edge
+		boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
+		graph->add_edge(e);
+	}
+	
+	//add one long-range link
+	{
+		boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[0];
+		boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[80];
+
+		//create edge
+		boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
+		e->marker_information().add_data("long_range_link", true);
+		graph->add_edge(e);	
+	}
+	
+	// set time of inital world information
+	graph->set_time(0);
+
+	// insert initial world information into history
+	boost::shared_ptr<TimePoint> new_time_point(new TimePoint());
+	new_time_point->set_world_information(graph);
+	history->insert(new_time_point);
+
+	// setup of view and event handler
+	boost::shared_ptr<AbstractViewFactory> view_factory(new ViewFactory<LocalGraphView>());
+	boost::shared_ptr<RobotControl> robot_control(new UniformRobotControl(view_factory, 5, graph));
+
+	//setup views of robots
+	for(int i=0; i<nodes.size();i++){
+		RobotData& tempRobotData = graph->get_according_robot_data(IDs[i]);
+		robot_control->compute_view(tempRobotData.robot());
+	}
+
+	boost::shared_ptr<DistributionGenerator> generator(new DistributionGenerator(0));
+	View::set_distribution_generator(generator);
+
+	//get StatsCalc class
+	StatsCalc stats_calc_;
+	
+		/**************************************************
+	 * the graph is a straight line of nodes 0 - 99  *
+	 * and a long-range link from 0 to 80			  *
+	 * so distance is 1 for 0 to 80 				  *
+	 * and 80 for 80 to 0							  *
+	 **************************************************/
+	std::vector<boost::shared_ptr<EdgeIdentifier> > ignore_one_edge;
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance_and_ignore_long_range_links_in_one_dir(history->get_newest().world_information_ptr(), IDs[0], IDs[80], ignore_one_edge),1);
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance_and_ignore_long_range_links_in_one_dir(history->get_newest().world_information_ptr(), IDs[80], IDs[0], ignore_one_edge),80);
+	
+	//if long range link isn't ignored, distance should be 1for 80 to 0, too
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_hop_distance(history->get_newest().world_information_ptr(), IDs[80], IDs[0], ignore_one_edge),1);
+	
+	//diameter should be 99 now
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_diameter_and_ignore_long_range_links_in_one_dir(history->get_newest().world_information_ptr(), ignore_one_edge),99);
+	
+	//adding another long-range link from 90 to 10
+	//add one long-range link
+	{
+		boost::shared_ptr<RobotIdentifier> nodeID1 = IDs[90];
+		boost::shared_ptr<RobotIdentifier> nodeID2 = IDs[10];
+
+		//create edge
+		boost::shared_ptr<Edge> e (new UndirectedEdge(nodeID1,nodeID2));
+		e->marker_information().add_data("long_range_link", true);
+		graph->add_edge(e);	
+	}
+	
+	//diameter should be 59 now
+	BOOST_CHECK_EQUAL(stats_calc_.calculate_diameter_and_ignore_long_range_links_in_one_dir(history->get_newest().world_information_ptr(), ignore_one_edge),59);	
+}

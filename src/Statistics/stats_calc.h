@@ -107,6 +107,15 @@ public:
 	static double normal_circle_dist_func(const boost::shared_ptr<WorldInformation> graph,
 	                                      boost::shared_ptr<RobotIdentifier> start,
 	                                      boost::shared_ptr<RobotIdentifier> end);
+	
+	static std::size_t calculate_diameter_and_ignore_long_range_links_in_one_dir(const boost::shared_ptr<WorldInformation> graph,
+						 const std::vector< boost::shared_ptr<EdgeIdentifier> >& ignore);
+	
+	static std::size_t calculate_hop_distance_and_ignore_long_range_links_in_one_dir(const boost::shared_ptr<WorldInformation> graph,
+											boost::shared_ptr<RobotIdentifier> start,
+											boost::shared_ptr<RobotIdentifier> target,
+											const std::vector< boost::shared_ptr<EdgeIdentifier> >& ignore);
+	
 private:
 	static bool is_edge_in_list(std::vector< boost::shared_ptr<EdgeIdentifier> > ignore,
 						boost::shared_ptr<EdgeIdentifier> find_this_edge);
