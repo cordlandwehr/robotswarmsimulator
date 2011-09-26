@@ -10,14 +10,14 @@ function getNumberOfColors()
 	for i = 1 , #nodes do
 		marker = WorldInformation.get_robot_information(nodes[i])
 		if marker:has_key(":color") then
-			local color = marker:get_data(":color")
-			if color ~= nil then
-				if colors[color] == nil then
-					colors[color] = true
-					number_of_colors = number_of_colors + 1				
-				end
-			end
-
+			color = marker:get_data(":color")
+		else
+			color = nodes[i]
+		end
+		
+		if colors[color] == nil then
+			colors[color] = true
+			number_of_colors = number_of_colors + 1				
 		end
 	end
   
@@ -81,6 +81,7 @@ function main()
 	log("q=" .. q)
 
 	local polynomials = generate_polynomials(kappa, q, M)
+	log("#polynomials = " .. #polynomials)
 	local pstrings = {}
 	for i = 1, #polynomials do
 		local poly = table.concat(polynomials[i], ",")
@@ -93,6 +94,7 @@ function main()
 		marker = WorldInformation.get_robot_information(nodes[i])
 		marker:add_data("num_colors", M)
 		marker:add_data("polynomials", table.concat(pstrings, ";"))
+		marker:add_data("prime", q)
 		WorldInformation.set_robot_information(nodes[i], marker)
 	end
 end
