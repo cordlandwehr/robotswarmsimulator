@@ -107,6 +107,16 @@ public:
 	static const std::vector<double> evaluate_first_mf_experiment(const boost::shared_ptr<WorldInformation> graph);
 	
 	/**
+	 * Calculates possible advantages of long range links per hop for local greedy routing
+	 * in a circle.
+	 * 
+	 * \param graph 	Currennt WorldInformation.
+	 * \returns		A vector of pairs of mean and SD values beginning with distance
+	 * 			two. 
+	 **/
+	static const std::vector<double> evaluate_uniform_lrlink_distribution(const boost::shared_ptr<WorldInformation> graph);
+	
+	/**
 	 * Calculates hop distance in a circle where robots are sorted by ID.
 	 * This is an example function for a dist_func of calculate_lrl_local_greedy_routing_distance
 	 *

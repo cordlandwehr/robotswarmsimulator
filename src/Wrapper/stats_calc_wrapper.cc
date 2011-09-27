@@ -71,6 +71,11 @@ const std::vector<double>
 StatsCalcWrapper::evaluate_first_mf_experiment() {
   return StatsCalc::evaluate_first_mf_experiment(WI::world_information_);
 }
+
+const std::vector<double>
+StatsCalcWrapper::evaluate_uniform_lrlink_distribution() {
+ return StatsCalc::evaluate_uniform_lrlink_distribution(WI::world_information_);
+}
   
 double StatsCalcWrapper::evaluate_polynomial(std::vector<double> poly, double val) {
 	return boost::math::tools::evaluate_polynomial(poly.data(), val, poly.size());

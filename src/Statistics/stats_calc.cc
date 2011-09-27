@@ -321,6 +321,9 @@ const std::vector<double> StatsCalc::evaluate_first_mf_experiment(const boost::s
     mean += *it;
   }
   mean /= n;
+  // calc distribution
+  std::size_t nn = graph->robot_data().size()/2;
+  std::vector<std::size_t> counts(nn, 0);
   // calculate SD etc.
   double sum_of_square_diffs = 0.0;
   double sum_of_cubic_diffs = 0.0;
@@ -333,6 +336,8 @@ const std::vector<double> StatsCalc::evaluate_first_mf_experiment(const boost::s
     sum_of_square_diffs += (*it-mean)*(*it-mean);
     sum_of_cubic_diffs += (*it-mean)*(*it-mean)*(*it-mean);
     sum_of_4th_diffs += (*it-mean)*(*it-mean)*(*it-mean)*(*it-mean);
+    // count hop distance
+    counts[*it-1] += 1;
   }
   double sd = std::sqrt(sum_of_square_diffs/(n-1));
   double skewness = (sum_of_cubic_diffs/n) / std::sqrt(std::pow(sum_of_square_diffs/n, 3.0));
@@ -353,7 +358,95 @@ const std::vector<double> StatsCalc::evaluate_first_mf_experiment(const boost::s
   result.push_back(sd);
   result.push_back(skewness);
   result.push_back(excess);
+  result.insert(result.end(), counts.begin(), counts.end());
   // return results
+  return result;
+}
+
+
+const std::vector<double> StatsCalc::evaluate_uniform_lrlink_distribution(const boost::shared_ptr<WorldInformation> graph) {
+  // vector to store all hopdistaces in
+  std::vector< std::vector<double> > hop_distances(graph->robot_data().size()/2);
+  // iterate over all possible pairs
+  std::map< std::size_t, boost::shared_ptr<RobotData> >::iterator ita, itb;
+  for (ita = graph->robot_data().begin();
+       ita != graph->robot_data().end();
+       ++ita) {
+    for (itb = graph->robot_data().begin();
+	 itb != graph->robot_data().end();
+	 ++itb) {
+      // skip cases where source and target are the same robot
+      if (ita->first == itb->first) continue;
+      // calculate lrl greedy local hop distance
+      double distance = normal_circle_dist_func(graph,
+						boost::dynamic_pointer_cast<RobotIdentifier>(ita->second->id()),
+						boost::dynamic_pointer_cast<RobotIdentifier>(itb->second->id()));
+      // skip distances smaller than two
+      if (distance < 2.0) continue;
+      // get long range link
+      std::vector<boost::shared_ptr<EdgeIdentifier> > edges = outgoing_edges(graph, ita->second);
+      boost::shared_ptr<RobotIdentifier> lr_partner;
+      for(int i=0; i<edges.size(); ++i){
+	boost::shared_ptr<Edge> e = graph->get_according_edge(edges[i]);
+	if((!e->marker_information().has_key("long_range_link")) || (e->marker_information().has_key("long_range_link") && e->robot1()->id() == ita->second->id()->id())){
+	  if(e->robot1()->id() != ita->second->id()->id()){
+	    lr_partner = e->robot1();
+	  } else if(e->robot2()->id() != ita->second->id()->id()){
+	    lr_partner = e->robot2();
+	  }
+	}
+      }
+      
+      // no lr link? reduction of 1
+      if (!lr_partner) {
+	hop_distances[(std::size_t)distance-1].push_back(1);
+      } else {
+	double lr_distance = normal_circle_dist_func(graph,
+						    boost::dynamic_pointer_cast<RobotIdentifier>(ita->second->id()),
+						    lr_partner);
+	if (lr_distance < distance) {
+	  hop_distances[(std::size_t)distance-1].push_back(distance-lr_distance);
+	} else {
+	  hop_distances[(std::size_t)distance-1].push_back(1);
+	}
+      }
+    }
+  }
+  
+  // compute mean and for each distance
+  std::vector< std::pair<double, double> > avg_distances(hop_distances.size());
+  
+  // calculate mean
+  std::vector< std::vector<double> >::const_iterator itd;
+  std::vector<double>::const_iterator itv;
+  
+  for (std::size_t i = 0; i < hop_distances.size(); i++) {
+    double mean = 0.0;
+    for (std::size_t j = 0; j < hop_distances[i].size(); j++) {
+      mean += hop_distances[i][j];
+    }
+    mean /= hop_distances[i].size();
+    avg_distances[i].first = mean;
+  }
+  
+  // calculate SD
+  for (std::size_t i = 0; i < hop_distances.size(); i++) {
+    double sd = 0.0;
+    for (std::size_t j = 0; j < hop_distances[i].size(); j++) {
+      double diff = hop_distances[i][j]-avg_distances[i].first;
+      sd += diff*diff;
+    }
+    sd /= (hop_distances[i].size()-1);
+    avg_distances[i].second = sd;
+  }  
+  
+  // return results
+  std::vector<double> result(2*avg_distances.size());
+  for (std::size_t i = 0; i < avg_distances.size(); i++) {
+    result[2*i] = avg_distances[i].first;
+    result[2*i+1] = avg_distances[i].second;
+  }
+  
   return result;
 }
 

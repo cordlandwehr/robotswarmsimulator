@@ -68,6 +68,16 @@ public:
    *			q.625, q.750, q.875, Max, Mean, SD, Skewness, Exess).
    */
   static const std::vector<double> evaluate_first_mf_experiment();
+  
+  /**
+	 * Calculates possible advantages of long range links per hop for local greedy routing
+	 * in a circle.
+	 * 
+	 * \param graph 	Currennt WorldInformation.
+	 * \returns		A vector of pairs of mean and SD values beginning with distance
+	 * 			two. 
+	 **/
+  static const std::vector<double> evaluate_uniform_lrlink_distribution();
 
   /**
    * Evaluates a polynomial at a given value.
