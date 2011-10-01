@@ -1,9 +1,9 @@
 -- this WM creates and evaluates uniform LR link distributions
 
 min_size = 64
-max_size = 128
+max_size = 1024
 step_size = 64
-samples = 1024
+samples = 10
 done = false
 
 timestamp = nil
