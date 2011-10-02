@@ -126,6 +126,7 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("get_messages", (const std::vector<std::size_t>(*)(std::size_t)) &WorldInformationWrapper::get_messages, luabind::copy_table(luabind::result)),
 	luabind::def("get_receiver", &WorldInformationWrapper::get_receiver),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
+	luabind::def("get_robot_position", &WorldInformationWrapper::get_robot_position),
 	luabind::def("get_robots", &WorldInformationWrapper::get_robots, luabind::copy_table(luabind::result)),
 	luabind::def("get_sender", &WorldInformationWrapper::get_sender),
 	luabind::def("get_tail", &WorldInformationWrapper::get_tail),
@@ -136,7 +137,8 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("remove_message", &WorldInformationWrapper::remove_message),
 	luabind::def("remove_robot", &WorldInformationWrapper::remove_robot),
 	luabind::def("set_edge_information", &WorldInformationWrapper::set_edge_information),
-	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information)
+	luabind::def("set_robot_information", &WorldInformationWrapper::set_robot_information),
+	luabind::def("set_robot_position", &WorldInformationWrapper::set_robot_position)
       ]
     ];
     

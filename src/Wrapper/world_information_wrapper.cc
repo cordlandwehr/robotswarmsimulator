@@ -298,6 +298,16 @@ WorldInformationWrapper::get_robot_information(std::size_t id) {
   return marker_information;
 }
 
+const Vector3dWrapper
+WorldInformationWrapper::get_robot_position(std::size_t id) {
+  // check the given ID
+  check_mapping(robot_identifiers_, id);
+  // look up robot
+  boost::shared_ptr<const RobotData> rd = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]);
+  // create and return new MarkerInforamtionWrapper object
+  return transform(rd->position());
+}
+
 const std::vector < std::size_t > 
 WorldInformationWrapper::get_robots () {
   // use separate vector to store results
@@ -401,6 +411,17 @@ WorldInformationWrapper::set_robot_information(std::size_t id, MarkerInformation
   boost::shared_ptr<MarkerInformation> new_marker(new MarkerInformation(marker.marker_information()));
   // set new MarkerInforamtion
   rid->set_marker_information(new_marker);
+}
+
+void 
+WorldInformationWrapper::set_robot_position(std::size_t id, Vector3dWrapper position) {
+  // check the given ID
+  check_mapping(robot_identifiers_, id);
+  // get correct robot and create MarkerInformation object
+  boost::shared_ptr<RobotData> rid = world_information_->get_according_robot_data_ptr(robot_identifiers_[id]);
+  boost::shared_ptr<Vector3d> new_position(new Vector3d(transform(position)));
+  // set new MarkerInforamtion
+  rid->set_position(new_position);
 }
 
 void

@@ -169,6 +169,14 @@ public:
   static const MarkerInformationWrapper get_robot_information(std::size_t id);
   
   /**
+   * Returns the current position of a given robot.
+   * 
+   * \param id		ID of the robot.
+   * \returns		Wrapped Vector3d object.
+   */
+  static const Vector3dWrapper get_robot_position(std::size_t id);
+  
+  /**
    * Returns set of robots.
    * 
    * \returns		Vector of integer robot IDs.
@@ -264,6 +272,14 @@ public:
    * \param marker	The wrapper MarkerInformation object.
    */
   static void set_robot_information(std::size_t id, MarkerInformationWrapper marker);
+  
+  /**
+   * Sets position of the given robot.
+   * 
+   * \param id		The id of the robot.
+   * \param position	Wrapped Vector3d object.
+   */
+  static void set_robot_position(std::size_t id, Vector3dWrapper position);
 
 private:
   friend class StatsCalcWrapper;
