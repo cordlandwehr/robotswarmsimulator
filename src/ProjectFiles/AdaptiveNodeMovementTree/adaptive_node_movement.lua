@@ -94,9 +94,9 @@ end
 -- Functions for request generation and handling ------------------------------
 -------------------------------------------------------------------------------
 
-function get_weight(depth)
+function get_weight(distance)
   -- the larger the return value the more likely the selection of the request
-  return 1/depth
+  return 1/distance
 end
 
 function chose_request(value, requests)
