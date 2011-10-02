@@ -109,6 +109,76 @@ function chose_request(value, requests)
 end
 
 -------------------------------------------------------------------------------
+-- Helper functions for ANM experiments ---------------------------------------
+-------------------------------------------------------------------------------
+
+function switch_robots(a, b)
+  -- get neighbors for both robots and delete old edges
+  local na = {}
+  local nb = {}
+  for i, edge in ipairs(WorldInformation.get_edges(a, "all")) do
+    local marker = WorldInformation.get_edge_information(edge)
+    if not marker:has_key("optimal") then 
+      local tail = WorldInformation.get_tail(edge)
+      local head = WorldInformation.get_head(edge)
+      if tail ~= a then
+	na[#na+1] = tail
+      else
+	na[#na+1] = head
+      end
+      WorldInformation.remove_edge(edge)
+    end
+  end
+  for i, edge in ipairs(WorldInformation.get_edges(b, "all")) do
+    local marker = WorldInformation.get_edge_information(edge)
+    if not marker:has_key("optimal") then
+      local tail = WorldInformation.get_tail(edge)
+      local head = WorldInformation.get_head(edge)
+      if tail ~= b then
+	nb[#nb+1] = tail
+      else
+	nb[#nb+1] = head
+      end
+      WorldInformation.remove_edge(edge)
+    end
+  end
+  -- switch positions
+  local pa = WorldInformation.get_robot_position(a)
+  local pb = WorldInformation.get_robot_position(b)
+  WorldInformation.set_robot_position(a, pb)
+  WorldInformation.set_robot_position(b, pa)
+  -- create edges
+  for i, id in ipairs(nb) do
+    if id ~= a then
+      WorldInformation.add_edge(a, id, "undirected")
+    end
+  end
+  for i, id in ipairs(na) do
+    if id ~= b then
+      WorldInformation.add_edge(b, id, "undirected")
+    end
+  end
+  WorldInformation.add_edge(a, b, "undirected")
+end
+
+function handle_request(request, heap) 
+  -- IDs
+  local a = request.first
+  local b = request.second
+  -- positions
+  local pa = posmap[a]
+  local pb = posmap[b]
+  -- get neighbor position (heap indices) on path
+  local pna = get_next(pa, pb, heap)
+  -- get neighbors (robot IDs) on path
+  local na = heap[pna]
+  -- switch a and neighbor of a
+  heap[pa], heap[pna] = heap[pna], heap[pa]
+  posmap[a], posmap[na] = posmap[na], posmap[a]
+  switch_robots(a, na)
+end
+
+-------------------------------------------------------------------------------
 -- Setup of a new ANM tree experiment -----------------------------------------
 -------------------------------------------------------------------------------
 
@@ -144,7 +214,11 @@ function setup_anm_tree(depth)
   
   
   -- 4) shuffle heap
-  shuffled = table.shuffle(opt)
+  shuffled = {}
+  for i, value in ipairs(opt) do
+    shuffled[i] = value
+  end
+  table.shuffle(shuffled)
 
   -- 5) create mapping id -> index (in shuffled array)
   posmap = {}
@@ -162,7 +236,20 @@ function setup_anm_tree(depth)
     WorldInformation.add_robot(shuffled[i], pos, "SimpleRobot", marker)
   end
   
-  -- 7) create edges
+  -- 7) create optimal edges
+  local marker = MarkerInformation()
+  marker:add_data("optimal", true)
+  marker:add_data(":color", 6)
+  for i = 1, #opt do
+    if lc(i, shuffled) then
+      WorldInformation.add_edge(opt[i], opt[lc(i, opt)], marker, "undirected")
+    end
+    if rc(i, shuffled) then
+      WorldInformation.add_edge(opt[i], opt[rc(i, opt)], marker, "undirected")
+    end
+  end
+  
+  -- 8) create shuffled edges
   for i = 1, #shuffled do
     if lc(i, shuffled) then
       WorldInformation.add_edge(shuffled[i], shuffled[lc(i, shuffled)], "undirected")
@@ -175,39 +262,12 @@ end
 
 
 function main()
-  tdepth = 6
   if status == "SETUP" then
-    setup_anm_tree(tdepth)
+    setup_anm_tree(7)
     status = "ANM"
   else
     local request = chose_request(math.random(), requests)
-    -- switch for first node
-    local pf = posmap[request.first]
-    local ps = posmap[request.second]
-    local pnext = get_next(pf, ps, shuffled)
-    local next = shuffled[pnext]    
-    log("info", "Next: " .. next )
-    
-    local fmarker = WorldInformation.get_robot_information(request.first)
-    local nmarker = WorldInformation.get_robot_information(next)
-    log("info", "marker")
-    
-    -- switch heap entries and mapping
-    shuffled[pf], shuffled[pnext] = shuffled[pnext], shuffled[pf]
-    posmap[request.first], posmap[next] = posmap[next], posmap[request.first]
-    -- get markes
-    log("info", "shuffled")
-    WorldInformation.remove_robot(request.first)
-    WorldInformation.remove_robot(next)
-    log("info", "remove")
-    local d = math.floor(math.log(posmap[request.first]) / math.log(2))
-    local fpos = Vector3d((position(posmap[request.first])-0.5)*tdepth*1.5, -d, 0)
-    WorldInformation.add_robot(request.first, fpos, "SimpleRobot", fmarker)
-    log("info", "add first")
-    local d = math.floor(math.log(posmap[next]) / math.log(2))
-    local npos = Vector3d((position(posmap[next])-0.5)*tdepth*1.5, -d, 0)
-    WorldInformation.add_robot(next, npos, "SimpleRobot", nmarker)
-    log("info", "add next")
+    handle_request(request, shuffled)
   end
 end
 
