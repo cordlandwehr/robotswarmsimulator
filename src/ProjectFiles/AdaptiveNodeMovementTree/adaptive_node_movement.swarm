@@ -7,3 +7,4 @@ EDGE_FILENAME=edges.csv
 # standard WM
 ASG=SYNCHRONOUS_WM
 WORLD_MODIFIERS=adaptive_node_movement.lua
+WORLD_MODIFIERS=tikz.lua

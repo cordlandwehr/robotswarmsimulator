@@ -38,6 +38,7 @@ function handle_message(msg)
 				new_marker = MarkerInformation()
 				new_marker:add_data("long_range_link", true)
 				new_marker:add_data("creation_time", View.get_time())
+				new_marker:add_data(":color", 6)
 			end
 			View.add_insert_edge_request(me, msg_marker:get_data("neighbor"), new_marker, "undirected")
 			-- change status back to ask
@@ -149,6 +150,7 @@ function main()
 			local new_marker = MarkerInformation()
 			new_marker:add_data("long_range_link", true)
 			new_marker:add_data("creation_time", View.get_time())
+			new_marker:add_data(":color", 6)
 			View.add_insert_edge_request(me, me, new_marker, "undirected")
 		end
 	end
