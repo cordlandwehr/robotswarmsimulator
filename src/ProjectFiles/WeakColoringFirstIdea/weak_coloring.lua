@@ -34,13 +34,17 @@ function main()
 	local polynomials = {}
 	for i = 1, #psplitstrings do
 		local pstring = psplitstrings[i]
-		local pcoefficientstrings = pstring:split(",")
+		local pcolpoly = pstring:split("|")
+		local pcolindex = tonumber(pcolpoly[1])
+		local pcoefficientstrings = pcolpoly[2]:split(",")
 		local pcoefficients = {}
 		for j =1, #pcoefficientstrings do
 			pcoefficients[j] = tonumber(pcoefficientstrings[j])		
 		end
-		polynomials[i] = pcoefficients
+		polynomials[pcolindex] = pcoefficients
 	end
+		
+	log("polynomials[my_color] = " .. table.concat( polynomials[my_color], ":"))
 	
 	
 	-- find alpha with least defects
@@ -52,13 +56,7 @@ function main()
 	for alpha = 0, q -1 do
 		local nodes = View.get_visible_robots()
 		
-		log("polynomials[my_color] = " .. table.concat( polynomials[my_color], ":"))
-		
-		local phi_result = Statistics.evaluate_polynomial(polynomials[my_color], alpha)
-		
-		if (phi_result >= q) then
-			log("error: phi_result must not be bigger than q")
-		end
+		local phi_result = Statistics.evaluate_polynomial(polynomials[my_color], alpha) % q
 		
 		local new_defects = 0;
 		
@@ -67,7 +65,7 @@ function main()
 			if marker:has_key(":color") then			
 				color = marker:get_data(":color")
 			else
-				color = nodes[i]
+				color = i
 			end
 			neighbor_phi = Statistics.evaluate_polynomial(polynomials[color], alpha)
 			if phi_result == neighbor_phi then

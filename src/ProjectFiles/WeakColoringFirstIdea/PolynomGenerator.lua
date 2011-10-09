@@ -1,29 +1,6 @@
 
 local d = 1
 
-function getNumberOfColors()
-	local number_of_colors = 0;
-	
-	local colors = {}
-
-	local nodes = WorldInformation.get_robots()
-	for i = 1 , #nodes do
-		marker = WorldInformation.get_robot_information(nodes[i])
-		if marker:has_key(":color") then
-			color = marker:get_data(":color")
-		else
-			color = nodes[i]
-		end
-		
-		if colors[color] == nil then
-			colors[color] = true
-			number_of_colors = number_of_colors + 1				
-		end
-	end
-  
-  return number_of_colors
-end
-
 function table.equals_table(t1, t2)
 	if #t1 ~= #t2 then
 		return false
@@ -45,26 +22,59 @@ function table.contains_table(t, value)
 	return false
 end
 
+function table.contains(t, value)
+	for _, v in ipairs(t) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
 
-function generate_polynomials(degree, modulo, count)
+
+function generate_polynomials(degree, modulo, colors)
 	local polynomials = {}
-	while #polynomials < count do
+	
+	for _, c in ipairs(colors) do
 		local poly = {}
+		repeat
 		for j = 1, degree do 
 			local c = math.random(0, modulo-1)
 			table.insert(poly, c)
 		end
-		if not table.contains_table(polynomials, poly) then
-			table.insert(polynomials, poly)
-		end
+		until not table.contains_table(polynomials, poly)
+		
+		polynomials[c] = poly
+			
 	end
 	return polynomials
 end
 
+function getColors()
+	local colors = {}
+
+	local nodes = WorldInformation.get_robots()
+	for i = 1 , #nodes do
+		marker = WorldInformation.get_robot_information(nodes[i])
+		local color
+		if marker:has_key(":color") then
+			color = marker:get_data(":color")
+		else
+			color = i
+		end
+		if not table.contains(colors, color) then
+			table.insert(colors, color)
+		end
+	end
+  
+  return colors
+end
+
 function main()
 
-	local M = getNumberOfColors()
-	log("Number of colors: " .. M)
+	local colors = getColors()
+	local M = #colors
+	log("Colors(" .. M .."): " .. table.concat(colors, ","))
 	
 	local Delta = Statistics.calculate_degree()
 	local Upsilon = Delta-d
@@ -80,13 +90,13 @@ function main()
 	local q = Statistics.generate_primes(q_min, 2*q_min)[1]
 	log("q=" .. q)
 
-	local polynomials = generate_polynomials(kappa, q, M)
-	log("#polynomials = " .. #polynomials)
+	local polynomials = generate_polynomials(kappa, q, colors)
 	local pstrings = {}
-	for i = 1, #polynomials do
-		local poly = table.concat(polynomials[i], ",")
+	for c, p in pairs(polynomials) do
+		local poly = c .. "|" ..table.concat(p, ",")
 		table.insert(pstrings, poly)
 	end
+	log("#polynomials = " .. #pstrings)
 
 
 	local nodes = WorldInformation.get_robots()
