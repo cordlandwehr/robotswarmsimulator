@@ -25,12 +25,9 @@ function main()
 	else
 		my_color = me + 1
 	end
-	log("my_color = " .. my_color)
 	
 	-- decode polynomials
-	log("pstrings = " .. pstrings)
 	local psplitstrings = pstrings:split(";")
-	log ("#psplitstrings = " .. #psplitstrings)
 	local polynomials = {}
 	for i = 1, #psplitstrings do
 		local pstring = psplitstrings[i]
@@ -44,9 +41,8 @@ function main()
 		polynomials[pcolindex] = pcoefficients
 	end
 		
-	log("polynomials[my_color] = " .. table.concat( polynomials[my_color], ":"))
-	
-	
+	log("Node " .. me .. " color = " .. my_color .. ", polynomial = " .. table.concat( polynomials[my_color], ","))
+		
 	-- find alpha with least defects
 	local nodes = View.get_visible_robots()
 	
