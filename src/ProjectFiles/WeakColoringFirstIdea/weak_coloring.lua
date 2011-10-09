@@ -1,5 +1,5 @@
 -- colors 0, .., available_color-1 are avaiable
-d = 2;
+d = 1;
 
 function string:split(sep)
 	local sep, fields = sep or ":", {}
@@ -48,13 +48,12 @@ function main()
 	
 	
 	-- find alpha with least defects
-	local robots = View.get_visible_robots()
+	local nodes = View.get_visible_robots()
 	
 	local defects = 10000000;
 	local best_alpha = 0;
 	local best_phi_result = 0;
 	for alpha = 0, q -1 do
-		local nodes = View.get_visible_robots()
 		
 		local phi_result = Statistics.evaluate_polynomial(polynomials[my_color], alpha) % q
 		
@@ -67,7 +66,7 @@ function main()
 			else
 				color = i
 			end
-			neighbor_phi = Statistics.evaluate_polynomial(polynomials[color], alpha)
+			neighbor_phi = Statistics.evaluate_polynomial(polynomials[color], alpha) % q
 			if phi_result == neighbor_phi then
 				new_defects = new_defects + 1
 			end
@@ -77,6 +76,10 @@ function main()
 			best_alpha = alpha
 			best_phi_result = phi_result
 		end		
+	end
+	
+	if defects > d then
+		log("warning", "calculated alpha violates condition of algorithm: " .. defects .. ">d=" .. d)
 	end
 	
 	local my_color = best_alpha * q + best_phi_result + 1

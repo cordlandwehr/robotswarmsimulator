@@ -1,5 +1,5 @@
 
-local d = 1
+d = 1
 
 function table.equals_table(t1, t2)
 	if #t1 ~= #t2 then
@@ -76,14 +76,15 @@ function main()
 	local M = #colors
 	log("Colors(" .. M .."): " .. table.concat(colors, ","))
 	
-	local Delta = Statistics.calculate_degree()
-	local Upsilon = Delta-d
+	local Delta = Statistics.calculate_degree()	
+	local max_defect = math.max(Statistics.calculate_maximal_defect(),0)
+	local Upsilon = (Delta-max_defect)/(d+1-max_defect)
 	
 	if M==0 or Upsilon <= 1 then
 		return
 	end
 	
-	log("M=" .. M .. ", Delta=" .. Delta .. ", Upsilon=" .. Upsilon  )
+	log("Delta=" .. Delta .. ", max_defect=" .. max_defect .. ", Upsilon=" .. Upsilon  )
 	local kappa = math.ceil(math.log(M)/math.log(Upsilon))
 	local q_min = math.floor(kappa*Upsilon+1)
 	log("kappa=" .. kappa .. ", qmin=" .. q_min )
