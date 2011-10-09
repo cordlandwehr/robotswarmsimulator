@@ -62,6 +62,7 @@ LuaWorldModifier::compute(const boost::shared_ptr<WorldInformation> &world_infor
 	catch(luabind::error& e) {
 		luabind::object error_msg(luabind::from_stack(e.state(), -1));
 	    std::cerr << error_msg << std::endl;
+	    ConsoleOutput::log(ConsoleOutput::Lua, ConsoleOutput::error) << error_msg;
 	}
     
     return LuaWrapper::WorldInformationWrapper::get_request_set();  
