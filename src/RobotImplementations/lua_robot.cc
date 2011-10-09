@@ -66,6 +66,7 @@
 #include "../Wrapper/marker_information_wrapper.h"
 #include "../Wrapper/console_output_wrapper.h"
 #include "../Wrapper/stats_calc_wrapper.h"
+#include "../Utilities/console_output.h"
 
 namespace {
 	boost::shared_ptr<View> view; //current view for the lua script
@@ -469,6 +470,7 @@ std::set<boost::shared_ptr<Request> > LuaRobot::compute() {
 	catch(luabind::error& e) {
 		luabind::object error_msg(luabind::from_stack(e.state(), -1));
 	    std::cerr << error_msg << std::endl;
+	    ConsoleOutput::log(ConsoleOutput::Lua, ConsoleOutput::error) << error_msg;
 	}
 
 	return requests;
