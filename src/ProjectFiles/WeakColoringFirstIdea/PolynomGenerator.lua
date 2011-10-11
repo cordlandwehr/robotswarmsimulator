@@ -1,34 +1,11 @@
 
-local d = 1
-
-function getNumberOfColors()
-	local number_of_colors = 0;
-	
-	local colors = {}
-
-	local nodes = WorldInformation.get_robots()
-	for i = 1 , #nodes do
-		marker = WorldInformation.get_robot_information(nodes[i])
-		if marker:has_key(":color") then
-			color = marker:get_data(":color")
-		else
-			color = nodes[i]
-		end
-		
-		if colors[color] == nil then
-			colors[color] = true
-			number_of_colors = number_of_colors + 1				
-		end
-	end
-  
-  return number_of_colors
-end
+d = 1
 
 function table.equals_table(t1, t2)
 	if #t1 ~= #t2 then
 		return false
 	end
-	for k, v in ipairs(t1) do
+	for k, v in pairs(t1) do
 		if v ~= t2[k] then
 			return false
 		end
@@ -37,7 +14,7 @@ function table.equals_table(t1, t2)
 end
 
 function table.contains_table(t, value)
-	for _, v in ipairs(t) do
+	for _, v in pairs(t) do
 		if table.equals_table(v, value) then
 			return true
 		end
@@ -45,49 +22,94 @@ function table.contains_table(t, value)
 	return false
 end
 
+function table.contains(t, value)
+	for _, v in pairs(t) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
 
-function generate_polynomials(degree, modulo, count)
+
+function generate_polynomials(degree, modulo, colors)
 	local polynomials = {}
-	while #polynomials < count do
+	
+	for _, col in ipairs(colors) do
 		local poly = {}
-		for j = 1, degree do 
-			local c = math.random(0, modulo-1)
-			table.insert(poly, c)
-		end
-		if not table.contains_table(polynomials, poly) then
-			table.insert(polynomials, poly)
-		end
+		repeat
+			for j = 1, degree do 
+				local c = math.random(0, modulo-1)
+				table.insert(poly, c)
+			end
+		until not table.contains_table(polynomials, poly)
+		
+		polynomials[col] = poly
+			
 	end
 	return polynomials
 end
 
-function main()
+function getColors()
+	local colors = {}
 
-	local M = getNumberOfColors()
-	log("Number of colors: " .. M)
+	local nodes = WorldInformation.get_robots()
+	for i = 1 , #nodes do
+		marker = WorldInformation.get_robot_information(nodes[i])
+		local color
+		if marker:has_key(":color") then
+			color = marker:get_data(":color")
+		else
+			color = i
+		end
+		if not table.contains(colors, color) then
+			table.insert(colors, color)
+		end
+	end
+  
+  return colors
+end
+
+function main()
+	log("---------------------------- Start PolynomGenerator ----------------------------") 
 	
-	local Delta = Statistics.calculate_degree()
-	local Upsilon = Delta-d
+	local colors = getColors()
+	local M = #colors
+	log("Colors(" .. M .."): " .. table.concat(colors, ","))
+	if M==0 then
+		log("warning", "number of colors=0") 
+		log("---------------------------- End PolynomGenerator ----------------------------") 
+		return
+	end	
 	
-	if M==0 or Upsilon <= 1 then
+	local max_defect = math.max(Statistics.calculate_maximal_defect(),0)
+	if max_defect>d then
+		log("warning", "maximal defect=" .. max_defect .. ">d=" .. d ) 
+		log("---------------------------- End PolynomGenerator ----------------------------") 
 		return
 	end
 	
-	log("M=" .. M .. ", Delta=" .. Delta .. ", Upsilon=" .. Upsilon  )
+	local Delta = Statistics.calculate_degree()	
+	local Upsilon = (Delta-max_defect)/(d+1-max_defect)
+		
+	if Upsilon <= 1  then
+		log("warning", "invalid Upsilon=" .. Upsilon .. "<=1" ) 
+		log("---------------------------- End PolynomGenerator ----------------------------") 
+		return
+	end
+		
 	local kappa = math.ceil(math.log(M)/math.log(Upsilon))
 	local q_min = math.floor(kappa*Upsilon+1)
-	log("kappa=" .. kappa .. ", qmin=" .. q_min )
-	local q = Statistics.generate_primes(q_min, 2*q_min)[1]
-	log("q=" .. q)
+	local q = Statistics.generate_primes(q_min+1, 2*q_min)[1]
+	
+	log("Delta=" .. Delta .. ", max_defect=" .. max_defect 	.. ", Upsilon=" .. Upsilon .. ", kappa=" .. kappa .. ", qmin=" .. q_min .. ", q=" .. q )
 
-	local polynomials = generate_polynomials(kappa, q, M)
-	log("#polynomials = " .. #polynomials)
+	local polynomials = generate_polynomials(kappa, q, colors)
 	local pstrings = {}
-	for i = 1, #polynomials do
-		local poly = table.concat(polynomials[i], ",")
+	for c, p in pairs(polynomials) do
+		local poly = c .. "|" ..table.concat(p, ",")
 		table.insert(pstrings, poly)
 	end
-
 
 	local nodes = WorldInformation.get_robots()
 	for i = 1 , #nodes do
@@ -95,8 +117,12 @@ function main()
 		marker:add_data("num_colors", M)
 		marker:add_data("polynomials", table.concat(pstrings, ";"))
 		marker:add_data("prime", q)
+		marker:add_data("max_defect", max_defect)
 		WorldInformation.set_robot_information(nodes[i], marker)
 	end
+	log("Polynomials: " .. table.concat(pstrings, ";"))
+	
+	log("---------------------------- End PolynomGenerator ----------------------------") 
 end
 
 

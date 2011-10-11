@@ -1,5 +1,5 @@
 -- colors 0, .., available_color-1 are avaiable
-d = 2;
+d = 1;
 
 function string:split(sep)
 	local sep, fields = sep or ":", {}
@@ -25,40 +25,33 @@ function main()
 	else
 		my_color = me + 1
 	end
-	log("my_color = " .. my_color)
 	
 	-- decode polynomials
-	log("pstrings = " .. pstrings)
 	local psplitstrings = pstrings:split(";")
-	log ("#psplitstrings = " .. #psplitstrings)
 	local polynomials = {}
 	for i = 1, #psplitstrings do
 		local pstring = psplitstrings[i]
-		local pcoefficientstrings = pstring:split(",")
+		local pcolpoly = pstring:split("|")
+		local pcolindex = tonumber(pcolpoly[1])
+		local pcoefficientstrings = pcolpoly[2]:split(",")
 		local pcoefficients = {}
 		for j =1, #pcoefficientstrings do
 			pcoefficients[j] = tonumber(pcoefficientstrings[j])		
 		end
-		polynomials[i] = pcoefficients
+		polynomials[pcolindex] = pcoefficients
 	end
-	
-	
+		
+	log("Node " .. me .. " color = " .. my_color .. ", polynomial = " .. table.concat( polynomials[my_color], ","))
+		
 	-- find alpha with least defects
-	local robots = View.get_visible_robots()
+	local nodes = View.get_visible_robots()
 	
 	local defects = 10000000;
 	local best_alpha = 0;
 	local best_phi_result = 0;
 	for alpha = 0, q -1 do
-		local nodes = View.get_visible_robots()
 		
-		log("polynomials[my_color] = " .. table.concat( polynomials[my_color], ":"))
-		
-		local phi_result = Statistics.evaluate_polynomial(polynomials[my_color], alpha)
-		
-		if (phi_result >= q) then
-			log("error: phi_result must not be bigger than q")
-		end
+		local phi_result = Statistics.evaluate_polynomial(polynomials[my_color], alpha) % q
 		
 		local new_defects = 0;
 		
@@ -67,9 +60,9 @@ function main()
 			if marker:has_key(":color") then			
 				color = marker:get_data(":color")
 			else
-				color = nodes[i]
+				color = i
 			end
-			neighbor_phi = Statistics.evaluate_polynomial(polynomials[color], alpha)
+			neighbor_phi = Statistics.evaluate_polynomial(polynomials[color], alpha) % q
 			if phi_result == neighbor_phi then
 				new_defects = new_defects + 1
 			end
@@ -79,6 +72,10 @@ function main()
 			best_alpha = alpha
 			best_phi_result = phi_result
 		end		
+	end
+	
+	if defects > d then
+		log("warning", "calculated alpha violates condition of algorithm: " .. defects .. ">d=" .. d)
 	end
 	
 	local my_color = best_alpha * q + best_phi_result + 1
