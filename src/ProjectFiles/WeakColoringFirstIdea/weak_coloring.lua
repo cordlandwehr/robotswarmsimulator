@@ -67,11 +67,15 @@ function main()
 				new_defects = new_defects + 1
 			end
 		end	
+		
 		if new_defects < defects then
 			defects = new_defects
 			best_alpha = alpha
 			best_phi_result = phi_result
 		end		
+		if defects <= d then
+			break
+		end
 	end
 	
 	if defects > d then

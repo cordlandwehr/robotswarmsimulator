@@ -24,11 +24,19 @@ function generate_robots()
 end
 
 function generate_edges()
+  math.randomseed(os.time())
   local handler = assert(io.open(edge_out, "w"))
   handler:write(edge_header)
   for i = 1, n do
     local id = i-1
     handler:write(edge_row:format(id, (id+1)%n, 1))
+    if math.random() >= 0.5 then
+	    local id2 = math.random(0,n-1)
+	    while id2 == id or id2 == (id+1)%n  or id2 == (id-1)%n do
+	    	id2 = math.random(0,n-1)
+	    end
+	    handler:write(edge_row:format(id, id2, 1))
+    end
   end
   handler:close() 
 end

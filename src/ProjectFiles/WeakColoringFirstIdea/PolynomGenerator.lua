@@ -1,4 +1,6 @@
 
+round=0
+
 d = 1
 
 function table.equals_table(t1, t2)
@@ -34,6 +36,8 @@ end
 
 function generate_polynomials(degree, modulo, colors)
 	local polynomials = {}
+	
+	-- math.randomseed(os.time())
 	
 	for _, col in ipairs(colors) do
 		local poly = {}
@@ -72,6 +76,8 @@ end
 
 function main()
 	log("---------------------------- Start PolynomGenerator ----------------------------") 
+	round = round+1
+	log("round: " .. round)
 	
 	local colors = getColors()
 	local M = #colors
