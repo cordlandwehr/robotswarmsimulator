@@ -41,7 +41,7 @@ function main()
 		polynomials[pcolindex] = pcoefficients
 	end
 		
-	log("Node " .. me .. " color = " .. my_color .. ", polynomial = " .. table.concat( polynomials[my_color], ","))
+	--log("Node " .. me .. " color = " .. my_color .. ", polynomial = " .. table.concat( polynomials[my_color], ","))
 		
 	-- find alpha with least defects
 	local nodes = View.get_visible_robots()
@@ -86,7 +86,7 @@ function main()
 	
 	my_marker:add_data(":color", my_color)
 	
-	log("Node " .. me .. " set its color to (" .. best_alpha .. ", " .. best_phi_result .. ") = " .. my_color);	
+	--log("Node " .. me .. " set its color to (" .. best_alpha .. ", " .. best_phi_result .. ") = " .. my_color);	
 
 	View.add_marker_request(my_marker)
 end

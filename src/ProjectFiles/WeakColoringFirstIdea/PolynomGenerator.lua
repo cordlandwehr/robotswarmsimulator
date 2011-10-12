@@ -1,4 +1,3 @@
-
 round=0
 
 d = 1
@@ -42,7 +41,7 @@ function generate_polynomials(degree, modulo, colors)
 	for _, col in ipairs(colors) do
 		local poly = {}
 		repeat
-			for j = 1, degree do 
+			for j = 0, degree do 
 				local c = math.random(0, modulo-1)
 				table.insert(poly, c)
 			end
