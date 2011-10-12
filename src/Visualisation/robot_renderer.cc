@@ -199,7 +199,11 @@ void RobotRenderer::draw_robot(const boost::shared_ptr<RobotData> & robot ) cons
 	}
 
 	unsigned int rob_color = get_color_from_marker_information(robot, robot->color());
-	glColor3fv(&kRobotIdColor[rob_color][0]);
+
+	float color[3];
+
+	generateColor(rob_color, color);
+	glColor3fv(color);
 	glPushName(SimulationRenderer::SELECTION_ROBOT);
 	glPushName(robot->id()->id());
 	draw_robot_sphere( rob_pos, robot_size );

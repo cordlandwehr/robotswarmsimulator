@@ -48,4 +48,8 @@ const float kRobotIdColor [][3] = {
 	{ 0.5f,0.0f,1.0f },
 };
 
+void hsl2rgb(const float& h, const float& s, const float& l, float* rgb);
+
+void generateColor(const unsigned int& color_number, float* color);
+
 #endif /* ROBOT_COLOR_H_ */
