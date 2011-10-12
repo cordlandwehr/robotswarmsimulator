@@ -46,7 +46,7 @@ function main()
 	-- find alpha with least defects
 	local nodes = View.get_visible_robots()
 	
-	local defects = 10000000;
+	local defects = 0;
 	local best_alpha = 0;
 	local best_phi_result = 0;
 	for alpha = 0, q -1 do
@@ -68,25 +68,18 @@ function main()
 			end
 		end	
 		
-		if new_defects < defects then
+		if new_defects > defects then
 			defects = new_defects
 			best_alpha = alpha
 			best_phi_result = phi_result
 		end		
-		--if defects <= d then
-		-- 	break
-		--end
-	end
-	
-	if defects > d then
-		log("warning", "calculated alpha violates condition of algorithm: " .. defects .. ">d=" .. d)
 	end
 	
 	local my_color = best_alpha * q + best_phi_result + 1
 	
 	my_marker:add_data(":color", my_color)
 	
-	my_marker:add_data("role", "public")
+	my_marker:add_data("role", "private")
 	
 	--log("Node " .. me .. " set its color to (" .. best_alpha .. ", " .. best_phi_result .. ") = " .. my_color);	
 

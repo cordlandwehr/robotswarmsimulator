@@ -1,4 +1,3 @@
-
 round=0
 
 d = 1
@@ -42,7 +41,7 @@ function generate_polynomials(degree, modulo, colors)
 	for _, col in ipairs(colors) do
 		local poly = {}
 		repeat
-			for j = 1, degree do 
+			for j = 0, degree do 
 				local c = math.random(0, modulo-1)
 				table.insert(poly, c)
 			end
@@ -91,12 +90,12 @@ function main()
 	local max_defect = math.max(Statistics.calculate_maximal_defect(),0)
 	if max_defect>d then
 		log("warning", "maximal defect=" .. max_defect .. ">d=" .. d ) 
-		log("---------------------------- End PolynomGenerator ----------------------------") 
-		return
 	end
 	
+	local d_prime = math.min(max_defect, d)
+	
 	local Delta = Statistics.calculate_degree()	
-	local Upsilon = (Delta-max_defect)/(d+1-max_defect)
+	local Upsilon = (Delta-d_prime)/(d+1-d_prime)
 		
 	if Upsilon <= 1  then
 		log("warning", "invalid Upsilon=" .. Upsilon .. "<=1" ) 
