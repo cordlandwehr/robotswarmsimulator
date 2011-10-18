@@ -19,8 +19,11 @@ find_package(Boost 1.37 REQUIRED filesystem program_options system thread)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # find/configure OpenGL
+if(RSS_NO_VISUALIZATION)
+else(RSS_NO_VISUALIZATION)
 find_package(OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
+endif(RSS_NO_VISUALIZATION)
 
 # find/configure Lua (statically linked for release builds)
 reverse_link_preference_in_release()
@@ -69,7 +72,17 @@ endif(APPLE)
 
 # find/configure QT
 # TODO packaging of QT libraries for release builds
-if(RSS_USE_QT_LIBRARIES)
+if(RSS_NO_VISUALIZATION)
+	# generate executable of the above source files and link it
+	add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
+	target_link_libraries(RobotSwarmSimulator
+		RSSimulator
+		${Boost_LIBRARIES}
+		${LUA_LIBRARIES}
+		${LAPACK_LIBRARIES}
+		luabind
+	)
+else(RSS_NO_VISUALIZATION)
 	set(QT_USE_QTOPENGL TRUE)    
 	find_package(Qt4 REQUIRED)
 	
@@ -86,18 +99,7 @@ if(RSS_USE_QT_LIBRARIES)
 	    ${QT_LIBRARIES}
 		luabind
 	)
-else(RSS_USE_QT_LIBRARIES)
-	# generate executable of the above source files and link it
-	add_executable(RobotSwarmSimulator ${RSSMAIN_SRCS})
-	target_link_libraries(RobotSwarmSimulator
-		RSSimulator
-		${Boost_LIBRARIES}
-		${OPENGL_LIBRARIES}
-		${LUA_LIBRARIES}
-		${LAPACK_LIBRARIES}
-		luabind
-	)
-endif(RSS_USE_QT_LIBRARIES)
+endif(RSS_NO_VISUALIZATION)
 
 # add executable to install target
 install(TARGETS RobotSwarmSimulator

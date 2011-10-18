@@ -19,7 +19,7 @@ add_definitions(-frounding-math)
 set(ECLIPSE_CDT4_GENERATE_SOURCE_PROJECT true)
 
 
-option(RSS_USE_QT_LIBRARIES "Use the Qt libraries for the visualization." ON) 
+option(RSS_NO_VISUALIZATION "Build the simulator without visualization." OFF) 
 
 # enable testing
 enable_testing()

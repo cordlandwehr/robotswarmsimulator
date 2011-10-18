@@ -7,20 +7,20 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 # find all source files
 file(GLOB_RECURSE RSSLIB_SRCS *.cc)
-if(RSS_USE_QT_LIBRARIES)
+if(RSS_NO_VISUALIZATION)
+	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc Gui/*.cc OpenGL/*.cc Visualization/*.cc)
+else(RSS_NO_VISUALIZATION)
 	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc)
-else(RSS_USE_QT_LIBRARIES)
-	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc Gui/*.cc)
-endif(RSS_USE_QT_LIBRARIES)
+endif(RSS_NO_VISUALIZATION)
 list(REMOVE_ITEM RSSLIB_SRCS ${NON_RSSLIB_SRCS})
 
 # find all header files
 file(GLOB_RECURSE RSSLIB_HDRS *.h)
-if(RSS_USE_QT_LIBRARIES)
+if(RSS_NO_VISUALIZATION)
+	file(GLOB_RECURSE NON_RSSLIB_HDRS testheader*.h Playground/*.h Tests/*.h UserInterfaces/*.h Gui/*.h OpenGL/*.h Visualization/*.h)
+else(RSS_NO_VISUALIZATION)
 	file(GLOB_RECURSE NON_RSSLIB_HDRS testheader*.h Playground/*.h Tests/*.h UserInterfaces/*.h)
-else(RSS_USE_QT_LIBRARIES)
-	file(GLOB_RECURSE NON_RSSLIB_HDRS testheader*.h Playground/*.h Tests/*.h UserInterfaces/*.h Gui/*.h)
-endif(RSS_USE_QT_LIBRARIES)
+endif(RSS_NO_VISUALIZATION)
 list(REMOVE_ITEM RSSLIB_HDRS ${NON_RSSLIB_HDRS})
 
 # find/configure boost
@@ -77,7 +77,8 @@ endif(APPLE)
 # include directory for Luabind
 include_directories(${luabind_SOURCE_DIR})
 
-if(RSS_USE_QT_LIBRARIES)
+if(RSS_NO_VISUALIZATION)
+else(RSS_NO_VISUALIZATION)
 	# find/configure Qt4
 	set(QT_USE_QTOPENGL TRUE)
 	find_package(Qt4 REQUIRED)
@@ -93,7 +94,7 @@ if(RSS_USE_QT_LIBRARIES)
 	QT4_ADD_RESOURCES(RSSLIB_RES_H ${RSSLIB_QT4_RES})
 	
 	list(APPEND RSSLIB_SRCS ${RSSLIB_MOC_CPP} ${RSSLIB_UI_CPP} ${RSSLIB_RES_H})
-endif(RSS_USE_QT_LIBRARIES)
+endif(RSS_NO_VISUALIZATION)
 
 find_package(Threads REQUIRED)
 

@@ -48,7 +48,7 @@
 #include <Utilities/console_output.h>
 #include <Wrapper/lua_distribution_generator.h>
 
-#ifdef RSS_USE_QT_LIBRARIES
+#ifndef RSS_NO_VISUALIZATION
 	#include <QtGui/QApplication>
 	#include <Gui/rss_main_window.h>
 	#include <Gui/rss_gl_widget.h>
@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
 												   run_until_no_multiplicity);
 			}
 
-#ifdef RSS_USE_QT_LIBRARIES
+#ifndef RSS_NO_VISUALIZATION
 			if(create_visualization) {
 
 				QApplication app(argc, argv);
@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
 			}
 		} else {
 
-#ifdef RSS_USE_QT_LIBRARIES
+#ifndef RSS_NO_VISUALIZATION
 			QApplication app(argc, argv);
 			Q_INIT_RESOURCE(qt_resources);
 			app.setApplicationName("RobotSwarmSimulator");
