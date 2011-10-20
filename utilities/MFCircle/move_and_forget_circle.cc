@@ -215,12 +215,12 @@ std::vector< std::pair< double, double > > simulator::calculate_avg_hop_improvem
   for (std::size_t a = 0; a < n; ++a) {
     for (std::size_t b = 0; b < n; ++b) {
       if (a == b) continue; // skip self loops
-      std::size_t dist = ring_distance(nodes, a, b);
+      std::size_t dist = ring_distance(n, a, b);
       // get improvement assuming a local greedy algorithm
       std::size_t ld, rd, lrd, improvement;
-      ld = ring_distance(nodes, nodes[a].left_neighbor, b);
-      rd = ring_distance(nodes, nodes[a].right_neighbor, b);
-      lrd = ring_distance(nodes, nodes[a].long_range_link, b);
+      ld = ring_distance(n, nodes[a].left_neighbor, b);
+      rd = ring_distance(n, nodes[a].right_neighbor, b);
+      lrd = ring_distance(n, nodes[a].long_range_link, b);
       if ((ld <= rd && ld <= lrd) || (rd <= ld && rd <= lrd)) {
 	improvement = 1;
       } else {
