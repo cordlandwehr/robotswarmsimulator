@@ -189,7 +189,7 @@ std::size_t simulator::hop_distance(const std::vector<simulator::node>& nodes, s
   // implements a local greedy algorithm using the 'ring_distance' function as metric
   std::size_t hops = 0;
   std::size_t ld, rd, lrd;
-  std::size_t n = nodes.size()
+  std::size_t n = nodes.size();
   while (a != b) {
     ld = ring_distance(n, nodes[a].left_neighbor, b);
     rd = ring_distance(n, nodes[a].right_neighbor, b);
