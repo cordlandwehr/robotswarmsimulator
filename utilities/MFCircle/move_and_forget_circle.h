@@ -52,7 +52,7 @@ void random_walk(std::vector<node>& nodes, const std::size_t& steps = 1);
 inline bool flip_coin(const std::size_t& id = 0);
 inline bool forget_link(const std::size_t& age, const std::size_t& id = 0);
 inline double forgetting_probablity(const double& age);
-inline std::size_t ring_distance(const std::vector<node>& nodes, const std::size_t& a, const std::size_t& b);
+inline std::size_t ring_distance(const std::size_t n, const std::size_t a, const std::size_t b);
 std::size_t hop_distance(const std::vector<node>& nodes, std::size_t a, const std::size_t& b);
 std::vector<std::size_t> calculate_full_hop_distance_distribution(const std::vector<node>& nodes);
 std::vector<std::size_t> calculate_random_hop_distance_distribution(const std::vector<node>& nodes, const std::size_t& sample_size);
