@@ -8,7 +8,7 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 # find all source files
 file(GLOB_RECURSE RSSLIB_SRCS *.cc)
 if(RSS_NO_VISUALIZATION)
-	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc Gui/*.cc OpenGL/*.cc Visualization/*.cc)
+	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc Gui/*.cc OpenGL/*.cc Visualisation/*.cc)
 else(RSS_NO_VISUALIZATION)
 	file(GLOB_RECURSE NON_RSSLIB_SRCS testheader*.cc Playground/*.cc Tests/*.cc UserInterfaces/*.cc)
 endif(RSS_NO_VISUALIZATION)
