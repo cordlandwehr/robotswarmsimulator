@@ -30,6 +30,8 @@
 #ifndef STATS_CALC_H_
 #define STATS_CALC_H_
 
+#include <string>
+
 #include <boost/smart_ptr.hpp>
 
 #include "../Model/world_information.h"
@@ -55,7 +57,7 @@ public:
 	   * \param graph	The graph as a WorldInformation
 	   * \returns		maximal number of defects
 	   */
-	static int calculate_maximal_defect(const boost::shared_ptr<WorldInformation> graph);
+	static int calculate_maximal_defect(const boost::shared_ptr<WorldInformation> graph, const std::string& role="");
 
 	  /**
 	   * Calculates the total number of defects in a graph.

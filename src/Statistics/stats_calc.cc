@@ -36,6 +36,7 @@
 #include <queue>
 
 const std::string kColorName = ":color";
+const std::string kRoleName = "role";
 
 
 int StatsCalc::calculate_degree(const boost::shared_ptr<WorldInformation> graph){
@@ -56,7 +57,7 @@ int StatsCalc::calculate_degree(const boost::shared_ptr<WorldInformation> graph)
 
 
 
-int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation> graph){
+int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation> graph, const std::string& role){
 	std::vector<boost::shared_ptr<RobotData> > nodes;
 	graph->robot_data_to_vector(nodes);
 
@@ -82,6 +83,15 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 				currNodeMarker = rd1.marker_information();
 				if(!currNodeMarker.has_key(kColorName))
 								return -1;
+
+				if(currNodeMarker.has_key(kRoleName) && role.compare("") != 0) {
+					std::string r = boost::any_cast<std::string>(currNodeMarker.get_data(kRoleName));
+					if(role.compare(r) != 0) {
+						// ignore nodes with other roles
+						continue;
+					}
+				}
+
 				double neighboursColor = boost::any_cast<double>(currNodeMarker.get_data(kColorName));
 
 				if(neighboursColor == currentNodesOwnColor)
@@ -101,7 +111,7 @@ int StatsCalc::calculate_maximal_defect(const boost::shared_ptr<WorldInformation
 				maxDefect = countDefects;
 			}
 		}
-		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculated maximal defect " << maxDefect << ".";
+		ConsoleOutput::log(ConsoleOutput::Statistics, ConsoleOutput::debug) << "stats_calc::calculated maximal defect (Role: '" << role << "') " << maxDefect << ".";
 		return maxDefect;
 }
 

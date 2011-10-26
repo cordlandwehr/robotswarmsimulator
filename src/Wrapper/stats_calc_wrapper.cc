@@ -58,8 +58,13 @@ int
 
 
 int
-StatsCalcWrapper::calculate_maximal_defect() {
-  return StatsCalc::calculate_maximal_defect(WI::world_information_);
+StatsCalcWrapper::calculate_maximal_defect(const std::string& role) {
+  return StatsCalc::calculate_maximal_defect(WI::world_information_, role);
+}
+
+int
+StatsCalcWrapper::calculate_maximal_defect_default() {
+  return StatsCalc::calculate_maximal_defect(WI::world_information_, "");
 }
 
 int

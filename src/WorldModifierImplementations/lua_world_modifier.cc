@@ -152,6 +152,7 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("calculate_diameter_with_long_range", &StatsCalcWrapper::calculate_diameter_with_long_range),
 	luabind::def("calculate_hop_distance", &StatsCalcWrapper::calculate_hop_distance, luabind::copy_table(_3)),
 	luabind::def("calculate_maximal_defect", &StatsCalcWrapper::calculate_maximal_defect),
+	luabind::def("calculate_maximal_defect", &StatsCalcWrapper::calculate_maximal_defect_default),
 	luabind::def("calculate_total_defects", &StatsCalcWrapper::calculate_total_defects),
 	luabind::def("evaluate_first_mf_experiment", &StatsCalcWrapper::evaluate_first_mf_experiment, luabind::copy_table(luabind::result)),
 	luabind::def("evaluate_uniform_lrlink_distribution", &StatsCalcWrapper::evaluate_uniform_lrlink_distribution, luabind::copy_table(luabind::result)),

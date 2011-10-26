@@ -9,6 +9,7 @@
 #define STATS_CALC_WRAPPER_H
 
 #include <vector>
+#include <string>
 
 #include "../Wrapper/world_information_wrapper.h"
 
@@ -50,8 +51,9 @@ public:
    * 
    * \returns 		Maximal defect.
    */
-  static int calculate_maximal_defect();
-  
+  static int calculate_maximal_defect(const std::string& role);
+  static int calculate_maximal_defect_default();
+
   /**
    * Calculates total defects.
    * 
