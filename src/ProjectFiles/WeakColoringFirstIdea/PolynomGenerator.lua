@@ -88,6 +88,7 @@ function main()
 	end	
 	
 	local max_defect = math.max(Statistics.calculate_maximal_defect(),0)
+	local max_public_defect = math.max(Statistics.calculate_maximal_defect("public"),0)
 	if max_defect>d then
 		log("warning", "maximal defect=" .. max_defect .. ">d=" .. d ) 
 	end
@@ -123,6 +124,7 @@ function main()
 		marker:add_data("polynomials", table.concat(pstrings, ";"))
 		marker:add_data("prime", q)
 		marker:add_data("max_defect", max_defect)
+		marker:add_data("max_public_defect", max_public_defect)
 		WorldInformation.set_robot_information(nodes[i], marker)
 	end
 	log("Polynomials: " .. table.concat(pstrings, ";"))
