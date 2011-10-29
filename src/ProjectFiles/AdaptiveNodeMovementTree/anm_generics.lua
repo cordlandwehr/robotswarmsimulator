@@ -96,11 +96,6 @@ end
 -- Functions for request generation and handling ------------------------------
 -------------------------------------------------------------------------------
 
-function get_weight(distance)
-  -- the larger the return value the more likely the selection of the request
-  return 1/distance
-end
-
 function chose_request(value, requests)
   -- TODO: replace this with binary search
   i = 1
@@ -174,7 +169,7 @@ end
 -- Setup of a new ANM tree experiment -----------------------------------------
 -------------------------------------------------------------------------------
 
-function setup_anm_tree(depth)
+function setup_anm_tree(depth, weightFunc)
   -- 1) create the 'optimal' solution
   local opt = {}
   for i = 1, 2^depth-1 do
@@ -191,8 +186,12 @@ function setup_anm_tree(depth)
 	requests[k] = {}
 	requests[k].first = opt[i]
 	requests[k].second = opt[j]
-	requests[k].weight = get_weight(hop_distance(requests[k].first, requests[k].second, opt))
-	weight = weight + requests[k].weight
+	requests[k].weight = weightFunc(hop_distance(requests[k].first, requests[k].second, opt))
+	if requests[k].weight == 0 then
+	  requests[k] = nil
+	else
+	  weight = weight + requests[k].weight
+	end
       end
     end
   end

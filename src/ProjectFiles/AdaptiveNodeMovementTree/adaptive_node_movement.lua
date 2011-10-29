@@ -2,6 +2,7 @@ dofile "src/ProjectFiles/AdaptiveNodeMovementTree/anm_generics.lua"
 
 
 
+
 function handle_request(request, heap) 
   -- IDs
   local a = request.first
@@ -23,9 +24,18 @@ function handle_request(request, heap)
 end
 
 
+function get_weight(distance)
+  -- the larger the return value the more likely the selection of the request
+  if distance > 1 then
+    return 0
+  else
+    return 1/distance
+  end
+end
+
 function main()
   if status == "SETUP" then
-    setup_anm_tree(7)
+    setup_anm_tree(7, get_weight)
     status = "ANM"
   else
     local request = chose_request(math.random(), requests)
