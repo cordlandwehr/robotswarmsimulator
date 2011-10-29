@@ -168,6 +168,10 @@ function handle_request(request, heap)
   -- positions
   local pa = posmap[a]
   local pb = posmap[b]
+  -- are a and b neighors in the current tree
+  if hop_distance(pa, pb, shuffled) == 1 then
+    return
+  end
   -- get neighbor position (heap indices) on path
   local pna = get_next(pa, pb, heap)
   -- get neighbors (robot IDs) on path
@@ -194,7 +198,7 @@ function setup_anm_tree(depth)
   weight = 0
   for i = 1, #opt do
     for j = 1, #opt do
-      if i ~= j then 
+      if hop_distance(opt[i], opt[j], opt) == 1 then 
 	local k = #requests+1
 	requests[k] = {}
 	requests[k].first = opt[i]
