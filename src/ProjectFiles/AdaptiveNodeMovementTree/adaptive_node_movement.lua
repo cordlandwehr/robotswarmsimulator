@@ -35,11 +35,12 @@ end
 
 function main()
   if status == "SETUP" then
-    setup_anm_tree(7, get_weight)
+    setup_anm_tree(6, get_weight)
     status = "ANM"
   else
     local request = chose_request(math.random(), requests)
     handle_request(request, shuffled)
+    update_potential()
   end
 end
 

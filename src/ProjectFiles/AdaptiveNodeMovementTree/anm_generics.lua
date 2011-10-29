@@ -105,16 +105,58 @@ function chose_request(value, requests)
   return requests[i]
 end
 
+
+-------------------------------------------------------------------------------
+-- The potential function ------------------------------
+-------------------------------------------------------------------------------
+function phi()
+  local potential = 0
+  for i = 1, #opt do
+    if lc(i, opt) then
+      potential = potential + hop_distance(shuffled[i], shuffled[lc(i, opt)], shuffled) - 1
+    end
+    if rc(i, opt) then
+      potential = potential + hop_distance(shuffled[i], shuffled[rc(i, opt)], shuffled) - 1
+    end
+  end
+  
+  return potential
+end
+
+
+function update_potential()
+  local marker = WorldInformation.get_robot_information(shuffled[1])
+  marker:add_data("potential", phi())
+  WorldInformation.set_robot_information(shuffled[1], marker)
+end
+
+
 -------------------------------------------------------------------------------
 -- Helper functions for ANM experiments ---------------------------------------
 -------------------------------------------------------------------------------
 
 function switch_robots(a, b, heap)
+
+  if posmap[a] == 1 or posmap[b] == 1 then
+    local marker = WorldInformation.get_robot_information(heap[1])
+    marker:remove_data("potential")
+    WorldInformation.set_robot_information(heap[1], marker)
+    --marker:add_data(":color", color)
+  end
+
   local pa = posmap[a]
   local pna = posmap[b]
 
+
   heap[pa], heap[pna] = heap[pna], heap[pa]
   posmap[a], posmap[b] = posmap[b], posmap[a]
+
+  if posmap[a] == 1 or posmap[b] == 1 then
+    local marker = WorldInformation.get_robot_information(heap[1])
+    marker:add_data("potential", phi())
+    WorldInformation.set_robot_information(heap[1], marker)
+  end
+
 
   -- get neighbors for both robots and delete old edges
   local na = {}
@@ -171,7 +213,7 @@ end
 
 function setup_anm_tree(depth, weightFunc)
   -- 1) create the 'optimal' solution
-  local opt = {}
+  opt = {}
   for i = 1, 2^depth-1 do
     opt[i] = i
   end
@@ -224,6 +266,9 @@ function setup_anm_tree(depth, weightFunc)
     local marker = MarkerInformation()
     local pos = Vector3d((position(i)-0.5)*depth*1.5, -d, 0)
     marker:add_data(":color", color)
+    if i == 1 then
+      marker:add_data("potential", phi())
+    end
     WorldInformation.add_robot(shuffled[i], pos, "SimpleRobot", marker)
   end
   
