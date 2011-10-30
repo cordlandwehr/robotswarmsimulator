@@ -21,8 +21,8 @@ function handle_request(request, heap)
     switch_robots(a, na, heap)
 
     -- update positions for they could have changed
-    local pa = posmap[a]
-    local pb = posmap[b]  
+    pa = posmap[a]
+    pb = posmap[b]  
   end
 
 end
@@ -39,7 +39,7 @@ end
 
 function main()
   if status == "SETUP" then
-    setup_anm_tree(7, get_weight)
+    setup_anm_tree(7, get_weight)z
     status = "ANM"
   else
     local request = chose_request(math.random(), requests)
