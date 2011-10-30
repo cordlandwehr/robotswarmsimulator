@@ -37,14 +37,6 @@ function get_weight(distance)
 end
 
 function main()
-  if status == "SETUP" then
-    setup_anm_tree(7, get_weight, "directlyToOtherNode")
-    status = "ANM"
-  else
-    local request = chose_request(math.random(), requests)
-    handle_request(request, shuffled)
-    update_potential()
-    write_potential()
-  end
+  generic_main("directlyToOtherNode", 7, get_weight, handle_request)
 end
 

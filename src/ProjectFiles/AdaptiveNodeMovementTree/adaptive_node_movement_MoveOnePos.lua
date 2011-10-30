@@ -1,8 +1,6 @@
 dofile "src/ProjectFiles/AdaptiveNodeMovementTree/anm_generics.lua"
 
 
-
-
 function handle_request(request, heap) 
   -- IDs
   local a = request.first
@@ -34,14 +32,6 @@ function get_weight(distance)
 end
 
 function main()
-  if status == "SETUP" then
-    setup_anm_tree(6, get_weight, "moveOnePos")
-    status = "ANM"
-  else
-    local request = chose_request(math.random(), requests)
-    handle_request(request, shuffled)
-    update_potential()
-    write_potential()
-  end
+  generic_main("moveOnePos", 7, get_weight, handle_request)
 end
 

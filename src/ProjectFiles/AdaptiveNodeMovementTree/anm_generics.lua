@@ -345,3 +345,15 @@ function setup_anm_tree(depth, weightFunc, projectName)
     setup_IO()
   end
 end
+
+function generic_main(name, depth, weightFunc, handleFunc)
+  if status == "SETUP" then
+    setup_anm_tree(depth, weightFunc, name)
+    status = "ANM"
+  else
+    local request = chose_request(math.random(), requests)
+    handleFunc(request, shuffled)
+    update_potential()
+    write_potential()
+  end
+end
