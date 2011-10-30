@@ -17,6 +17,7 @@
 #include "../Requests/position_request.h"
 #include "../Utilities/console_output.h"
 #include "../Utilities/vector_arithmetics.h"
+#include "../SimulationKernel/factories.h"
 
 #include "../Wrapper/console_output_wrapper.h"
 #include "../Wrapper/coordinate_system_wrapper.h"
@@ -125,6 +126,7 @@ void LuaWorldModifier::register_lua_methods() {
 	luabind::def("get_message_information", &WorldInformationWrapper::get_message_information),
 	luabind::def("get_messages", (const std::vector<std::size_t>(*)()) &WorldInformationWrapper::get_messages, luabind::copy_table(luabind::result)),
 	luabind::def("get_messages", (const std::vector<std::size_t>(*)(std::size_t)) &WorldInformationWrapper::get_messages, luabind::copy_table(luabind::result)),
+	luabind::def("get_project_path", &WorldInformationWrapper::get_project_path),
 	luabind::def("get_receiver", &WorldInformationWrapper::get_receiver),
 	luabind::def("get_robot_information", &WorldInformationWrapper::get_robot_information),
 	luabind::def("get_robot_position", &WorldInformationWrapper::get_robot_position),
@@ -161,6 +163,7 @@ void LuaWorldModifier::register_lua_methods() {
 	
       ]
     ];
+    
 }
 
 void LuaWorldModifier::report_errors(int status) {

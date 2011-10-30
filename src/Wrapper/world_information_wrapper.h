@@ -146,6 +146,14 @@ public:
   static const std::vector<std::size_t> get_messages(std::size_t);
     
   /**
+   * Return project path.
+   * 
+   * \returns		Project path.
+   */
+  static std::string get_project_path();  
+  
+  
+  /**
    * Return receiver ID of a given message.
    * 
    * \param id		ID of the message.

@@ -251,6 +251,14 @@ WorldInformationWrapper::get_messages() {
   return result;
 }
 
+
+std::string
+WorldInformationWrapper::get_project_path()
+{
+  return Factory::project_directory_path.string();
+}
+
+
 const std::vector<std::size_t>
 WorldInformationWrapper::get_messages(std::size_t id) {
   // check the given ID

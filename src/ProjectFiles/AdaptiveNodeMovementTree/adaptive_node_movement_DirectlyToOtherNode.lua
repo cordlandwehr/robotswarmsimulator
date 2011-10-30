@@ -1,7 +1,4 @@
-dofile "src/ProjectFiles/AdaptiveNodeMovementTree/anm_generics.lua"
-
-
-
+dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
 
 function handle_request(request, heap) 
   -- IDs
@@ -39,7 +36,7 @@ end
 
 function main()
   if status == "SETUP" then
-    setup_anm_tree(7, get_weight)z
+    setup_anm_tree(7, get_weight)
     status = "ANM"
   else
     local request = chose_request(math.random(), requests)
