@@ -4,11 +4,14 @@ function handle_request(request, heap)
   -- IDs
   local a = request.first
   local b = request.second
+
   -- positions
   local pa = posmap[a]
   local pb = posmap[b]
-  -- are a and b neighors in the current tree
+  
+--  log("info", "Request between " .. a .. " and " .. b .. ", positioned at " .. pa .. " and " .. pb .. ", respectively")
 
+  -- are a and b neighbors in the current tree
   while hop_distance(pa, pb, heap) > 1 do
     -- get neighbor position (heap indices) on path
     local pna = get_next(pa, pb, heap)
@@ -21,7 +24,6 @@ function handle_request(request, heap)
     pa = posmap[a]
     pb = posmap[b]  
   end
-
 end
 
 
@@ -36,12 +38,13 @@ end
 
 function main()
   if status == "SETUP" then
-    setup_anm_tree(7, get_weight)
+    setup_anm_tree(7, get_weight, "directlyToOtherNode")
     status = "ANM"
   else
     local request = chose_request(math.random(), requests)
     handle_request(request, shuffled)
     update_potential()
+    write_potential()
   end
 end
 

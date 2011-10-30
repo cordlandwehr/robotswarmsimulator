@@ -3,7 +3,18 @@ opt = nil
 shuffled = nil
 requests = nil
 posmap = nil
+projectname = "undefined"
+levels = nil
 
+-- IO settings
+file_prefix = WorldInformation.get_project_path() .. "/output/"
+file_name = "anm_%s_%d_%s"
+file_path = file_name .. ".dat"
+file_path_plt = file_name .. ".plt"
+file_header = "Time\tPhi\n"
+file_data = "%d\t%d\n"
+gnuplot_terminal = "pdf"
+timestamp = nil
 
 
 -------------------------------------------------------------------------------
@@ -130,6 +141,37 @@ function update_potential()
   WorldInformation.set_robot_information(shuffled[1], marker)
 end
 
+-------------------------------------------------------------------------------
+-- IO helper functions --------------------------------------------------------
+-------------------------------------------------------------------------------
+
+function setup_IO()
+  -- use ISO-like timestamp [Year]-[Month]-[Day]T[Hours]-[Minutes]-[Seconds]
+  timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+  -- create new file and write header
+  local handler = assert(io.open(file_prefix .. file_path:format(projectname,levels,timestamp), "w"))
+  handler:write(file_header)
+  -- calculate data row for start configuration
+  handler:write(file_data:format(WorldInformation.get_time(), phi()))	
+  handler:close()
+
+  -- create the .plt file for convenience
+  local plt_handler = assert(io.open(file_prefix .. file_path_plt:format(projectname,levels,timestamp), "w"))
+  plt_handler:write("set terminal " .. gnuplot_terminal .. "\n")
+  plt_handler:write("set output '" .. file_name:format(projectname,levels,timestamp) .. "." .. gnuplot_terminal .. "'" .. "\n")
+  plt_handler:write("plot '" .. file_path:format(projectname,levels,timestamp) .. "' using 1:2 with lines" .. "\n")
+  plt_handler:close()
+
+
+end
+
+function write_potential()
+  -- write potential to .dat file - note that update_potentaiL() is not called automatically here
+  local handler = assert(io.open(file_prefix .. file_path:format(projectname,levels,timestamp), "a"))
+  -- write current potential
+  handler:write(file_data:format(WorldInformation.get_time(), phi()))
+  handler:close() 
+end
 
 -------------------------------------------------------------------------------
 -- Helper functions for ANM experiments ---------------------------------------
@@ -211,7 +253,9 @@ end
 -- Setup of a new ANM tree experiment -----------------------------------------
 -------------------------------------------------------------------------------
 
-function setup_anm_tree(depth, weightFunc)
+function setup_anm_tree(depth, weightFunc, projectName)
+  levels = depth
+
   -- 1) create the 'optimal' solution
   opt = {}
   for i = 1, 2^depth-1 do
@@ -293,5 +337,11 @@ function setup_anm_tree(depth, weightFunc)
     if rc(i, shuffled) then
       WorldInformation.add_edge(shuffled[i], shuffled[rc(i, shuffled)], "undirected")
     end
+  end
+
+  -- 9) setup IO
+  if projectName ~= nil then
+    projectname = projectName
+    setup_IO()
   end
 end
