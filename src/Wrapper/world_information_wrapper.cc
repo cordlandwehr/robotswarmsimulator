@@ -255,7 +255,10 @@ WorldInformationWrapper::get_messages() {
 std::string
 WorldInformationWrapper::get_project_path()
 {
-  return Factory::project_directory_path.string();
+  if (Factory::project_directory_path.string() != "")
+	return Factory::project_directory_path.string();
+  else
+	return ".";
 }
 
 
