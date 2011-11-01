@@ -37,6 +37,6 @@ function get_weight(distance)
 end
 
 function main()
-  generic_main("directlyToOtherNode", 7, get_weight, handle_request, false)
+  generic_main("directlyToOtherNode_ONIOS", 7, get_weight, handle_request, false)
 end
 

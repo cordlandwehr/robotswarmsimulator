@@ -1,0 +1,9 @@
+PROJECT_NAME=Adaptive Node Movement for Trees
+
+# the following files are empty
+ROBOT_FILENAME=robots.csv
+EDGE_FILENAME=edges.csv
+
+# standard WM
+ASG=SYNCHRONOUS_WM
+WORLD_MODIFIERS=memoryleaker2.lua

@@ -32,6 +32,6 @@ function get_weight(distance)
 end
 
 function main()
-  generic_main("moveOnePos", 7, get_weight, handle_request, false)
+  generic_main("moveOnePos_ONIOS", 7, get_weight, handle_request, false)
 end
 

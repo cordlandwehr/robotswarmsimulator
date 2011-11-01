@@ -108,12 +108,25 @@ end
 -------------------------------------------------------------------------------
 
 function chose_request(value, requests)
-  -- TODO: replace this with binary search
-  i = 1
-  while requests[i].probability_interval_position < value do
-    i = i+1
+  -- TODO: review if this binary search is ok
+  local min = 1
+  local max = #requests
+  local mid = min + math.floor((max-min)/2)
+  local found = false
+
+  while (found == false) do
+    if (min == max) then
+      return requests[min]
+    end
+
+    if requests[mid].probability_interval_position < value then
+      min = mid + 1
+      mid = min + math.floor((max-min)/2)
+    else 
+      max = mid
+      mid = min + math.floor((max-min)/2)
+    end
   end
-  return requests[i]
 end
 
 
@@ -253,7 +266,7 @@ end
 -- Setup of a new ANM tree experiment -----------------------------------------
 -------------------------------------------------------------------------------
 
-function setup_anm_tree(depth, weightFunc, projectName)
+function setup_anm_tree(depth, weightFunc, projectName, onlyNeighborsInOptimalSolution)
   levels = depth
 
   -- 1) create the 'optimal' solution
@@ -267,7 +280,7 @@ function setup_anm_tree(depth, weightFunc, projectName)
   weight = 0
   for i = 1, #opt do
     for j = 1, #opt do
-      if hop_distance(opt[i], opt[j], opt) == 1 then 
+      if (i ~= j) and ((onlyNeighborsInOptimalSolution == false) or (hop_distance(opt[i], opt[j], opt) == 1)) then 
 	local k = #requests+1
 	requests[k] = {}
 	requests[k].first = opt[i]
@@ -346,10 +359,13 @@ function setup_anm_tree(depth, weightFunc, projectName)
   end
 end
 
-function generic_main(name, depth, weightFunc, handleFunc)
+function generic_main(name, depth, weightFunc, handleFunc, onlyNeighborsInOptimalSolution, localSetup)
   if status == "SETUP" then
-    setup_anm_tree(depth, weightFunc, name)
+    setup_anm_tree(depth, weightFunc, name, onlyNeighborsInOptimalSolution)
     status = "ANM"
+    if localSetup ~= nil then
+      localSetup(depth)
+    end
   else
     local request = chose_request(math.random(), requests)
     handleFunc(request, shuffled)
