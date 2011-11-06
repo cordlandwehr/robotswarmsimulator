@@ -45,6 +45,6 @@ function get_weight(distance)
 end
 
 function main()
-  generic_main("toOtherNodeWithProbability_ONIOS", 7, get_weight, handle_request, false)
+  generic_main("toOtherNodeWithProbability_ONIOS", 7, get_weight, handle_request, true)
 end
 
