@@ -1,6 +1,6 @@
 dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
 
-threshold = 1
+threshold = 5
 
 memory = {}
 
@@ -13,12 +13,12 @@ function handle_request(request, heap)
   local pa = posmap[a]
   local pb = posmap[b]
   
-  log("info", "Request between " .. a .. " and " .. b .. ", positioned at " .. pa .. " and " .. pb .. ", respectively")
+  --log("info", "Request between " .. a .. " and " .. b .. ", positioned at " .. pa .. " and " .. pb .. ", respectively")
 
   local pna = get_next(pa, pb, heap)
   local over = false
 
-  log("info", "pna " .. pna .. ", parent(a): " .. parent(pa, heap) .. ", lc(a): " .. lc(pa, heap) .. ", rc(a): " .. rc(pa, heap) )
+  --log("info", "pna " .. pna .. ", parent(a): " .. parent(pa, heap) .. ", lc(a): " .. lc(pa, heap) .. ", rc(a): " .. rc(pa, heap) )
 
   --update local threshold values
   if pna == parent(pa, heap) then
@@ -49,9 +49,9 @@ function handle_request(request, heap)
     -- move a to b
     while hop_distance(pa, pb, heap) > 1 do
       -- get neighbor position (heap indices) on path
-      --local pna = get_next(pa, pb, heap)
+      local ppna = get_next(pa, pb, heap)
       -- get neighbors (robot IDs) on path
-      local na = heap[pna]
+      local na = heap[ppna]
       -- switch a and neighbor of a
       switch_robots(a, na, heap)
   
@@ -73,7 +73,7 @@ function get_weight(distance)
 end
 
 function localSetup(depth)
-  memory = {}
+  --memory = {}
   for i = 1, 2^depth-1 do
     memory[i] = {}
     memory[i].p = 0
