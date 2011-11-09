@@ -18,6 +18,11 @@ set(Boost_ADDITIONAL_VERSIONS 1.37 1.37.0 1.38 1.38.0 1.39 1.39.0)
 find_package(Boost 1.37 REQUIRED filesystem program_options system thread)
 include_directories(${Boost_INCLUDE_DIRS})
 
+if(RSS_NO_VISUALIZATION)
+  add_definitions(-DRSS_NO_VISUALIZATION)
+endif(RSS_NO_VISUALIZATION)
+
+
 # find/configure OpenGL
 if(RSS_NO_VISUALIZATION)
 else(RSS_NO_VISUALIZATION)
