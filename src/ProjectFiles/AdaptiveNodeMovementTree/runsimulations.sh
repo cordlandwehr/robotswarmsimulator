@@ -1,9 +1,10 @@
+#!/bin/bash
 # config
-projects=( "MoveOnePos" "ToOtherNodeWithProbability" "DirectlyToOtherNode" "DirectlyToOtherNodeWithProbability" )
-n=4
-maxp=3
-depth=10
-onios=true
+PROJECTS=( 'MoveOnePos' 'DirectlyToOtherNode' 'ToOtherNodeWithProbability' 'DirectlyToOtherNodeWithOneWayThreshold' 'ToOtherNodeWithProbability2_m25_s1' )
+n=${#PROJECTS[@]}
+maxp=1
+depth=4
+ONIOS=true
 
 # vars
 running=0
@@ -18,11 +19,11 @@ do
 	if [ $running -lt $maxp ]
 	then
 		# start a new job
-		sh anm.sh ${projects[$index]} depth onios &
+		sh anm.sh ${PROJECTS[$index]} $depth $ONIOS &
 		index=$(($index + 1))
 		echo "Running job #"$index" ..."
 	fi
 	
 	# sleep for a second
-	sleep 1
+	sleep 3
 done
