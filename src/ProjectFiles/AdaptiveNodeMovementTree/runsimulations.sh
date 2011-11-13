@@ -2,7 +2,7 @@
 # config
 PROJECTS=( 'MoveOnePos' 'DirectlyToOtherNode' 'ToOtherNodeWithProbability' 'DirectlyToOtherNodeWithOneWayThreshold' 'ToOtherNodeWithProbability2_m25_s1' )
 n=${#PROJECTS[@]}
-maxp=1
+maxp=3
 depth=4
 ONIOS=true
 

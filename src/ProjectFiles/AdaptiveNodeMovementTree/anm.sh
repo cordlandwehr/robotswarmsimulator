@@ -4,7 +4,7 @@ NAME=$1
 DEPTH=$2
 ONIOS=$3
 DIR="anm_"$NAME
-STEPS=$(($DEPTH * DEPTH * 10))
+STEPS=$(($DEPTH * DEPTH * 1000))
 
 # create new directory and copy project files
 
