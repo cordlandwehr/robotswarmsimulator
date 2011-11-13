@@ -30,3 +30,9 @@ function get_weight(distance)
     return 1/distance
   end
 end
+
+function localSetup(depth)
+
+end
+
+

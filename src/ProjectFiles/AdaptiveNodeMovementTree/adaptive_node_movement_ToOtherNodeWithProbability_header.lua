@@ -44,3 +44,7 @@ function get_weight(distance)
   end
 end
 
+function localSetup(depth)
+
+end
+

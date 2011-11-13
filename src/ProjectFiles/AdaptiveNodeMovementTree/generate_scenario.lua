@@ -4,7 +4,7 @@ script_out = arg[3]
 onios = arg[4]
 
 func_header = "\nfunction main()\n"
-func_call = "generic_main(\"" .. name ..  "\", " .. depth .. ", get_weight, handle_request, " .. onios .. ")\n"
+func_call = "generic_main(\"" .. name ..  "\", " .. depth .. ", get_weight, handle_request, " .. onios .. ", localSetup" .. ")\n"
 func_footer = "end\n"
 
 
