@@ -17,6 +17,7 @@
 #include "../Requests/position_request.h"
 #include "../Utilities/console_output.h"
 #include "../Utilities/vector_arithmetics.h"
+#include "../Utilities/distribution_generator.h"
 #include "../SimulationKernel/factories.h"
 
 #include "../Wrapper/console_output_wrapper.h"
@@ -91,7 +92,7 @@ void LuaWorldModifier::register_lua_methods() {
          .def("get_data", &MarkerInformationWrapper::get_data)
 	 .def("get_keys", &MarkerInformationWrapper::get_keys, luabind::copy_table(luabind::result))
 	 .def("has_key", &MarkerInformationWrapper::has_key)
-	 .def("remove_data", &MarkerInformationWrapper::remove_data),
+	 .def("remove_data", &MarkerInformationWrapper::remove_data), 
      
          luabind::class_<Vector3dWrapper>("Vector3d")
          .def(luabind::constructor<>())
@@ -163,6 +164,31 @@ void LuaWorldModifier::register_lua_methods() {
 	
       ]
     ];
+	
+	//register distribution generator		 
+    luabind::module(lua_state_.get())
+    [	
+    
+	  luabind::class_<DistributionGenerator>("DistributionGenerator")
+			 .def(luabind::constructor<int>())
+			 .def("set_seed", &DistributionGenerator::set_seed)
+			 .def("init_uniform", &DistributionGenerator::init_uniform)
+			 .def("init_normal", &DistributionGenerator::init_normal)
+			 .def("init_bernoulli", &DistributionGenerator::init_bernoulli)
+			 .def("init_exponential", &DistributionGenerator::init_exponential)
+			 .def("init_geometric", &DistributionGenerator::init_geometric)
+			 .def("init_uniform_real", &DistributionGenerator::init_uniform_real)
+			 .def("init_uniform_on_sphere", &DistributionGenerator::init_uniform_on_sphere)
+			 .def("get_value_uniform", &DistributionGenerator::get_value_uniform)
+			 .def("get_value_normal", &DistributionGenerator::get_value_normal)
+			 .def("get_value_bernoulli", &DistributionGenerator::get_value_bernoulli)
+			 .def("get_value_exponential", &DistributionGenerator::get_value_exponential)
+			 .def("get_value_geometric", &DistributionGenerator::get_value_geometric)
+			 .def("get_value_uniform_real", &DistributionGenerator::get_value_uniform_real)
+			 .def("get_value_uniform_on_sphere", &DistributionGenerator::get_value_uniform_on_sphere, luabind::copy_table(luabind::result))
+			 
+	];
+	
     
 }
 

@@ -37,6 +37,10 @@ void lua_generator_init_uniform(int min, int max);
 
 int lua_generator_get_uniform();
 
+void lua_generator_init_normal(double mean, double sigma);
+
+double lua_generator_get_normal();
+
 }
 
 #endif /* LUA_DISTRIBUTION_GENERATOR_H_ */

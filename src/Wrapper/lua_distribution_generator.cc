@@ -40,3 +40,10 @@ int LuaWrapper::lua_generator_get_uniform() {
 	return lua_generator.get_value_uniform();
 }
 
+void LuaWrapper::lua_generator_init_normal(double mean, double sigma) {
+  lua_generator.init_normal(mean, sigma);
+}
+
+double LuaWrapper::lua_generator_get_normal() {
+  return lua_generator.get_value_normal();
+}
