@@ -5,13 +5,18 @@ requests = nil
 posmap = nil
 projectname = "undefined"
 levels = nil
+cost = 0
 
 -- IO settings
 file_prefix = WorldInformation.get_project_path() .. "/output/"
-file_name = "anm_%s_%d_%s"
+file_name = "anm_%s_%d_%sphi"
 file_path = file_name .. ".dat"
 file_path_plt = file_name .. ".plt"
+file_name_cost = "anm_%s_%d_%scost"
+file_path_cost = file_name_cost .. ".dat"
+file_path_plt_cost = file_name_cost .. ".plt"
 file_header = "Time\tPhi\n"
+file_header_cost = "Time\tCost\n"
 file_data = "%d\t%d\n"
 gnuplot_terminal = "pdf"
 timestamp = nil
@@ -154,6 +159,17 @@ function update_potential()
   WorldInformation.set_robot_information(shuffled[1], marker)
 end
 
+function update_cost(request, heap)
+  -- IDs
+  local a = request.first
+  local b = request.second
+  -- positions
+  local pa = posmap[a]
+  local pb = posmap[b]
+  -- are a and b neighors in the current tree
+  cost = cost + hop_distance(pa, pb, heap) - 1
+end
+
 -------------------------------------------------------------------------------
 -- IO helper functions --------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -161,6 +177,8 @@ end
 function setup_IO()
   -- use ISO-like timestamp [Year]-[Month]-[Day]T[Hours]-[Minutes]-[Seconds]
   timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+
+  --potential files:
   -- create new file and write header
   local handler = assert(io.open(file_prefix .. file_path:format(projectname,levels,timestamp), "w"))
   handler:write(file_header)
@@ -175,6 +193,20 @@ function setup_IO()
   plt_handler:write("plot '" .. file_path:format(projectname,levels,timestamp) .. "' using 1:2 with lines" .. "\n")
   plt_handler:close()
 
+  -- cost files:
+  -- create new file and write header
+  local handler = assert(io.open(file_prefix .. file_path_cost:format(projectname,levels,timestamp), "w"))
+  handler:write(file_header_cost)
+  -- calculate data row for start configuration
+  handler:write(file_data:format(WorldInformation.get_time(), cost))	
+  handler:close()
+
+  -- create the .plt file for convenience
+  local plt_handler = assert(io.open(file_prefix .. file_path_plt_cost:format(projectname,levels,timestamp), "w"))
+  plt_handler:write("set terminal " .. gnuplot_terminal .. "\n")
+  plt_handler:write("set output '" .. file_name_cost:format(projectname,levels,timestamp) .. "." .. gnuplot_terminal .. "'" .. "\n")
+  plt_handler:write("plot '" .. file_path_cost:format(projectname,levels,timestamp) .. "' using 1:2 with lines" .. "\n")
+  plt_handler:close()
 
 end
 
@@ -183,6 +215,14 @@ function write_potential()
   local handler = assert(io.open(file_prefix .. file_path:format(projectname,levels,timestamp), "a"))
   -- write current potential
   handler:write(file_data:format(WorldInformation.get_time(), phi()))
+  handler:close() 
+end
+
+function write_cost()
+  -- write potential to .dat file - note that update_potentaiL() is not called automatically here
+  local handler = assert(io.open(file_prefix .. file_path_cost:format(projectname,levels,timestamp), "a"))
+  -- write current cost
+  handler:write(file_data:format(WorldInformation.get_time(), cost))
   handler:close() 
 end
 
@@ -368,8 +408,10 @@ function generic_main(name, depth, weightFunc, handleFunc, onlyNeighborsInOptima
     end
   else
     local request = chose_request(math.random(), requests)
+    update_cost(request, shuffled)
     handleFunc(request, shuffled)
     update_potential()
     write_potential()
+    write_cost()
   end
 end
