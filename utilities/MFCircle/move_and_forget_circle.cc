@@ -55,6 +55,11 @@ int main (int argc, const char* argv[])
     simulator::path = argv[2];
     if (argc > 3) {
       simulator::seed = atoi(argv[3]);
+      if (argc > 4) {
+		simulator::threads = atoi(argv[4]);
+      } else {
+		simulator::threads = 0;
+      }
     } else {
       simulator::seed = SEED; 
     }
@@ -69,9 +74,12 @@ int main (int argc, const char* argv[])
   for (std::size_t i = 0; i < simulator::forgetting_probablities.size(); ++i) {
     simulator::forgetting_probablities[i] = simulator::forgetting_probablity(i);
   }
-  // init mutex
+  // init mutex an dthread num
   #ifdef _OPENMP
     omp_init_lock(&simulator::generator_mutex);
+    if (simulator::threads) {
+	  omp_set_num_threads(simulator::threads);
+	}
   #endif
   // start the 'simulation'
   std::cout << "Starting simulation." << std::endl;
@@ -112,13 +120,14 @@ void simulator::random_walk(std::vector< simulator::node >& nodes, const std::si
   // get size of the ring
   std::size_t n = nodes.size();
   // perform random walks for each node (in parallel)
-  std::size_t i, j, id, lrl, age;
+int i, j;
+  std::size_t id, lrl, age;
   #pragma omp parallel for shared(nodes) private(i,j,id,lrl,age) schedule(dynamic)
-  for (i = 0; i < n; ++i) {
+  for (i = 0; i < static_cast<int>(n); ++i) {
     #ifdef _OPENMP
       id = omp_get_thread_num();
     #endif
-    for (j = 0; j < steps; ++j) {
+    for (j = 0; j < static_cast<int>(steps); ++j) {
       lrl = nodes[i].long_range_link;
       age = nodes[i].long_range_link_age;
       if (simulator::forget_link(age, id)) {

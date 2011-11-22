@@ -16,6 +16,7 @@ namespace simulator {
 std::size_t n_nodes;
 std::string path;
 std::size_t seed;
+int threads;
   
 // random generator
 std::map<std::size_t, boost::mt19937> generators; // Mersenne Twister
