@@ -1,6 +1,7 @@
 dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
+dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
 
-probability = 0.9
+probability = arg1
 
 function handle_request(request, heap) 
   -- IDs
