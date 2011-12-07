@@ -3,7 +3,11 @@ depth = arg[2]
 script_out = arg[3]
 onios = arg[4]
 project_file_out = arg[5]
-params = arg[6]
+if #arg > 5 then
+	params = arg[6]
+else
+	params = 0
+end
 
 func_header = "\nfunction main()\n"
 func_call = "generic_main(\"" .. name .. "_" .. depth .. params .. "\", " .. depth .. ", get_weight, handle_request, " .. onios .. ", localSetup" .. ")\n"
@@ -34,7 +38,7 @@ function generate_includes()
   handler:close()
 end
 
-if #arg < 6 then
+if #arg < 5 then
   print("Usage: 'lua " .. arg[0] .. " <strategy name> <tree depth> <script output file> <onios (true/false)> <project_file_out> <paramsWithDash> <params...>' ...")
 else
   print("Generating '" .. script_out .. "' with depth " .. depth .. " and script " .. script_out .. ".")

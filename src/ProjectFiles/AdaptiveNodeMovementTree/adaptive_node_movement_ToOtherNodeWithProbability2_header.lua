@@ -1,9 +1,8 @@
 dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
 dofile(WorldInformation.get_project_path() .. "/includes.lua")
 
-probability = arg1
-mean = arg2
-s = arg3
+mean = arg1
+s = arg2
 dg = DistributionGenerator(1)
 
 function handle_request(request, heap) 
