@@ -190,7 +190,11 @@ function setup_IO()
   local plt_handler = assert(io.open(file_prefix .. file_path_plt:format(projectname,timestamp), "w"))
   plt_handler:write("set terminal " .. gnuplot_terminal .. "\n")
   plt_handler:write("set output '" .. file_name:format(projectname,timestamp) .. "." .. gnuplot_terminal .. "'" .. "\n")
-  plt_handler:write("plot '" .. file_path:format(projectname,timestamp) .. "' using 1:2 with lines" .. "\n")
+  plt_handler:write("set xlabel 'rounds (in 1000)'\n")
+  plt_handler:write("set ylabel 'value of phi'\n")
+  plt_handler:write("set yrange [0:1000]\n")
+  plt_handler:write("set title \"DirectlyToOtherNodeMoveOnePos (depth 7)\"\n")
+  plt_handler:write("plot '" .. file_path:format(projectname,timestamp) .. "' using ($1/1000):2 with lines title 'Phi'" .. "\n")
   plt_handler:close()
 
   -- cost files:
