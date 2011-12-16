@@ -1,5 +1,5 @@
 dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
-dofile(WorldInformation.get_project_path() .. "/anm_generics.lua")
+dofile(WorldInformation.get_project_path() .. "/includes.lua")
 
 probability = arg1
 

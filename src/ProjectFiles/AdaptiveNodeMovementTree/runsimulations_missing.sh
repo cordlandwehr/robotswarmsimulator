@@ -1,14 +1,10 @@
 #!/bin/bash
 # config
 
+# just a test file...
+
 PROJECTS=(
-	'DirectlyToOtherNodeWithOneWayThreshold2' '3'
-	'DirectlyToOtherNodeWithOneWayThreshold2' '4'
-	'DirectlyToOtherNodeWithOneWayThreshold2' '5'
-	'DirectlyToOtherNodeWithOneWayThreshold2' '6'
-	'DirectlyToOtherNodeWithOneWayThreshold2' '7'
-	'DirectlyToOtherNodeWithOneWayThreshold2' '8'
-	'DirectlyToOtherNodeWithOneWayThreshold2' '9'
+		'ToOtherNodeWithDynamicThreshold' '3'
         )
 n=${#PROJECTS[@]}
 maxp=3
