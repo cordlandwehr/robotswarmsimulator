@@ -23,32 +23,47 @@ function handle_request(request, heap)
 
   --update local threshold values
   if pna == parent(pa, heap) then
+
     memory[a].p = memory[a].p + 1
+
     if memory[a].l > 0 then
 	    memory[a].l = memory[a].l - 1
+    end
     if memory[a].r > 0 then
 	    memory[a].r = memory[a].r - 1
+    end
     if memory[a].p >= threshold then
       over = true  
     end
   elseif pna == lc(pa, heap) then
     if memory[a].p > 0 then
 	memory[a].p = memory[a].p - 1
+    end
+  
     memory[a].l = memory[a].l + 1
+
     if memory[a].r > 0 then
 	    memory[a].r = memory[a].r - 1
+    end
+
     if memory[a].l >= threshold then
       over = true
-   end
+    end
+
   elseif pna == rc(pa, heap) then
     if memory[a].p > 0 then
 	memory[a].p = memory[a].p - 1
+    end
+
     if memory[a].l > 0 then
 	    memory[a].l = memory[a].l - 1
-    memory[a].r = memory[a].r + 1    
+    end
+
+    memory[a].r = memory[a].r + 1 
+   
     if memory[a].r >= threshold then
       over = true
-   end
+    end
   end
 
   -- if threshold exceeded, move node

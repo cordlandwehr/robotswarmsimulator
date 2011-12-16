@@ -6,12 +6,10 @@
 SEEDS=(
 	  '42'
 	  '23'
-	  '1337'
       )
 
 PROJECTS=(
-		'DirectlyToOtherNode' ''
-		'ToOtherNodeWithProbability' '0.25'
+	'ToOtherNodeWithDynamicThreshold' '2'
         )
 
 n=${#PROJECTS[@]}
@@ -44,7 +42,7 @@ do
 	fi
 	
 	# sleep for a second
-	sleep 3
+	sleep 15
   done
   indexS=$(($indexS + 1))
 

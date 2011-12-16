@@ -2,7 +2,6 @@
 # config
 
 PROJECTS=(
-
 	'DirectlyToOtherNodeWithFixedThreshold' '11'
 	'DirectlyToOtherNodeWithFixedThreshold' '12'
 	'DirectlyToOtherNodeWithFixedThreshold' '14'

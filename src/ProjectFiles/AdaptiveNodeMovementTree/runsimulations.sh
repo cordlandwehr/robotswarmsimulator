@@ -38,29 +38,47 @@ PROJECTS=(
 	'ToOtherNodeWithProbability2' '0.5 1' 
 	'ToOtherNodeWithProbability2' '0.75 1' 
         )
+
+
+SEEDS=(
+	  '42'
+	  '23'
+	  '1337'
+      )
+
+
 n=${#PROJECTS[@]}
+nS=${#SEEDS[@]}
 maxp=3
 depth=7
 ONIOS=true
 
 # vars
 running=0
-index=0
+indexS=0
 
-# check as long as there are jobs left
-while [ $index -lt $n ]
+while [ $indexS -lt $nS ]
 do
+  echo "Initiating with seed no #"$indexS" ..."
+  # check as long as there are jobs left
+  
+  index=0
+  while [ $index -lt $n ]
+  do
 	# count current simulator processes
 	running=`ps -A | grep [R]obotSwarmSimul | wc -l`
 
 	if [ $running -lt $maxp ]
 	then
 		# start a new job
-		sh anm.sh ${PROJECTS[$index]} $depth $ONIOS ${PROJECTS[(($index + 1))]} &
+		sh anm.sh ${SEEDS[$indexS]} ${PROJECTS[$index]} $depth $ONIOS ${PROJECTS[(($index + 1))]} &
 		index=$(($index + 2))
-		echo "Running job #"$index" ..."
+		echo "Running job #"$(($index/2))" ..."
 	fi
 	
 	# sleep for a second
 	sleep 3
+  done
+  indexS=$(($indexS + 1))
+
 done
