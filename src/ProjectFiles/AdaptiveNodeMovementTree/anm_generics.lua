@@ -6,13 +6,14 @@ posmap = nil
 projectname = "undefined"
 levels = nil
 cost = 0
+seed = nil
 
 -- IO settings
 file_prefix = WorldInformation.get_project_path() .. "/output/"
-file_name = "anm_%s_%sphi"
+file_name = "anm_%s_#%sphi"
 file_path = file_name .. ".dat"
 file_path_plt = file_name .. ".plt"
-file_name_cost = "anm_%s_%scost"
+file_name_cost = "anm_%s_#%scost"
 file_path_cost = file_name_cost .. ".dat"
 file_path_plt_cost = file_name_cost .. ".plt"
 file_header = "Time\tPhi\n"
@@ -176,7 +177,8 @@ end
 
 function setup_IO()
   -- use ISO-like timestamp [Year]-[Month]-[Day]T[Hours]-[Minutes]-[Seconds]
-  timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+  --timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+  timestamp = seed
 
   --potential files:
   -- create new file and write header
@@ -310,8 +312,10 @@ end
 -- Setup of a new ANM tree experiment -----------------------------------------
 -------------------------------------------------------------------------------
 
-function setup_anm_tree(depth, weightFunc, projectName, onlyNeighborsInOptimalSolution)
+function setup_anm_tree(seed, depth, weightFunc, projectName, onlyNeighborsInOptimalSolution)
   levels = depth
+
+  math.randomseed( seed )
 
   -- 1) create the 'optimal' solution
   opt = {}
@@ -403,9 +407,10 @@ function setup_anm_tree(depth, weightFunc, projectName, onlyNeighborsInOptimalSo
   end
 end
 
-function generic_main(name, depth, weightFunc, handleFunc, onlyNeighborsInOptimalSolution, localSetup)
+function generic_main(lseed, name, depth, weightFunc, handleFunc, onlyNeighborsInOptimalSolution, localSetup)
   if status == "SETUP" then
-    setup_anm_tree(depth, weightFunc, name, onlyNeighborsInOptimalSolution)
+    seed = lseed
+    setup_anm_tree(lseed, depth, weightFunc, name, onlyNeighborsInOptimalSolution)
     status = "ANM"
     if localSetup ~= nil then
       localSetup(depth)

@@ -1,12 +1,14 @@
 # starts anm simulation
 
-NAME=$1
-DEPTH=$2
-ONIOS=$3
+SEED=$1
+NAME=$2
+DEPTH=$3
+ONIOS=$4
 DIR="anm_"$NAME
-STEPS=$(($DEPTH * DEPTH * 10000))
+#STEPS=$(($DEPTH * DEPTH * 10000))
+STEPS=$(($DEPTH * DEPTH * 10))
 
-shift; shift; shift
+shift; shift; shift; shift
 
 params=""
 paramsLine=""
@@ -17,7 +19,7 @@ do
   shift
 done
 
-DIR=$DIR"_"$DEPTH$paramsLine
+DIR=$DIR"_"$DEPTH$paramsLine"_"$SEED
 
 # create new directory and copy project files
 
@@ -32,7 +34,7 @@ cp *.csv ./$DIR
 cd ./$DIR
 mkdir output
 cp "../adaptive_node_movement_"$NAME"_header.lua" "adaptive_node_movement_"$NAME".lua" 
-lua generate_scenario.lua $NAME $DEPTH "adaptive_node_movement_"$NAME".lua" $ONIOS "adaptive_node_movement_"$NAME".swarm" $paramsLine $params
+lua generate_scenario.lua $SEED $NAME $DEPTH "adaptive_node_movement_"$NAME".lua" $ONIOS "adaptive_node_movement_"$NAME".swarm" $paramsLine $params
 
 # start the simulation
 ../../../../build/src/UserInterfaces/RobotSwarmSimulator --project-file "adaptive_node_movement_"$NAME".swarm" --blind --steps $STEPS --history-length 256

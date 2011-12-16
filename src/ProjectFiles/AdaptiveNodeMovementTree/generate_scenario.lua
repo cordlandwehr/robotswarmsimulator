@@ -1,16 +1,17 @@
-name = arg[1]
-depth = arg[2]
-script_out = arg[3]
-onios = arg[4]
-project_file_out = arg[5]
-if #arg > 5 then
-	params = arg[6]
+seed = arg[1]
+name = arg[2]
+depth = arg[3]
+script_out = arg[4]
+onios = arg[5]
+project_file_out = arg[6]
+if #arg > 6 then
+	params = arg[7]
 else
-	params = 0
+	params = ""
 end
 
 func_header = "\nfunction main()\n"
-func_call = "generic_main(\"" .. name .. "_" .. depth .. params .. "\", " .. depth .. ", get_weight, handle_request, " .. onios .. ", localSetup" .. ")\n"
+func_call = "generic_main(" .. seed .. ", " .. "\"" .. name .. "_" .. depth .. params .. "\", " .. depth .. ", get_weight, handle_request, " .. onios .. ", localSetup" .. ")\n"
 func_footer = "end\n"
 includes_out = "includes.lua"
 
@@ -32,14 +33,14 @@ end
 
 function generate_includes()
   local handler = assert(io.open(includes_out, "w"))
-  for i = 7, #arg do
-    handler:write("arg" .. i-6 .. " = " .. arg[i] .. "\n")
+  for i = 8, #arg do
+    handler:write("arg" .. i-7 .. " = " .. arg[i] .. "\n")
   end
   handler:close()
 end
 
-if #arg < 5 then
-  print("Usage: 'lua " .. arg[0] .. " <strategy name> <tree depth> <script output file> <onios (true/false)> <project_file_out> <paramsWithDash> <params...>' ...")
+if #arg < 6 then
+  print("Usage: 'lua " .. arg[0] .. " <seed> <strategy name> <tree depth> <script output file> <onios (true/false)> <project_file_out> <paramsWithDash> <params...>' ...")
 else
   print("Generating '" .. script_out .. "' with depth " .. depth .. " and script " .. script_out .. ".")
   generate_script()
