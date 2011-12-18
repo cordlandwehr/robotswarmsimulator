@@ -10,6 +10,8 @@ SEEDS=(
 
 PROJECTS=(
 	'ToOtherNodeWithDynamicThreshold' '2'
+	'ToOtherNodeWithDynamicThreshold' '3'
+	'ToOtherNodeWithDynamicThreshold' '4'
         )
 
 n=${#PROJECTS[@]}
