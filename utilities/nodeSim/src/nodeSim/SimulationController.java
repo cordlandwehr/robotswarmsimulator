@@ -244,7 +244,7 @@ public abstract class SimulationController {
 		nodes[posS].incSentRequests();
 		nodes[posD].incReceivedRequests();
 		
-		//execute the rearrangement strategy
+		//execute the rearrangement strategy		
 		rearrange(posS, posD);
 		
 		lastRequest = request;

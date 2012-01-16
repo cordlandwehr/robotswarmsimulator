@@ -6,7 +6,7 @@ package nodeSim;
 /**
  * Represents a node in the list
  */
-class Node {
+public class Node {
 	protected int sentRequests;
 	protected int receivedRequests;
 	protected int optimalPosition;

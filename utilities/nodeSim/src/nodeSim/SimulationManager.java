@@ -14,6 +14,7 @@ import nodeSim.controllers.StrategyCController;
 import nodeSim.controllers.StrategyCRController;
 import nodeSim.controllers.StrategyDController;
 import nodeSim.controllers.StrategyEController;
+import nodeSim.controllers.StrategyGTTMController;
 
 
 /**
@@ -42,6 +43,17 @@ class SimulationManager {
 		this.simulationName = simulationName;
 		this.ultraSilent = ultraSilent;
 	}
+	
+	/**
+	 * Constructor. 
+	 * @param simulationName a name for this simulation (used for the directory structure)
+	 * @param numberOfSims number of simulations to be done (if done manually)
+	 */
+	SimulationManager(String simulationName, boolean ultraSilent, int numberOfSims) {
+		this.simulationName = simulationName;
+		this.ultraSilent = ultraSilent;
+		seqLines = new String[numberOfSims][];
+	}	
 	
 	/**
 	 * runs several simulation based on generated inputs in series and creates an evaluation using average values
@@ -222,7 +234,11 @@ class SimulationManager {
 		else if (strategies == "CR")
 			controllers = new SimulationController[]{ 
 				new StrategyCRController(new Input(csv))
-			};		
+			};
+		else if (strategies == "GTTM")
+			controllers = new SimulationController[]{ 
+				new StrategyGTTMController(new Input(csv))
+			};			
 		else
 			controllers = new SimulationController[]{};						
 	
