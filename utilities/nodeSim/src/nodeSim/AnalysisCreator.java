@@ -175,8 +175,8 @@ public class AnalysisCreator {
 		
 		saveSummary1(filenameprefix);
 		//saveSummary2(filenameprefix);		
-		saveSummary3(filenameprefix);		
-		saveSummary4(filenameprefix);
+		//saveSummary3(filenameprefix);	//not interesting here	
+		//saveSummary4(filenameprefix);	//not interesting here
 		
 		//close the text file writer
 		finish();
