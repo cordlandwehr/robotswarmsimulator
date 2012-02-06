@@ -41,6 +41,7 @@
 #include <boost/program_options.hpp>
 #include <boost/cast.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 
 #include <config.h>
@@ -244,7 +245,7 @@ int main(int argc, char** argv) {
 					boost::xtime xt;
 					boost::xtime_get(&xt, boost::TIME_UTC);
 					xt.sec += 1; // change xt to next second
-					boost::thread::sleep(xt);
+					boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 				}
 				ConsoleOutput::log(ConsoleOutput::Kernel, ConsoleOutput::info) << "Terminating simulation.\n";
 				sim_control->terminate_simulation();

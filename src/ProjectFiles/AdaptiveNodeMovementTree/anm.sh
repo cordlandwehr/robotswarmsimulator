@@ -5,7 +5,7 @@ NAME=$2
 DEPTH=$3
 ONIOS=$4
 DIR="anm_"$NAME
-STEPS=$(($DEPTH * $DEPTH * 10000))
+STEPS=$((160714 * $DEPTH * $DEPTH - 1625000 * $DEPTH + 4250000))
 #STEPS=$(($DEPTH * $DEPTH * 1))
 
 shift; shift; shift; shift
@@ -39,7 +39,7 @@ cp "../../adaptive_node_movement_"$NAME"_header.lua" "adaptive_node_movement_"$N
 lua generate_scenario.lua $SEED $NAME $DEPTH "adaptive_node_movement_"$NAME".lua" $ONIOS "adaptive_node_movement_"$NAME".swarm" $paramsLine $params
 
 # start the simulation
-../../../../../build/src/UserInterfaces/RobotSwarmSimulator --project-file "adaptive_node_movement_"$NAME".swarm" --blind --steps $STEPS --history-length 256
+../../../../../build/src/UserInterfaces/RobotSwarmSimulator --project-file "adaptive_node_movement_"$NAME".swarm" --blind --steps $STEPS --history-length 16
 
 # run gnuplot
 cd output

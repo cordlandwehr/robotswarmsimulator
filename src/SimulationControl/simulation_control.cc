@@ -289,7 +289,8 @@ void SimulationControl::SimulationKernelFunctor::loop() {
 			double curtime = curStepClock * 1000.0 / CLOCKS_PER_SEC;
 
 			if(limited_steps_) {
-				ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_ << " with " << curtime << " ms (avg is " << avgtime << " ms)";
+				if (steps % 128 == 0)				
+					ConsoleOutput::log(ConsoleOutput::Control, ConsoleOutput::info) << "completed step " << steps << "/" << number_of_steps_ << " with " << curtime << " ms (avg is " << avgtime << " ms)";
 
 				steps++;
 				if( steps > number_of_steps_) {
